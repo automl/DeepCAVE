@@ -1,37 +1,20 @@
-from urllib.parse import urlparse
-from typing import Optional
+import os
 
-from .converters import available_converters
-
-from ..storage_backend import AbstractStorage
+from deep_cave.util.importing import auto_import_iter
+from deep_cave.converter.converter import Converter
 
 
-def get_converter(converter_name: str, tracking_uri: str, study: Optional[str] = None) -> AbstractStorage:
-    """
-    Interface for converters. Abstracts the selection and initialization process away. Returns the correct converter
-    as an instance of AbstractStorage.
+converters = {}
 
-    Parameters
-    ----------
-    converter_name
-        str. Name of the converter. Every Converter has a unique name, based on which it is selected.
-    tracking_uri
-        str. The tracking_uri, with which the storage is initialized.
-    study
-        str. The name of the study with which the storage is initialized. Can be None, when information about all
-            available studies is needed.
+paths = [os.path.join(os.path.dirname(__file__), '*')]
+for name, obj in auto_import_iter("converter", paths):
+    if not issubclass(obj, Converter):
+        continue
+    # Plugin itself is a subclass, filter it out
+    if obj == Converter:
+        continue
 
-    Returns
-    -------
-        An instance of AbstractStorage.
-    """
-    parsed_url = urlparse(tracking_uri)
+    converters[obj.name()] = obj
 
-    if converter_name not in available_converters:
-        raise KeyError(f'converter_name {converter_name} not in available converters'
-                       f'Available converters are {available_converters.keys()}')
-    if available_converters[converter_name].scheme() != parsed_url.scheme:
-        raise ValueError(f'Not matching Converter ({converter_name}) with scheme ({parsed_url.scheme})'
-                         f'expected {available_converters[converter_name].scheme()} as scheme')
 
-    return available_converters[converter_name](study, tracking_uri)
+

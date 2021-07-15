@@ -37,6 +37,10 @@ loggers:
     level: DEBUG
     handlers: [ console ]
     propagate: no
+  matplotlib:
+    level: INFO
+    handlers: [ console ]
+    propagate: no
 root:
-  level: INFO
+  level: DEBUG
   handlers: [console]

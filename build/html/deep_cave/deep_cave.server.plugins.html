@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>deep_cave.server.plugins package &#8212; deep_cave bab028ca6b161db07f08a2c5597fdd1ab150b816 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="deep_cave.storage_backend package" href="deep_cave.storage_backend.html" />
+    <link rel="prev" title="deep_cave.server.layout package" href="deep_cave.server.layout.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="deep-cave-server-plugins-package">
+<h1>deep_cave.server.plugins package<a class="headerlink" href="#deep-cave-server-plugins-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-deep_cave.server.plugins.plugin">
+<span id="deep-cave-server-plugins-plugin-module"></span><h2>deep_cave.server.plugins.plugin module<a class="headerlink" href="#module-deep_cave.server.plugins.plugin" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deep_cave.server.plugins.plugin.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract Plugin class. A (analysis-)plugin is used to create a new analysis-tool in the UI.
+It is basically a wrapper for any python code. Through a uniform interface any kind of library can be
+integrated into the server.</p>
+<p>It is necessay to implement the method process and ui_elements. There are other methods and properties to
+further control the behaviour of the plugin.
+Other methods
+- ui_customization: Customize ui_elements based on available data
+Other properties
+- name: Change the display name
+- category: [missing] change the group the plugin is placed inside the UI
+- tooltip: Shortly explain what the method is doing
+- has_single_output: The plugin declares that it can analyze multiple trials in one call of process.
+- default_output: Controls what is shown, when process hasn’t run yet
+- wip: [missing] A flag indicating the completeness of implementation.</p>
+<p>The general life cycle of a plugin is the following:
+1. The plugin is registered with the PluginManager.
+2. The PluginManager calls ui_elements and instantiates the dash Components with the id (generated</p>
+<blockquote>
+<div><p>automatically) of this plugin and registers it to the UI.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p>The PluginManager registers the callback function process with the UI. Adding any ui_elements to the callback.</p></li>
+<li><p>The server is started.</p></li>
+<li><p>When a user opens the site, the ui_elements are displayed.</p></li>
+<li><dl class="simple">
+<dt>When the user selects a study, the ui_customization is called. The customization defines the changes to the UI</dt><dd><p>based on the data provided. The UI is updated according to the customization.</p>
+</dd>
+</dl>
+</li>
+<li><p>When the user interacts with the ui_elements the Components act accordingly.</p></li>
+<li><p>The user or an external event (like new data becoming available) can trigger the analysis of the study.</p></li>
+<li><dl class="simple">
+<dt>The data from the study, together with the user input are provided to the process method. The method performs</dt><dd><p>the analysis and returns an UI component as a result.</p>
+</dd>
+</dl>
+</li>
+<li><p>The result is displayed to the user.</p></li>
+<li><p>When the user ends the session the plugins state is reset.</p></li>
+</ol>
+<p>Up to this point the ‘data’ given to process and ui_customization were relatively abstract. The following
+passage deals with the content in more detail.</p>
+<p>On each call to process all available data is handed to process. If certain information isn’t need it should be
+left to <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs, to prevent an error due to the argument not defined in process.</p>
+<p>Kwargs that are always present are:
+- data: A pandas.DataFrame with all available trials. The columns are categorized with four prefixes.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘trial.’: Contains the three elements to make a trial unique. The config_id, fidelity and an increment or seed</p></li>
+<li><p>‘config.’: The features or configurations used to train the model</p></li>
+<li><p>‘metrics.’: The metrics produced by this trial</p></li>
+<li><p>‘trial_meta.’: Additional meta data produced by the trial, e.g. tags, duration, start and end</p></li>
+</ul>
+<p>Also each trial has a unique trial_id, generated form the three components of a trial (config_id, fidelity,
+increment)</p>
+</div></blockquote>
+<ul>
+<li><dl>
+<dt>meta: A dictionary containing meta data about the study itself. The meta can contain but mustn’t the following</dt><dd><p>keys:
+- optimizer_args: Arguments used to run the AutoML optimizer
+- study_name: Name of the study.
+- objective: The metric used by the AutoML optimizer for evaluation of a model.
+- search_space: A ConfigSpace.ConfigurationSpace. For more information,</p>
+<blockquote>
+<div><p>see <a class="reference external" href="https://github.com/automl/ConfigSpace">https://github.com/automl/ConfigSpace</a></p>
+</div></blockquote>
+<ul class="simple">
+<li><p>start_time: Start time of the study.</p></li>
+<li><p>end_time: End time of the study.</p></li>
+<li><p>duration: The duration of the study.</p></li>
+<li><p>groups: Additional key-value pairs used for grouping.</p></li>
+</ul>
+<p>Depending on the back_end there are also the keys
+- metrics: Lists all columns in data with the ‘metrics.’ prefix
+- config: Lists all columns in data with the ‘config.’ prefix</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>models: A dictionary containing meta data about the models logged for different fidelities.</dt><dd><p>The key is always the fidelity. If a model was logged, then there is always the ‘default’ fidelity available.
+The value is has the another dict with the key-value pairs:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>mapping: A discription of how the features (‘config.’) in data should be mapped to the model</p></li>
+<li><p>model_id: The unique identifier of the logged model</p></li>
+<li><p>format: format</p></li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Those values shouldn’t be of concern to the user. The surrogate model can be obtained by simply calling:</dt><dd><p>self.get_surrogate_model(models, fidelity)</p>
+</dd>
+</dl>
+<p>with the desired fidelity, available as key in models.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Next there are the values obtained from ui_elements. The key in kwargs is the same key defined in ui_elements.
+The value is the value returned from the dash Component.</p>
+<p>The user can group studies by their group-keys defined in meta[‘groups’]. If this is the case studies with the
+same group key-value pair will be merged and send to process as one study. If the are different key-value pairs
+identical pairs are again merge, but different key-value pairs are passed to process separately.
+If the property has_single_output is set to False, the maintainer of the plugin doesn’t have to consider this case,
+since the different groups are passed separately to process and their output is append.
+If the property has_single_output is set to True, then the input the process method changes (not to customize_ui,
+which only receives the first selected study). ‘data’, ‘meta’ and ‘models’ will be embedded into a dictionary,
+with the key being the study_name. The value is identical to the description above. The process method is
+expected to handle multiple studies at once and process one output.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.allowed_outputs">
+<span class="sig-name descname"><span class="pre">allowed_outputs</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.allowed_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-obj docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">dash.development.base_component.Component</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">plotly.graph_objs._figure.Figure</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">dash_table.DataTable.DataTable</span></code>]</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.category">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the category of the plugin. Not yet used</p>
+<blockquote>
+<div><p>str. The output defines the category of the plugin.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.default_output">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">default_output</span></span><em class="property"><span class="pre">:</span> <span class="pre">Union[dash.development.base_component.Component,</span> <span class="pre">plotly.graph_objs._figure.Figure,</span> <span class="pre">str,</span> <span class="pre">dash_table.DataTable.DataTable]</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.default_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define what is displayed in the UI before process was called.</p>
+<blockquote>
+<div><p>A valid dash Component instance.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.encode_data">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">encode_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigSpace.configuration_space.ConfigurationSpace</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.encode_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper method, that calls the helper function encode_data. When a ConfigSpace is provided the
+data will be converted based on those rules. Otherwise the class of data (numerical, ordinal, nominal) will
+be derived from the data type.</p>
+<p>For information see the documentation of encode_data.</p>
+<dl class="simple">
+<dt>data</dt><dd><p>pd.DataFrame. A data DataFrame as provided by a process call.</p>
+</dd>
+<dt>cs</dt><dd><p>ConfigurationSpace. A ConfigurationSpace object that matches the specified data.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>pd.DataFrame. Returns a new DataFrame with nominal values in OneHot encoding, ordinal values in Ordinal
+encoding and numerical values cast into the correct datatype.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.generate_ui">
+<span class="sig-name descname"><span class="pre">generate_ui</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">customization</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dash.development.base_component.Component</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.generate_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by PluginManager to instantiate the ui elements.</p>
+<dl class="simple">
+<dt>customization</dt><dd><p>Dict. If a customization dict is provided, the plugins are called with the provided arguments.
+If it is None, the ui elements will be initialized only with an id.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>List of instantiated components</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.get_output_id">
+<span class="sig-name descname"><span class="pre">get_output_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.get_output_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method, that generates the id by which the output element in the dash ui is referenced</p>
+<blockquote>
+<div><p>str. Returns a string with the id used in the dash ui for the output element</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.get_surrogate_model">
+<span class="sig-name descname"><span class="pre">get_surrogate_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fidelity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="deep_cave.registry.html#deep_cave.registry.onnx_surrogate.ONNXSurrogate" title="deep_cave.registry.onnx_surrogate.ONNXSurrogate"><span class="pre">deep_cave.registry.onnx_surrogate.ONNXSurrogate</span></a><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.get_surrogate_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method for the user, to load the selected model. The models dict is available to every process call.
+fidelity can be a number, or a string, referencing the fidelity. The string default should always be
+available if a least one model was uploaded to the registry.</p>
+<dl class="simple">
+<dt>models</dt><dd><p>Dict. Of models with its meta data, like fidelity and mapping.</p>
+</dd>
+<dt>fidelity</dt><dd><p>str or float. Referencing one of the fidelities in models.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>ONNXSurrogate model, or None, if the operation failed for any reason</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.get_ui_id">
+<span class="sig-name descname"><span class="pre">get_ui_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.get_ui_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method. From the plugin id and the name of the ui element it generates an id for the element</p>
+<dl class="simple">
+<dt>name</dt><dd><p>str. Name of the ui element</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>str. The id for the ui element used as a reference in the dash ui.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.has_single_output">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">has_single_output</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.has_single_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the flag for has_single_output. For the implications on process see the class description.</p>
+<blockquote>
+<div><p>bool.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.name">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify the displayed name of the plugin. Default is the name of the class.</p>
+<blockquote>
+<div><p>str. The name of the plugin.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.prefix">
+<span class="sig-name descname"><span class="pre">prefix</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'plugin'</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.process">
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dash.development.base_component.Component</span><span class="p"><span class="pre">,</span> </span><span class="pre">plotly.graph_objs._figure.Figure</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">dash_table.DataTable.DataTable</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the analysis process of the plugin</p>
+<dl class="simple">
+<dt>kwargs</dt><dd><p>Dict. Content of kwargs are ‘data’, ‘meta’, ‘models’ and any additional user input defined in ui_elements
+(for more information on the contents of these keys see class description above).</p>
+</dd>
+</dl>
+<p>Return any of the following:
+- dash Graph
+- plotly Figure
+- dash component, like dash_table
+- string, that can be interpreted as HTML
+The content will be handled by internal logic and displayed to the user.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.register_callback">
+<span class="sig-name descname"><span class="pre">register_callback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.register_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called by PluginManager to register the single callback of this plugin.</p>
+<p>The method could be extended to increase the interactivity, but it is not recommended, since it is not
+standardized for all plugins.</p>
+<p>The method generates a function and sets the single output element, all trigger and state elements set
+in the constructor of the plugin.</p>
+<blockquote>
+<div><p>None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.tooltip">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">tooltip</span></span><em class="property"><span class="pre">:</span> <span class="pre">str</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.tooltip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortly describe what the plugin is doing. The tooltip is displayed on mouseover to the user.</p>
+<blockquote>
+<div><p>str. A text that shortly describes the plugin.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.ui_customization">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ui_customization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.ui_customization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Based on the available kwargs specify the Components parameters.</p>
+<dl class="simple">
+<dt>kwargs</dt><dd><p>Dict. Content of kwargs are ‘data’, ‘meta’, ‘models’
+(for more information on the contents of these keys see class description above).</p>
+</dd>
+</dl>
+<p>Return a dictionary with the keys matching the ones defined in ui_elements. The value is itself a dictionary.
+The content of those dictionary are forwarded as <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs to the dash Component defined in ui_elements.</p>
+<p>For more on the kwargs available to each Component consult <a class="reference external" href="https://dash.plotly.com/dash-core-components">https://dash.plotly.com/dash-core-components</a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.ui_elements">
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ui_elements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">dash.development.base_component.Component</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.ui_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines additional UI elements that can be used to deliver user input to the process method.</p>
+<p>Dict with key being the name of the UI element and value the dash_core_components.Component. Use the class
+and not an instance.
+For more information on components, see <a class="reference external" href="https://dash.plotly.com/dash-core-components">https://dash.plotly.com/dash-core-components</a></p>
+<p>The key is used for later reference in ui_customization and process.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin.Plugin.wip">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">wip</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin.Plugin.wip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Doesn’t do anything</p>
+<blockquote>
+<div><p>bool. Flag indicate work in progress with True.</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-deep_cave.server.plugins.plugin_manager">
+<span id="deep-cave-server-plugins-plugin-manager-module"></span><h2>deep_cave.server.plugins.plugin_manager module<a class="headerlink" href="#module-deep_cave.server.plugins.plugin_manager" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin_manager.PluginManager">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deep_cave.server.plugins.plugin_manager.</span></span><span class="sig-name descname"><span class="pre">PluginManager</span></span><a class="headerlink" href="#deep_cave.server.plugins.plugin_manager.PluginManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="deep_cave.server.plugins.plugin_manager.PluginManager.instance">
+<span class="sig-name descname"><span class="pre">instance</span></span><em class="property"> <span class="pre">=</span> <span class="pre">&lt;deep_cave.server.plugins.plugin_manager.PluginManager.__PluginManager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#deep_cave.server.plugins.plugin_manager.PluginManager.instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-deep_cave.server.plugins">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deep_cave.server.plugins" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">deep_cave</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">deep_cave</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">deep_cave</a><ul>
+  <li><a href="deep_cave.html">deep_cave package</a><ul>
+  <li><a href="deep_cave.server.html">deep_cave.server package</a><ul>
+      <li>Previous: <a href="deep_cave.server.layout.html" title="previous chapter">deep_cave.server.layout package</a></li>
+      <li>Next: <a href="deep_cave.storage_backend.html" title="next chapter">deep_cave.storage_backend package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niels Nuthmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/deep_cave/deep_cave.server.plugins.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

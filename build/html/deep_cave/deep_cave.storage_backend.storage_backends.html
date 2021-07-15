@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>deep_cave.storage_backend.storage_backends package &#8212; deep_cave bab028ca6b161db07f08a2c5597fdd1ab150b816 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="deep_cave.store package" href="deep_cave.store.html" />
+    <link rel="prev" title="deep_cave.storage_backend package" href="deep_cave.storage_backend.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="deep-cave-storage-backend-storage-backends-package">
+<h1>deep_cave.storage_backend.storage_backends package<a class="headerlink" href="#deep-cave-storage-backend-storage-backends-package" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-deep_cave.storage_backend.storage_backends.json_storage">
+<span id="deep-cave-storage-backend-storage-backends-json-storage-module"></span><h2>deep_cave.storage_backend.storage_backends.json_storage module<a class="headerlink" href="#module-deep_cave.storage_backend.storage_backends.json_storage" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deep_cave.storage_backend.storage_backends.json_storage.</span></span><span class="sig-name descname"><span class="pre">JsonStorage</span></span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="deep_cave.storage_backend.html#deep_cave.storage_backend.abstract_storage.AbstractStorage" title="deep_cave.storage_backend.abstract_storage.AbstractStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">deep_cave.storage_backend.abstract_storage.AbstractStorage</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.append_json_dump">
+<span class="sig-name descname"><span class="pre">append_json_dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.append_json_dump" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.get_studies">
+<span class="sig-name descname"><span class="pre">get_studies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.get_studies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return information of all studies in tracking_uri.
+Return the name of the studies and the meta information in dict format.</p>
+<blockquote>
+<div><p>A dict with keys being the study names and the value being the meta dictionary from retrieve_meta</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_model_log">
+<span class="sig-name descname"><span class="pre">on_model_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fidelity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_entry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_model_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback called, when a new model is logged.</p>
+<dl class="simple">
+<dt>fidelity</dt><dd><p>The fidelity the model is associated with. Remember a fidelity can get a model assigned multiple times.</p>
+</dd>
+<dt>model_entry</dt><dd><p>The content of the model meta data.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_study_end">
+<span class="sig-name descname"><span class="pre">on_study_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">study_meta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_study_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback called everytime a study ends.</p>
+<dl class="simple">
+<dt>study_meta</dt><dd><p>The complete content of the study meta data.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_study_start">
+<span class="sig-name descname"><span class="pre">on_study_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">study_meta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_study_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback called everytime a study starts.</p>
+<dl class="simple">
+<dt>study_meta</dt><dd><p>The content of the study meta data, available at the beginning of the study.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_trial_end">
+<span class="sig-name descname"><span class="pre">on_trial_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_trial_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback called everytime a trial ends.</p>
+<dl class="simple">
+<dt>trial_id</dt><dd><p>The tripled of trial_id.</p>
+</dd>
+<dt>trial</dt><dd><p>The complete content of the trial.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_trial_start">
+<span class="sig-name descname"><span class="pre">on_trial_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.on_trial_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback called everytime a new trial starts.</p>
+<dl class="simple">
+<dt>trial_id</dt><dd><p>The tripled of trial_id.</p>
+</dd>
+<dt>trial</dt><dd><p>The content of the trial, available at the beginning of the trial.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p>None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_data">
+<span class="sig-name descname"><span class="pre">retrieve_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pandas.core.frame.DataFrame</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default just returns the composite information retrieved from trials, meta and models.</p>
+<p>This method can be overridden, to add additional information to either of the three data components</p>
+<blockquote>
+<div><p>Trial data DataFrame, the meta dict and the model meta dict</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_meta">
+<span class="sig-name descname"><span class="pre">retrieve_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve only the meta data.</p>
+<blockquote>
+<div><p>A dictionary conforming to the standard of meta data</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_models">
+<span class="sig-name descname"><span class="pre">retrieve_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the model meta data and return it as Dict</p>
+<blockquote>
+<div><p>Dict, with the model meta data.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_trials">
+<span class="sig-name descname"><span class="pre">retrieve_trials</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.retrieve_trials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the trial data and convert it into a conform trials DataFrame.</p>
+<blockquote>
+<div><p>pd.DataFrame.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.scheme">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">scheme</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.storage_backend.storage_backends.json_storage.JsonStorage.scheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the scheme this backend storage can handle. E.g. empty string means filesystem, sqlite://[path], means
+the implementation is used for saving and loading, to and from a sqlite file.</p>
+<p>Further separation between storage_backends currently not possible. There can only be one storage backend
+per schema.</p>
+<p>Alternatively, the naming convention in converters can be used.</p>
+<blockquote>
+<div><p>Returns a string that matches the scheme</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-deep_cave.storage_backend.storage_backends">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deep_cave.storage_backend.storage_backends" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">deep_cave</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">deep_cave</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">deep_cave</a><ul>
+  <li><a href="deep_cave.html">deep_cave package</a><ul>
+  <li><a href="deep_cave.storage_backend.html">deep_cave.storage_backend package</a><ul>
+      <li>Previous: <a href="deep_cave.storage_backend.html" title="previous chapter">deep_cave.storage_backend package</a></li>
+      <li>Next: <a href="deep_cave.store.html" title="next chapter">deep_cave.store package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niels Nuthmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/deep_cave/deep_cave.storage_backend.storage_backends.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

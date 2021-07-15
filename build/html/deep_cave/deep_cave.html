@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>deep_cave package &#8212; deep_cave bab028ca6b161db07f08a2c5597fdd1ab150b816 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="deep_cave.converter package" href="deep_cave.converter.html" />
+    <link rel="prev" title="deep_cave" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="deep-cave-package">
+<h1>deep_cave package<a class="headerlink" href="#deep-cave-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.converter.html">deep_cave.converter package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deep_cave.converter.converters.html">deep_cave.converter.converters package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.converter.converters.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.converter.converters.html#module-deep_cave.converter.converters.bohb_converter">deep_cave.converter.converters.bohb_converter module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.converter.converters.html#module-deep_cave.converter.converters">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.html#module-deep_cave.converter.abstract_converter">deep_cave.converter.abstract_converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.html#module-deep_cave.converter">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.logger.html">deep_cave.logger package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.logger.html#module-deep_cave.logger">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.registry.html">deep_cave.registry package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.registry.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.registry.html#module-deep_cave.registry.abstract_registry">deep_cave.registry.abstract_registry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.registry.html#module-deep_cave.registry.onnx_registry">deep_cave.registry.onnx_registry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.registry.html#module-deep_cave.registry.onnx_surrogate">deep_cave.registry.onnx_surrogate module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.registry.html#module-deep_cave.registry">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.server.html">deep_cave.server package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deep_cave.server.analysis_tools.html">deep_cave.server.analysis_tools package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.budget_correlation">deep_cave.server.analysis_tools.budget_correlation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.fANOVA">deep_cave.server.analysis_tools.fANOVA module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.ice_plots">deep_cave.server.analysis_tools.ice_plots module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.parallel_coordinates">deep_cave.server.analysis_tools.parallel_coordinates module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.partial_dependence_plot">deep_cave.server.analysis_tools.partial_dependence_plot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools.performance_over_time">deep_cave.server.analysis_tools.performance_over_time module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.analysis_tools.html#module-deep_cave.server.analysis_tools">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="deep_cave.server.layout.html">deep_cave.server.layout package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.layout.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.layout.html#module-deep_cave.server.layout.layout">deep_cave.server.layout.layout module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.layout.html#module-deep_cave.server.layout.table">deep_cave.server.layout.table module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.layout.html#module-deep_cave.server.layout">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="deep_cave.server.plugins.html">deep_cave.server.plugins package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.plugins.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.plugins.html#module-deep_cave.server.plugins.plugin">deep_cave.server.plugins.plugin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.plugins.html#module-deep_cave.server.plugins.plugin_manager">deep_cave.server.plugins.plugin_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.server.plugins.html#module-deep_cave.server.plugins">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#module-deep_cave.server.config">deep_cave.server.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#module-deep_cave.server.helper">deep_cave.server.helper module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#module-deep_cave.server.server">deep_cave.server.server module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#module-deep_cave.server.state">deep_cave.server.state module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.server.html#module-deep_cave.server">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.storage_backend.html">deep_cave.storage_backend package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.storage_backend.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="deep_cave.storage_backend.storage_backends.html">deep_cave.storage_backend.storage_backends package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.storage_backend.storage_backends.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.storage_backend.storage_backends.html#module-deep_cave.storage_backend.storage_backends.json_storage">deep_cave.storage_backend.storage_backends.json_storage module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="deep_cave.storage_backend.storage_backends.html#module-deep_cave.storage_backend.storage_backends">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.storage_backend.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.storage_backend.html#module-deep_cave.storage_backend.abstract_storage">deep_cave.storage_backend.abstract_storage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.storage_backend.html#module-deep_cave.storage_backend">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.store.html">deep_cave.store package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.store.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.store.html#module-deep_cave.store.state">deep_cave.store.state module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.store.html#module-deep_cave.store.store">deep_cave.store.store module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.store.html#module-deep_cave.store.trial">deep_cave.store.trial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.store.html#module-deep_cave.store">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.util.html">deep_cave.util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#module-deep_cave.util.importing">deep_cave.util.importing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#module-deep_cave.util.logs">deep_cave.util.logs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#module-deep_cave.util.parsing">deep_cave.util.parsing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#module-deep_cave.util.util">deep_cave.util.util module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.util.html#module-deep_cave.util">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-deep_cave">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deep_cave" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.end_study">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">end_study</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#deep_cave.end_study" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ends the current study and resets the global study store to None</p>
+<p>None</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.end_trial">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">end_trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trial</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="deep_cave.store.html#deep_cave.store.trial.Trial" title="deep_cave.store.trial.Trial"><span class="pre">deep_cave.store.trial.Trial</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.date</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.time</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.end_trial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to end a trial. Has an optional end_time argument when used with pre-calculated
+benchmarks, to correctly track the running time.</p>
+<p>end_trial is implicitly called, when using start_trial with a context manager.</p>
+<dl class="simple">
+<dt>trial: Trial</dt><dd><p>The Trial object to reference the current trial.</p>
+</dd>
+<dt>end_time: [datetime.date, datetime.datetime, datetime.time], optional</dt><dd><p>A datetime object that is logged as end_time and which is used to calculate the
+running duration.
+If end_time is None, set it to the current wall clock time.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>None</dt><dd><p>Only alters the store of the storage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.get_registry_uri">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">get_registry_uri</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.get_registry_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter for the registry_uri of the logger.</p>
+<blockquote>
+<div><p>Returns string, if a uri is already defined, otherwise return None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.get_study">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">get_study</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.get_study" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter for the name/id of the current study.</p>
+<blockquote>
+<div><p>Returns string, if a study already exists, otherwise return None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.get_tracking_uri">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">get_tracking_uri</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#deep_cave.get_tracking_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter for the tracking_uri of the logger.</p>
+<blockquote>
+<div><p>Returns string, if a uri is already defined, otherwise return None.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.log_surrogate">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">log_surrogate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">onnx.onnx_ml_pb2.ModelProto</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fidelity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapping</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.log_surrogate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log a surrogate model as onnx.ModelProto.</p>
+<p>Convert your surrogate model (with one of the available converters) into onnx representation.
+Create a mapping from the onnx input name to the used features in the correct ordering.</p>
+<p>The above arguments are important to use the surrogate model correctly. The model can then be used
+in the server application to generate Interpretability plots about the surrogate model.</p>
+<p>For more information see the supported tools section <a class="reference external" href="https://onnx.ai/supported-tools.html#buildModel">https://onnx.ai/supported-tools.html#buildModel</a> or
+or the onnx tutorial page <a class="reference external" href="https://github.com/onnx/tutorials">https://github.com/onnx/tutorials</a>.</p>
+<dl class="simple">
+<dt>model: onnx.ModelProto</dt><dd><p>The model returned from convert_* (e.g. convert_sklearn from the package skl2onnx)</p>
+</dd>
+<dt>fidelity: str, float, optional</dt><dd><p>Optional, to specify on which fidelity the model was build. If None, it is logged as the default model</p>
+</dd>
+<dt>mapping</dt><dd><p>A dictionary with the onnx input name as key. The value has to be a list of feature names, that are
+consistent with the one used in configs. The feature names are used, in case only a subset of the configurations
+where used to train the surrogate model. The ordering of the feature names is also important to guarantee,
+that the ordering corresponds to the one used during training.
+Additionally, can this mapping be used in more complex Pipelines (like sklearn.pipeline.Pipeline)
+or models with multiple inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.set_registry_uri">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">set_registry_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.set_registry_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter for the registry_uri of the logger.</p>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.set_study">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">set_study</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.set_study" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter for the name/id of the current study.</p>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.set_tracking_uri">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">set_tracking_uri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.set_tracking_uri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setter for the tracking_uri of the logger.</p>
+<blockquote>
+<div><p>None</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.start_study">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">start_study</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">study</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_args</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_space</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigSpace.configuration_space.ConfigurationSpace</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">None</span><a class="headerlink" href="#deep_cave.start_study" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is automatically called and filled with default values when study is None.
+Otherwise, start_study can be used to specify more details about the current study.</p>
+<dl class="simple">
+<dt>study: str, optional</dt><dd><p>Select a name of the study, when none generate a random string.</p>
+</dd>
+<dt>optimizer_args: Dict, optional</dt><dd><p>The arguments used in the AutoML optimizer to run this study. Should be any JSON serializable dict.</p>
+</dd>
+<dt>objective: str, optional</dt><dd><p>The objective the AutoML optimizer tries to optimized. Should be the subset of logged metrics</p>
+</dd>
+<dt>search_space: ConfigurationSpace</dt><dd><dl class="simple">
+<dt>The configuration space of used by the AutoML optimizer. This is used for logging purposes and</dt><dd><p>to generate new instance. Currently, only ConfigurationSpace is supported</p>
+</dd>
+</dl>
+</dd>
+<dt>groups: dict</dt><dd><p>Key-value pair that classifies the study into a group. E.g., {“dataset”: “MNIST”, “run”: 5, “algorithm”: BOHB}</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>None</dt><dd><p>The global store of deep_cave is set to this study, but no value is returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.start_trial">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.</span></span><span class="sig-name descname"><span class="pre">start_trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fidelity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.date</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">,</span> </span><span class="pre">datetime.time</span><span class="p"><span class="pre">,</span> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="deep_cave.store.html#deep_cave.store.trial.Trial" title="deep_cave.store.trial.Trial"><span class="pre">deep_cave.store.trial.Trial</span></a><a class="headerlink" href="#deep_cave.start_trial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a Trial. A Trial is uniquely identified by the config and its budget.
+Can be used as a context manager, which ends the trial automatically after exiting the scope.</p>
+<p>The Trial object can then be used as a thread safe way to log certain metrics to the trial.</p>
+<dl class="simple">
+<dt>config: Dict</dt><dd><p>A dictionary that describes the hyperparameters used to train the ML system.
+The config is hashed to generate a unique key. Fidelity shouldn’t alter the config.
+Otherwise, the trackability between trials with the same config and different
+fidelities are lost</p>
+</dd>
+<dt>fidelity: [str, float]</dt><dd><p>A fidelity that influences the behaviour of the ML system.
+It could be a float, describing the percentage of data used to train the system.
+It could be an int, specifying the budget in epochs available to train the ML system.
+It could be a str, describing the type of evaluation function used. E.g. evaluate
+the model in high or low fidelity.</p>
+</dd>
+<dt>increment: [datetime.datetime, datetime.date, datetime.time, int], optional</dt><dd><p>Can be any type of datetime object or int increment or seed. If None the current time is used.
+This parameter can be used to track a benchmark, where start and end time can be
+different from the wall clock time needed to produce the result.
+The increment or seed or start_time is used to make the tuple config, fidelity unique</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Trial</dt><dd><p>The Trial object can be used to log metrics for the running trial to the Study.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">deep_cave</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">deep_cave</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">deep_cave</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">deep_cave</a></li>
+      <li>Next: <a href="deep_cave.converter.html" title="next chapter">deep_cave.converter package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niels Nuthmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/deep_cave/deep_cave.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

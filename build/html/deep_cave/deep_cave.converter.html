@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>deep_cave.converter package &#8212; deep_cave bab028ca6b161db07f08a2c5597fdd1ab150b816 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="deep_cave.converter.converters package" href="deep_cave.converter.converters.html" />
+    <link rel="prev" title="deep_cave package" href="deep_cave.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="deep-cave-converter-package">
+<h1>deep_cave.converter package<a class="headerlink" href="#deep-cave-converter-package" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="deep_cave.converter.converters.html">deep_cave.converter.converters package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.converters.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.converters.html#module-deep_cave.converter.converters.bohb_converter">deep_cave.converter.converters.bohb_converter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deep_cave.converter.converters.html#module-deep_cave.converter.converters">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-deep_cave.converter.abstract_converter">
+<span id="deep-cave-converter-abstract-converter-module"></span><h2>deep_cave.converter.abstract_converter module<a class="headerlink" href="#module-deep_cave.converter.abstract_converter" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="deep_cave.converter.abstract_converter.AbstractConverter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">deep_cave.converter.abstract_converter.</span></span><span class="sig-name descname"><span class="pre">AbstractConverter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">study</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracking_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#deep_cave.converter.abstract_converter.AbstractConverter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="deep_cave.storage_backend.html#deep_cave.storage_backend.abstract_storage.AbstractStorage" title="deep_cave.storage_backend.abstract_storage.AbstractStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">deep_cave.storage_backend.abstract_storage.AbstractStorage</span></code></a></p>
+<p>AbstractConverter is a subclass of AbstractStorage. Thereby, converters can be used where storage is required.
+Adds another the static method name. Name is used to select the converter from the configured config variable
+CONVERTER.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deep_cave.converter.abstract_converter.AbstractConverter.name">
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">str</span><a class="headerlink" href="#deep_cave.converter.abstract_converter.AbstractConverter.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the converter child class.</p>
+<blockquote>
+<div><p>The name as string.</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-deep_cave.converter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-deep_cave.converter" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="deep_cave.converter.get_converter">
+<span class="sig-prename descclassname"><span class="pre">deep_cave.converter.</span></span><span class="sig-name descname"><span class="pre">get_converter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">converter_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracking_uri</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">study</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="deep_cave.storage_backend.html#deep_cave.storage_backend.abstract_storage.AbstractStorage" title="deep_cave.storage_backend.abstract_storage.AbstractStorage"><span class="pre">deep_cave.storage_backend.abstract_storage.AbstractStorage</span></a><a class="headerlink" href="#deep_cave.converter.get_converter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface for converters. Abstracts the selection and initialization process away. Returns the correct converter
+as an instance of AbstractStorage.</p>
+<dl class="simple">
+<dt>converter_name</dt><dd><p>str. Name of the converter. Every Converter has a unique name, based on which it is selected.</p>
+</dd>
+<dt>tracking_uri</dt><dd><p>str. The tracking_uri, with which the storage is initialized.</p>
+</dd>
+<dt>study</dt><dd><dl class="simple">
+<dt>str. The name of the study with which the storage is initialized. Can be None, when information about all</dt><dd><p>available studies is needed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<blockquote>
+<div><p>An instance of AbstractStorage.</p>
+</div></blockquote>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">deep_cave</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">deep_cave</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">deep_cave</a><ul>
+  <li><a href="deep_cave.html">deep_cave package</a><ul>
+      <li>Previous: <a href="deep_cave.html" title="previous chapter">deep_cave package</a></li>
+      <li>Next: <a href="deep_cave.converter.converters.html" title="next chapter">deep_cave.converter.converters package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Niels Nuthmann.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/deep_cave/deep_cave.converter.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -13,12 +13,12 @@ from deep_cave.util.logs import get_logger
 logger = get_logger(__name__)
 
 
-def auto_import_iter(paths: List[str]):
+def auto_import_iter(module, paths: List[str]):
     for path in paths:
         for f in glob.glob(path):
             if os.path.basename(f).startswith('__'):
                 continue
-            module_name = 'analysis_tools.' + os.path.basename(f).replace('.py', '')
+            module_name = f'{module}.' + os.path.basename(f).replace('.py', '')
             # dynamic import
             # https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
             try:

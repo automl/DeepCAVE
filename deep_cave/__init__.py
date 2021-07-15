@@ -13,6 +13,7 @@
 
 # mlflow style access to API via __init__.py
 
+'''
 from .logger import (
     start_trial,
     end_trial,
@@ -30,6 +31,7 @@ from .store.state import (
     get_registry_uri
 )
 
+
 __all__ = [
     'start_trial',
     'end_trial',
@@ -43,6 +45,7 @@ __all__ = [
     'get_registry_uri',
     'log_surrogate'
 ]
+'''
 
 from ._version import get_versions
 __version__ = get_versions()['version']
