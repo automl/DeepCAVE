@@ -45,7 +45,6 @@ class Converter:
 
     def get_run_names(self, selected_only=False):
         self.update()
-        print(selected_only)
 
         run_names = []
         for run in glob.glob(os.path.join(self.working_dir, '*')):

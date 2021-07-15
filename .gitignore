@@ -1,0 +1,5 @@
+build/*
+cache/*
+docs/*
+__pycache__
+_*
