@@ -47,11 +47,28 @@ class DataManager:
 
         self.storage = storage
 
-    def set(self, key, value):
+    def set(self, keys, value):
+        if isinstance(keys, str):
+            keys = [keys]
+        else:
+            assert isinstance(keys, list)
+        
+        key = "-".join(keys)
+
         self.storage.set(key, value)
 
-    def get(self, key):
+    def get(self, keys):
+        if isinstance(keys, str):
+            keys = [keys]
+        else:
+            assert isinstance(keys, list)
+        
+        key = "-".join(keys)
+        
         return self.storage.get(key)
+
+    def clear(self):
+        self.storage.clear()
 
     def get_runs():
         return

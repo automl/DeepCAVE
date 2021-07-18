@@ -5,6 +5,7 @@ from dash.dependencies import Input, Output, State
 
 from deep_cave.server import app
 from deep_cave.plugin_manager import pm
+from deep_cave.run_manager import rm
 from deep_cave.layouts.layout import Layout
 from deep_cave.layouts.header import HeaderLayout
 from deep_cave.layouts.general import GeneralLayout
@@ -37,14 +38,18 @@ class MainLayout(Layout):
 
             if paths[0] == "":
                 return general_layout
-            elif paths[0] == "hyperparameters":
-                return hyperparameters_layout
-            elif paths[0] == "plugins":
-                for name, layout in plugin_layouts.items():
-                    if name == paths[1]:
-                        return layout
             else:
-                return not_found_layout
+                if len(rm.get_run_names(selected_only=True)) == 0:
+                    return html.Div("Please select runs first.")
+                else:
+                    if paths[0] == "hyperparameters":
+                        return hyperparameters_layout
+                    elif paths[0] == "plugins":
+                        for name, layout in plugin_layouts.items():
+                            if name == paths[1]:
+                                return layout
+                    else:
+                        return not_found_layout
     
 
     def _get_layout(self):

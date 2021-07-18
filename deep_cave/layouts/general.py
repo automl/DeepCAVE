@@ -2,6 +2,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 
 from deep_cave.converter import converters
 from deep_cave.server import app
@@ -35,6 +36,7 @@ class GeneralLayout(Layout):
             alert_message = None
 
             if isinstance(n_clicks, int) and n_clicks > 0:
+                dm.clear()
                 dm.set("working_dir", working_dir)
                 dm.set("converter", converter_name)
                 dm.set("run_ids", [])
@@ -57,9 +59,21 @@ class GeneralLayout(Layout):
         # We have to inform the other plugins here as well
         @app.callback(output, input)
         def general_register_runs(run_ids):
-            dm.set("run_ids", run_ids)
+            if self.get_run_ids() != run_ids:
+                working_dir = dm.get("working_dir")
+                converter = dm.get("converter")
 
-            return run_ids
+                # Clear cache
+                dm.clear()
+
+                # Set everything
+                dm.set("working_dir", working_dir)
+                dm.set("converter", converter)
+                dm.set("run_ids", run_ids)
+
+                return run_ids
+            
+            raise PreventUpdate()
 
     @staticmethod
     def get_converter_options():

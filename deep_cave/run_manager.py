@@ -38,16 +38,16 @@ class RunManager:
         # Get current converter first
         self.converter = converters[dm.get("converter")]()
 
-    def get_runs(self):
+    def get_runs(self, selected_only=True):
         self.update()
 
         # Get data from converter
-        return self.converter.get_runs(selected_only=True)
+        return self.converter.get_runs(selected_only=selected_only)
 
-    def get_run_names(self):
+    def get_run_names(self, selected_only=False):
         self.update()
 
-        return self.converter.get_run_names()
+        return self.converter.get_run_names(selected_only=selected_only)
 
 
 rm = RunManager.getInstance()
