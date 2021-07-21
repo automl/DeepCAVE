@@ -1,0 +1,10 @@
+"CPU Time Used","Estimated Training Performance","Wallclock Time","Incumbent ID","Automatic Configurator (CPU) Time","Configuration..."
+0.000000, 2147483648.000000, 0.003140, 1, 0.003140, activation=''relu'', n_layer='2', n_neurons='387', solver=''sgd'', batch_size='82', learning_rate=''adaptive'', learning_rate_init='0.09860801164933497'
+3.772759, 0.898719, 3.912723, 1, 0.139964, activation=''relu'', n_layer='2', n_neurons='387', solver=''sgd'', batch_size='82', learning_rate=''adaptive'', learning_rate_init='0.09860801164933497'
+4.919533, 0.723417, 5.199619, 2, 0.280086, activation=''tanh'', n_layer='4', n_neurons='10', solver=''lbfgs''
+7.600596, 0.489704, 8.164464, 3, 0.563868, activation=''relu'', n_layer='3', n_neurons='12', solver=''adam'', batch_size='253', learning_rate_init='0.004086042982623543'
+10.241572, 0.264328, 11.048538, 4, 0.806966, activation=''relu'', n_layer='1', n_neurons='99', solver=''lbfgs''
+13.642620, 0.119638, 14.624848, 5, 0.982228, activation=''logistic'', n_layer='1', n_neurons='961', solver=''lbfgs''
+88.281156, 0.017806, 90.633707, 6, 2.352551, activation=''tanh'', n_layer='1', n_neurons='146', solver=''sgd'', batch_size='73', learning_rate=''constant'', learning_rate_init='0.03785759610701171'
+295.688651, 0.017804, 302.330410, 7, 6.641759, activation=''tanh'', n_layer='3', n_neurons='420', solver=''sgd'', batch_size='171', learning_rate=''adaptive'', learning_rate_init='0.0051863074074503974'
+487.576342, 0.016691, 500.388645, 8, 12.812303, activation=''tanh'', n_layer='1', n_neurons='286', solver=''adam'', batch_size='73', learning_rate_init='0.0020007206098846936'

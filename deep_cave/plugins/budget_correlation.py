@@ -42,9 +42,6 @@ class BudgetCorrelation(Plugin):
         ]
 
     def plot_figure(self, data):
-        import time
-        time.sleep(5)
-
         fig = plt.figure()
         plt.plot([i for i in range(int(data["yay"]))])
         plt.ylabel(data["blub"])
@@ -54,7 +51,7 @@ class BudgetCorrelation(Plugin):
             display_figure(fig)
         ]
 
-    def _load_input(self, run):
+    def _load_input(self, run, **inputs):
         return {
             "objective": {
                 "value": "hi"
@@ -65,7 +62,7 @@ class BudgetCorrelation(Plugin):
             }
         }
 
-    def _load_output(self, **inputs):
+    def _load_output(self, run, **inputs):
         """
         It's important to return only serializable data.
         Layouts should be specified within _get_output_layout.

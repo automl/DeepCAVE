@@ -19,48 +19,48 @@ class Converter:
         raise NotImplementedError()
 
     @abstractmethod
-    def retrieve_trials(run_name):
+    def retrieve_runhistory(run_name):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def retrieve_configspace(run_name):
         raise NotImplementedError()
 
     def update(self):
         self.working_dir = dm.get('working_dir')
-        self.run_ids = dm.get("run_ids")
+        self.run_id = dm.get("run_id")
 
-    def get_runs(self, selected_only=True) -> Dict[str, Dict]:
+    def get_selected_run(self) -> Run:
         self.update()
 
-        runs = {}
-        for run in glob.glob(os.path.join(self.working_dir, '*')):
-            run_name = os.path.basename(run)
+        meta = self.retrieve_meta()
+        rh = self.retrieve_runhistory()
+        cs = self.retrieve_configspace()
 
-            if selected_only and run_name not in self.run_ids:
-                continue
+        return Run(meta, rh, cs)
 
-            meta = self.retrieve_meta(run_name)
-            trials = self.retrieve_trials(run_name)
-
-            runs[run_name] = Run(meta, trials)
-            
-        return runs
-
-    def get_run_names(self, selected_only=False):
+    def get_run_ids(self, selected_only=False):
         self.update()
 
-        run_names = []
+        run_ids = []
         for run in glob.glob(os.path.join(self.working_dir, '*')):
-            run_name = os.path.basename(run)
+            run_id = os.path.basename(run)
 
-            if selected_only and run_name not in self.run_ids:
+            if selected_only and run_id not in self.run_id:
                 continue
 
-            run_names.append(run_name)
+            run_ids.append(run_id)
 
             
-        return run_names
+        return run_ids
 
-    def _get_json_content(self, run_name, file):
-        filename = os.path.join(self.working_dir, run_name, file)
+    def _get_json_content(self, file):
+        filename = os.path.join(self.working_dir, self.run_id, file + ".json")
         with open(filename, 'r') as f:
-            meta = json.load(f)
+            data = json.load(f)
         
-        return meta
+        return data
+
+    def _get_json_filename(self, file):
+        return os.path.join(self.working_dir, self.run_id, file + ".json")
+

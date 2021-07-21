@@ -15,7 +15,7 @@ def get_app():
     app = dash.Dash(
         __name__,
         title='Deep CAVE',
-        update_title='Loading...',
+        update_title='',
         external_stylesheets=[dbc.themes.BOOTSTRAP]
     )
 

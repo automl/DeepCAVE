@@ -4,7 +4,7 @@ from flask_caching import Cache
 
 root = os.getcwd()
 cache_dir = os.path.join(root, "cache")
-working_dir = os.path.join(root, "data")
+working_dir = os.path.join(root, "data", "smac3-output")
 
 STORAGE_CONFIG = {
     'CACHE_TYPE': 'FileSystemCache',
@@ -13,8 +13,8 @@ STORAGE_CONFIG = {
 
 STORAGE_DEFAULTS = {
     'working_dir': working_dir,
-    'converter': 'Test',
-    'run_ids': [],
+    'converter_name': 'SMAC',
+    'run_id': "",
 }
 
 

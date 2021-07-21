@@ -16,8 +16,8 @@ class GeneralLayout(Layout):
         outputs = [
             Output('general-working-directory-input', 'value'),
             Output('general-converter-select', 'value'),
-            Output('general-runs-checklist', 'options'),
-            Output('general-runs-checklist', 'value'),
+            Output('general-runs-radiolist', 'options'),
+            Output('general-runs-radiolist', 'value'),
             Output('general-alert', 'is_open'),
             Output('general-alert', 'children'),
         ]
@@ -38,40 +38,40 @@ class GeneralLayout(Layout):
             if isinstance(n_clicks, int) and n_clicks > 0:
                 dm.clear()
                 dm.set("working_dir", working_dir)
-                dm.set("converter", converter_name)
-                dm.set("run_ids", [])
+                dm.set("converter_name", converter_name)
+                dm.set("run_id", "")
 
                 alert_open = True
                 alert_message = "Successfully updated meta data."
             
             return \
                 GeneralLayout.get_working_dir(), \
-                GeneralLayout.get_converter(), \
+                GeneralLayout.get_converter_name(), \
                 GeneralLayout.get_run_options(), \
-                GeneralLayout.get_run_ids(), \
+                GeneralLayout.get_run_id(), \
                 alert_open, \
                 alert_message
 
-        input = Input('general-runs-checklist', 'value')
+        input = Input('general-runs-radiolist', 'value')
         output = Output('general-runs-output', 'value')
 
         # Save the run ids internally
         # We have to inform the other plugins here as well
         @app.callback(output, input)
-        def general_register_runs(run_ids):
-            if self.get_run_ids() != run_ids:
+        def general_register_runs(run_id):
+            if self.get_run_id() != run_id:
                 working_dir = dm.get("working_dir")
-                converter = dm.get("converter")
+                converter_name = dm.get("converter_name")
 
                 # Clear cache
                 dm.clear()
 
                 # Set everything
                 dm.set("working_dir", working_dir)
-                dm.set("converter", converter)
-                dm.set("run_ids", run_ids)
+                dm.set("converter_name", converter_name)
+                dm.set("run_id", run_id)
 
-                return run_ids
+                return run_id
             
             raise PreventUpdate()
 
@@ -81,23 +81,23 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_run_options():
-        return [{"label": run_name, "value": run_name} for run_name in rm.get_run_names()]
+        return [{"label": run_name, "value": run_name} for run_name in rm.get_run_ids()]
 
     @staticmethod
-    def get_run_ids():
-        run_ids = dm.get("run_ids")
-        if run_ids is None:
-            return []
+    def get_run_id():
+        run_id = dm.get("run_id")
+        if run_id is None:
+            return ""
 
-        return run_ids
+        return run_id
 
     @staticmethod
     def get_working_dir():
         return dm.get("working_dir")
 
     @staticmethod
-    def get_converter():
-        return dm.get("converter")
+    def get_converter_name():
+        return dm.get("converter_name")
 
     def _get_layout(self):
         return [
@@ -124,8 +124,8 @@ class GeneralLayout(Layout):
 
             html.H2('Runs'),
             dbc.Input(id="general-runs-output", style="display: none;"),
-            dbc.Checklist(
-                id="general-runs-checklist",
+            dbc.RadioItems(
+                id="general-runs-radiolist",
                 #options=GeneralLayout.get_run_options(),
                 #value=GeneralLayout.get_run_ids()
             )

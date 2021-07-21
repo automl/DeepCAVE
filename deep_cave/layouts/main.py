@@ -39,7 +39,7 @@ class MainLayout(Layout):
             if paths[0] == "":
                 return general_layout
             else:
-                if len(rm.get_run_names(selected_only=True)) == 0:
+                if rm.get_selected_run() == "":
                     return html.Div("Please select runs first.")
                 else:
                     if paths[0] == "hyperparameters":
@@ -56,7 +56,7 @@ class MainLayout(Layout):
         return \
             html.Div(children=[
                 HeaderLayout(),
-                html.Div(className='container-fluid', children=[
+                html.Div(id='main-container', className='container-fluid', children=[
                     html.Div(className='row', children=[
                         SidebarLayout(),
                         html.Main(className='col-md-9 ms-sm-auto col-lg-10 px-md-4', children=[

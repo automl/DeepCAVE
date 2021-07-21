@@ -1,0 +1,24 @@
+html, body,
+#react-entry-point,
+#_dash-global-error-container,
+#_dash-global-error-container > div,
+#_dash-global-error-container > div > div:not(.dash-debug-alert-label, .dash-debug-menu__outer, .dash-debug-menu),
+#_dash-global-error-container > div > div > div,
+#_dash-app-content,
+#_dash-app-content > div,
+#main-container,
+#main-container > .row {
+    height: 100%;
+}
+
+main {
+    padding: 1rem;
+}
+
+header {
+    height: 4rem;
+}
+
+h1 {
+    margin-bottom: 2rem;
+}
