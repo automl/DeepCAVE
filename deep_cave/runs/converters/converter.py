@@ -4,8 +4,8 @@ import glob
 import json
 from typing import Dict, Type, Any
 
-from deep_cave.util.run import Run
-from deep_cave.data_manager import dm
+from deep_cave.runs.run import Run
+from deep_cave.cache import cache
 
 
 class Converter:
@@ -27,8 +27,8 @@ class Converter:
         raise NotImplementedError()
 
     def update(self):
-        self.working_dir = dm.get('working_dir')
-        self.run_id = dm.get("run_id")
+        self.working_dir = cache.get('working_dir')
+        self.run_id = cache.get("run_id")
 
     def get_selected_run(self) -> Run:
         self.update()

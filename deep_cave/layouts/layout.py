@@ -5,6 +5,7 @@ from deep_cave.util.importing import auto_import_iter
 
 class Layout(ABC):
 
+    '''
     instance = None
     def __new__(cls, *args, **kwargs):
         if not cls.instance:
@@ -16,25 +17,14 @@ class Layout(ABC):
             cls.instance.register_callbacks()
 
         return cls.instance.get_layout()
+    '''
 
-    def define_variables(self):
-        if not self.variables_defined:
-            self._define_variables()
-            self.variables_defined = True
-    
+    def __init__(self):
+        self.register_callbacks()
+
     def register_callbacks(self):
-        if not self.callbacks_registered:
-            self._register_callbacks()
-            self.callbacks_registered = True
-
-    def get_layout(self):
-        return self._get_layout()
-
-    def _define_variables(self):
         pass
 
-    def _register_callbacks(self):
-        pass
-
-    def _get_layout(self):
+    @abstractmethod
+    def __call__(self):
         pass

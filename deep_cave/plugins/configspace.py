@@ -11,7 +11,7 @@ import numpy as np
 from scipy.stats import spearmanr
 from itertools import combinations_with_replacement
 
-from deep_cave.server import app
+from deep_cave import app
 from deep_cave.plugins.plugin import Plugin
 from deep_cave.util.gui_helper import display_figure
 from deep_cave.util.logs import get_logger
@@ -20,7 +20,7 @@ from deep_cave.util.styled_plot import plt
 logger = get_logger(__name__)
 
 
-class BudgetCorrelation(Plugin):
+class ConfigSpace(Plugin):
     @staticmethod
     def id():
         return "configuration_space"
@@ -33,7 +33,7 @@ class BudgetCorrelation(Plugin):
     def update_on_changes():
         return True
 
-    def _get_input_layout(self):
+    def get_input_layout(self):
         return [
             dbc.Label("Fidelity"),
             dcc.Slider(id=self.register_input("fidelity", ["min", "max", "marks", "value"])),
@@ -42,12 +42,12 @@ class BudgetCorrelation(Plugin):
             dcc.Slider(id=self.register_input("num_configs", ["min", "max", "marks", "value"])),
         ]
     
-    def _get_output_layout(self):
+    def get_output_layout(self):
         return [
             dcc.Graph(self.register_output("heat_map", "figure"))
         ]
 
-    def _load_input(self, run):
+    def load_input(self, run):
         return {
             "fidelity": {
                 "min": 0,
@@ -63,22 +63,24 @@ class BudgetCorrelation(Plugin):
             },
         }
     
-    def _load_dependency_input(self, run, **inputs):
+    def load_dependency_input(self, run, **inputs):
         count = int(run.get_fidelities()[int(inputs["fidelity"]["value"])])
+        value = int(inputs["num_configs"]["value"])
+
         return {
             "num_configs": {
-                #"min": 0,
                 "max": count,
                 "marks": {str(i):str(i) for i in range(count)},
-                #"value": inputs["num_configs"]["value"],
+                "value": value if value <= count else count,
             }
         }
 
-    def _load_output(self, run, **inputs):
+    def load_output(self, run, **inputs):
         heat_map = px.imshow(
-            [[1, 20, 30],
-            [20, 1, 60],
-            [30, 60, 1]]
+            np.random.rand(
+                inputs["num_configs"]["value"],
+                inputs["num_configs"]["value"],
+            )
         )
 
         return {

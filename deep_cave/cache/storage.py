@@ -1,39 +1,10 @@
-import os
 from flask_caching import Cache
+from deep_cave.cache.defaults import STORAGE_CONFIG, STORAGE_DEFAULTS
 
 
-root = os.getcwd()
-cache_dir = os.path.join(root, "cache")
-working_dir = os.path.join(root, "data", "smac3-output")
-
-STORAGE_CONFIG = {
-    'CACHE_TYPE': 'FileSystemCache',
-    'CACHE_DIR': cache_dir,
-}
-
-STORAGE_DEFAULTS = {
-    'working_dir': working_dir,
-    'converter_name': 'SMAC',
-    'run_id': "",
-}
-
-
-class DataManager:
-
-    instance = None
-
-    @staticmethod 
-    def getInstance():
-        if DataManager.instance == None:
-            DataManager.instance = DataManager()
-
-        return DataManager.instance
-
+class Storage:
     def __init__(self):
-        if DataManager.instance != None:
-            raise Exception("This class is a singleton!")
-        else:
-            DataManager.instance = self
+        pass
 
     def setup_storage(self, server):
         # Register the cache
@@ -70,14 +41,3 @@ class DataManager:
     def clear(self):
         self.storage.clear()
 
-    def get_runs():
-        return
-
-
-dm = DataManager.getInstance()
-    
-__all__ = ["dm"]
-
-# data.get("run_ids")
-# data.get_run_ids()
-# data.get_blub()

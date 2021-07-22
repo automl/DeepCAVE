@@ -18,7 +18,7 @@ from deep_cave.util.styled_plot import plt
 
 logger = get_logger(__name__)
 
-
+'''
 class BudgetCorrelation(Plugin):
     @staticmethod
     def id():
@@ -76,3 +76,4 @@ class BudgetCorrelation(Plugin):
             "output": objective,
             "output2": fidelity
         }
+'''

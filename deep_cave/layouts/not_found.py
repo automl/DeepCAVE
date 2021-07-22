@@ -5,5 +5,8 @@ from deep_cave.layouts.layout import Layout
 
 
 class NotFoundLayout(Layout):
-    def _get_layout(self):
+    def __call__(self):
         return html.H2('This page does not exists.')
+
+
+layout = NotFoundLayout()

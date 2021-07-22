@@ -4,15 +4,15 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from deep_cave.converter import converters
-from deep_cave.server import app
-from deep_cave.data_manager import dm
-from deep_cave.run_manager import rm
+from deep_cave.runs.converters import available_converters
+from deep_cave import app
+from deep_cave.cache import cache
 from deep_cave.layouts.layout import Layout
+from deep_cave.runs import get_run_ids
 
 
 class GeneralLayout(Layout):
-    def _register_callbacks(self):
+    def register_callbacks(self):
         outputs = [
             Output('general-working-directory-input', 'value'),
             Output('general-converter-select', 'value'),
@@ -36,19 +36,19 @@ class GeneralLayout(Layout):
             alert_message = None
 
             if isinstance(n_clicks, int) and n_clicks > 0:
-                dm.clear()
-                dm.set("working_dir", working_dir)
-                dm.set("converter_name", converter_name)
-                dm.set("run_id", "")
+                cache.clear()
+                cache.set("working_dir", working_dir)
+                cache.set("converter_name", converter_name)
+                cache.set("run_id", "")
 
                 alert_open = True
                 alert_message = "Successfully updated meta data."
             
             return \
-                GeneralLayout.get_working_dir(), \
-                GeneralLayout.get_converter_name(), \
-                GeneralLayout.get_run_options(), \
-                GeneralLayout.get_run_id(), \
+                cache.get("working_dir"), \
+                cache.get("converter_name"), \
+                self.get_run_options(), \
+                cache.get("run_id"), \
                 alert_open, \
                 alert_message
 
@@ -59,17 +59,17 @@ class GeneralLayout(Layout):
         # We have to inform the other plugins here as well
         @app.callback(output, input)
         def general_register_runs(run_id):
-            if self.get_run_id() != run_id:
-                working_dir = dm.get("working_dir")
-                converter_name = dm.get("converter_name")
+            if cache.get("run_id") != run_id:
+                working_dir = cache.get("working_dir")
+                converter_name = cache.get("converter_name")
 
                 # Clear cache
-                dm.clear()
+                cache.clear()
 
                 # Set everything
-                dm.set("working_dir", working_dir)
-                dm.set("converter_name", converter_name)
-                dm.set("run_id", run_id)
+                cache.set("working_dir", working_dir)
+                cache.set("converter_name", converter_name)
+                cache.set("run_id", run_id)
 
                 return run_id
             
@@ -77,56 +77,41 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_converter_options():
-        return [{"label": adapter, "value": adapter} for adapter in converters.keys()]
+        return [{"label": adapter, "value": adapter} for adapter in available_converters.keys()]
 
     @staticmethod
     def get_run_options():
-        return [{"label": run_name, "value": run_name} for run_name in rm.get_run_ids()]
+        return [{"label": run_name, "value": run_name} for run_name in get_run_ids()]
 
-    @staticmethod
-    def get_run_id():
-        run_id = dm.get("run_id")
-        if run_id is None:
-            return ""
-
-        return run_id
-
-    @staticmethod
-    def get_working_dir():
-        return dm.get("working_dir")
-
-    @staticmethod
-    def get_converter_name():
-        return dm.get("converter_name")
-
-    def _get_layout(self):
+    def __call__(self):
         return [
             html.H1('General'),
 
             dbc.Alert("", color="success", id="general-alert", is_open=False, dismissable=True),
 
-            html.Div("Working Directory"),
-            html.Div(html.I("Absolute path to your studies.")),
-            dbc.Input(id="general-working-directory-input", placeholder="", type="text", 
-                #value=GeneralLayout.get_working_dir()
-            ),
+            dbc.FormGroup([
+                dbc.Label("Working Directory", html_for="general-working-directory-input"),
+                dbc.FormText("Absolute path to your studies."),
+                dbc.Input(id="general-working-directory-input", placeholder="", type="text"),
+            ]),
 
-            html.Div("Converter"),
-            html.Div(html.I("Which optimizer was used to receive the data?")),
-            dbc.Select(
-                id="general-converter-select",
-                options=GeneralLayout.get_converter_options(),
-                #value=GeneralLayout.get_converter(),
-            ),
+            dbc.FormGroup([
+                dbc.Label("Converter", html_for="general-converter-select"),
+                dbc.FormText("Which optimizer was used to receive the data?"),
+                dbc.Select(
+                    id="general-converter-select",
+                    options=GeneralLayout.get_converter_options(),
+                    placeholder="Select converter ..."
+                ),
+            ]),
 
-            dbc.Button("Update", id="general-update-button", color="primary", className="mt-3"),
+            dbc.Button("Update", id="general-update-button", color="primary"),
             html.Hr(),
 
             html.H2('Runs'),
-            dbc.Input(id="general-runs-output", style="display: none;"),
-            dbc.RadioItems(
-                id="general-runs-radiolist",
-                #options=GeneralLayout.get_run_options(),
-                #value=GeneralLayout.get_run_ids()
-            )
+            dbc.Input(id="general-runs-output", style={"display": "none"}),
+            dbc.RadioItems(id="general-runs-radiolist")
         ]
+
+
+layout = GeneralLayout()

@@ -1,7 +1,7 @@
-from deep_cave.server import app
-from deep_cave.layouts.main import MainLayout
+from deep_cave import app
+from deep_cave.layouts.main import layout
 
 
 if __name__ == '__main__':
-    app.layout = MainLayout()
+    app.layout = layout()
     app.run_server(debug=True)

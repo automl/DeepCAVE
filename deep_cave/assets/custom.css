@@ -11,6 +11,10 @@ html, body,
     height: 100%;
 }
 
+body {
+    background-color: rgb(249, 249, 249);
+}
+
 main {
     padding: 1rem;
 }
@@ -20,5 +24,19 @@ header {
 }
 
 h1 {
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
+}
+
+label {
+    margin-bottom: 0;
+}
+
+.form-text {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+#sidebarMenu {
+    background-color: rgb(243, 242, 241);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
 }

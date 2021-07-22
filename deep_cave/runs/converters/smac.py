@@ -4,8 +4,8 @@ import glob
 import pandas as pd
 from typing import Dict, Type, Any
 
-from deep_cave.converter.converter import Converter
-from deep_cave.util.run import Run
+from deep_cave.runs.converters.converter import Converter
+from deep_cave.runs.run import Run
 from smac.runhistory.runhistory import RunHistory
 from ConfigSpace.read_and_write import json as cs_json
 

@@ -1,3 +1,8 @@
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+
 # IEEETrans double column standard
 FIG_WIDTH = 252.0 / 72.27 #1pt is 1/72.27 inches
 FIG_HEIGHT = FIG_WIDTH / 1.618 #golden ratio
@@ -10,11 +15,6 @@ class StyledPlot:
     """
 
     def __init__(self):
-        print("yooo")
-        import matplotlib
-        matplotlib.use('Agg')
-        import matplotlib.pyplot as plt
-
         plt.style.use('seaborn')
 
         # Set MatPlotLib defaults
@@ -121,5 +121,6 @@ class StyledPlot:
             return self.__getattribute__(name)
         except:
             return self.plt.__getattribute__(name)
+
 
 plt = StyledPlot()
