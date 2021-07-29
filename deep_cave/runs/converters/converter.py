@@ -51,7 +51,6 @@ class Converter:
 
             run_ids.append(run_id)
 
-            
         return run_ids
 
     def _get_json_content(self, file):

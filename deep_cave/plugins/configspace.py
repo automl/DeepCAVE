@@ -19,7 +19,7 @@ from deep_cave.util.styled_plot import plt
 
 logger = get_logger(__name__)
 
-
+'''
 class ConfigSpace(Plugin):
     @staticmethod
     def id():
@@ -86,3 +86,4 @@ class ConfigSpace(Plugin):
         return {
             "heat_map": heat_map,
         }
+'''

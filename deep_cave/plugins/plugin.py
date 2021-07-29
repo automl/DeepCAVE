@@ -40,6 +40,10 @@ class Plugin(Layout):
         raise NotImplementedError()
 
     @staticmethod
+    def position():
+        return 99999
+
+    @staticmethod
     @abstractmethod
     def name():
         raise NotImplementedError()
@@ -218,15 +222,16 @@ class Plugin(Layout):
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
         """
-        components = []
+        components = [html.H1(self.name())]
+
+        if self.description() != '':
+            components += [html.P(self.description())]
 
         input_button = dbc.Button(
             children=self.button_caption(),
             id=self.get_internal_id("update-button"),
             style={"display": "none"} if self.update_on_changes() else {}
         )
-
-        components += [html.H1(self.name())]
 
         input_layout = self.get_input_layout()
         if input_layout:
@@ -254,9 +259,8 @@ class Plugin(Layout):
     def load_output(self, **kwargs):
         pass
     
-    @abstractmethod
     def load_dependency_input(self, run, **inputs):
-        pass
+        return inputs
 
     def get_input_layout(self):
         return []
