@@ -11,11 +11,11 @@ STORAGE_CONFIG = {
     'CACHE_DIR': cache_dir,
 }
 
-STORAGE_DEFAULTS = {
+STORAGE_REQUIRED_DATA = {
     'working_dir': working_dir,
     'converter_name': 'SMAC',
-    'run_id': "",
+    'run_id': None,
 }
 
 
-__all__ = [STORAGE_CONFIG, STORAGE_DEFAULTS]
+__all__ = [STORAGE_CONFIG, STORAGE_REQUIRED_DATA]

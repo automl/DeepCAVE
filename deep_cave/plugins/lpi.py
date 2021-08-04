@@ -17,7 +17,7 @@ from deep_cave.util.gui_helper import display_figure
 from deep_cave.util.logs import get_logger
 from deep_cave.util.styled_plot import plt
 
-from fanova import fANOVA as _fANOVA
+from evaluators.lpi import LPI as _LPI
 import itertools as it
 import logging
 from collections import OrderedDict
@@ -33,14 +33,14 @@ from ConfigSpace.hyperparameters import CategoricalHyperparameter, UniformFloatH
 logger = get_logger(__name__)
 
 
-class fANOVA(Plugin):
+class LPI(Plugin):
     @staticmethod
     def id():
-        return "fanova"
+        return "lpi"
 
     @staticmethod
     def name():
-        return "fANOVA"
+        return "LPI"
 
     @staticmethod
     def category():
@@ -63,37 +63,37 @@ class fANOVA(Plugin):
         return {
             "hyperparameters": {
                 "options": [{"label": name, "value": idx} for idx, name in enumerate(hp_names)],
-                "value": [i for i in range(len(hp_names))]
+                "value": [idx for idx in range(len(hp_names))]
             }
         }
 
     def load_output(self, run, **inputs):
         fidelities = run.get_fidelities()
-        hyperparameter_ids = inputs["hyperparameters"]["value"]
+        hyperparameter_ids = sorted(inputs["hyperparameters"]["value"])
         hp_names = run.cs.get_hyperparameter_names()
 
         # Collect data
         data = []
         for fidelity in fidelities:
 
-            X, y, mapping, id_mapping, _, _, new_cs = run.transform_configs(
+            X, y, mapping, id_mapping, _, _, _ = run.transform_configs(
                 fidelity,
-                hyperparameter_ids=hyperparameter_ids,
-                remove_inactive=True
+                hyperparameter_ids=hyperparameter_ids
+            )
+
+            lpi = _LPI(
+                run.get_runhistory(),
+                fidelity,
+                selected_hyperparameters,
             )
 
 
-            conf = new_cs.sample_configuration()
-
-            run.transform_config(conf, mapping)
-            #print(conf)
-
-
+            
 
             fanova = _fANOVA(
                 pd.DataFrame(data=X),
                 np.array(y),
-                #config_space=configspace,
+                config_space=config_space,
                 #n_trees=n_trees,
                 #min_samples_split=min_samples_split
             )
@@ -101,11 +101,8 @@ class fANOVA(Plugin):
             x = []
             y = []
             error_y = []
-            for id in sorted(hyperparameter_ids):
-                new_id = id_mapping[id]
-
-                if new_id is None:
-                    continue
+            for id in selected_hp_ids:
+                new_id = hp_id_mapping[id]
 
                 results = fanova.quantify_importance([new_id])
                 results = list(results.values())[0]
@@ -114,7 +111,7 @@ class fANOVA(Plugin):
 
                 x += [hp_names[id]]
                 y += [importance]
-                error_y += [std]
+                error_y += [0]
 
             data += [go.Bar(name=fidelity, x=x, y=y, error_y_array=error_y)]
 

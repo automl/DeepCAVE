@@ -40,6 +40,10 @@ class Plugin(Layout):
         raise NotImplementedError()
 
     @staticmethod
+    def category():
+        return None
+
+    @staticmethod
     def position():
         return 99999
 
@@ -229,6 +233,7 @@ class Plugin(Layout):
 
         input_button = dbc.Button(
             children=self.button_caption(),
+            className="mt-3",
             id=self.get_internal_id("update-button"),
             style={"display": "none"} if self.update_on_changes() else {}
         )

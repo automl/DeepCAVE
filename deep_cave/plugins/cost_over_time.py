@@ -19,18 +19,22 @@ from deep_cave.util.styled_plot import plt
 logger = get_logger(__name__)
 
 
-class PerformanceOverTime(Plugin):
+class CostOverTime(Plugin):
     @staticmethod
     def id():
-        return "performance_over_time"
+        return "cost_over_time"
 
     @staticmethod
     def name():
-        return "Performance Over Time"
+        return "Cost Over Time"
 
     @staticmethod
     def position():
         return 0
+
+    @staticmethod
+    def category():
+        return "Performance"
 
     @staticmethod
     def update_on_changes():
