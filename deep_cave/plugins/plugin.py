@@ -2,10 +2,13 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Type, Union, Optional, Tuple
 import os
 import json
+import copy
 from collections import defaultdict
 
 import pandas as pd
 
+
+from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
@@ -17,8 +20,8 @@ from ConfigSpace import ConfigurationSpace
 from dash.exceptions import PreventUpdate
 
 from deep_cave import app
-from deep_cave.cache import cache
-from deep_cave.util.logs import get_logger
+from deep_cave import cache
+from deep_cave.utils.logs import get_logger
 from deep_cave.layouts.layout import Layout
 from deep_cave.runs import get_selected_run
 
@@ -28,9 +31,16 @@ logger = get_logger(__name__)
 
 class Plugin(Layout):
     def __init__(self):
-        self.inputs = {}
-        self.interactive_inputs = {}
-        self.outputs = {}
+        self.inputs = []
+        self.outputs = []
+
+        # Processing right now?
+        self.blocked = False
+
+        # Alert texts
+        self.alert_text = ""
+        self.alert_color = "success"
+        self.alert_update_required = False
 
         super().__init__()
 
@@ -60,36 +70,31 @@ class Plugin(Layout):
     def button_caption():
         return "Process"
 
-    @staticmethod
-    def update_on_changes():
-        return False
-
-    def register_input(self, id, attributes=["value"]):
+    def register_input(self, id, attributes=["value"], filter=False):
         if isinstance(attributes, str):
             attributes = [attributes]
 
         for attribute in attributes:
-            if id not in self.inputs:
-                self.inputs[id] = []
+            key = (id, attribute, filter)
+            if key not in self.inputs:
+                self.inputs.append(key)
 
-            if attribute not in self.inputs[id]:
-                self.inputs[id].append(attribute)
+        # We have to rearrange the inputs because `State`
+        # must follow all `Input`. Since all filters are `Input`, we have to
+        # shift them to the front.
+        self.inputs.sort(key=lambda x: x[2], reverse=True)
 
         return self.get_internal_input_id(id)
-    
-    def register_output(self, id, attribute="value", func=None):
+
+    def register_output(self, id, attribute="value", mpl=False):
         assert isinstance(attribute, str)
 
-        """
-        If a func is used then our attr is always children.
-        That's because the func should always return
-        a list of dash html components.
-        """
-        if func is not None:
-            attribute = "children"
+        if mpl:
+            id = id + "-mpl"
 
-        if id not in self.outputs:
-            self.outputs[id] = (attribute, func)
+        key = (id, attribute, mpl)
+        if key not in self.outputs:
+            self.outputs.append(key)
 
         return self.get_internal_output_id(id)
 
@@ -106,122 +111,213 @@ class Plugin(Layout):
         # We have to call the output layout one time to register
         # the values
         self.get_input_layout()
+        self.get_filter_layout()
         self.get_output_layout()
-
-        outputs = []
-        for id, (attribute, _) in self.outputs.items():
-            outputs.append(Output(self.get_internal_output_id(id), attribute))
-
-        inputs = [Input(self.get_internal_id("update-button"), 'n_clicks')]
-        for id, attributes in self.inputs.items():
-            for attribute in attributes:
-                if self.update_on_changes():
-                    inputs.append(Input(self.get_internal_input_id(id), attribute))
-                else:
-                    inputs.append(State(self.get_internal_input_id(id), attribute))
-
-        # Register updates from inputs
-        @app.callback(outputs, inputs)
-        def plugin_output_update(n_clicks, *user_specified_inputs_list):
-            if n_clicks is None and not self.update_on_changes():
-                outputs = cache.get(["plugins", self.id(), "outputs"])
-                if outputs is None:
-                    raise PreventUpdate()
-            
-            else:
-                # Map the list `user_specified_inputs`
-                # to a dict.
-                user_specified_inputs = {}
-                index = 0
-                for id, attributes in self.inputs.items():
-                    if id not in user_specified_inputs:
-                        user_specified_inputs[id] = {}
-
-                    for attribute in attributes:
-                        if attribute not in user_specified_inputs[id]:
-                            user_specified_inputs[id][attribute] = \
-                                user_specified_inputs_list[index]
-
-                        index += 1
-
-                outputs = self.load_output(get_selected_run(), **user_specified_inputs)
-
-                # Now we have to check if any funcs were
-                # registered
-                for id, (attribute, func) in self.outputs.items():
-                    if func is not None:
-                        outputs[id] = func(outputs[id])
-
-                # Save inputs+outputs in cache
-                cache.set(["plugins", self.id(), "outputs"], outputs)
-
-            return list(outputs.values())
+        self.get_mpl_output_layout()
 
         # Handles the initial and the cashed input values
         outputs = []
-        inputs = [] #[Input(self.get_internal_id("update-button"), 'n_clicks')]
+        # [Input(self.get_internal_id("update-button"), 'n_clicks')]
+        inputs = []
 
         # Define also inputs if they are declared as interactive
-        for id, attributes in self.inputs.items():
-            for attribute in attributes:
-                inputs.append(Input(self.get_internal_input_id(id), attribute))
+        for id, attribute, _ in self.inputs:
+            inputs.append(Input(self.get_internal_input_id(id), attribute))
 
-        for id, attributes in self.inputs.items():
-            for attribute in attributes:
-                outputs.append(Output(self.get_internal_input_id(id), attribute))
+        for id, attribute, _ in self.inputs:
+            outputs.append(Output(self.get_internal_input_id(id), attribute))
 
         if len(outputs) > 0:
             @app.callback(outputs, inputs)
-            def plugin_input_update(*user_specified_inputs_list):
+            def plugin_input_update(*inputs_list):
                 init = True
-                for input in user_specified_inputs_list:
+                # Simple check if page was loaded for the first time
+                for input in inputs_list:
                     if input is not None:
                         init = False
                         break
 
-                # Only load what we've got
+                run = get_selected_run()
+
+                # Reload our inputs
                 if init:
-                    user_specified_inputs = cache.get(["plugins", self.id(), "user_specified_inputs"])
+                    inputs = cache.get("plugins", self.id(), "last_inputs")
 
-                    if user_specified_inputs is None:
-                        user_specified_inputs = self.load_input(get_selected_run())
-                        cache.set(["plugins", self.id(), "user_specified_inputs"], user_specified_inputs)
+                    if inputs is None:
+                        inputs = self.load_inputs(run)
+
+                        # Set not used inputs
+                        for (id, attribute, _) in self.inputs:
+                            if id not in inputs:
+                                inputs[id] = {}
+
+                            if attribute not in inputs[id]:
+                                inputs[id][attribute] = None
                 else:
-                    # Map the list `user_specified_inputs`
-                    # to a dict.
-                    user_specified_inputs = {}
-                    index = 0
-                    for id, attributes in self.inputs.items():
-                        if id not in user_specified_inputs:
-                            user_specified_inputs[id] = {}
-
-                        for attribute in attributes:
-                            if attribute not in user_specified_inputs[id]:
-                                user_specified_inputs[id][attribute] = \
-                                    user_specified_inputs_list[index]
-
-                            index += 1
+                    # Map the list `inputs` to a dict.
+                    inputs = self._list_to_dict(inputs_list)
 
                     # How to update only parameters which have a dependency?
-                    user_dependencies_inputs = self.load_dependency_input(get_selected_run(), **user_specified_inputs)
+                    user_dependencies_inputs = self.load_dependency_inputs(
+                        run, **inputs)
 
                     # Update dict
                     # update() removes keys, so it's done manually
                     for k1, v1 in user_dependencies_inputs.items():
                         for k2, v2 in v1.items():
-                            user_specified_inputs[k1][k2] = v2
-                    
-                    cache.set(["plugins", self.id(), "user_specified_inputs"], user_specified_inputs)
+                            inputs[k1][k2] = v2
 
                 # From dict to list
-                user_specified_inputs_list = []
-                for v1 in user_specified_inputs.values():
-                    for v2 in v1.values():
-                        user_specified_inputs_list.append(v2)
+                inputs_list = self._dict_to_list(inputs, input=True)
 
-                return user_specified_inputs_list        
+                return inputs_list
 
-    def __call__(self):
+        # Update internal alert state to divs
+        @app.callback(
+            Output(self.get_internal_id("alert"), 'children'),
+            Output(self.get_internal_id("alert"), 'color'),
+            Output(self.get_internal_id("alert"), 'is_open'),
+            Input(self.get_internal_id("alert-interval"), 'n_intervals'))
+        def update_alert(_):
+            if self.alert_update_required:
+                self.alert_update_required = False
+                return self.alert_text, self.alert_color, True
+            else:
+                raise PreventUpdate()
+
+    def update_alert(self, text, color="success"):
+        self.alert_text = text
+        self.alert_color = color
+        self.alert_update_required = True
+
+    def _inputs_changed(self, inputs, last_inputs):
+        # Check if last_inputs are the same as the given inputs.
+        inputs_changed = False
+        filters_changed = False
+
+        # If only filters changed, then we don't need to
+        # calculate the results again.
+        if last_inputs is not None:
+            for (id, attribute, filter) in self.inputs:
+                if inputs[id][attribute] != last_inputs[id][attribute]:
+                    if not filter:
+                        inputs_changed = True
+                    else:
+                        filters_changed = True
+
+        return inputs_changed, filters_changed
+
+    def _process_raw_outputs(self, inputs, raw_outputs):
+        logger.debug("Process raw outputs.")
+        # Use raw outputs to update our layout
+        mpl_active = cache.get("matplotlib-mode")
+        if mpl_active:
+            outputs = self.load_mpl_outputs(inputs, raw_outputs)
+        else:
+            outputs = self.load_outputs(inputs, raw_outputs)
+
+        # Map outputs here because it may be that the outputs are
+        # differently sorted than the values were registered.
+        if isinstance(outputs, dict):
+            outputs = self._dict_to_list(outputs, input=False)
+        else:
+            if not isinstance(outputs, list):
+                outputs = [outputs]
+
+        # We have to add no_updates here for the mode we don't want
+        count_outputs = 0
+        count_mpl_outputs = 0
+        for (_, _, mpl_mode) in self.outputs:
+            if mpl_mode:
+                count_mpl_outputs += 1
+            else:
+                count_outputs += 1
+
+        if mpl_active:
+            outputs = [no_update for _ in range(count_outputs)] + outputs
+        else:
+            outputs = outputs + [no_update for _ in range(count_mpl_outputs)]
+
+        return outputs
+
+    def _list_to_dict(self, values: list, input=True):
+        """
+        Maps the given values to a dict, regarding the sorting from
+        either self.inputs or self.outputs.
+
+        Returns:
+            dict
+        """
+
+        if input:
+            order = self.inputs
+        else:
+            order = self.outputs
+
+        mapping = {}
+        for value, (id, attribute, *_) in zip(values, order):
+            if id not in mapping:
+                mapping[id] = {}
+
+            mapping[id][attribute] = value
+
+        return mapping
+
+    def _dict_to_list(self, d, input=False):
+        """
+        Maps the given dict to a list, regarding the sorting from either
+        self.inputs or self.outputs.
+
+        Returns:
+            list.
+        """
+
+        if input:
+            order = self.inputs
+        else:
+            order = self.outputs
+
+        result = []
+        for (id, attribute, instance) in order:
+
+            if not input:
+                # Instance is mlp_mode in case of outputs
+                # Simply ignore other outputs.
+                if instance != cache.get("matplotlib-mode"):
+                    continue
+            try:
+                value = d[id][attribute]
+                result += [value]
+            except:
+                result += [None]
+
+        return result
+
+    def _dict_as_key(self, d, remove_filters=False):
+        """
+        Converts a dictionary to a key. Only ids from self.inputs are considered.
+
+        Parameters:
+            d (dict): Dictionary to get the key from.
+            remove_filters (bool): Option wheather the filters should be included or not.
+
+        Returns:
+            key (str): Key as string from the given dictionary.
+        """
+
+        if not isinstance(d, dict):
+            return None
+
+        new_d = copy.deepcopy(d)
+        if remove_filters:
+            for (id, _, filter) in self.inputs:
+                if filter:
+                    if id in new_d:
+                        del new_d[id]
+
+        return str(new_d)
+
+    def __call__(self, render_button=False):
         """
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
@@ -231,44 +327,101 @@ class Plugin(Layout):
         if self.description() != '':
             components += [html.P(self.description())]
 
-        input_button = dbc.Button(
-            children=self.button_caption(),
-            className="mt-3",
-            id=self.get_internal_id("update-button"),
-            style={"display": "none"} if self.update_on_changes() else {}
-        )
+        # Register alerts
+        components += [
+            dcc.Interval(
+                id=self.get_internal_id("alert-interval"),
+                interval=1*500,
+                n_intervals=5
+            ),
+            dbc.Alert(
+                id=self.get_internal_id("alert"),
+                is_open=False,
+                dismissable=True,
+                fade=True),
+        ]
 
         input_layout = self.get_input_layout()
-        if input_layout:
+        input_control_layout = html.Div(
+            style={} if render_button else {"display": "none"},
+            className="mt-3 clearfix",
+            children=[
+                dbc.Button(
+                    children=self.button_caption(),
+                    id=self.get_internal_id("update-button"),
+
+                ),
+                html.Span(
+                    html.Em(id=self.get_internal_id("processing-info")),
+                    className="ml-3 align-baseline",
+                )
+            ]
+        )
+
+        # We always have to render it because of the button.
+        # Button tells us if the page was just loaded.
+        components += [html.Div(
+            id=f'{self.id()}-input',
+            className="shadow-sm p-3 mb-3 bg-white rounded-lg",
+            children=input_layout + [input_control_layout],
+            style={} if render_button or input_layout else {"display": "none"}
+        )]
+
+        filter_layout = self.get_filter_layout()
+        if len(filter_layout) > 0:
             components += [html.Div(
-                id=f'{self.id()}-input',
+                id=f'{self.id()}-filter',
                 className="shadow-sm p-3 mb-3 bg-white rounded-lg",
-                children=self.get_input_layout() + [input_button]
+                children=filter_layout
             )]
-        
+
         output_layout = self.get_output_layout()
         if output_layout:
             components += [html.Div(
                 id=f'{self.id()}-output',
-                className="shadow-sm p-3 bg-white rounded-lg",
-                children=self.get_output_layout()
+                className="shadow-sm p-3 bg-white rounded-lg loading-container",
+                children=output_layout,
+                style={} if not cache.get(
+                    "matplotlib-mode") else {"display": "none"}
+            )]
+
+        output_layout = self.get_mpl_output_layout()
+        if output_layout:
+            components += [html.Div(
+                id=f'{self.id()}-mpl-output',
+                className="shadow-sm p-3 bg-white rounded-lg loading-container",
+                children=output_layout,
+                style={} if cache.get(
+                    "matplotlib-mode") else {"display": "none"}
             )]
 
         return components
 
-    @abstractmethod
-    def load_input(run):
-        pass
+    def load_inputs(run):
+        return {}
 
-    @abstractmethod
-    def load_output(self, **kwargs):
-        pass
-    
-    def load_dependency_input(self, run, **inputs):
+    def load_dependency_inputs(self, run, **inputs):
         return inputs
 
     def get_input_layout(self):
         return []
-    
+
+    def get_filter_layout(self):
+        return []
+
+    @staticmethod
+    @abstractmethod
+    def process(run, **inputs):
+        pass
+
     def get_output_layout(self):
         return []
+
+    def load_outputs(self, filters, raw_outputs):
+        return {}
+
+    def get_mpl_output_layout(self):
+        return []
+
+    def load_mpl_outputs(self, filters, raw_outputs):
+        return {}

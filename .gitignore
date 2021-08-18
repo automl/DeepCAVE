@@ -3,3 +3,4 @@ cache/*
 docs/*
 __pycache__
 _*
+*.rdb

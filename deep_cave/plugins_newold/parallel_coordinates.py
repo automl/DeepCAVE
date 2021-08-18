@@ -13,9 +13,7 @@ import numpy as np
 
 from deep_cave import app
 from deep_cave.plugins.plugin import Plugin
-from deep_cave.util.gui_helper import display_figure
-from deep_cave.util.logs import get_logger
-from deep_cave.util.styled_plot import plt
+from deep_cave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
@@ -44,19 +42,22 @@ class ParallelCoordinates(Plugin):
     def get_input_layout(self):
         return [
             dbc.Label("Fidelity"),
-            dcc.Slider(id=self.register_input("fidelity", ["min", "max", "marks", "value"]), className="mb-3"),
+            dcc.Slider(id=self.register_input(
+                "fidelity", ["min", "max", "marks", "value"]), className="mb-3"),
 
             dbc.Label("Hyperparameters"),
-            dbc.Checklist(id=self.register_input("hyperparameters", ["options", "value"]))
+            dbc.Checklist(id=self.register_input(
+                "hyperparameters", ["options", "value"]))
         ]
-    
+
     def get_output_layout(self):
         return [
             dcc.Graph(self.register_output("graph", "figure"))
         ]
 
     def load_input(self, run):
-        fidelities = [str(np.round(float(fidelity), 2)) for fidelity in run.get_fidelities()]
+        fidelities = [str(np.round(float(fidelity), 2))
+                      for fidelity in run.get_fidelities()]
         fidelities = ["Mixed"] + fidelities
 
         hp_names = run.cs.get_hyperparameter_names()
@@ -65,7 +66,7 @@ class ParallelCoordinates(Plugin):
             "fidelity": {
                 "min": 0,
                 "max": len(fidelities) - 1,
-                "marks": {str(i):fidelity for i, fidelity in enumerate(fidelities)},
+                "marks": {str(i): fidelity for i, fidelity in enumerate(fidelities)},
                 "value": 0
             },
             "hyperparameters": {
@@ -98,7 +99,7 @@ class ParallelCoordinates(Plugin):
             data[hp_name] = {}
             data[hp_name]["label"] = hp_name
             data[hp_name]["values"] = values
-            
+
             selected_labels = []
             selected_values = []
 
@@ -111,16 +112,15 @@ class ParallelCoordinates(Plugin):
             data[hp_name]["ticktext"] = selected_labels
             data[hp_name]["tickvals"] = selected_values
 
-        fig = go.Figure(data=
-            go.Parcoords(
-                line = dict(
-                    color = data["cost"]["values"],
-                    showscale = True,
-                    cmin = 0,
-                    cmax = 1
-                ),
-                dimensions = list([d for d in data.values()])
-            )
+        fig = go.Figure(data=go.Parcoords(
+            line=dict(
+                color=data["cost"]["values"],
+                showscale=True,
+                cmin=0,
+                cmax=1
+            ),
+            dimensions=list([d for d in data.values()])
+        )
         )
 
         return {

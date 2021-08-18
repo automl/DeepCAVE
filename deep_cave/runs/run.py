@@ -9,12 +9,11 @@ from smac.runhistory.runhistory import RunHistory
 from deep_cave.evaluators.epm.util_funcs import get_types
 from smac.tae import StatusType
 
-from deep_cave.util.mapping import numerical_map_fn, categorical_map_fn
+from deep_cave.utils.mapping import numerical_map_fn, categorical_map_fn
 
 
 class Run:
     def __init__(self, meta: dict, runhistory: RunHistory, configspace: ConfigSpace):
-
         """
         meta: start_time, end_time, duration, 
         """
@@ -22,10 +21,10 @@ class Run:
         self.meta = meta
         self.rh = runhistory
         self.cs = configspace
-    
+
     def get_meta(self):
         return self.meta
-    
+
     def get_runhistory(self, fidelity=None):
         # TODO: Get only relevant fidelities
         # TODO: merge multiple runs runhistory with update_from_json()
@@ -36,7 +35,8 @@ class Run:
         if hyperparameter_ids is None:
             return self.cs
 
-        selected_hps = self.get_hyperparameters(hyperparameter_ids, remove_inactive)
+        selected_hps = self.get_hyperparameters(
+            hyperparameter_ids, remove_inactive)
 
         # Create a new configspace if only specific hyperparameters are selected
         new_cs = copy.deepcopy(self.cs)
@@ -69,7 +69,7 @@ class Run:
         for clause in new_cs.forbidden_clauses:
             if clause.hyperparameter in selected_hps:
                 new_forbidden_clauses.append(clause)
-        
+
         for hp_name, d in new_cs._children.copy().items():
             for child_hp_name in d.copy().keys():
                 child_hp = self.cs.get_hyperparameter(child_hp_name)
@@ -79,7 +79,7 @@ class Run:
         new_cs._update_cache()
         new_cs._sort_hyperparameters()
         new_cs._check_default_configuration()
-        
+
         return new_cs
 
     def get_incumbent(self, fidelity=None, hyperparameter_ids=None):
@@ -92,7 +92,7 @@ class Run:
             fidelities (list or float or None)
         """
         results = {}
-        
+
         configs = []
         for (config_id, _, _, budget), (_, _, status, _, _, _) in self.rh.data.items():
             if fidelities is not None:
@@ -100,7 +100,7 @@ class Run:
                     continue
                 elif fidelities != budget:
                     continue
-            
+
             if status not in statuses:
                 continue
 
@@ -126,10 +126,12 @@ class Run:
         if isinstance(ids, list):
             hps = []
             for i in ids:
-                hp = self.cs.get_hyperparameter(self.cs.get_hyperparameter_by_idx(int(i)))
+                hp = self.cs.get_hyperparameter(
+                    self.cs.get_hyperparameter_by_idx(int(i)))
                 hps.append(hp)
         else:
-            hps = [self.cs.get_hyperparameter(self.cs.get_hyperparameter_by_idx(int(ids)))]
+            hps = [self.cs.get_hyperparameter(
+                self.cs.get_hyperparameter_by_idx(int(ids)))]
 
         if remove_inactive:
             def check_parents_active(hp, selected_hps: list):
@@ -148,11 +150,12 @@ class Run:
                     active = True
 
                     for parent in parents:
-                        parent_active = check_parents_active(parent, selected_hps)
+                        parent_active = check_parents_active(
+                            parent, selected_hps)
                         if not parent_active:
                             active = False
                             break
-                
+
                     return active
 
             new_hps = []
@@ -173,18 +176,17 @@ class Run:
         array = []
         print(mapping.keys())
         for hp_name in self.cs.get_hyperparameter_names():
-            
 
             if hp_name in mapping:
                 hp_value = config.get(hp_name)
                 array.append(mapping[hp_name](hp_value))
-            
+
         print(array)
         print(config.get_array())
 
         return array
 
-    def transform_configs(self,     
+    def transform_configs(self,
                           fidelities=None,
                           statuses=[StatusType.SUCCESS],
                           hyperparameter_ids=None,
@@ -195,7 +197,7 @@ class Run:
         Parameters:
             fidelity (str)
             hyperparameter_selection (list, optional): list of HyperParameter objects.
-        
+
         Returns:
             X (np.array): 
             y (float): cost
@@ -208,8 +210,10 @@ class Run:
         new_configspace = self.cs
         selected_hps = None
         if hyperparameter_ids is not None:
-            selected_hps = self.get_hyperparameters(hyperparameter_ids, remove_inactive)
-            new_configspace = self.get_configspace(hyperparameter_ids, remove_inactive)
+            selected_hps = self.get_hyperparameters(
+                hyperparameter_ids, remove_inactive)
+            new_configspace = self.get_configspace(
+                hyperparameter_ids, remove_inactive)
 
         hyperparameters = self.cs.get_hyperparameters_dict()
         cs = self.cs
@@ -217,7 +221,7 @@ class Run:
         types, bounds = get_types(cs)
 
         X, y = {}, []
-        mapping = {} 
+        mapping = {}
         categorical_mapping = {}
 
         results = self.get_costs(fidelities, statuses)
@@ -261,15 +265,15 @@ class Run:
                                 categorical_mapping[hp_name][None] = -1
 
                     elif isinstance(hp, Constant):
-                       raise NotImplementedError()
+                        raise NotImplementedError()
 
                     # Add value to X
                     X[hp_name].append(value)
-                        
+
                 else:
                     # Add nan otherwise
                     X[hp_name].append(np.nan)
-        
+
         # We map the values between 0..1 now
         for hp_name, values in X.copy().items():
             hp = hyperparameters[hp_name]
@@ -290,7 +294,7 @@ class Run:
 
                     mapping[hp_name] = lambda v, reverse=False, nan=np.nan, mn=mn, mx=mx, log=hp.log: \
                         numerical_map_fn(v, mn, mx, log, reverse, nan)
-            
+
             # Use the mapping to create new_values now
             new_values = []
             for value in values:
@@ -298,7 +302,7 @@ class Run:
 
             # Update X
             X[hp_name] = new_values
-        
+
         # Moreover, we need a id mapping because
         # the hyperparameter ids have changed
         id_mapping = {}
@@ -312,8 +316,10 @@ class Run:
 
         # Types and bonds have to be addressed now
         # Simply remove the not used ids
-        types = [elem for i, elem in enumerate(types) if id_mapping[i] is not None]
-        bounds = [elem for i, elem in enumerate(bounds) if id_mapping[i] is not None]
+        types = [elem for i, elem in enumerate(
+            types) if id_mapping[i] is not None]
+        bounds = [elem for i, elem in enumerate(
+            bounds) if id_mapping[i] is not None]
 
         return X, y, mapping, id_mapping, types, bounds, new_configspace
 
@@ -400,9 +406,8 @@ class Run:
                     "origin": origin,
                     "budget": budget
                 }]
-        
-        return wallclock_times, costs, additional
 
+        return wallclock_times, costs, additional
 
     def __repr__(self):
         import hashlib
@@ -420,11 +425,3 @@ class Run:
         cs_encoded = encode(ConfigSpace.read_and_write.json.write(self.cs))
 
         return str(meta_encoded) + str(rh_encoded) + str(cs_encoded)
-
-            
-            
-
-
-
-
-    

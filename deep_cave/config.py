@@ -1,21 +1,23 @@
 import os
-from flask_caching import Cache
-
 
 root = os.getcwd()
 cache_dir = os.path.join(root, "cache")
 working_dir = os.path.join(root, "data", "smac3-output")
 
-STORAGE_CONFIG = {
-    'CACHE_TYPE': 'FileSystemCache',
-    'CACHE_DIR': cache_dir,
+
+CONFIG = {
+    'DIR': cache_dir,
+    'NAME': "sEjia302pyWqs",
+    'REDIS_URL': "redis://localhost:6379"
 }
 
-STORAGE_REQUIRED_DATA = {
+
+REQUIRED_DATA = {
     'working_dir': working_dir,
     'converter_name': 'SMAC',
     'run_id': None,
+    'matplotlib-mode': False,
 }
 
 
-__all__ = [STORAGE_CONFIG, STORAGE_REQUIRED_DATA]
+__all__ = [CONFIG, REQUIRED_DATA]

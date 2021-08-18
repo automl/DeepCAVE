@@ -40,3 +40,21 @@ label {
     background-color: rgb(243, 242, 241);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
+
+
+/*
+.loading-container > *[data-dash-is-loading="true"] {
+    height: 10px;
+    visibility: hidden;
+}
+
+.loading-container > *[data-dash-is-loading="true"]::before{
+    content: "Loading...";
+    display: inline-block;
+    width: 100%;
+    color: magenta;
+    visibility: visible;
+    text-align: center;
+    clear: both;
+}
+*/

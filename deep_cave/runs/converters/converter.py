@@ -5,7 +5,7 @@ import json
 from typing import Dict, Type, Any
 
 from deep_cave.runs.run import Run
-from deep_cave.cache import cache
+from deep_cave import cache
 
 
 class Converter:
@@ -57,9 +57,8 @@ class Converter:
         filename = os.path.join(self.working_dir, self.run_id, file + ".json")
         with open(filename, 'r') as f:
             data = json.load(f)
-        
+
         return data
 
     def _get_json_filename(self, file):
         return os.path.join(self.working_dir, self.run_id, file + ".json")
-

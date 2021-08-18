@@ -12,9 +12,8 @@ from scipy.stats import spearmanr
 from itertools import combinations_with_replacement
 
 from deep_cave.plugins.plugin import Plugin
-from deep_cave.util.gui_helper import display_figure
-from deep_cave.util.logs import get_logger
-from deep_cave.util.styled_plot import plt
+from deep_cave.utils.logs import get_logger
+from deep_cave.utils.styled_plot import plt
 
 logger = get_logger(__name__)
 

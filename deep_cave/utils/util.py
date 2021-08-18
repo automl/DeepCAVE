@@ -5,8 +5,6 @@ from io import BytesIO
 import base64
 
 import dash_html_components as html
-
-
 import os
 
 import pandas as pd
@@ -50,7 +48,8 @@ def _infer_encoding(data: pd.DataFrame):
             # if not numerical convert it to numerical, via one-hot encoding
             from_cols.append(col)
     if from_cols:
-        dummies = pd.get_dummies(data[from_cols], prefix=from_cols, prefix_sep='.')
+        dummies = pd.get_dummies(
+            data[from_cols], prefix=from_cols, prefix_sep='.')
         data.drop(columns=from_cols, inplace=True)
         data = data.join(dummies)
     return data
@@ -63,7 +62,8 @@ def _encode(data: pd.DataFrame, cs: Optional):
         if ordinal:
             columns = [col_name]
         else:
-            columns = ['config.' + hp_name + '.' + str(col) for col in list(hp_choices)]
+            columns = ['config.' + hp_name + '.' +
+                       str(col) for col in list(hp_choices)]
         to_cols.extend(columns)
         choices.append(list(hp_choices))
         return col_name, columns, list(hp_choices)
@@ -73,7 +73,8 @@ def _encode(data: pd.DataFrame, cs: Optional):
         if transformer_class is OneHotEncoder:
             add_kwargs = {'sparse': False}
         data[to_cols] = pd.DataFrame(
-            transformer_class(categories=choices, **add_kwargs).fit_transform(data[from_cols]),
+            transformer_class(categories=choices, **
+                              add_kwargs).fit_transform(data[from_cols]),
             columns=to_cols,
             index=data.index)
         if transformer_class is OneHotEncoder:
@@ -94,9 +95,12 @@ def _encode(data: pd.DataFrame, cs: Optional):
         elif isinstance(hp, FloatHyperparameter):
             data['config.' + hp.name] = data['config.' + hp.name].astype(float)
         elif isinstance(hp, OrdinalHyperparameter):
-            _add_entry(hp.name, hp.sequence, ord_from_cols, ord_to_cols, ord_choices, ordinal=True)
+            _add_entry(hp.name, hp.sequence, ord_from_cols,
+                       ord_to_cols, ord_choices, ordinal=True)
 
-    data = _transform(data, cat_from_cols, cat_to_cols, cat_choices, OneHotEncoder)
-    data = _transform(data, ord_from_cols, ord_to_cols, ord_choices, OrdinalEncoder)
+    data = _transform(data, cat_from_cols, cat_to_cols,
+                      cat_choices, OneHotEncoder)
+    data = _transform(data, ord_from_cols, ord_to_cols,
+                      ord_choices, OrdinalEncoder)
 
     return data, org_cols

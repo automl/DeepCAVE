@@ -1,7 +1,7 @@
 version: 1
 formatters:
   simple:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format: '%(name)s (%(levelname)s): %(message)s'
 handlers:
   console:
     class: logging.StreamHandler
@@ -34,6 +34,10 @@ loggers:
     handlers: [ console ]
     propagate: no
   deep_cave.storage_backend:
+    level: DEBUG
+    handlers: [ console ]
+    propagate: no
+  deep_cave.plugins:
     level: DEBUG
     handlers: [ console ]
     propagate: no

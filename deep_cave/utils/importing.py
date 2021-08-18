@@ -7,7 +7,7 @@ import sys
 import inspect
 import collections
 
-from deep_cave.util.logs import get_logger
+from deep_cave.utils.logs import get_logger
 
 
 logger = get_logger(__name__)
@@ -27,7 +27,8 @@ def auto_import_iter(module, paths: List[str]):
                 sys.modules[spec.name] = foo
                 spec.loader.exec_module(foo)
             except Exception as e:
-                logger.exception(f'Problem when loading file {f} as {module_name} from path {path}')
+                logger.exception(
+                    f'Problem when loading file {f} as {module_name} from path {path}')
             # iterate module content
             # https://stackoverflow.com/questions/1796180/how-can-i-get-a-list-of-all-classes-within-current-module-in-python
             # allow only class # inspect.isclass
