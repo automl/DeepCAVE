@@ -4,8 +4,8 @@ import glob
 import pandas as pd
 from typing import Dict, Type, Any
 
-from deep_cave.runs.converters.converter import Converter
-from deep_cave.runs.run import Run
+from deep_cave.trials.converters.converter import Converter
+from deep_cave.trials.run import Run
 from smac.runhistory.runhistory import RunHistory
 from ConfigSpace.read_and_write import json as cs_json
 
@@ -41,4 +41,3 @@ class SMAC(Converter):
             config = cs_json.read(json_string)
 
         return config
-

@@ -4,7 +4,7 @@ import glob
 import json
 from typing import Dict, Type, Any
 
-from deep_cave.runs.run import Run
+from deep_cave.trials.run import Run
 from deep_cave import cache
 
 

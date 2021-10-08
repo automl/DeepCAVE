@@ -4,3 +4,4 @@ docs/*
 __pycache__
 _*
 *.rdb
+logs

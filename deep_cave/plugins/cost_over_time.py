@@ -35,7 +35,7 @@ class CostOverTime(StaticPlugin):
 
     @staticmethod
     def category():
-        return "Performance"
+        return "Performance Analysis"
 
     def get_input_layout(self):
         return [

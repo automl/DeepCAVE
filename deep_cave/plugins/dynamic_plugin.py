@@ -55,6 +55,8 @@ class DynamicPlugin(Plugin):
                 *inputs_list: Values from user.
             """
 
+            print(state)
+
             # The results from the last run
             last_inputs = cache.get("plugins", self.id(), "last_inputs")
             last_raw_outputs = cache.get(
@@ -88,8 +90,9 @@ class DynamicPlugin(Plugin):
                 logger.debug("Process.")
                 run = get_selected_run()
 
-                # Start this task in celery
-                raw_outputs = __class__.process(run, **inputs)
+                # In contrast to static plugin, we process directly.
+                # That means the result is not calculated in the queue.
+                raw_outputs = self.process(run, inputs)
         else:
             logger.debug("Use available raw_outputs to render view.")
 

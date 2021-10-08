@@ -70,6 +70,11 @@ class Plugin(Layout):
     def button_caption():
         return "Process"
 
+    @staticmethod
+    def debug():
+        """No caching is used."""
+        return False
+
     def register_input(self, id, attributes=["value"], filter=False):
         if isinstance(attributes, str):
             attributes = [attributes]
@@ -159,7 +164,7 @@ class Plugin(Layout):
 
                     # How to update only parameters which have a dependency?
                     user_dependencies_inputs = self.load_dependency_inputs(
-                        run, **inputs)
+                        run, inputs)
 
                     # Update dict
                     # update() removes keys, so it's done manually
@@ -397,10 +402,10 @@ class Plugin(Layout):
 
         return components
 
-    def load_inputs(run):
+    def load_inputs(self, run):
         return {}
 
-    def load_dependency_inputs(self, run, **inputs):
+    def load_dependency_inputs(self, run, inputs):
         return inputs
 
     def get_input_layout(self):
@@ -411,7 +416,7 @@ class Plugin(Layout):
 
     @staticmethod
     @abstractmethod
-    def process(run, **inputs):
+    def process(run, inputs):
         pass
 
     def get_output_layout(self):

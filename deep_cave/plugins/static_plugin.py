@@ -96,12 +96,10 @@ class StaticPlugin(Plugin):
             raw_outputs = cache.get("plugins", self.id(), inputs_key)
 
             last_inputs = cache.get("plugins", self.id(), "last_inputs")
-            last_inputs_key = self._dict_as_key(
-                last_inputs, remove_filters=True)
-            last_raw_outputs = cache.get("plugins", self.id(), last_inputs_key)
+            # last_inputs_key = self._dict_as_key(last_inputs, remove_filters=True)
+            #last_raw_outputs = cache.get("plugins", self.id(), last_inputs_key)
 
             # Check if filter changed
-            #inputs_changed, filters_changed = self._inputs_changed(inputs, last_inputs)
 
             # Set new inputs as last_inputs
             cache.set("plugins", self.id(), "last_inputs", value=inputs)
@@ -111,6 +109,11 @@ class StaticPlugin(Plugin):
                 self._n_clicks = n_clicks
 
                 logger.debug("Button pressed.")
+
+                if self.debug():
+                    logger.debug("Debug mode: Reset raw outputs")
+                    raw_outputs = None
+
                 # Check if we need to process
                 if raw_outputs is None and not queue.is_processed(inputs_key):
 
