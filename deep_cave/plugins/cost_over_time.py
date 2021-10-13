@@ -52,7 +52,7 @@ class CostOverTime(StaticPlugin):
 
     def load_inputs(self, run):
         fidelities = [str(np.round(float(fidelity), 2))
-                      for fidelity in run.get_fidelities()]
+                      for fidelity in run.get_budgets()]
         fidelities = ["Mixed"] + fidelities
 
         return {
@@ -65,28 +65,17 @@ class CostOverTime(StaticPlugin):
         }
 
     @staticmethod
-    def blub2():
-        print("YAY")
-        import time
-        time.sleep(5)
-        print("... and finished")
-        return {"blub": 234}
-
-    @staticmethod
     def process(run, params):
-        import time
-        time.sleep(20)
-
         fidelity_id = params["fidelity"]["value"] - 1
 
         fidelity = None
         if fidelity_id >= 0:
-            fidelity = run.get_fidelity(fidelity_id)
+            fidelity = run.get_budgets()[fidelity_id]
 
-        wallclock_times, costs, additional = run.get_trajectory(fidelity)
+        costs, times = run.get_trajectory(fidelity)
 
         return {
-            "wallclock_times": wallclock_times,
+            "times": times,
             "costs": costs,
             # "hovertext": additional
         }

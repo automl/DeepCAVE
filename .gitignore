@@ -1,5 +1,5 @@
 build/*
-cache/*
+*cache*
 docs/*
 __pycache__
 _*

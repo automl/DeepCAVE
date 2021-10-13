@@ -17,10 +17,9 @@ import dash_table
 from ConfigSpace import ConfigurationSpace
 from dash.exceptions import PreventUpdate
 
-from deep_cave import app
-from deep_cave import cache
+from deep_cave import app, cache
+from deep_cave.runs.handler import handler
 from deep_cave.utils.logs import get_logger
-from deep_cave.runs import get_selected_run
 from deep_cave.plugins.plugin import Plugin
 
 
@@ -55,12 +54,10 @@ class DynamicPlugin(Plugin):
                 *inputs_list: Values from user.
             """
 
-            print(state)
-
             # The results from the last run
-            last_inputs = cache.get("plugins", self.id(), "last_inputs")
+            last_inputs = cache.get(self.id(), "last_inputs")
             last_raw_outputs = cache.get(
-                "plugins", self.id(), self._dict_as_key(last_inputs, remove_filters=True))
+                self.id(), self._dict_as_key(last_inputs, remove_filters=True))
 
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
@@ -82,25 +79,24 @@ class DynamicPlugin(Plugin):
     def _get_outputs(self, inputs, raw_outputs=None):
         if raw_outputs is None:
             # First check if inputs is in cache
-            raw_outputs = cache.get("plugins", self.id(
+            raw_outputs = cache.get(self.id(
             ), self._dict_as_key(inputs, remove_filters=True))
             if raw_outputs is not None:
                 logger.debug("Found outputs in cache.")
             else:
                 logger.debug("Process.")
-                run = get_selected_run()
 
                 # In contrast to static plugin, we process directly.
                 # That means the result is not calculated in the queue.
-                raw_outputs = self.process(run, inputs)
+                raw_outputs = self.process(handler.get_run(), inputs)
         else:
             logger.debug("Use available raw_outputs to render view.")
 
         logger.debug("Cache inputs and outputs.")
 
         # Cache it
-        cache.set("plugins", self.id(), "last_inputs", value=inputs)
-        cache.set("plugins", self.id(), self._dict_as_key(
+        cache.set(self.id(), "last_inputs", value=inputs)
+        cache.set(self.id(), self._dict_as_key(
             inputs, remove_filters=True), value=raw_outputs)
 
         return self._process_raw_outputs(inputs, raw_outputs)

@@ -3,15 +3,14 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 
-from deep_cave import app, queue
-from deep_cave import cache
+from deep_cave import app, queue, meta_cache
+from deep_cave.runs.handler import handler
 from deep_cave.layouts.layout import Layout
 from deep_cave.layouts.header import layout as header_layout
 from deep_cave.layouts.general import layout as general_layout
 from deep_cave.layouts.not_found import layout as not_found_layout
 from deep_cave.layouts.sidebar import layout as sidebar_layout
 from deep_cave.plugins import plugin_layouts
-from deep_cave.runs import get_selected_run
 
 
 class MainLayout(Layout):
@@ -31,21 +30,21 @@ class MainLayout(Layout):
             else:
                 if not queue.ready():
                     return html.Div("At least one worker has to be enabled.")
-                if cache.get("run_id") is None:
-                    return html.Div("Please select run first.")
+                if meta_cache.get("run_id") is None:
+                    return html.Div("Please select a run first.")
                 else:
                     # Cache run here
                     # check if new run is run in cache, otherwise empty it
 
-                    run = repr(get_selected_run())
+                    #run = repr(get_selected_run())
 
-                    if cache.get("run") is not None:
-                        if run != cache.get("run"):
-                            cache.empty()
+                    # if cache.get("run") is not None:
+                    #    if run != cache.get("run"):
+                    #        cache.empty()
 
-                            # Print a message that the run changed and thus the cache was cleared
+                    # Print a message that the run changed and thus the cache was cleared
 
-                    cache.set("run", value=run)
+                    #cache.set("run", value=run)
 
                     if paths[0] == "plugins":
                         for name, layout in plugin_layouts.items():

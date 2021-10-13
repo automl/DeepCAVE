@@ -29,7 +29,7 @@ class fANOVA(DynamicPlugin):
 
     @staticmethod
     def position():
-        return 1
+        return 100
 
     @staticmethod
     def category():
@@ -67,8 +67,8 @@ class fANOVA(DynamicPlugin):
         ]
 
     def load_inputs(self, run):
-        hp_names = run.cs.get_hyperparameter_names()
-        fidelities = run.get_fidelities()
+        hp_names = run.configspace.get_hyperparameter_names()
+        fidelities = run.get_budgets()
 
         return {
             "num_trees": {
@@ -99,17 +99,17 @@ class fANOVA(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        fidelities = run.get_fidelities()
-        hp_names = run.cs.get_hyperparameter_names()
+        hp_names = run.configspace.get_hyperparameter_names()
+        fidelities = run.get_budgets()
 
         # Collect data
         data = {}
         for fidelity in fidelities:
-            X, Y = run.get_encoded_data(fidelities=fidelity, for_tree=True)
+            X, Y = run.get_encoded_configs(budget=fidelity, for_tree=True)
 
             evaluator = _fANOVA(
                 X, Y,
-                configspace=run.cs,
+                configspace=run.configspace,
                 num_trees=int(inputs["num_trees"]["value"])
             )
             importance_dict = evaluator.quantify_importance(

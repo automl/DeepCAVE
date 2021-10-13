@@ -1,29 +1,44 @@
 from deep_cave import queue
 import os
 import json
-from deep_cave.config import CONFIG, REQUIRED_DATA
 
 
 class Cache:
-    def __init__(self):
+    def __init__(self, filename=None, defaults={}):
         """
-        Cache handling a json file. Decided not to use flask_caching
-        since code is easier to chance to our needs.
+        Cache handles a json file. Decided not to use flask_caching
+        since code is easier to change to our needs.
         """
 
+        self._defaults = defaults
+        self._setup(filename)
+
+    def _setup(self, filename):
         self._data = {}
-        self._filename = os.path.join(CONFIG["DIR"], CONFIG["NAME"] + ".json")
+        self._filename = filename
+
+        if filename is None:
+            return
 
         if not os.path.exists(self._filename):
-            self.set_dict(REQUIRED_DATA)
+            self.set_dict(self._defaults)
         else:
             self.read()
 
+    def switch(self, filename):
+        self._setup(filename)
+
     def read(self):
+        if not os.path.exists(self._filename):
+            return
+
         with open(self._filename) as f:
             self._data = json.load(f)
 
     def write(self):
+        if self._filename is None:
+            return
+
         with open(self._filename, 'w') as f:
             json.dump(self._data, f, indent=4)
 
@@ -61,10 +76,6 @@ class Cache:
         return True
 
     def clear(self):
-
         self._data = {}
-        self._data.update(REQUIRED_DATA)
+        self._data.update(self._defaults)
         self.write()
-
-
-# Test if update writes to file

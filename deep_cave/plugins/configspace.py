@@ -12,7 +12,7 @@ from deep_cave import app
 from deep_cave.plugins.dynamic_plugin import DynamicPlugin
 from deep_cave.plugins.static_plugin import StaticPlugin
 from deep_cave.utils.logs import get_logger
-from smac.tae import StatusType
+from deep_cave.runs.run import Status
 
 from deep_cave.evaluators.fanova import fANOVA as _fANOVA
 
@@ -53,36 +53,34 @@ class Configspace(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        print("hi")
-        rh = run.get_runhistory()
 
         # Config id | Fidelity #1 | Fidelity #2 | ...
         all_config_ids = []
         config_ids = {}
-        for (config_id, _, _, budget), (_, _, status, _, _, _) in rh.data.items():
-            if status != StatusType.SUCCESS:
+        for trial in run.history:
+            if trial.status != Status.SUCCESS:
                 continue
 
-            if config_id not in all_config_ids:
-                all_config_ids.append(config_id)
+            if trial.config_id not in all_config_ids:
+                all_config_ids.append(trial.config_id)
 
-            if budget not in config_ids:
-                config_ids[budget] = []
+            if trial.budget not in config_ids:
+                config_ids[trial.budget] = []
 
-            if config_id not in config_ids[budget]:
-                config_ids[budget].append(config_id)
+            if trial.config_id not in config_ids[trial.budget]:
+                config_ids[trial.budget].append(trial.config_id)
 
         results = {}
         for config_id in all_config_ids:
             results[config_id] = []
-            for fidelity in run.get_fidelities():
+            for fidelity in run.get_budgets():
                 if config_id in config_ids[fidelity]:
                     results[config_id].append("YES")
                 else:
                     results[config_id].append("")
 
         return {
-            "fidelities": run.get_fidelities(),
+            "fidelities": run.get_budgets(),
             "data": results
         }
 

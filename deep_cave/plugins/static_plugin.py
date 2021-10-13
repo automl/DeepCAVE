@@ -9,10 +9,9 @@ import dash_html_components as html
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deep_cave import app, queue
-from deep_cave import cache
+from deep_cave import app, queue, cache
+from deep_cave.runs.handler import handler
 from deep_cave.utils.logs import get_logger
-from deep_cave.runs import get_selected_run
 from deep_cave.plugins.plugin import Plugin
 
 
@@ -93,16 +92,16 @@ class StaticPlugin(Plugin):
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
-            raw_outputs = cache.get("plugins", self.id(), inputs_key)
+            raw_outputs = cache.get(self.id(), inputs_key)
 
-            last_inputs = cache.get("plugins", self.id(), "last_inputs")
+            last_inputs = cache.get(self.id(), "last_inputs")
             # last_inputs_key = self._dict_as_key(last_inputs, remove_filters=True)
-            #last_raw_outputs = cache.get("plugins", self.id(), last_inputs_key)
+            #last_raw_outputs = cache.get(self.id(), last_inputs_key)
 
             # Check if filter changed
 
             # Set new inputs as last_inputs
-            cache.set("plugins", self.id(), "last_inputs", value=inputs)
+            cache.set(self.id(), "last_inputs", value=inputs)
 
             if button_pressed:
                 # Update state
@@ -119,14 +118,14 @@ class StaticPlugin(Plugin):
 
                     meta = {
                         "display_name": self.name(),
-                        "keys": ["plugins", self.id(), inputs_key]
+                        "keys": [self.id(), inputs_key]
                     }
 
                     logger.debug("Enqueued task.")
                     # Start the task in rq
                     queue.enqueue(
                         self.process,
-                        args=[get_selected_run(), inputs],
+                        args=[handler.get_run(), inputs],
                         job_id=inputs_key,
                         meta=meta
                     )

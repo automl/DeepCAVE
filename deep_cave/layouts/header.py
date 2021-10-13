@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output, State
 
 from deep_cave.layouts.layout import Layout
 from deep_cave import app
-from deep_cave import cache
+from deep_cave import meta_cache, cache
 
 
 class HeaderLayout(Layout):
@@ -25,14 +25,14 @@ class HeaderLayout(Layout):
         @app.callback(outputs, inputs)
         def update_matplotlib_mode(n_clicks, pathname):
             update = None
-            mode = cache.get("matplotlib-mode")
+            mode = meta_cache.get("matplotlib-mode")
             if mode is None:
                 mode = False
 
             if n_clicks is not None:
                 update = pathname
                 mode = not mode
-                cache.set("matplotlib-mode", value=mode)
+                meta_cache.set("matplotlib-mode", value=mode)
 
             if mode:
                 return "primary", "on", update

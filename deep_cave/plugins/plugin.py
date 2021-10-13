@@ -23,7 +23,7 @@ from deep_cave import app
 from deep_cave import cache
 from deep_cave.utils.logs import get_logger
 from deep_cave.layouts.layout import Layout
-from deep_cave.runs import get_selected_run
+from deep_cave.runs.handler import handler
 
 
 logger = get_logger(__name__)
@@ -142,7 +142,7 @@ class Plugin(Layout):
                         init = False
                         break
 
-                run = get_selected_run()
+                run = handler.get_run()
 
                 # Reload our inputs
                 if init:
