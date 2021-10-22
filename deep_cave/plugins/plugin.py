@@ -75,6 +75,12 @@ class Plugin(Layout):
         """No caching is used."""
         return False
 
+    def requirements_met(self, run):
+        """
+        Returns either bool or str. If str, it is shown to the user.
+        """
+        return True
+
     def register_input(self, id, attributes=["value"], filter=False):
         if isinstance(attributes, str):
             attributes = [attributes]
@@ -345,6 +351,14 @@ class Plugin(Layout):
                 dismissable=True,
                 fade=True),
         ]
+
+        status = self.requirements_met(handler.get_run())
+        if isinstance(status, str):
+            self.update_alert(status, color="danger")
+            return components
+        elif isinstance(status, bool):
+            if not status:
+                return components
 
         input_layout = self.get_input_layout()
         input_control_layout = html.Div(

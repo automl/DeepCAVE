@@ -179,14 +179,15 @@ class Run:
         if o is None:
             return
 
-        if type(o) != type(self.meta["objectives"]):
-            raise RuntimeError(
-                "Object must have the same format as objectives.")
-        else:
-            if isinstance(o, list):
-                if len(o) != len(self.meta["objectives"]):
-                    raise RuntimeError(
-                        "Object does not match the size of objectives.")
+        if isinstance(o, list):
+            if len(o) == len(self.meta["objectives"]):
+                return
+        elif isinstance(o, int) or isinstance(o, float):
+            if isinstance(self.meta["objectives"], str):
+                return
+
+        raise RuntimeError(
+            "Object does not match the size of objectives.")
 
     def get_config_id(self, config: dict):
         # Find out config id
@@ -195,6 +196,23 @@ class Run:
                 return id
 
         return None
+
+    def get_configs(self, budget=None):
+        """"""
+
+        configs = []
+        for trial in self.history:
+            if budget is not None:
+                if budget != trial.budget:
+                    continue
+
+            config = self.configs[trial.config_id]
+            configs += [config]
+
+        return configs
+
+    def get_budget(self, id):
+        return self.meta["budgets"][id]
 
     def get_budgets(self):
         return self.meta["budgets"]
@@ -206,18 +224,18 @@ class Run:
 
         return budgets[-1]
 
-    def get_costs(self, b=None, statuses=[Status.SUCCESS]):
+    def get_costs(self, budget=None, statuses=[Status.SUCCESS]):
         """
         If no budget is given, the highest budget is chosen.
         """
 
-        if b is None:
-            b = self.get_highest_budget()
+        if budget is None:
+            budget = self.get_highest_budget()
 
         results = {}
         for trial in self.history:
             if trial.budget is not None:
-                if trial.budget != b:
+                if trial.budget != budget:
                     continue
 
             if trial.status not in statuses:
@@ -261,8 +279,10 @@ class Run:
         If no weights are given, the mean is used.
         """
 
-        objective_weights = self.meta["objective_weights"]
+        if not isinstance(costs, list):
+            costs = [costs]
 
+        objective_weights = self.meta["objective_weights"]
         if objective_weights is None:
             objectives = self.meta["objectives"]
             if isinstance(objectives, list):
@@ -423,9 +443,12 @@ class Run:
 
 
 class Trial(tuple):
-    def __new__(cls, *values):
-        # Create the tuple
-        return super(Trial, cls).__new__(cls, tuple(values))
+    def __new__(cls, *args, **kwargs):
+
+        if len(kwargs) > 0:
+            return super(Trial, cls).__new__(cls, tuple(kwargs.values()))
+        else:
+            return super(Trial, cls).__new__(cls, tuple(args))
 
     def __init__(self,
                  config_id,

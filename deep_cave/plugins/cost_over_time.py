@@ -11,13 +11,13 @@ import pandas as pd
 import numpy as np
 
 from deep_cave import app
-from deep_cave.plugins.static_plugin import StaticPlugin
+from deep_cave.plugins.dynamic_plugin import DynamicPlugin
 from deep_cave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
-class CostOverTime(StaticPlugin):
+class CostOverTime(DynamicPlugin):
     def __init__(self):
         super().__init__()
 
@@ -46,14 +46,16 @@ class CostOverTime(StaticPlugin):
 
     def get_filter_layout(self):
         return [
-            dbc.Label("filter"),
-            dbc.Input(id=self.register_input("filter", "value", filter=True))
+            dbc.FormGroup([
+                dbc.Label("Logarithmic"),
+                dbc.RadioItems(id=self.register_input(
+                    "log", ["options", "value"], filter=True))
+            ])
         ]
 
     def load_inputs(self, run):
-        fidelities = [str(np.round(float(fidelity), 2))
-                      for fidelity in run.get_budgets()]
-        fidelities = ["Mixed"] + fidelities
+        fidelities = [
+            str(np.round(float(fidelity), 2)) for fidelity in run.get_budgets()]
 
         return {
             "fidelity": {
@@ -62,15 +64,19 @@ class CostOverTime(StaticPlugin):
                 "marks": {str(i): fidelity for i, fidelity in enumerate(fidelities)},
                 "value": 0
             },
+            "log": {
+                "options": [{"label": "Yes", "value": 1}, {"label": "No", "value": 0}],
+                "value": 0
+            }
         }
 
     @staticmethod
     def process(run, params):
-        fidelity_id = params["fidelity"]["value"] - 1
+        fidelity_id = params["fidelity"]["value"]
 
         fidelity = None
-        if fidelity_id >= 0:
-            fidelity = run.get_budgets()[fidelity_id]
+        if fidelity_id is not None and fidelity_id >= 0:
+            fidelity = run.get_budget(fidelity_id)
 
         costs, times = run.get_trajectory(fidelity)
 
@@ -83,22 +89,25 @@ class CostOverTime(StaticPlugin):
     def get_output_layout(self):
         return [
             dcc.Graph(self.register_output("graph", "figure")),
-            dbc.Input(id=self.register_output("blub", "value"))
         ]
 
     def load_outputs(self, filters, raw_outputs):
         trace = go.Scatter(
-            x=raw_outputs["wallclock_times"],
+            x=raw_outputs["times"],
             y=raw_outputs["costs"],
             name="hv",
             line_shape='hv',
             # hovertext=outputs["additional"]
         )
 
+        type = None
+        if filters["log"]["value"] == 1:
+            type = 'log'
+
         layout = go.Layout(
             xaxis=dict(
                 title='Wallclock time [s]',
-                type='log'
+                type=type
             ),
             yaxis=dict(
                 title='Cost',
@@ -107,7 +116,7 @@ class CostOverTime(StaticPlugin):
 
         fig = go.Figure(data=[trace], layout=layout)
 
-        return [fig, filters["filter"]["value"]]
+        return [fig]
 
     def get_mpl_output_layout(self):
         return [

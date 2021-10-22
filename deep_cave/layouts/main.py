@@ -28,10 +28,13 @@ class MainLayout(Layout):
             if paths[0] == "":
                 return general_layout()
             else:
+                def alert(text): return dbc.Alert(
+                    text, id="alert", is_open=True, dismissable=False, fade=True, color="danger")
+
                 if not queue.ready():
-                    return html.Div("At least one worker has to be enabled.")
+                    return alert("At least one worker has to be enabled.")
                 if meta_cache.get("run_id") is None:
-                    return html.Div("Please select a run first.")
+                    return alert("Please select a run first.")
                 else:
                     # Cache run here
                     # check if new run is run in cache, otherwise empty it

@@ -38,13 +38,9 @@ class DynamicPlugin(Plugin):
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
         inputs = [Input(self.get_internal_id("update-button"), 'n_clicks')]
-        for id, attribute, filter in self.inputs:
-            if filter:
-                inputs.append(
-                    Input(self.get_internal_input_id(id), attribute))
-            else:
-                inputs.append(
-                    State(self.get_internal_input_id(id), attribute))
+        for id, attribute, _ in self.inputs:
+            inputs.append(
+                Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
         @app.callback(outputs, inputs)

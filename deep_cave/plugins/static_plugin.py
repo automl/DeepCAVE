@@ -122,6 +122,7 @@ class StaticPlugin(Plugin):
                     }
 
                     logger.debug("Enqueued task.")
+
                     # Start the task in rq
                     queue.enqueue(
                         self.process,
