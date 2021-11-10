@@ -19,6 +19,7 @@ from src.evaluators.fanova import fANOVA as _fANOVA
 logger = get_logger(__name__)
 
 
+"""
 class MFIS(DynamicPlugin):
     def __init__(self):
         super().__init__()
@@ -39,7 +40,8 @@ class MFIS(DynamicPlugin):
     def category():
         return "Meta-Data Analysis"
 
-    def requirements_met(self, run):
+    @staticmethod
+    def check_requirements(self, runs):
         try:
             run.history[0].additional["cost_history"]
         except:
@@ -346,3 +348,4 @@ class MFIS(DynamicPlugin):
         fig2 = go.Figure(data=[trace2], layout=layout2)
 
         return [fig1, fig2]
+"""

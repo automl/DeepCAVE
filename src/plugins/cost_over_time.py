@@ -38,23 +38,25 @@ class CostOverTime(StaticPlugin):
     def category():
         return "Performance Analysis"
 
-    def get_input_layout(self):
+    @staticmethod
+    def get_input_layout(register):
         return [
             dbc.Label("Fidelity"),
-            dcc.Slider(id=self.register_input(
+            dcc.Slider(id=register(
                 "fidelity", ["min", "max", "marks", "value"])),
         ]
 
-    def get_filter_layout(self):
+    @staticmethod
+    def get_filter_layout(register):
         return [
             dbc.FormGroup([
                 dbc.Label("Logarithmic"),
-                dbc.RadioItems(id=self.register_input(
-                    "log", ["options", "value"], filter=True))
+                dbc.RadioItems(id=register("log", ["options", "value"]))
             ])
         ]
 
-    def load_inputs(self, runs):
+    @staticmethod
+    def load_inputs(runs):
         run = list(runs.values())[0]
 
         fidelities = [
@@ -83,24 +85,29 @@ class CostOverTime(StaticPlugin):
 
         costs, times = run.get_trajectory(fidelity)
 
+        import time
+        time.sleep(20)
+
         return {
             "times": times,
             "costs": costs,
             # "hovertext": additional
         }
 
-    def get_output_layout(self):
+    @staticmethod
+    def get_output_layout(register):
         return [
-            dcc.Graph(self.register_output("graph", "figure")),
+            dcc.Graph(register("graph", "figure")),
         ]
 
-    def load_outputs(self, inputs, outputs):
+    @staticmethod
+    def load_outputs(inputs, outputs, groups):
         traces = []
+        for run_name, run_outputs in outputs.items():
 
-        for run_name, output in outputs.items():
             traces.append(go.Scatter(
-                x=output["times"],
-                y=output["costs"],
+                x=run_outputs["times"],
+                y=run_outputs["costs"],
                 name=run_name,
                 line_shape='hv',
                 # hovertext=outputs["additional"]
@@ -122,12 +129,19 @@ class CostOverTime(StaticPlugin):
 
         fig = go.Figure(data=traces, layout=layout)
 
+        graphs = []
+        for group_name, _ in groups.items():
+            graphs.append(fig)
+            return graphs
+
+        # return []
+
         return [fig]
 
-    def get_mpl_output_layout(self):
-        return [
-            dbc.Input(id=self.register_output("blub", "value", mpl=True))
-        ]
+    # def get_mpl_output_layout(self):
+    #    return [
+    #        dbc.Input(id=self.register_output("blub", "value", mpl=True))
+    #    ]
 
-    def load_mpl_outputs(self, inputs, outputs):
-        return [inputs["filter"]["value"]]
+    # def load_mpl_outputs(self, inputs, outputs):
+    #    return [inputs["filter"]["value"]]

@@ -20,6 +20,7 @@ class Handler:
         self.working_dir = c.get('working_dir')
         self.run_ids = c.get('run_ids')
         self.runs = {}
+        self.groups = {}
 
         # Read from cache
         self.update()
@@ -31,6 +32,7 @@ class Handler:
 
         working_dir = c.get('working_dir')
         run_ids = c.get('run_ids')
+        groups = c.get('groups')
 
         # Set converter based on current working_dir
         self.converter = self._find_compatible_converter(working_dir)
@@ -88,6 +90,7 @@ class Handler:
 
         self.working_dir = working_dir
         self.run_ids = run_ids
+        self.groups = groups
 
     def set_working_dir(self, working_dir=None):
         c.set('working_dir', value=working_dir)
@@ -108,6 +111,9 @@ class Handler:
     def set_run_ids(self, run_ids):
         c.set('run_ids', value=run_ids)
 
+    def set_groups(self, groups):
+        c.set('groups', value=groups)
+
     def get_working_dir(self):
         self.update()
         return self.working_dir
@@ -119,6 +125,10 @@ class Handler:
     def get_run_ids(self):
         self.update()
         return self.run_ids
+
+    def get_groups(self):
+        self.update()
+        return self.groups.copy()
 
     def get_converter(self):
         self.update()

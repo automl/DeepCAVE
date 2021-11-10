@@ -75,7 +75,8 @@ class Plugin(Layout):
         """No caching is used."""
         return False
 
-    def requirements_met(self, run):
+    @staticmethod
+    def check_requirements(runs):
         """
         Returns either bool or str. If str, it is shown to the user.
         """
@@ -121,10 +122,14 @@ class Plugin(Layout):
     def register_callbacks(self):
         # We have to call the output layout one time to register
         # the values
-        self.get_input_layout()
-        self.get_filter_layout()
-        self.get_output_layout()
-        self.get_mpl_output_layout()
+        # Problem: Inputs/Outputs can't be changed afterwards anymore.
+
+        self.__class__.get_input_layout(self.register_input)
+        self.__class__.get_filter_layout(
+            lambda a, b: self.register_input(a, b, filter=True))
+        self.__class__.get_output_layout(self.register_output)
+        self.__class__.get_mpl_output_layout(
+            lambda a, b: self.register_output(a, b, mpl=True))
 
         # Handles the initial and the cashed input values
         outputs = []
@@ -148,14 +153,12 @@ class Plugin(Layout):
                         init = False
                         break
 
-                runs = handler.get_runs()
-
                 # Reload our inputs
                 if init:
                     inputs = c.get("plugins", self.id(), "last_inputs")
 
                     if inputs is None:
-                        inputs = self.load_inputs(runs)
+                        inputs = self.load_inputs(self.runs)
 
                         # Set not used inputs
                         for (id, attribute, _) in self.inputs:
@@ -169,8 +172,8 @@ class Plugin(Layout):
                     inputs = self._list_to_dict(inputs_list)
 
                     # How to update only parameters which have a dependency?
-                    user_dependencies_inputs = self.load_dependency_inputs(
-                        runs, inputs)
+                    user_dependencies_inputs = self.__class__.load_dependency_inputs(
+                        self.runs, inputs)
 
                     # Update dict
                     # update() removes keys, so it's done manually
@@ -219,13 +222,16 @@ class Plugin(Layout):
         return inputs_changed, filters_changed
 
     def _process_raw_outputs(self, inputs, raw_outputs):
+
         logger.debug("Process raw outputs.")
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
         if mpl_active:
-            outputs = self.load_mpl_outputs(inputs, raw_outputs)
+            outputs = self.__class__.load_mpl_outputs(
+                inputs, raw_outputs, self.groups)
         else:
-            outputs = self.load_outputs(inputs, raw_outputs)
+            outputs = self.__class__.load_outputs(
+                inputs, raw_outputs, self.groups)
 
         # Map outputs here because it may be that the outputs are
         # differently sorted than the values were registered.
@@ -333,6 +339,16 @@ class Plugin(Layout):
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
         """
+
+        self.runs = handler.get_runs()
+        groups = handler.get_groups()
+        if len(groups) == 0:
+            # Create groups with run_name: run_name
+            for run_name in handler.get_run_names():
+                groups[run_name] = [run_name]
+
+        self.groups = groups
+
         components = [html.H1(self.name())]
 
         if self.description() != '':
@@ -352,7 +368,7 @@ class Plugin(Layout):
                 fade=True),
         ]
 
-        status = self.requirements_met(handler.get_runs())
+        status = self.check_requirements(self.runs)
         if isinstance(status, str):
             self.update_alert(status, color="danger")
             return components
@@ -360,7 +376,7 @@ class Plugin(Layout):
             if not status:
                 return components
 
-        input_layout = self.get_input_layout()
+        input_layout = self.get_input_layout(self.register_input)
         input_control_layout = html.Div(
             style={} if render_button else {"display": "none"},
             className="mt-3 clearfix",
@@ -386,7 +402,8 @@ class Plugin(Layout):
             style={} if render_button or input_layout else {"display": "none"}
         )]
 
-        filter_layout = self.get_filter_layout()
+        def register(a, b): return self.register_input(a, b, filter=True)
+        filter_layout = self.__class__.get_filter_layout(register)
         if len(filter_layout) > 0:
             components += [html.Div(
                 id=f'{self.id()}-filter',
@@ -394,7 +411,7 @@ class Plugin(Layout):
                 children=filter_layout
             )]
 
-        output_layout = self.get_output_layout()
+        output_layout = self.__class__.get_output_layout(self.register_output)
         if output_layout:
             components += [html.Div(
                 id=f'{self.id()}-output',
@@ -404,7 +421,8 @@ class Plugin(Layout):
                     "matplotlib-mode") else {"display": "none"}
             )]
 
-        output_layout = self.get_mpl_output_layout()
+        def register(a, b): return self.register_input(a, b, mpl=True)
+        output_layout = self.__class__.get_mpl_output_layout(register)
         if output_layout:
             components += [html.Div(
                 id=f'{self.id()}-mpl-output',
@@ -416,31 +434,39 @@ class Plugin(Layout):
 
         return components
 
-    def load_inputs(self, runs):
+    @staticmethod
+    def load_inputs(runs):
         return {}
 
-    def load_dependency_inputs(self, runs, inputs):
+    @staticmethod
+    def load_dependency_inputs(runs, inputs):
         return inputs
 
-    def get_input_layout(self):
+    @staticmethod
+    def get_input_layout(register):
         return []
 
-    def get_filter_layout(self):
+    @staticmethod
+    def get_filter_layout(register):
         return []
+
+    @staticmethod
+    def get_output_layout(register):
+        return []
+
+    @staticmethod
+    def get_mpl_output_layout(register):
+        return []
+
+    @staticmethod
+    def load_outputs(inputs, outputs, groups):
+        return {}
+
+    @staticmethod
+    def load_mpl_outputs(inputs, outputs, groups):
+        return {}
 
     @staticmethod
     @abstractmethod
     def process(run, inputs):
         pass
-
-    def get_output_layout(self):
-        return []
-
-    def load_outputs(self, filters, raw_outputs):
-        return {}
-
-    def get_mpl_output_layout(self):
-        return []
-
-    def load_mpl_outputs(self, filters, raw_outputs):
-        return {}

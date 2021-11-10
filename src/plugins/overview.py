@@ -18,7 +18,7 @@ from src.evaluators.fanova import fANOVA as _fANOVA
 
 logger = get_logger(__name__)
 
-
+"""
 class Overview(DynamicPlugin):
     @staticmethod
     def id():
@@ -62,3 +62,4 @@ class Overview(DynamicPlugin):
     def load_outputs(self, filters, raw_outputs):
 
         return ["hi"]
+"""

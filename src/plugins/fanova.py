@@ -17,7 +17,7 @@ from src.evaluators.fanova import fANOVA as _fANOVA
 
 logger = get_logger(__name__)
 
-
+"""
 class fANOVA(DynamicPlugin):
     @staticmethod
     def id():
@@ -169,3 +169,4 @@ class fANOVA(DynamicPlugin):
         fig.update_layout(barmode='group')
 
         return [fig]
+"""

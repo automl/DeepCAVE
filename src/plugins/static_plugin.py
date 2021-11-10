@@ -49,10 +49,8 @@ class StaticPlugin(Plugin):
     """
 
     def __init__(self):
-        # How often the button was pressed.
-        # It's important because we can't use `State` attributes
-        # because of input dependencies.
-        self._n_clicks = None
+        self._state = None
+        self._refresh_required = True
 
         super().__init__()
 
@@ -84,107 +82,115 @@ class StaticPlugin(Plugin):
                 *inputs_list: Values from user.
             """
 
-            button_pressed = False
-            if n_clicks is not None and n_clicks != self._n_clicks:
-                button_pressed = True
+            # State 0: StandBy/Ready.
+            # State 1: StandBy/Processing Necessary.
+            # State 2: Results are in progress.
 
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
+            last_inputs = c.get("plugins", self.id(), "last_inputs")
+
             raw_outputs = self._get_raw_outputs(inputs_key)
             raw_outputs_available = True
             for run_name in handler.get_run_names():
                 if raw_outputs[run_name] is None:
                     raw_outputs_available = False
 
-            last_inputs = c.get("plugins", self.id(), "last_inputs")
+            button_pressed = n_clicks is not None
+            inputs_changed = inputs != last_inputs
 
-            if button_pressed:
-                logger.debug("Button pressed.")
+            # Check current state
+            if raw_outputs_available:
+                if inputs_changed or self._refresh_required:
+                    c.set("plugins", self.id(), "last_inputs", value=inputs)
 
-                # Update state
-                self._n_clicks = n_clicks
+                    outputs = self._process_raw_outputs(inputs, raw_outputs)
+                    self._refresh_required = False
 
-                if self.debug():
-                    logger.debug("Debug mode: Reset raw outputs")
-                    raw_outputs = {}
+                    return self._update(state=0, outputs=outputs)
+                else:
+                    return self._update(state=0)
 
-                # Check if we need to process
-                for run_name, run in handler.get_runs().items():
-                    job_id = self._get_job_id(run_name, inputs_key)
-
-                    # We already got our results or it was already processed
-                    if raw_outputs[run_name] is not None or queue.is_processed(job_id):
-                        continue
-
-                    meta = {
-                        "display_name": self.name(),
-                        "run_name": run_name,
-                        "inputs_key": inputs_key,
-                    }
-
-                    logger.debug(f"Enqueued {run_name}.")
-
-                    # Start the task in rq
-                    queue.enqueue(
-                        self.process,
-                        args=[run, inputs],
-                        job_id=job_id,
-                        meta=meta
-                    )
-
-                return self._update_status("")
-
-            # Now the interval comes in
             else:
-                # Get finished jobs and save them
-                for job in queue.get_finished_jobs():
-                    try:
-                        job_id = job.id
-                        job_run_outputs = job.result
-                        job_meta = job.meta
-                        job_inputs_key = job_meta["inputs_key"]
-                        job_run_name = job_meta["run_name"]
+                if button_pressed and self._state != 2:
+                    logger.debug("Button pressed.")
 
-                        logger.debug(f"Job `{job_id}`")
+                    # Check if we need to process
+                    for run_name, run in handler.get_runs().items():
+                        job_id = self._get_job_id(run_name, inputs_key)
 
-                        # Save results in cache
-                        rc[job_run_name].set(
-                            job_inputs_key, value=job_run_outputs)
-                        logger.debug(f"... cached")
+                        # We already got our results or it was already processed
+                        if raw_outputs[run_name] is not None or queue.is_processed(job_id):
+                            continue
 
-                        queue.delete_job(job_id)
-                        logger.debug(f"... deleted")
-                    except:
-                        queue.delete_job(job_id)
-                        logger.debug(f"... deleted")
+                        meta = {
+                            "display_name": self.name(),
+                            "run_name": run_name,
+                            "inputs_key": inputs_key,
+                        }
 
-            # Check if queue is still running
-            queue_running = False
-            queue_pending = False
-            for run_name in handler.get_run_names():
-                job_id = self._get_job_id(run_name, inputs_key)
-                if queue.is_running(job_id):
-                    queue_running = True
+                        logger.debug(f"Enqueued {run_name}.")
 
-                if queue.is_pending(job_id):
-                    queue_pending = True
+                        # Start the task in rq
+                        queue.enqueue(
+                            self.process,
+                            args=[run, inputs],
+                            job_id=job_id,
+                            meta=meta
+                        )
 
-            if queue_running:
-                return self._update_status("Processing ...")
-            elif queue_pending:
-                return self._update_status("Pending ...")
-            elif raw_outputs_available:
-                if last_inputs == inputs and n_clicks is not None:
-                    return self._update_status("Ready.")
+                    # Reset button
+                    return self._update(state=2, button_state=None)
+                else:
+                    # Get finished jobs and save them
+                    for job in queue.get_finished_jobs():
+                        try:
+                            job_id = job.id
+                            job_run_outputs = job.result
+                            job_meta = job.meta
+                            job_inputs_key = job_meta["inputs_key"]
+                            job_run_name = job_meta["run_name"]
 
-                # Set new inputs as last_inputs
-                c.set("plugins", self.id(), "last_inputs", value=inputs)
+                            logger.debug(f"Job `{job_id}`")
 
-                return [0, ""] + self._process_raw_outputs(inputs, raw_outputs)
-            else:
-                return self._update_status("")
+                            # Save results in cache
+                            rc[job_run_name].set(
+                                job_inputs_key, value=job_run_outputs)
+                            logger.debug(f"... cached")
+
+                            queue.delete_job(job_id)
+                            logger.debug(f"... deleted")
+                        except:
+                            queue.delete_job(job_id)
+                            logger.debug(f"... deleted")
+
+                    # Check if queue is still running
+                    queue_running = False
+                    queue_pending = False
+                    for run_name in handler.get_run_names():
+                        job_id = self._get_job_id(run_name, inputs_key)
+                        if queue.is_running(job_id):
+                            queue_running = True
+
+                        if queue.is_pending(job_id):
+                            queue_pending = True
+
+                    if queue_running or queue_pending:
+                        return self._update(state=2)
+
+                    # Ready again?
+                    raw_outputs = self._get_raw_outputs(inputs_key)
+                    raw_outputs_available = True
+                    for run_name in handler.get_run_names():
+                        if raw_outputs[run_name] is None:
+                            raw_outputs_available = False
+
+                    if raw_outputs_available:
+                        return self._update(state=0)
+                    else:
+                        return self._update(state=1)
 
     def _get_raw_outputs(self, inputs_key):
         raw_outputs = {}
@@ -193,17 +199,33 @@ class StaticPlugin(Plugin):
 
         return raw_outputs
 
-    def _update_status(self, status):
-        return [no_update, status] + [no_update for _ in range(len(self.outputs))]
+    def _update(self, state=None, button_state=None, outputs=None):
+        status = ""
+        if self._state == 0:
+            status = "Ready."
+        if self._state == 1:
+            status = "Processing Necessary."
+        if self._state == 2:
+            status = "Processing ..."
+
+        if outputs is None:
+            outputs = [no_update for _ in range(len(self.outputs))]
+
+        if state is not None:
+            self._state = state
+
+        return [button_state, status] + outputs
 
     def _get_job_id(self, run_name, inputs_key):
         return run_name + "-" + inputs_key
 
     def __call__(self):
+        self._state = None
+        self._refresh_required = True
+
         components = [
-            # dcc.Store(id=self.get_internal_id("update-outputs")),
-            dcc.Interval(id=self.get_internal_id(
-                "update-outputs"), interval=500)
+            dcc.Interval(
+                id=self.get_internal_id("update-outputs"), interval=500)
         ]
         components += super().__call__(True)
 

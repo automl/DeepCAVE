@@ -19,7 +19,7 @@ from src.evaluators.fanova import fANOVA as _fANOVA
 
 logger = get_logger(__name__)
 
-
+"""
 class Configspace(DynamicPlugin):
     @staticmethod
     def id():
@@ -109,3 +109,4 @@ class Configspace(DynamicPlugin):
         table = dbc.Table(table_header + table_body, bordered=True)
 
         return table
+"""
