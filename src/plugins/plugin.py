@@ -158,7 +158,7 @@ class Plugin(Layout):
                     inputs = c.get("plugins", self.id(), "last_inputs")
 
                     if inputs is None:
-                        inputs = self.load_inputs(self.runs)
+                        inputs = self.__class__.load_inputs(self.runs)
 
                         # Set not used inputs
                         for (id, attribute, _) in self.inputs:

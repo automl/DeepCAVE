@@ -215,7 +215,13 @@ class Run:
         return self.meta["budgets"][id]
 
     def get_budgets(self):
-        return self.meta["budgets"]
+        """
+        There's at least one budget with None included.
+        """
+        budgets = self.meta["budgets"]
+        assert len(budgets) > 0
+
+        return budgets
 
     def get_highest_budget(self):
         budgets = self.meta["budgets"]
@@ -245,21 +251,16 @@ class Run:
 
         return results
 
-    def get_trajectory(self, budget=None):
-        """
-        If no budget is chosen, only the highest is considered.
-        """
-
-        if budget is None:
-            budget = self.get_budgets()[-1]
+    def get_trajectory(self, budget):
 
         costs = []
+        ids = []
         times = []
 
         # TODO: Sort self.history by start_time
 
         current_cost = np.inf
-        for trial in self.history:
+        for id, trial in enumerate(self.history):
             # Only consider selected/last budget
             if trial.budget != budget:
                 continue
@@ -270,8 +271,9 @@ class Run:
 
                 costs.append(cost)
                 times.append(trial.end_time)  # Use end_time as time
+                ids.append(id)
 
-        return costs, times
+        return costs, times, ids
 
     def calculate_cost(self, costs):
         """

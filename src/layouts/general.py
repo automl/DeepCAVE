@@ -138,20 +138,21 @@ class GeneralLayout(Layout):
 
         @ app.callback(outputs, inputs)
         def general_set_groups(group_names, all_run_names):
+            # Abort on page load
+            if self._refresh_groups:
+                self._refresh_groups = False
+                return
+
             groups = {}
             for group_name, run_names in zip(group_names, all_run_names):
                 if group_name is None or group_name == "":
                     continue
 
-                if run_names is None:
-                    run_names = []
+                if run_names is None or len(run_names) == 0:
+                    continue
+                    #run_names = []
 
                 groups[group_name] = run_names
-
-            # Don't save if there are no groups
-            # Reset is done earlier
-            if len(groups) == 0:
-                return
 
             # Now save it
             handler.set_groups(groups)
@@ -175,6 +176,8 @@ class GeneralLayout(Layout):
         return converter_text
 
     def __call__(self):
+        self._refresh_groups = True
+
         return [
             html.H1('General'),
 

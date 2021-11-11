@@ -124,7 +124,7 @@ class Handler:
 
     def get_run_ids(self):
         self.update()
-        return self.run_ids
+        return self.run_ids.copy()
 
     def get_groups(self):
         self.update()
