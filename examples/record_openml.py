@@ -4,6 +4,7 @@ sys.path.insert(0, '../')  # noqa
 from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.scenario.scenario import Scenario
 from hpobench.benchmarks.ml.nn_benchmark import NNBenchmark
+from smac.initial_design.random_configuration_design import RandomConfigurations
 from src import Recorder
 
 task_id = 167149
@@ -36,7 +37,11 @@ if __name__ == "__main__":
             # "cutoff-time": 10,
         })
 
-        smac = SMAC4HPO(scenario=scenario, tae_runner=eval_func, rng=seed)
+        smac = SMAC4HPO(
+            scenario=scenario,
+            tae_runner=eval_func,
+            initial_design=RandomConfigurations,
+            rng=seed)
         smac.optimize()
         rh = smac.get_runhistory()
         very_start_time = None
