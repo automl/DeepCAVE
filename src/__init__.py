@@ -1,17 +1,11 @@
 import os
 
-from absl import app
-from absl import flags
-
 from src.utils.cache import Cache
 from src.utils.run_caches import RunCaches
 from src.server import get_app
 from src.queue import Queue
 from src.config import CONFIG, META
 from src.runs.recorder import Recorder
-
-FLAGS = flags.FLAGS
-flags.DEFINE_boolean('interface', False, 'Produces debugging output.')
 
 version = "0.0.1"
 
