@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 record_openml.py --seed=0
 record_openml.py --seed=1
