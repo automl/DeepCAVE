@@ -14,13 +14,12 @@ flags.DEFINE_integer('seed', 0, 'Seed', lower_bound=0)
 
 task_id = 167149
 n_configs = 500
-seeds = [0, 1, 2, 3, 4]
 benchmark = NNBenchmark(task_id=task_id)
 
 
 def eval_func(cfg, seed=0):
     result_dict = benchmark.objective_function(
-        configuration=cfg, rng=seed, fidelity={"iter": 80})
+        configuration=cfg, rng=seed, fidelity={"iter": 100})
     cost = result_dict['cost']
 
     return cost
