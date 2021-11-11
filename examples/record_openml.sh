@@ -1,8 +1,8 @@
 #!/bin/bash
 
-record_openml.py --seed=0
-record_openml.py --seed=1
-record_openml.py --seed=2
-record_openml.py --seed=3
-record_openml.py --seed=4
-record_openml.py --seed=5
+python record_openml.py --seed=0
+python record_openml.py --seed=1
+python record_openml.py --seed=2
+python record_openml.py --seed=3
+python record_openml.py --seed=4
+python record_openml.py --seed=5
