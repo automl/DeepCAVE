@@ -7,14 +7,12 @@ from hpobench.benchmarks.ml.nn_benchmark import NNBenchmark
 from src import Recorder
 
 task_id = 167149
-n_configs = 25
-seeds = [0]
+n_configs = 500
+seeds = [0, 1, 2, 3, 4]
 benchmark = NNBenchmark(task_id=task_id)
 
 
 def eval_func(cfg, seed=0):
-    #task_id = 167149
-    #benchmark = NNBenchmark(task_id=task_id)
     result_dict = benchmark.objective_function(configuration=cfg, rng=seed)
     cost = result_dict['cost']
 
@@ -25,13 +23,6 @@ if __name__ == "__main__":
 
     for seed in seeds:
         cs = benchmark.get_configuration_space(seed=seed)
-
-        #-------- START RANDOM SEARCH --------#
-        # with Recorder(cs, prefix=f"openml_{task_id}_rs_{seed}", overwrite=True) as r:
-        #    for config in cs.sample_configuration(n_configs):
-        #        r.start(config)
-        #        cost = eval_func(config, seed)
-        #        r.end(costs=cost)
 
         #-------- START SMAC --------#
         scenario = Scenario({
@@ -61,3 +52,10 @@ if __name__ == "__main__":
 
                 r.start(config, start_time=starttime)
                 r.end(costs=cost, end_time=endtime)
+
+        #-------- START RANDOM SEARCH --------#
+        with Recorder(cs, prefix=f"openml_{task_id}_rs_{seed}", overwrite=True) as r:
+            for config in cs.sample_configuration(n_configs):
+                r.start(config)
+                cost = eval_func(config, seed)
+                r.end(costs=cost)
