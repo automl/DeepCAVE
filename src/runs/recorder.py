@@ -14,7 +14,8 @@ class Recorder:
                  objective_weights=None,
                  meta={},
                  save_path="logs",
-                 trial_name=None):
+                 prefix="run",
+                 overwrite=False):
         """
         All objectives follow the scheme the lower the better.
         If file
@@ -23,10 +24,11 @@ class Recorder:
             save_path (str): Blub.
             configspace (ConfigSpace):
             objectives (str or list):
-            trial_name: Name of the trial. If not given, trial_x will be used.
+            prefix: Name of the trial. If not given, trial_x will be used.
+            overwrite: Uses the prefix as name and overwrites the file.
         """
 
-        self._set_path(save_path, trial_name)
+        self._set_path(save_path, prefix, overwrite)
 
         # Set variables
         self.last_trial_id = None
@@ -50,7 +52,7 @@ class Recorder:
     def __exit__(self, type, value, traceback):
         pass
 
-    def _set_path(self, path, name):
+    def _set_path(self, path, prefix="run", overwrite=False):
         """
         Identifies the latest run and sets the path with increased id.
         """
@@ -63,9 +65,9 @@ class Recorder:
             # Remove last slash
             path = path[:-1]
 
-        if name is None:
+        if not overwrite:
             new_idx = 0
-            for file in glob.glob(f"{path}/run_*"):
+            for file in glob.glob(f"{path}/{prefix}_*"):
                 idx = file.split("_")[-1]
                 if idx.isnumeric():
                     idx = int(idx)
@@ -74,28 +76,25 @@ class Recorder:
 
             # And increase the id
             new_idx += 1
-
-            self.path = os.path.join(path, f"run_{new_idx}")
-
+            self.path = os.path.join(path, f"{prefix}_{new_idx}")
         else:
-            self.path = os.path.join(path, name)
-
-            # Check if trial name is already given
-            if os.path.exists(self.path):
-                raise RuntimeError(
-                    f"The path `{self.path}` already exists.")
+            self.path = os.path.join(path, f"{prefix}")
 
     def start(self,
               config,
               budget=None,
               model=None,
               origin=None,
-              additional={}):
+              additional={},
+              start_time=None):
 
         id = (config, budget)
 
+        if start_time is None:
+            start_time = time.time() - self.start_time
+
         # Start timer
-        self.start_times[id] = time.time() - self.start_time
+        self.start_times[id] = start_time
         self.models[id] = model
         self.origins[id] = origin
         self.additionals[id] = additional
@@ -107,7 +106,8 @@ class Recorder:
             status=Status.SUCCESS,
             config=None,
             budget=None,
-            additional={}):
+            additional={},
+            end_time=None):
         """
         In case of multi-processing, config+budget should be passed as otherwise
         it can't be matched correctly.
@@ -127,7 +127,9 @@ class Recorder:
             status = Status.CRASHED
 
         start_time = self.start_times[id]
-        end_time = time.time() - self.start_time
+
+        if end_time is None:
+            end_time = time.time() - self.start_time
 
         # Add to trial history
         self.run.add(

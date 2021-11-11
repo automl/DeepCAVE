@@ -85,9 +85,6 @@ class CostOverTime(StaticPlugin):
 
         costs, times = run.get_trajectory(fidelity)
 
-        import time
-        time.sleep(20)
-
         return {
             "times": times,
             "costs": costs,

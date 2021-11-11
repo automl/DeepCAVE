@@ -20,32 +20,7 @@ logger = get_logger(__name__)
 
 class StaticPlugin(Plugin):
     """
-    Behaviour:
-
-    A On page load:
-    A1: last_inputs/last_outputs are available? Show them.
-    A2: last_inputs/last_outputs not available? Leave everything as it is.
-
-    B On filter+input change:
-    B1: Don't do anything if button pressed.
-    B1: Reset input
-    B2: Print error message that input was reset.
-
-    On input change:
-    2.1: Don't do anything.
-
-    On press button:
-    3.1: Take input and process it if
-    3.1.1: Input is not in the queue.
-    3.1.2: Input is not found in the cache.
-    3.2: Update output based on new results.
-
-
-
-    On filter change:
-    4.1: Update output without processing.
-
-    Check for new results
+    Calculation with queue. Made for time consuimg tasks.
     """
 
     def __init__(self):
@@ -81,10 +56,6 @@ class StaticPlugin(Plugin):
                 state (int): From button.
                 *inputs_list: Values from user.
             """
-
-            # State 0: StandBy/Ready.
-            # State 1: StandBy/Processing Necessary.
-            # State 2: Results are in progress.
 
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
