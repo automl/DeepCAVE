@@ -1,10 +1,13 @@
 import os
+import sys
 from src.runs.recorder import Recorder
 
+
 version = "0.0.1"
+exec_file = sys.argv[0]
 
 
-if __name__ == "__main__":
+if "server.py" in exec_file or "worker.py" in exec_file:
     from src.utils.cache import Cache  # noqa
     from src.utils.run_caches import RunCaches  # noqa
     from src.server import get_app  # noqa
