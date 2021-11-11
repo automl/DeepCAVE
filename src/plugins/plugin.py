@@ -155,7 +155,7 @@ class Plugin(Layout):
 
                 # Reload our inputs
                 if init:
-                    inputs = c.get("plugins", self.id(), "last_inputs")
+                    inputs = c.get("last_inputs", self.id())
 
                     if inputs is None:
                         inputs = self.__class__.load_inputs(self.runs)

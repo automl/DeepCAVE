@@ -6,7 +6,7 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State, ALL
 from dash.exceptions import PreventUpdate
 
-from src import app, c
+from src import app, c, rc
 from src.config import CONFIG
 from src.runs.handler import handler
 from src.layouts.layout import Layout
@@ -136,7 +136,7 @@ class GeneralLayout(Layout):
             Input({'type': 'group-dropdown', 'index': ALL}, 'value')
         ]
 
-        @ app.callback(outputs, inputs)
+        @app.callback(outputs, inputs)
         def general_set_groups(group_names, all_run_names):
             # Abort on page load
             if self._refresh_groups:
@@ -157,7 +157,17 @@ class GeneralLayout(Layout):
             # Now save it
             handler.set_groups(groups)
 
-            return  # html.Div([])
+            return
+
+        output = Output('general-clear-cache-button', 'n_clicks')
+        input = Input('general-clear-cache-button', 'n_clicks')
+
+        @app.callback(output, input)
+        def general_clear_cache(_):
+            print(handler.get_run_names())
+            rc.clear_all()
+
+            return None
 
     @ staticmethod
     def get_run_options():
@@ -207,9 +217,11 @@ class GeneralLayout(Layout):
 
             html.Hr(),
 
-            html.H2('Additional'),
-            dbc.Button("Clear Cache",
-                       id="general-clear-cache-button", color="primary"),
+            html.H2('Caches'),
+            dbc.FormGroup([
+                dbc.Button("Clear Plugin Caches",
+                           id="general-clear-cache-button", color="primary"),
+            ]),
         ]
 
 

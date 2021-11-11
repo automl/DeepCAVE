@@ -51,7 +51,7 @@ class DynamicPlugin(Plugin):
             """
 
             # The results from the last run
-            last_inputs = c.get("plugins", self.id(), "last_inputs")
+            last_inputs = c.get("last_inputs", self.id())
             last_raw_outputs = {}
             for name in handler.get_run_names():
                 last_raw_outputs[name] = rc[name].get(
@@ -99,11 +99,7 @@ class DynamicPlugin(Plugin):
             raw_outputs[name] = run_outputs
 
         # Cache last inputs
-        c.set(
-            "plugins",
-            self.id(),
-            "last_inputs",
-            value=inputs)
+        c.set("last_inputs", self.id(), value=inputs)
 
         return self._process_raw_outputs(inputs, raw_outputs)
 

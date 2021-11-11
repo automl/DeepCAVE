@@ -61,7 +61,7 @@ class StaticPlugin(Plugin):
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
-            last_inputs = c.get("plugins", self.id(), "last_inputs")
+            last_inputs = c.get("last_inputs", self.id())
 
             raw_outputs = self._get_raw_outputs(inputs_key)
             raw_outputs_available = True
@@ -75,7 +75,7 @@ class StaticPlugin(Plugin):
             # Check current state
             if raw_outputs_available:
                 if inputs_changed or self._refresh_required:
-                    c.set("plugins", self.id(), "last_inputs", value=inputs)
+                    c.set("last_inputs", self.id(), value=inputs)
 
                     outputs = self._process_raw_outputs(inputs, raw_outputs)
                     self._refresh_required = False
