@@ -1,25 +1,15 @@
-from typing import Dict, Type, Any
-
+import numpy as np
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-import dash_html_components as html
-import plotly.express as px
 import plotly.graph_objs as go
-from dash.dependencies import Input, Output, State
-
-import pandas as pd
-import numpy as np
-
-from src import app
 from src.plugins.dynamic_plugin import DynamicPlugin
-from src.plugins.static_plugin import StaticPlugin
 from src.utils.logs import get_logger
 from src.utils.styled_plotty import get_color
 
 logger = get_logger(__name__)
 
 
-class CostOverTime(StaticPlugin):
+class CostOverTime(DynamicPlugin):
     def __init__(self):
         super().__init__()
 
@@ -33,7 +23,7 @@ class CostOverTime(StaticPlugin):
 
     @staticmethod
     def position():
-        return 5
+        return 1
 
     @staticmethod
     def category():
@@ -206,21 +196,4 @@ class CostOverTime(StaticPlugin):
             ),
         )
 
-        fig = go.Figure(data=traces, layout=layout)
-
-        graphs = []
-        for group_name, _ in groups.items():
-            graphs.append(fig)
-            return graphs
-
-        # return []
-
-        return [fig]
-
-    # def get_mpl_output_layout(self):
-    #    return [
-    #        dbc.Input(id=self.register_output("blub", "value", mpl=True))
-    #    ]
-
-    # def load_mpl_outputs(self, inputs, outputs):
-    #    return [inputs["filter"]["value"]]
+        return [go.Figure(data=traces, layout=layout)]
