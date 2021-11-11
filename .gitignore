@@ -4,4 +4,5 @@ docs/*
 __pycache__
 *.rdb
 logs
+logs/*
 smac3-output*
