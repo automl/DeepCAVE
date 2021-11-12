@@ -1,6 +1,3 @@
-import sys  # noqa
-sys.path.insert(0, '../')  # noqa
-
 from functools import partial
 from absl import app as flags_app
 from absl import flags
@@ -8,7 +5,7 @@ from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.scenario.scenario import Scenario
 from hpobench.benchmarks.ml.rf_benchmark import RandomForestBenchmark
 from smac.initial_design.random_configuration_design import RandomConfigurations
-from src import Recorder
+from deepcave import Recorder
 
 FLAGS = flags.FLAGS
 flags.DEFINE_integer('seed', 0, 'Seed', lower_bound=0)

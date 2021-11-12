@@ -9,3 +9,4 @@ logs
 logs/*
 smac3-output*
 .DS_Store
+requirements_old.txt

@@ -7,9 +7,17 @@ DeepCAVE has two main contributions:
 
 ## Installation
 
-1. Create a new anaconda environment.
-2. Install python with `conda install python=3.10`.
-3. Install dependencies with `pip install -r requirements.txt`.
+```
+git clone https://github.com/automl/DeepCAVE.git
+cd DeepCAVE
+conda create -n DeepCAVE python=3.6
+make install
+```
+
+If you want to use DeepCAVE in a different directory set your PYTHONPATH:
+```
+export PYTHONPATH=$(pwd)
+```
 
 
 ## Recording
@@ -37,5 +45,6 @@ with Recorder(configspace, objectives=["accuracy", "mse"]) as r:
 
 ## Visualizing and Evaluating
 
-The webserver as well as the queue/workers can be started by running ``` ./start.sh ```.
+The webserver as well as the queue/workers can be started by running ``` ./run.sh ```. Everything
+else can be specified in the dashboard.
 

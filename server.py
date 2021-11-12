@@ -1,5 +1,5 @@
-from src import app
-from src.layouts.main import layout
+from deepcave import app
+from deepcave.layouts.main import layout
 
 
 if __name__ == '__main__':

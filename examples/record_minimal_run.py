@@ -1,5 +1,5 @@
 import ConfigSpace as CS
-from deep_cave import Recorder
+from deepcave import Recorder
 
 
 configspace = CS.ConfigurationSpace(seed=0)

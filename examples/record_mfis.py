@@ -1,13 +1,11 @@
 import random
 import sys
 import time
-sys.path.insert(0, '../')
+import ConfigSpace as CS
+from deepcave import Recorder
 
 
 if __name__ == "__main__":
-    import ConfigSpace as CS
-    from deep_cave import Recorder
-
     configspace = CS.ConfigurationSpace(seed=0)
     start = CS.hyperparameters.UniformFloatHyperparameter(
         name='start', lower=0, upper=0.3)

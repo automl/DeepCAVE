@@ -1,5 +1,5 @@
 
-from src import queue
+from deepcave import queue
 from rq import Connection, Worker
 
 
