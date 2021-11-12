@@ -1,5 +1,6 @@
 build/*
 *cache*
+!cache.py
 docs/*
 __pycache__
 *.rdb
