@@ -62,7 +62,7 @@ class CostOverTime(DynamicPlugin):
         for budget in run.get_budgets():
             if budget is None:
                 continue
-            budget = str(np.round(float(budget), 2))
+            budgets.append(str(np.round(float(budget), 2)))
 
         max_ticks = len(budgets) - 1
         if max_ticks < 0:

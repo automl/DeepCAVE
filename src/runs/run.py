@@ -2,6 +2,7 @@ import os
 import numpy as np
 import jsonlines
 from enum import IntEnum
+import pandas as pd
 import json
 
 from ConfigSpace.configuration_space import Configuration
@@ -189,6 +190,13 @@ class Run:
         raise RuntimeError(
             "Object does not match the size of objectives.")
 
+    def get_objectives(self):
+        objectives = self.meta["objectives"]
+        if isinstance(objectives, str):
+            return [objectives]
+
+        return objectives
+
     def get_config_id(self, config: dict):
         # Find out config id
         for id, c in self.configs.items():
@@ -309,10 +317,12 @@ class Run:
     def get_encoded_configs(self,
                             budget=None,
                             statuses=[Status.SUCCESS],
-                            for_tree=False):
+                            for_tree=False,
+                            pandas=False):
         """
-        Inputs:
-            `for_tree`: Inactives are treated differently.
+        Args:
+            for_tree (bool): Inactives are treated differently.
+            pandas (bool): Return pandas DataFrame.
         """
 
         X = []
@@ -364,6 +374,15 @@ class Run:
                 if conditional[idx] is True:
                     nonfinite_mask = ~np.isfinite(X[:, idx])
                     X[nonfinite_mask, idx] = impute_values[idx]
+
+        if pandas:
+            Y = Y.reshape(-1, 1)
+            data = np.concatenate((X, Y), axis=1)
+            df = pd.DataFrame(
+                data=data,
+                columns=[name for name in self.configspace.get_hyperparameter_names()] + ["cost"])
+
+            return df
 
         return X, Y
 
