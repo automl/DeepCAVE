@@ -6,7 +6,9 @@ docs/*
 __pycache__
 *.rdb
 logs
+logs2
 logs/*
 smac3-output*
 .DS_Store
 requirements_old.txt
+__init__.pyc
