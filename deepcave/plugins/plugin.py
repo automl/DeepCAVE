@@ -231,10 +231,10 @@ class Plugin(Layout):
         mpl_active = c.get("matplotlib-mode")
         if mpl_active:
             outputs = self.__class__.load_mpl_outputs(
-                inputs, raw_outputs, self.groups)
+                self.runs, inputs, raw_outputs, self.groups)
         else:
             outputs = self.__class__.load_outputs(
-                inputs, raw_outputs, self.groups)
+                self.runs, inputs, raw_outputs, self.groups)
 
         # Map outputs here because it may be that the outputs are
         # differently sorted than the values were registered.
@@ -464,11 +464,11 @@ class Plugin(Layout):
         return []
 
     @staticmethod
-    def load_outputs(inputs, outputs, groups):
+    def load_outputs(runs, inputs, outputs, groups):
         return {}
 
     @staticmethod
-    def load_mpl_outputs(inputs, outputs, groups):
+    def load_mpl_outputs(runs, inputs, outputs, groups):
         return {}
 
     @staticmethod

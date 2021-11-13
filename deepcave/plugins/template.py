@@ -67,7 +67,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, groups):
+    def load_outputs(_, inputs, outputs, groups):
         traces = []
 
         for run_name, run_outputs in outputs.items():

@@ -163,9 +163,9 @@ class GeneralLayout(Layout):
         input = Input('general-clear-cache-button', 'n_clicks')
 
         @app.callback(output, input)
-        def general_clear_cache(_):
-            print(handler.get_run_names())
-            rc.clear_all()
+        def general_clear_cache(n_clicks):
+            if n_clicks is not None:
+                rc.clear_all()
 
             return None
 

@@ -27,7 +27,15 @@ def display_figure(fig):
     return html.Img(src="data:image/png;base64,{}".format(data))
 
 
-def get_slider_marks(strings, steps=10):
+def get_slider_marks(strings=None, steps=10):
+    if strings is None:
+        return {0: str("None")}
+
+    if len(strings) < steps:
+        steps = len(strings)
+
+    marks = {}
+
     marks = {}
     for i, string in enumerate(strings):
         if i % (len(strings) / steps) == 0:
@@ -37,3 +45,18 @@ def get_slider_marks(strings, steps=10):
     marks[len(strings)-1] = str(strings[-1])
 
     return marks
+
+
+def get_select_options(strings=None):
+    if strings is None:
+        return []
+
+    options = []
+    for string in strings:
+        options.append({"label": string, "value": string})
+
+    return options
+
+
+def get_checklist_options(strings=None):
+    return get_select_options(strings)

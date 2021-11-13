@@ -105,7 +105,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, groups):
+    def load_outputs(_, inputs, outputs, groups):
         show_groups = inputs["groups"]["value"]
         if not show_groups:
             groups = {}
