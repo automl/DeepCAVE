@@ -37,14 +37,14 @@ class Run:
 
     def __init__(self,
                  configspace=None,
-                 objectives="accuracy",
-                 objective_weights=None,
+                 objectives=[],
                  meta={},
                  path=None):
         """
         If path is given, trials are loaded from the path.
 
         Inputs:
+            objectives (Objective or list of Objective): ...
             meta (dict): Could be `ram`, `cores`, ...
         """
 
@@ -58,16 +58,14 @@ class Run:
             raise RuntimeError(
                 "Please provide a configspace or specify a path to load existing trials.")
 
+        if not isinstance(objectives, list):
+            objectives = [objectives]
+
         self.meta = {
             "objectives": objectives,
-            "objective_weights": objective_weights,
             "budgets": []
         }
         self.meta.update(meta)
-
-        # Objectives and objective weights must be compatible
-        if objective_weights is not None:
-            self._check_objective_compatibility(objective_weights)
 
     def reset(self):
         self.meta = {}
@@ -118,9 +116,9 @@ class Run:
     def add(self,
             costs,
             config,  # either dict or Configuration
-            budget=None,
-            start_time=None,
-            end_time=None,
+            budget=np.inf,
+            start_time=0.,
+            end_time=0.,
             status=Status.SUCCESS,
             origin=None,
             model=None,
@@ -131,9 +129,31 @@ class Run:
 
         Inputs:
             additional (dict): What's supported by DeepCAVE? Like `ram`, 
+            costs (float or list of floats)
         """
 
-        self._check_objective_compatibility(costs)
+        if not isinstance(costs, list):
+            costs = [costs]
+
+        assert len(costs) == len(self.meta["objectives"])
+
+        for i in range(len(costs)):
+            cost = costs[i]
+            objective = self.meta["objectives"][i]
+
+            # Update time objective here
+            if objective["name"] == "time" and cost is None:
+                costs[i] = end_time - start_time
+                cost = costs[i]
+
+            # Update bounds here
+            if not objective["lock_lower"]:
+                if cost < objective["lower"]:
+                    self.meta["objectives"][i]["lower"] = cost
+
+            if not objective["lock_upper"]:
+                if cost > objective["upper"]:
+                    self.meta["objectives"][i]["upper"] = cost
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()
@@ -171,31 +191,8 @@ class Run:
         # Update models
         self.models[trial_key] = model
 
-    def _check_objective_compatibility(self, o):
-        """
-        Costs or weights must be the same format as the defined objectives.
-        Otherwise, this function will return an error.
-        """
-
-        if o is None:
-            return
-
-        if isinstance(o, list):
-            if len(o) == len(self.meta["objectives"]):
-                return
-        elif isinstance(o, int) or isinstance(o, float):
-            if isinstance(self.meta["objectives"], str):
-                return
-
-        raise RuntimeError(
-            "Object does not match the size of objectives.")
-
-    def get_objectives(self):
-        objectives = self.meta["objectives"]
-        if isinstance(objectives, str):
-            return [objectives]
-
-        return objectives
+    def get_objective_names(self) -> list:
+        return [obj["name"] for obj in self.meta["objectives"]]
 
     def get_config_id(self, config: dict):
         # Find out config id
@@ -272,7 +269,9 @@ class Run:
 
         return results
 
-    def get_trajectory(self, budget):
+    def get_trajectory(self, objective_names=None, budget=None):
+        if budget is None:
+            budget = self.get_highest_budget()
 
         costs = []
         ids = []
@@ -286,7 +285,7 @@ class Run:
             if trial.budget != budget:
                 continue
 
-            cost = self.calculate_cost(trial.costs)
+            cost = self.calculate_cost(trial.costs, objective_names)
             if cost < current_cost:
                 current_cost = cost
 
@@ -296,30 +295,39 @@ class Run:
 
         return costs, times, ids
 
-    def calculate_cost(self, costs):
+    def calculate_cost(self, costs, objective_names=None):
         """
-        Calculates cost from multiple costs given objective weights.
-        If no weights are given, the mean is used.
+        Calculates cost from multiple costs.
+        Normalizes the cost first and weight every cost the same.
         """
 
-        if not isinstance(costs, list):
-            costs = [costs]
+        if objective_names is None:
+            objective_names = self.get_objective_names()
 
-        objective_weights = self.meta["objective_weights"]
-        if objective_weights is None:
-            objectives = self.meta["objectives"]
-            if isinstance(objectives, list):
-                # Give the same weight to all objectives
-                objective_weights = [
-                    1 / len(objectives) for _ in range(len(objectives))
-                ]
-            else:
-                objective_weights = [1]
-        else:
-            # Make sure objective_weights has same length than objectives
-            self._check_objective_compatibility(objective_weights)
+        assert len(objective_names) > 0
 
-        costs = [u*v for u, v in zip(costs, objective_weights)]
+        objectives = self.meta["objectives"]
+
+        # First normalize
+        filtered_objectives = []
+        normalized_costs = []
+        for cost, objective in zip(costs, objectives):
+            if objective["name"] not in objective_names:
+                continue
+
+            a = cost - objective["lower"]
+            b = objective["upper"] - objective["lower"]
+            normalized_cost = a / b
+
+            normalized_costs.append(normalized_cost)
+            filtered_objectives.append(objective)
+
+        # Give the same weight to all objectives
+        objective_weights = [
+            1 / len(objectives) for _ in range(len(filtered_objectives))
+        ]
+
+        costs = [u*v for u, v in zip(normalized_costs, objective_weights)]
         cost = np.mean(costs)
 
         return cost
@@ -328,6 +336,7 @@ class Run:
         return len(self.history) == 0
 
     def get_encoded_configs(self,
+                            objective_names=None,
                             budget=None,
                             statuses=[Status.SUCCESS],
                             for_tree=False,
@@ -348,7 +357,7 @@ class Run:
             config = Configuration(self.configspace, config)
 
             encoded = config.get_array()
-            cost = self.calculate_cost(costs)
+            cost = self.calculate_cost(costs, objective_names)
 
             X.append(encoded)
             Y.append(cost)

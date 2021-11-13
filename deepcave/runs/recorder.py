@@ -10,8 +10,7 @@ from deepcave.utils.files import make_dirs
 class Recorder:
     def __init__(self,
                  configspace,
-                 objectives="cost",
-                 objective_weights=None,
+                 objectives=[],
                  meta={},
                  save_path="logs",
                  prefix="run",
@@ -23,7 +22,7 @@ class Recorder:
         Parameters:
             save_path (str): Blub.
             configspace (ConfigSpace):
-            objectives (str or list):
+            objectives (list of Objective):
             prefix: Name of the trial. If not given, trial_x will be used.
             overwrite: Uses the prefix as name and overwrites the file.
         """
@@ -42,7 +41,6 @@ class Recorder:
         self.run = Run(
             configspace=configspace,
             objectives=objectives,
-            objective_weights=objective_weights,
             meta=meta
         )
 
@@ -105,7 +103,7 @@ class Recorder:
             costs=np.inf,
             status=Status.SUCCESS,
             config=None,
-            budget=None,
+            budget=np.inf,
             additional={},
             end_time=None):
         """
@@ -122,10 +120,6 @@ class Recorder:
         model = self.models[id]
         start_additional = self.additionals[id].copy()
         start_additional.update(additional)
-
-        if costs == np.inf:
-            status = Status.CRASHED
-
         start_time = self.start_times[id]
 
         if end_time is None:

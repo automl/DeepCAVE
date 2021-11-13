@@ -1,6 +1,7 @@
 import os
 import sys
 from deepcave.runs.recorder import Recorder
+from deepcave.runs.objective import Objective
 
 
 version = "0.0.1"
@@ -25,6 +26,6 @@ if "server.py" in exec_file or "worker.py" in exec_file:
     # Run caches
     rc = RunCaches()
 
-    __all__ = ["version", "app", "queue", "c", "rc", "Recorder"]
+    __all__ = ["version", "app", "queue", "c", "rc", "Recorder", "Objective"]
 else:
-    __all__ = ["version", "Recorder"]
+    __all__ = ["version", "Recorder", "Objective"]
