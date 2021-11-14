@@ -18,8 +18,11 @@ from deepcave.evaluators.fanova import fANOVA as _fANOVA
 
 logger = get_logger(__name__)
 
-"""
+
 class Overview(DynamicPlugin):
+    def __init__(self):
+        super().__init__()
+
     @staticmethod
     def id():
         return "overview"
@@ -34,32 +37,35 @@ class Overview(DynamicPlugin):
 
     @staticmethod
     def category():
-        return "Meta-Data Analysis"
+        return "General"
 
     @staticmethod
-    def description():
-        return "especially lists all found configurations and which fidelities were used."
-
-    @staticmethod
-    def debug():
-        return False
-
-    def get_input_layout(self):
-        return []
-
-    def get_filter_layout(self):
-        return []
+    def activate_run_selection() -> bool:
+        return True
 
     @staticmethod
     def process(run, inputs):
-        return None
+        return {}
 
-    def get_output_layout(self):
+    @staticmethod
+    def get_output_layout(register):
         return [
-            html.Div(self.register_output("blub", "children"))
+            html.H3("Meta-Data"),
+            html.Hr(),
+
+            html.H3("Statistics"),
+            html.Hr(),
+
+            html.H3("Best Config"),
+            html.Hr(),
+
+            html.H3("Configuration Space"),
+            html.Div(id=register("cs", "children")),
         ]
 
-    def load_outputs(self, filters, raw_outputs):
+    @staticmethod
+    def load_outputs(inputs, outputs, _):
 
-        return ["hi"]
-"""
+        return [
+            "hi"
+        ]

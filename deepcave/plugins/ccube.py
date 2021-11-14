@@ -166,7 +166,7 @@ class CCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs, groups):
+    def load_outputs(inputs, outputs, _):
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
 
@@ -184,8 +184,6 @@ class CCube(DynamicPlugin):
 
         run_name = inputs["run_name"]["value"]
         df = deserialize_df(outputs[run_name]["df"])
-
-        # print(df)
 
         # Limit to n_configs
         df = df.drop([str(i) for i in range(n_configs + 1, len(df))])

@@ -8,9 +8,8 @@ from deepcave.utils.styled_plotty import get_color
 
 logger = get_logger(__name__)
 
-
 """
-class CostOverTime(DynamicPlugin):
+class Template(DynamicPlugin):
     def __init__(self):
         super().__init__()
 
@@ -68,7 +67,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(_, inputs, outputs, groups):
+    def load_outputs(inputs, outputs, groups):
         traces = []
 
         for run_name, run_outputs in outputs.items():

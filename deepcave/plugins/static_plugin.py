@@ -50,7 +50,7 @@ class StaticPlugin(Plugin):
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def plugin_process(n_clicks, n_intervals, *inputs_list):
+        def plugin_process(n_clicks, _, *inputs_list):
             """
             Parameters:
                 state (int): From button.
@@ -82,10 +82,6 @@ class StaticPlugin(Plugin):
                 run_names = self.runs.keys()
 
             button_pressed = n_clicks is not None
-
-            # Check if inputs changed.
-            # inputs_changed, _ = self._inputs_changed(
-            #    inputs, last_inputs)
             inputs_changed = inputs != last_inputs
 
             # Check current state
@@ -101,7 +97,6 @@ class StaticPlugin(Plugin):
                     return self._update(state=0, outputs=outputs)
                 else:
                     return self._update(state=0)
-
             else:
                 if button_pressed and self._state != 2:
                     logger.debug("Button pressed.")

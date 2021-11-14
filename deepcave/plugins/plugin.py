@@ -265,16 +265,16 @@ class Plugin(Layout):
         return inputs_changed, filters_changed
 
     def _process_raw_outputs(self, inputs, raw_outputs):
-
         logger.debug("Process raw outputs.")
+
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
         if mpl_active:
             outputs = self.__class__.load_mpl_outputs(
-                self.runs, inputs, raw_outputs, self.groups)
+                inputs, raw_outputs, self.groups)
         else:
             outputs = self.__class__.load_outputs(
-                self.runs, inputs, raw_outputs, self.groups)
+                inputs, raw_outputs, self.groups)
 
         # Map outputs here because it may be that the outputs are
         # differently sorted than the values were registered.
@@ -427,6 +427,11 @@ class Plugin(Layout):
             run_input_layout = []
 
         input_layout = self.__class__.get_input_layout(self.register_input)
+
+        separator_layout = []
+        if input_layout and run_input_layout:
+            separator_layout.append(html.Hr())
+
         input_control_layout = html.Div(
             style={} if render_button else {"display": "none"},
             className="mt-3 clearfix",
@@ -447,8 +452,11 @@ class Plugin(Layout):
         components += [html.Div(
             id=f'{self.id()}-input',
             className="shadow-sm p-3 mb-3 bg-white rounded-lg",
-            children=run_input_layout + input_layout + [input_control_layout],
-            style={} if render_button or input_layout else {"display": "none"}
+            children=run_input_layout +
+            separator_layout +
+            input_layout +
+            [input_control_layout],
+            style={} if render_button or input_layout or run_input_layout else {"display": "none"}
         )]
 
         def register(a, b): return self.register_input(a, b, filter=True)
@@ -490,7 +498,7 @@ class Plugin(Layout):
                 id=register("run_name", ["options", "value"]),
                 placeholder="Select run ..."
             ),
-        ], className="mb-3")
+        ])
 
     @staticmethod
     def load_run_inputs(runs):
@@ -526,11 +534,11 @@ class Plugin(Layout):
         return []
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs, groups):
+    def load_outputs(inputs, outputs, groups):
         return {}
 
     @staticmethod
-    def load_mpl_outputs(runs, inputs, outputs, groups):
+    def load_mpl_outputs(inputs, outputs, groups):
         return {}
 
     @staticmethod
