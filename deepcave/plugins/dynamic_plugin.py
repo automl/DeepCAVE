@@ -7,6 +7,7 @@ from collections import defaultdict
 
 import pandas as pd
 
+from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash import dcc
 import dash_bootstrap_components as dbc
@@ -43,7 +44,7 @@ class DynamicPlugin(Plugin):
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def plugin_output_update(state, *inputs_list):
+        def plugin_output_update(_, *inputs_list):
             """
             Parameters:
                 *inputs_list: Values from user.
@@ -51,14 +52,39 @@ class DynamicPlugin(Plugin):
 
             # The results from the last run
             last_inputs = c.get("last_inputs", self.id())
+            last_inputs_key = self._dict_as_key(
+                last_inputs,
+                remove_filters=True)
             last_raw_outputs = {}
-            for name in handler.get_run_names():
-                last_raw_outputs[name] = rc[name].get(
-                    self._dict_as_key(last_inputs, remove_filters=True))
 
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
+
+            # Special case: If run selection is active
+            # Don't update anything if the inputs haven't changed
+            if self.__class__.activate_run_selection():
+                if "run_name" not in inputs or inputs["run_name"]["value"] is None:
+                    raise PreventUpdate()
+
+                run_names = [inputs["run_name"]["value"]]
+
+                # Also:
+                # Remove `run_name` from last_inputs_key because
+                # we don't want the run names included.
+                _last_inputs = c.get("last_inputs", self.id())
+                if _last_inputs is not None:
+
+                    del _last_inputs["run_name"]
+                    last_inputs_key = self._dict_as_key(
+                        _last_inputs,
+                        remove_filters=True)
+            else:
+                run_names = self.runs.keys()
+
+            # Get latest raw outputs
+            for run_name in run_names:
+                last_raw_outputs[run_name] = rc[run_name].get(last_inputs_key)
 
             # Check if inputs changed.
             inputs_changed, filters_changed = self._inputs_changed(
@@ -74,24 +100,41 @@ class DynamicPlugin(Plugin):
                 return self._get_outputs(inputs, last_raw_outputs)
 
     def _get_outputs(self, inputs, raw_outputs={}):
-        for name, run in handler.get_runs().items():
+        inputs_key = self._dict_as_key(inputs, remove_filters=True)
 
+        # Special case again
+        # Only process the selected run
+        if self.__class__.activate_run_selection():
+            runs = {}
+            run_name = inputs["run_name"]["value"]
+            runs[run_name] = self.runs[run_name]
+
+            # Also:
+            # Remove `run_name` from last_inputs_key because
+            # we don't want the run names included.
+            _inputs = inputs.copy()
+            del _inputs["run_name"]
+
+            inputs_key = self._dict_as_key(_inputs, remove_filters=True)
+        else:
+            runs = self.runs
+
+        for name, run in runs.items():
             if name in raw_outputs:
                 # If output is already set, we are good to go.
                 if raw_outputs[name] is not None:
                     continue
 
-            run_outputs = rc[name].get(
-                self._dict_as_key(inputs, remove_filters=True))
+            run_outputs = rc[name].get(inputs_key)
             if run_outputs is None:
                 logger.debug(f"Process {name}.")
                 run_outputs = self.process(run, inputs)
 
+                # Here's the thing:
+                # We have to remove `run_name` from the inputs completely
+
                 # Cache it
-                rc[name].set(
-                    self._dict_as_key(inputs, remove_filters=True),
-                    value=run_outputs
-                )
+                rc[name].set(inputs_key, value=run_outputs)
             else:
                 logger.debug(f"Found outputs from {name} in cache.")
 

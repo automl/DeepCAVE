@@ -9,6 +9,7 @@ from deepcave.utils.styled_plotty import get_color
 logger = get_logger(__name__)
 
 
+"""
 class CostOverTime(DynamicPlugin):
     def __init__(self):
         super().__init__()
@@ -83,3 +84,4 @@ class CostOverTime(DynamicPlugin):
             inputs["test-input"]["value"],
             go.Figure(data=traces)
         ]
+"""

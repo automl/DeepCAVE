@@ -7,13 +7,15 @@ import plotly.express as px
 import json
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.logs import get_logger
+from deepcave.utils.data_structures import update_dict
 from deepcave.utils.styled_plotty import get_color
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
+from deepcave.utils.compression import serialize_df, deserialize_df
 
 logger = get_logger(__name__)
 
 
-class CostOverTime(DynamicPlugin):
+class CCube(DynamicPlugin):
     def __init__(self):
         super().__init__()
 
@@ -34,19 +36,12 @@ class CostOverTime(DynamicPlugin):
         return "Performance Analysis"
 
     @staticmethod
-    def get_input_layout(register):
-        return []
+    def activate_run_selection():
+        return True
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_input_layout(register):
         return [
-            html.Div([
-                dbc.Select(
-                    id=register("selected_run_name", ["options", "value"]),
-                    placeholder="Select run ..."
-                ),
-            ], className="mb-3"),
-
             html.Div([
                 dbc.Label("Objective"),
                 dbc.Select(
@@ -59,8 +54,12 @@ class CostOverTime(DynamicPlugin):
                 dbc.Label("Budget"),
                 dcc.Slider(
                     id=register("budget", ["min", "max", "marks", "value"])),
-            ], className="mb-3"),
+            ]),
+        ]
 
+    @staticmethod
+    def get_filter_layout(register):
+        return [
             html.Div([
                 dbc.Label("Number of Configurations"),
                 dcc.Slider(
@@ -77,10 +76,6 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def load_inputs(runs):
         return {
-            "selected_run_name": {
-                "options": get_select_options(runs.keys()),
-                "value": None
-            },
             "budget": {
                 "min": 0,
                 "max": 0,
@@ -105,15 +100,7 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def load_dependency_inputs(runs, previous_inputs, inputs):
-        previous_run_name = previous_inputs["selected_run_name"]["value"]
-        run_name = inputs["selected_run_name"]["value"]
-
-        # Reset everything
-        if previous_run_name is not None and previous_run_name != run_name:
-            inputs = __class__.load_inputs(runs)
-            inputs["selected_run_name"]["value"] = inputs["selected_run_name"]["value"]
-
-        run = runs[run_name]
+        run = runs[inputs["run_name"]["value"]]
         budget_id = inputs["budget"]["value"]
         budgets = run.get_budgets()
         hp_names = run.configspace.get_hyperparameter_names()
@@ -125,18 +112,16 @@ class CostOverTime(DynamicPlugin):
         if objective_value is None:
             objective_value = objective_names[0]
 
-        inputs.update({
+        new_inputs = {
             "budget": {
                 "min": 0,
                 "max": len(readable_budgets) - 1,
                 "marks": get_slider_marks(readable_budgets),
-                "value": inputs["budget"]["value"]
             },
             "n_configs": {
                 "min": 0,
                 "max": len(configs) - 1,
                 "marks": get_slider_marks(list(range(len(configs)))),
-                "value": inputs["n_configs"]["value"]
             },
             "objective": {
                 "options": get_select_options(objective_names),
@@ -144,9 +129,9 @@ class CostOverTime(DynamicPlugin):
             },
             "hyperparameters": {
                 "options": get_select_options(hp_names),
-                "value": inputs["hyperparameters"]["value"]
             },
-        })
+        }
+        update_dict(inputs, new_inputs)
 
         # Restrict to three hyperparameters
         selected = inputs["hyperparameters"]["value"]
@@ -160,8 +145,19 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        # We leave the process method out here.
-        return {}
+        objective_name = inputs["objective"]["value"]
+        budget_id = inputs["budget"]["value"]
+        budget = run.get_budget(budget_id)
+
+        df = run.get_encoded_configs(
+            objective_names=[objective_name],
+            budget=budget,
+            pandas=True
+        )
+
+        return {
+            "df": serialize_df(df),
+        }
 
     @staticmethod
     def get_output_layout(register):
@@ -171,15 +167,9 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs, groups):
-        selected_run_name = inputs["selected_run_name"]["value"]
-        if selected_run_name is None:
-            return [px.scatter()]
-
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
-        objective_name = inputs["objective"]["value"]
-        budget_id = inputs["budget"]["value"]
-        budget = runs[selected_run_name].get_budget(budget_id)
+
         if n_configs == 0 or len(hp_names) == 0:
             return [px.scatter()]
 
@@ -192,15 +182,13 @@ class CostOverTime(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
-        run = runs[selected_run_name]
+        run_name = inputs["run_name"]["value"]
+        df = deserialize_df(outputs[run_name]["df"])
 
-        df = run.get_encoded_configs(
-            objective_names=[objective_name],
-            budget=budget,
-            pandas=True)
+        # print(df)
 
         # Limit to n_configs
-        df.drop(list(range(n_configs + 1, len(df))), inplace=True)
+        df = df.drop([str(i) for i in range(n_configs + 1, len(df))])
 
         if x is None:
             return [px.scatter()]

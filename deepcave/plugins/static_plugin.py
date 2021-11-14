@@ -63,16 +63,34 @@ class StaticPlugin(Plugin):
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             last_inputs = c.get("last_inputs", self.id())
 
-            raw_outputs = self._get_raw_outputs(inputs_key)
-            raw_outputs_available = True
-            for run_name in handler.get_run_names():
-                if raw_outputs[run_name] is None:
-                    raw_outputs_available = False
+            # Special case: If run selection is active
+            # Don't update anything if the inputs haven't changed
+            if self.__class__.activate_run_selection():
+                if inputs["run_name"]["value"] is None:
+                    raise PreventUpdate
+
+                run_names = [inputs["run_name"]["value"]]
+
+                # Also:
+                # Remove `run_name` from inputs_key because
+                # we don't want the run names included.
+                _inputs = inputs.copy()
+                del _inputs["run_name"]
+
+                inputs_key = self._dict_as_key(_inputs, remove_filters=True)
+            else:
+                run_names = self.runs.keys()
 
             button_pressed = n_clicks is not None
+
+            # Check if inputs changed.
+            # inputs_changed, _ = self._inputs_changed(
+            #    inputs, last_inputs)
             inputs_changed = inputs != last_inputs
 
             # Check current state
+            raw_outputs, raw_outputs_available = self._get_raw_outputs(
+                run_names, inputs_key)
             if raw_outputs_available:
                 if inputs_changed or self._refresh_required:
                     c.set("last_inputs", self.id(), value=inputs)
@@ -88,8 +106,17 @@ class StaticPlugin(Plugin):
                 if button_pressed and self._state != 2:
                     logger.debug("Button pressed.")
 
+                    # Special case again
+                    # Only process the selected run
+                    if self.__class__.activate_run_selection():
+                        runs = {}
+                        run_name = inputs["run_name"]["value"]
+                        runs[run_name] = self.runs[run_name]
+                    else:
+                        runs = self.runs
+
                     # Check if we need to process
-                    for run_name, run in handler.get_runs().items():
+                    for run_name, run in runs.items():
                         job_id = self._get_job_id(run_name, inputs_key)
 
                         # We already got our results or it was already processed
@@ -140,7 +167,7 @@ class StaticPlugin(Plugin):
                     # Check if queue is still running
                     queue_running = False
                     queue_pending = False
-                    for run_name in handler.get_run_names():
+                    for run_name in run_names:
                         job_id = self._get_job_id(run_name, inputs_key)
                         if queue.is_running(job_id):
                             queue_running = True
@@ -152,23 +179,24 @@ class StaticPlugin(Plugin):
                         return self._update(state=2)
 
                     # Ready again?
-                    raw_outputs = self._get_raw_outputs(inputs_key)
-                    raw_outputs_available = True
-                    for run_name in handler.get_run_names():
-                        if raw_outputs[run_name] is None:
-                            raw_outputs_available = False
+                    raw_outputs, raw_outputs_available = self._get_raw_outputs(
+                        run_names, inputs_key)
 
                     if raw_outputs_available:
                         return self._update(state=0)
                     else:
                         return self._update(state=1)
 
-    def _get_raw_outputs(self, inputs_key):
+    def _get_raw_outputs(self, run_names, inputs_key):
         raw_outputs = {}
-        for run_name in handler.get_run_names():
+        raw_outputs_available = True
+        for run_name in run_names:
             raw_outputs[run_name] = rc[run_name].get(inputs_key)
 
-        return raw_outputs
+            if raw_outputs[run_name] is None:
+                raw_outputs_available = False
+
+        return raw_outputs, raw_outputs_available
 
     def _update(self, state=None, button_state=None, outputs=None):
         status = ""

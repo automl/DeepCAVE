@@ -20,9 +20,11 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app
 from deepcave import c, rc
+from deepcave.utils.data_structures import update_dict
 from deepcave.utils.logs import get_logger
 from deepcave.layouts.layout import Layout
 from deepcave.runs.handler import handler
+from deepcave.utils.layout import get_select_options
 
 
 logger = get_logger(__name__)
@@ -70,16 +72,25 @@ class Plugin(Layout):
         return "Process"
 
     @staticmethod
-    def debug():
-        """No caching is used."""
-        return False
-
-    @staticmethod
     def check_requirements(runs):
         """
         Returns either bool or str. If str, it is shown to the user.
         """
         return True
+
+    @staticmethod
+    def activate_run_selection() -> bool:
+        """
+        Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at
+        a time. Moreover, it prevents the plugin to calculate results across all runs.
+
+        The run can be selected by inputs["run_name"]["value"].
+
+        Returns:
+            bool: True if run selection should be shown.
+        """
+
+        return False
 
     def register_input(self, id, attributes=["value"], filter=False):
         if isinstance(attributes, str):
@@ -123,6 +134,9 @@ class Plugin(Layout):
         # the values
         # Problem: Inputs/Outputs can't be changed afterwards anymore.
 
+        if self.__class__.activate_run_selection():
+            self.__class__.get_run_input_layout(self.register_input)
+
         self.__class__.get_input_layout(self.register_input)
         self.__class__.get_filter_layout(
             lambda a, b: self.register_input(a, b, filter=True))
@@ -159,6 +173,12 @@ class Plugin(Layout):
                     if inputs is None:
                         inputs = self.__class__.load_inputs(self.runs)
 
+                        # Also update the run selection
+                        if self.__class__.activate_run_selection():
+                            new_inputs = self.__class__.load_run_inputs(
+                                self.runs)
+                            update_dict(inputs, new_inputs)
+
                         # Set not used inputs
                         for (id, attribute, _) in self.inputs:
                             if id not in inputs:
@@ -173,15 +193,30 @@ class Plugin(Layout):
                     if len(self.previous_inputs) == 0:
                         self.previous_inputs = inputs.copy()
 
+                    # Only work on copies.
+                    # We don't want the inputs dict to be changed by the user.
+                    _previous_inputs = self.previous_inputs.copy()
+                    _inputs = inputs.copy()
+
+                    if self.__class__.activate_run_selection():
+                        _previous_run_name = _previous_inputs["run_name"]["value"]
+                        _run_name = inputs["run_name"]["value"]
+
+                        # Reset everything if run name changed.
+                        if _previous_run_name is not None and _previous_run_name != _run_name:
+                            # We can't use load_inputs here only
+                            # because `run_name` would be removed.
+                            # Also: We want to keep the current run name.
+                            update_dict(
+                                _inputs, self.__class__.load_inputs(self.runs))
+
                     # How to update only parameters which have a dependency?
                     user_dependencies_inputs = self.__class__.load_dependency_inputs(
-                        self.runs, self.previous_inputs.copy(), inputs.copy())
+                        self.runs, _previous_inputs, _inputs)
 
                     # Update dict
-                    # update() removes keys, so it's done manually
-                    for k1, v1 in user_dependencies_inputs.items():
-                        for k2, v2 in v1.items():
-                            inputs[k1][k2] = v2
+                    # dict.update() remove keys, so it's done manually
+                    update_dict(inputs, user_dependencies_inputs)  # inplace
 
                 # From dict to list
                 inputs_list = self._dict_to_list(inputs, input=True)
@@ -216,6 +251,11 @@ class Plugin(Layout):
         # calculate the results again.
         if last_inputs is not None:
             for (id, attribute, filter) in self.inputs:
+
+                if self.__class__.activate_run_selection():
+                    if id == "run_name":
+                        continue
+
                 if inputs[id][attribute] != last_inputs[id][attribute]:
                     if not filter:
                         inputs_changed = True
@@ -344,18 +384,17 @@ class Plugin(Layout):
         """
 
         self.previous_inputs = {}
-
         self.runs = handler.get_runs()
         groups = handler.get_groups()
+
         if len(groups) == 0:
             # Create groups with run_name: run_name
-            for run_name in handler.get_run_names():
+            for run_name in self.runs.keys():
                 groups[run_name] = [run_name]
 
         self.groups = groups
 
         components = [html.H1(self.name())]
-
         if self.description() != '':
             components += [html.P(self.description())]
 
@@ -381,7 +420,13 @@ class Plugin(Layout):
             if not status:
                 return components
 
-        input_layout = self.get_input_layout(self.register_input)
+        if self.__class__.activate_run_selection():
+            run_input_layout = [
+                self.__class__.get_run_input_layout(self.register_input)]
+        else:
+            run_input_layout = []
+
+        input_layout = self.__class__.get_input_layout(self.register_input)
         input_control_layout = html.Div(
             style={} if render_button else {"display": "none"},
             className="mt-3 clearfix",
@@ -389,11 +434,10 @@ class Plugin(Layout):
                 dbc.Button(
                     children=self.button_caption(),
                     id=self.get_internal_id("update-button"),
-
                 ),
                 html.Span(
                     html.Em(id=self.get_internal_id("processing-info")),
-                    className="ml-3 align-baseline",
+                    className="ms-3 align-baseline",
                 )
             ]
         )
@@ -403,7 +447,7 @@ class Plugin(Layout):
         components += [html.Div(
             id=f'{self.id()}-input',
             className="shadow-sm p-3 mb-3 bg-white rounded-lg",
-            children=input_layout + [input_control_layout],
+            children=run_input_layout + input_layout + [input_control_layout],
             style={} if render_button or input_layout else {"display": "none"}
         )]
 
@@ -438,6 +482,24 @@ class Plugin(Layout):
             )]
 
         return components
+
+    @staticmethod
+    def get_run_input_layout(register):
+        return html.Div([
+            dbc.Select(
+                id=register("run_name", ["options", "value"]),
+                placeholder="Select run ..."
+            ),
+        ], className="mb-3")
+
+    @staticmethod
+    def load_run_inputs(runs):
+        return {
+            "run_name": {
+                "options": get_select_options(runs.keys()),
+                "value": None
+            }
+        }
 
     @staticmethod
     def load_inputs(runs):

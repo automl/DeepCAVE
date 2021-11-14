@@ -75,6 +75,10 @@ class GeneralLayout(Layout):
             if run_names != old_run_names:
                 handler.set_groups({})
 
+                # Also really important:
+                # Reset last inputs
+                c.set("last_inputs", value={})
+
             handler.set_run_names(run_names)
             return run_names
 
