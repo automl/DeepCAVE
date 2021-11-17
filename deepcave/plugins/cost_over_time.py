@@ -1,14 +1,16 @@
 import numpy as np
-from dash import dcc
+from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options, get_radio_options
+
 
 logger = get_logger(__name__)
 
-"""
+
 class CostOverTime(DynamicPlugin):
     def __init__(self):
         super().__init__()
@@ -30,57 +32,92 @@ class CostOverTime(DynamicPlugin):
         return "Performance Analysis"
 
     @staticmethod
+    def check_requirements(runs, _):
+        # Check if selected runs have same budgets+objectives
+        objectives = None
+        budgets = None
+
+        for _, run in runs.items():
+            if objectives is None or budgets is None:
+                objectives = run.get_objective_names()
+                budgets = run.get_budgets()
+            else:
+                if objectives != run.get_objective_names():
+                    return f"Objectives differ across the selected runs."
+                if budgets != run.get_budgets():
+                    return f"Budgets differ across the selected runs."
+
+        return True
+
+    @staticmethod
     def get_input_layout(register):
         return [
-            dbc.Label("Budget"),
-            dcc.Slider(id=register(
-                "budget", ["min", "max", "marks", "value"])),
+            html.Div([
+                dbc.Label("Objective"),
+                dbc.Select(
+                    id=register("objective", ["options", "value"]),
+                    placeholder="Select objective ..."
+                ),
+            ], className="mb-3"),
+
+            html.Div([
+                dbc.Label("Budget"),
+                dcc.Slider(id=register(
+                           "budget", ["min", "max", "marks", "value"])),
+            ], className=""),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            dbc.Label("X-Axis"),
-            dbc.RadioItems(id=register("xaxis", ["options", "value"])),
+            html.Div([
+                dbc.Label("X-Axis"),
+                dbc.RadioItems(id=register("xaxis", ["options", "value"])),
+            ], className="mb-3"),
 
-            dbc.Label("Logarithmic"),
-            dbc.RadioItems(id=register("log", ["options", "value"])),
+            html.Div([
+                dbc.Label("Logarithmic"),
+                dbc.RadioItems(id=register("log", ["options", "value"])),
+            ], className="mb-3"),
 
-            dbc.Label("Show Groups"),
-            dbc.RadioItems(id=register("groups", ["options", "value"])),
+            html.Div([
+                dbc.Label("Show Groups"),
+                dbc.RadioItems(id=register("groups", ["options", "value"])),
+            ], className=""),
         ]
 
     @staticmethod
     def load_inputs(runs):
+        # Just select the first run
+        # Since we already know the budgets+objectives
+        # are the same across the selected runs.
         run = list(runs.values())[0]
-
-        budgets = []
-        for budget in run.get_budgets():
-            if budget is None:
-                continue
-            budgets.append(str(np.round(float(budget), 2)))
-
-        max_ticks = len(budgets) - 1
-        if max_ticks < 0:
-            max_ticks = 0
+        readable_budgets = run.get_budgets(human=True)
+        objective_names = run.get_objective_names()
 
         return {
+            "objective": {
+                "options": get_select_options(objective_names),
+                "value": objective_names[0]
+            },
             "budget": {
                 "min": 0,
-                "max": max_ticks,
-                "marks": {str(i): budget for i, budget in enumerate(budgets)},
+                "max": len(readable_budgets) - 1,
+                "marks": get_slider_marks(readable_budgets),
                 "value": 0
             },
             "xaxis": {
-                "options": [{"label": "Time", "value": "times"}, {"label": "Number of evaluated configurations", "value": "configs"}],
+                "options": [
+                    {"label": "Time", "value": "times"},
+                    {"label": "Number of evaluated configurations", "value": "configs"}],
                 "value": "times"
             },
             "log": {
-                "options": [{"label": "Yes", "value": True}, {"label": "No", "value": False}],
+                "options": get_radio_options(binary=True),
                 "value": True
             },
             "groups": {
-                "options": [{"label": "Yes", "value": True}, {"label": "No", "value": False}],
+                "options": get_radio_options(binary=True),
                 "value": False
             },
         }
@@ -90,7 +127,9 @@ class CostOverTime(DynamicPlugin):
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
 
-        costs, times, ids = run.get_trajectory(budget)
+        costs, times, ids = run.get_trajectory(
+            objective_names=[inputs["objective"]["value"]],
+            budget=budget)
 
         return {
             "costs": costs,
@@ -105,7 +144,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(_, inputs, outputs, groups):
+    def load_outputs(inputs, outputs, groups):
         show_groups = inputs["groups"]["value"]
         if not show_groups:
             groups = {}
@@ -188,9 +227,8 @@ class CostOverTime(DynamicPlugin):
                 type=type
             ),
             yaxis=dict(
-                title='Cost',
+                title=inputs["objective"]["value"],
             ),
         )
 
         return [go.Figure(data=traces, layout=layout)]
-"""

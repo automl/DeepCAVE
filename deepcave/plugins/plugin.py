@@ -72,7 +72,7 @@ class Plugin(Layout):
         return "Process"
 
     @staticmethod
-    def check_requirements(runs):
+    def check_requirements(runs, groups):
         """
         Returns either bool or str. If str, it is shown to the user.
         """
@@ -422,7 +422,7 @@ class Plugin(Layout):
                 fade=True),
         ]
 
-        status = self.check_requirements(self.runs)
+        status = self.check_requirements(self.runs, self.groups)
         if isinstance(status, str):
             self.update_alert(status, color="danger")
             return components
