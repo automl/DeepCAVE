@@ -199,7 +199,10 @@ class Plugin(Layout):
                     _inputs = inputs.copy()
 
                     if self.__class__.activate_run_selection():
-                        _previous_run_name = _previous_inputs["run_name"]["value"]
+                        if "run_name" in _previous_inputs:
+                            _previous_run_name = _previous_inputs["run_name"]["value"]
+                        else:
+                            _previous_run_name = None
                         _run_name = inputs["run_name"]["value"]
 
                         # Reset everything if run name changed.
@@ -209,6 +212,10 @@ class Plugin(Layout):
                             # Also: We want to keep the current run name.
                             update_dict(
                                 _inputs, self.__class__.load_inputs(self.runs))
+
+                            # TODO: Reset only inputs which are not available in another ru.
+                            # E.g. if options from budget in run_2 and run_3 are the same
+                            # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
                     # How to update only parameters which have a dependency?
                     user_dependencies_inputs = self.__class__.load_dependency_inputs(
@@ -275,6 +282,9 @@ class Plugin(Layout):
         else:
             outputs = self.__class__.load_outputs(
                 inputs, raw_outputs, self.groups)
+
+        if outputs == PreventUpdate:
+            raise PreventUpdate
 
         # Map outputs here because it may be that the outputs are
         # differently sorted than the values were registered.
@@ -535,6 +545,12 @@ class Plugin(Layout):
 
     @staticmethod
     def load_outputs(inputs, outputs, groups):
+        """
+        Returns:
+            list or PreventUpdate: List of outputs (for `get_output_layout`) or PreventUpdate if
+            certain conditions are not met.
+        """
+
         return {}
 
     @staticmethod

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Type, Union, Optional, Tuple
 
 from dash.dash import no_update
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash import dcc
 import dash_bootstrap_components as dbc
 from dash import html
@@ -41,7 +41,7 @@ class StaticPlugin(Plugin):
 
         inputs = [
             Input(self.get_internal_id("update-button"), 'n_clicks'),
-            Input(self.get_internal_id("update-outputs"), 'n_intervals')
+            Input(self.get_internal_id("update-interval-output"), 'data')
         ]
 
         for id, attribute, _ in self.inputs:
@@ -57,6 +57,8 @@ class StaticPlugin(Plugin):
                 *inputs_list: Values from user.
             """
 
+            self._blocked = True
+
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
@@ -67,6 +69,7 @@ class StaticPlugin(Plugin):
             # Don't update anything if the inputs haven't changed
             if self.__class__.activate_run_selection():
                 if inputs["run_name"]["value"] is None:
+                    self._blocked = False
                     raise PreventUpdate
 
                 run_names = [inputs["run_name"]["value"]]
@@ -182,6 +185,23 @@ class StaticPlugin(Plugin):
                     else:
                         return self._update(state=1)
 
+        output = Output(self.get_internal_id('update-interval-output'), 'data')
+        inputs = [
+            Input(self.get_internal_id("update-interval"), 'n_intervals'),
+            State(self.get_internal_id("update-interval-output"), 'data'),
+        ]
+
+        # Interval should not always run the main callback the whole time
+        # Especially not if it's blocked because PreventUpdate
+        # prevent output updates from previous callback calls.
+        @app.callback(output, inputs)
+        def plugin_check_blocked(_, data):
+            if self._blocked:
+                raise PreventUpdate
+
+            # This will trigger the main loop
+            return data+1
+
     def _get_raw_outputs(self, run_names, inputs_key):
         raw_outputs = {}
         raw_outputs_available = True
@@ -208,6 +228,7 @@ class StaticPlugin(Plugin):
         if state is not None:
             self._state = state
 
+        self._blocked = False
         return [button_state, status] + outputs
 
     def _get_job_id(self, run_name, inputs_key):
@@ -216,10 +237,13 @@ class StaticPlugin(Plugin):
     def __call__(self):
         self._state = None
         self._refresh_required = True
+        self._blocked = False
 
         components = [
             dcc.Interval(
-                id=self.get_internal_id("update-outputs"), interval=500)
+                id=self.get_internal_id("update-interval"), interval=200),
+            dcc.Store(id=self.get_internal_id(
+                "update-interval-output"), data=0),
         ]
         components += super().__call__(True)
 
