@@ -47,16 +47,31 @@ def get_slider_marks(strings=None, steps=10):
     return marks
 
 
-def get_select_options(strings=None):
-    if strings is None:
+def get_select_options(labels=None, values=None):
+    """
+    If values are none use labels as values.
+    If both are none return empty list.
+    """
+
+    if labels is None and values is None:
         return []
 
+    if values is None:
+        values = [l for l in labels]
+
+    if labels is None:
+        labels = [v for v in values]
+
     options = []
-    for string in strings:
-        options.append({"label": string, "value": string})
+    for l, v in zip(labels, values):
+        options.append({"label": l, "value": v})
 
     return options
 
 
-def get_checklist_options(strings=None):
-    return get_select_options(strings)
+def get_checklist_options(labels=None, values=None):
+    return get_select_options(labels, values)
+
+
+def get_radio_options(labels=None, values=None):
+    return get_select_options(labels, values)

@@ -1,36 +1,38 @@
 import numpy as np
-import pandas as pd
 from dash import dcc
 from dash import html
+from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 import plotly.express as px
 import json
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.utils.logs import get_logger
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
+from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options, get_radio_options
 from deepcave.utils.compression import serialize, deserialize
+from deepcave.evaluators.ice import ICE as ICEEvaluator
 
 logger = get_logger(__name__)
 
 
-class CCube(DynamicPlugin):
+class ICE(StaticPlugin):
     def __init__(self):
         super().__init__()
 
     @staticmethod
     def id():
-        return "ccube"
+        return "ice"
 
     @staticmethod
     def name():
-        return "Configurations Cube"
+        return "Individual Conditional Expectation"
 
     @staticmethod
     def position():
-        return 5
+        return 10
 
     @staticmethod
     def category():
@@ -62,14 +64,8 @@ class CCube(DynamicPlugin):
     def get_filter_layout(register):
         return [
             html.Div([
-                dbc.Label("Number of Configurations"),
-                dcc.Slider(
-                    id=register("n_configs", ["min", "max", "marks", "value"])),
-            ], className="mb-3"),
-
-            html.Div([
                 dbc.Label("Hyperparameters"),
-                dbc.Checklist(
+                dbc.RadioItems(
                     id=register("hyperparameters", ["options", "value"])),
             ]),
         ]
@@ -83,19 +79,13 @@ class CCube(DynamicPlugin):
                 "marks": get_slider_marks(),
                 "value": 0
             },
-            "n_configs": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
             "objective": {
                 "options": get_select_options(),
                 "value": None
             },
             "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
+                "options": get_radio_options(),
+                "value": None
             },
         }
 
@@ -105,6 +95,8 @@ class CCube(DynamicPlugin):
         budget_id = inputs["budget"]["value"]
         budgets = run.get_budgets()
         hp_names = run.configspace.get_hyperparameter_names()
+        hp_idx = [run.configspace.get_idx_by_hyperparameter_name(
+            hp_name) for hp_name in hp_names]
         readable_budgets = run.get_budgets(human=True)
         configs = run.get_configs(budget=budgets[budget_id])
         objective_names = run.get_objective_names()
@@ -119,28 +111,15 @@ class CCube(DynamicPlugin):
                 "max": len(readable_budgets) - 1,
                 "marks": get_slider_marks(readable_budgets),
             },
-            "n_configs": {
-                "min": 0,
-                "max": len(configs) - 1,
-                "marks": get_slider_marks(list(range(len(configs)))),
-            },
             "objective": {
                 "options": get_select_options(objective_names),
                 "value": objective_value
             },
             "hyperparameters": {
-                "options": get_select_options(hp_names),
+                "options": get_radio_options(hp_names, hp_idx),
             },
         }
         update_dict(inputs, new_inputs)
-
-        # Restrict to three hyperparameters
-        selected = inputs["hyperparameters"]["value"]
-        n_selected = len(selected)
-        if n_selected > 3:
-            del selected[0]
-
-        inputs["hyperparameters"]["value"] = selected
 
         return inputs
 
@@ -150,14 +129,16 @@ class CCube(DynamicPlugin):
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
 
-        df = run.get_encoded_configs(
+        X, Y = run.get_encoded_configs(
             objective_names=[objective_name],
             budget=budget,
-            pandas=True
         )
 
+        evaluator = ICEEvaluator()
+        evaluator.fit(run.configspace, X, Y)
+
         return {
-            "df": serialize(df),
+            "data": serialize(evaluator.get_data())
         }
 
     @staticmethod
@@ -168,40 +149,47 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-        hp_names = inputs["hyperparameters"]["value"]
-        n_configs = inputs["n_configs"]["value"]
+        s = inputs["hyperparameters"]["value"]
 
-        if n_configs == 0 or len(hp_names) == 0:
-            return [px.scatter()]
-
-        x, y, z = None, None, None
-        for i, hp_name in enumerate(hp_names):
-            if i == 0:
-                x = hp_name
-            if i == 1:
-                y = hp_name
-            if i == 2:
-                z = hp_name
+        if s is None:
+            return PreventUpdate
 
         run_name = inputs["run_name"]["value"]
-        df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)
+        hp_name = inputs["hyperparameters"]["options"][s]["label"]
+        run_output = outputs[run_name]
 
-        # Limit to n_configs
-        df = df.drop([str(i) for i in range(n_configs + 1, len(df))])
+        data = deserialize(run_output["data"], dtype=np.ndarray)
+        evaluator = ICEEvaluator(data)
+        all_x, all_y = evaluator.get_ice_data(s)
 
-        if x is None:
-            return [px.scatter()]
+        traces = []
+        for x, y in zip(all_x, all_y):
+            traces.append(
+                go.Scatter(
+                    x=x,
+                    y=y,
+                    showlegend=False,
+                    line_color=get_color(0, alpha=0.05),
+                    hoverinfo='skip'
+                ))
 
-        if z is None:
-            if y is None:
-                df[""] = df["cost"]
-                for k in df[""].keys():
-                    df[""][k] = 0
+        x, y = evaluator.get_pdp_data(s)
+        traces.append(
+            go.Scatter(
+                x=x,
+                y=y,
+                showlegend=False,
+                line_color=get_color(0, alpha=1)
+            )
+        )
 
-                y = ""
+        layout = go.Layout(
+            xaxis=dict(
+                title=hp_name,
+            ),
+            yaxis=dict(
+                title=inputs["objective"]["value"],
+            ),
+        )
 
-            fig = px.scatter(df, x=x, y=y, color='cost')
-        else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z, color='cost')
-
-        return [fig]
+        return [go.Figure(data=traces, layout=layout)]

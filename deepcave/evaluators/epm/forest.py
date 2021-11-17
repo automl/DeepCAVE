@@ -5,16 +5,16 @@ import functools
 
 import copy
 import numpy as np
+
 from smac.configspace import ConfigurationSpace
 from smac.utils.constants import N_TREES, VERY_SMALL_NUMBER
-
 from smac.epm.rf_with_instances import RandomForestWithInstances as RFI
 from smac.epm.util_funcs import get_types
 from smac.epm.base_rf import BaseModel
 
 
 class Forest(BaseModel):
-    def __init__(self, configspace, seed, instance_features, pca_components):
+    def __init__(self, configspace, seed=0, instance_features=None, pca_components=None):
         # Set types and bounds automatically
         types, bounds = get_types(configspace, instance_features)
 
