@@ -32,10 +32,7 @@ class StaticPlugin(Plugin):
     def register_callbacks(self):
         super().register_callbacks()
 
-        outputs = [
-            Output(self.get_internal_id("update-button"), 'n_clicks'),
-            Output(self.get_internal_id("processing-info"), 'children')
-        ]
+        outputs = []
         for id, attribute, _ in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
@@ -65,6 +62,8 @@ class StaticPlugin(Plugin):
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             last_inputs = c.get("last_inputs", self.id())
 
+            runs = self.runs
+
             # Special case: If run selection is active
             # Don't update anything if the inputs haven't changed
             if self.__class__.activate_run_selection():
@@ -72,7 +71,11 @@ class StaticPlugin(Plugin):
                     self._blocked = False
                     raise PreventUpdate
 
-                run_names = [inputs["run_name"]["value"]]
+                # Update runs
+                runs = {}
+                run_name = inputs["run_name"]["value"]
+                runs[run_name] = self.runs[run_name]
+                run_names = [run_name]
 
                 # Also:
                 # Remove `run_name` from inputs_key because
@@ -82,36 +85,35 @@ class StaticPlugin(Plugin):
 
                 inputs_key = self._dict_as_key(_inputs, remove_filters=True)
             else:
-                run_names = self.runs.keys()
+                run_names = runs.keys()
 
             button_pressed = n_clicks is not None
             inputs_changed = inputs != last_inputs
 
             # Check current state
-            raw_outputs, raw_outputs_available = self._get_raw_outputs(
-                run_names, inputs_key)
+            raw_outputs = {}
+            raw_outputs_available = True
+            for run_name in run_names:
+                raw_outputs[run_name] = rc[run_name].get(self.id(), inputs_key)
+
+                if raw_outputs[run_name] is None:
+                    raw_outputs_available = False
+
             if raw_outputs_available:
+                self._state = 0
+
                 if inputs_changed or self._refresh_required:
                     c.set("last_inputs", self.id(), value=inputs)
 
                     outputs = self._process_raw_outputs(inputs, raw_outputs)
                     self._refresh_required = False
 
-                    return self._update(state=0, outputs=outputs)
-                else:
-                    return self._update(state=0)
+                    return outputs
             else:
+                self._state = 1
+
                 if button_pressed and self._state != 2:
                     logger.debug("Button pressed.")
-
-                    # Special case again
-                    # Only process the selected run
-                    if self.__class__.activate_run_selection():
-                        runs = {}
-                        run_name = inputs["run_name"]["value"]
-                        runs[run_name] = self.runs[run_name]
-                    else:
-                        runs = self.runs
 
                     # Check if we need to process
                     for run_name, run in runs.items():
@@ -138,7 +140,8 @@ class StaticPlugin(Plugin):
                         )
 
                     # Reset button
-                    return self._update(state=2, button_state=None)
+                    self._reset_button = True
+                    self._state = 2
                 else:
                     # Get finished jobs and save them
                     for job in queue.get_finished_jobs():
@@ -174,16 +177,10 @@ class StaticPlugin(Plugin):
                             queue_pending = True
 
                     if queue_running or queue_pending:
-                        return self._update(state=2)
+                        self._state = 2
 
-                    # Ready again?
-                    raw_outputs, raw_outputs_available = self._get_raw_outputs(
-                        run_names, inputs_key)
-
-                    if raw_outputs_available:
-                        return self._update(state=0)
-                    else:
-                        return self._update(state=1)
+            self._blocked = False
+            raise PreventUpdate
 
         output = Output(self.get_internal_id('update-interval-output'), 'data')
         inputs = [
@@ -202,41 +199,38 @@ class StaticPlugin(Plugin):
             # This will trigger the main loop
             return data+1
 
-    def _get_raw_outputs(self, run_names, inputs_key):
-        raw_outputs = {}
-        raw_outputs_available = True
-        for run_name in run_names:
-            raw_outputs[run_name] = rc[run_name].get(self.id(), inputs_key)
+        output = [
+            Output(self.get_internal_id("processing-info"), 'children'),
+            Output(self.get_internal_id("update-button"), 'n_clicks'),
+        ]
+        input = Input(self.get_internal_id("update-interval"), 'n_intervals')
 
-            if raw_outputs[run_name] is None:
-                raw_outputs_available = False
+        # Update status label
+        # Register updates from inputs
+        @app.callback(output, input)
+        def plugin_update_status(_):
+            status = ""
+            if self._state == 0:
+                status = "Ready."
+            if self._state == 1:
+                status = "Processing Necessary."
+            if self._state == 2:
+                status = "Processing ..."
 
-        return raw_outputs, raw_outputs_available
+            button = no_update
+            if self._reset_button:
+                self._reset_button = False
+                button = None
 
-    def _update(self, state=None, button_state=None, outputs=None):
-        status = ""
-        if self._state == 0:
-            status = "Ready."
-        if self._state == 1:
-            status = "Processing Necessary."
-        if self._state == 2:
-            status = "Processing ..."
-
-        if outputs is None:
-            outputs = [no_update for _ in range(len(self.outputs))]
-
-        if state is not None:
-            self._state = state
-
-        self._blocked = False
-        return [button_state, status] + outputs
+            return status, button
 
     def _get_job_id(self, run_name, inputs_key):
         return run_name + "-" + inputs_key
 
     def __call__(self):
-        self._state = None
+        self._state = 1
         self._refresh_required = True
+        self._reset_button = False
         self._blocked = False
 
         components = [
