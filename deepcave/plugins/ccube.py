@@ -30,7 +30,7 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def position():
-        return 5
+        return 20
 
     @staticmethod
     def category():
@@ -163,7 +163,9 @@ class CCube(DynamicPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(register("graph", "figure")),
+            dcc.Graph(
+                register("graph", "figure")
+            ),
         ]
 
     @staticmethod
@@ -182,8 +184,6 @@ class CCube(DynamicPlugin):
                 y = hp_name
             if i == 2:
                 z = hp_name
-
-        print(outputs)
 
         run_name = inputs["run_name"]["value"]
         df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)

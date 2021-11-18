@@ -32,7 +32,7 @@ class ICE(StaticPlugin):
 
     @staticmethod
     def position():
-        return 10
+        return 30
 
     @staticmethod
     def category():

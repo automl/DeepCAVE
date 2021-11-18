@@ -1,5 +1,6 @@
 import numpy as np
 from dash import dcc, html
+from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
@@ -25,7 +26,7 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def position():
-        return 1
+        return 10
 
     @staticmethod
     def category():
@@ -180,6 +181,10 @@ class CostOverTime(DynamicPlugin):
 
             all_x = np.array(all_x)
             all_y = np.array(all_y)
+
+            if len(all_x) == 0 or len(all_y) == 0:
+                return PreventUpdate
+
             y_mean = np.mean(all_y, axis=1)
             y_std = np.std(all_y, axis=1)
             y_upper = list(y_mean+y_std)
