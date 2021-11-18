@@ -19,7 +19,7 @@ from ConfigSpace import ConfigurationSpace
 from dash.exceptions import PreventUpdate
 
 from deepcave import app
-from deepcave import c, rc
+from deepcave import c
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.logs import get_logger
 from deepcave.layouts.layout import Layout

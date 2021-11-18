@@ -183,6 +183,8 @@ class CCube(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
+        print(outputs)
+
         run_name = inputs["run_name"]["value"]
         df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)
 

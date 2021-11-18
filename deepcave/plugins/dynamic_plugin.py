@@ -77,7 +77,7 @@ class DynamicPlugin(Plugin):
 
             raw_outputs = {}
             for name, run in runs.items():
-                run_outputs = rc[name].get(inputs_key)
+                run_outputs = rc[name].get(self.id(), inputs_key)
                 if run_outputs is None:
                     logger.debug(f"Process {name}.")
                     run_outputs = self.process(run, inputs)
@@ -86,7 +86,7 @@ class DynamicPlugin(Plugin):
                     # We have to remove `run_name` from the inputs completely
 
                     # Cache it
-                    rc[name].set(inputs_key, value=run_outputs)
+                    rc[name].set(self.id(), inputs_key, value=run_outputs)
                 else:
                     logger.debug(f"Found outputs from {name} in cache.")
 
