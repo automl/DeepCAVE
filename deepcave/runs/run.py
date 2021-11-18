@@ -9,6 +9,7 @@ from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.read_and_write import json as cs_json
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, UniformIntegerHyperparameter
 
+from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
 from deepcave.utils.logs import get_logger
 
@@ -18,9 +19,9 @@ logger = get_logger(__name__)
 class Status(IntEnum):
     SUCCESS = 1
     TIMEOUT = 2
-    CRASHED = 3
-    ABORTED = 4
-    STOPPED = 5
+    MEMORYOUT = 3
+    CRASHED = 4
+    ABORTED = 5
     RUNNING = 6
 
 
@@ -60,6 +61,9 @@ class Run:
 
         if not isinstance(objectives, list):
             objectives = [objectives]
+
+        for objective in objectives:
+            assert isinstance(objective, Objective)
 
         self.meta = {
             "objectives": objectives,
@@ -125,7 +129,9 @@ class Run:
             additional={}):
         """
 
-        if combination of config and budget already exists, it will be overwritten.
+        If combination of config and budget already exists, it will be overwritten.
+        Not successful runs are added with None costs.
+        The cost will be calculated on the worst result later on.
 
         Inputs:
             additional (dict): What's supported by DeepCAVE? Like `ram`, 
@@ -145,6 +151,10 @@ class Run:
             if objective["name"] == "time" and cost is None:
                 costs[i] = end_time - start_time
                 cost = costs[i]
+
+            # If cost is none, replace it later with the highest cost
+            if cost is None:
+                continue
 
             # Update bounds here
             if not objective["lock_lower"]:
@@ -248,7 +258,7 @@ class Run:
 
         return budgets[-1]
 
-    def get_costs(self, budget=None, statuses=[Status.SUCCESS]):
+    def get_costs(self, budget=None, statuses=None):
         """
         If no budget is given, the highest budget is chosen.
         """
@@ -262,12 +272,28 @@ class Run:
                 if trial.budget != budget:
                     continue
 
-            if trial.status not in statuses:
-                continue
+            if statuses is not None:
+                if trial.status not in statuses:
+                    continue
 
-            results[trial.config_id] = trial.costs
+            results[trial.config_id] = self._process_costs(trial.costs)
 
         return results
+
+    def _process_costs(self, costs):
+        new_costs = []
+        for idx, cost in enumerate(costs):
+            # Replace with highest cost
+            if cost is None:
+                obj = self.meta["objectives"][idx]
+                if obj["optimize"] == "lower":
+                    cost = obj["upper"]
+                else:
+                    cost = obj["lower"]
+
+            new_costs += [cost]
+
+        return new_costs
 
     def get_trajectory(self, objective_names=None, budget=None):
         if budget is None:
@@ -301,10 +327,16 @@ class Run:
         Normalizes the cost first and weight every cost the same.
         """
 
+        costs = self._process_costs(costs)
+
         if objective_names is None:
             objective_names = self.get_objective_names()
 
         assert len(objective_names) > 0
+
+        # No normalization needed
+        if len(objective_names) == 1:
+            return costs[0]
 
         objectives = self.meta["objectives"]
 
@@ -318,6 +350,11 @@ class Run:
             a = cost - objective["lower"]
             b = objective["upper"] - objective["lower"]
             normalized_cost = a / b
+
+            # We optimize the lower
+            # So we need to flip the normalized cost
+            if objective["optimize"] == "upper":
+                normalized_cost = 1 - normalized_cost
 
             normalized_costs.append(normalized_cost)
             filtered_objectives.append(objective)
@@ -338,7 +375,7 @@ class Run:
     def get_encoded_configs(self,
                             objective_names=None,
                             budget=None,
-                            statuses=[Status.SUCCESS],
+                            statuses=None,
                             for_tree=False,
                             pandas=False):
         """
