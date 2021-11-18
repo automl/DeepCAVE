@@ -182,9 +182,11 @@ class GeneralLayout(Layout):
         converter_text = ""
         if converter is not None:
             converter_text = [
-                html.Span("Found compatible runs from "),
-                html.I(converter.name()),
-                html.Span(".")
+                html.Div([
+                    html.Span("Found compatible runs from "),
+                    html.I(converter.name()),
+                    html.Span(".")
+                ], className="mt-2")
             ]
 
         return converter_text
@@ -199,7 +201,8 @@ class GeneralLayout(Layout):
             #html.Div("Working Directory"),
             #dbc.FormText("Absolute path to your runs."),
             dbc.Input(id="general-working-directory-input",
-                      placeholder="", type="text"),
+                      placeholder="",
+                      type="text"),
 
             dbc.FormText(id="general-converter-label"),
 
