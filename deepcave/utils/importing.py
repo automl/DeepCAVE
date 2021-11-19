@@ -19,6 +19,10 @@ def auto_import_iter(module, paths: List[str]):
             if os.path.basename(f).startswith('__'):
                 continue
             module_name = f'{module}.' + os.path.basename(f).replace('.py', '')
+
+            if "pending" in module_name:
+                continue
+
             # dynamic import
             # https://stackoverflow.com/questions/67631/how-to-import-a-module-given-the-full-path
             try:
@@ -29,6 +33,7 @@ def auto_import_iter(module, paths: List[str]):
             except Exception as e:
                 logger.exception(
                     f'Problem when loading file {f} as {module_name} from path {path}')
+
             # iterate module content
             # https://stackoverflow.com/questions/1796180/how-can-i-get-a-list-of-all-classes-within-current-module-in-python
             # allow only class # inspect.isclass
