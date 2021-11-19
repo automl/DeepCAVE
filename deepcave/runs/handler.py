@@ -185,8 +185,12 @@ class Handler:
 
             works = True
             for run_name in run_names:
+                if run_name == ".DS_Store":
+                    continue
+
                 try:
                     converter.get_run(working_dir, run_name)
+                    return converter
                 except:
                     works = False
                     break
