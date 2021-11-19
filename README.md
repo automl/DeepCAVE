@@ -10,7 +10,7 @@ DeepCAVE has two main contributions:
 ```
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
-conda create -n DeepCAVE python=3.6
+conda create -n DeepCAVE python=3.9
 make install
 ```
 
@@ -45,6 +45,8 @@ with Recorder(configspace, objectives=["accuracy", "mse"]) as r:
 
 ## Visualizing and Evaluating
 
-The webserver as well as the queue/workers can be started by running ``` ./run.sh ```. Everything
-else can be specified in the dashboard.
+The webserver as well as the queue/workers can be started by running ``` ./run.sh ```. 
+Visit `http://127.0.0.1:8050/` to get started.
+
+![interface](interface.png)
 
