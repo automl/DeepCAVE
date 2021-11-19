@@ -201,8 +201,37 @@ class Run:
         # Update models
         self.models[trial_key] = model
 
+    def get_meta(self):
+        return self.meta
+
+    def get_objectives(self):
+        return self.meta["objectives"]
+
+    def get_objective_name(self, objective_names=None):
+        """
+        Get the cost name of given objective names.
+        Returns "Combined Cost" if multiple objective names were involved.
+        """
+
+        given_objective_names = self.get_objective_names()
+
+        if objective_names is None:
+            if len(given_objective_names) == 1:
+                return given_objective_names[0]
+        else:
+            if isinstance(objective_names, str):
+                objective_names = [objective_names]
+
+            if len(objective_names) == 1:
+                return objective_names[0]
+
+        return "Combined Cost"
+
     def get_objective_names(self) -> list:
         return [obj["name"] for obj in self.meta["objectives"]]
+
+    def get_config(self, id):
+        return self.configs[id]
 
     def get_config_id(self, config: dict):
         # Find out config id
@@ -213,8 +242,6 @@ class Run:
         return None
 
     def get_configs(self, budget=None):
-        """"""
-
         configs = []
         for trial in self.history:
             if budget is not None:
@@ -280,7 +307,25 @@ class Run:
 
         return results
 
+    def get_min_cost(self, objective_names=None, budget=None, statuses=None):
+        min_cost = np.inf
+        best_config = None
+
+        results = self.get_costs(budget, statuses)
+        for config_id, costs in results.items():
+            cost = self.calculate_cost(costs, objective_names, normalize=True)
+
+            if cost < min_cost:
+                min_cost = cost
+                best_config = self.get_config(config_id)
+
+        return min_cost, best_config
+
     def _process_costs(self, costs):
+        """
+        Get rid of none costs.
+        """
+
         new_costs = []
         for idx, cost in enumerate(costs):
             # Replace with highest cost
@@ -303,10 +348,16 @@ class Run:
         ids = []
         times = []
 
-        # TODO: Sort self.history by start_time
+        order = []
+        # Sort self.history by end_time
+        for id, trial in enumerate(self.history):
+            order.append((id, trial.end_time))
+
+        order.sort(key=lambda tup: tup[1])
 
         current_cost = np.inf
-        for id, trial in enumerate(self.history):
+        for id, cost in order:
+            trial = self.history[id]
             # Only consider selected/last budget
             if trial.budget != budget:
                 continue
@@ -316,12 +367,12 @@ class Run:
                 current_cost = cost
 
                 costs.append(cost)
-                times.append(trial.end_time)  # Use end_time as time
+                times.append(trial.end_time)
                 ids.append(id)
 
         return costs, times, ids
 
-    def calculate_cost(self, costs, objective_names=None):
+    def calculate_cost(self, costs, objective_names=None, normalize=False):
         """
         Calculates cost from multiple costs.
         Normalizes the cost first and weight every cost the same.
@@ -335,7 +386,7 @@ class Run:
         assert len(objective_names) > 0
 
         # No normalization needed
-        if len(objective_names) == 1:
+        if len(objective_names) == 1 and not normalize:
             return costs[0]
 
         objectives = self.meta["objectives"]
@@ -359,7 +410,7 @@ class Run:
             normalized_costs.append(normalized_cost)
             filtered_objectives.append(objective)
 
-        # Give the same weight to all objectives
+        # Give the same weight to all objectives (for now)
         objective_weights = [
             1 / len(objectives) for _ in range(len(filtered_objectives))
         ]
@@ -381,7 +432,7 @@ class Run:
         """
         Args:
             for_tree (bool): Inactives are treated differently.
-            pandas (bool): Return pandas DataFrame.
+            pandas (bool): Return pandas DataFrame instead of X and Y.
         """
 
         X = []
@@ -435,11 +486,15 @@ class Run:
                     X[nonfinite_mask, idx] = impute_values[idx]
 
         if pandas:
+            cost_column = self.get_objective_name(objective_names)
+
             Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)
             df = pd.DataFrame(
                 data=data,
-                columns=[name for name in self.configspace.get_hyperparameter_names()] + ["cost"])
+                # Combined Cost
+                columns=[
+                    name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
 
             return df
 
@@ -538,6 +593,9 @@ class Trial(tuple):
                  end_time,
                  status,
                  additional):
+
+        if isinstance(status, int):
+            status = Status(status)
 
         data = {
             "config_id": config_id,
