@@ -5,10 +5,9 @@ build/*
 docs/*
 __pycache__
 *.rdb
-logs
-logs2
-logs/*
+examples/logs/SMAC
+examples/logs/BOHB
 smac3-output*
 .DS_Store
-requirements_old.txt
+pending
 __init__.pyc

@@ -11,3 +11,4 @@ matplotlib==3.4.3
 redis==3.5.3
 rq==1.10.0
 absl-py==1.0.0
+hpbandster==0.7.4
