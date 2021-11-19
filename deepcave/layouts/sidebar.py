@@ -33,6 +33,7 @@ class SidebarLayout(Layout):
         def update_queue_info(_):
             try:
                 jobs = {}
+
                 for job in queue.get_running_jobs():
                     display_name = job.meta['display_name']
                     run_name = job.meta['run_name']
@@ -57,7 +58,7 @@ class SidebarLayout(Layout):
                         className='nav-item',
                         children=[
                             html.A(f"{display_name}",
-                                   className='nav-link disabled')
+                                   className='nav-link')
                         ]
                     )]
 
@@ -67,7 +68,8 @@ class SidebarLayout(Layout):
                                 className='nav-item',
                                 children=[
                                     html.A(f"{status} {run_name}",
-                                           className='nav-link disabled')
+                                           className='nav-link disabled',
+                                           style={'padding-top': 0, 'padding-bottom': 0})
                                 ]
                             )
                         ]
