@@ -13,10 +13,11 @@ gamma = CS.hyperparameters.UniformFloatHyperparameter(
 
 configspace.add_hyperparameters([alpha, beta, gamma])
 
-accuracy = Objective('accuracy', lower=0, upper=1)
+accuracy = Objective('accuracy', lower=0, upper=1, optimize="upper")
 time = Objective('time')
+save_path = "logs/DeepCAVE"
 
-with Recorder(configspace, objectives=[accuracy, time]) as r:
+with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as r:
     for config in configspace.sample_configuration(100):
         for budget in [20, 40, 60]:
             r.start(config, budget)
