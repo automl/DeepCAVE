@@ -4,7 +4,7 @@ from deepcave.runs.recorder import Recorder
 from deepcave.runs.objective import Objective
 
 
-version = "0.0.1"
+version = "0.1"
 exec_file = sys.argv[0]
 
 
