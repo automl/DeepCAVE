@@ -2,9 +2,9 @@ import os
 import sys
 from deepcave.runs.recorder import Recorder
 from deepcave.runs.objective import Objective
+from deepcave.__version__ import __version__
 
-
-version = "0.1"
+version = __version__
 exec_file = sys.argv[0]
 
 
