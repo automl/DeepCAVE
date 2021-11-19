@@ -3,7 +3,7 @@ import os
 
 root = os.getcwd()
 cache_dir = os.path.join(root, "cache")  # user_cache_dir("deepcave")
-working_dir = os.path.join(root, "logs")
+working_dir = os.path.join(root, "examples", "logs", "DeepCAVE")
 
 
 # General information to start services
