@@ -194,16 +194,19 @@ class CCube(DynamicPlugin):
         if x is None:
             return [px.scatter()]
 
+        column_names = df.columns.tolist()
+        cost_name = column_names[-1]
+
         if z is None:
             if y is None:
-                df[""] = df["cost"]
+                df[""] = df[cost_name]
                 for k in df[""].keys():
                     df[""][k] = 0
 
                 y = ""
 
-            fig = px.scatter(df, x=x, y=y, color='cost')
+            fig = px.scatter(df, x=x, y=y, color=cost_name)
         else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z, color='cost')
+            fig = px.scatter_3d(df, x=x, y=y, z=z, color=cost_name)
 
         return [fig]
