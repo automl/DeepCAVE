@@ -14,19 +14,6 @@ class DeepCAVE(Converter):
     def name() -> str:
         return "DeepCAVE"
 
-    def get_available_run_names(self, working_dir) -> list:
-        """
-        Lists the run names in working_dir.
-        """
-
-        run_names = []
-        for run in glob.glob(os.path.join(working_dir, '*')):
-            run_name = os.path.basename(run)
-
-            run_names.append(run_name)
-
-        return run_names
-
     def get_run_id(self, working_dir, run_name) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.

@@ -18,23 +18,6 @@ class SMAC(Converter):
     def name() -> str:
         return "SMAC"
 
-    def get_available_run_names(self, working_dir) -> list:
-        """
-        Lists the run names in working_dir.
-        """
-
-        run_names = []
-        for run in glob.glob(os.path.join(working_dir, '*')):
-            run_name = os.path.basename(run)
-
-            try:
-                self.get_run_id(working_dir, run_name)
-                run_names.append(run_name)
-            except:
-                pass
-
-        return run_names
-
     def get_run_id(self, working_dir, run_name) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
@@ -65,7 +48,7 @@ class SMAC(Converter):
         # Read meta
         # Everything else is ignored
         mapping = {
-            "deterministic": "Deterministic",
+            "deterministic": "deterministic",
             "run_obj": "Run Objective",
             "cutoff": "Algorithm Time Limit",
             "memory_limit": "Memory Limit",
@@ -154,6 +137,7 @@ class SMAC(Converter):
                 additional=additional_info,
             )
 
-        run.save(os.path.join(base, "run"))
+        # Save for sanity check
+        # run.save(os.path.join(base, "run"))
 
         return run
