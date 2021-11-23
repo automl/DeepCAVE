@@ -15,6 +15,7 @@ computer. Afterwards, follow the instructions:
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
 conda create -n DeepCAVE python=3.9
+conda activate DeepCAVE
 pip install .
 ```
 
