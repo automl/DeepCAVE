@@ -39,7 +39,25 @@ class ICE(StaticPlugin):
         return "Performance Analysis"
 
     @staticmethod
-    def activate_run_selection():
+    def check_requirements(runs, _):
+        # Check if selected runs have same budgets+objectives
+        objectives = None
+        budgets = None
+        configspace = None
+
+        for _, run in runs.items():
+            if objectives is None or budgets is None:
+                objectives = run.get_objective_names()
+                budgets = run.get_budgets()
+                configspace = run.configspace
+            else:
+                if objectives != run.get_objective_names():
+                    return f"Objectives differ across selected runs."
+                if budgets != run.get_budgets():
+                    return f"Budgets differ across selected runs."
+                if configspace != run.configspace:
+                    return f"Configspace differ across selected runs."
+
         return True
 
     @staticmethod
@@ -67,61 +85,49 @@ class ICE(StaticPlugin):
                 dbc.Label("Hyperparameters"),
                 dbc.RadioItems(
                     id=register("hyperparameters", ["options", "value"])),
-            ]),
+            ], className="mb-3"),
+
+            html.Div([
+                dbc.Label("Show Confidence Bands"),
+                dbc.RadioItems(
+                    id=register("confidence_bands", ["options", "value"])),
+            ], className=""),
         ]
 
     @staticmethod
     def load_inputs(runs):
-        return {
-            "budget": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
-            "objective": {
-                "options": get_select_options(),
-                "value": None
-            },
-            "hyperparameters": {
-                "options": get_radio_options(),
-                "value": None
-            },
-        }
-
-    @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
-        run = runs[inputs["run_name"]["value"]]
-        budget_id = inputs["budget"]["value"]
-        budgets = run.get_budgets()
+        run = runs[list(runs.keys())[0]]
         hp_names = run.configspace.get_hyperparameter_names()
         hp_idx = [run.configspace.get_idx_by_hyperparameter_name(
             hp_name) for hp_name in hp_names]
         readable_budgets = run.get_budgets(human=True)
-        configs = run.get_configs(budget=budgets[budget_id])
         objective_names = run.get_objective_names()
 
-        objective_value = inputs["objective"]["value"]
-        if objective_value is None:
-            objective_value = objective_names[0]
+        budget_marks = get_slider_marks(readable_budgets)
+        objective_options = get_select_options(objective_names)
+        hp_options = get_radio_options(hp_names, hp_idx)
+        ci_options = get_radio_options(binary=True)
 
-        new_inputs = {
+        return {
             "budget": {
                 "min": 0,
                 "max": len(readable_budgets) - 1,
-                "marks": get_slider_marks(readable_budgets),
+                "marks": budget_marks,
+                "value": 0
             },
             "objective": {
-                "options": get_select_options(objective_names),
-                "value": objective_value
+                "options": objective_options,
+                "value": objective_options[0]["value"]
             },
             "hyperparameters": {
-                "options": get_radio_options(hp_names, hp_idx),
+                "options": hp_options,
+                "value": hp_options[0]["value"]
             },
+            "confidence_bands": {
+                "options": ci_options,
+                "value": ci_options[0]["value"]
+            }
         }
-        update_dict(inputs, new_inputs)
-
-        return inputs
 
     @staticmethod
     def process(run, inputs):
@@ -144,7 +150,11 @@ class ICE(StaticPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(register("graph", "figure")),
+            html.H3("Vanilla"),
+            dcc.Graph(register("graph-mean", "figure")),
+
+            html.H3("Uncertainty Quantification"),
+            dcc.Graph(register("graph-var", "figure")),
         ]
 
     @staticmethod
@@ -154,42 +164,76 @@ class ICE(StaticPlugin):
         if s is None:
             return PreventUpdate
 
-        run_name = inputs["run_name"]["value"]
         hp_name = inputs["hyperparameters"]["options"][s]["label"]
-        run_output = outputs[run_name]
 
-        data = deserialize(run_output["data"], dtype=np.ndarray)
-        evaluator = ICEEvaluator(data)
-        all_x, all_y = evaluator.get_ice_data(s)
+        figures = []
+        for variance_based in [False, True]:
 
-        traces = []
-        for x, y in zip(all_x, all_y):
-            traces.append(
-                go.Scatter(
-                    x=x,
-                    y=y,
-                    showlegend=False,
-                    line_color=get_color(0, alpha=0.05),
-                    hoverinfo='skip'
-                ))
+            traces = []
+            for idx, (run_name, run_outputs) in enumerate(outputs.items()):
+                data = deserialize(run_outputs["data"], dtype=np.ndarray)
+                evaluator = ICEEvaluator(data)
 
-        x, y = evaluator.get_pdp_data(s)
-        traces.append(
-            go.Scatter(
-                x=x,
-                y=y,
-                showlegend=False,
-                line_color=get_color(0, alpha=1)
+                all_x, all_y = evaluator.get_ice_data(
+                    s, variance_based=variance_based)
+
+                x, y, y_std = evaluator.get_pdp_data(
+                    s, variance_based=variance_based)
+
+                y_upper = list(y+y_std)
+                y_lower = list(y-y_std)
+                y_hat = np.mean(y, axis=0)
+
+                traces.append(
+                    go.Scatter(
+                        x=x,
+                        y=y,
+                        showlegend=True,
+                        name=f"{run_name} ({np.round(y_hat, 3)})",
+                        line_color=get_color(idx, alpha=1)
+                    )
+                )
+
+                if not inputs["confidence_bands"]["value"]:
+                    for x, y in zip(all_x, all_y):
+                        traces.append(
+                            go.Scatter(
+                                x=x,
+                                y=y,
+                                showlegend=False,
+                                line_color=get_color(idx, alpha=0.05),
+                                hoverinfo='skip'
+                            ))
+                else:
+                    traces.append(go.Scatter(
+                        x=x,
+                        y=y_upper,
+                        line=dict(color=get_color(idx, 0)),
+                        # line_shape='hv',
+                        hoverinfo="skip",
+                        showlegend=False,
+                    ))
+
+                    traces.append(go.Scatter(
+                        x=x,
+                        y=y_lower,
+                        fill='tonexty',
+                        fillcolor=get_color(idx, 0.2),
+                        line=dict(color=get_color(idx, 0)),
+                        # line_shape='hv',
+                        hoverinfo="skip",
+                        showlegend=False,
+                    ))
+
+            layout = go.Layout(
+                xaxis=dict(
+                    title=hp_name,
+                ),
+                yaxis=dict(
+                    title=inputs["objective"]["value"],
+                ),
             )
-        )
 
-        layout = go.Layout(
-            xaxis=dict(
-                title=hp_name,
-            ),
-            yaxis=dict(
-                title=inputs["objective"]["value"],
-            ),
-        )
+            figures.append(go.Figure(data=traces, layout=layout))
 
-        return [go.Figure(data=traces, layout=layout)]
+        return figures
