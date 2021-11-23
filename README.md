@@ -7,11 +7,15 @@ DeepCAVE has two main contributions:
 
 ## Installation
 
+First, make sure you have
+[swig](https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/) installed on your
+computer. Afterwards, follow the instructions:
+
 ```
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
 conda create -n DeepCAVE python=3.9
-make install
+pip install .
 ```
 
 If you want to use DeepCAVE in a different directory set your PYTHONPATH:
@@ -26,7 +30,7 @@ In the following, a minimal example is given to show the simplicity yet powerful
 
 ```
 import ConfigSpace as CS
-from deep_cave import Recorder
+from deep_cave import Recorder, Objective
 
 
 configspace = CS.ConfigurationSpace(seed=0)
@@ -34,7 +38,10 @@ alpha = CS.hyperparameters.UniformFloatHyperparameter(
     name='alpha', lower=0, upper=1)
 configspace.add_hyperparameter(alpha)
 
-with Recorder(configspace, objectives=["accuracy", "mse"]) as r:
+accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
+mse = Objective("mse", lower=0)
+
+with Recorder(configspace, objectives=[accuracy, mse]) as r:
     for config in configspace.sample_configuration(100):
         for budget in [20, 40, 60]:
             r.start(config, budget)

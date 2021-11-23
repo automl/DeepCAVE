@@ -1,3 +1,14 @@
+# 0.1.1
+
+## Plugins
+
+- ICE/PDP: Added uncertainties
+
+## Others
+
+- Installable via pip
+
+
 # 0.1
 
 ## Features
