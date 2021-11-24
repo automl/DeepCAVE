@@ -3,6 +3,7 @@
 ## Plugins
 
 - ICE/PDP: Added uncertainties
+- fANOVA: Works with no budgets now
 
 ## Others
 

@@ -84,7 +84,7 @@ class fANOVA(StaticPlugin):
     @staticmethod
     def load_dependency_inputs(runs, previous_inputs, inputs):
         run = runs[inputs["run_name"]["value"]]
-        budgets = run.get_budgets()
+        budgets = run.get_budgets(human=True)
         hp_names = run.configspace.get_hyperparameter_names()
 
         new_inputs = {
