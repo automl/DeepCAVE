@@ -4,6 +4,7 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
+from ast import literal_eval
 
 import pandas as pd
 import numpy as np
@@ -155,6 +156,7 @@ class fANOVA(StaticPlugin):
         # Collect data
         data = {}
         for budget, importance_dict in outputs.items():
+            budget = literal_eval(budget) if isinstance(budget, str) else budget
             budget = convert_type(budget)
 
             if budget not in inputs["budgets"]["value"]:
