@@ -11,3 +11,7 @@ smac3-output*
 .DS_Store
 pending
 __init__.pyc
+examples/logs*
+!examples/logs/DeepCAVE
+*.sh
+!run.sh
