@@ -35,7 +35,7 @@ class ICE:
                 configspace=configspace,
                 seed=seed,
                 # num_trees=num_trees,
-                # bootstrapping=bootstrapping,
+                bootstrapping=False,
                 # points_per_tree=points_per_tree,
                 # ratio_features=ratio_features,
                 # min_samples_split=min_samples_split,
@@ -64,6 +64,7 @@ class ICE:
                 X_ice[i] = X_copy
 
                 # Then we do a prediction with the new data
+                # print(self.model.__dict__)
                 mean, var = self.model.predict(X_copy)
                 var = var.reshape((-1,))
                 mean = mean.reshape((-1,))
