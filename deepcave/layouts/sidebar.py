@@ -1,7 +1,6 @@
-from dash import html
-from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
 from dash import dcc
+from dash import html
+from dash.dependencies import Input, Output
 
 from deepcave import app, queue
 from deepcave.layouts.layout import Layout
@@ -77,9 +76,11 @@ class SidebarLayout(Layout):
                 if len(jobs) > 0:
                     return [
                         html.Hr(),
-                        html.H6(className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted', children=[
-                            html.Span("Queue Information")
-                        ]),
+                        html.H6(
+                            className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted',
+                            children=[
+                                html.Span("Queue Information")
+                            ]),
                         html.Ul(className='nav flex-column', children=items),
                     ]
 
@@ -92,9 +93,11 @@ class SidebarLayout(Layout):
         layouts = []
         for category, points in self.nav_points.items():
             layouts += [
-                html.H6(className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted', children=[
-                    html.Span(category)
-                ])
+                html.H6(
+                    className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted',
+                    children=[
+                        html.Span(category)
+                    ])
             ]
 
             point_layouts = []

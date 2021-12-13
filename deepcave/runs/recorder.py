@@ -1,15 +1,17 @@
-
 import glob
 import os
-import numpy as np
 import time
+
+import ConfigSpace
+import numpy as np
+
 from deepcave.runs.run import Status, Run
 from deepcave.utils.files import make_dirs
 
 
 class Recorder:
     def __init__(self,
-                 configspace,
+                 configspace: ConfigSpace.ConfigurationSpace,
                  objectives=[],
                  meta={},
                  save_path="logs",

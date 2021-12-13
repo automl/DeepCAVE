@@ -1,13 +1,15 @@
+from typing import Union, Optional
+
+import dash_bootstrap_components as dbc
 import numpy as np
+import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
+
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options, get_radio_options
-
 
 logger = get_logger(__name__)
 
@@ -17,23 +19,23 @@ class CostOverTime(DynamicPlugin):
         super().__init__()
 
     @staticmethod
-    def id():
+    def id() -> str:
         return "cost_over_time"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "Cost Over Time"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 10
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "Performance Analysis"
 
     @staticmethod
-    def check_requirements(runs, _):
+    def check_requirements(runs, groups) -> Union[bool, str]:
         # Check if selected runs have same budgets+objectives
         objectives = None
         budgets = None

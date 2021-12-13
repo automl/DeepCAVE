@@ -1,36 +1,32 @@
+from typing import Any, Dict, Optional, List, Tuple
+
 import numpy as np
-import pickle
-from sklearn.ensemble import RandomForestRegressor
+from ConfigSpace import ConfigurationSpace
+
 from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class ICE:
-    def __init__(self, data={}):
+    def __init__(self, data: Optional[Dict[int, Any]] = None):
         self.model = None
 
         # Make sure to have int keys
         self.data = {}
 
-        for k, (X, Y_mean, Y_var) in data.items():
+        if data is not None:
+            for k, (X, Y_mean, Y_var) in data.items():
+                X = np.array(X)
+                Y_mean = np.array(Y_mean)
+                Y_var = np.array(Y_var)
 
-            X = np.array(X)
-            Y_mean = np.array(Y_mean)
-            Y_var = np.array(Y_var)
+                self.data[int(k)] = (X, Y_mean, Y_var)
 
-            self.data[int(k)] = (X, Y_mean, Y_var)
-
-    def get_data(self):
+    def get_data(self) -> Dict[int, Any]:
         return self.data
 
-    def fit(self, configspace, X, Y, seed=0):
-        """
-        Args:
-            s (int): The id of the requested hyperparameter.
-        """
-
+    def fit(self, configspace: ConfigurationSpace, X: np.ndarray, Y: np.ndarray, seed=0):
         # Train random forest here
         if self.model is None:
-
             self.model = RandomForest(
                 configspace=configspace,
                 seed=seed,
@@ -74,7 +70,11 @@ class ICE:
 
             self.data[int(s)] = (X_ice, y_ice_mean, y_ice_var)
 
-    def get_ice_data(self, s, centered=False, variance_based=False):
+    def get_ice_data(self, s: int, centered=False, variance_based=False) -> Tuple[List[float], List[float]]:
+        """
+        Args:
+            s (int): The id of the requested hyperparameter.
+        """
         if s not in self.data:
             return [], []
 
@@ -107,9 +107,13 @@ class ICE:
 
         return all_x, all_y
 
-    def get_pdp_data(self, s, variance_based=False):
+    def get_pdp_data(self, s: int, variance_based=False) -> Tuple[List[float], List[float], List[float]]:
+        """
+        Args:
+            s (int): The id of the requested hyperparameter.
+        """
         if s not in self.data:
-            return [], []
+            return [], [], []
 
         (X_ice, y_ice_mean, y_ice_var) = self.data[s]
 

@@ -1,41 +1,35 @@
-from typing import Dict, Type, Any
+from typing import Optional
 
+import dash_bootstrap_components as dbc
+import numpy as np
+import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
-
-import pandas as pd
-import numpy as np
-
-from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.utils.logs import get_logger
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
-from deepcave.utils.compression import serialize, deserialize
 
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
-
+from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.utils.data_structures import update_dict
+from deepcave.utils.layout import get_checklist_options
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
 class fANOVA(StaticPlugin):
     @staticmethod
-    def id():
+    def id() -> str:
         return "fanova"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "fANOVA"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 100
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "Hyperparameter Analysis"
 
     @staticmethod

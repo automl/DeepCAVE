@@ -1,27 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Type, Union, Optional, Tuple
-import os
-import json
-import copy
-from collections import defaultdict
-
-import pandas as pd
-
-from dash.dash import no_update
-from dash.dependencies import Input, Output, State
-from dash import dcc
-import dash_bootstrap_components as dbc
-from plotly.graph_objects import Figure
-from dash import html
-from dash.development.base_component import Component
-from ConfigSpace import ConfigurationSpace
+from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
-from deepcave.runs.handler import handler
-from deepcave.utils.logs import get_logger
 from deepcave.plugins.plugin import Plugin
-
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 

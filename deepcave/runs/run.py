@@ -1,13 +1,15 @@
-import os
-import numpy as np
-import jsonlines
-from enum import IntEnum
-import pandas as pd
 import json
+import os
+from enum import IntEnum
+from typing import List, Union, Any, Dict
 
+import jsonlines
+import numpy as np
+import pandas as pd
 from ConfigSpace.configuration_space import Configuration
+from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, \
+    UniformIntegerHyperparameter
 from ConfigSpace.read_and_write import json as cs_json
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, UniformIntegerHyperparameter
 
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
@@ -38,8 +40,8 @@ class Run:
 
     def __init__(self,
                  configspace=None,
-                 objectives=[],
-                 meta={},
+                 objectives: Union[str, List[str]] = None,
+                 meta: Dict[str, Any] = None,
                  path=None):
         """
         If path is given, trials are loaded from the path.
@@ -48,12 +50,17 @@ class Run:
             objectives (Objective or list of Objective): ...
             meta (dict): Could be `ram`, `cores`, ...
         """
+        if objectives is None:
+            objectives = []
+        if meta is None:
+            meta = {}
 
         self.reset()
         self.configspace = configspace
         self.path = path
         if self.path is not None:
-            return self.load()
+            self.load()
+            return
 
         if configspace is None and path is None:
             raise RuntimeError(
@@ -82,11 +89,11 @@ class Run:
         self.trial_keys = {}
 
     @property
-    def path(self):
+    def path(self) -> str:
         return self._path
 
     @path.setter
-    def path(self, value):
+    def path(self, value: str):
         """
         If path is changed, also change the filenames of all created files.
         """
@@ -107,15 +114,15 @@ class Run:
         self.origins_fn = os.path.join(value, "origins.json")
         self.history_fn = os.path.join(value, "history.jsonl")
 
-    def exists(self):
+    def exists(self) -> bool:
         if self._path is None:
             return False
 
         return os.path.isfile(self.meta_fn) and \
-            os.path.isfile(self.configspace_fn) and \
-            os.path.isfile(self.configs_fn) and \
-            os.path.isfile(self.origins_fn) and \
-            os.path.isfile(self.history_fn)
+               os.path.isfile(self.configspace_fn) and \
+               os.path.isfile(self.configs_fn) and \
+               os.path.isfile(self.origins_fn) and \
+               os.path.isfile(self.history_fn)
 
     def add(self,
             costs,
@@ -612,4 +619,4 @@ class Trial(tuple):
             setattr(self, k, v)
 
     def get_key(self):
-        return (self.config_id, self.budget)
+        return self.config_id, self.budget

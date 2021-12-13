@@ -1,19 +1,18 @@
+from typing import Optional
+
+import dash_bootstrap_components as dbc
 import numpy as np
+import plotly.graph_objs as go
 from dash import dcc
 from dash import html
 from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
-import plotly.express as px
-import json
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.utils.logs import get_logger
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options, get_radio_options
-from deepcave.utils.compression import serialize, deserialize
+
 from deepcave.evaluators.ice import ICE as ICEEvaluator
+from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.utils.compression import serialize, deserialize
+from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options
+from deepcave.utils.logs import get_logger
+from deepcave.utils.styled_plotty import get_color
 
 logger = get_logger(__name__)
 
@@ -23,19 +22,19 @@ class ICE(StaticPlugin):
         super().__init__()
 
     @staticmethod
-    def id():
+    def id() -> str:
         return "ice"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "Individual Conditional Expectation"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 30
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "Performance Analysis"
 
     @staticmethod
@@ -180,8 +179,8 @@ class ICE(StaticPlugin):
                 x, y, y_std = evaluator.get_pdp_data(
                     s, variance_based=variance_based)
 
-                y_upper = list(y+y_std)
-                y_lower = list(y-y_std)
+                y_upper = list(y + y_std)
+                y_lower = list(y - y_std)
                 y_hat = np.mean(y, axis=0)
 
                 traces.append(

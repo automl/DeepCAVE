@@ -1,17 +1,15 @@
-import string
-from typing import Optional
-import random
-from io import BytesIO
 import base64
+import random
+import string
+from io import BytesIO
+from typing import Optional
 
 import dash_html_components as html
-import os
-
 import pandas as pd
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
     IntegerHyperparameter, FloatHyperparameter, OrdinalHyperparameter
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
 def get_random_string(length):
@@ -57,13 +55,12 @@ def _infer_encoding(data: pd.DataFrame):
 
 def _encode(data: pd.DataFrame, cs: Optional):
     def _add_entry(hp_name, hp_choices, from_cols, to_cols, choices, ordinal):
-        col_name = 'config.' + hp_name
+        col_name = f'config.{hp_name}'
         from_cols.append(col_name)
         if ordinal:
             columns = [col_name]
         else:
-            columns = ['config.' + hp_name + '.' +
-                       str(col) for col in list(hp_choices)]
+            columns = [f'config.{hp_name}.{col}' for col in list(hp_choices)]
         to_cols.extend(columns)
         choices.append(list(hp_choices))
         return col_name, columns, list(hp_choices)

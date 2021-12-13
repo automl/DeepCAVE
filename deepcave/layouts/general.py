@@ -1,16 +1,14 @@
 import os
 
+import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State, ALL
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
-from deepcave.config import CONFIG
-from deepcave.runs.handler import handler
 from deepcave.layouts.layout import Layout
-from deepcave.utils.hash import string_to_hash
+from deepcave.runs.handler import handler
 
 
 class GeneralLayout(Layout):
@@ -173,11 +171,11 @@ class GeneralLayout(Layout):
 
             return None
 
-    @ staticmethod
+    @staticmethod
     def get_run_options():
         return [{"label": run_name, "value": run_name} for run_name in handler.get_available_run_names()]
 
-    @ staticmethod
+    @staticmethod
     def get_converter_text(converter):
         converter_text = ""
         if converter is not None:
@@ -198,8 +196,8 @@ class GeneralLayout(Layout):
             html.H1('General'),
 
             dbc.Label("Working Directory"),
-            #html.Div("Working Directory"),
-            #dbc.FormText("Absolute path to your runs."),
+            # html.Div("Working Directory"),
+            # dbc.FormText("Absolute path to your runs."),
             dbc.Input(id="general-working-directory-input",
                       placeholder="",
                       type="text"),

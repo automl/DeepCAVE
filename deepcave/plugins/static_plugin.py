@@ -1,19 +1,11 @@
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Type, Union, Optional, Tuple
-
+from dash import dcc
 from dash.dash import no_update
 from dash.dependencies import Input, Output, State
-from dash import dcc
-import dash_bootstrap_components as dbc
-from dash import html
-from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, queue, c, rc
-from deepcave.runs.handler import handler
-from deepcave.utils.logs import get_logger
 from deepcave.plugins.plugin import Plugin
-
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
@@ -197,7 +189,7 @@ class StaticPlugin(Plugin):
                 raise PreventUpdate
 
             # This will trigger the main loop
-            return data+1
+            return data + 1
 
         output = [
             Output(self.get_internal_id("processing-info"), 'children'),
@@ -224,8 +216,8 @@ class StaticPlugin(Plugin):
 
             return status, button
 
-    def _get_job_id(self, run_name, inputs_key):
-        return run_name + "-" + inputs_key
+    def _get_job_id(self, run_name, inputs_key) -> str:
+        return f"{run_name}-{inputs_key}"
 
     def __call__(self):
         self._state = 1

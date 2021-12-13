@@ -1,31 +1,22 @@
-from abc import ABC, abstractmethod
-from typing import Dict, List, Any, Type, Union, Optional, Tuple
-import os
-import json
 import copy
-from collections import defaultdict
+from abc import abstractmethod
+from typing import Dict, List, Any, Union, Optional, Iterable
 
-import pandas as pd
-
-
-from dash.dash import no_update
-from dash.dependencies import Input, Output, State
-from dash import dcc
 import dash_bootstrap_components as dbc
-from plotly.graph_objects import Figure
+from dash import dcc
 from dash import html
+from dash.dash import no_update
+from dash.dependencies import Input, Output
 from dash.development.base_component import Component
-from ConfigSpace import ConfigurationSpace
 from dash.exceptions import PreventUpdate
 
 from deepcave import app
 from deepcave import c
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.logs import get_logger
 from deepcave.layouts.layout import Layout
 from deepcave.runs.handler import handler
+from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
-
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
@@ -47,20 +38,20 @@ class Plugin(Layout):
 
     @staticmethod
     @abstractmethod
-    def id():
+    def id() -> str:
         raise NotImplementedError()
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return None
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 99999
 
     @staticmethod
     @abstractmethod
-    def name():
+    def name() -> str:
         raise NotImplementedError()
 
     @staticmethod
@@ -68,11 +59,11 @@ class Plugin(Layout):
         return ''
 
     @staticmethod
-    def button_caption():
+    def button_caption() -> str:
         return "Process"
 
     @staticmethod
-    def check_requirements(runs, groups):
+    def check_requirements(runs, groups) -> Union[bool, str]:
         """
         Returns either bool or str. If str, it is shown to the user.
         """
@@ -92,7 +83,7 @@ class Plugin(Layout):
 
         return False
 
-    def register_input(self, id, attributes=["value"], filter=False):
+    def register_input(self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False):
         if isinstance(attributes, str):
             attributes = [attributes]
 
@@ -108,7 +99,7 @@ class Plugin(Layout):
 
         return self.get_internal_input_id(id)
 
-    def register_output(self, id, attribute="value", mpl=False):
+    def register_output(self, id: str, attribute: str = "value", mpl=False) -> str:
         assert isinstance(attribute, str)
 
         if mpl:
@@ -120,14 +111,14 @@ class Plugin(Layout):
 
         return self.get_internal_output_id(id)
 
-    def get_internal_id(self, id):
-        return self.id() + "-" + id
+    def get_internal_id(self, id: str) -> str:
+        return f"{self.id()}-{id}"
 
-    def get_internal_input_id(self, id):
-        return self.id() + "-" + id + "-input"
+    def get_internal_input_id(self, id: str) -> str:
+        return f"{self.id()}-{id}-input"
 
-    def get_internal_output_id(self, id):
-        return self.id() + "-" + id + "-output"
+    def get_internal_output_id(self, id: str) -> str:
+        return f"{self.id()}-{id}-output"
 
     def register_callbacks(self):
         # We have to call the output layout one time to register
@@ -244,7 +235,7 @@ class Plugin(Layout):
             else:
                 raise PreventUpdate()
 
-    def update_alert(self, text, color="success"):
+    def update_alert(self, text: str, color: str = "success"):
         self.alert_text = text
         self.alert_color = color
         self.alert_update_required = True
@@ -310,7 +301,7 @@ class Plugin(Layout):
 
         return outputs
 
-    def _list_to_dict(self, values: list, input=True):
+    def _list_to_dict(self, values: List[str], input=True) -> Dict[str, Dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -333,7 +324,7 @@ class Plugin(Layout):
 
         return mapping
 
-    def _dict_to_list(self, d, input=False):
+    def _dict_to_list(self, d: Dict[str, Dict[str, str]], input=False) -> List[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
         self.inputs or self.outputs.
@@ -363,7 +354,7 @@ class Plugin(Layout):
 
         return result
 
-    def _dict_as_key(self, d, remove_filters=False):
+    def _dict_as_key(self, d: Dict[str, Any], remove_filters=False) -> Optional[str]:
         """
         Converts a dictionary to a key. Only ids from self.inputs are considered.
 
@@ -387,7 +378,7 @@ class Plugin(Layout):
 
         return str(new_d)
 
-    def __call__(self, render_button=False):
+    def __call__(self, render_button=False) -> List[Component]:
         """
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
@@ -412,7 +403,7 @@ class Plugin(Layout):
         components += [
             dcc.Interval(
                 id=self.get_internal_id("alert-interval"),
-                interval=1*500,
+                interval=1 * 500,
                 n_intervals=5
             ),
             dbc.Alert(
@@ -463,13 +454,15 @@ class Plugin(Layout):
             id=f'{self.id()}-input',
             className="shadow-sm p-3 mb-3 bg-white rounded-lg",
             children=run_input_layout +
-            separator_layout +
-            input_layout +
-            [input_control_layout],
+                     separator_layout +
+                     input_layout +
+                     [input_control_layout],
             style={} if render_button or input_layout or run_input_layout else {"display": "none"}
         )]
 
-        def register(a, b): return self.register_input(a, b, filter=True)
+        def register(a, b):
+            return self.register_input(a, b, filter=True)
+
         filter_layout = self.__class__.get_filter_layout(register)
         if len(filter_layout) > 0:
             components += [html.Div(
@@ -488,7 +481,9 @@ class Plugin(Layout):
                     "matplotlib-mode") else {"display": "none"}
             )]
 
-        def register(a, b): return self.register_input(a, b, mpl=True)
+        def register(a, b):
+            return self.register_input(a, b, mpl=True)
+
         output_layout = self.__class__.get_mpl_output_layout(register)
         if output_layout:
             components += [html.Div(
@@ -502,7 +497,7 @@ class Plugin(Layout):
         return components
 
     @staticmethod
-    def get_run_input_layout(register):
+    def get_run_input_layout(register) -> Component:
         return html.Div([
             dbc.Select(
                 id=register("run_name", ["options", "value"]),
@@ -511,7 +506,7 @@ class Plugin(Layout):
         ])
 
     @staticmethod
-    def load_run_inputs(runs):
+    def load_run_inputs(runs) -> Dict[str, Any]:
         return {
             "run_name": {
                 "options": get_select_options(runs.keys()),
@@ -520,7 +515,7 @@ class Plugin(Layout):
         }
 
     @staticmethod
-    def load_inputs(runs):
+    def load_inputs(runs) -> Dict[str, Any]:
         return {}
 
     @staticmethod
@@ -528,7 +523,7 @@ class Plugin(Layout):
         return inputs
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register) -> List[Component]:
         return []
 
     @staticmethod
