@@ -10,7 +10,7 @@ def read_plugins():
     plugins = {}
 
     paths = [os.path.join(os.path.abspath(os.curdir),
-                          'deepcave', 'plugins', '*')]
+                          'deepcave', 'plugins')]
 
     for _, obj in auto_import_iter("deepcave.plugins", paths):
 
