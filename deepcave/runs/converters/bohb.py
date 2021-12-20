@@ -51,6 +51,7 @@ class BOHB(Converter):
 
         from hpbandster.core.result import logged_results_to_HBS_result
         bohb = logged_results_to_HBS_result(base)
+        config_mapping = bohb.get_id2config_mapping()
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
@@ -67,13 +68,16 @@ class BOHB(Converter):
 
             cost = bohb_run.loss
             budget = bohb_run.budget
-            config = bohb_run.info["config"]
-            # Convert str to dict
-            config = json.loads(config)
+
+            if bohb_run.info is None:
+                status = 'CRASHED'
+            else:
+                status = bohb_run.info["state"]
+
+            config = config_mapping[bohb_run.config_id]['config']
 
             origin = None
             additional = {}
-            status = bohb_run.info["state"]
 
             # QUEUED, RUNNING, CRASHED, REVIEW, TERMINATED, COMPLETED, SUCCESS
             if "SUCCESS" in status or "TERMINATED" in status or "COMPLETED" in status:
