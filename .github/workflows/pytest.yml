@@ -6,7 +6,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Add conda to system path
-        run: echo $CONDA/bin >> $GITHUB_PATH # $CONDA is an environment variable pointing to the root of the miniconda directory
+        run: |
+          # $CONDA is an environment variable pointing to the root of the miniconda directory
+          echo $CONDA/bin >> $GITHUB_PATH
       - name: Install dependencies
         run: conda env update --file environment.yml --name base
       - run: pytest tests
