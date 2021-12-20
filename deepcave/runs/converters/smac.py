@@ -1,15 +1,12 @@
-import os
 import json
-import glob
-import pandas as pd
-import numpy as np
-from typing import Dict, Type, Any
+import os
 
-import ConfigSpace
-from deepcave.runs.run import Status
+import numpy as np
+
 from deepcave.runs.converters.converter import Converter
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
+from deepcave.runs.run import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -33,11 +30,11 @@ class SMAC(Converter):
         """
 
         # For SMAC, we create a new run object
-        base = os.path.join(working_dir, run_name)
+        base = working_dir / run_name
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
+        with (base / 'configspace.json').open('r') as f:
             configspace = cs_json.read(f.read())
 
         # Read objectives
@@ -57,7 +54,7 @@ class SMAC(Converter):
         }
 
         meta = {}
-        with open(os.path.join(base, "scenario.txt")) as f:
+        with (base / "scenario.txt").open() as f:
             for line in f.readlines():
                 items = line.split(" = ")
                 arg = items[0]

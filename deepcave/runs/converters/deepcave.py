@@ -1,8 +1,4 @@
 import os
-import json
-import glob
-import pandas as pd
-from typing import Dict, Type, Any
 
 from deepcave.runs.converters.converter import Converter
 from deepcave.runs.run import Run
@@ -28,4 +24,4 @@ class DeepCAVE(Converter):
         Based on working_dir/run_name/*, return a new trials object.
         """
 
-        return Run(path=os.path.join(working_dir, run_name))
+        return Run(path=working_dir / run_name)

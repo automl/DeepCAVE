@@ -181,7 +181,6 @@ class Handler:
         All directories must be valid. Otherwise, DeepCAVE does not recognize it as compatible directory.
         """
         if working_dir is None or not (working_dir := Path(working_dir)).is_dir():
-            logger.warning(f"Working dir is not a folder: {working_dir}")
             return None
 
         # Find first directory

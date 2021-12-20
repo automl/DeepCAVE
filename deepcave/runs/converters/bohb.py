@@ -1,14 +1,10 @@
-import os
 import json
-import glob
-import pandas as pd
-from typing import Dict, Type, Any
+import os
 
-import ConfigSpace
-from deepcave.runs.run import Status
 from deepcave.runs.converters.converter import Converter
-from deepcave.runs.run import Run
 from deepcave.runs.objective import Objective
+from deepcave.runs.run import Run
+from deepcave.runs.run import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -31,12 +27,11 @@ class BOHB(Converter):
         Based on working_dir/run_name/*, return a new trials object.
         """
 
-        base = os.path.join(working_dir, run_name)
+        base = working_dir / run_name
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
-            configspace = cs_json.read(f.read())
+        configspace = cs_json.read((base / 'configspace.json').read_text())
 
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
@@ -50,7 +45,7 @@ class BOHB(Converter):
         )
 
         from hpbandster.core.result import logged_results_to_HBS_result
-        bohb = logged_results_to_HBS_result(base)
+        bohb = logged_results_to_HBS_result(str(base))
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
