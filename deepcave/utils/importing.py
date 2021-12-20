@@ -1,24 +1,22 @@
-import os
-import glob
-from typing import List
-from importlib import import_module
 import importlib.util
-import sys
 import inspect
-import collections
+import sys
+from pathlib import Path
+from typing import List, Iterator, Any
 
 from deepcave.utils.logs import get_logger
-
 
 logger = get_logger(__name__)
 
 
-def auto_import_iter(module, paths: List[str]):
-    for path in paths:
-        for f in glob.glob(path):
-            if os.path.basename(f).startswith('__'):
+def auto_import_iter(module: str, paths: List[str]) -> Iterator[tuple[str, Any]]:
+    for path_name in paths:
+        path = Path(path_name)
+        logger.debug(f"Searching for files in {path.absolute()}")
+        for f in path.iterdir():
+            if f.name.startswith('__'):
                 continue
-            module_name = f'{module}.' + os.path.basename(f).replace('.py', '')
+            module_name = f'{module}.{f.stem}'
 
             if "pending" in module_name:
                 continue
@@ -31,8 +29,7 @@ def auto_import_iter(module, paths: List[str]):
                 sys.modules[spec.name] = foo
                 spec.loader.exec_module(foo)
             except Exception as e:
-                logger.exception(
-                    f'Problem when loading file {f} as {module_name} from path {path}')
+                logger.exception(f'Problem when loading file {f} as {module_name} from path {path}')
 
             # iterate module content
             # https://stackoverflow.com/questions/1796180/how-can-i-get-a-list-of-all-classes-within-current-module-in-python

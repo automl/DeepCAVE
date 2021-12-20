@@ -58,6 +58,7 @@ class Recorder:
         """
 
         # Make sure the word is interpreted as folder
+        # TODO(dwoiwode): Cleanup with pathlib
         if path[-1] != "/":
             make_dirs(path + "/")
         else:

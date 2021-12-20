@@ -1,7 +1,7 @@
 import os
 
-from deepcave.plugins.plugin import Plugin
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.plugin import Plugin
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.utils.importing import auto_import_iter
 
@@ -67,6 +67,5 @@ def get_plugin_categories():
 plugin_layouts = get_plugin_layouts()
 plugin_names = get_plugin_names()
 plugin_categories = get_plugin_categories()
-
 
 __all__ = [plugin_layouts, plugin_names, plugin_categories]

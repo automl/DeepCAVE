@@ -2,22 +2,26 @@ import base64
 import random
 import string
 from io import BytesIO
-from typing import Optional
+from typing import Optional, Union
 
 import dash_html_components as html
 import pandas as pd
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
     IntegerHyperparameter, FloatHyperparameter, OrdinalHyperparameter
+from matplotlib import pyplot as plt
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
-def get_random_string(length):
+def get_random_string(length: int) -> str:
+    if length < 0:
+        raise ValueError("Length has to be greater than 0")
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(length))
 
 
-def matplotlib_to_html_image(fig):
+def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
+    # TODO(dwoiwode): Duplicate code (see ./layout.py)?
     # create a virtual file which matplotlib can use to save the figure
     buffer = BytesIO()
     # save the image to memory to display in the web
@@ -26,18 +30,20 @@ def matplotlib_to_html_image(fig):
     # display any kind of image taken from
     # https://github.com/plotly/dash/issues/71
     encoded_image = base64.b64encode(buffer.read())
-    return html.Img(src='data:image/png;base64,{}'.format(encoded_image.decode()), className='img-fluid')
+    return html.Img(src=f'data:image/png;base64,{encoded_image.decode()}', className='img-fluid')
 
 
-def encode_data(data: pd.DataFrame, cs: Optional[ConfigurationSpace] = None):
-    # converts only columns with "conig." prefix
+def encode_data(data: pd.DataFrame,
+                cs: Optional[ConfigurationSpace] = None) -> Union[pd.DataFrame,
+                                                                  tuple[pd.DataFrame, dict[pd.Series, pd.Series]]]:
+    # converts only columns with "config." prefix
     if cs:
         return _encode(data, cs)
     else:
         return _infer_encoding(data)
 
 
-def _infer_encoding(data: pd.DataFrame):
+def _infer_encoding(data: pd.DataFrame) -> pd.DataFrame:
     from_cols = []
     for col in data.columns:
         if 'config.' not in col:
@@ -71,7 +77,7 @@ def _encode(data: pd.DataFrame, cs: Optional):
             add_kwargs = {'sparse': False}
         data[to_cols] = pd.DataFrame(
             transformer_class(categories=choices, **
-                              add_kwargs).fit_transform(data[from_cols]),
+            add_kwargs).fit_transform(data[from_cols]),
             columns=to_cols,
             index=data.index)
         if transformer_class is OneHotEncoder:

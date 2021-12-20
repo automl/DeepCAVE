@@ -1,4 +1,4 @@
-def update_dict(a, b):
+def update_dict(a: dict[str, dict], b: dict[str, dict]):
     """
     Updates a from b inplace.
     """

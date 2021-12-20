@@ -1,50 +1,64 @@
-import os
 import json
+from pathlib import Path
+from typing import Optional, Any
+
 from deepcave.utils.files import make_dirs
 
 
 class Cache:
-    def __init__(self, filename=None, defaults={}):
+    def __init__(self, filename: Optional[str] = None, defaults=None):
         """
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
         """
+        self._defaults = defaults or {}
 
-        self._defaults = defaults
+        # Fields set by self._setup()
+        self._data = {}
+        self._file: Optional[Path] = None
+
+        # Initial setup
         self._setup(filename)
 
     def _setup(self, filename):
         self._data = {}
-        self._filename = filename
 
         if filename is None:
+            self._file = None
+            self.set_dict(self._defaults)
             return
+        self._file = Path(filename)
 
-        if not os.path.exists(self._filename):
+        if not self._file.exists():
             self.set_dict(self._defaults)
         else:
             self.read()
 
-    def switch(self, filename):
+    def switch(self, filename: Optional[str]):
         self._setup(filename)
 
     def read(self):
-        if not os.path.exists(self._filename):
+        if not self._file.exists():
             return
 
-        with open(self._filename) as f:
+        with self._file.open("r") as f:
             self._data = json.load(f)
 
     def write(self):
-        if self._filename is None:
+        if self._file is None:
             return
 
-        make_dirs(self._filename)
+        make_dirs(self._file)
 
-        with open(self._filename, 'w') as f:
+        with self._file.open('w') as f:
             json.dump(self._data, f, indent=4)
 
     def set(self, *keys, value):
+        """
+        Set a value from a chain of keys.
+        E.g. set("a","b","c",4) creates following dictionary:
+        {"a": {"b": {"c": 4}}}
+        """
         d = self._data
         for key in keys[:-1]:
             if key not in d:
@@ -59,7 +73,7 @@ class Cache:
         self._data.update(d)
         self.write()
 
-    def get(self, *keys):
+    def get(self, *keys) -> Optional[Any]:
         d = self._data
         for key in keys:
             if key not in d:
@@ -69,11 +83,12 @@ class Cache:
 
         return d
 
-    def has(self, *keys):
+    def has(self, *keys) -> bool:
         d = self._data
         for key in keys:
             if key not in d:
                 return False
+            d = d[key]
 
         return True
 
