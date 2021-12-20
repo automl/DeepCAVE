@@ -1,8 +1,10 @@
+from typing import Optional
+
 import numpy as np
 
 
 class Objective(dict):
-    def __init__(self, name, lower=None, upper=None, optimize="lower"):
+    def __init__(self, name: str, lower: Optional[float] = None, upper: Optional[float] = None, optimize="lower"):
         """
 
         Lock the lower bound if lower is not None.

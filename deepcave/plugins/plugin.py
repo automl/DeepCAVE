@@ -1,6 +1,6 @@
 import copy
 from abc import abstractmethod
-from typing import Dict, List, Any, Union, Optional, Iterable
+from typing import Any, Union, Optional, Iterable
 
 import dash_bootstrap_components as dbc
 from dash import dcc
@@ -301,7 +301,7 @@ class Plugin(Layout):
 
         return outputs
 
-    def _list_to_dict(self, values: List[str], input=True) -> Dict[str, Dict[str, str]]:
+    def _list_to_dict(self, values: list[str], input=True) -> dict[str, dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -324,7 +324,7 @@ class Plugin(Layout):
 
         return mapping
 
-    def _dict_to_list(self, d: Dict[str, Dict[str, str]], input=False) -> List[Optional[str]]:
+    def _dict_to_list(self, d: dict[str, dict[str, str]], input=False) -> list[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
         self.inputs or self.outputs.
@@ -354,7 +354,7 @@ class Plugin(Layout):
 
         return result
 
-    def _dict_as_key(self, d: Dict[str, Any], remove_filters=False) -> Optional[str]:
+    def _dict_as_key(self, d: dict[str, Any], remove_filters=False) -> Optional[str]:
         """
         Converts a dictionary to a key. Only ids from self.inputs are considered.
 
@@ -378,7 +378,7 @@ class Plugin(Layout):
 
         return str(new_d)
 
-    def __call__(self, render_button=False) -> List[Component]:
+    def __call__(self, render_button=False) -> list[Component]:
         """
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
@@ -506,7 +506,7 @@ class Plugin(Layout):
         ])
 
     @staticmethod
-    def load_run_inputs(runs) -> Dict[str, Any]:
+    def load_run_inputs(runs) -> dict[str, Any]:
         return {
             "run_name": {
                 "options": get_select_options(runs.keys()),
@@ -515,7 +515,7 @@ class Plugin(Layout):
         }
 
     @staticmethod
-    def load_inputs(runs) -> Dict[str, Any]:
+    def load_inputs(runs) -> dict[str, Any]:
         return {}
 
     @staticmethod
@@ -523,7 +523,7 @@ class Plugin(Layout):
         return inputs
 
     @staticmethod
-    def get_input_layout(register) -> List[Component]:
+    def get_input_layout(register) -> list[Component]:
         return []
 
     @staticmethod

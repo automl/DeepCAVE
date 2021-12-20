@@ -1,19 +1,19 @@
-import glob
-import os
 import time
+from pathlib import Path
+from typing import Union, Optional
 
 import ConfigSpace
 import numpy as np
+from ConfigSpace import Configuration
 
 from deepcave.runs.run import Status, Run
-from deepcave.utils.files import make_dirs
 
 
 class Recorder:
     def __init__(self,
                  configspace: ConfigSpace.ConfigurationSpace,
-                 objectives=[],
-                 meta={},
+                 objectives=None,
+                 meta=None,
                  save_path="logs",
                  prefix="run",
                  overwrite=False):
@@ -28,6 +28,10 @@ class Recorder:
             prefix: Name of the trial. If not given, trial_x will be used.
             overwrite: Uses the prefix as name and overwrites the file.
         """
+        if objectives is None:
+            objectives = []
+        if meta is None:
+            meta = {}
 
         self._set_path(save_path, prefix, overwrite)
 
@@ -52,24 +56,21 @@ class Recorder:
     def __exit__(self, type, value, traceback):
         pass
 
-    def _set_path(self, path, prefix="run", overwrite=False):
+    def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False):
         """
         Identifies the latest run and sets the path with increased id.
         """
 
         # Make sure the word is interpreted as folder
-        # TODO(dwoiwode): Cleanup with pathlib
-        if path[-1] != "/":
-            make_dirs(path + "/")
-        else:
-            make_dirs(path)
-            # Remove last slash
-            path = path[:-1]
+        path = Path(path)
+        path.mkdir(parents=True, exist_ok=True)
 
         if not overwrite:
             new_idx = 0
-            for file in glob.glob(f"{path}/{prefix}_*"):
-                idx = file.split("_")[-1]
+            for file in path.iterdir():
+                if not file.name.startswith(f"{prefix}_"):
+                    continue
+                idx = file.name.split("_")[-1]
                 if idx.isnumeric():
                     idx = int(idx)
                     if idx > new_idx:
@@ -77,17 +78,19 @@ class Recorder:
 
             # And increase the id
             new_idx += 1
-            self.path = os.path.join(path, f"{prefix}_{new_idx}")
+            self.path = path / f"{prefix}_{new_idx}"
         else:
-            self.path = os.path.join(path, f"{prefix}")
+            self.path = path / f"{prefix}"
 
     def start(self,
-              config,
-              budget=None,
+              config: Union[dict, Configuration],
+              budget: Optional[float] = None,
               model=None,
               origin=None,
-              additional={},
-              start_time=None):
+              additional: Optional[dict] = None,
+              start_time: Optional[float] = None):
+        if additional is None:
+            additional = {}
 
         id = (config, budget)
 
@@ -103,16 +106,18 @@ class Recorder:
         self.last_trial_id = id
 
     def end(self,
-            costs=np.inf,
-            status=Status.SUCCESS,
-            config=None,
-            budget=np.inf,
-            additional={},
-            end_time=None):
+            costs: float = np.inf,
+            status: Status = Status.SUCCESS,
+            config: Union[dict, Configuration] = None,
+            budget: float = np.inf,
+            additional: Optional[dict] = None,
+            end_time: Optional[float] = None):
         """
         In case of multi-processing, config+budget should be passed as otherwise
         it can't be matched correctly.
         """
+        if additional is None:
+            additional = {}
 
         if config is not None:
             id = (config, budget)
@@ -141,10 +146,10 @@ class Recorder:
         )
 
         # Clean the dicts
-        del self.start_times[id]
-        del self.models[id]
-        del self.origins[id]
-        del self.additionals[id]
+        self.start_times.pop(id)
+        self.models.pop(id)
+        self.origins.pop(id)
+        self.additionals.pop(id)
 
         # And save the results
         self.run.save(self.path)

@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
+from dash.development.base_component import Component
 
 from deepcave import app, queue
 from deepcave.layouts.general import layout as general_layout
@@ -44,7 +45,7 @@ class MainLayout(Layout):
 
             return not_found_layout
 
-    def __call__(self):
+    def __call__(self) -> Component:
         return \
             html.Div(children=[
                 header_layout(),

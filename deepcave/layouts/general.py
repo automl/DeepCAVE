@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output, State, ALL
+from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
@@ -189,7 +190,7 @@ class GeneralLayout(Layout):
 
         return converter_text
 
-    def __call__(self):
+    def __call__(self) -> list[Component]:
         self._refresh_groups = True
 
         return [

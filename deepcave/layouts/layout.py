@@ -1,4 +1,7 @@
 from abc import abstractmethod
+from typing import Union
+
+from dash.development.base_component import Component
 
 
 class Layout:
@@ -9,5 +12,5 @@ class Layout:
         pass
 
     @abstractmethod
-    def __call__(self):
+    def __call__(self) -> Union[list[Component], Component]:
         pass

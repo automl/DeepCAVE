@@ -1,7 +1,7 @@
 import json
-import os
 from enum import IntEnum
-from typing import List, Union, Any, Dict
+from pathlib import Path
+from typing import List, Union, Any, Dict, Optional
 
 import jsonlines
 import numpy as np
@@ -42,7 +42,7 @@ class Run:
                  configspace=None,
                  objectives: Union[str, List[str]] = None,
                  meta: Dict[str, Any] = None,
-                 path=None):
+                 path: Optional[Union[str, Path]] = None):
         """
         If path is given, trials are loaded from the path.
 
@@ -55,6 +55,15 @@ class Run:
         if meta is None:
             meta = {}
 
+        # objects created by reset
+        self.configs = {}
+        self.origins = {}
+        self.models = {}
+
+        self.history = []
+        self.trial_keys = {}
+
+        # Reset and load configspace/path
         self.reset()
         self.configspace = configspace
         self.path = path
@@ -66,12 +75,14 @@ class Run:
             raise RuntimeError(
                 "Please provide a configspace or specify a path to load existing trials.")
 
+        # Objectives
         if not isinstance(objectives, list):
             objectives = [objectives]
 
         for objective in objectives:
             assert isinstance(objective, Objective)
 
+        # Meta
         self.meta = {
             "objectives": objectives,
             "budgets": []
@@ -89,11 +100,11 @@ class Run:
         self.trial_keys = {}
 
     @property
-    def path(self) -> str:
+    def path(self) -> Path:
         return self._path
 
     @path.setter
-    def path(self, value: str):
+    def path(self, value: Optional[Union[str, Path]]):
         """
         If path is changed, also change the filenames of all created files.
         """
@@ -102,38 +113,33 @@ class Run:
             self._path = None
             return
 
-        if value[-1] != "/":
-            value += "/"
+        self._path = Path(value)
 
-        make_dirs(value)
-        self._path = value
+        make_dirs(self._path)
 
-        self.meta_fn = os.path.join(value, "meta.json")
-        self.configspace_fn = os.path.join(value, "configspace.json")
-        self.configs_fn = os.path.join(value, "configs.json")
-        self.origins_fn = os.path.join(value, "origins.json")
-        self.history_fn = os.path.join(value, "history.jsonl")
+        self.meta_fn = self._path / "meta.json"
+        self.configspace_fn = self._path / "configspace.json"
+        self.configs_fn = self._path / "configs.json"
+        self.origins_fn = self._path / "origins.json"
+        self.history_fn = self._path / "history.jsonl"
 
     def exists(self) -> bool:
         if self._path is None:
             return False
 
-        return os.path.isfile(self.meta_fn) and \
-               os.path.isfile(self.configspace_fn) and \
-               os.path.isfile(self.configs_fn) and \
-               os.path.isfile(self.origins_fn) and \
-               os.path.isfile(self.history_fn)
+        return all(f.is_file() for f in (self.meta_fn, self.configspace_fn, self.configs_fn,
+                                         self.origins_fn, self.history_fn))
 
     def add(self,
-            costs,
-            config,  # either dict or Configuration
-            budget=np.inf,
-            start_time=0.,
-            end_time=0.,
-            status=Status.SUCCESS,
+            costs: Union[list[float], float],
+            config: Union[dict, Configuration],  # either dict or Configuration
+            budget: float = np.inf,
+            start_time: float = 0.,
+            end_time: float = 0.,
+            status: Status = Status.SUCCESS,
             origin=None,
             model=None,
-            additional={}):
+            additional: Optional[dict] = None):
         """
 
         If combination of config and budget already exists, it will be overwritten.
@@ -144,6 +150,8 @@ class Run:
             additional (dict): What's supported by DeepCAVE? Like `ram`, 
             costs (float or list of floats)
         """
+        if additional is None:
+            additional = {}
 
         if not isinstance(costs, list):
             costs = [costs]
@@ -179,8 +187,6 @@ class Run:
             config_id = len(self.configs)
             self.configs[config_id] = config
             self.origins[config_id] = origin
-        else:
-            config_id = self.get_config_id(config)
 
         config_id = self.get_config_id(config)
         trial = Trial(
@@ -422,7 +428,7 @@ class Run:
             1 / len(objectives) for _ in range(len(filtered_objectives))
         ]
 
-        costs = [u*v for u, v in zip(normalized_costs, objective_weights)]
+        costs = [u * v for u, v in zip(normalized_costs, objective_weights)]
         cost = np.mean(costs)
 
         return cost
@@ -447,7 +453,6 @@ class Run:
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
-
             config = self.configs[config_id]
             config = Configuration(self.configspace, config)
 
@@ -501,36 +506,31 @@ class Run:
                 data=data,
                 # Combined Cost
                 columns=[
-                    name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
+                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
 
             return df
 
         return X, Y
 
-    def save(self, path=None):
+    def save(self, path: Optional[Union[str, Path]] = None):
         """
         If path is none, self.path will be chosen.
         """
 
-        if path is not None:
-            self.path = path
-
-        if self.path is None:
+        if path is None:
             raise RuntimeError("Please specify a path to save the trials.")
 
+        self.path = Path(path)
+
         # Save configspace
-        with open(self.configspace_fn, 'w') as f:
-            f.write(cs_json.write(self.configspace))
+        self.configspace_fn.write_text(cs_json.write(self.configspace))
 
         # Save meta data (could be changed)
-        with open(self.meta_fn, 'w') as f:
-            json.dump(self.meta, f, indent=4)
+        self.meta_fn.write_text(json.dumps(self.meta, indent=4))
 
-        with open(self.configs_fn, 'w') as f:
-            json.dump(self.configs, f, indent=4)
+        self.configs_fn.write_text(json.dumps(self.configs, indent=4))
 
-        with open(self.origins_fn, 'w') as f:
-            json.dump(self.origins, f, indent=4)
+        self.origins_fn.write_text(json.dumps(self.origins, indent=4))
 
         # Save history
         with jsonlines.open(self.history_fn, mode='w') as f:
@@ -541,33 +541,30 @@ class Run:
         # to save the run.
         # Then, DeepCAVE can show direct suggestions in the select path dialog.
 
-    def load(self, path=None):
+    def load(self, path: Optional[Union[str, Path]] = None):
         self.reset()
 
-        if path is not None:
-            self.path = path
+        if path is None:
+            raise RuntimeError("Could not load trials because path is None.")
+
+        self.path = Path(path)
 
         if not self.exists():
-            raise RuntimeError(
-                "Could not load trials because trials were not found.")
+            raise RuntimeError("Could not load trials because trials were not found.")
 
         # Load meta data
-        with open(self.meta_fn) as f:
-            self.meta = json.load(f)
+        self.meta = json.loads(self.meta_fn.read_text())
 
         # Load configspace
-        with open(self.configspace_fn, 'r') as f:
-            self.configspace = cs_json.read(f.read())
+        self.configspace = cs_json.read(self.configspace_fn.read_text())
 
         # Load configs
-        with open(self.configs_fn) as f:
-            configs = json.load(f)
-            self.configs = {int(k): v for k, v in configs.items()}
-            # Make sure all keys are integers
+        configs = json.loads(self.configs_fn.read_text())
+        # Make sure all keys are integers
+        self.configs = {int(k): v for k, v in configs.items()}
 
         # Load origins
-        with open(self.origins_fn) as f:
-            self.origins = json.load(f)
+        self.origins = json.loads(self.origins_fn.read_text())
 
         # Load history
         with jsonlines.open(self.history_fn) as f:
@@ -618,5 +615,5 @@ class Trial(tuple):
         for k, v in data.items():
             setattr(self, k, v)
 
-    def get_key(self):
-        return self.config_id, self.budget
+    def get_key(self) -> tuple[str, int]:
+        return self.config_id, self.budget  # noqa

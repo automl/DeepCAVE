@@ -1,6 +1,7 @@
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
+from dash.development.base_component import Component
 
 from deepcave import app, queue
 from deepcave.layouts.layout import Layout
@@ -88,7 +89,7 @@ class SidebarLayout(Layout):
             except:
                 return
 
-    def __call__(self):
+    def __call__(self) -> list[Component]:
 
         layouts = []
         for category, points in self.nav_points.items():
