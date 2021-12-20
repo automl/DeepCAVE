@@ -2,6 +2,7 @@ name: PyTest
 on: [ push ]
 jobs:
   pytest:
+    name: PyTest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,5 +15,5 @@ jobs:
         with:
           python-version: 3.9
       - name: Install dependencies
-        run: conda env update --file environment.yml --name base
+      - run: conda env update --file environment.yml --name base
       - run: pytest tests
