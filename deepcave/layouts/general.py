@@ -1,5 +1,3 @@
-import os
-
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
@@ -35,14 +33,13 @@ class GeneralLayout(Layout):
                 run_ids = handler.get_run_ids()
                 converter = handler.get_converter()
 
-                return \
-                    working_dir, \
-                    self.get_converter_text(converter), \
-                    self.get_run_options(), \
-                    list(run_ids.keys())
+                return (str(working_dir),
+                        self.get_converter_text(converter),
+                        self.get_run_options(),
+                        list(run_ids.keys()))
 
             # Check if working dir exists
-            if working_dir is None or not os.path.isdir(working_dir):
+            if working_dir is None or not working_dir.is_dir():
                 PreventUpdate()
 
             run_names = []
@@ -55,11 +52,10 @@ class GeneralLayout(Layout):
             if converter is None:
                 PreventUpdate()
 
-            return \
-                working_dir, \
-                self.get_converter_text(converter), \
-                self.get_run_options(), \
-                run_names
+            return (str(working_dir),
+                    self.get_converter_text(converter),
+                    self.get_run_options(),
+                    run_names)
 
         input = Input('general-runs-checklist', 'value')
         output = Output('general-run-names', 'value')
@@ -94,7 +90,9 @@ class GeneralLayout(Layout):
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
         def general_display_groups(n_clicks, run_names, children):
-            def get_layout(index, options, input_value="", dropdown_value=[]):
+            def get_layout(index, options, input_value="", dropdown_value=None):
+                if dropdown_value is None:
+                    dropdown_value = []
                 return html.Div([
                     dbc.Input(
                         id={'type': 'group-name', 'index': index},

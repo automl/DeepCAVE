@@ -1,9 +1,8 @@
 import json
-import os
 import time
 from functools import cached_property
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 from deepcave import c, rc
 from deepcave.runs.converters.converter import Converter
@@ -21,7 +20,7 @@ class Handler:
     """
 
     def __init__(self) -> None:
-        self.working_dir = Path(c.get('working_dir'))
+        self.working_dir: Path = Path(c.get('working_dir'))
         self.run_ids = c.get('run_ids')
         self.runs = {}
         self.groups: dict[str, list[str]] = {}  # TODO(dwoiwode): Group type not clear
@@ -37,7 +36,7 @@ class Handler:
         The run caches are switched here.
         """
 
-        working_dir = c.get('working_dir')
+        working_dir = Path(c.get('working_dir'))
         run_ids = c.get('run_ids')
         groups = c.get('groups')
 
@@ -100,8 +99,8 @@ class Handler:
         self.run_ids = run_ids
         self.groups = groups
 
-    def set_working_dir(self, working_dir: Optional[str] = None):
-        c.set('working_dir', value=working_dir)
+    def set_working_dir(self, working_dir: Optional[Path] = None):
+        c.set('working_dir', value=str(working_dir))
 
     def set_run_names(self, run_names: Optional[list[str]] = None):
         if run_names is None:
@@ -164,7 +163,7 @@ class Handler:
     def _get_available_converters(self):
         available_converters = {}
 
-        paths = [os.path.join(os.path.dirname(__file__), 'converters/')]
+        paths = [Path(__file__).parent / 'converters/']
         for _, obj in auto_import_iter("converter", paths):
             if not issubclass(obj, Converter):
                 continue
@@ -176,11 +175,11 @@ class Handler:
 
         return available_converters
 
-    def _find_compatible_converter(self, working_dir: Optional[Union[str, Path]]) -> Optional[Converter]:
+    def _find_compatible_converter(self, working_dir: Optional[Path]) -> Optional[Converter]:
         """
         All directories must be valid. Otherwise, DeepCAVE does not recognize it as compatible directory.
         """
-        if working_dir is None or not (working_dir := Path(working_dir)).is_dir():
+        if working_dir is None or not working_dir.is_dir():
             return None
 
         # Find first directory

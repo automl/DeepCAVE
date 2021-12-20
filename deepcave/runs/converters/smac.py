@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 
 import numpy as np
 
@@ -15,16 +15,16 @@ class SMAC(Converter):
     def name() -> str:
         return "SMAC"
 
-    def get_run_id(self, working_dir, run_name) -> str:
+    def get_run_id(self, working_dir: Path, run_name: str) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
 
         # Use hash of history.json as id
-        return file_to_hash(os.path.join(working_dir, run_name, "runhistory.json"))
+        return file_to_hash(working_dir / run_name / "runhistory.json")
 
-    def get_run(self, working_dir, run_name) -> Run:
+    def get_run(self, working_dir: Path, run_name: str) -> Run:
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
@@ -73,7 +73,7 @@ class SMAC(Converter):
         )
 
         # Iterate over the runhistory
-        with open(os.path.join(base, "runhistory.json")) as json_file:
+        with (base / "runhistory.json").open() as json_file:
             all_data = json.load(json_file)
             data = all_data["data"]
             config_origins = all_data["config_origins"]

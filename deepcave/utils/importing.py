@@ -9,9 +9,8 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-def auto_import_iter(module: str, paths: List[str]) -> Iterator[tuple[str, Any]]:
-    for path_name in paths:
-        path = Path(path_name)
+def auto_import_iter(module: str, paths: List[Path]) -> Iterator[tuple[str, Any]]:
+    for path in paths:
         logger.debug(f"Searching for files in {path.absolute()}")
         for f in path.iterdir():
             if f.name.startswith('__'):

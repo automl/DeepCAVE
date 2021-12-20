@@ -40,7 +40,7 @@ class Run:
 
     def __init__(self,
                  configspace=None,
-                 objectives: Union[str, List[str]] = None,
+                 objectives: Union[Objective, List[Objective]] = None,
                  meta: Dict[str, Any] = None,
                  path: Optional[Union[str, Path]] = None):
         """
@@ -100,7 +100,7 @@ class Run:
         self.trial_keys = {}
 
     @property
-    def path(self) -> Path:
+    def path(self) -> Optional[Path]:
         return self._path
 
     @path.setter
@@ -544,10 +544,10 @@ class Run:
     def load(self, path: Optional[Union[str, Path]] = None):
         self.reset()
 
-        if path is None:
+        if path is None and self.path is None:
             raise RuntimeError("Could not load trials because path is None.")
-
-        self.path = Path(path)
+        if path is not None:
+            self.path = Path(path)
 
         if not self.exists():
             raise RuntimeError("Could not load trials because trials were not found.")

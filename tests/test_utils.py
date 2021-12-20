@@ -27,7 +27,7 @@ class TestCache(unittest.TestCase):
 
         # Load with new file
         self.assertFalse(cache_file.exists())
-        cache = Cache(str(cache_file))
+        cache = Cache(cache_file)
 
         # Set values
         cache.set("a", "b", "c", value=4)
@@ -53,7 +53,7 @@ class TestCache(unittest.TestCase):
 
         # Load with exising file
         self.assertTrue(cache_file.exists())
-        cache = Cache(str(cache_file))
+        cache = Cache(cache_file)
 
         # Get values
         value = cache.get("d", "e", "f")
@@ -207,7 +207,7 @@ class TestHash(unittest.TestCase):
         self.assertEqual(a, b)
 
     def test_file_to_hash(self):
-        file = __file__
+        file = Path(__file__)
         a = file_to_hash(file)
         self.assertGreater(len(a), 5)
         self.assertIsInstance(a, str)
