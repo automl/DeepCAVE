@@ -69,7 +69,7 @@ class TestCache(unittest.TestCase):
         # Load with new file
         self.assertFalse(cache_file.exists())
         defaults = {"i": {"j": 4}, "k": {"l": {"m": 42}}, "v": 9}
-        cache = Cache(str(cache_file), defaults=defaults)
+        cache = Cache(cache_file, defaults=defaults)
 
         # Test get values
         self.assertEqual(4, cache.get("i", "j"))
@@ -101,7 +101,7 @@ class TestCache(unittest.TestCase):
         # Load with new file
         self.assertFalse(cache_file.exists())
         defaults = {"i": {"j": 4}, "k": {"l": {"m": 42}}, "v": 9}
-        cache = Cache(str(cache_file), defaults=defaults)
+        cache = Cache(cache_file, defaults=defaults)
 
         # Test has values
         self.assertTrue(cache.has("i"))
@@ -217,7 +217,7 @@ class TestImporting(unittest.TestCase):
     def test_auto_import_iterator(self):
         # Cannot do futher tests as importing plugin fails due to missing app
         found = []
-        for name, obj in auto_import_iter("deepcave.plugins", ["./deepcave/plugins"]):
+        for name, obj in auto_import_iter("deepcave.plugins", [Path("./deepcave/plugins")]):
             self.assertIsInstance(name, str)
             found.append(obj)
 
