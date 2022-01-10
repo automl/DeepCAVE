@@ -1,3 +1,5 @@
+from abc import ABC
+
 from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
@@ -8,7 +10,7 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class DynamicPlugin(Plugin):
+class DynamicPlugin(Plugin, ABC):
     def __init__(self):
         super().__init__()
 
@@ -39,7 +41,7 @@ class DynamicPlugin(Plugin):
 
             # Special case again
             # Only process the selected run
-            if self.__class__.activate_run_selection():
+            if self.activate_run_selection:
                 if "run_name" not in inputs or inputs["run_name"]["value"] is None:
                     raise PreventUpdate()
 
@@ -59,7 +61,7 @@ class DynamicPlugin(Plugin):
 
             raw_outputs = {}
             for name, run in runs.items():
-                run_outputs = rc[name].get(self.id(), inputs_key)
+                run_outputs = rc[name].get(self.id, inputs_key)
                 if run_outputs is None:
                     logger.debug(f"Process {name}.")
                     run_outputs = self.process(run, inputs)
@@ -68,14 +70,14 @@ class DynamicPlugin(Plugin):
                     # We have to remove `run_name` from the inputs completely
 
                     # Cache it
-                    rc[name].set(self.id(), inputs_key, value=run_outputs)
+                    rc[name].set(self.id, inputs_key, value=run_outputs)
                 else:
                     logger.debug(f"Found outputs from {name} in cache.")
 
                 raw_outputs[name] = run_outputs
 
             # Cache last inputs
-            c.set("last_inputs", self.id(), value=inputs)
+            c.set("last_inputs", self.id, value=inputs)
 
             return self._process_raw_outputs(inputs, raw_outputs)
 

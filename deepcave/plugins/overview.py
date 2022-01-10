@@ -12,28 +12,12 @@ logger = get_logger(__name__)
 
 
 class Overview(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
+    id = "overview"
+    name = "Overview"
+    category = "General"
+    position = 1
 
-    @staticmethod
-    def id() -> str:
-        return "overview"
-
-    @staticmethod
-    def name() -> str:
-        return "Overview"
-
-    @staticmethod
-    def position() -> int:
-        return 1
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "General"
-
-    @staticmethod
-    def activate_run_selection() -> bool:
-        return True
+    activate_run_selection =  True
 
     @staticmethod
     def process(run, inputs):

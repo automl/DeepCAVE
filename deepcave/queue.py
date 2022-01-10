@@ -1,3 +1,5 @@
+from typing import Any, Callable
+
 import redis
 from rq import Queue as _Queue
 from rq import Worker
@@ -49,7 +51,7 @@ class Queue:
 
         return False
 
-    def get_jobs(self, registry="running"):
+    def get_jobs(self, registry="running") -> list[Job]:
         if registry == "running":
             registry = self._queue.started_job_registry
         elif registry == "pending":
@@ -66,16 +68,16 @@ class Queue:
 
         return results
 
-    def get_running_jobs(self):
+    def get_running_jobs(self) -> list[Job]:
         return self.get_jobs(registry="running")
 
-    def get_pending_jobs(self):
+    def get_pending_jobs(self) -> list[Job]:
         return self.get_jobs(registry="pending")
 
-    def get_finished_jobs(self):
+    def get_finished_jobs(self) -> list[Job]:
         return self.get_jobs(registry="finished")
 
-    def delete_job(self, job_id):
+    def delete_job(self, job_id: str):
         registries = [
             self._queue.finished_job_registry,
             self._queue,
@@ -88,7 +90,7 @@ class Queue:
             except:
                 pass
 
-    def enqueue(self, func, args, job_id, meta):
+    def enqueue(self, func: Callable[[Any], Any], args: Any, job_id: str, meta: dict[str, str]):
         # First check if job_id is already in use
         if self.is_processed(job_id):
             logger.debug("Job was not added because it was processed already.")

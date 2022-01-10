@@ -18,24 +18,10 @@ logger = get_logger(__name__)
 
 
 class ICE(StaticPlugin):
-    def __init__(self):
-        super().__init__()
-
-    @staticmethod
-    def id() -> str:
-        return "ice"
-
-    @staticmethod
-    def name() -> str:
-        return "Individual Conditional Expectation"
-
-    @staticmethod
-    def position() -> int:
-        return 30
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Performance Analysis"
+    id = "ice"
+    name = "Individual Conditional Expectation"
+    category = "Performance Analysis"
+    position = 30
 
     @staticmethod
     def check_requirements(runs, _):

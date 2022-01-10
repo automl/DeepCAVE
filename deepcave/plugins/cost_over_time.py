@@ -15,24 +15,10 @@ logger = get_logger(__name__)
 
 
 class CostOverTime(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
-
-    @staticmethod
-    def id() -> str:
-        return "cost_over_time"
-
-    @staticmethod
-    def name() -> str:
-        return "Cost Over Time"
-
-    @staticmethod
-    def position() -> int:
-        return 10
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Performance Analysis"
+    id = "cost_over_time"
+    name = "Cost Over Time"
+    category = "Performance Analysis"
+    position = 10
 
     @staticmethod
     def check_requirements(runs, groups) -> Union[bool, str]:
@@ -66,7 +52,7 @@ class CostOverTime(DynamicPlugin):
             html.Div([
                 dbc.Label("Budget"),
                 dcc.Slider(id=register(
-                           "budget", ["min", "max", "marks", "value"])),
+                    "budget", ["min", "max", "marks", "value"])),
             ], className=""),
         ]
 
@@ -176,7 +162,7 @@ class CostOverTime(DynamicPlugin):
                     run_y = outputs[run_name]["costs"]
 
                     # Find closest x value
-                    idx = min(range(len(run_x)), key=lambda i: abs(run_x[i]-x))
+                    idx = min(range(len(run_x)), key=lambda i: abs(run_x[i] - x))
                     group_y.append(run_y[idx])
 
                 all_y.append(group_y)
@@ -189,8 +175,8 @@ class CostOverTime(DynamicPlugin):
 
             y_mean = np.mean(all_y, axis=1)
             y_std = np.std(all_y, axis=1)
-            y_upper = list(y_mean+y_std)
-            y_lower = list(y_mean-y_std)
+            y_upper = list(y_mean + y_std)
+            y_lower = list(y_mean - y_std)
 
             traces.append(go.Scatter(
                 x=all_x,

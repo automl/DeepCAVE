@@ -6,7 +6,7 @@ from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.utils.importing import auto_import_iter
 
 
-def read_plugins():
+def read_plugins() -> list[Plugin]:
     plugins = {}
 
     paths = [Path(__file__).parent]
@@ -18,7 +18,7 @@ def read_plugins():
             if any(obj.__module__ in c.__module__ for c in [DynamicPlugin, StaticPlugin, Plugin]):
                 continue
 
-            pos = obj.position()
+            pos = obj.position
             if pos not in plugins:
                 plugins[pos] = []
 
@@ -31,10 +31,10 @@ def read_plugins():
     return plugins_ordered
 
 
-plugins = read_plugins()
+plugins: list[Plugin] = read_plugins()
 
-plugin_layouts: dict[str, Plugin] = {plugin.id(): plugin() for plugin in plugins}
-plugin_names: dict[str, str] = {plugin.id(): plugin.name() for plugin in plugins}
-plugin_categories: dict[str, str] = {plugin.id(): plugin.category() for plugin in plugins}
+plugin_layouts: dict[str, Plugin] = {plugin.id: plugin() for plugin in plugins}
+plugin_names: dict[str, str] = {plugin.id: plugin.name for plugin in plugins}
+plugin_categories: dict[str, str] = {plugin.id: plugin.category for plugin in plugins}
 
 __all__ = [plugin_layouts, plugin_names, plugin_categories]

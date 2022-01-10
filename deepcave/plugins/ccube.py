@@ -16,28 +16,12 @@ logger = get_logger(__name__)
 
 
 class CCube(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
+    id = "ccube"
+    name = "Configurations Cube"
+    category = "Performance Analysis"
+    position = 20
 
-    @staticmethod
-    def id() -> str:
-        return "ccube"
-
-    @staticmethod
-    def name() -> str:
-        return "Configurations Cube"
-
-    @staticmethod
-    def position() -> int:
-        return 20
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Performance Analysis"
-
-    @staticmethod
-    def activate_run_selection():
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):

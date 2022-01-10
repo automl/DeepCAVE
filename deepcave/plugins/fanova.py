@@ -17,25 +17,12 @@ logger = get_logger(__name__)
 
 
 class fANOVA(StaticPlugin):
-    @staticmethod
-    def id() -> str:
-        return "fanova"
+    id = "fanova"
+    name = "fANOVA"
+    category = "Hyperparameter Analysis"
+    position = 100
 
-    @staticmethod
-    def name() -> str:
-        return "fANOVA"
-
-    @staticmethod
-    def position() -> int:
-        return 100
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Hyperparameter Analysis"
-
-    @staticmethod
-    def activate_run_selection():
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):

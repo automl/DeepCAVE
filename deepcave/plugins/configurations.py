@@ -13,28 +13,12 @@ logger = get_logger(__name__)
 
 
 class Configurations(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
+    id = "configurations"
+    name = "Configurations"
+    category = "General"
+    position = 5
 
-    @staticmethod
-    def id() -> str:
-        return "configurations"
-
-    @staticmethod
-    def name() -> str:
-        return "Configurations"
-
-    @staticmethod
-    def position() -> int:
-        return 5
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "General"
-
-    @staticmethod
-    def activate_run_selection() -> bool:
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def process(run, inputs):

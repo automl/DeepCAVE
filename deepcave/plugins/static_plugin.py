@@ -1,3 +1,5 @@
+from abc import ABC
+
 from dash import dcc
 from dash.dash import no_update
 from dash.dependencies import Input, Output, State
@@ -10,7 +12,7 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class StaticPlugin(Plugin):
+class StaticPlugin(Plugin, ABC):
     """
     Calculation with queue. Made for time-consuming tasks.
     """
@@ -42,7 +44,7 @@ class StaticPlugin(Plugin):
         def plugin_process(n_clicks, _, *inputs_list):
             """
             Parameters:
-                state (int): From button.
+                n_clicks (int): From button.
                 *inputs_list: Values from user.
             """
 
@@ -52,13 +54,13 @@ class StaticPlugin(Plugin):
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
-            last_inputs = c.get("last_inputs", self.id())
+            last_inputs = c.get("last_inputs", self.id)
 
             runs = self.runs
 
             # Special case: If run selection is active
             # Don't update anything if the inputs haven't changed
-            if self.__class__.activate_run_selection():
+            if self.activate_run_selection:
                 if inputs["run_name"]["value"] is None:
                     self._blocked = False
                     raise PreventUpdate
@@ -86,7 +88,7 @@ class StaticPlugin(Plugin):
             raw_outputs = {}
             raw_outputs_available = True
             for run_name in run_names:
-                raw_outputs[run_name] = rc[run_name].get(self.id(), inputs_key)
+                raw_outputs[run_name] = rc[run_name].get(self.id, inputs_key)
 
                 if raw_outputs[run_name] is None:
                     raw_outputs_available = False
@@ -95,7 +97,7 @@ class StaticPlugin(Plugin):
                 self._state = 0
 
                 if inputs_changed or self._refresh_required:
-                    c.set("last_inputs", self.id(), value=inputs)
+                    c.set("last_inputs", self.id, value=inputs)
 
                     outputs = self._process_raw_outputs(inputs, raw_outputs)
                     self._refresh_required = False
@@ -116,7 +118,7 @@ class StaticPlugin(Plugin):
                             continue
 
                         meta = {
-                            "display_name": self.name(),
+                            "display_name": self.name,
                             "run_name": run_name,
                             "inputs_key": inputs_key,
                         }
@@ -137,8 +139,8 @@ class StaticPlugin(Plugin):
                 else:
                     # Get finished jobs and save them
                     for job in queue.get_finished_jobs():
+                        job_id = job.id
                         try:
-                            job_id = job.id
                             job_run_outputs = job.result
                             job_meta = job.meta
                             job_inputs_key = job_meta["inputs_key"]
@@ -148,7 +150,7 @@ class StaticPlugin(Plugin):
 
                             # Save results in cache
                             rc[job_run_name].set(
-                                self.id(), job_inputs_key, value=job_run_outputs)
+                                self.id, job_inputs_key, value=job_run_outputs)
                             logger.debug(f"... cached")
 
                             queue.delete_job(job_id)

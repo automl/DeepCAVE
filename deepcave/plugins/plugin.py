@@ -1,5 +1,5 @@
 import copy
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import Any, Union, Optional, Iterable, Callable
 
 import dash_bootstrap_components as dbc
@@ -22,7 +22,25 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class Plugin(Layout):
+class Plugin(Layout, ABC):
+    id: str
+    name: str
+    category: Optional[str] = None
+    description: Optional[str] = None
+    position: int = 99999
+
+    button_caption: str = "Process"
+
+    """
+    activate_run_selection:
+    Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at
+    a time. Moreover, it prevents the plugin to calculate results across all runs.
+
+    The run can be selected by inputs["run_name"]["value"].
+    bool: True if run selection should be shown.
+    """
+    activate_run_selection: bool = False
+
     def __init__(self):
         self.inputs = []
         self.outputs = []
@@ -38,51 +56,11 @@ class Plugin(Layout):
         super().__init__()
 
     @staticmethod
-    @abstractmethod
-    def id() -> str:
-        raise NotImplementedError()
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return None
-
-    @staticmethod
-    def position() -> int:
-        return 99999
-
-    @staticmethod
-    @abstractmethod
-    def name() -> str:
-        raise NotImplementedError()
-
-    @staticmethod
-    def description() -> str:
-        return ''
-
-    @staticmethod
-    def button_caption() -> str:
-        return "Process"
-
-    @staticmethod
     def check_requirements(runs, groups) -> Union[bool, str]:
         """
         Returns either bool or str. If str, it is shown to the user.
         """
         return True
-
-    @staticmethod
-    def activate_run_selection() -> bool:
-        """
-        Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at
-        a time. Moreover, it prevents the plugin to calculate results across all runs.
-
-        The run can be selected by inputs["run_name"]["value"].
-
-        Returns:
-            bool: True if run selection should be shown.
-        """
-
-        return False
 
     def register_input(self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False) -> str:
         if isinstance(attributes, str):
@@ -113,20 +91,20 @@ class Plugin(Layout):
         return self.get_internal_output_id(id)
 
     def get_internal_id(self, id: str) -> str:
-        return f"{self.id()}-{id}"
+        return f"{self.id}-{id}"
 
     def get_internal_input_id(self, id: str) -> str:
-        return f"{self.id()}-{id}-input"
+        return f"{self.id}-{id}-input"
 
     def get_internal_output_id(self, id: str) -> str:
-        return f"{self.id()}-{id}-output"
+        return f"{self.id}-{id}-output"
 
     def register_callbacks(self):
         # We have to call the output layout one time to register
         # the values
         # Problem: Inputs/Outputs can't be changed afterwards anymore.
 
-        if self.__class__.activate_run_selection():
+        if self.activate_run_selection:
             self.__class__.get_run_input_layout(self.register_input)
 
         self.__class__.get_input_layout(self.register_input)
@@ -160,14 +138,14 @@ class Plugin(Layout):
 
                 # Reload our inputs
                 if init:
-                    inputs = c.get("last_inputs", self.id())
+                    inputs = c.get("last_inputs", self.id)
 
                     if inputs is None:
                         inputs = self.__class__.load_inputs(self.runs)
 
                         # Also update the run selection
-                        if self.__class__.activate_run_selection():
-                            new_inputs = self.__class__.load_run_inputs(self.runs)
+                        if self.activate_run_selection:
+                            new_inputs = self.__class__.load_run_inputs(self.runs, self.groups)
                             update_dict(inputs, new_inputs)
 
                         # Set not used inputs
@@ -189,7 +167,7 @@ class Plugin(Layout):
                     _previous_inputs = self.previous_inputs.copy()
                     _inputs = inputs.copy()
 
-                    if self.__class__.activate_run_selection():
+                    if self.activate_run_selection:
                         if "run_name" in _previous_inputs:
                             _previous_run_name = _previous_inputs["run_name"]["value"]
                         else:
@@ -250,7 +228,7 @@ class Plugin(Layout):
         if last_inputs is not None:
             for (id, attribute, filter) in self.inputs:
 
-                if self.__class__.activate_run_selection():
+                if self.activate_run_selection:
                     if id == "run_name":
                         continue
 
@@ -395,9 +373,9 @@ class Plugin(Layout):
 
         self.groups = groups
 
-        components = [html.H1(self.name())]
-        if self.description() != '':
-            components += [html.P(self.description())]
+        components = [html.H1(self.name)]
+        if self.description is not None:
+            components += [html.P(self.description)]
 
         # Register alerts
         components += [
@@ -421,7 +399,7 @@ class Plugin(Layout):
             if not status:
                 return components
 
-        if self.__class__.activate_run_selection():
+        if self.activate_run_selection:
             run_input_layout = [
                 self.__class__.get_run_input_layout(self.register_input)]
         else:
@@ -438,7 +416,7 @@ class Plugin(Layout):
             className="mt-3 clearfix",
             children=[
                 dbc.Button(
-                    children=self.button_caption(),
+                    children=self.button_caption,
                     id=self.get_internal_id("update-button"),
                 ),
                 html.Span(
@@ -451,12 +429,12 @@ class Plugin(Layout):
         # We always have to render it because of the button.
         # Button tells us if the page was just loaded.
         components += [html.Div(
-            id=f'{self.id()}-input',
+            id=f'{self.id}-input',
             className="shadow-sm p-3 mb-3 bg-white rounded-lg",
             children=run_input_layout +
-            separator_layout +
-            input_layout +
-            [input_control_layout],
+                     separator_layout +
+                     input_layout +
+                     [input_control_layout],
             style={} if render_button or input_layout or run_input_layout else {"display": "none"}
         )]
 
@@ -466,7 +444,7 @@ class Plugin(Layout):
         filter_layout = self.__class__.get_filter_layout(register_in)
         if len(filter_layout) > 0:
             components += [html.Div(
-                id=f'{self.id()}-filter',
+                id=f'{self.id}-filter',
                 className="shadow-sm p-3 mb-3 bg-white rounded-lg",
                 children=filter_layout
             )]
@@ -474,7 +452,7 @@ class Plugin(Layout):
         output_layout = self.__class__.get_output_layout(self.register_output)
         if output_layout:
             components += [html.Div(
-                id=f'{self.id()}-output',
+                id=f'{self.id}-output',
                 className="shadow-sm p-3 bg-white rounded-lg loading-container",
                 children=output_layout,
                 style={} if not c.get(
@@ -487,7 +465,7 @@ class Plugin(Layout):
         output_layout = self.__class__.get_mpl_output_layout(register_out)
         if output_layout:
             components += [html.Div(
-                id=f'{self.id()}-mpl-output',
+                id=f'{self.id}-mpl-output',
                 className="shadow-sm p-3 bg-white rounded-lg loading-container",
                 children=output_layout,
                 style={} if c.get("matplotlib-mode") else {"display": "none"}
