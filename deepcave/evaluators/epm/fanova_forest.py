@@ -1,7 +1,8 @@
+from typing import Optional
+
 import pyrfr
 import pyrfr.regression as regression
 import pyrfr.util
-import typing
 import itertools as it
 
 import numpy as np
@@ -23,8 +24,8 @@ class fANOVAForest(Forest):
             max_depth=64,
             cutoffs=(-np.inf, np.inf),
 
-            instance_features: typing.Optional[np.ndarray] = None,
-            pca_components: typing.Optional[int] = None):
+            instance_features: Optional[np.ndarray] = None,
+            pca_components: Optional[int] = None):
 
         super().__init__(
             configspace,

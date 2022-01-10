@@ -1,5 +1,6 @@
+from typing import Optional
+
 import pyrfr.regression as regression
-import typing
 
 import numpy as np
 from smac.configspace import ConfigurationSpace
@@ -51,14 +52,14 @@ class RandomForest(Forest):
         return regression.binary_rss_forest()
 
     def _predict(self, X: np.ndarray,
-                 cov_return_type: typing.Optional[str] = 'diagonal_cov') \
-            -> typing.Tuple[np.ndarray, np.ndarray]:
+                 cov_return_type: Optional[str] = 'diagonal_cov') \
+            -> tuple[np.ndarray, np.ndarray]:
         """Predict means and variances for given X.
         Parameters
         ----------
         X : np.ndarray of shape = [n_samples,
                                    n_features (config + instance features)]
-        cov_return_type: typing.Optional[str]
+        cov_return_type: Optional[str]
             Specifies what to return along with the mean. Refer ``predict()`` for more information.
         Returns
         -------

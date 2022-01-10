@@ -2,14 +2,14 @@ import importlib.util
 import inspect
 import sys
 from pathlib import Path
-from typing import List, Iterator, Any
+from typing import Iterator, Any
 
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
-def auto_import_iter(module: str, paths: List[Path]) -> Iterator[tuple[str, Any]]:
+def auto_import_iter(module: str, paths: list[Path]) -> Iterator[tuple[str, Any]]:
     for path in paths:
         logger.debug(f"Searching for files in {path.absolute()}")
         for f in path.iterdir():

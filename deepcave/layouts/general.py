@@ -174,8 +174,9 @@ class GeneralLayout(Layout):
             return None
 
     @staticmethod
-    def get_run_options():
-        return [{"label": run_name, "value": run_name} for run_name in handler.get_available_run_names()]
+    def get_run_options() -> list[dict[str, str]]:
+        runs = [{"label": run_name, "value": run_name} for run_name in handler.get_available_run_names()]
+        return runs
 
     @staticmethod
     def get_converter_text(converter):

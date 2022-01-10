@@ -1,7 +1,8 @@
 
 import itertools as it
-import typing
 from collections import OrderedDict
+from typing import Optional
+
 import numpy as np
 
 
@@ -18,8 +19,8 @@ class fANOVA:
                  min_samples_leaf=0,
                  max_depth=64,
                  cutoffs=(-np.inf, np.inf),
-                 instance_features: typing.Optional[np.ndarray] = None,
-                 pca_components: typing.Optional[int] = None):
+                 instance_features: Optional[np.ndarray] = None,
+                 pca_components: Optional[int] = None):
         """
         Calculate and provide midpoints and sizes from the forest's 
         split values in order to get the marginals
