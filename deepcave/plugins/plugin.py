@@ -14,7 +14,7 @@ from deepcave import app
 from deepcave import c
 from deepcave.layouts.layout import Layout
 from deepcave.runs.handler import handler
-from deepcave.runs.run import Run, GroupedRun
+from deepcave.runs.run import Run
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
@@ -167,7 +167,7 @@ class Plugin(Layout):
 
                         # Also update the run selection
                         if self.__class__.activate_run_selection():
-                            new_inputs = self.__class__.load_run_inputs(self.runs, self.groups)
+                            new_inputs = self.__class__.load_run_inputs(self.runs)
                             update_dict(inputs, new_inputs)
 
                         # Set not used inputs
@@ -454,9 +454,9 @@ class Plugin(Layout):
             id=f'{self.id()}-input',
             className="shadow-sm p-3 mb-3 bg-white rounded-lg",
             children=run_input_layout +
-                     separator_layout +
-                     input_layout +
-                     [input_control_layout],
+            separator_layout +
+            input_layout +
+            [input_control_layout],
             style={} if render_button or input_layout or run_input_layout else {"display": "none"}
         )]
 
