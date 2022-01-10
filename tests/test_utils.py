@@ -4,7 +4,7 @@ import string
 import unittest
 from pathlib import Path
 
-import dash_html_components as html
+from dash import html
 import matplotlib.pyplot as plt
 import pandas as pd
 

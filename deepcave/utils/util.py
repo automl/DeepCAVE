@@ -4,7 +4,7 @@ import string
 from io import BytesIO
 from typing import Optional, Union
 
-import dash_html_components as html
+from dash import html
 import pandas as pd
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, \
