@@ -1,14 +1,10 @@
-import os
 import json
-import glob
-import pandas as pd
-from typing import Dict, Type, Any
+from pathlib import Path
 
-import ConfigSpace
-from deepcave.runs.run import Status
 from deepcave.runs.converters.converter import Converter
-from deepcave.runs.run import Run
 from deepcave.runs.objective import Objective
+from deepcave.runs.run import Run
+from deepcave.runs.run import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -17,26 +13,25 @@ class BOHB(Converter):
     def name() -> str:
         return "BOHB"
 
-    def get_run_id(self, working_dir, run_name) -> str:
+    def get_run_id(self, working_dir: Path, run_name: str) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
 
         # Use hash of history.json as id
-        return file_to_hash(os.path.join(working_dir, run_name, "results.json"))
+        return file_to_hash(working_dir / run_name / "results.json")
 
     def get_run(self, working_dir, run_name) -> Run:
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
 
-        base = os.path.join(working_dir, run_name)
+        base = working_dir / run_name
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
-            configspace = cs_json.read(f.read())
+        configspace = cs_json.read((base / 'configspace.json').read_text())
 
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
@@ -50,7 +45,7 @@ class BOHB(Converter):
         )
 
         from hpbandster.core.result import logged_results_to_HBS_result
-        bohb = logged_results_to_HBS_result(base)
+        bohb = logged_results_to_HBS_result(str(base))
         config_mapping = bohb.get_id2config_mapping()
 
         first_starttime = None

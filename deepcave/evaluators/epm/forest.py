@@ -1,20 +1,15 @@
-from abc import abstractmethod
-import pyrfr.regression as regression
-import typing
 import functools
+from abc import abstractmethod
 
-import copy
 import numpy as np
-
+import pyrfr.regression as regression
 from smac.configspace import ConfigurationSpace
-from smac.utils.constants import N_TREES, VERY_SMALL_NUMBER
-from smac.epm.rf_with_instances import RandomForestWithInstances as RFI
-from smac.epm.util_funcs import get_types
 from smac.epm.base_rf import BaseModel
+from smac.epm.util_funcs import get_types
 
 
 class Forest(BaseModel):
-    def __init__(self, configspace, seed=0, instance_features=None, pca_components=None):
+    def __init__(self, configspace: ConfigurationSpace, seed=0, instance_features=None, pca_components=None):
         # Set types and bounds automatically
         types, bounds = get_types(configspace, instance_features)
 
@@ -34,7 +29,7 @@ class Forest(BaseModel):
         self.rng = regression.default_random_engine(seed)
 
     @abstractmethod
-    def _get_model():
+    def _get_model(self):
         raise NotImplementedError()
 
     def _set_model_options(self, d):

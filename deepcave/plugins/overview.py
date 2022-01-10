@@ -1,21 +1,12 @@
-from typing import Dict, Type, Any
+from typing import Optional
 
-from dash import dcc
-from dash import html
 import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
-
 import pandas as pd
-import numpy as np
+from dash import html
 
-from deepcave import app
-from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.utils.logs import get_logger
 from deepcave.runs.run import Status
-
-from deepcave.evaluators.fanova import fANOVA as _fANOVA
-
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
@@ -25,19 +16,19 @@ class Overview(DynamicPlugin):
         super().__init__()
 
     @staticmethod
-    def id():
+    def id() -> str:
         return "overview"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "Overview"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 1
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "General"
 
     @staticmethod

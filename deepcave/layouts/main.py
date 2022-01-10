@@ -1,16 +1,17 @@
 from dash import dcc
 from dash import html
-import dash_bootstrap_components as dbc
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output
+from dash.development.base_component import Component
 
 from deepcave import app, queue
-from deepcave.runs.handler import handler
-from deepcave.layouts.layout import Layout
-from deepcave.layouts.header import layout as header_layout
 from deepcave.layouts.general import layout as general_layout
+from deepcave.layouts.header import layout as header_layout
+from deepcave.layouts.layout import Layout
 from deepcave.layouts.not_found import layout as not_found_layout
 from deepcave.layouts.sidebar import layout as sidebar_layout
 from deepcave.plugins import plugin_layouts
+from deepcave.runs.handler import handler
+from deepcave.utils.dash import alert
 
 
 class MainLayout(Layout):
@@ -28,9 +29,6 @@ class MainLayout(Layout):
             if paths[0] == "":
                 return general_layout()
             else:
-                def alert(text): return dbc.Alert(
-                    text, id="alert", is_open=True, dismissable=False, fade=True, color="danger")
-
                 if not queue.ready():
                     return alert("At least one worker has to be enabled.")
                 if len(handler.get_run_names()) == 0:
@@ -43,7 +41,7 @@ class MainLayout(Layout):
 
             return not_found_layout
 
-    def __call__(self):
+    def __call__(self) -> Component:
         return \
             html.Div(children=[
                 header_layout(),

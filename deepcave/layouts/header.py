@@ -1,11 +1,11 @@
-from dash import html
 import dash_bootstrap_components as dbc
 from dash import dcc
+from dash import html
 from dash.dependencies import Input, Output
 
-from deepcave.layouts.layout import Layout
 from deepcave import app
 from deepcave import c
+from deepcave.layouts.layout import Layout
 
 
 class HeaderLayout(Layout):
@@ -39,7 +39,7 @@ class HeaderLayout(Layout):
             else:
                 return "secondary", "off", update
 
-    def __call__(self):
+    def __call__(self) -> html.Header:
         return html.Header(className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow', children=[
             html.A(
                 'DeepCave', className='navbar-brand me-0 px-3', href='#'),

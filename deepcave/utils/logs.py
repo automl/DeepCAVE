@@ -1,14 +1,13 @@
 import logging
 import logging.config
-import os
+from pathlib import Path
 
 import yaml
 
-
-with open(os.path.join(os.path.dirname(__file__), 'logging.yml'), 'r') as stream:
+with (Path(__file__).parent / 'logging.yml').open('r') as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 logging.config.dictConfig(config)
 
 
-def get_logger(logger_name):
+def get_logger(logger_name: str) -> logging.Logger:
     return logging.getLogger(logger_name)
