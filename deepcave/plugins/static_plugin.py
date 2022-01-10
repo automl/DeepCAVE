@@ -12,7 +12,7 @@ logger = get_logger(__name__)
 
 class StaticPlugin(Plugin):
     """
-    Calculation with queue. Made for time consuimg tasks.
+    Calculation with queue. Made for time-consuming tasks.
     """
 
     def __init__(self):

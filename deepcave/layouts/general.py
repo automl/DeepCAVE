@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
@@ -26,20 +28,21 @@ class GeneralLayout(Layout):
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def general_update(_, working_dir):
+        def general_update(_, working_dir: str):
             # `working_dir` is only none on page load
             if working_dir is None:
-                working_dir = handler.get_working_dir()
+                handler_working_dir = handler.get_working_dir()
                 run_ids = handler.get_run_ids()
                 converter = handler.get_converter()
 
-                return (str(working_dir),
+                return (str(handler_working_dir),
                         self.get_converter_text(converter),
                         self.get_run_options(),
                         list(run_ids.keys()))
 
             # Check if working dir exists
-            if working_dir is None or not working_dir.is_dir():
+            working_dir_path = Path(working_dir)
+            if not working_dir_path.is_dir():
                 PreventUpdate()
 
             run_names = []
@@ -52,7 +55,7 @@ class GeneralLayout(Layout):
             if converter is None:
                 PreventUpdate()
 
-            return (str(working_dir),
+            return (working_dir,
                     self.get_converter_text(converter),
                     self.get_run_options(),
                     run_names)

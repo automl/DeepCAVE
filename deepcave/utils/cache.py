@@ -11,7 +11,7 @@ class Cache:
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
         """
-        self._defaults = defaults or {}
+        self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
         self._data = {}
@@ -35,9 +35,11 @@ class Cache:
             self.read()
 
     def switch(self, filename: Optional[Path]):
+        """ Switch to a new file """
         self._setup(filename)
 
     def read(self):
+        """ Reads content from a file and load into cache as dictionary """
         if not self._file.exists():
             return
 
@@ -45,6 +47,7 @@ class Cache:
             self._data = json.load(f)
 
     def write(self):
+        """ Write content of cache into file """
         if self._file is None:
             return
 
@@ -56,7 +59,7 @@ class Cache:
     def set(self, *keys, value):
         """
         Set a value from a chain of keys.
-        E.g. set("a","b","c",4) creates following dictionary:
+        E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
         d = self._data
@@ -69,11 +72,13 @@ class Cache:
         d[keys[-1]] = value
         self.write()
 
-    def set_dict(self, d):
+    def set_dict(self, d: dict):
+        """ Updates cache to a specific value """
         self._data.update(d)
         self.write()
 
     def get(self, *keys) -> Optional[Any]:
+        """ Retrieve value for a specific key """
         d = self._data
         for key in keys:
             if key not in d:
@@ -84,6 +89,7 @@ class Cache:
         return d
 
     def has(self, *keys) -> bool:
+        """ Check whether cache has specific key """
         d = self._data
         for key in keys:
             if key not in d:
@@ -93,6 +99,7 @@ class Cache:
         return True
 
     def clear(self):
+        """ Clear all cache and reset to defaults """
         self._data = {}
         self._data.update(self._defaults)
         self.write()

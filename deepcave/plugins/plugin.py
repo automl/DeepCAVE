@@ -1,6 +1,6 @@
 import copy
 from abc import abstractmethod
-from typing import Any, Union, Optional, Iterable
+from typing import Any, Union, Optional, Iterable, Callable
 
 import dash_bootstrap_components as dbc
 from dash import dcc
@@ -14,6 +14,7 @@ from deepcave import app
 from deepcave import c
 from deepcave.layouts.layout import Layout
 from deepcave.runs.handler import handler
+from deepcave.runs.run import Run, GroupedRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
@@ -83,7 +84,7 @@ class Plugin(Layout):
 
         return False
 
-    def register_input(self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False):
+    def register_input(self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False) -> str:
         if isinstance(attributes, str):
             attributes = [attributes]
 
@@ -103,7 +104,7 @@ class Plugin(Layout):
         assert isinstance(attribute, str)
 
         if mpl:
-            id = id + "-mpl"
+            id += "-mpl"
 
         key = (id, attribute, mpl)
         if key not in self.outputs:
@@ -166,8 +167,7 @@ class Plugin(Layout):
 
                         # Also update the run selection
                         if self.__class__.activate_run_selection():
-                            new_inputs = self.__class__.load_run_inputs(
-                                self.runs)
+                            new_inputs = self.__class__.load_run_inputs(self.runs, self.groups)
                             update_dict(inputs, new_inputs)
 
                         # Set not used inputs
@@ -301,7 +301,7 @@ class Plugin(Layout):
 
         return outputs
 
-    def _list_to_dict(self, values: list[str], input=True) -> dict[str, dict[str, str]]:
+    def _list_to_dict(self, values: Iterable[str], input=True) -> dict[str, dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -460,10 +460,10 @@ class Plugin(Layout):
             style={} if render_button or input_layout or run_input_layout else {"display": "none"}
         )]
 
-        def register(a, b):
+        def register_in(a, b):
             return self.register_input(a, b, filter=True)
 
-        filter_layout = self.__class__.get_filter_layout(register)
+        filter_layout = self.__class__.get_filter_layout(register_in)
         if len(filter_layout) > 0:
             components += [html.Div(
                 id=f'{self.id()}-filter',
@@ -481,23 +481,22 @@ class Plugin(Layout):
                     "matplotlib-mode") else {"display": "none"}
             )]
 
-        def register(a, b):
-            return self.register_input(a, b, mpl=True)
+        def register_out(a, b):
+            return self.register_output(a, b, mpl=True)
 
-        output_layout = self.__class__.get_mpl_output_layout(register)
+        output_layout = self.__class__.get_mpl_output_layout(register_out)
         if output_layout:
             components += [html.Div(
                 id=f'{self.id()}-mpl-output',
                 className="shadow-sm p-3 bg-white rounded-lg loading-container",
                 children=output_layout,
-                style={} if c.get(
-                    "matplotlib-mode") else {"display": "none"}
+                style={} if c.get("matplotlib-mode") else {"display": "none"}
             )]
 
         return components
 
     @staticmethod
-    def get_run_input_layout(register) -> Component:
+    def get_run_input_layout(register: Callable[[str, Union[str, list[str]]], str]) -> Component:
         return html.Div([
             dbc.Select(
                 id=register("run_name", ["options", "value"]),
@@ -554,5 +553,5 @@ class Plugin(Layout):
 
     @staticmethod
     @abstractmethod
-    def process(run, inputs):
+    def process(run: Run, inputs):
         pass

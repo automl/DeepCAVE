@@ -136,6 +136,7 @@ class fANOVA(StaticPlugin):
     @staticmethod
     def load_outputs(inputs, outputs, _):
         run_name = inputs["run_name"]["value"]
+
         outputs = outputs[run_name]
         # First selected, should always be shown first
         selected_hyperparameters = inputs["hyperparameters"]["value"]
@@ -145,7 +146,7 @@ class fANOVA(StaticPlugin):
             return PreventUpdate
 
         # TODO: After json serialize/deserialize, budget is not an integer anymore
-        convert_type = type(selected_budgets[0])
+        convert_type = lambda x: str(float(x))  # type(selected_budgets[0])
 
         # Collect data
         data = {}
@@ -178,8 +179,7 @@ class fANOVA(StaticPlugin):
 
         # Sort by last fidelity now
         last_selected_budget = selected_budgets[-1]
-        idx = np.argsort(
-            data[last_selected_budget][1], axis=None)[::-1]
+        idx = np.argsort(data[last_selected_budget][1], axis=None)[::-1]
 
         bar_data = []
         for budget, values in data.items():
