@@ -1,15 +1,12 @@
-import os
 import json
-import glob
-import pandas as pd
-import numpy as np
-from typing import Dict, Type, Any
+from pathlib import Path
 
-import ConfigSpace
-from deepcave.runs.run import Status
+import numpy as np
+
 from deepcave.runs.converters.converter import Converter
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
+from deepcave.runs.run import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -18,26 +15,26 @@ class SMAC(Converter):
     def name() -> str:
         return "SMAC"
 
-    def get_run_id(self, working_dir, run_name) -> str:
+    def get_run_id(self, working_dir: Path, run_name: str) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
 
         # Use hash of history.json as id
-        return file_to_hash(os.path.join(working_dir, run_name, "runhistory.json"))
+        return file_to_hash(working_dir / run_name / "runhistory.json")
 
-    def get_run(self, working_dir, run_name) -> Run:
+    def get_run(self, working_dir: Path, run_name: str) -> Run:
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
 
         # For SMAC, we create a new run object
-        base = os.path.join(working_dir, run_name)
+        base = working_dir / run_name
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
+        with (base / 'configspace.json').open('r') as f:
             configspace = cs_json.read(f.read())
 
         # Read objectives
@@ -57,7 +54,7 @@ class SMAC(Converter):
         }
 
         meta = {}
-        with open(os.path.join(base, "scenario.txt")) as f:
+        with (base / "scenario.txt").open() as f:
             for line in f.readlines():
                 items = line.split(" = ")
                 arg = items[0]
@@ -76,7 +73,7 @@ class SMAC(Converter):
         )
 
         # Iterate over the runhistory
-        with open(os.path.join(base, "runhistory.json")) as json_file:
+        with (base / "runhistory.json").open() as json_file:
             all_data = json.load(json_file)
             data = all_data["data"]
             config_origins = all_data["config_origins"]

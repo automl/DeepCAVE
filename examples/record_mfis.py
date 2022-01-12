@@ -1,18 +1,18 @@
 import random
-import sys
 import time
-import ConfigSpace as CS
-from deepcave import Recorder
 
+import ConfigSpace as CS
+
+from deepcave import Recorder
 
 if __name__ == "__main__":
     configspace = CS.ConfigurationSpace(seed=0)
     start = CS.hyperparameters.UniformFloatHyperparameter(
-        name='start', lower=0, upper=0.3)
+        'start', lower=0, upper=0.3)
     increase = CS.hyperparameters.UniformFloatHyperparameter(
-        name='increase', lower=1, upper=1.01)
+        'increase', lower=1, upper=1.01)
     penalty = CS.hyperparameters.CategoricalHyperparameter(
-        name='penalty', choices=[True, False])
+        'penalty', choices=[True, False])
     configspace.add_hyperparameters([start, increase, penalty])
 
     with Recorder(configspace, objectives="accuracy") as r:

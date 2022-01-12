@@ -1,3 +1,10 @@
+# 0.1.2
+
+## Others
+- Added typehints
+- Added tests for caches, basic layouts and other utils
+
+
 # 0.1.1
 
 ## Plugins

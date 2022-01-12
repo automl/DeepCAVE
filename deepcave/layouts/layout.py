@@ -1,7 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod, ABC
+from typing import Union
+
+from dash.development.base_component import Component
 
 
-class Layout:
+class Layout(ABC):
     def __init__(self):
         self.register_callbacks()
 
@@ -9,5 +12,5 @@ class Layout:
         pass
 
     @abstractmethod
-    def __call__(self):
+    def __call__(self) -> Union[list[Component], Component]:
         pass

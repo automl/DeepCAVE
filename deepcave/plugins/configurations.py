@@ -1,12 +1,13 @@
+from typing import Optional
 
-import pandas as pd
-from dash import html
 import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
+import pandas as pd
+from ConfigSpace.hyperparameters import UniformIntegerHyperparameter, NormalIntegerHyperparameter, \
+    UniformFloatHyperparameter, NormalFloatHyperparameter, CategoricalHyperparameter, OrdinalHyperparameter, Constant
+from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.logs import get_logger
-from ConfigSpace.hyperparameters import UniformIntegerHyperparameter, NormalIntegerHyperparameter, UniformFloatHyperparameter, NormalFloatHyperparameter, CategoricalHyperparameter, OrdinalHyperparameter, Constant
 
 logger = get_logger(__name__)
 
@@ -16,19 +17,19 @@ class Configurations(DynamicPlugin):
         super().__init__()
 
     @staticmethod
-    def id():
+    def id() -> str:
         return "configurations"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "Configurations"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 5
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "General"
 
     @staticmethod
@@ -49,7 +50,10 @@ class Configurations(DynamicPlugin):
 
             log = False
             value = None
-            if isinstance(hp, UniformIntegerHyperparameter) or isinstance(hp, NormalIntegerHyperparameter) or isinstance(hp, UniformFloatHyperparameter) or isinstance(hp, NormalFloatHyperparameter):
+            if isinstance(hp, UniformIntegerHyperparameter) or isinstance(hp,
+                                                                          NormalIntegerHyperparameter) or isinstance(hp,
+                                                                                                                     UniformFloatHyperparameter) or isinstance(
+                hp, NormalFloatHyperparameter):
                 value = str([hp.lower, hp.upper])
                 log = hp.log
             elif isinstance(hp, CategoricalHyperparameter):

@@ -1,17 +1,16 @@
-import numpy as np
+from typing import Optional
+
+import dash_bootstrap_components as dbc
 import pandas as pd
+import plotly.express as px
 from dash import dcc
 from dash import html
-import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
-import plotly.express as px
-import json
+
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.utils.logs import get_logger
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
 from deepcave.utils.compression import serialize, deserialize
+from deepcave.utils.data_structures import update_dict
+from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
@@ -21,19 +20,19 @@ class CCube(DynamicPlugin):
         super().__init__()
 
     @staticmethod
-    def id():
+    def id() -> str:
         return "ccube"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "Configurations Cube"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 20
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "Performance Analysis"
 
     @staticmethod

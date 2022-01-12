@@ -1,42 +1,36 @@
-from typing import Dict, Type, Any
+from typing import Optional
 
-from dash import dcc, html
-from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
+import numpy as np
 import plotly.graph_objs as go
 from ast import literal_eval
-
-import pandas as pd
-import numpy as np
-
-from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.utils.logs import get_logger
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.styled_plotty import get_color
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
-from deepcave.utils.compression import serialize, deserialize
+from dash import dcc, html
+from dash.exceptions import PreventUpdate
 
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
-
+from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.utils.data_structures import update_dict
+from deepcave.utils.layout import get_checklist_options
+from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
 class fANOVA(StaticPlugin):
     @staticmethod
-    def id():
+    def id() -> str:
         return "fanova"
 
     @staticmethod
-    def name():
+    def name() -> str:
         return "fANOVA"
 
     @staticmethod
-    def position():
+    def position() -> int:
         return 100
 
     @staticmethod
-    def category():
+    def category() -> Optional[str]:
         return "Hyperparameter Analysis"
 
     @staticmethod
@@ -142,6 +136,7 @@ class fANOVA(StaticPlugin):
     @staticmethod
     def load_outputs(inputs, outputs, _):
         run_name = inputs["run_name"]["value"]
+
         outputs = outputs[run_name]
         # First selected, should always be shown first
         selected_hyperparameters = inputs["hyperparameters"]["value"]
@@ -151,7 +146,7 @@ class fANOVA(StaticPlugin):
             return PreventUpdate
 
         # TODO: After json serialize/deserialize, budget is not an integer anymore
-        convert_type = type(selected_budgets[0])
+        convert_type = lambda x: str(float(x))  # type(selected_budgets[0])
 
         # Collect data
         data = {}
@@ -184,8 +179,7 @@ class fANOVA(StaticPlugin):
 
         # Sort by last fidelity now
         last_selected_budget = selected_budgets[-1]
-        idx = np.argsort(
-            data[last_selected_budget][1], axis=None)[::-1]
+        idx = np.argsort(data[last_selected_budget][1], axis=None)[::-1]
 
         bar_data = []
         for budget, values in data.items():

@@ -1,16 +1,15 @@
-import os
+from pathlib import Path
 
+import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import html
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State, ALL
+from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
-from deepcave.config import CONFIG
-from deepcave.runs.handler import handler
 from deepcave.layouts.layout import Layout
-from deepcave.utils.hash import string_to_hash
+from deepcave.runs.handler import handler
 
 
 class GeneralLayout(Layout):
@@ -29,21 +28,21 @@ class GeneralLayout(Layout):
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def general_update(_, working_dir):
+        def general_update(_, working_dir: str):
             # `working_dir` is only none on page load
             if working_dir is None:
-                working_dir = handler.get_working_dir()
+                handler_working_dir = handler.get_working_dir()
                 run_ids = handler.get_run_ids()
                 converter = handler.get_converter()
 
-                return \
-                    working_dir, \
-                    self.get_converter_text(converter), \
-                    self.get_run_options(), \
-                    list(run_ids.keys())
+                return (str(handler_working_dir),
+                        self.get_converter_text(converter),
+                        self.get_run_options(),
+                        list(run_ids.keys()))
 
             # Check if working dir exists
-            if working_dir is None or not os.path.isdir(working_dir):
+            working_dir_path = Path(working_dir)
+            if not working_dir_path.is_dir():
                 PreventUpdate()
 
             run_names = []
@@ -56,11 +55,10 @@ class GeneralLayout(Layout):
             if converter is None:
                 PreventUpdate()
 
-            return \
-                working_dir, \
-                self.get_converter_text(converter), \
-                self.get_run_options(), \
-                run_names
+            return (working_dir,
+                    self.get_converter_text(converter),
+                    self.get_run_options(),
+                    run_names)
 
         input = Input('general-runs-checklist', 'value')
         output = Output('general-run-names', 'value')
@@ -95,7 +93,9 @@ class GeneralLayout(Layout):
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
         def general_display_groups(n_clicks, run_names, children):
-            def get_layout(index, options, input_value="", dropdown_value=[]):
+            def get_layout(index, options, input_value="", dropdown_value=None):
+                if dropdown_value is None:
+                    dropdown_value = []
                 return html.Div([
                     dbc.Input(
                         id={'type': 'group-name', 'index': index},
@@ -173,11 +173,11 @@ class GeneralLayout(Layout):
 
             return None
 
-    @ staticmethod
+    @staticmethod
     def get_run_options():
         return [{"label": run_name, "value": run_name} for run_name in handler.get_available_run_names()]
 
-    @ staticmethod
+    @staticmethod
     def get_converter_text(converter):
         converter_text = ""
         if converter is not None:
@@ -191,15 +191,15 @@ class GeneralLayout(Layout):
 
         return converter_text
 
-    def __call__(self):
+    def __call__(self) -> list[Component]:
         self._refresh_groups = True
 
         return [
             html.H1('General'),
 
             dbc.Label("Working Directory"),
-            #html.Div("Working Directory"),
-            #dbc.FormText("Absolute path to your runs."),
+            # html.Div("Working Directory"),
+            # dbc.FormText("Absolute path to your runs."),
             dbc.Input(id="general-working-directory-input",
                       placeholder="",
                       type="text"),

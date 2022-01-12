@@ -1,10 +1,13 @@
-import os
 import json
-import hashlib
+import time
+from functools import cached_property
+from pathlib import Path
+from typing import Optional
 
-from deepcave.utils.importing import auto_import_iter
-from deepcave.runs.converters.converter import Converter
 from deepcave import c, rc
+from deepcave.runs.converters.converter import Converter
+from deepcave.runs.run import Run
+from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -17,10 +20,13 @@ class Handler:
     """
 
     def __init__(self) -> None:
-        self.working_dir = c.get('working_dir')
+        self.working_dir: Path = Path(c.get('working_dir'))
         self.run_ids = c.get('run_ids')
         self.runs = {}
-        self.groups = {}
+        self.groups: dict[str, list[str]] = {}  # TODO(dwoiwode): Group type not clear
+
+        # Fields set by self.update()
+        self.converter: Optional[Converter] = None
 
         # Read from cache
         self.update()
@@ -30,7 +36,7 @@ class Handler:
         The run caches are switched here.
         """
 
-        working_dir = c.get('working_dir')
+        working_dir = Path(c.get('working_dir'))
         run_ids = c.get('run_ids')
         groups = c.get('groups')
 
@@ -71,10 +77,11 @@ class Handler:
                         rc[run_name].clear()
 
                     # Update the run
-                    self.runs[run_name] = self.converter.get_run(
-                        working_dir, run_name)
+                    t1 = time.perf_counter()
+                    self.runs[run_name] = self.converter.get_run(working_dir, run_name)
+                    t2 = time.perf_counter()
 
-                    logger.info(f"... run was updated.")
+                    logger.info(f"... run was updated. (took {t2 - t1} seconds)")
 
                 # Update run ids
                 run_ids[run_name] = run_id
@@ -92,10 +99,12 @@ class Handler:
         self.run_ids = run_ids
         self.groups = groups
 
-    def set_working_dir(self, working_dir=None):
-        c.set('working_dir', value=working_dir)
+    def set_working_dir(self, working_dir: Optional[Path] = None):
+        c.set('working_dir', value=str(working_dir))
 
-    def set_run_names(self, run_names=[]):
+    def set_run_names(self, run_names: Optional[list[str]] = None):
+        if run_names is None:
+            run_names = []
         run_ids = {}
         for name in run_names:
             id = None
@@ -111,37 +120,37 @@ class Handler:
     def set_run_ids(self, run_ids):
         c.set('run_ids', value=run_ids)
 
-    def set_groups(self, groups):
+    def set_groups(self, groups: dict[str, list[str]]):
         c.set('groups', value=groups)
 
-    def get_working_dir(self):
+    def get_working_dir(self) -> Path:
         self.update()
         return self.working_dir
 
-    def get_run_names(self):
+    def get_run_names(self) -> list[str]:
         self.update()
         return list(self.run_ids.keys())
 
-    def get_run_ids(self):
+    def get_run_ids(self) -> list[str]:
         self.update()
         return self.run_ids.copy()
 
-    def get_groups(self):
+    def get_groups(self) -> dict[str, list[str]]:
         self.update()
         return self.groups.copy()
 
-    def get_converter(self):
+    def get_converter(self) -> Converter:
         self.update()
         return self.converter
 
-    def get_available_run_names(self):
+    def get_available_run_names(self) -> list[str]:
         self.update()
         if self.converter is None or self.working_dir is None:
             return []
 
         return self.converter.get_available_run_names(self.working_dir)
 
-    def get_runs(self):
+    def get_runs(self) -> dict[str, Run]:
         """
         self.converter.get_run() might be expensive. Therefore, we cache it here, and only
         reload it, once working directory, run id or the id based on the files changed.
@@ -150,10 +159,11 @@ class Handler:
         self.update()
         return self.runs
 
+    @cached_property
     def _get_available_converters(self):
         available_converters = {}
 
-        paths = [os.path.join(os.path.dirname(__file__), 'converters/*')]
+        paths = [Path(__file__).parent / 'converters/']
         for _, obj in auto_import_iter("converter", paths):
             if not issubclass(obj, Converter):
                 continue
@@ -165,22 +175,22 @@ class Handler:
 
         return available_converters
 
-    def _find_compatible_converter(self, working_dir):
+    def _find_compatible_converter(self, working_dir: Optional[Path]) -> Optional[Converter]:
         """
         All directories must be valid. Otherwise, DeepCAVE does not recognize it as compatible directory.
         """
-
-        if working_dir is None or not os.path.isdir(working_dir):
+        if working_dir is None or not working_dir.is_dir():
             return None
 
         # Find first directory
-        run_names = [name for name in os.listdir(working_dir)]
+        run_names = [file.name for file in working_dir.iterdir()]
         run_names.sort()
 
         if len(run_names) == 0:
+            logger.warning(f"No runs found in {working_dir}")
             return None
 
-        for obj in self._get_available_converters().values():
+        for obj in self._get_available_converters.values():
             converter = obj()
 
             works = True
@@ -190,19 +200,21 @@ class Handler:
 
                 try:
                     converter.get_run(working_dir, run_name)
-                    return converter
+                    return converter  # TODO(dwoiwode): Early stopping? Dann macht das if works: return converter keinen Sinn mehr
                 except:
                     works = False
                     break
 
             if works:
+                # TODO(dwoiwode): Might be problematic if only file in dir is .DS_Store. Otherwise code is not reachable
                 return converter
 
         return None
 
-    def _get_json_content(self, filename):
-        filename = os.path.join(filename)
-        with open(filename, 'r') as f:
+    def _get_json_content(self, filename: str) -> dict:
+        # TODO(dwoiwode): Unused method
+        filename = Path(filename)
+        with filename.open('r') as f:
             data = json.load(f)
 
         return data
