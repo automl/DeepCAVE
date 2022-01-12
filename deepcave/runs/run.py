@@ -444,23 +444,39 @@ class Run:
                             pandas=False):
         """
         Args:
-            for_tree (bool): Inactives are treated differently.
+            for_tree (bool): Inactives are treated differently. If false, all inactives are set to
+            -1.
+            normalize (bool): Normalize the configuration between 0 and 1.
             pandas (bool): Return pandas DataFrame instead of X and Y.
         """
 
-        X = []
-        Y = []
+        hp_names = self.configspace.get_hyperparameter_names()
+
+        X, Y = [], []
+        labels = []
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
             config = self.configs[config_id]
             config = Configuration(self.configspace, config)
 
-            encoded = config.get_array()
-            cost = self.calculate_cost(costs, objective_names)
+            y = self.calculate_cost(costs, objective_names)
+            x = config.get_array()
 
-            X.append(encoded)
-            Y.append(cost)
+            X.append(x)
+            Y.append(y)
+
+            labels_ = []
+            for hp_name in hp_names:
+                # hyperparameter name may not be in config
+                if hp_name in config:
+                    labels_ += [config[hp_name]]
+                else:
+                    labels_ += ["NaN"]
+
+            # We append y here directly
+            labels_ += [y]
+            labels.append(labels_)
 
         X = np.array(X)
         Y = np.array(Y)
@@ -499,16 +515,22 @@ class Run:
 
         if pandas:
             cost_column = self.get_objective_name(objective_names)
+            columns = [
+                name for name in self.configspace.get_hyperparameter_names()] + [cost_column]
 
             Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)
             df = pd.DataFrame(
                 data=data,
                 # Combined Cost
-                columns=[
-                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
+                columns=columns)
 
-            return df
+            df_labels = pd.DataFrame(
+                data=labels,
+                # Combined Cost
+                columns=columns)
+
+            return df, df_labels
 
         return X, Y
 
@@ -550,7 +572,8 @@ class Run:
             self.path = Path(path)
 
         if not self.exists():
-            raise RuntimeError("Could not load trials because trials were not found.")
+            raise RuntimeError(
+                "Could not load trials because trials were not found.")
 
         # Load meta data
         self.meta = json.loads(self.meta_fn.read_text())
