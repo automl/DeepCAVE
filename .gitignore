@@ -16,3 +16,4 @@ examples/*
 !examples/logs/DeepCAVE
 *.sh
 !run.sh
+*egg-info
