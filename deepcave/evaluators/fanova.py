@@ -116,6 +116,7 @@ class fANOVA:
                     importance_dict[dim_names] = {}
                 else:
                     importance_dict[sub_dims] = {}
+
                 # clean here to catch zero variance in a trees
                 non_zero_idx = np.nonzero(
                     [self.forest.trees_total_variance[t] for t in range(self.num_trees)])
@@ -281,12 +282,13 @@ if __name__ == "__main__":
 
     alpha = CSH.UniformFloatHyperparameter(name='alpha', lower=0, upper=1)
     beta = CSH.UniformFloatHyperparameter(name='beta', lower=0, upper=1)
-    gamma = CSH.UniformFloatHyperparameter(name='gamma', lower=0, upper=1)
-    gamma1 = CSH.UniformFloatHyperparameter(name='gamma1', lower=0, upper=1)
-    gamma2 = CSH.UniformFloatHyperparameter(name='gamma2', lower=0, upper=1)
-    gamma3 = CSH.UniformFloatHyperparameter(name='gamma3', lower=0, upper=1)
+    gamma = CSH.UniformFloatHyperparameter(
+        name='gamma', lower=1, upper=1.00000000001)
 
-    cs.add_hyperparameters([alpha, beta, gamma, gamma1, gamma2, gamma3])
+    # Constants do not work
+    # gamma = CSH.Constant(name='gamma', value=1)
+
+    cs.add_hyperparameters([alpha, beta, gamma])
 
     X = []
     Y = []
@@ -324,10 +326,7 @@ if __name__ == "__main__":
             nonfinite_mask = ~np.isfinite(X[:, idx])
             X[nonfinite_mask, idx] = impute_values[idx]
 
-    #f = fANOVA(X, Y, cs)
-    #imp = f.quantify_importance(cs.get_hyperparameter_names()[:3], depth=1)
-    # print(imp)
-
     f = fANOVA(X, Y, cs)
-    imp = f.quantify_importance(cs.get_hyperparameter_names(), depth=1)
+    imp = f.quantify_importance(
+        cs.get_hyperparameter_names(), depth=1, sorted=False)
     print(imp)
