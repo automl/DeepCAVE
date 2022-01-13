@@ -214,6 +214,10 @@ class CCube(DynamicPlugin):
         if x is None:
             return [px.scatter()]
 
+        # hovertemplate = ""
+        # for name in column_names:
+        #    hovertemplate += name + ": %{df_labels[name]}<br>"
+
         if z is None:
             # Add another column with zeros
             if y is None:
