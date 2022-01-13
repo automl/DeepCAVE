@@ -133,9 +133,7 @@ class ParallelCoordinates(DynamicPlugin):
 
         # Now we also need to know when to use the labels and when to use the encoded data
         show_all_labels = []
-        for hp in enumerate(run.configspace.get_hyperparameters()):
-            # TODO: FIX THIS
-            print(hp)
+        for hp in run.configspace.get_hyperparameters():
             if isinstance(hp, CategoricalHyperparameter) or isinstance(hp, Constant):
                 show_all_labels.append(True)
             else:
@@ -157,13 +155,14 @@ class ParallelCoordinates(DynamicPlugin):
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-
         hp_names = inputs["hyperparameters"]["value"]
         run_name = inputs["run_name"]["value"]
-        df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)
-        df_labels = deserialize(
-            outputs[run_name]["df_labels"], dtype=pd.DataFrame)
         show_all_labels = outputs[run_name]["show_all_labels"]
+
+        df = outputs[run_name]["df"]
+        df = deserialize(df, dtype=pd.DataFrame)
+        df_labels = outputs[run_name]["df_labels"]
+        df_labels = deserialize(df_labels, dtype=pd.DataFrame)
 
         # Dummy data to understand the structure
         # data = {
@@ -179,29 +178,48 @@ class ParallelCoordinates(DynamicPlugin):
 
         data = defaultdict(dict)
         for hp_name, show_all in zip(hp_names, show_all_labels):
-            data[hp_name]["values"] = df[hp_name].values
+            values = df[hp_name].values
+            labels = df_labels[hp_name].values
+
+            unique_values = []  # df[hp_name].unique()
+            unique_labels = []  # df_labels[hp_name].unique()
+            for value, label in zip(values, labels):
+                if value not in unique_values and label not in unique_labels:
+                    unique_values.append(value)
+                    unique_labels.append(label)
+
+            data[hp_name]["values"] = values
             data[hp_name]["label"] = hp_name
 
-            if show_all:
-                data[hp_name]["tickvals"] = df[hp_name].values
-                data[hp_name]["ticktext"] = df_labels[hp_name].values
+            selected_values = []
+            selected_labels = []
+
+            # If we have less than 10 values, we also show them
+            if show_all or len(unique_values) < 10:
+                # Make sure we don't have multiple (same) labels for the same value
+                for value, label in zip(unique_values, unique_labels):
+                    selected_values.append(value)
+                    selected_labels.append(label)
+
             else:
-                values = df[hp_name].values
-                labels = df_labels[hp_name].values
+                # Add min+max values
+                for idx in [np.argmin(values), np.argmax(values)]:
+                    selected_values.append(values[idx])
+                    selected_labels.append(labels[idx])
 
-                selected_values = []
-                selected_labels = []
+                # After we added min and max values, we want to add
+                # intermediate values too
+                min_v = np.min(values)
+                max_v = np.max(values)
+                for factor in [0.2, 0.4, 0.6, 0.8]:
+                    new_v = (factor * (max_v - min_v)) + min_v
+                    idx = np.abs(unique_values - new_v).argmin(axis=-1)
 
-                min_idx = np.argmin(values)
-                max_idx = np.argmax(values)
+                    selected_values.append(unique_values[idx])
+                    selected_labels.append(unique_labels[idx])
 
-                selected_values.append(values[min_idx])
-                selected_labels.append(labels[min_idx])
-                selected_values.append(values[max_idx])
-                selected_labels.append(labels[max_idx])
-
-                data[hp_name]["tickvals"] = selected_values
-                data[hp_name]["ticktext"] = selected_labels
+            data[hp_name]["tickvals"] = selected_values
+            data[hp_name]["ticktext"] = selected_labels
 
         objective = inputs["objective"]["value"]
         data[objective]["values"] = df[objective].values
@@ -211,51 +229,8 @@ class ParallelCoordinates(DynamicPlugin):
             line=dict(
                 color=data[objective]["values"],
                 showscale=True,
-                # cmin=0,
-                # cmax=1
             ),
             dimensions=list([d for d in data.values()])
         ))
-
-        return [fig]
-
-        hp_names = inputs["hyperparameters"]["value"]
-        n_configs = inputs["n_configs"]["value"]
-
-        if n_configs == 0 or len(hp_names) == 0:
-            return [px.scatter()]
-
-        x, y, z = None, None, None
-        for i, hp_name in enumerate(hp_names):
-            if i == 0:
-                x = hp_name
-            if i == 1:
-                y = hp_name
-            if i == 2:
-                z = hp_name
-
-        run_name = inputs["run_name"]["value"]
-        df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)
-
-        # Limit to n_configs
-        df = df.drop([str(i) for i in range(n_configs + 1, len(df))])
-
-        if x is None:
-            return [px.scatter()]
-
-        column_names = df.columns.tolist()
-        cost_name = column_names[-1]
-
-        if z is None:
-            if y is None:
-                df[""] = df[cost_name]
-                for k in df[""].keys():
-                    df[""][k] = 0
-
-                y = ""
-
-            fig = px.scatter(df, x=x, y=y, color=cost_name)
-        else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z, color=cost_name)
 
         return [fig]

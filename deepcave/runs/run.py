@@ -448,6 +448,10 @@ class Run:
             -1.
             normalize (bool): Normalize the configuration between 0 and 1.
             pandas (bool): Return pandas DataFrame instead of X and Y.
+            
+        Returns:
+            X, Y (np.array): Encoded configurations OR
+            df, df_labels (pd.DataFrame): Encoded dataframes if pandas equals True.
         """
 
         hp_names = self.configspace.get_hyperparameter_names()
@@ -520,15 +524,9 @@ class Run:
 
             Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)
-            df = pd.DataFrame(
-                data=data,
-                # Combined Cost
-                columns=columns)
 
-            df_labels = pd.DataFrame(
-                data=labels,
-                # Combined Cost
-                columns=columns)
+            df = pd.DataFrame(data=data, columns=columns)
+            df_labels = pd.DataFrame(data=labels, columns=columns)
 
             return df, df_labels
 
