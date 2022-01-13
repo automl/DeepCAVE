@@ -448,7 +448,7 @@ class Run:
             -1.
             normalize (bool): Normalize the configuration between 0 and 1.
             pandas (bool): Return pandas DataFrame instead of X and Y.
-            
+
         Returns:
             X, Y (np.array): Encoded configurations OR
             df, df_labels (pd.DataFrame): Encoded dataframes if pandas equals True.
@@ -474,7 +474,18 @@ class Run:
             for hp_name in hp_names:
                 # hyperparameter name may not be in config
                 if hp_name in config:
-                    labels_ += [config[hp_name]]
+                    label = config[hp_name]
+
+                    # Scientific notation
+                    if type(label) == float:
+                        if str(label).startswith('0.000') or "e-" in str(label):
+                            label = np.format_float_scientific(
+                                label, precision=2)
+                        else:
+                            # Round to 2 decimals
+                            label = np.round(label, 2)
+
+                    labels_ += [label]
                 else:
                     labels_ += ["NaN"]
 
