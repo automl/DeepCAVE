@@ -1,8 +1,10 @@
+from abc import ABC, abstractmethod
 import json
 from enum import IntEnum
 from pathlib import Path
-from typing import List, Union, Any, Dict, Optional
+from typing import Union, Any, Optional, Iterable
 
+import ConfigSpace
 import jsonlines
 import numpy as np
 import pandas as pd
@@ -14,6 +16,7 @@ from ConfigSpace.read_and_write import json as cs_json
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
 from deepcave.utils.logs import get_logger
+from deepcave.utils.hash import string_to_hash
 
 logger = get_logger(__name__)
 
@@ -27,7 +30,44 @@ class Status(IntEnum):
     RUNNING = 6
 
 
-class Run:
+class AbstractRun(ABC):
+    prefix: str
+
+    def __init__(self, name: str):
+        self.name = name
+
+    @property
+    def run_cache_id(self) -> str:
+        return string_to_hash(f"{self.prefix}:{self.name}")
+
+    @property
+    @abstractmethod
+    def configspace(self) -> Optional[ConfigSpace.ConfigurationSpace]:
+        return None
+
+    @abstractmethod
+    def get_budgets(self, human=False) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_encoded_configs(self,
+                            objective_names=None,
+                            budget=None,
+                            statuses=None,
+                            for_tree=False,
+                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
+        pass
+
+    @property
+    @abstractmethod
+    def hash(self) -> str:
+        """
+        Hash of current run. If hash changes, cache has to be cleared, as something has changed
+        """
+        pass
+
+
+class Run(AbstractRun, ABC):
     """
     Creates
     - meta.json
@@ -37,26 +77,30 @@ class Run:
     - origins.json
     - models/1.blub
     """
+    prefix = "run"
+    _initial_order: int
 
     def __init__(self,
+                 name: str,
                  configspace=None,
-                 objectives: Union[Objective, List[Objective]] = None,
-                 meta: Dict[str, Any] = None,
+                 objectives: Union[Objective, list[Objective]] = None,
+                 meta: dict[str, Any] = None,
                  path: Optional[Union[str, Path]] = None):
         """
-        If path is given, trials are loaded from the path.
+        If path is given, runs are loaded from the path.
 
         Inputs:
             objectives (Objective or list of Objective): ...
             meta (dict): Could be `ram`, `cores`, ...
         """
+        super(Run, self).__init__(name)
         if objectives is None:
             objectives = []
         if meta is None:
             meta = {}
 
         # objects created by reset
-        self.configs = {}
+        self.configs: dict[str, Configuration] = {}
         self.origins = {}
         self.models = {}
 
@@ -65,7 +109,7 @@ class Run:
 
         # Reset and load configspace/path
         self.reset()
-        self.configspace = configspace
+        self._configspace = configspace
         self.path = path
         if self.path is not None:
             self.load()
@@ -89,9 +133,37 @@ class Run:
         }
         self.meta.update(meta)
 
+    @classmethod
+    @abstractmethod
+    def from_path(cls, path: Path) -> "Run":
+        """
+        Based on a path, return a new Run object.
+        """
+        pass
+
+    # TODO: Old stub from converters
+    # def get_available_run_names(self, working_dir: Path) -> list[str]:
+    #     """
+    #     Lists the run names in working_dir.
+    #     """
+    #
+    #     run_names = []
+    #     for run in working_dir.iterdir():
+    #         run_folder = run.name
+    #
+    #         try:
+    #             self.get_run_hash(working_dir, run_folder)
+    #             run_names.append(run_folder)
+    #         except KeyboardInterrupt:
+    #             raise
+    #         except:
+    #             pass
+    #
+    #     return run_names
+
     def reset(self):
         self.meta = {}
-        self.configspace = None
+        self._configspace = None
         self.configs = {}
         self.origins = {}
         self.models = {}
@@ -102,6 +174,10 @@ class Run:
     @property
     def path(self) -> Optional[Path]:
         return self._path
+
+    @property
+    def configspace(self) -> ConfigSpace.ConfigurationSpace:
+        return self._configspace
 
     @path.setter
     def path(self, value: Optional[Union[str, Path]]):
@@ -266,10 +342,10 @@ class Run:
 
         return configs
 
-    def get_budget(self, id):
+    def get_budget(self, id: int) -> float:
         return self.meta["budgets"][id]
 
-    def get_budgets(self, human=False):
+    def get_budgets(self, human=False) -> list[str]:
         """
         There's at least one budget with None included.
 
@@ -334,16 +410,15 @@ class Run:
 
         return min_cost, best_config
 
-    def _process_costs(self, costs):
+    def _process_costs(self, costs: Iterable[float]) -> list[float]:
         """
         Get rid of none costs.
         """
 
         new_costs = []
-        for idx, cost in enumerate(costs):
-            # Replace with highest cost
+        for cost, obj in zip(costs, self.meta["objectives"]):
+            # Replace with the worst cost
             if cost is None:
-                obj = self.meta["objectives"][idx]
                 if obj["optimize"] == "lower":
                     cost = obj["upper"]
                 else:
@@ -385,7 +460,7 @@ class Run:
 
         return costs, times, ids
 
-    def calculate_cost(self, costs, objective_names=None, normalize=False):
+    def calculate_cost(self, costs, objective_names=None, normalize=False) -> float:
         """
         Calculates cost from multiple costs.
         Normalizes the cost first and weight every cost the same.
@@ -429,7 +504,7 @@ class Run:
         ]
 
         costs = [u * v for u, v in zip(normalized_costs, objective_weights)]
-        cost = np.mean(costs)
+        cost = np.mean(costs).item()
 
         return cost
 
@@ -441,7 +516,7 @@ class Run:
                             budget=None,
                             statuses=None,
                             for_tree=False,
-                            pandas=False):
+                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
         """
         Args:
             for_tree (bool): Inactives are treated differently.
@@ -556,7 +631,7 @@ class Run:
         self.meta = json.loads(self.meta_fn.read_text())
 
         # Load configspace
-        self.configspace = cs_json.read(self.configspace_fn.read_text())
+        self._configspace = cs_json.read(self.configspace_fn.read_text())
 
         # Load configs
         configs = json.loads(self.configs_fn.read_text())
@@ -579,6 +654,62 @@ class Run:
 
         # Load models
         # TODO
+
+
+class GroupedRun(AbstractRun):
+    prefix = "group"
+
+    def __init__(self, name: str, runs: list[Run]):
+        super(GroupedRun, self).__init__(name)
+        self.runs = [run for run in runs if run is not None]  # Filter Nones
+
+    def __iter__(self):
+        for run in self.runs:
+            yield run.name
+
+    @property
+    def hash(self) -> str:
+        total_hash_str = ""
+        for run in self.runs:
+            total_hash_str += run.hash
+
+        return string_to_hash(total_hash_str)
+
+    @property
+    def run_names(self) -> list[str]:
+        return [run.name for run in self.runs]
+
+    @property
+    def configspace(self) -> Optional[ConfigSpace.ConfigurationSpace]:
+        cs = self.runs[0].configspace
+        for run in self.runs:
+            if cs != run.configspace:
+                return None
+
+        return cs
+
+    def get_budgets(self, human=False) -> list[str]:
+        budgets = set()
+        for run in self.runs:
+            budgets.update(run.get_budgets(human=human))
+        return list(budgets)
+
+    def get_encoded_configs(self, objective_names=None, budget=None, statuses=None, for_tree=False, pandas=False) -> \
+            Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
+        kwargs = {
+            'objective_names': objective_names,
+            'budget': budget,
+            'statuses': statuses,
+            'for_tree': for_tree,
+            'pandas': pandas
+        }
+        if not pandas:
+            XX, YY = zip(*[run.get_encoded_configs(**kwargs) for run in self.runs])
+            X = np.stack(XX)
+            Y = np.stack(YY)
+            return X, Y
+        else:
+            raise NotImplemented("Pandas not implemented for grouped runs yet")
 
 
 class Trial(tuple):

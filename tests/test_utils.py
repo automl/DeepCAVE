@@ -17,7 +17,7 @@ from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options, get_checklist_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import hex_to_rgb, get_color
-from deepcave.utils.util import get_random_string, matplotlib_to_html_image
+from deepcave.utils.util import get_random_string, matplotlib_to_html_image, add_prefix_to_dict, add_prefix_to_list
 
 
 class TestCache(unittest.TestCase):
@@ -382,3 +382,40 @@ class TestUtil(unittest.TestCase):
     def test_encode_data_with_cs(self):
         # TODO(dwoiwode): Test with more knowledge about data structure
         pass
+
+    def test_add_prefix_to_dict(self):
+        a = {"a": 4, "b": 1, "c": 9}
+        a_prefixed = add_prefix_to_dict(a, "run:")
+        self.assertIn("run:a", a_prefixed)
+        self.assertIn("run:b", a_prefixed)
+        self.assertIn("run:c", a_prefixed)
+        self.assertNotIn("a", a_prefixed)
+        self.assertNotIn("b", a_prefixed)
+        self.assertNotIn("c", a_prefixed)
+        self.assertEqual(a_prefixed["run:a"], 4)
+        self.assertEqual(a_prefixed["run:b"], 1)
+        self.assertEqual(a_prefixed["run:c"], 9)
+
+        # Other prefix, same dict
+        a_prefixed = add_prefix_to_dict(a, "group:")
+        self.assertIn("group:a", a_prefixed)
+        self.assertIn("group:b", a_prefixed)
+        self.assertIn("group:c", a_prefixed)
+        self.assertNotIn("a", a_prefixed)
+        self.assertNotIn("b", a_prefixed)
+        self.assertNotIn("c", a_prefixed)
+        self.assertEqual(a_prefixed["group:a"], 4)
+        self.assertEqual(a_prefixed["group:b"], 1)
+        self.assertEqual(a_prefixed["group:c"], 9)
+
+    def test_add_prefix_to_list(self):
+        a = ["a", "b", "Hello", "World"]
+        a_prefixed = add_prefix_to_list(a, "run:")
+        self.assertIsInstance(a_prefixed, list)
+        self.assertEqual(4, len(a_prefixed))
+        self.assertEqual("run:a", a_prefixed[0])
+        self.assertEqual("run:b", a_prefixed[1])
+        self.assertEqual("run:Hello", a_prefixed[2])
+
+        a_prefixed = add_prefix_to_list(a, "job:")
+        self.assertEqual("job:World", a_prefixed[3])

@@ -13,11 +13,12 @@ from dash.exceptions import PreventUpdate
 from deepcave import app
 from deepcave import c
 from deepcave.layouts.layout import Layout
-from deepcave.runs.handler import handler
-from deepcave.runs.run import Run
+from deepcave.runs.handler import run_handler
+from deepcave.runs.run import Run, GroupedRun, AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
+from deepcave.utils.util import add_prefix_to_dict
 
 logger = get_logger(__name__)
 
@@ -52,6 +53,8 @@ class Plugin(Layout, ABC):
         self.alert_text = ""
         self.alert_color = "success"
         self.alert_update_required = False
+
+        self.runs: dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
 
@@ -187,8 +190,11 @@ class Plugin(Layout, ABC):
                             # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
                     # How to update only parameters which have a dependency?
+                    all_runs = {}
+                    all_runs.update(add_prefix_to_dict(self.runs, "run:"))
+                    all_runs.update(add_prefix_to_dict(self.groups, "group:"))
                     user_dependencies_inputs = self.__class__.load_dependency_inputs(
-                        self.runs, _previous_inputs, _inputs)
+                        all_runs, _previous_inputs, _inputs)
 
                     # Update dict
                     # dict.update() remove keys, so it's done manually
@@ -363,15 +369,18 @@ class Plugin(Layout, ABC):
         """
 
         self.previous_inputs = {}
-        self.runs = handler.get_runs()
-        groups = handler.get_groups()
+        self.runs = run_handler.get_runs()
+        groups = run_handler.get_groups()
 
-        if len(groups) == 0:
+        if len(groups) == 0:  # TODO(dwoiwode): Why?
             # Create groups with run_name: run_name
             for run_name in self.runs.keys():
                 groups[run_name] = [run_name]
 
-        self.groups = groups
+        self.groups = {
+            name: GroupedRun(name, [self.runs[run_id] for run_id in run_ids])
+            for name, run_ids in groups.items()
+        }
 
         components = [html.H1(self.name)]
         if self.description is not None:
@@ -483,20 +492,60 @@ class Plugin(Layout, ABC):
         ])
 
     @staticmethod
-    def load_run_inputs(runs) -> dict[str, Any]:
+    def load_run_inputs(runs: dict[str, Run], groups: dict[str, GroupedRun]) -> dict[str, Any]:
+        run_ids = [f"run:{key}" for key in runs.keys()]
+        group_ids = [f"group:{key}" for key in groups.keys()]
+        labels = list(runs.keys()) + list(groups.keys())
+        print("Runs", run_ids)
+        print("Groups", group_ids)
+        values = run_ids + group_ids
         return {
             "run_name": {
-                "options": get_select_options(runs.keys()),
+                "options": get_select_options(labels=labels, values=values),
                 "value": None
             }
         }
+
+    def get_selected_runs(self, inputs) -> list[AbstractRun]:
+        """
+        Parses selected runs from inputs.
+        If self.activate_run_selection is set return only selected run
+
+        Otherwise, return all possible runs
+
+        Can raise PreventUpdate() if activate_run_selection is set, but run_name not available
+        """
+
+        # Special case: If run selection is active
+        # Don't update anything if the inputs haven't changed
+        if self.activate_run_selection:
+            if inputs["run_name"]["value"] is None:
+                raise PreventUpdate()
+
+            # Update runs
+            run_name = inputs["run_name"]["value"]
+            run_type, name = run_name.split(":", maxsplit=1)
+            if run_type == GroupedRun.prefix:
+                run = run_handler.groups[name]
+            else:
+                run = run_handler.runs[name]
+
+            # Also:
+            # Remove `run_name` from inputs_key because
+            # we don't want the run names included.
+            _inputs = inputs.copy()
+            del _inputs["run_name"]
+
+            return [run]
+        else:
+            return run_handler.runs
 
     @staticmethod
     def load_inputs(runs) -> dict[str, Any]:
         return {}
 
     @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
+    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
         return inputs
 
     @staticmethod
@@ -531,5 +580,5 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     @abstractmethod
-    def process(run: Run, inputs):
+    def process(run: AbstractRun, inputs):
         pass

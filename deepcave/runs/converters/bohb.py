@@ -1,51 +1,49 @@
-import json
 from pathlib import Path
 
-from deepcave.runs.converters.converter import Converter
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
 from deepcave.runs.run import Status
 from deepcave.utils.hash import file_to_hash
 
 
-class BOHB(Converter):
-    @staticmethod
-    def name() -> str:
-        return "BOHB"
+class BOHBRun(Run):
+    prefix = "BOHB"
+    _initial_order = 2
 
-    def get_run_id(self, working_dir: Path, run_name: str) -> str:
+    @property
+    def hash(self) -> str:
         """
-        The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
-        Idea behind: If id changed, then we have to update cached trials.
+        The id from the files in the current working_dir/run_name/*. For example, results.json could be read and hashed.
+        Idea behind: If id changed, then we have to update cached run.
         """
+        # Use hash of results.json as id
+        return file_to_hash(self.path / "results.json")
 
-        # Use hash of history.json as id
-        return file_to_hash(working_dir / run_name / "results.json")
-
-    def get_run(self, working_dir, run_name) -> Run:
+    @classmethod
+    def from_path(cls, path: Path) -> "BOHBRun":
         """
-        Based on working_dir/run_name/*, return a new trials object.
+        Based on path, return a new run object.
         """
-
-        base = working_dir / run_name
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        configspace = cs_json.read((base / 'configspace.json').read_text())
+        configspace = cs_json.read((path / 'configspace.json').read_text())
 
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
         # Only lock lower
         objective = Objective("Cost", lower=0)
 
-        run = Run(
+        run = BOHBRun(
+            path.stem,
             configspace=configspace,
             objectives=objective,
-            meta={}
+            meta={},
+            path=path
         )
 
         from hpbandster.core.result import logged_results_to_HBS_result
-        bohb = logged_results_to_HBS_result(str(base))
+        bohb = logged_results_to_HBS_result(str(path))
         config_mapping = bohb.get_id2config_mapping()
 
         first_starttime = None
@@ -96,8 +94,5 @@ class BOHB(Converter):
                 origin=origin,
                 additional=additional,
             )
-
-        # Save for sanity check
-        # run.save(os.path.join(base, "run"))
 
         return run

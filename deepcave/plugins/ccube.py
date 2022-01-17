@@ -7,6 +7,7 @@ from dash import dcc
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs.run import AbstractRun
 from deepcave.utils.compression import serialize, deserialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
@@ -83,7 +84,7 @@ class CCube(DynamicPlugin):
         }
 
     @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
+    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
         run = runs[inputs["run_name"]["value"]]
         budget_id = inputs["budget"]["value"]
         budgets = run.get_budgets()

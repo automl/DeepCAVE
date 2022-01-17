@@ -10,7 +10,7 @@ from deepcave.layouts.layout import Layout
 from deepcave.layouts.not_found import layout as not_found_layout
 from deepcave.layouts.sidebar import layout as sidebar_layout
 from deepcave.plugins import plugin_layouts
-from deepcave.runs.handler import handler
+from deepcave.runs.handler import run_handler
 from deepcave.utils.dash import alert
 
 
@@ -31,7 +31,7 @@ class MainLayout(Layout):
             else:
                 if not queue.ready():
                     return alert("At least one worker has to be enabled.")
-                if len(handler.get_run_names()) == 0:
+                if len(run_handler.get_run_names()) == 0:
                     return alert("Please select a run first.")
                 else:
                     if paths[0] == "plugins":

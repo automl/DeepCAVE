@@ -16,7 +16,9 @@ class DynamicPlugin(Plugin, ABC):
 
     def register_callbacks(self):
         super().register_callbacks()
+        self._callback_inputs_changed()
 
+    def _callback_inputs_changed(self):
         outputs = []
         for id, attribute, _ in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))

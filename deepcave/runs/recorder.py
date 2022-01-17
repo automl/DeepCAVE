@@ -6,6 +6,7 @@ import ConfigSpace
 import numpy as np
 from ConfigSpace import Configuration
 
+from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.run import Status, Run
 
 
@@ -22,7 +23,7 @@ class Recorder:
         If file
 
         Parameters:
-            save_path (str): Blub.
+            save_path (str):
             configspace (ConfigSpace):
             objectives (list of Objective):
             prefix: Name of the trial. If not given, trial_x will be used.
@@ -33,6 +34,7 @@ class Recorder:
         if meta is None:
             meta = {}
 
+        self.path: Path = None
         self._set_path(save_path, prefix, overwrite)
 
         # Set variables
@@ -44,7 +46,8 @@ class Recorder:
         self.additionals = {}
 
         # Define trials container
-        self.run = Run(
+        self.run = DeepCAVERun(
+            self.path.stem,
             configspace=configspace,
             objectives=objectives,
             meta=meta

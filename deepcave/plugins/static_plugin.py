@@ -7,6 +7,7 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app, queue, c, rc
 from deepcave.plugins.plugin import Plugin
+from deepcave.runs.run import AbstractRun, GroupedRun, Run
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -25,7 +26,12 @@ class StaticPlugin(Plugin, ABC):
 
     def register_callbacks(self):
         super().register_callbacks()
+        self._callback_inputs_changed()
+        self._callback_loop_update_status_label()
+        self._callback_loop_trigger_main_loop()
 
+    def _callback_inputs_changed(self):
+        # Plugin specific outputs
         outputs = []
         for id, attribute, _ in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
@@ -35,9 +41,9 @@ class StaticPlugin(Plugin, ABC):
             Input(self.get_internal_id("update-interval-output"), 'data')
         ]
 
+        # Get other plugin specific inputs that might change
         for id, attribute, _ in self.inputs:
-            inputs.append(
-                Input(self.get_internal_input_id(id), attribute))
+            inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
@@ -56,30 +62,7 @@ class StaticPlugin(Plugin, ABC):
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             last_inputs = c.get("last_inputs", self.id)
 
-            runs = self.runs
-
-            # Special case: If run selection is active
-            # Don't update anything if the inputs haven't changed
-            if self.activate_run_selection:
-                if inputs["run_name"]["value"] is None:
-                    self._blocked = False
-                    raise PreventUpdate
-
-                # Update runs
-                runs = {}
-                run_name = inputs["run_name"]["value"]
-                runs[run_name] = self.runs[run_name]
-                run_names = [run_name]
-
-                # Also:
-                # Remove `run_name` from inputs_key because
-                # we don't want the run names included.
-                _inputs = inputs.copy()
-                del _inputs["run_name"]
-
-                inputs_key = self._dict_as_key(_inputs, remove_filters=True)
-            else:
-                run_names = runs.keys()
+            runs = self.get_selected_runs(inputs)
 
             button_pressed = n_clicks is not None
             inputs_changed = inputs != last_inputs
@@ -87,13 +70,15 @@ class StaticPlugin(Plugin, ABC):
             # Check current state
             raw_outputs = {}
             raw_outputs_available = True
-            for run_name in run_names:
-                raw_outputs[run_name] = rc[run_name].get(self.id, inputs_key)
+            for run in runs:
+                raw_outputs[run.name] = rc[run.name].get(self.id, inputs_key)
 
-                if raw_outputs[run_name] is None:
+                if raw_outputs[run.name] is None:
                     raw_outputs_available = False
 
+            # Process
             if raw_outputs_available:
+                # Load raw outputs from cache
                 self._state = 0
 
                 if inputs_changed or self._refresh_required:
@@ -104,6 +89,7 @@ class StaticPlugin(Plugin, ABC):
 
                     return outputs
             else:
+                # Load from process
                 self._state = 1
 
                 if button_pressed and self._state != 2:
@@ -176,6 +162,7 @@ class StaticPlugin(Plugin, ABC):
             self._blocked = False
             raise PreventUpdate
 
+    def _callback_loop_trigger_main_loop(self):
         output = Output(self.get_internal_id('update-interval-output'), 'data')
         inputs = [
             Input(self.get_internal_id("update-interval"), 'n_intervals'),
@@ -193,6 +180,7 @@ class StaticPlugin(Plugin, ABC):
             # This will trigger the main loop
             return data + 1
 
+    def _callback_loop_update_status_label(self):
         output = [
             Output(self.get_internal_id("processing-info"), 'children'),
             Output(self.get_internal_id("update-button"), 'n_clicks'),

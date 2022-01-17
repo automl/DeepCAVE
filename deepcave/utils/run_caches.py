@@ -1,33 +1,69 @@
 from pathlib import Path
+from typing import Union, Optional
 
 from deepcave.config import CONFIG
 from deepcave.utils.cache import Cache
-from deepcave.utils.hash import string_to_hash
+from deepcave.runs.run import AbstractRun
+from deepcave.utils.logs import get_logger
+
+logger = get_logger("RunCache")
 
 
-class RunCaches(dict):
+class RunCaches:
     """
     Holds the caches for the selected runs.
     """
 
-    def switch(self, working_dir: Path, run_names: list[str]):
+    def __init__(self):
+        self.data: dict[str, Cache] = {}
+
+    def __getitem__(self, run: Union[AbstractRun, str]) -> Cache:
+        if isinstance(run, AbstractRun):
+            run_cache_id = run.run_cache_id
+        else:
+            run_cache_id = run
+        return self.data[run_cache_id]
+
+    def __contains__(self, run: Union[AbstractRun, str]) -> bool:
+        if isinstance(run, AbstractRun):
+            run_cache_id = run.run_cache_id
+        else:
+            run_cache_id = run
+        return run_cache_id in self.data
+
+    def add(self, run: AbstractRun):
         """
+        Adds new files to cache. Clears cache if hash is not up-to-date
+
+
         Parameters:
-            working_dir (Path): A directory in which the runs lie
-            run_names (str): A list of names of runs
+           run (AbstractRun): A run object, that should be cached
         """
-        self.clear()
         cache_dir = Path(CONFIG["CACHE_DIR"])
-        data = {}
-        for run_name in run_names:
-            id = working_dir / run_name
-            hash = string_to_hash(str(id))
 
-            filename = cache_dir / f"{hash}.json"
-            data[run_name] = Cache(filename)
-
-        self.update(data)
-
-    def clear_all(self):
-        for cache in self.values():
+        filename = cache_dir / f"{run.run_cache_id}.json"
+        cache = Cache(filename)
+        cache.set("name", value=str(run.name))
+        self.data[run.run_cache_id] = cache
+        current_hash = cache.get("hash")
+        new_hash = run.hash
+        if current_hash != new_hash:
             cache.clear()
+            cache.set("hash", value=new_hash)
+
+    def clear(self):
+        """ Clears all cache """
+        self.data.clear()
+
+    def clear_all_caches(self):
+        """ Removes all data from caches (but keep run accessible in RunCache) """
+        for cache in self.data.values():
+            cache.clear()
+
+    def needs_update(self, run: Optional[AbstractRun]) -> bool:
+        # Only clear the cache if the run hashes changed.
+        if run not in self:
+            self.add(run)
+
+        cached_run_hash = self[run].get("hash")
+        return run.hash != cached_run_hash

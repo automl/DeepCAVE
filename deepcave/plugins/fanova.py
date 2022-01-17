@@ -1,14 +1,15 @@
+from ast import literal_eval
 from typing import Optional
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
-from ast import literal_eval
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.runs.run import AbstractRun, Run, GroupedRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
 from deepcave.utils.logs import get_logger
@@ -64,7 +65,7 @@ class fANOVA(StaticPlugin):
         }
 
     @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
+    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
         run = runs[inputs["run_name"]["value"]]
         budgets = run.get_budgets(human=True)
         hp_names = run.configspace.get_hyperparameter_names()
@@ -89,7 +90,7 @@ class fANOVA(StaticPlugin):
         return inputs
 
     @staticmethod
-    def process(run, inputs):
+    def process(run: AbstractRun, inputs):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
 

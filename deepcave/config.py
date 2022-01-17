@@ -13,8 +13,8 @@ CONFIG = {
 # Meta information which are used across the platform
 META = {
     'matplotlib-mode': False,
-    'working_dir': working_dir,
-    'run_ids': {},  # {run_name: run_id}
+    'working_dir': str(working_dir),
+    'run_hashes': {},  # {run_name: run_hash}
     'groups': {}  # {group_name: [run_name, ...]}
 }
 

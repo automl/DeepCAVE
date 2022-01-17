@@ -2,7 +2,7 @@ import base64
 import random
 import string
 from io import BytesIO
-from typing import Optional, Union
+from typing import Optional, Union, Any, Iterable
 
 from dash import html
 import pandas as pd
@@ -107,3 +107,13 @@ def _encode(data: pd.DataFrame, cs: Optional):
                       ord_choices, OrdinalEncoder)
 
     return data, org_cols
+
+
+def add_prefix_to_dict(data: dict[str, Any], prefix: str) -> dict[str, Any]:
+    """ Adds a prefix to every key in a dictionary """
+    return {f"{prefix}{key}": value for key, value in data.items()}
+
+
+def add_prefix_to_list(data: Iterable[str], prefix: str) -> list[str]:
+    """ Adds a prefix to every item in an iterable (e.g. a list). Returns a list """
+    return [f"{prefix}{item}" for item in data]
