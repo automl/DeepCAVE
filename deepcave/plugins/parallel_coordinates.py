@@ -2,10 +2,12 @@ from typing import Optional
 
 import dash_bootstrap_components as dbc
 import pandas as pd
+import plotly.graph_objs as go
 import plotly.express as px
+import numpy as np
 from dash import dcc
 from dash import html
-import numpy as np
+from collections import defaultdict
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
@@ -17,17 +19,17 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-class CCube(DynamicPlugin):
+class ParallelCoordinates(DynamicPlugin):
     def __init__(self):
         super().__init__()
 
     @staticmethod
     def id() -> str:
-        return "ccube"
+        return "parallel_coordinates"
 
     @staticmethod
     def name() -> str:
-        return "Configurations Cube"
+        return "Parallel Coordinates"
 
     @staticmethod
     def position() -> int:
@@ -35,7 +37,7 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def category() -> Optional[str]:
-        return "Performance Analysis"
+        return "Hyperparameter Analysis"
 
     @staticmethod
     def activate_run_selection():
@@ -63,12 +65,6 @@ class CCube(DynamicPlugin):
     def get_filter_layout(register):
         return [
             html.Div([
-                dbc.Label("Number of Configurations"),
-                dcc.Slider(
-                    id=register("n_configs", ["min", "max", "marks", "value"])),
-            ], className="mb-3"),
-
-            html.Div([
                 dbc.Label("Hyperparameters"),
                 dbc.Checklist(
                     id=register("hyperparameters", ["options", "value"])),
@@ -78,21 +74,15 @@ class CCube(DynamicPlugin):
     @staticmethod
     def load_inputs(runs):
         return {
+            "objective": {
+                "options": get_select_options(),
+                "value": None
+            },
             "budget": {
                 "min": 0,
                 "max": 0,
                 "marks": get_slider_marks(),
                 "value": 0
-            },
-            "n_configs": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
-            "objective": {
-                "options": get_select_options(),
-                "value": None
             },
             "hyperparameters": {
                 "options": get_checklist_options(),
@@ -103,11 +93,8 @@ class CCube(DynamicPlugin):
     @staticmethod
     def load_dependency_inputs(runs, previous_inputs, inputs):
         run = runs[inputs["run_name"]["value"]]
-        budget_id = inputs["budget"]["value"]
-        budgets = run.get_budgets()
         hp_names = run.configspace.get_hyperparameter_names()
         readable_budgets = run.get_budgets(human=True)
-        configs = run.get_configs(budget=budgets[budget_id])
         objective_names = run.get_objective_names()
 
         objective_value = inputs["objective"]["value"]
@@ -115,33 +102,20 @@ class CCube(DynamicPlugin):
             objective_value = objective_names[0]
 
         new_inputs = {
+            "objective": {
+                "options": get_select_options(objective_names),
+                "value": objective_value
+            },
             "budget": {
                 "min": 0,
                 "max": len(readable_budgets) - 1,
                 "marks": get_slider_marks(readable_budgets),
-            },
-            "n_configs": {
-                "min": 0,
-                "max": len(configs) - 1,
-                "marks": get_slider_marks(list(range(len(configs)))),
-            },
-            "objective": {
-                "options": get_select_options(objective_names),
-                "value": objective_value
             },
             "hyperparameters": {
                 "options": get_select_options(hp_names),
             },
         }
         update_dict(inputs, new_inputs)
-
-        # Restrict to three hyperparameters
-        selected = inputs["hyperparameters"]["value"]
-        n_selected = len(selected)
-        if n_selected > 3:
-            del selected[0]
-
-        inputs["hyperparameters"]["value"] = selected
 
         return inputs
 
@@ -182,66 +156,30 @@ class CCube(DynamicPlugin):
     @staticmethod
     def load_outputs(inputs, outputs, _):
         hp_names = inputs["hyperparameters"]["value"]
-        n_configs = inputs["n_configs"]["value"]
         run_name = inputs["run_name"]["value"]
         show_all_labels = outputs[run_name]["show_all_labels"]
-
-        if n_configs == 0 or len(hp_names) == 0:
-            return [px.scatter()]
-
-        x, y, z = None, None, None
-        for i, hp_name in enumerate(hp_names):
-            if i == 0:
-                x = hp_name
-            if i == 1:
-                y = hp_name
-            if i == 2:
-                z = hp_name
 
         df = outputs[run_name]["df"]
         df = deserialize(df, dtype=pd.DataFrame)
         df_labels = outputs[run_name]["df_labels"]
         df_labels = deserialize(df_labels, dtype=pd.DataFrame)
 
-        # Limit to n_configs
-        idx = [str(i) for i in range(n_configs + 1, len(df))]
-        df = df.drop(idx)
-        df_labels = df_labels.drop(idx)
+        # Dummy data to understand the structure
+        # data = {
+        #     "hp1": {
+        #         "values": [0, 1, 2],
+        #         "label": "HP1",
+        #     },
+        #     "hp2": {
+        #         "values": [0, 4, 2],
+        #         "label": "HP2",
+        #     },
+        # }
 
-        column_names = df.columns.tolist()
-        cost_name = column_names[-1]
-
-        if x is None:
-            return [px.scatter()]
-
-        # hovertemplate = ""
-        # for name in column_names:
-        #    hovertemplate += name + ": %{df_labels[name]}<br>"
-
-        if z is None:
-            # Add another column with zeros
-            if y is None:
-                y = ""
-
-                # Do it for both dataframes
-                for frame in [df, df_labels]:
-                    frame[y] = frame[cost_name]
-                    for k in frame[y].keys():
-                        frame[y][k] = 0
-
-            fig = px.scatter(df, x=x, y=y, color=cost_name,
-                             hover_data=df_labels)
-        else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z,
-                                color=cost_name, hover_data=df_labels)
-
-        scene = {}
-        for axis, name in zip([x, y, z], ["xaxis", "yaxis", "zaxis"]):
-            if axis is None:
-                continue
-
-            values = df[axis].values
-            labels = df_labels[axis].values
+        data = defaultdict(dict)
+        for hp_name, show_all in zip(hp_names, show_all_labels):
+            values = df[hp_name].values
+            labels = df_labels[hp_name].values
 
             unique_values = []  # df[hp_name].unique()
             unique_labels = []  # df_labels[hp_name].unique()
@@ -250,12 +188,14 @@ class CCube(DynamicPlugin):
                     unique_values.append(value)
                     unique_labels.append(label)
 
+            data[hp_name]["values"] = values
+            data[hp_name]["label"] = hp_name
+
             selected_values = []
             selected_labels = []
 
             # If we have less than 10 values, we also show them
-            # if show_all_labels[axis] or len(unique_values) < 10:
-            if len(unique_values) < 10:
+            if show_all or len(unique_values) < 10:
                 # Make sure we don't have multiple (same) labels for the same value
                 for value, label in zip(unique_values, unique_labels):
                     selected_values.append(value)
@@ -278,21 +218,19 @@ class CCube(DynamicPlugin):
                     selected_values.append(unique_values[idx])
                     selected_labels.append(unique_labels[idx])
 
-            kwargs = {
-                name: {
-                    "tickvals": selected_values,
-                    "ticktext": selected_labels,
-                }
-            }
-            fig.update_scenes(**kwargs)
+            data[hp_name]["tickvals"] = selected_values
+            data[hp_name]["ticktext"] = selected_labels
 
-            if axis is None:
-                continue
+        objective = inputs["objective"]["value"]
+        data[objective]["values"] = df[objective].values
+        data[objective]["label"] = objective
 
-            # scatter and scatter3d handle the zaxis differently
-            scene[name] = kwargs[name]
-
-        if z is None:
-            fig.update_layout(**scene)
+        fig = go.Figure(data=go.Parcoords(
+            line=dict(
+                color=data[objective]["values"],
+                showscale=True,
+            ),
+            dimensions=list([d for d in data.values()])
+        ))
 
         return [fig]
