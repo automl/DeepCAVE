@@ -7,6 +7,7 @@ from dash import dcc
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs.handler import run_handler
 from deepcave.runs.run import AbstractRun
 from deepcave.utils.compression import serialize, deserialize
 from deepcave.utils.data_structures import update_dict
@@ -169,8 +170,9 @@ class CCube(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
-        run_name = inputs["run_name"]["value"]
-        df = deserialize(outputs[run_name]["df"], dtype=pd.DataFrame)
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        output = outputs[run.name]
+        df = deserialize(output["df"], dtype=pd.DataFrame)
 
         # Limit to n_configs
         df = df.drop([str(i) for i in range(n_configs + 1, len(df))])

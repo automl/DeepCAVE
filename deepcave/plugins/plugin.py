@@ -259,7 +259,7 @@ class Plugin(Layout, ABC):
                 inputs, raw_outputs, self.groups)
 
         if outputs == PreventUpdate:
-            raise PreventUpdate
+            raise PreventUpdate()
 
         # Map outputs here because it may be that the outputs are
         # differently sorted than the values were registered.
@@ -523,12 +523,7 @@ class Plugin(Layout, ABC):
                 raise PreventUpdate()
 
             # Update runs
-            run_name = inputs["run_name"]["value"]
-            run_type, name = run_name.split(":", maxsplit=1)
-            if run_type == GroupedRun.prefix:
-                run = run_handler.groups[name]
-            else:
-                run = run_handler.runs[name]
+            run = run_handler.from_run_id(inputs["run_name"]["value"])
 
             # Also:
             # Remove `run_name` from inputs_key because

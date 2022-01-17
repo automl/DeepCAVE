@@ -1,4 +1,5 @@
 from abc import ABC
+from enum import Enum
 
 from dash import dcc
 from dash.dash import no_update
@@ -7,10 +8,16 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app, queue, c, rc
 from deepcave.plugins.plugin import Plugin
-from deepcave.runs.run import AbstractRun, GroupedRun, Run
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
+
+
+class PluginState(Enum):
+    UNSET = -1
+    READY = 0
+    NEEDS_PROCESSING = 1
+    PROCESSING = 2
 
 
 class StaticPlugin(Plugin, ABC):
@@ -19,7 +26,7 @@ class StaticPlugin(Plugin, ABC):
     """
 
     def __init__(self):
-        self._state = None
+        self._state: PluginState = PluginState.UNSET
         self._refresh_required = True
 
         super().__init__()
@@ -71,7 +78,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.name] = rc[run.name].get(self.id, inputs_key)
+                raw_outputs[run.name] = rc[run].get(self.id, inputs_key)
 
                 if raw_outputs[run.name] is None:
                     raw_outputs_available = False
@@ -79,7 +86,7 @@ class StaticPlugin(Plugin, ABC):
             # Process
             if raw_outputs_available:
                 # Load raw outputs from cache
-                self._state = 0
+                self._state = PluginState.READY
 
                 if inputs_changed or self._refresh_required:
                     c.set("last_inputs", self.id, value=inputs)
@@ -92,36 +99,37 @@ class StaticPlugin(Plugin, ABC):
                 # Load from process
                 self._state = 1
 
-                if button_pressed and self._state != 2:
+                if button_pressed and self._state != PluginState.PROCESSING:
                     logger.debug("Button pressed.")
 
                     # Check if we need to process
-                    for run_name, run in runs.items():
-                        job_id = self._get_job_id(run_name, inputs_key)
+                    for run in runs:
+                        job_id = self._get_job_id(run.name, inputs_key)
 
                         # We already got our results or it was already processed
-                        if raw_outputs[run_name] is not None or queue.is_processed(job_id):
+                        if raw_outputs[run.name] is not None or queue.is_processed(job_id):
                             continue
 
-                        meta = {
+                        job_meta = {
                             "display_name": self.name,
-                            "run_name": run_name,
+                            "run_name": run.name,
+                            "run_cache_id": run.run_cache_id,
                             "inputs_key": inputs_key,
                         }
 
-                        logger.debug(f"Enqueued {run_name}.")
+                        logger.debug(f"Enqueued {run.name}.")
 
                         # Start the task in rq
                         queue.enqueue(
                             self.process,
                             args=[run, inputs],
                             job_id=job_id,
-                            meta=meta
+                            meta=job_meta
                         )
 
                     # Reset button
                     self._reset_button = True
-                    self._state = 2
+                    self._state = PluginState.PROCESSING
                 else:
                     # Get finished jobs and save them
                     for job in queue.get_finished_jobs():
@@ -130,7 +138,7 @@ class StaticPlugin(Plugin, ABC):
                             job_run_outputs = job.result
                             job_meta = job.meta
                             job_inputs_key = job_meta["inputs_key"]
-                            job_run_name = job_meta["run_name"]
+                            job_run_name = job_meta["run_cache_id"]
 
                             logger.debug(f"Job `{job_id}`")
 
@@ -148,8 +156,8 @@ class StaticPlugin(Plugin, ABC):
                     # Check if queue is still running
                     queue_running = False
                     queue_pending = False
-                    for run_name in run_names:
-                        job_id = self._get_job_id(run_name, inputs_key)
+                    for run in runs:
+                        job_id = self._get_job_id(run.name, inputs_key)
                         if queue.is_running(job_id):
                             queue_running = True
 
@@ -157,7 +165,7 @@ class StaticPlugin(Plugin, ABC):
                             queue_pending = True
 
                     if queue_running or queue_pending:
-                        self._state = 2
+                        self._state = PluginState.PROCESSING
 
             self._blocked = False
             raise PreventUpdate
@@ -191,20 +199,20 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(output, input)
         def plugin_update_status(_):
-            status = ""
-            if self._state == 0:
-                status = "Ready."
-            if self._state == 1:
-                status = "Processing Necessary."
-            if self._state == 2:
-                status = "Processing ..."
+            status_str = ""
+            if self._state == PluginState.READY:
+                status_str = "Ready."
+            elif self._state == PluginState.NEEDS_PROCESSING:
+                status_str = "Processing Necessary."
+            elif self._state == PluginState.PROCESSING:
+                status_str = "Processing ..."
 
             button = no_update
             if self._reset_button:
                 self._reset_button = False
                 button = None
 
-            return status, button
+            return status_str, button
 
     def _get_job_id(self, run_name, inputs_key) -> str:
         return f"{run_name}-{inputs_key}"

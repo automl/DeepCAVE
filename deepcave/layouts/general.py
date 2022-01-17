@@ -55,15 +55,10 @@ class GeneralLayout(Layout):
                 raise PreventUpdate()
 
             empty_run_names = []
-            run_handler.update_working_directory(working_dir)
-
-            # Find converter name
-            converter = run_handler.get_converter()
-            if converter is None:
-                raise PreventUpdate()
+            run_handler.update_working_directory(working_dir_path)
 
             return (working_dir,
-                    self.get_converter_text(converter),
+                    self.get_converter_text(run_handler.available_run_classes),
                     self.get_run_options(),
                     empty_run_names)
 

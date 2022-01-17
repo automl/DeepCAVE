@@ -1,5 +1,4 @@
 from ast import literal_eval
-from typing import Optional
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -9,7 +8,8 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.runs.run import AbstractRun, Run, GroupedRun
+from deepcave.runs.handler import run_handler
+from deepcave.runs.run import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
 from deepcave.utils.logs import get_logger
@@ -123,15 +123,15 @@ class fANOVA(StaticPlugin):
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-        run_name = inputs["run_name"]["value"]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
-        outputs = outputs[run_name]
         # First selected, should always be shown first
         selected_hyperparameters = inputs["hyperparameters"]["value"]
         selected_budgets = inputs["budgets"]["value"]
 
         if len(selected_hyperparameters) == 0 or len(selected_budgets) == 0:
-            return PreventUpdate
+            raise PreventUpdate()
 
         # TODO: After json serialize/deserialize, budget is not an integer anymore
         convert_type = lambda x: str(float(x))  # type(selected_budgets[0])

@@ -135,7 +135,7 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def load_outputs(inputs, outputs, groups):
         show_groups = inputs["groups"]["value"]
-        if not show_groups:
+        if show_groups is not None:
             groups = {}
             for run_name in outputs.keys():
                 groups[run_name] = [run_name]
@@ -144,7 +144,8 @@ class CostOverTime(DynamicPlugin):
         for group_idx, (group_name, run_names) in enumerate(groups.items()):
             all_x = []  # All required x
             for run_name in run_names:
-                run_x = outputs[run_name][inputs["xaxis"]["value"]]
+                name_ = outputs[run_name]
+                run_x = name_[inputs["xaxis"]["value"]]
 
                 for x in run_x:
                     if x not in all_x:

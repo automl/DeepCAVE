@@ -69,6 +69,7 @@ class AbstractRun(ABC):
 
 class Run(AbstractRun, ABC):
     """
+    TODO(dwoiwode): Docstring is outdated?
     Creates
     - meta.json
     - configspace.json
@@ -661,7 +662,7 @@ class GroupedRun(AbstractRun):
 
     def __init__(self, name: str, runs: list[Run]):
         super(GroupedRun, self).__init__(name)
-        self.runs = [run for run in runs if run is not None]  # Filter Nones
+        self.runs = [run for run in runs if run is not None]  # Filter for Nones
 
     def __iter__(self):
         for run in self.runs:
@@ -705,8 +706,8 @@ class GroupedRun(AbstractRun):
         }
         if not pandas:
             XX, YY = zip(*[run.get_encoded_configs(**kwargs) for run in self.runs])
-            X = np.stack(XX)
-            Y = np.stack(YY)
+            X = np.concatenate(XX)
+            Y = np.concatenate(YY)
             return X, Y
         else:
             raise NotImplemented("Pandas not implemented for grouped runs yet")

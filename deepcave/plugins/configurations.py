@@ -7,6 +7,7 @@ from ConfigSpace.hyperparameters import UniformIntegerHyperparameter, NormalInte
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs.handler import run_handler
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -87,8 +88,8 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-        run_name = inputs["run_name"]["value"]
-        outputs = outputs[run_name]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
         def create_table(output): return dbc.Table.from_dataframe(
             pd.DataFrame(output), striped=True, bordered=True

@@ -142,6 +142,16 @@ class RunHandler:
     def get_run_names(self) -> list[str]:
         return list(self.runs.keys())
 
+    def from_run_id(self, run_id:str) -> AbstractRun:
+        """
+        Required format: {prefix}:{run_name}
+        """
+        run_type, name = run_id.split(":", maxsplit=1)
+        if run_type == GroupedRun.prefix:
+            return run_handler.groups[name]
+        else:
+            return run_handler.runs[name]
+
     def get_groups(self) -> dict[str, GroupedRun]:
         return self.groups.copy()
 
