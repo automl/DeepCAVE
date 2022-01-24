@@ -4,6 +4,12 @@ from deepcave.__version__ import __version__
 from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
+if sys.version_info < (3, 9):
+    raise ValueError(
+        "Unsupported python version %s found. DeepCAVE requires Python "
+        "3.9 or higher." % sys.version_info
+    )
+
 version = __version__
 _exec_file = sys.argv[0]
 
@@ -19,9 +25,7 @@ if "server.py" in _exec_file or "worker.py" in _exec_file:
     queue = Queue(config.REDIS_URL)
 
     # Meta cache
-    c = Cache(
-        filename=config.CACHE_DIR / "meta.json",
-        defaults=config.META_DEFAULT)
+    c = Cache(filename=config.CACHE_DIR / "meta.json", defaults=config.META_DEFAULT)
 
     # Run caches
     rc = RunCaches(config.CACHE_DIR)
