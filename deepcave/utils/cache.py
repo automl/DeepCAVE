@@ -22,14 +22,9 @@ class Cache:
 
     def _setup(self, filename: Path):
         self._data = {}
-
-        if filename is None:
-            self._file = None
-            self.set_dict(self._defaults)
-            return
         self._file = filename
 
-        if not self._file.exists():
+        if filename is None or not self._file.exists():
             self.set_dict(self._defaults)
         else:
             self.read()
@@ -51,7 +46,7 @@ class Cache:
         if self._file is None:
             return
 
-        make_dirs(self._file)
+        self._file.parent.mkdir(exist_ok=True, parents=True)
 
         with self._file.open('w') as f:
             json.dump(self._data, f, indent=4)

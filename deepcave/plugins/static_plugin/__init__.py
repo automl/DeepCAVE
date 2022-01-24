@@ -75,7 +75,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.name] = rc[run.run_cache_id].get(self.id, inputs_key)
+                raw_outputs[run.name] = rc.get_run(run).get(self.id, inputs_key)
 
                 if raw_outputs[run.name] is None:
                     raw_outputs_available = False
@@ -140,8 +140,9 @@ class StaticPlugin(Plugin, ABC):
                             self.logger.debug(f"Job `{job_id}`")
 
                             # Save results in cache
-                            rc[job_run_name].set(
-                                self.id, job_inputs_key, value=job_run_outputs)
+                            rc.get(job_run_name).set(
+                                self.id, job_inputs_key, value=job_run_outputs
+                            )
                             self.logger.debug(f"... cached")
 
                             queue.delete_job(job_id)

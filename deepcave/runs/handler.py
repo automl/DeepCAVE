@@ -90,11 +90,8 @@ class RunHandler:
         class_hint = None
         if run_name in self.runs:
             run = self.runs[run_name]
-            if not rc.needs_update(run):
-                return run
-
-            class_hint = run.__class__
-            logger.info(f"Run {run_name} needs an update")
+            rc.get_run(run)  # Create cache file and set name/hash. Clear cache if hash got changed
+            return run
         else:
             logger.info(f"Run {run_name} needs to be initialized")
 
@@ -111,7 +108,7 @@ class RunHandler:
             return None
 
         # Add to run cache
-        rc.add(run)
+        rc.get(run)
         return run
 
     def update_groups(self, groups: Optional[dict[str, list[str]]] = None):
@@ -127,13 +124,11 @@ class RunHandler:
 
         # Add groups to rc
         for group in groups.values():
-            if not rc.needs_update(group):
-                continue
-
-            rc.add(group)
+            rc.get_run(group)  # Create cache file and set name/hash. Clear cache if hash got changed
 
         # Save in memory
         self.groups = groups
+
         # Save in cache
         groups_for_cache = {
             name: [run.name for run in group.runs]
