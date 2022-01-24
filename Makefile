@@ -39,7 +39,7 @@ DOCS_DIR := ${DIR}/docs
 INDEX_HTML := file://${DOCS_DIR}/html/build/index.html
 
 install-dev:
-	$(PIP) install -e ".[formatting,tests,examples,docs]"
+	$(PIP) install -e ".[tests,examples,docs]"
 	pre-commit install
 
 check-black:

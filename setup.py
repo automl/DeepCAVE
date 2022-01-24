@@ -10,15 +10,16 @@ def read_file(file_name):
 
 
 extras_require = {
-    "formatting": ["flake8", "black", "isort"],
     "tests": [
         "pytest>=4.6",
-        "mypy",
+        "pytest-cov",
         "pytest-xdist",
         "pytest-timeout",
-        "openml",
+        "mypy",
+        "isort",
+        "black",
+        "pydocstyle",
         "pre-commit",
-        "pytest-cov",
     ],
     "examples": [
         "matplotlib",
