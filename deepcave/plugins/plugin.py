@@ -193,8 +193,7 @@ class Plugin(Layout, ABC):
                     all_runs = {}
                     all_runs.update(add_prefix_to_dict(self.runs, "run:"))
                     all_runs.update(add_prefix_to_dict(self.groups, "group:"))
-                    user_dependencies_inputs = self.__class__.load_dependency_inputs(
-                        all_runs, _previous_inputs, _inputs)
+                    user_dependencies_inputs = self.__class__.load_dependency_inputs(all_runs, _previous_inputs, _inputs)
 
                     # Update dict
                     # dict.update() remove keys, so it's done manually
@@ -533,7 +532,8 @@ class Plugin(Layout, ABC):
 
             return [run]
         else:
-            return run_handler.runs
+            # TODO(dwoiwode): Only return runs or also groups?
+            return list(run_handler.runs.values())
 
     @staticmethod
     def load_inputs(runs) -> dict[str, Any]:
@@ -577,3 +577,9 @@ class Plugin(Layout, ABC):
     @abstractmethod
     def process(run: AbstractRun, inputs):
         pass
+
+    @staticmethod
+    def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
+        run = run_handler.from_run_cache_id(run_cache_id)
+        return process(run, inputs)
+

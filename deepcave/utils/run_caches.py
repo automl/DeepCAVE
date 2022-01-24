@@ -15,13 +15,9 @@ class RunCaches:
     """
 
     def __init__(self):
-        self.data: dict[str, Cache] = {}
+        self.data: dict[str, Cache] = {}  # run_cache_id -> Cache
 
-    def __getitem__(self, run: Union[AbstractRun, str]) -> Cache:
-        if isinstance(run, AbstractRun):
-            run_cache_id = run.run_cache_id
-        else:
-            run_cache_id = run
+    def __getitem__(self, run_cache_id: str) -> Cache:
         return self.data[run_cache_id]
 
     def __contains__(self, run: Union[AbstractRun, str]) -> bool:
@@ -65,5 +61,5 @@ class RunCaches:
         if run not in self:
             self.add(run)
 
-        cached_run_hash = self[run].get("hash")
+        cached_run_hash = self[run.run_cache_id].get("hash")
         return run.hash != cached_run_hash

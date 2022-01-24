@@ -78,7 +78,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.name] = rc[run].get(self.id, inputs_key)
+                raw_outputs[run.name] = rc[run.run_cache_id].get(self.id, inputs_key)
 
                 if raw_outputs[run.name] is None:
                     raw_outputs_available = False
@@ -121,8 +121,8 @@ class StaticPlugin(Plugin, ABC):
 
                         # Start the task in rq
                         queue.enqueue(
-                            self.process,
-                            args=[run, inputs],
+                            self._process,
+                            args=[self.process, run.run_cache_id, inputs],
                             job_id=job_id,
                             meta=job_meta
                         )

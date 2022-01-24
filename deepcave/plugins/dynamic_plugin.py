@@ -41,42 +41,24 @@ class DynamicPlugin(Plugin, ABC):
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
 
-            # Special case again
-            # Only process the selected run
-            if self.activate_run_selection:
-                if "run_name" not in inputs or inputs["run_name"]["value"] is None:
-                    raise PreventUpdate()
-
-                runs = {}
-                run_name = inputs["run_name"]["value"]
-                runs[run_name] = self.runs[run_name]
-
-                # Also:
-                # Remove `run_name` from last_inputs_key because
-                # we don't want the run names included.
-                _inputs = inputs.copy()
-                del _inputs["run_name"]
-
-                inputs_key = self._dict_as_key(_inputs, remove_filters=True)
-            else:
-                runs = self.runs
+            runs = self.get_selected_runs(inputs)
 
             raw_outputs = {}
-            for name, run in runs.items():
-                run_outputs = rc[name].get(self.id, inputs_key)
+            for run in runs:
+                run_outputs = rc[run.run_cache_id].get(self.id, inputs_key)
                 if run_outputs is None:
-                    logger.debug(f"Process {name}.")
+                    logger.debug(f"Process {run.name}.")
                     run_outputs = self.process(run, inputs)
 
                     # Here's the thing:
                     # We have to remove `run_name` from the inputs completely
 
                     # Cache it
-                    rc[name].set(self.id, inputs_key, value=run_outputs)
+                    rc[run.run_cache_id].set(self.id, inputs_key, value=run_outputs)
                 else:
-                    logger.debug(f"Found outputs from {name} in cache.")
+                    logger.debug(f"Found outputs from {run.name} in cache.")
 
-                raw_outputs[name] = run_outputs
+                raw_outputs[run.name] = run_outputs
 
             # Cache last inputs
             c.set("last_inputs", self.id, value=inputs)

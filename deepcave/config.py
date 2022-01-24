@@ -14,7 +14,7 @@ CONFIG = {
 META = {
     'matplotlib-mode': False,
     'working_dir': str(working_dir),
-    'run_hashes': {},  # {run_name: run_hash}
+    'selected_runs': [],  # [run_name, ...]
     'groups': {}  # {group_name: [run_name, ...]}
 }
 

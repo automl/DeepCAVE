@@ -46,6 +46,10 @@ class AbstractRun(ABC):
         return None
 
     @abstractmethod
+    def get_budget(self, id: int) -> float:
+        pass
+
+    @abstractmethod
     def get_budgets(self, human=False) -> list[str]:
         pass
 
@@ -360,7 +364,7 @@ class Run(AbstractRun, ABC):
             readable_budgets = []
             for b in budgets:
                 if b is None:
-                    readable_budgets += [str("None")]
+                    readable_budgets += ["None"]
                 else:
                     readable_budgets += [str(np.round(float(b), 2))]
 
@@ -688,6 +692,9 @@ class GroupedRun(AbstractRun):
                 return None
 
         return cs
+
+    def get_budget(self, idx: int) -> float:
+        return self.runs[0].get_budget(idx)
 
     def get_budgets(self, human=False) -> list[str]:
         budgets = set()

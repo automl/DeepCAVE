@@ -26,8 +26,8 @@ class RunHandler:
         # Mapping: How many runs are converted from this run-class
         self.available_run_classes: dict[Type[Run], int] = {class_: 0 for class_ in self._available_run_classes}
 
-        self.runs: dict[str, Run] = {}
-        self.groups: dict[str, GroupedRun] = {}
+        self.runs: dict[str, Run] = {}  # run_name -> Run
+        self.groups: dict[str, GroupedRun] = {}  # group_name -> GroupedRun
 
         # Read from cache
         self.load_from_cache()
@@ -37,8 +37,11 @@ class RunHandler:
         selected_runs: list[str] = c.get('selected_run_names')  # run_name
         groups: dict[str, list[str]] = c.get('groups')  # group_name -> list[run_names]
 
+        print(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
+        print(f"Setting runs to {selected_runs}")
         self.update_runs(selected_runs)
+        print(f"Setting groups to {groups}")
         self.update_groups(groups)
 
     def update_working_directory(self, working_directory: Path, force_clear: bool = False):
@@ -148,9 +151,26 @@ class RunHandler:
         """
         run_type, name = run_id.split(":", maxsplit=1)
         if run_type == GroupedRun.prefix:
-            return run_handler.groups[name]
+            return self.groups[name]
         else:
-            return run_handler.runs[name]
+            return self.runs[name]
+
+    def from_run_cache_id(self, run_cache_id: str) -> AbstractRun:
+        """
+        Required format: run.run_cache_id.
+        """
+        # Search in runs
+        for run in self.runs.values():
+            if run.run_cache_id == run_cache_id:
+                return run
+
+        # Search in groups
+        for group in self.groups.values():
+            if group.run_cache_id == run_cache_id:
+                return group
+
+        raise KeyError(f"Could not find run with run_cache_id {run_cache_id}. "
+                       f"Searched in {len(self.runs)} runs and {len(self.groups)} groups")
 
     def get_groups(self) -> dict[str, GroupedRun]:
         return self.groups.copy()

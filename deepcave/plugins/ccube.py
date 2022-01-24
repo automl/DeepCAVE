@@ -86,7 +86,7 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
-        run = runs[inputs["run_name"]["value"]]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
         budget_id = inputs["budget"]["value"]
         budgets = run.get_budgets()
         hp_names = run.configspace.get_hyperparameter_names()
