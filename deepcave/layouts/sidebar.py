@@ -1,27 +1,24 @@
+from typing import Union
+
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
 from deepcave import app, queue
-from deepcave.layouts.layout import Layout
-from deepcave.plugins import plugin_names, plugin_categories
+from deepcave.layouts import Layout
+from deepcave.plugins.plugin import Plugin
 
 
 class SidebarLayout(Layout):
-
-    def __init__(self):
+    def __init__(self, categorized_plugins: dict[str, list[Plugin]]):
         super().__init__()
+        self.plugins = categorized_plugins
 
-        nav_points = {}
-        for id, name in plugin_names.items():
-
-            category = plugin_categories[id]
-
-            if category not in nav_points:
-                nav_points[category] = []
-
-            nav_points[category].append((id, name))
+        nav_points = {category: [] for category in categorized_plugins}
+        for category, plugins in categorized_plugins.items():
+            for plugin in plugins:
+                nav_points[category].append((plugin.id, plugin.name))
 
         self.nav_points = nav_points
 
@@ -89,7 +86,7 @@ class SidebarLayout(Layout):
             except:
                 return
 
-    def __call__(self) -> list[Component]:
+    def __call__(self) -> Union[list[Component], Component]:
 
         layouts = []
         for category, points in self.nav_points.items():
@@ -125,6 +122,3 @@ class SidebarLayout(Layout):
                 dcc.Interval(id="queue-info-interval", interval=1000),
                 html.Div(id="queue-info")
             ])
-
-
-layout = SidebarLayout()

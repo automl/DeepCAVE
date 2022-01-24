@@ -5,7 +5,7 @@ from dash.dependencies import Input, Output
 
 from deepcave import app
 from deepcave import c
-from deepcave.layouts.layout import Layout
+from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
@@ -55,6 +55,3 @@ class HeaderLayout(Layout):
                 id="matplotlib-mode-toggle"
             ),
         ])
-
-
-layout = HeaderLayout()

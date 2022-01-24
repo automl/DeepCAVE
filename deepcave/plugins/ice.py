@@ -20,8 +20,6 @@ logger = get_logger(__name__)
 class ICE(StaticPlugin):
     id = "ice"
     name = "Individual Conditional Expectation"
-    category = "Performance Analysis"
-    position = 30
 
     @staticmethod
     def check_requirements(runs, _):

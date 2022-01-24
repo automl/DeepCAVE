@@ -9,7 +9,7 @@ from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
-from deepcave.layouts.layout import Layout
+from deepcave.layouts import Layout
 from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run
 
@@ -238,6 +238,3 @@ class GeneralLayout(Layout):
             dbc.Button("Clear Plugin Caches",
                        id="general-clear-cache-button", color="primary"),
         ]
-
-
-layout = GeneralLayout()

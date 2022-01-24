@@ -10,9 +10,8 @@ from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app
-from deepcave import c
-from deepcave.layouts.layout import Layout
+from deepcave import app, c
+from deepcave.layouts import Layout
 from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run, GroupedRun, AbstractRun
 from deepcave.utils.data_structures import update_dict

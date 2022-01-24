@@ -17,8 +17,6 @@ logger = get_logger(__name__)
 class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
-    category = "Performance Analysis"
-    position = 10
 
     @staticmethod
     def check_requirements(runs, groups) -> Union[bool, str]:

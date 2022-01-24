@@ -15,8 +15,6 @@ logger = get_logger(__name__)
 class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
-    category = "General"
-    position = 1
 
     activate_run_selection =  True
 

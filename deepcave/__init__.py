@@ -8,23 +8,24 @@ version = __version__
 exec_file = sys.argv[0]
 
 if "server.py" in exec_file or "worker.py" in exec_file:
+    from deepcave.config import configs
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa
     from deepcave.server import get_app  # noqa
     from deepcave.queue import Queue  # noqa
-    from deepcave.config import CONFIG, META  # noqa
 
+    config = configs["default"]
     app = get_app()
-    queue = Queue(CONFIG["REDIS_URL"])
+    queue = Queue(config.REDIS_URL)
 
     # Meta cache
     c = Cache(
-        filename=CONFIG["CACHE_DIR"] / "meta.json",
-        defaults=META)
+        filename=config.CACHE_DIR / "meta.json",
+        defaults=config.META_DEFAULT)
 
     # Run caches
-    rc = RunCaches()
+    rc = RunCaches(config.CACHE_DIR)
 
-    __all__ = ["version", "app", "queue", "c", "rc", "Recorder", "Objective"]
+    __all__ = ["version", "app", "queue", "c", "rc", "config", "Recorder", "Objective"]
 else:
     __all__ = ["version", "Recorder", "Objective"]

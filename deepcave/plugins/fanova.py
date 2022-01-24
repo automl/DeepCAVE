@@ -20,8 +20,6 @@ logger = get_logger(__name__)
 class fANOVA(StaticPlugin):
     id = "fanova"
     name = "fANOVA"
-    category = "Hyperparameter Analysis"
-    position = 100
 
     activate_run_selection = True
 

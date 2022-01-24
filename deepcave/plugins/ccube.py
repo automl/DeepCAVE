@@ -20,8 +20,6 @@ logger = get_logger(__name__)
 class CCube(DynamicPlugin):
     id = "ccube"
     name = "Configurations Cube"
-    category = "Performance Analysis"
-    position = 20
 
     activate_run_selection = True
 
