@@ -31,12 +31,12 @@ class Config:
         dictionary [category -> List[Plugins]]
         Plugins are ordered
         """
-        from deepcave.plugins.ccube import CCube
-        from deepcave.plugins.fanova import fANOVA
-        from deepcave.plugins.ice import ICE
-        from deepcave.plugins.overview import Overview
-        from deepcave.plugins.configurations import Configurations
-        from deepcave.plugins.cost_over_time import CostOverTime
+        from deepcave.plugins.dynamic_plugin.ccube import CCube
+        from deepcave.plugins.dynamic_plugin.overview import Overview
+        from deepcave.plugins.dynamic_plugin.configurations import Configurations
+        from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
+        from deepcave.plugins.static_plugin.fanova import fANOVA
+        from deepcave.plugins.static_plugin.ice import ICE
         plugins = {
             "General": [
                 Overview(),

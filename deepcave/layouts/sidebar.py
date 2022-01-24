@@ -7,7 +7,7 @@ from dash.development.base_component import Component
 
 from deepcave import app, queue
 from deepcave.layouts import Layout
-from deepcave.plugins.plugin import Plugin
+from deepcave.plugins import Plugin
 
 
 class SidebarLayout(Layout):
