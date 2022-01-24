@@ -10,7 +10,7 @@ def read_file(file_name):
 
 
 extras_require = {
-    "formatting": ["black", "isort"],
+    "formatting": ["flake8", "black", "isort"],
     "tests": [
         "pytest>=4.6",
         "mypy",

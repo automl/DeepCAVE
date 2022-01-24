@@ -1,6 +1,7 @@
 import sys
 
 from deepcave.__version__ import __version__
+from deepcave.__author__ import __author__
 from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
@@ -11,6 +12,7 @@ if sys.version_info < (3, 9):
     )
 
 version = __version__
+author = __author__
 _exec_file = sys.argv[0]
 
 if "server.py" in _exec_file or "worker.py" in _exec_file:
