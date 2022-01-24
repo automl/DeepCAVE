@@ -2,7 +2,7 @@ from pathlib import Path
 
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
-from deepcave.runs.run import Status
+from deepcave.runs import Status
 from deepcave.utils.hash import file_to_hash
 
 

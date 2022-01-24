@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Union, Optional
 
 from deepcave.utils.cache import Cache
-from deepcave.runs.run import AbstractRun
+from deepcave.runs import AbstractRun
 from deepcave.utils.logs import get_logger
 
 logger = get_logger("RunCache")

@@ -1,4 +1,4 @@
-from typing import Union, Optional
+from typing import Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -8,11 +8,8 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options
-from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
-from deepcave.runs.run import AbstractRun
-
-logger = get_logger(__name__)
+from deepcave.runs import AbstractRun
 
 
 class CostOverTime(DynamicPlugin):

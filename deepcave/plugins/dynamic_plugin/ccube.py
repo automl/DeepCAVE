@@ -1,5 +1,3 @@
-from typing import Optional
-
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
@@ -8,7 +6,7 @@ from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs.handler import run_handler
-from deepcave.runs.run import AbstractRun
+from deepcave.runs import AbstractRun
 from deepcave.utils.compression import serialize, deserialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options

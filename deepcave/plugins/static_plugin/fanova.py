@@ -9,12 +9,9 @@ from dash.exceptions import PreventUpdate
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs.handler import run_handler
-from deepcave.runs.run import AbstractRun
+from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
 
 
 class fANOVA(StaticPlugin):

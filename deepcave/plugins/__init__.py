@@ -13,7 +13,9 @@ from dash.exceptions import PreventUpdate
 from deepcave import app, c
 from deepcave.layouts import Layout
 from deepcave.runs.handler import run_handler
-from deepcave.runs.run import Run, GroupedRun, AbstractRun
+from deepcave.runs.run import Run
+from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger

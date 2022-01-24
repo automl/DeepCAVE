@@ -7,7 +7,8 @@ import numpy as np
 from ConfigSpace import Configuration
 
 from deepcave.runs.converters.deepcave import DeepCAVERun
-from deepcave.runs.run import Status, Run
+from deepcave.runs.run import Run
+from deepcave.runs import Status
 
 
 class Recorder:

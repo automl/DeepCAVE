@@ -1,5 +1,3 @@
-from typing import Optional
-
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -11,11 +9,8 @@ from deepcave.evaluators.ice import ICE as ICEEvaluator
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.utils.compression import serialize, deserialize
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options
-from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
-from deepcave.runs.run import AbstractRun
-
-logger = get_logger(__name__)
+from deepcave.runs import AbstractRun
 
 
 class ICE(StaticPlugin):

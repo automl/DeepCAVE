@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import Optional, Type
 
 from deepcave import c, rc
-from deepcave.runs.run import Run, GroupedRun, AbstractRun
+from deepcave.runs.run import Run
+from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs import AbstractRun
 from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.logs import get_logger
 

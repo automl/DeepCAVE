@@ -1,15 +1,10 @@
-from typing import Optional
-
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs.handler import run_handler
-from deepcave.runs.run import Status
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
+from deepcave.runs import Status
 
 
 class Overview(DynamicPlugin):
