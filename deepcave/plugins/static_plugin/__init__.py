@@ -7,10 +7,7 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, queue, c, rc
-from deepcave.plugins.plugin import Plugin
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
+from deepcave.plugins import Plugin
 
 
 class PluginState(Enum):
@@ -100,7 +97,7 @@ class StaticPlugin(Plugin, ABC):
                 self._state = 1
 
                 if button_pressed and self._state != PluginState.PROCESSING:
-                    logger.debug("Button pressed.")
+                    self.logger.debug("Button pressed.")
 
                     # Check if we need to process
                     for run in runs:
@@ -117,7 +114,7 @@ class StaticPlugin(Plugin, ABC):
                             "inputs_key": inputs_key,
                         }
 
-                        logger.debug(f"Enqueued {run.name}.")
+                        self.logger.debug(f"Enqueued {run.name}.")
 
                         # Start the task in rq
                         queue.enqueue(
@@ -140,18 +137,18 @@ class StaticPlugin(Plugin, ABC):
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_name = job_meta["run_cache_id"]
 
-                            logger.debug(f"Job `{job_id}`")
+                            self.logger.debug(f"Job `{job_id}`")
 
                             # Save results in cache
                             rc[job_run_name].set(
                                 self.id, job_inputs_key, value=job_run_outputs)
-                            logger.debug(f"... cached")
+                            self.logger.debug(f"... cached")
 
                             queue.delete_job(job_id)
-                            logger.debug(f"... deleted")
+                            self.logger.debug(f"... deleted")
                         except:
                             queue.delete_job(job_id)
-                            logger.debug(f"... deleted")
+                            self.logger.debug(f"... deleted")
 
                     # Check if queue is still running
                     queue_running = False

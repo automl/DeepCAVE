@@ -1,13 +1,9 @@
 from abc import ABC
 
 from dash.dependencies import Input, Output
-from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc
-from deepcave.plugins.plugin import Plugin
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
+from deepcave.plugins import Plugin
 
 
 class DynamicPlugin(Plugin, ABC):
@@ -47,7 +43,7 @@ class DynamicPlugin(Plugin, ABC):
             for run in runs:
                 run_outputs = rc[run.run_cache_id].get(self.id, inputs_key)
                 if run_outputs is None:
-                    logger.debug(f"Process {run.name}.")
+                    self.logger.debug(f"Process {run.name}.")
                     run_outputs = self.process(run, inputs)
 
                     # Here's the thing:
@@ -56,7 +52,7 @@ class DynamicPlugin(Plugin, ABC):
                     # Cache it
                     rc[run.run_cache_id].set(self.id, inputs_key, value=run_outputs)
                 else:
-                    logger.debug(f"Found outputs from {run.name} in cache.")
+                    self.logger.debug(f"Found outputs from {run.name} in cache.")
 
                 raw_outputs[run.name] = run_outputs
 
