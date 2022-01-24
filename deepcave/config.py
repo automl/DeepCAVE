@@ -1,21 +1,59 @@
 from pathlib import Path
+from typing import Type
 
-root = Path.cwd()
-cache_dir = root / "cache"  # user_cache_dir("deepcave")
-working_dir = root / "examples" / "logs" / "DeepCAVE"
 
-# General information to start services
-CONFIG = {
-    'CACHE_DIR': cache_dir,
-    'REDIS_URL': "redis://localhost:6379",
+class Config:
+    # General config
+    TITLE: str = 'Deep CAVE'
+
+    # Cache dir
+    root = Path.cwd()
+    DEFAULT_WORKING_DIRECTORY = root / "examples" / "logs" / "DeepCAVE"
+
+    CACHE_DIR = root / "cache"
+
+    # Redis settings
+    REDIS_URL = "redis://localhost:6379"
+
+    # Default Meta information which are used across the platform
+    META_DEFAULT = {
+        'matplotlib-mode': False,
+        'working_dir': str(DEFAULT_WORKING_DIRECTORY),
+        'selected_runs': [],  # [run_name, ...]
+        'groups': {}  # {group_name: [run_name, ...]}
+    }
+
+    # Plugins
+    @property
+    def PLUGINS(self) -> dict[str, list[Type['Plugin']]]:
+        """
+        Returns:
+        dictionary [category -> List[Plugins]]
+        Plugins are ordered
+        """
+        from deepcave.plugins.ccube import CCube
+        from deepcave.plugins.fanova import fANOVA
+        from deepcave.plugins.ice import ICE
+        from deepcave.plugins.overview import Overview
+        from deepcave.plugins.configurations import Configurations
+        from deepcave.plugins.cost_over_time import CostOverTime
+        plugins = {
+            "General": [
+                Overview(),
+                Configurations(),
+            ],
+            "Hyperparameter Analysis": [
+                fANOVA(),
+            ],
+            "Performance Analysis": [
+                CostOverTime(),
+                CCube(),
+                ICE(),
+            ],
+        }
+        return plugins
+
+
+configs = {
+    "default": Config()
 }
-
-# Meta information which are used across the platform
-META = {
-    'matplotlib-mode': False,
-    'working_dir': str(working_dir),
-    'selected_runs': [],  # [run_name, ...]
-    'groups': {}  # {group_name: [run_name, ...]}
-}
-
-__all__ = [CONFIG, META]

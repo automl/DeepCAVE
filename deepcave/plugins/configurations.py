@@ -16,8 +16,6 @@ logger = get_logger(__name__)
 class Configurations(DynamicPlugin):
     id = "configurations"
     name = "Configurations"
-    category = "General"
-    position = 5
 
     activate_run_selection = True
 

@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Union, Optional
 
-from deepcave.config import CONFIG
 from deepcave.utils.cache import Cache
 from deepcave.runs.run import AbstractRun
 from deepcave.utils.logs import get_logger
@@ -14,8 +13,9 @@ class RunCaches:
     Holds the caches for the selected runs.
     """
 
-    def __init__(self):
+    def __init__(self, cache_dir: Path):
         self.data: dict[str, Cache] = {}  # run_cache_id -> Cache
+        self.cache_dir = cache_dir
 
     def __getitem__(self, run_cache_id: str) -> Cache:
         return self.data[run_cache_id]
@@ -35,9 +35,7 @@ class RunCaches:
         Parameters:
            run (AbstractRun): A run object, that should be cached
         """
-        cache_dir = Path(CONFIG["CACHE_DIR"])
-
-        filename = cache_dir / f"{run.run_cache_id}.json"
+        filename = self.cache_dir / f"{run.run_cache_id}.json"
         cache = Cache(filename)
         cache.set("name", value=str(run.name))
         self.data[run.run_cache_id] = cache

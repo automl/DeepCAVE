@@ -1,20 +1,22 @@
-
 import itertools as it
 from collections import OrderedDict
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
+import pandas as pd
+from ConfigSpace import ConfigurationSpace
 
 
 class fANOVA:
     def __init__(self,
-                 X, Y,
-                 configspace=None,
+                 X: Union[pd.DataFrame, np.ndarray],
+                 Y,
+                 configspace: ConfigurationSpace,
                  seed=0,
                  num_trees=16,
                  bootstrapping=True,
                  points_per_tree=-1,
-                 ratio_features: float = 7. / 10.,
+                 ratio_features: float = 7 / 10,
                  min_samples_split=0,
                  min_samples_leaf=0,
                  max_depth=64,
@@ -31,18 +33,18 @@ class fANOVA:
 
         Y: vector with the response values (numerically encoded)
 
-        config_space : ConfigSpace instantiation
+        configspace : ConfigSpace instantiation
 
         num_trees: number of trees in the forest to be fit
 
         seed: seed for the forests randomness
 
-        bootstrapping: whether or not to bootstrap the data for each tree
+        bootstrapping: whether to bootstrap the data for each tree or not
 
         points_per_tree: number of points used for each tree 
                         (only subsampling if bootstrapping is false)
 
-        max_features: number of features to be used at each split, default is 70%
+        ratio_features: number of features to be used at each split, default is 70%
 
         min_samples_split: minimum number of samples required to attempt to split 
 
@@ -80,13 +82,19 @@ class fANOVA:
 
         self.forest.train(X, Y)
 
-    def quantify_importance(self, dims, depth=1, sorted=True):
+    def quantify_importance(self, dims, depth=1, sort=True) -> dict[tuple, tuple[float, float, float, float]]:
         """
         Inputs:
-            `depth`: How often dims should be combinated.
+            `depth`: How often dims should be combined.
 
         Returns:
             ordered dict on total importance
+            Dict[Tuple[dim_names] -> (
+                                mean_fractions_individual,
+                                mean_fractions_total,
+                                std_fractions_individual,
+                                std_fractions_total
+                            )]
         """
 
         if type(dims[0]) == str:
@@ -139,9 +147,11 @@ class fANOVA:
                     np.std(fractions_total),
                 )
 
-        if sorted:
-            sorted_importance_dict = {k: v for k, v in sorted(
-                importance_dict.items(), key=lambda item: item[1][1])}
+        if sort:
+            sorted_importance_dict = {
+                k: v
+                for k, v in sorted(importance_dict.items(), key=lambda item: item[1][1])
+            }
 
             return sorted_importance_dict
 
@@ -269,6 +279,7 @@ class fANOVA:
 
 if __name__ == "__main__":
     import sys
+
     sys.path.insert(0, '../../')
 
     import numpy as np
@@ -276,7 +287,8 @@ if __name__ == "__main__":
 
     import ConfigSpace as CS
     import ConfigSpace.hyperparameters as CSH
-    from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, UniformIntegerHyperparameter
+    from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, \
+        UniformIntegerHyperparameter
 
     cs = CS.ConfigurationSpace(seed=1234)
 
@@ -325,8 +337,8 @@ if __name__ == "__main__":
             nonfinite_mask = ~np.isfinite(X[:, idx])
             X[nonfinite_mask, idx] = impute_values[idx]
 
-    #f = fANOVA(X, Y, cs)
-    #imp = f.quantify_importance(cs.get_hyperparameter_names()[:3], depth=1)
+    # f = fANOVA(X, Y, cs)
+    # imp = f.quantify_importance(cs.get_hyperparameter_names()[:3], depth=1)
     # print(imp)
 
     f = fANOVA(X, Y, cs)
