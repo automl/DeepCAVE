@@ -1,17 +1,15 @@
 import time
-import warnings
 from functools import cached_property
 from pathlib import Path
 from typing import Optional, Type
 
 from deepcave import c, rc
+from deepcave.config import Config
 from deepcave.runs.run import Run
 from deepcave.runs.grouped_run import GroupedRun
 from deepcave.runs import AbstractRun
 from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
 
 
 class RunHandler:
@@ -20,14 +18,16 @@ class RunHandler:
     and switches to the right (plugin) cache.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, config: Config) -> None:
         # Fields set by self.update()
+        self.logger = get_logger("RunHandler")
         self.working_dir: Optional[Path] = None
         self.failed_to_load = set()
 
-        # Mapping: How many runs are converted from this run-class
-        self.available_run_classes: dict[Type[Run], int] = {class_: 0 for class_ in self._available_run_classes}
+        # Available converters
+        self.available_run_classes: list[Type[Run]] = config.AVAILABLE_CONVERTERS
 
+        # Internal state
         self.runs: dict[str, Run] = {}  # run_name -> Run
         self.groups: dict[str, GroupedRun] = {}  # group_name -> GroupedRun
 
@@ -73,37 +73,35 @@ class RunHandler:
             selected_run_names = c.get("selected_run_names")
         new_runs: dict[str, Run] = {}
 
-        # We also have to check the cache here
-        # because the data might not be accurate anymore.
-        # This is basically called on every page.
+        class_hint = None
         for run_name in selected_run_names:
-            run = self.update_run(run_name)
+            run = self.update_run(run_name, class_hint=class_hint)
             if run is not None:
                 new_runs[run_name] = run
+                class_hint = run.__class__
 
         # Save runs in memory and in cache
         self.runs = new_runs
         c.set("selected_run_names", value=self.get_run_names())
 
-    def update_run(self, run_name: str) -> Optional[Run]:
+    def update_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[Run]:
         # Try to get run from current runs
-        class_hint = None
         if run_name in self.runs:
             run = self.runs[run_name]
             rc.get_run(run)  # Create cache file and set name/hash. Clear cache if hash got changed
             return run
         else:
-            logger.info(f"Run {run_name} needs to be initialized")
+            self.logger.info(f"Run {run_name} needs to be initialized")
 
         # Load run
         t1 = time.perf_counter()
         run = self.get_run(run_name, class_hint=class_hint)
         t2 = time.perf_counter()
-        logger.info(f"... {run_name} was loaded. (took {t2 - t1} seconds)")
+        self.logger.info(f"... {run_name} was loaded. (took {t2 - t1} seconds)")
 
         # Run could not be loaded
         if run is None:
-            warnings.warn(f"Run {run_name} could not be loaded")
+            self.logger.warning(f"Run {run_name} could not be loaded")
             self.failed_to_load.add(run_name)
             return None
 
@@ -142,7 +140,7 @@ class RunHandler:
     def get_run_names(self) -> list[str]:
         return list(self.runs.keys())
 
-    def from_run_id(self, run_id:str) -> AbstractRun:
+    def from_run_id(self, run_id: str) -> AbstractRun:
         """
         Required format: {prefix}:{run_name}
         """
@@ -214,17 +212,15 @@ class RunHandler:
         if self.working_dir is None or not self.working_dir.is_dir():
             return None
 
-        sorted_classes = list(sorted(self.available_run_classes, key=self.available_run_classes.get, reverse=True))
-
         if class_hint is not None:
-            sorted_classes.insert(0, class_hint)
+            self.available_run_classes.remove(class_hint)
+            self.available_run_classes.insert(0, class_hint)
 
         # Go through all converter run classes found in the order of how many runs have already been converted
-        for run_class in sorted_classes:
+        for run_class in self.available_run_classes:
             try:
                 run = run_class.from_path(self.working_dir / run_name)
-                self.available_run_classes[run_class] += 1
-                logger.info(f"Successfully loaded {run_name} with {run_class}")
+                self.logger.info(f"Successfully loaded {run_name} with {run_class}")
                 return run
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt
@@ -232,8 +228,3 @@ class RunHandler:
             except:
                 pass
         return None
-
-
-run_handler = RunHandler()
-
-__all__ = [run_handler]

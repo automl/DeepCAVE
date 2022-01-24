@@ -53,6 +53,14 @@ class Config:
         }
         return plugins
 
+    # Run Converter
+    @property
+    def AVAILABLE_CONVERTERS(self) -> list[Type['Run']]:
+        from deepcave.runs.converters.deepcave import DeepCAVERun
+        from deepcave.runs.converters.bohb import BOHBRun
+        from deepcave.runs.converters.smac import SMACRun
+        return [DeepCAVERun, BOHBRun, SMACRun]
+
 
 configs = {
     "default": Config()

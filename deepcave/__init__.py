@@ -1,6 +1,7 @@
 import sys
 
 from deepcave.__version__ import __version__
+from deepcave.runs.handler import RunHandler
 from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
@@ -25,6 +26,9 @@ if "server.py" in _exec_file or "worker.py" in _exec_file:
 
     # Run caches
     rc = RunCaches(config.CACHE_DIR)
+
+    # Run Handler
+    run_handler = RunHandler(config.AVAILABLE_CONVERTERS)
 
     __all__ = ["version", "app", "queue", "c", "rc", "config", "Recorder", "Objective"]
 else:
