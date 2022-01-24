@@ -10,6 +10,7 @@ from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
+from deepcave.runs.run import AbstractRun
 
 logger = get_logger(__name__)
 
@@ -19,24 +20,17 @@ class CostOverTime(DynamicPlugin):
     name = "Cost Over Time"
     category = "Performance Analysis"
     position = 10
-
+    
     @staticmethod
-    def check_requirements(runs, groups) -> Union[bool, str]:
+    def check_compatibility(run: AbstractRun):
         # Check if selected runs have same budgets+objectives
-        objectives = None
-        budgets = None
-
-        for _, run in runs.items():
-            if objectives is None or budgets is None:
-                objectives = run.get_objective_names()
-                budgets = run.get_budgets()
-            else:
-                if objectives != run.get_objective_names():
-                    return f"Objectives differ across the selected runs."
-                if budgets != run.get_budgets():
-                    return f"Budgets differ across the selected runs."
-
-        return True
+        try:
+            run.get_objective_names()
+            run.get_budgets()
+            
+            return True
+        except:
+            return False
 
     @staticmethod
     def get_input_layout(register):

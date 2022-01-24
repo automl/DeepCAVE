@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
+from functools import cached_property
 import json
 from dataclasses import dataclass
 from enum import IntEnum
 from pathlib import Path
 from typing import Union, Any, Optional, Iterable, Iterator
+from copy import deepcopy
 
 import ConfigSpace
 import jsonlines
@@ -46,23 +48,6 @@ class AbstractRun(ABC):
     def configspace(self) -> Optional[ConfigSpace.ConfigurationSpace]:
         return None
 
-    @abstractmethod
-    def get_budget(self, id: int) -> float:
-        pass
-
-    @abstractmethod
-    def get_budgets(self, human=False) -> list[str]:
-        pass
-
-    @abstractmethod
-    def get_encoded_configs(self,
-                            objective_names=None,
-                            budget=None,
-                            statuses=None,
-                            for_tree=False,
-                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
-        pass
-
     @property
     @abstractmethod
     def hash(self) -> str:
@@ -70,32 +55,300 @@ class AbstractRun(ABC):
         Hash of current run. If hash changes, cache has to be cleared, as something has changed
         """
         pass
+    
+    def empty(self):
+        return len(self.history) == 0
 
-    @abstractmethod
-    def get_meta(self) -> dict[str, str]:
-        pass
+    def get_objectives(self):
+        return self.meta["objectives"]
 
-    @abstractmethod
-    def get_objectives(self) -> dict[str, Any]:
-        pass
-
-    @abstractmethod
-    def get_trials(self) -> Iterator['Trial']:
-        pass
-
-    @abstractmethod
-    def get_trajectory(self, objective_names:list[str], budget:float) -> tuple[list[float], list[float], list[str]]:
+    def get_objective_name(self, objective_names=None):
         """
-        Returns Tuple[costs, times, ids]
+        Get the cost name of given objective names.
+        Returns "Combined Cost" if multiple objective names were involved.
         """
-        pass
 
-    @abstractmethod
-    def get_min_cost(self) -> tuple[float, Configuration]:
+        given_objective_names = self.get_objective_names()
+
+        if objective_names is None:
+            if len(given_objective_names) == 1:
+                return given_objective_names[0]
+        else:
+            if isinstance(objective_names, str):
+                objective_names = [objective_names]
+
+            if len(objective_names) == 1:
+                return objective_names[0]
+
+        return "Combined Cost"
+
+    def get_objective_names(self) -> list:
+        return [obj["name"] for obj in self.get_objectives()]
+
+    def get_configs(self, budget=None):
+        configs = []
+        for trial in self.history:
+            if budget is not None:
+                if budget != trial.budget:
+                    continue
+
+            config = self.configs[trial.config_id]
+            configs += [config]
+
+        return configs
+
+    def get_config(self, id):
+        return self.configs[id]
+
+    def get_config_id(self, config: dict):
+        # Find out config id
+        for id, c in self.configs.items():
+            if c == config:
+                return id
+
+        return None
+
+    def get_budget(self, id: int) -> float:
+        return self.meta["budgets"][id]
+
+    def get_budgets(self, human=False) -> list[str]:
         """
-        Returns: Tuple[cost, config]
+        There's at least one budget with None included.
+
+        Args:
+
         """
-        pass
+        budgets = self.meta["budgets"]
+        assert len(budgets) > 0
+
+        if human:
+            readable_budgets = []
+            for b in budgets:
+                if b is None:
+                    readable_budgets += ["None"]
+                else:
+                    readable_budgets += [str(np.round(float(b), 2))]
+
+            return readable_budgets
+
+        return budgets
+
+    def get_highest_budget(self):
+        budgets = self.meta["budgets"]
+        if len(budgets) == 0:
+            return None
+
+        return budgets[-1]
+    
+    def _process_costs(self, costs: Iterable[float]) -> list[float]:
+        """
+        Get rid of none costs.
+        """
+
+        new_costs = []
+        for cost, obj in zip(costs, self.get_objectives()):
+            # Replace with the worst cost
+            if cost is None:
+                if obj["optimize"] == "lower":
+                    cost = obj["upper"]
+                else:
+                    cost = obj["lower"]
+
+            new_costs += [cost]
+
+        return new_costs
+
+    def get_costs(self, budget=None, statuses=None):
+        """
+        If no budget is given, the highest budget is chosen.
+        """
+
+        if budget is None:
+            budget = self.get_highest_budget()
+
+        results = {}
+        for trial in self.history:
+            if trial.budget is not None:
+                if trial.budget != budget:
+                    continue
+
+            if statuses is not None:
+                if trial.status not in statuses:
+                    continue
+
+            results[trial.config_id] = self._process_costs(trial.costs)
+
+        return results
+
+    def get_min_cost(self, objective_names=None, budget=None, statuses=None):
+        min_cost = np.inf
+        best_config = None
+
+        results = self.get_costs(budget, statuses)
+        for config_id, costs in results.items():
+            cost = self.calculate_cost(costs, objective_names, normalize=True)
+
+            if cost < min_cost:
+                min_cost = cost
+                best_config = self.get_config(config_id)
+
+        return min_cost, best_config
+
+    def calculate_cost(self, costs, objective_names=None, normalize=False) -> float:
+        """
+        Calculates cost from multiple costs.
+        Normalizes the cost first and weight every cost the same.
+        """
+
+        costs = self._process_costs(costs)
+
+        if objective_names is None:
+            objective_names = self.get_objective_names()
+
+        assert len(objective_names) > 0
+
+        # No normalization needed
+        if len(objective_names) == 1 and not normalize:
+            return costs[0]
+
+        objectives = self.get_objectives()
+
+        # First normalize
+        filtered_objectives = []
+        normalized_costs = []
+        for cost, objective in zip(costs, objectives):
+            if objective["name"] not in objective_names:
+                continue
+
+            a = cost - objective["lower"]
+            b = objective["upper"] - objective["lower"]
+            normalized_cost = a / b
+
+            # We optimize the lower
+            # So we need to flip the normalized cost
+            if objective["optimize"] == "upper":
+                normalized_cost = 1 - normalized_cost
+
+            normalized_costs.append(normalized_cost)
+            filtered_objectives.append(objective)
+
+        # Give the same weight to all objectives (for now)
+        objective_weights = [
+            1 / len(objectives) for _ in range(len(filtered_objectives))
+        ]
+
+        costs = [u * v for u, v in zip(normalized_costs, objective_weights)]
+        cost = np.mean(costs).item()
+
+        return cost
+    
+    def get_trajectory(self, objective_names=None, budget=None):
+        if budget is None:
+            budget = self.get_highest_budget()
+
+        costs = []
+        ids = []
+        times = []
+
+        order = []
+        # Sort self.history by end_time
+        for id, trial in enumerate(self.history):
+            order.append((id, trial.end_time))
+
+        order.sort(key=lambda tup: tup[1])
+
+        current_cost = np.inf
+        for id, cost in order:
+            trial = self.history[id]
+            # Only consider selected/last budget
+            if trial.budget != budget:
+                continue
+
+            cost = self.calculate_cost(trial.costs, objective_names)
+            if cost < current_cost:
+                current_cost = cost
+
+                costs.append(cost)
+                times.append(trial.end_time)
+                ids.append(id)
+
+        return costs, times, ids
+
+    def get_encoded_configs(self,
+                            objective_names=None,
+                            budget=None,
+                            statuses=None,
+                            for_tree=False,
+                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
+        """
+        Args:
+            for_tree (bool): Inactives are treated differently.
+            pandas (bool): Return pandas DataFrame instead of X and Y.
+        """
+
+        X = []
+        Y = []
+
+        results = self.get_costs(budget, statuses)
+        for config_id, costs in results.items():
+            config = self.configs[config_id]
+            config = Configuration(self.configspace, config)
+
+            encoded = config.get_array()
+            cost = self.calculate_cost(costs, objective_names)
+
+            X.append(encoded)
+            Y.append(cost)
+
+        X = np.array(X)
+        Y = np.array(Y)
+
+        # Imputation: Easiest case is to replace all nans with -1
+        # However, since Stefan used different values for inactives
+        # we also have to use different inactives to be compatible
+        # with the random forests.
+        # https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45
+
+        if not for_tree:
+            X[np.isnan(X)] = -1
+        else:
+            conditional = {}
+            impute_values = {}
+
+            for idx, hp in enumerate(self.configspace.get_hyperparameters()):
+                if idx not in conditional:
+                    parents = self.configspace.get_parents_of(hp.name)
+                    if len(parents) == 0:
+                        conditional[idx] = False
+                    else:
+                        conditional[idx] = True
+                        if isinstance(hp, CategoricalHyperparameter):
+                            impute_values[idx] = len(hp.choices)
+                        elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
+                            impute_values[idx] = -1
+                        elif isinstance(hp, Constant):
+                            impute_values[idx] = 1
+                        else:
+                            raise ValueError
+
+                if conditional[idx] is True:
+                    nonfinite_mask = ~np.isfinite(X[:, idx])
+                    X[nonfinite_mask, idx] = impute_values[idx]
+
+        if pandas:
+            cost_column = self.get_objective_name(objective_names)
+
+            Y = Y.reshape(-1, 1)
+            data = np.concatenate((X, Y), axis=1)
+            df = pd.DataFrame(
+                data=data,
+                # Combined Cost
+                columns=[
+                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
+
+            return df
+
+        return X, Y
 
 
 class Run(AbstractRun, ABC):
@@ -244,11 +497,11 @@ class Run(AbstractRun, ABC):
         if not isinstance(costs, list):
             costs = [costs]
 
-        assert len(costs) == len(self.meta["objectives"])
+        assert len(costs) == len(self.get_objectives())
 
         for i in range(len(costs)):
             cost = costs[i]
-            objective = self.meta["objectives"][i]
+            objective = self.get_objectives()[i]
 
             # Update time objective here
             if objective["name"] == "time" and cost is None:
@@ -262,11 +515,11 @@ class Run(AbstractRun, ABC):
             # Update bounds here
             if not objective["lock_lower"]:
                 if cost < objective["lower"]:
-                    self.meta["objectives"][i]["lower"] = cost
+                    self.get_objectives()[i]["lower"] = cost
 
             if not objective["lock_upper"]:
                 if cost > objective["upper"]:
-                    self.meta["objectives"][i]["upper"] = cost
+                    self.get_objectives()[i]["upper"] = cost
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()
@@ -302,303 +555,6 @@ class Run(AbstractRun, ABC):
         # Update models
         self.models[trial_key] = model
 
-    def get_meta(self):
-        return self.meta
-
-    def get_objectives(self):
-        return self.meta["objectives"]
-
-    def get_objective_name(self, objective_names=None):
-        """
-        Get the cost name of given objective names.
-        Returns "Combined Cost" if multiple objective names were involved.
-        """
-
-        given_objective_names = self.get_objective_names()
-
-        if objective_names is None:
-            if len(given_objective_names) == 1:
-                return given_objective_names[0]
-        else:
-            if isinstance(objective_names, str):
-                objective_names = [objective_names]
-
-            if len(objective_names) == 1:
-                return objective_names[0]
-
-        return "Combined Cost"
-
-    def get_objective_names(self) -> list:
-        return [obj["name"] for obj in self.meta["objectives"]]
-
-    def get_config(self, id):
-        return self.configs[id]
-
-    def get_config_id(self, config: dict):
-        # Find out config id
-        for id, c in self.configs.items():
-            if c == config:
-                return id
-
-        return None
-
-    def get_configs(self, budget=None):
-        configs = []
-        for trial in self.history:
-            if budget is not None:
-                if budget != trial.budget:
-                    continue
-
-            config = self.configs[trial.config_id]
-            configs += [config]
-
-        return configs
-
-    def get_budget(self, id: int) -> float:
-        return self.meta["budgets"][id]
-
-    def get_budgets(self, human=False) -> list[str]:
-        """
-        There's at least one budget with None included.
-
-        Args:
-
-        """
-        budgets = self.meta["budgets"]
-        assert len(budgets) > 0
-
-        if human:
-            readable_budgets = []
-            for b in budgets:
-                if b is None:
-                    readable_budgets += ["None"]
-                else:
-                    readable_budgets += [str(np.round(float(b), 2))]
-
-            return readable_budgets
-
-        return budgets
-
-    def get_highest_budget(self):
-        budgets = self.meta["budgets"]
-        if len(budgets) == 0:
-            return None
-
-        return budgets[-1]
-
-    def get_costs(self, budget=None, statuses=None):
-        """
-        If no budget is given, the highest budget is chosen.
-        """
-
-        if budget is None:
-            budget = self.get_highest_budget()
-
-        results = {}
-        for trial in self.history:
-            if trial.budget is not None:
-                if trial.budget != budget:
-                    continue
-
-            if statuses is not None:
-                if trial.status not in statuses:
-                    continue
-
-            results[trial.config_id] = self._process_costs(trial.costs)
-
-        return results
-
-    def get_min_cost(self, objective_names=None, budget=None, statuses=None):
-        min_cost = np.inf
-        best_config = None
-
-        results = self.get_costs(budget, statuses)
-        for config_id, costs in results.items():
-            cost = self.calculate_cost(costs, objective_names, normalize=True)
-
-            if cost < min_cost:
-                min_cost = cost
-                best_config = self.get_config(config_id)
-
-        return min_cost, best_config
-
-    def _process_costs(self, costs: Iterable[float]) -> list[float]:
-        """
-        Get rid of none costs.
-        """
-
-        new_costs = []
-        for cost, obj in zip(costs, self.meta["objectives"]):
-            # Replace with the worst cost
-            if cost is None:
-                if obj["optimize"] == "lower":
-                    cost = obj["upper"]
-                else:
-                    cost = obj["lower"]
-
-            new_costs += [cost]
-
-        return new_costs
-
-    def get_trajectory(self, objective_names=None, budget=None):
-        if budget is None:
-            budget = self.get_highest_budget()
-
-        costs = []
-        ids = []
-        times = []
-
-        order = []
-        # Sort self.history by end_time
-        for id, trial in enumerate(self.history):
-            order.append((id, trial.end_time))
-
-        order.sort(key=lambda tup: tup[1])
-
-        current_cost = np.inf
-        for id, cost in order:
-            trial = self.history[id]
-            # Only consider selected/last budget
-            if trial.budget != budget:
-                continue
-
-            cost = self.calculate_cost(trial.costs, objective_names)
-            if cost < current_cost:
-                current_cost = cost
-
-                costs.append(cost)
-                times.append(trial.end_time)
-                ids.append(id)
-
-        return costs, times, ids
-
-    def calculate_cost(self, costs, objective_names=None, normalize=False) -> float:
-        """
-        Calculates cost from multiple costs.
-        Normalizes the cost first and weight every cost the same.
-        """
-
-        costs = self._process_costs(costs)
-
-        if objective_names is None:
-            objective_names = self.get_objective_names()
-
-        assert len(objective_names) > 0
-
-        # No normalization needed
-        if len(objective_names) == 1 and not normalize:
-            return costs[0]
-
-        objectives = self.meta["objectives"]
-
-        # First normalize
-        filtered_objectives = []
-        normalized_costs = []
-        for cost, objective in zip(costs, objectives):
-            if objective["name"] not in objective_names:
-                continue
-
-            a = cost - objective["lower"]
-            b = objective["upper"] - objective["lower"]
-            normalized_cost = a / b
-
-            # We optimize the lower
-            # So we need to flip the normalized cost
-            if objective["optimize"] == "upper":
-                normalized_cost = 1 - normalized_cost
-
-            normalized_costs.append(normalized_cost)
-            filtered_objectives.append(objective)
-
-        # Give the same weight to all objectives (for now)
-        objective_weights = [
-            1 / len(objectives) for _ in range(len(filtered_objectives))
-        ]
-
-        costs = [u * v for u, v in zip(normalized_costs, objective_weights)]
-        cost = np.mean(costs).item()
-
-        return cost
-
-    def empty(self):
-        return len(self.history) == 0
-
-    def get_encoded_configs(self,
-                            objective_names=None,
-                            budget=None,
-                            statuses=None,
-                            for_tree=False,
-                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
-        """
-        Args:
-            for_tree (bool): Inactives are treated differently.
-            pandas (bool): Return pandas DataFrame instead of X and Y.
-        """
-
-        X = []
-        Y = []
-
-        results = self.get_costs(budget, statuses)
-        for config_id, costs in results.items():
-            config = self.configs[config_id]
-            config = Configuration(self.configspace, config)
-
-            encoded = config.get_array()
-            cost = self.calculate_cost(costs, objective_names)
-
-            X.append(encoded)
-            Y.append(cost)
-
-        X = np.array(X)
-        Y = np.array(Y)
-
-        # Imputation: Easiest case is to replace all nans with -1
-        # However, since Stefan used different values for inactives
-        # we also have to use different inactives to be compatible
-        # with the random forests.
-        # https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45
-
-        if not for_tree:
-            X[np.isnan(X)] = -1
-        else:
-            conditional = {}
-            impute_values = {}
-
-            for idx, hp in enumerate(self.configspace.get_hyperparameters()):
-                if idx not in conditional:
-                    parents = self.configspace.get_parents_of(hp.name)
-                    if len(parents) == 0:
-                        conditional[idx] = False
-                    else:
-                        conditional[idx] = True
-                        if isinstance(hp, CategoricalHyperparameter):
-                            impute_values[idx] = len(hp.choices)
-                        elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
-                            impute_values[idx] = -1
-                        elif isinstance(hp, Constant):
-                            impute_values[idx] = 1
-                        else:
-                            raise ValueError
-
-                if conditional[idx] is True:
-                    nonfinite_mask = ~np.isfinite(X[:, idx])
-                    X[nonfinite_mask, idx] = impute_values[idx]
-
-        if pandas:
-            cost_column = self.get_objective_name(objective_names)
-
-            Y = Y.reshape(-1, 1)
-            data = np.concatenate((X, Y), axis=1)
-            df = pd.DataFrame(
-                data=data,
-                # Combined Cost
-                columns=[
-                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
-
-            return df
-
-        return X, Y
-
     def save(self, path: Optional[Union[str, Path]] = None):
         """
         If path is none, self.path will be chosen.
@@ -614,9 +570,7 @@ class Run(AbstractRun, ABC):
 
         # Save meta data (could be changed)
         self.meta_fn.write_text(json.dumps(self.meta, indent=4))
-
         self.configs_fn.write_text(json.dumps(self.configs, indent=4))
-
         self.origins_fn.write_text(json.dumps(self.origins, indent=4))
 
         # Save history
@@ -674,6 +628,67 @@ class GroupedRun(AbstractRun):
     def __init__(self, name: str, runs: list[Run]):
         super(GroupedRun, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
+        
+        self.configs: dict[str, Configuration] = {}
+        self.origins = {}
+        self.models = {}
+        
+        self.history = []
+        self.trial_keys = {}
+        
+        self.merged_history = False
+        
+        try:
+            # Make sure the same configspace is used
+            # Otherwise it does not make sense to merge 
+            # the histories
+            self.configspace
+            
+            # Also check if budgets are the same
+            self.get_budgets()
+            
+            # We need new config ids
+            current_config_id = 0
+            
+            # Combine runs here
+            for runs in self.runs:
+                config_mapping = {}  # Maps old ones to the new ones
+                
+                # Update configs + origins
+                for config_id in runs.configs.keys():
+                    config = runs.configs[config_id]
+                    origin = runs.origins[config_id]
+                    
+                    if config not in self.configs.values():
+                        self.configs[current_config_id] = config
+                        self.origins[current_config_id] = origin
+                        current_config_id += 1
+                        config_mapping[config_id] = current_config_id
+                
+                # Update history + trial_keys
+                for trial in self.history:
+                    # Deep copy trial
+                    trial = deepcopy(trial)
+                    
+                    (config_id, budget) = trial.get_key()
+                    
+                    # Config id might have changed
+                    config_id = config_mapping[config_id]
+                    
+                    # Update config id
+                    trial.config_id = config_id
+                    
+                    # Now we add it to the history
+                    trial_key = trial.get_key()
+                    if trial_key not in self.trial_keys:
+                        self.trial_keys[trial_key] = len(self.history)
+                        self.history.append(trial)
+                    else:
+                        self.history[self.trial_keys[trial_key]] = trial
+                        
+            self.merged_history = True
+        except:
+            pass
 
     def __iter__(self):
         for run in self.runs:
@@ -696,64 +711,143 @@ class GroupedRun(AbstractRun):
         cs = self.runs[0].configspace
         for run in self.runs:
             if cs != run.configspace:
-                return None
+                raise RuntimeError("Configspace of runs are not equal.")
 
         return cs
-
-    def get_budget(self, idx: int) -> float:
-        return self.runs[0].get_budget(idx)
-
-    def get_budgets(self, human=False) -> list[str]:
-        budgets = set()
-        for run in self.runs:
-            budgets.update(run.get_budgets(human=human))
-        return list(budgets)
-
-    def get_encoded_configs(self, objective_names=None, budget=None, statuses=None, for_tree=False, pandas=False) -> \
-            Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
-        kwargs = {
-            'objective_names': objective_names,
-            'budget': budget,
-            'statuses': statuses,
-            'for_tree': for_tree,
-            'pandas': pandas
-        }
-        if not pandas:
-            XX, YY = zip(*[run.get_encoded_configs(**kwargs) for run in self.runs])
-            X = np.concatenate(XX)
-            Y = np.concatenate(YY)
-            return X, Y
-        else:
-            # TODO
-            raise NotImplemented("Pandas not implemented for grouped runs yet")
-
-
+    
     def get_meta(self) -> dict[str, str]:
-        # TODO
-        pass
-
+        """
+        Returns the meta data if all runs have the same meta data.
+        Otherwise raise an error.
+        """
+        
+        meta = self.runs[0].get_meta()
+        for run in self.runs:
+            if meta != run.get_meta():
+                raise RuntimeError("Meta data of runs are not equal.")
+            
+        return meta
+    
     def get_objectives(self) -> dict[str, Any]:
-        # TODO
-        pass
-
-    def get_trials(self) -> Iterator['Trial']:
-        # TODO
-        pass
-
-    def get_trajectory(self, objective_names: list[str], budget: float) -> tuple[list[float], list[float], list[str]]:
         """
-        Returns Tuple[costs, times, ids]
+        Returns the objectives if all runs have the same objectives.
+        Otherwise raise an error.
         """
-        # TODO
-        pass
+        
+        objectives = self.runs[0].get_objectives()
+        for run in self.runs:
+            if objectives != run.get_objectives():
+                raise RuntimeError("Meta data of runs is not equal.")
+            
+        return objectives
+    
+    def get_objective_names(self) -> list:
+        """
+        Returns the objective names if all runs have the same objective names
+        Otherwise raise an error.
+        """
+        
+        return [obj["name"] for obj in self.get_objectives()]
+    
+    def get_config(self, id):
+        """
+        Returns a config if runs are mergeable.
+        Otherwise raise an error.
+        """
+        
+        if self.merged_history:
+            return self.configs[id]
+        else:
+            raise RuntimeError("Run data are not mergeable.") 
 
-    def get_min_cost(self) -> tuple[float, Configuration]:
+    def get_config_id(self, config: dict):
         """
-        Returns: Tuple[cost, config]
+        Returns a config id if runs are mergeable.
+        Otherwise raise an error.
         """
-        # TODO
-        pass
+        
+        if self.merged_history:
+            # Find out config id
+            for id, c in self.configs.items():
+                if c == config:
+                    return id
 
+            return None
+        else:
+            raise RuntimeError("Run data are not mergeable.") 
+
+    def get_configs(self, budget=None):
+        """
+        Return all configs if runs are mergeable.
+        Otherwise raise an error.
+        """
+        
+        if self.merged_history:
+            configs = []
+            for trial in self.history:
+                if budget is not None:
+                    if budget != trial.budget:
+                        continue
+
+                config = self.configs[trial.config_id]
+                configs += [config]
+
+            return configs
+        else:
+            raise RuntimeError("Run data are not mergeable.") 
+        
+    def get_budgets(self, human=False) -> list[str]:
+        """
+        Returns all budgets if all runs have the same budgets.
+        Otherwise raise an error.
+        """
+
+        budgets = self.runs[0].get_budgets(human=human)
+        for run in self.runs:
+            if budgets != run.get_budget(human=human):
+                raise RuntimeError("Budgets of runs are not equal.")
+            
+        return budgets
+    
+    def get_budget(self, idx: int) -> float:
+        """
+        Returns the budget of index `idx` if all runs have the same budget.
+        Otherwise raise an error.
+        """
+        
+        try:
+            budgets = self.get_budgets()
+            return budgets[idx]
+        raise:
+            raise RuntimeError("Budgets of runs are not equal.")
+        
+    
+    def get_highest_budget(self):
+        """
+        Returns highest budget if all runs have the same budgets.
+        Otherwise raise an error.
+        """
+        
+        try:
+            self.get_budgets()
+            return super.get_highest_budget()
+        raise:
+            raise RuntimeError("Budgets of runs are not equal.")
+    
+    
+    
+    def get_costs(self, *args, **kwargs):
+        """
+        Return costs if runs are mergeable.
+        Otherwise raise an error.
+        If no budget is given, the highest budget is chosen.
+        """
+
+        if self.merged_history:
+            return self.get_costs(*args, **kwargs)
+        else:
+            raise RuntimeError("Run data are not mergeable.") 
+    
 
 # TODO(dwoiwode): Folgender Code sollte auch die Trial-Klasse ersetzen können. Ist vielleicht lesbarer als ein vererbter Tuple
 # @dataclass

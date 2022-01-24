@@ -57,11 +57,11 @@ class Plugin(Layout, ABC):
         self.runs: dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
-
+    
     @staticmethod
-    def check_requirements(runs, groups) -> Union[bool, str]:
+    def check_compatibility(run: AbstractRun) -> bool:
         """
-        Returns either bool or str. If str, it is shown to the user.
+        Checks if a run is compatible with this plugin.
         """
         return True
 
@@ -148,7 +148,8 @@ class Plugin(Layout, ABC):
 
                         # Also update the run selection
                         if self.activate_run_selection:
-                            new_inputs = self.__class__.load_run_inputs(self.runs, self.groups)
+                            new_inputs = self.__class__.load_run_inputs(
+                                self.runs, self.groups, self.__class__.check_compatibility)
                             update_dict(inputs, new_inputs)
 
                         # Set not used inputs
@@ -491,13 +492,33 @@ class Plugin(Layout, ABC):
         ])
 
     @staticmethod
-    def load_run_inputs(runs: dict[str, Run], groups: dict[str, GroupedRun]) -> dict[str, Any]:
-        run_ids = [f"run:{key}" for key in runs.keys()]
-        group_ids = [f"group:{key}" for key in groups.keys()]
-        labels = list(runs.keys()) + list(groups.keys())
-        print("Runs", run_ids)
-        print("Groups", group_ids)
-        values = run_ids + group_ids
+    def load_run_inputs(runs: dict[str, Run],
+                        groups: dict[str, GroupedRun],
+                        check_compatibility: function) -> dict[str, Any]:
+        """
+        Set `run_names` and displays both runs and group runs if 
+        they are compatible.
+        """
+        
+        labels = []
+        values = []
+        
+        for id, run in runs.items():
+            try:
+                check_compatibility(run)
+                values.append(f"run:{run}")
+                labels.append(id)
+            except:
+                pass
+        
+        for id, run in groups.items():
+            try:
+                check_compatibility(run)
+                values.append(f"group:{run}")
+                labels.append(id)
+            except:
+                pass
+        
         return {
             "run_name": {
                 "options": get_select_options(labels=labels, values=values),
