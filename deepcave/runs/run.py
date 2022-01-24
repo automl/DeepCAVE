@@ -821,7 +821,7 @@ class GroupedRun(AbstractRun):
         try:
             budgets = self.get_budgets()
             return budgets[idx]
-        raise:
+        except:
             raise RuntimeError("Budgets of runs are not equal.")
         
     
@@ -834,7 +834,7 @@ class GroupedRun(AbstractRun):
         try:
             self.get_budgets()
             return super.get_highest_budget()
-        raise:
+        except:
             raise RuntimeError("Budgets of runs are not equal.")
     
     

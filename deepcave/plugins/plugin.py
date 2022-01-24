@@ -493,7 +493,7 @@ class Plugin(Layout, ABC):
     @staticmethod
     def load_run_inputs(runs: dict[str, Run],
                         groups: dict[str, GroupedRun],
-                        check_compatibility: function) -> dict[str, Any]:
+                        check_compatibility: Callable) -> dict[str, Any]:
         """
         Set `run_names` and displays both runs and group runs if 
         they are compatible.
