@@ -1,4 +1,3 @@
-
 import itertools as it
 from collections import OrderedDict
 from typing import Optional
@@ -31,7 +30,7 @@ class fANOVA:
 
         Y: vector with the response values (numerically encoded)
 
-        config_space : ConfigSpace instantiation
+        configspace : ConfigSpace instantiation
 
         num_trees: number of trees in the forest to be fit
 
@@ -42,7 +41,7 @@ class fANOVA:
         points_per_tree: number of points used for each tree 
                         (only subsampling if bootstrapping is false)
 
-        max_features: number of features to be used at each split, default is 70%
+        ratio_features: number of features to be used at each split, default is 70%
 
         min_samples_split: minimum number of samples required to attempt to split 
 
@@ -80,7 +79,7 @@ class fANOVA:
 
         self.forest.train(X, Y)
 
-    def quantify_importance(self, dims, depth=1, sorted=True):
+    def quantify_importance(self, dims, depth=1, sort=True):
         """
         Inputs:
             `depth`: How often dims should be combinated.
@@ -139,9 +138,11 @@ class fANOVA:
                     np.std(fractions_total),
                 )
 
-        if sorted:
-            sorted_importance_dict = {k: v for k, v in sorted(
-                importance_dict.items(), key=lambda item: item[1][1])}
+        if sort:
+            sorted_importance_dict = {
+                k: v
+                for k, v in sorted(importance_dict.items(), key=lambda item: item[1][1])
+            }
 
             return sorted_importance_dict
 
@@ -269,6 +270,7 @@ class fANOVA:
 
 if __name__ == "__main__":
     import sys
+
     sys.path.insert(0, '../../')
 
     import numpy as np
@@ -276,7 +278,8 @@ if __name__ == "__main__":
 
     import ConfigSpace as CS
     import ConfigSpace.hyperparameters as CSH
-    from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, UniformIntegerHyperparameter
+    from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, UniformFloatHyperparameter, \
+        UniformIntegerHyperparameter
 
     cs = CS.ConfigurationSpace(seed=1234)
 
@@ -325,8 +328,8 @@ if __name__ == "__main__":
             nonfinite_mask = ~np.isfinite(X[:, idx])
             X[nonfinite_mask, idx] = impute_values[idx]
 
-    #f = fANOVA(X, Y, cs)
-    #imp = f.quantify_importance(cs.get_hyperparameter_names()[:3], depth=1)
+    # f = fANOVA(X, Y, cs)
+    # imp = f.quantify_importance(cs.get_hyperparameter_names()[:3], depth=1)
     # print(imp)
 
     f = fANOVA(X, Y, cs)
