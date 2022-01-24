@@ -105,7 +105,8 @@ class fANOVA(StaticPlugin):
             importance_dict = evaluator.quantify_importance(
                 hp_names,
                 depth=1,
-                sort=False)
+                sort=False
+            )
 
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
 

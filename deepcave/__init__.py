@@ -5,9 +5,9 @@ from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
 version = __version__
-exec_file = sys.argv[0]
+_exec_file = sys.argv[0]
 
-if "server.py" in exec_file or "worker.py" in exec_file:
+if "server.py" in _exec_file or "worker.py" in _exec_file:
     from deepcave.config import configs
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa

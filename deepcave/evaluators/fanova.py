@@ -1,19 +1,22 @@
 import itertools as it
 from collections import OrderedDict
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
+import pandas as pd
+from ConfigSpace import ConfigurationSpace
 
 
 class fANOVA:
     def __init__(self,
-                 X, Y,
-                 configspace=None,
+                 X: Union[pd.DataFrame, np.ndarray],
+                 Y,
+                 configspace: ConfigurationSpace,
                  seed=0,
                  num_trees=16,
                  bootstrapping=True,
                  points_per_tree=-1,
-                 ratio_features: float = 7. / 10.,
+                 ratio_features: float = 7 / 10,
                  min_samples_split=0,
                  min_samples_leaf=0,
                  max_depth=64,
@@ -36,7 +39,7 @@ class fANOVA:
 
         seed: seed for the forests randomness
 
-        bootstrapping: whether or not to bootstrap the data for each tree
+        bootstrapping: whether to bootstrap the data for each tree or not
 
         points_per_tree: number of points used for each tree 
                         (only subsampling if bootstrapping is false)
@@ -79,13 +82,19 @@ class fANOVA:
 
         self.forest.train(X, Y)
 
-    def quantify_importance(self, dims, depth=1, sort=True):
+    def quantify_importance(self, dims, depth=1, sort=True) -> dict[tuple, tuple[float, float, float, float]]:
         """
         Inputs:
-            `depth`: How often dims should be combinated.
+            `depth`: How often dims should be combined.
 
         Returns:
             ordered dict on total importance
+            Dict[Tuple[dim_names] -> (
+                                mean_fractions_individual,
+                                mean_fractions_total,
+                                std_fractions_individual,
+                                std_fractions_total
+                            )]
         """
 
         if type(dims[0]) == str:
