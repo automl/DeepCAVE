@@ -59,7 +59,7 @@ class Overview(DynamicPlugin):
                 for s in Status:
                     stats[budget][s.name] = 0
 
-        for trial in run.history:
+        for trial in run.get_trials():
             stats[trial.budget][trial.status.name] += 1
 
         statistics = {

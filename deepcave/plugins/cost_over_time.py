@@ -112,7 +112,7 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> dict[str, list[Union[float, str]]]:
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
 

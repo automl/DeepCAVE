@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 import json
+from dataclasses import dataclass
 from enum import IntEnum
 from pathlib import Path
-from typing import Union, Any, Optional, Iterable
+from typing import Union, Any, Optional, Iterable, Iterator
 
 import ConfigSpace
 import jsonlines
@@ -67,6 +68,32 @@ class AbstractRun(ABC):
     def hash(self) -> str:
         """
         Hash of current run. If hash changes, cache has to be cleared, as something has changed
+        """
+        pass
+
+    @abstractmethod
+    def get_meta(self) -> dict[str, str]:
+        pass
+
+    @abstractmethod
+    def get_objectives(self) -> dict[str, Any]:
+        pass
+
+    @abstractmethod
+    def get_trials(self) -> Iterator['Trial']:
+        pass
+
+    @abstractmethod
+    def get_trajectory(self, objective_names:list[str], budget:float) -> tuple[list[float], list[float], list[str]]:
+        """
+        Returns Tuple[costs, times, ids]
+        """
+        pass
+
+    @abstractmethod
+    def get_min_cost(self) -> tuple[float, Configuration]:
+        """
+        Returns: Tuple[cost, config]
         """
         pass
 
@@ -145,26 +172,6 @@ class Run(AbstractRun, ABC):
         Based on a path, return a new Run object.
         """
         pass
-
-    # TODO: Old stub from converters
-    # def get_available_run_names(self, working_dir: Path) -> list[str]:
-    #     """
-    #     Lists the run names in working_dir.
-    #     """
-    #
-    #     run_names = []
-    #     for run in working_dir.iterdir():
-    #         run_folder = run.name
-    #
-    #         try:
-    #             self.get_run_hash(working_dir, run_folder)
-    #             run_names.append(run_folder)
-    #         except KeyboardInterrupt:
-    #             raise
-    #         except:
-    #             pass
-    #
-    #     return run_names
 
     def reset(self):
         self.meta = {}
@@ -717,9 +724,55 @@ class GroupedRun(AbstractRun):
             Y = np.concatenate(YY)
             return X, Y
         else:
+            # TODO
             raise NotImplemented("Pandas not implemented for grouped runs yet")
 
 
+    def get_meta(self) -> dict[str, str]:
+        # TODO
+        pass
+
+    def get_objectives(self) -> dict[str, Any]:
+        # TODO
+        pass
+
+    def get_trials(self) -> Iterator['Trial']:
+        # TODO
+        pass
+
+    def get_trajectory(self, objective_names: list[str], budget: float) -> tuple[list[float], list[float], list[str]]:
+        """
+        Returns Tuple[costs, times, ids]
+        """
+        # TODO
+        pass
+
+    def get_min_cost(self) -> tuple[float, Configuration]:
+        """
+        Returns: Tuple[cost, config]
+        """
+        # TODO
+        pass
+
+
+# TODO(dwoiwode): Folgender Code sollte auch die Trial-Klasse ersetzen können. Ist vielleicht lesbarer als ein vererbter Tuple
+# @dataclass
+# class Trial:
+#     config_id: str
+#     budget: int
+#     costs: float
+#     start_time: float
+#     end_time: float
+#     status: Status
+#     additional: dict[str, Any]
+#
+#     def __post_init__(self):
+#         if isinstance(self.status, int):
+#             self.status = Status(self.status)
+#
+#         assert isinstance(self.status, Status)
+#     def get_key(self) -> tuple[str, int]:
+#         return self.config_id, self.budget  # noqa
 class Trial(tuple):
     def __new__(cls, *args, **kwargs):
 
