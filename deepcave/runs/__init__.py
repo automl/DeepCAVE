@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from enum import IntEnum
-from typing import Optional, Iterator, Iterable, Union
+from typing import Optional, Iterator, Iterable, Union, Any
 
 import ConfigSpace
 import numpy as np
@@ -26,16 +27,17 @@ class AbstractRun(ABC):
 
     def __init__(self, name: str):
         self.name = name
+        self.logger = get_logger(self.__class__.__name__)
 
         # objects created by reset
-        self.configs: dict[str, Configuration] = {}
+        self.configs: dict[int, Configuration] = {}
         self.origins = {}
         self.models = {}
 
         self.history = []
         self.trial_keys = {}
 
-        self.logger = get_logger(self.__class__.__name__)
+        self.meta = {}
 
     def reset(self):
         self.meta = {}
@@ -354,63 +356,28 @@ class AbstractRun(ABC):
             df = pd.DataFrame(
                 data=data,
                 # Combined Cost
-                columns=[
-                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
+                columns=[name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
 
             return df
 
         return X, Y
 
-# @dataclass
-# class Trial:
-#     config_id: str
-#     budget: int
-#     costs: float
-#     start_time: float
-#     end_time: float
-#     status: Status
-#     additional: dict[str, Any]
-#
-#     def __post_init__(self):
-#         if isinstance(self.status, int):
-#             self.status = Status(self.status)
-#
-#         assert isinstance(self.status, Status)
-#     def get_key(self) -> tuple[str, int]:
-#         return self.config_id, self.budget  # noqa
-class Trial(tuple):
-    def __new__(cls, *args, **kwargs):
 
-        if len(kwargs) > 0:
-            return super(Trial, cls).__new__(cls, tuple(kwargs.values()))
-        else:
-            return super(Trial, cls).__new__(cls, tuple(args))
+@dataclass
+class Trial:
+    config_id: str
+    budget: int
+    costs: float
+    start_time: float
+    end_time: float
+    status: Status
+    additional: dict[str, Any]
 
-    def __init__(self,
-                 config_id,
-                 budget,
-                 costs,
-                 start_time,
-                 end_time,
-                 status,
-                 additional):
+    def __post_init__(self):
+        if isinstance(self.status, int):
+            self.status = Status(self.status)
 
-        if isinstance(status, int):
-            status = Status(status)
-
-        data = {
-            "config_id": config_id,
-            "budget": budget,
-            "costs": costs,
-            "start_time": start_time,
-            "end_time": end_time,
-            "status": status,
-            "additional": additional
-        }
-
-        # Make dict available as member variables
-        for k, v in data.items():
-            setattr(self, k, v)
+        assert isinstance(self.status, Status)
 
     def get_key(self) -> tuple[str, int]:
         return self.config_id, self.budget  # noqa
