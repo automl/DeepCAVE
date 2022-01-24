@@ -308,6 +308,9 @@ class Run(AbstractRun, ABC):
     def get_objectives(self):
         return self.meta["objectives"]
 
+    def get_trials(self) -> Iterator['Trial']:
+        yield from self.history
+
     def get_objective_name(self, objective_names=None):
         """
         Get the cost name of given objective names.
