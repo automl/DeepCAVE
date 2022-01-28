@@ -1,6 +1,7 @@
+from typing import Any, Optional
+
 import base64
 import io
-from typing import Optional, Any
 
 from dash import html
 

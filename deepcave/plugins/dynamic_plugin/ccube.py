@@ -1,15 +1,18 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-from dash import dcc
-from dash import html
+from dash import dcc, html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs.handler import run_handler
 from deepcave.runs import AbstractRun
-from deepcave.utils.compression import serialize, deserialize
+from deepcave.runs.handler import run_handler
+from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
+from deepcave.utils.layout import (
+    get_checklist_options,
+    get_select_options,
+    get_slider_marks,
+)
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -24,60 +27,51 @@ class CCube(DynamicPlugin):
     @staticmethod
     def get_input_layout(register):
         return [
-            html.Div([
-                dbc.Label("Objective"),
-                dbc.Select(
-                    id=register("objective", ["options", "value"]),
-                    placeholder="Select objective ..."
-                ),
-            ], className="mb-3"),
-
-            html.Div([
-                dbc.Label("Budget"),
-                dcc.Slider(
-                    id=register("budget", ["min", "max", "marks", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Objective"),
+                    dbc.Select(
+                        id=register("objective", ["options", "value"]),
+                        placeholder="Select objective ...",
+                    ),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Budget"),
+                    dcc.Slider(id=register("budget", ["min", "max", "marks", "value"])),
+                ]
+            ),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            html.Div([
-                dbc.Label("Number of Configurations"),
-                dcc.Slider(
-                    id=register("n_configs", ["min", "max", "marks", "value"])),
-            ], className="mb-3"),
-
-            html.Div([
-                dbc.Label("Hyperparameters"),
-                dbc.Checklist(
-                    id=register("hyperparameters", ["options", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Number of Configurations"),
+                    dcc.Slider(
+                        id=register("n_configs", ["min", "max", "marks", "value"])
+                    ),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Hyperparameters"),
+                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                ]
+            ),
         ]
 
     @staticmethod
     def load_inputs(runs):
         return {
-            "budget": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
-            "n_configs": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
-            "objective": {
-                "options": get_select_options(),
-                "value": None
-            },
-            "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
-            },
+            "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
+            "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
+            "objective": {"options": get_select_options(), "value": None},
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
     @staticmethod
@@ -107,7 +101,7 @@ class CCube(DynamicPlugin):
             },
             "objective": {
                 "options": get_select_options(objective_names),
-                "value": objective_value
+                "value": objective_value,
             },
             "hyperparameters": {
                 "options": get_select_options(hp_names),
@@ -132,9 +126,7 @@ class CCube(DynamicPlugin):
         budget = run.get_budget(budget_id)
 
         df = run.get_encoded_configs(
-            objective_names=[objective_name],
-            budget=budget,
-            pandas=True
+            objective_names=[objective_name], budget=budget, pandas=True
         )
 
         return {
@@ -144,9 +136,7 @@ class CCube(DynamicPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(
-                register("graph", "figure")
-            ),
+            dcc.Graph(register("graph", "figure")),
         ]
 
     @staticmethod

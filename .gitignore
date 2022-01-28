@@ -2,7 +2,6 @@ build/*
 *cache*
 !*cache.py
 !*caches.py
-docs/*
 __pycache__
 *.rdb
 examples/logs/SMAC
@@ -14,7 +13,12 @@ __init__.pyc
 examples/logs*
 examples/*
 !examples/logs/DeepCAVE
+!examples/record
+examples/record/_*.py
 *.sh
 !run.sh
 .vscode
 *.egg-info
+docs/apidoc
+docs/html
+docs/pages/examples

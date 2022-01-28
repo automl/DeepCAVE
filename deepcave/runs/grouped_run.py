@@ -1,9 +1,10 @@
+from typing import Any, List, Optional, Union
+
 from copy import deepcopy
-from typing import List, Optional, Any, Union
 
 import ConfigSpace
-from ConfigSpace import Configuration
 import numpy as np
+from ConfigSpace import Configuration
 
 from deepcave.runs import AbstractRun
 from deepcave.runs.run import Run

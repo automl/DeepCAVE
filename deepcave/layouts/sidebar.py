@@ -1,7 +1,6 @@
 from typing import Union
 
-from dash import dcc
-from dash import html
+from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
@@ -25,15 +24,16 @@ class SidebarLayout(Layout):
     def register_callbacks(self):
         # Update queue information panel
         @app.callback(
-            Output("queue-info", 'children'),
-            Input("queue-info-interval", 'n_intervals'))
+            Output("queue-info", "children"),
+            Input("queue-info-interval", "n_intervals"),
+        )
         def update_queue_info(_):
             try:
                 jobs = {}
 
                 for job in queue.get_running_jobs():
-                    display_name = job.meta['display_name']
-                    run_name = job.meta['run_name']
+                    display_name = job.meta["display_name"]
+                    run_name = job.meta["run_name"]
 
                     if display_name not in jobs:
                         jobs[display_name] = []
@@ -41,8 +41,8 @@ class SidebarLayout(Layout):
                     jobs[display_name].append((run_name, "[R]"))
 
                 for job in queue.get_pending_jobs():
-                    display_name = job.meta['display_name']
-                    run_name = job.meta['run_name']
+                    display_name = job.meta["display_name"]
+                    run_name = job.meta["run_name"]
 
                     if display_name not in jobs:
                         jobs[display_name] = []
@@ -51,23 +51,24 @@ class SidebarLayout(Layout):
 
                 items = []
                 for display_name, run_names in jobs.items():
-                    items += [html.Li(
-                        className='nav-item',
-                        children=[
-                            html.A(f"{display_name}",
-                                   className='nav-link')
-                        ]
-                    )]
+                    items += [
+                        html.Li(
+                            className="nav-item",
+                            children=[html.A(f"{display_name}", className="nav-link")],
+                        )
+                    ]
 
                     for run_name, status in run_names:
                         items += [
                             html.Li(
-                                className='nav-item',
+                                className="nav-item",
                                 children=[
-                                    html.A(f"{status} {run_name}",
-                                           className='nav-link disabled',
-                                           style={'padding-top': 0, 'padding-bottom': 0})
-                                ]
+                                    html.A(
+                                        f"{status} {run_name}",
+                                        className="nav-link disabled",
+                                        style={"padding-top": 0, "padding-bottom": 0},
+                                    )
+                                ],
                             )
                         ]
 
@@ -75,11 +76,10 @@ class SidebarLayout(Layout):
                     return [
                         html.Hr(),
                         html.H6(
-                            className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted',
-                            children=[
-                                html.Span("Queue Information")
-                            ]),
-                        html.Ul(className='nav flex-column', children=items),
+                            className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted",
+                            children=[html.Span("Queue Information")],
+                        ),
+                        html.Ul(className="nav flex-column", children=items),
                     ]
 
                 return []
@@ -92,33 +92,45 @@ class SidebarLayout(Layout):
         for category, points in self.nav_points.items():
             layouts += [
                 html.H6(
-                    className='sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted',
-                    children=[
-                        html.Span(category)
-                    ])
+                    className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted",
+                    children=[html.Span(category)],
+                )
             ]
 
             point_layouts = []
             for (id, name) in points:
-                point_layouts += [html.Li(
-                    className='nav-item',
-                    children=[html.A(name, className='nav-link active', href=f'/plugins/{id}')])
+                point_layouts += [
+                    html.Li(
+                        className="nav-item",
+                        children=[
+                            html.A(
+                                name, className="nav-link active", href=f"/plugins/{id}"
+                            )
+                        ],
+                    )
                 ]
 
-            layouts += [html.Ul(className='nav flex-column',
-                                children=point_layouts)]
+            layouts += [html.Ul(className="nav flex-column", children=point_layouts)]
 
-        return \
-            html.Nav(className='col-md-3 col-lg-2 d-md-block sidebar collapse', id='sidebarMenu', children=[
-                html.Div(className='position-sticky pt-3', children=[
-                    html.Ul(className='nav flex-column', children=[
-                        html.A("General", className='nav-link active', href='/'),
-                    ]),
-
-                    *layouts
-
-                ]),
-
+        return html.Nav(
+            className="col-md-3 col-lg-2 d-md-block sidebar collapse",
+            id="sidebarMenu",
+            children=[
+                html.Div(
+                    className="position-sticky pt-3",
+                    children=[
+                        html.Ul(
+                            className="nav flex-column",
+                            children=[
+                                html.A(
+                                    "General", className="nav-link active", href="/"
+                                ),
+                            ],
+                        ),
+                        *layouts,
+                    ],
+                ),
                 dcc.Interval(id="queue-info-interval", interval=1000),
-                html.Div(id="queue-info")
-            ])
+                html.Div(id="queue-info"),
+            ],
+        )

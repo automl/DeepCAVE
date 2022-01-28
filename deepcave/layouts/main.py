@@ -1,5 +1,4 @@
-from dash import dcc
-from dash import html
+from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
@@ -27,8 +26,8 @@ class MainLayout(Layout):
                 self.plugins[plugin.id] = plugin
 
     def register_callbacks(self):
-        output = Output('content', 'children')
-        input = Input('on-page-load', 'pathname')
+        output = Output("content", "children")
+        input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)
         def display_page(pathname: str):
@@ -50,19 +49,35 @@ class MainLayout(Layout):
             return self.not_found_layout(pathname)()
 
     def __call__(self) -> Component:
-        return \
-            html.Div(children=[
+        return html.Div(
+            children=[
                 self.header_layout(),
-                html.Div(id='main-container', className='container-fluid', children=[
-                    html.Div(className='row', children=[
-                        self.sidebar_layout(),
-                        html.Main(className='col-md-9 ms-sm-auto col-lg-10 px-md-4', children=[
-                            html.Div(className='', children=[
-                                dcc.Location(id='on-page-load', refresh=False),
-                                html.Div(id='content'),
-                                html.Div(id='general_message')
-                            ])
-                        ])
-                    ]),
-                ]),
-            ])
+                html.Div(
+                    id="main-container",
+                    className="container-fluid",
+                    children=[
+                        html.Div(
+                            className="row",
+                            children=[
+                                self.sidebar_layout(),
+                                html.Main(
+                                    className="col-md-9 ms-sm-auto col-lg-10 px-md-4",
+                                    children=[
+                                        html.Div(
+                                            className="",
+                                            children=[
+                                                dcc.Location(
+                                                    id="on-page-load", refresh=False
+                                                ),
+                                                html.Div(id="content"),
+                                                html.Div(id="general_message"),
+                                            ],
+                                        )
+                                    ],
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ]
+        )

@@ -1,5 +1,6 @@
+from typing import TypeVar, Union
+
 import json
-from typing import Union, TypeVar
 
 import numpy as np
 import pandas as pd

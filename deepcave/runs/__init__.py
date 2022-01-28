@@ -1,21 +1,22 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Iterable, Iterator, Optional, Union, Any
+
 import copy
 from enum import IntEnum
-from typing import Optional, Iterator, Iterable, Union, Any
 
 import ConfigSpace
 import numpy as np
 import pandas as pd
 from ConfigSpace import (
-    Configuration,
     CategoricalHyperparameter,
+    Configuration,
+    Constant,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
-    Constant,
 )
-from deepcave.runs.objective import Objective
 
+from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
 

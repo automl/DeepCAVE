@@ -1,13 +1,13 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
 from ConfigSpace.hyperparameters import (
-    UniformIntegerHyperparameter,
-    NormalIntegerHyperparameter,
-    UniformFloatHyperparameter,
-    NormalFloatHyperparameter,
     CategoricalHyperparameter,
-    OrdinalHyperparameter,
     Constant,
+    NormalFloatHyperparameter,
+    NormalIntegerHyperparameter,
+    OrdinalHyperparameter,
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
 )
 from dash import html
 

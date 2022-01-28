@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 class Queue:
     def __init__(self, redis_url="redis://localhost:6379"):
         self._connection = redis.from_url(redis_url)
-        self._queue = _Queue('high', connection=self._connection)
+        self._queue = _Queue("high", connection=self._connection)
 
     def ready(self):
         # Check if at least one worker is in use:
@@ -25,7 +25,11 @@ class Queue:
         return False
 
     def is_processed(self, job_id):
-        if self.is_running(job_id) or self.is_pending(job_id) or self.is_finished(job_id):
+        if (
+            self.is_running(job_id)
+            or self.is_pending(job_id)
+            or self.is_finished(job_id)
+        ):
             return True
 
         return False
@@ -81,7 +85,7 @@ class Queue:
         registries = [
             self._queue.finished_job_registry,
             self._queue,
-            self._queue.started_job_registry
+            self._queue.started_job_registry,
         ]
 
         for r in registries:
@@ -90,7 +94,9 @@ class Queue:
             except:
                 pass
 
-    def enqueue(self, func: Callable[[Any], Any], args: Any, job_id: str, meta: dict[str, str]):
+    def enqueue(
+        self, func: Callable[[Any], Any], args: Any, job_id: str, meta: dict[str, str]
+    ):
         # First check if job_id is already in use
         if self.is_processed(job_id):
             logger.debug("Job was not added because it was processed already.")
@@ -101,7 +107,7 @@ class Queue:
             args=args,
             job_id=job_id,
             meta=meta,
-            result_ttl=-1  # Make sure it's not automatically deleted.
+            result_ttl=-1,  # Make sure it's not automatically deleted.
         )
 
     def __getattr__(self, name):

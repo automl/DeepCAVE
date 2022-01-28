@@ -1,8 +1,10 @@
+from typing import Optional, Union
+
 from pathlib import Path
 from typing import Union, Optional, Iterator
 
-from deepcave.utils.cache import Cache
 from deepcave.runs import AbstractRun
+from deepcave.utils.cache import Cache
 from deepcave.utils.logs import get_logger
 
 
@@ -73,7 +75,7 @@ class RunCaches:
         return cache
 
     def clear_all_caches(self):
-        """ Removes all caches """
+        """Removes all caches"""
         files = list(self.cache_dir.iterdir())
         for file in files:
             file.unlink()

@@ -1,10 +1,10 @@
+from abc import ABC, abstractmethod
+from typing import Any, Callable, Iterable, Optional, Union
+
 import copy
-from abc import abstractmethod, ABC
-from typing import Any, Union, Optional, Iterable, Callable
 
 import dash_bootstrap_components as dbc
-from dash import dcc
-from dash import html
+from dash import dcc, html
 from dash.dash import no_update
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
@@ -12,10 +12,10 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app, c
 from deepcave.layouts import Layout
+from deepcave.runs import AbstractRun
+from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
 from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run
-from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
-from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger

@@ -7,13 +7,13 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs import AbstractRun
 from deepcave.utils.layout import (
-    get_slider_marks,
-    get_select_options,
     get_radio_options,
+    get_select_options,
+    get_slider_marks,
 )
 from deepcave.utils.styled_plotty import get_color
-from deepcave.runs import AbstractRun
 
 
 class CostOverTime(DynamicPlugin):

@@ -16,7 +16,14 @@ def flash(message: str, category: str = "info"):
         light      -> white
         dark       -> dark gray
     """
-    return dbc.Alert(message, id=f"alert_{hash(message)}", is_open=True, dismissable=False, fade=True, color=category)
+    return dbc.Alert(
+        message,
+        id=f"alert_{hash(message)}",
+        is_open=True,
+        dismissable=False,
+        fade=True,
+        color=category,
+    )
 
 
 def alert(message: str):

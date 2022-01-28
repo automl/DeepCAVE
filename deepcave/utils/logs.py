@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-with (Path(__file__).parent / 'logging.yml').open('r') as stream:
+with (Path(__file__).parent / "logging.yml").open("r") as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 logging.config.dictConfig(config)
 

@@ -1,5 +1,6 @@
-import functools
 from abc import abstractmethod
+
+import functools
 
 import numpy as np
 import pyrfr.regression as regression
@@ -9,7 +10,13 @@ from smac.epm.util_funcs import get_types
 
 
 class Forest(BaseModel):
-    def __init__(self, configspace: ConfigurationSpace, seed=0, instance_features=None, pca_components=None):
+    def __init__(
+        self,
+        configspace: ConfigurationSpace,
+        seed=0,
+        instance_features=None,
+        pca_components=None,
+    ):
         # Set types and bounds automatically
         types, bounds = get_types(configspace, instance_features)
 
@@ -38,16 +45,17 @@ class Forest(BaseModel):
         def rgetattr(obj, attr, *args):
             def _getattr(obj, attr):
                 return getattr(obj, attr, *args)
-            return functools.reduce(_getattr, [obj] + attr.split('.'))
+
+            return functools.reduce(_getattr, [obj] + attr.split("."))
 
         def rsetattr(obj, attr, val):
-            pre, _, post = attr.rpartition('.')
+            pre, _, post = attr.rpartition(".")
             return setattr(rgetattr(obj, pre) if pre else obj, post, val)
 
         for k, v in d.items():
             rsetattr(self.model_options, k, v)
 
-    def _train(self, X: np.ndarray, y: np.ndarray) -> 'Forest':
+    def _train(self, X: np.ndarray, y: np.ndarray) -> "Forest":
         """Trains the random forest on X and y.
         Parameters
         ----------
@@ -72,7 +80,9 @@ class Forest(BaseModel):
 
         return self
 
-    def _init_data_container(self, X: np.ndarray, y: np.ndarray) -> regression.default_data_container:
+    def _init_data_container(
+        self, X: np.ndarray, y: np.ndarray
+    ) -> regression.default_data_container:
         """Fills a pyrfr default data container, s.t. the forest knows
         categoricals and bounds for continous data
         Parameters

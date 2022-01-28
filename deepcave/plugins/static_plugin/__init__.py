@@ -1,4 +1,5 @@
 from abc import ABC
+
 from enum import Enum
 
 from dash import dcc
@@ -6,7 +7,7 @@ from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, queue, c, rc
+from deepcave import app, c, queue, rc
 from deepcave.plugins import Plugin
 
 

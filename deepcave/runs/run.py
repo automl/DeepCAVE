@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from typing import Any, Optional, Union
+
 import json
 from pathlib import Path
-from typing import Union, Any, Optional
 
 import ConfigSpace
 import jsonlines
@@ -9,7 +10,7 @@ import numpy as np
 from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.read_and_write import json as cs_json
 
-from deepcave.runs import Status, AbstractRun, Trial
+from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
 
