@@ -41,8 +41,8 @@ class StaticPlugin(Plugin, ABC):
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
         inputs = [
-            Input(self.get_internal_id("update-button"), 'n_clicks'),
-            Input(self.get_internal_id("update-interval-output"), 'data')
+            Input(self.get_internal_id("update-button"), "n_clicks"),
+            Input(self.get_internal_id("update-interval-output"), "data"),
         ]
 
         # Get other plugin specific inputs that might change
@@ -104,7 +104,9 @@ class StaticPlugin(Plugin, ABC):
                         job_id = self._get_job_id(run.name, inputs_key)
 
                         # We already got our results or it was already processed
-                        if raw_outputs[run.name] is not None or queue.is_processed(job_id):
+                        if raw_outputs[run.name] is not None or queue.is_processed(
+                            job_id
+                        ):
                             continue
 
                         job_meta = {
@@ -121,7 +123,7 @@ class StaticPlugin(Plugin, ABC):
                             self._process,
                             args=[self.process, run.run_cache_id, inputs],
                             job_id=job_id,
-                            meta=job_meta
+                            meta=job_meta,
                         )
 
                     # Reset button
@@ -169,10 +171,10 @@ class StaticPlugin(Plugin, ABC):
             raise PreventUpdate
 
     def _callback_loop_trigger_main_loop(self):
-        output = Output(self.get_internal_id('update-interval-output'), 'data')
+        output = Output(self.get_internal_id("update-interval-output"), "data")
         inputs = [
-            Input(self.get_internal_id("update-interval"), 'n_intervals'),
-            State(self.get_internal_id("update-interval-output"), 'data'),
+            Input(self.get_internal_id("update-interval"), "n_intervals"),
+            State(self.get_internal_id("update-interval-output"), "data"),
         ]
 
         # Interval should not always run the main callback the whole time
@@ -188,10 +190,10 @@ class StaticPlugin(Plugin, ABC):
 
     def _callback_loop_update_status_label(self):
         output = [
-            Output(self.get_internal_id("processing-info"), 'children'),
-            Output(self.get_internal_id("update-button"), 'n_clicks'),
+            Output(self.get_internal_id("processing-info"), "children"),
+            Output(self.get_internal_id("update-button"), "n_clicks"),
         ]
-        input = Input(self.get_internal_id("update-interval"), 'n_intervals')
+        input = Input(self.get_internal_id("update-interval"), "n_intervals")
 
         # Update status label
         # Register updates from inputs
@@ -222,10 +224,8 @@ class StaticPlugin(Plugin, ABC):
         self._blocked = False
 
         components = [
-            dcc.Interval(
-                id=self.get_internal_id("update-interval"), interval=200),
-            dcc.Store(id=self.get_internal_id(
-                "update-interval-output"), data=0),
+            dcc.Interval(id=self.get_internal_id("update-interval"), interval=200),
+            dcc.Store(id=self.get_internal_id("update-interval-output"), data=0),
         ]
         components += super().__call__(True)
 

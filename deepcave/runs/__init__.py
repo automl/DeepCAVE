@@ -82,10 +82,12 @@ class AbstractRun(ABC):
     def get_objectives(self):
         objectives = []
         for d in self.meta["objectives"]:
-            objective = Objective(name=d["name"],
-                                  lower=d["lower"],
-                                  upper=d["upper"],
-                                  optimize=d["optimize"])
+            objective = Objective(
+                name=d["name"],
+                lower=d["lower"],
+                upper=d["upper"],
+                optimize=d["optimize"],
+            )
 
             objective["lock_lower"] = d["lock_lower"]
             objective["lock_upper"] = d["lock_upper"]
@@ -281,7 +283,8 @@ class AbstractRun(ABC):
         if budget is None:
             budget = self.get_highest_budget()
 
-        costs = []
+        costs_mean = []
+        costs_std = []
         ids = []
         times = []
 
@@ -303,11 +306,12 @@ class AbstractRun(ABC):
             if cost < current_cost:
                 current_cost = cost
 
-                costs.append(cost)
+                costs_mean.append(cost)
+                costs_std.append(0)
                 times.append(trial.end_time)
                 ids.append(id)
 
-        return costs, times, ids
+        return times, costs_mean, costs_std, ids
 
     def get_encoded_configs(
         self,

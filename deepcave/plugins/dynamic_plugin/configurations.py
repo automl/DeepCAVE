@@ -13,7 +13,6 @@ from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun
-from deepcave.runs.grouped_run import NotMergeableError
 from deepcave.runs.handler import run_handler
 
 
@@ -70,7 +69,6 @@ class Configurations(DynamicPlugin):
 
         # Get best cost across all objectives, highest budget
         cost, config = run.get_min_cost()
-        print(cost, config)
 
         best_config = {"Hyperparameter": [], "Value": []}
 
