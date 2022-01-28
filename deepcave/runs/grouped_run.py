@@ -3,6 +3,7 @@ from typing import List, Optional, Any, Union
 
 import ConfigSpace
 from ConfigSpace import Configuration
+import numpy as np
 
 from deepcave.runs import AbstractRun
 from deepcave.runs.run import Run
@@ -63,8 +64,8 @@ class GroupedRun(AbstractRun):
                     if config_id not in config_mapping:
                         self.configs[current_config_id] = config
                         self.origins[current_config_id] = origin
-                        current_config_id += 1
                         config_mapping[config_id] = current_config_id
+                        current_config_id += 1
 
                 # Update history + trial_keys
                 for trial in run.history:
@@ -268,5 +269,48 @@ class GroupedRun(AbstractRun):
         else:
             raise NotMergeableError("Run data are not mergeable.")
 
+    def get_trajectory(self, *args, **kwargs):
 
-# TODO(dwoiwode): Folgender Code sollte auch die Trial-Klasse ersetzen können. Ist vielleicht lesbarer als ein vererbter Tuple
+        # Cache costs
+        run_costs = []
+        run_times = []
+
+        # All x values on which we need y values
+        all_times = []
+
+        for run in self.runs:
+            times, costs_mean, _, _ = run.get_trajectory(*args, **kwargs)
+
+            # Cache st we don't calculate it multiple times
+            run_costs.append(costs_mean)
+            run_times.append(times)
+
+            # Add all times
+            for time in times:
+                if time not in all_times:
+                    all_times.append(time)
+
+        all_times.sort()
+
+        # Now look for corresponding y values
+        all_costs = []
+
+        for time in all_times:
+            y = []
+
+            # Iterate over all runs
+            for costs, times in zip(run_costs, run_times):
+                # Find closest x value
+                idx = min(range(len(times)), key=lambda i: abs(times[i] - time))
+                y.append(costs[idx])
+
+            all_costs.append(y)
+
+        # Make numpy arrays
+        all_costs = np.array(all_costs)
+
+        times = all_times
+        costs_mean = np.mean(all_costs, axis=1)
+        costs_std = np.std(all_costs, axis=1)
+
+        return times, list(costs_mean), list(costs_std), []

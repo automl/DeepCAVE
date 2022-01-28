@@ -195,11 +195,28 @@ class RunHandler:
 
         return run_names
 
-    def get_runs(self) -> Dict[str, AbstractRun]:
+    def get_runs(self, include_groups=False) -> Dict[str, AbstractRun]:
         """
         self.converter.get_run() might be expensive. Therefore, we cache it here, and only
         reload it, once working directory, run id or the id based on the files changed.
         """
+
+        if include_groups:
+            # TODO: Prevent same name for runs/groups
+            runs = {}
+
+            # Add runs
+            for id, run in self.runs.items():
+                runs[id] = run
+
+            # Add groups
+            for id, group in self.groups.items():
+                runs[id] = group
+
+            return runs
+        else:
+            return self.runs
+
         return self.runs
 
     @cached_property

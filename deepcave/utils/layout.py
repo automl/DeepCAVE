@@ -87,8 +87,8 @@ def get_select_options(
 
 
 def get_checklist_options(labels=None, values=None, binary=False):
-    return get_select_options(labels, values, binary)
+    return get_select_options(labels=labels, values=values, binary=binary)
 
 
 def get_radio_options(labels=None, values=None, binary=False):
-    return get_select_options(labels, values, binary)
+    return get_select_options(labels=labels, values=values, binary=binary)

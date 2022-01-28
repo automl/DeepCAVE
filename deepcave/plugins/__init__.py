@@ -152,7 +152,7 @@ class Plugin(Layout, ABC):
                     inputs = c.get("last_inputs", self.id)
 
                     if inputs is None:
-                        inputs = self.__class__.load_inputs(self.runs)
+                        inputs = self.__class__.load_inputs(self.all_runs)
 
                         # Also update the run selection
                         if self.activate_run_selection:
@@ -197,18 +197,17 @@ class Plugin(Layout, ABC):
                             # We can't use load_inputs here only
                             # because `run_name` would be removed.
                             # Also: We want to keep the current run name.
-                            update_dict(_inputs, self.__class__.load_inputs(self.runs))
+                            update_dict(
+                                _inputs, self.__class__.load_inputs(self.all_runs)
+                            )
 
                             # TODO: Reset only inputs which are not available in another ru.
                             # E.g. if options from budget in run_2 and run_3 are the same
                             # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
                     # How to update only parameters which have a dependency?
-                    all_runs = {}
-                    all_runs.update(add_prefix_to_dict(self.runs, "run:"))
-                    all_runs.update(add_prefix_to_dict(self.groups, "group:"))
                     user_dependencies_inputs = self.__class__.load_dependency_inputs(
-                        all_runs, _previous_inputs, _inputs
+                        self.all_runs, _previous_inputs, _inputs
                     )
 
                     # Update dict
@@ -268,9 +267,11 @@ class Plugin(Layout, ABC):
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
         if mpl_active:
-            outputs = self.__class__.load_mpl_outputs(inputs, raw_outputs, self.groups)
+            outputs = self.__class__.load_mpl_outputs(
+                inputs, raw_outputs, self.all_runs
+            )
         else:
-            outputs = self.__class__.load_outputs(inputs, raw_outputs, self.groups)
+            outputs = self.__class__.load_outputs(inputs, raw_outputs, self.all_runs)
 
         if outputs == PreventUpdate:
             raise PreventUpdate()
@@ -394,6 +395,10 @@ class Plugin(Layout, ABC):
             name: GroupedRun(name, [self.runs[run_id] for run_id in run_ids])
             for name, run_ids in groups.items()
         }
+
+        self.all_runs = {}
+        self.all_runs.update(add_prefix_to_dict(self.runs, "run:"))
+        self.all_runs.update(add_prefix_to_dict(self.groups, "group:"))
 
         components = [html.H1(self.name)]
         if self.description is not None:
@@ -572,10 +577,6 @@ class Plugin(Layout, ABC):
             if inputs["run_name"]["value"] is None:
                 raise PreventUpdate()
 
-            print(self.runs)
-            print(self.groups)
-            print(inputs["run_name"]["value"])
-
             # Update runs
             run = run_handler.from_run_id(inputs["run_name"]["value"])
 
@@ -588,7 +589,7 @@ class Plugin(Layout, ABC):
             return [run]
         else:
             # TODO(dwoiwode): Only return runs or also groups?
-            return list(run_handler.runs.values())
+            return self.all_runs
 
     @staticmethod
     def load_inputs(runs) -> dict[str, Any]:
@@ -615,7 +616,7 @@ class Plugin(Layout, ABC):
         return []
 
     @staticmethod
-    def load_outputs(inputs, outputs, groups):
+    def load_outputs(inputs, outputs, runs):
         """
         Returns:
             list or PreventUpdate: List of outputs (for `get_output_layout`) or PreventUpdate if
@@ -625,7 +626,7 @@ class Plugin(Layout, ABC):
         return {}
 
     @staticmethod
-    def load_mpl_outputs(inputs, outputs, groups):
+    def load_mpl_outputs(inputs, outputs, runs):
         return {}
 
     @staticmethod
