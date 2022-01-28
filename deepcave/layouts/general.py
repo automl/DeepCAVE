@@ -24,15 +24,19 @@ class GeneralLayout(Layout):
 
     def _callback_working_directory_changed(self):
         outputs = [
-            Output('general-working-directory-input', 'value'),  # Working directory input
-            Output('general-converter-label', 'children'),  # Converter text
-            Output('general-runs-checklist', 'options'),  # Runs options : ("labels": , "values":)
-            Output('general-runs-checklist', 'value'),  # ???
+            Output(
+                "general-working-directory-input", "value"
+            ),  # Working directory input
+            Output("general-converter-label", "children"),  # Converter text
+            Output(
+                "general-runs-checklist", "options"
+            ),  # Runs options : ("labels": , "values":)
+            Output("general-runs-checklist", "value"),  # ???
         ]
 
         inputs = [
-            Input('on-page-load', 'href'),
-            Input('general-working-directory-input', 'value'),
+            Input("on-page-load", "href"),
+            Input("general-working-directory-input", "value"),
         ]
 
         # Register updates from inputs
@@ -44,10 +48,12 @@ class GeneralLayout(Layout):
                 run_names = run_handler.get_run_names()
                 converter = run_handler.available_run_classes
 
-                return (str(handler_working_dir),
-                        self.get_converter_text(converter),
-                        self.get_run_options(),
-                        run_names)
+                return (
+                    str(handler_working_dir),
+                    self.get_converter_text(converter),
+                    self.get_run_options(),
+                    run_names,
+                )
 
             # Check if working dir exists
             working_dir_path = Path(working_dir)
@@ -57,14 +63,16 @@ class GeneralLayout(Layout):
             empty_run_names = []
             run_handler.update_working_directory(working_dir_path)
 
-            return (working_dir,
-                    self.get_converter_text(run_handler.available_run_classes),
-                    self.get_run_options(),
-                    empty_run_names)
+            return (
+                working_dir,
+                self.get_converter_text(run_handler.available_run_classes),
+                self.get_run_options(),
+                empty_run_names,
+            )
 
     def _callback_run_selection_changed(self):
-        output = Output('general-run-names', 'value')
-        input = Input('general-runs-checklist', 'value')
+        output = Output("general-run-names", "value")
+        input = Input("general-runs-checklist", "value")
 
         # Save the run ids internally
         @app.callback(output, input)
@@ -86,35 +94,41 @@ class GeneralLayout(Layout):
 
     def _callback_group_selection_changed(self):
         outputs = [
-            Output('general-group-container', 'children'),
-            Output('general-add-group', 'n_clicks'),
+            Output("general-group-container", "children"),
+            Output("general-add-group", "n_clicks"),
         ]
         inputs = [
-            Input('general-add-group', 'n_clicks'),
-            Input('general-run-names', 'value'),
-            State('general-group-container', 'children')
+            Input("general-add-group", "n_clicks"),
+            Input("general-run-names", "value"),
+            State("general-group-container", "children"),
         ]
 
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
-        def callback(n_clicks:int, run_names, children):
+        def callback(n_clicks: int, run_names, children):
             def get_layout(index, options, input_value="", dropdown_value=None):
                 if dropdown_value is None:
                     dropdown_value = []
-                return html.Div([
-                    dbc.Input(
-                        id={'type': 'group-name', 'index': index},
-                        placeholder="Name",
-                        type="text",
-                        value=input_value,
-                        style={"margin-bottom": "-1px"}),
-                    dcc.Dropdown(
-                        id={'type': 'group-dropdown', 'index': index},
-                        options=[{'label': name, 'value': name} for name in options],
-                        value=dropdown_value,
-                        multi=True,
-                    )
-                ], className="mb-2")
+                return html.Div(
+                    [
+                        dbc.Input(
+                            id={"type": "group-name", "index": index},
+                            placeholder="Name",
+                            type="text",
+                            value=input_value,
+                            style={"margin-bottom": "-1px"},
+                        ),
+                        dcc.Dropdown(
+                            id={"type": "group-dropdown", "index": index},
+                            options=[
+                                {"label": name, "value": name} for name in options
+                            ],
+                            value=dropdown_value,
+                            multi=True,
+                        ),
+                    ],
+                    className="mb-2",
+                )
 
             groups = run_handler.get_groups()
             index = 0
@@ -126,24 +140,21 @@ class GeneralLayout(Layout):
                     continue
 
                 children.append(
-                    get_layout(index, run_names, group_name,
-                               grouped_run.run_names)
+                    get_layout(index, run_names, group_name, grouped_run.run_names)
                 )
 
                 index += 1
 
             if n_clicks is not None and len(run_names) > 0:
-                children.append(
-                    get_layout(index, run_names)
-                )
+                children.append(get_layout(index, run_names))
 
             return children, None
 
     def _callback_set_groups(self):
-        outputs = Output('general-group-output', 'data')
+        outputs = Output("general-group-output", "data")
         inputs = [
-            Input({'type': 'group-name', 'index': ALL}, 'value'),
-            Input({'type': 'group-dropdown', 'index': ALL}, 'value')
+            Input({"type": "group-name", "index": ALL}, "value"),
+            Input({"type": "group-dropdown", "index": ALL}, "value"),
         ]
 
         @app.callback(outputs, inputs)
@@ -155,7 +166,6 @@ class GeneralLayout(Layout):
 
             groups = {}
             for group_name, run_names in zip(group_names, all_run_names):
-                print(group_name, run_names)
                 if group_name is None or group_name == "":
                     continue
 
@@ -171,8 +181,8 @@ class GeneralLayout(Layout):
             return
 
     def _callback_clear_cache(self):
-        output = Output('general-clear-cache-button', 'n_clicks')
-        input = Input('general-clear-cache-button', 'n_clicks')
+        output = Output("general-clear-cache-button", "n_clicks")
+        input = Input("general-clear-cache-button", "n_clicks")
 
         @app.callback(output, input)
         def callback(n_clicks):
@@ -183,58 +193,47 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_run_options() -> list[dict[str, str]]:
-        runs = [{"label": run_name, "value": run_name} for run_name in run_handler.get_available_run_names()]
+        runs = [
+            {"label": run_name, "value": run_name}
+            for run_name in run_handler.get_available_run_names()
+        ]
         return runs
 
     @staticmethod
     def get_converter_text(converters: dict[Type[Run], int]) -> html.Div:
         converter_texts = []
         for converter in sorted(converters, key=converters.get, reverse=True):
-            converter_texts += [
-                html.Li([
-                    html.I(converter.__name__),
-                    html.Span(".")
-                ])
-            ]
+            converter_texts += [html.Li([html.I(converter.__name__), html.Span(".")])]
 
-        return html.Div([
-            html.Span("Possible run converters:"),
-            html.Ul(
-                converter_texts
-            )
-        ], className="mt-2")
+        return html.Div(
+            [html.Span("Possible run converters:"), html.Ul(converter_texts)],
+            className="mt-2",
+        )
 
     def __call__(self) -> list[Component]:
         self._refresh_groups = True
 
         return [
-            html.H1('General'),
-
+            html.H1("General"),
             dbc.Label("Working Directory"),
             # html.Div("Working Directory"),
             # dbc.FormText("Absolute path to your runs."),
-            dbc.Input(id="general-working-directory-input",
-                      placeholder="",
-                      type="text"),
-
+            dbc.Input(
+                id="general-working-directory-input", placeholder="", type="text"
+            ),
             dbc.FormText(id="general-converter-label"),
-
             html.Hr(),
-
-            html.H2('Runs'),
+            html.H2("Runs"),
             dbc.Input(id="general-run-names", style={"display": "none"}),
             dbc.Checklist(id="general-runs-checklist"),
-
             html.Hr(),
-
-            html.H2('Groups'),
+            html.H2("Groups"),
             html.Div(id="general-group-container", children=[]),
             dbc.Button("Add Group", id="general-add-group"),
             dcc.Store(id="general-group-output"),
-
             html.Hr(),
-
-            html.H2('Caches'),
-            dbc.Button("Clear Plugin Caches",
-                       id="general-clear-cache-button", color="primary"),
+            html.H2("Caches"),
+            dbc.Button(
+                "Clear Plugin Caches", id="general-clear-cache-button", color="primary"
+            ),
         ]

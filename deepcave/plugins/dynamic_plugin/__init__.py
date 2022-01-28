@@ -19,10 +19,9 @@ class DynamicPlugin(Plugin, ABC):
         for id, attribute, _ in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
-        inputs = [Input(self.get_internal_id("update-button"), 'n_clicks')]
+        inputs = [Input(self.get_internal_id("update-button"), "n_clicks")]
         for id, attribute, _ in self.inputs:
-            inputs.append(
-                Input(self.get_internal_input_id(id), attribute))
+            inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
@@ -40,7 +39,7 @@ class DynamicPlugin(Plugin, ABC):
             runs = self.get_selected_runs(inputs)
 
             raw_outputs = {}
-            for run in runs:
+            for run_name, run in runs.items():
                 run_outputs = rc[run.run_cache_id].get(self.id, inputs_key)
                 if run_outputs is None:
                     self.logger.debug(f"Process {run.name}.")
@@ -54,7 +53,7 @@ class DynamicPlugin(Plugin, ABC):
                 else:
                     self.logger.debug(f"Found outputs from {run.name} in cache.")
 
-                raw_outputs[run.name] = run_outputs
+                raw_outputs[run_name] = run_outputs
 
             # Cache last inputs
             c.set("last_inputs", self.id, value=inputs)

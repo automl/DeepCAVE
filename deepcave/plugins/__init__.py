@@ -14,7 +14,7 @@ from deepcave import app, c
 from deepcave.layouts import Layout
 from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run
-from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
@@ -55,10 +55,12 @@ class Plugin(Layout, ABC):
         self.alert_color = "success"
         self.alert_update_required = False
 
-        self.runs: dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
+        self.runs: dict[
+            str, AbstractRun
+        ] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
-    
+
     @staticmethod
     def check_compatibility(run: AbstractRun) -> bool:
         """
@@ -66,7 +68,9 @@ class Plugin(Layout, ABC):
         """
         return True
 
-    def register_input(self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False) -> str:
+    def register_input(
+        self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False
+    ) -> str:
         if isinstance(attributes, str):
             attributes = [attributes]
 
@@ -113,10 +117,12 @@ class Plugin(Layout, ABC):
 
         self.__class__.get_input_layout(self.register_input)
         self.__class__.get_filter_layout(
-            lambda a, b: self.register_input(a, b, filter=True))
+            lambda a, b: self.register_input(a, b, filter=True)
+        )
         self.__class__.get_output_layout(self.register_output)
         self.__class__.get_mpl_output_layout(
-            lambda a, b: self.register_output(a, b, mpl=True))
+            lambda a, b: self.register_output(a, b, mpl=True)
+        )
 
         # Handles the initial and the cashed input values
         outputs = []
@@ -131,6 +137,7 @@ class Plugin(Layout, ABC):
             outputs.append(Output(self.get_internal_input_id(id), attribute))
 
         if len(outputs) > 0:
+
             @app.callback(outputs, inputs)
             def plugin_input_update(*inputs_list):
                 init = True
@@ -145,12 +152,15 @@ class Plugin(Layout, ABC):
                     inputs = c.get("last_inputs", self.id)
 
                     if inputs is None:
-                        inputs = self.__class__.load_inputs(self.runs)
+                        inputs = self.__class__.load_inputs(self.all_runs)
 
                         # Also update the run selection
                         if self.activate_run_selection:
                             new_inputs = self.__class__.load_run_inputs(
-                                self.runs, self.groups, self.__class__.check_compatibility)
+                                self.runs,
+                                self.groups,
+                                self.__class__.check_compatibility,
+                            )
                             update_dict(inputs, new_inputs)
 
                         # Set not used inputs
@@ -180,22 +190,25 @@ class Plugin(Layout, ABC):
                         _run_name = inputs["run_name"]["value"]
 
                         # Reset everything if run name changed.
-                        if _previous_run_name is not None and _previous_run_name != _run_name:
+                        if (
+                            _previous_run_name is not None
+                            and _previous_run_name != _run_name
+                        ):
                             # We can't use load_inputs here only
                             # because `run_name` would be removed.
                             # Also: We want to keep the current run name.
                             update_dict(
-                                _inputs, self.__class__.load_inputs(self.runs))
+                                _inputs, self.__class__.load_inputs(self.all_runs)
+                            )
 
                             # TODO: Reset only inputs which are not available in another ru.
                             # E.g. if options from budget in run_2 and run_3 are the same
                             # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
                     # How to update only parameters which have a dependency?
-                    all_runs = {}
-                    all_runs.update(add_prefix_to_dict(self.runs, "run:"))
-                    all_runs.update(add_prefix_to_dict(self.groups, "group:"))
-                    user_dependencies_inputs = self.__class__.load_dependency_inputs(all_runs, _previous_inputs, _inputs)
+                    user_dependencies_inputs = self.__class__.load_dependency_inputs(
+                        self.all_runs, _previous_inputs, _inputs
+                    )
 
                     # Update dict
                     # dict.update() remove keys, so it's done manually
@@ -209,10 +222,11 @@ class Plugin(Layout, ABC):
 
         # Update internal alert state to divs
         @app.callback(
-            Output(self.get_internal_id("alert"), 'children'),
-            Output(self.get_internal_id("alert"), 'color'),
-            Output(self.get_internal_id("alert"), 'is_open'),
-            Input(self.get_internal_id("alert-interval"), 'n_intervals'))
+            Output(self.get_internal_id("alert"), "children"),
+            Output(self.get_internal_id("alert"), "color"),
+            Output(self.get_internal_id("alert"), "is_open"),
+            Input(self.get_internal_id("alert-interval"), "n_intervals"),
+        )
         def update_alert(_):
             if self.alert_update_required:
                 self.alert_update_required = False
@@ -254,10 +268,10 @@ class Plugin(Layout, ABC):
         mpl_active = c.get("matplotlib-mode")
         if mpl_active:
             outputs = self.__class__.load_mpl_outputs(
-                inputs, raw_outputs, self.groups)
+                inputs, raw_outputs, self.all_runs
+            )
         else:
-            outputs = self.__class__.load_outputs(
-                inputs, raw_outputs, self.groups)
+            outputs = self.__class__.load_outputs(inputs, raw_outputs, self.all_runs)
 
         if outputs == PreventUpdate:
             raise PreventUpdate()
@@ -286,7 +300,9 @@ class Plugin(Layout, ABC):
 
         return outputs
 
-    def _list_to_dict(self, values: Iterable[str], input=True) -> dict[str, dict[str, str]]:
+    def _list_to_dict(
+        self, values: Iterable[str], input=True
+    ) -> dict[str, dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -309,7 +325,9 @@ class Plugin(Layout, ABC):
 
         return mapping
 
-    def _dict_to_list(self, d: dict[str, dict[str, str]], input=False) -> list[Optional[str]]:
+    def _dict_to_list(
+        self, d: dict[str, dict[str, str]], input=False
+    ) -> list[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
         self.inputs or self.outputs.
@@ -373,15 +391,14 @@ class Plugin(Layout, ABC):
         self.runs = run_handler.get_runs()
         groups = run_handler.get_groups()
 
-        if len(groups) == 0:  # TODO(dwoiwode): Why?
-            # Create groups with run_name: run_name
-            for run_name in self.runs.keys():
-                groups[run_name] = [run_name]
-
         self.groups = {
             name: GroupedRun(name, [self.runs[run_id] for run_id in run_ids])
             for name, run_ids in groups.items()
         }
+
+        self.all_runs = {}
+        self.all_runs.update(add_prefix_to_dict(self.runs, "run:"))
+        self.all_runs.update(add_prefix_to_dict(self.groups, "group:"))
 
         components = [html.H1(self.name)]
         if self.description is not None:
@@ -392,26 +409,20 @@ class Plugin(Layout, ABC):
             dcc.Interval(
                 id=self.get_internal_id("alert-interval"),
                 interval=1 * 500,
-                n_intervals=5
+                n_intervals=5,
             ),
             dbc.Alert(
                 id=self.get_internal_id("alert"),
                 is_open=False,
                 dismissable=True,
-                fade=True),
+                fade=True,
+            ),
         ]
-
-        status = self.check_requirements(self.runs, self.groups)
-        if isinstance(status, str):
-            self.update_alert(status, color="danger")
-            return components
-        elif isinstance(status, bool):
-            if not status:
-                return components
 
         if self.activate_run_selection:
             run_input_layout = [
-                self.__class__.get_run_input_layout(self.register_input)]
+                self.__class__.get_run_input_layout(self.register_input)
+            ]
         else:
             run_input_layout = []
 
@@ -432,98 +443,121 @@ class Plugin(Layout, ABC):
                 html.Span(
                     html.Em(id=self.get_internal_id("processing-info")),
                     className="ms-3 align-baseline",
-                )
-            ]
+                ),
+            ],
         )
 
         # We always have to render it because of the button.
         # Button tells us if the page was just loaded.
-        components += [html.Div(
-            id=f'{self.id}-input',
-            className="shadow-sm p-3 mb-3 bg-white rounded-lg",
-            children=run_input_layout +
-                     separator_layout +
-                     input_layout +
-                     [input_control_layout],
-            style={} if render_button or input_layout or run_input_layout else {"display": "none"}
-        )]
+        components += [
+            html.Div(
+                id=f"{self.id}-input",
+                className="shadow-sm p-3 mb-3 bg-white rounded-lg",
+                children=run_input_layout
+                + separator_layout
+                + input_layout
+                + [input_control_layout],
+                style={}
+                if render_button or input_layout or run_input_layout
+                else {"display": "none"},
+            )
+        ]
 
         def register_in(a, b):
             return self.register_input(a, b, filter=True)
 
         filter_layout = self.__class__.get_filter_layout(register_in)
         if len(filter_layout) > 0:
-            components += [html.Div(
-                id=f'{self.id}-filter',
-                className="shadow-sm p-3 mb-3 bg-white rounded-lg",
-                children=filter_layout
-            )]
+            components += [
+                html.Div(
+                    id=f"{self.id}-filter",
+                    className="shadow-sm p-3 mb-3 bg-white rounded-lg",
+                    children=filter_layout,
+                )
+            ]
 
         output_layout = self.__class__.get_output_layout(self.register_output)
         if output_layout:
-            components += [html.Div(
-                id=f'{self.id}-output',
-                className="shadow-sm p-3 bg-white rounded-lg loading-container",
-                children=output_layout,
-                style={} if not c.get(
-                    "matplotlib-mode") else {"display": "none"}
-            )]
+            components += [
+                html.Div(
+                    id=f"{self.id}-output",
+                    className="shadow-sm p-3 bg-white rounded-lg loading-container",
+                    children=output_layout,
+                    style={} if not c.get("matplotlib-mode") else {"display": "none"},
+                )
+            ]
 
         def register_out(a, b):
             return self.register_output(a, b, mpl=True)
 
         output_layout = self.__class__.get_mpl_output_layout(register_out)
         if output_layout:
-            components += [html.Div(
-                id=f'{self.id}-mpl-output',
-                className="shadow-sm p-3 bg-white rounded-lg loading-container",
-                children=output_layout,
-                style={} if c.get("matplotlib-mode") else {"display": "none"}
-            )]
+            components += [
+                html.Div(
+                    id=f"{self.id}-mpl-output",
+                    className="shadow-sm p-3 bg-white rounded-lg loading-container",
+                    children=output_layout,
+                    style={} if c.get("matplotlib-mode") else {"display": "none"},
+                )
+            ]
 
         return components
 
     @staticmethod
-    def get_run_input_layout(register: Callable[[str, Union[str, list[str]]], str]) -> Component:
-        return html.Div([
-            dbc.Select(
-                id=register("run_name", ["options", "value"]),
-                placeholder="Select run ..."
-            ),
-        ])
+    def get_run_input_layout(
+        register: Callable[[str, Union[str, list[str]]], str]
+    ) -> Component:
+        return html.Div(
+            [
+                dbc.Select(
+                    id=register("run_name", ["options", "value"]),
+                    placeholder="Select run ...",
+                ),
+            ]
+        )
 
     @staticmethod
-    def load_run_inputs(runs: dict[str, Run],
-                        groups: dict[str, GroupedRun],
-                        check_compatibility: Callable) -> dict[str, Any]:
+    def load_run_inputs(
+        runs: dict[str, Run],
+        groups: dict[str, GroupedRun],
+        check_compatibility: Callable,
+    ) -> dict[str, Any]:
         """
-        Set `run_names` and displays both runs and group runs if 
+        Set `run_names` and displays both runs and group runs if
         they are compatible.
         """
-        
+
         labels = []
         values = []
-        
+        disabled = []
+
         for id, run in runs.items():
             try:
-                check_compatibility(run)
-                values.append(f"run:{run}")
+                values.append(f"run:{id}")
                 labels.append(id)
+                disabled.append(False)
             except:
                 pass
-        
+
+        added_group_label = False
         for id, run in groups.items():
-            try:
-                check_compatibility(run)
-                values.append(f"group:{run}")
+            if check_compatibility(run):
+                if not added_group_label:
+                    values.append("")
+                    labels.append("Groups")
+                    disabled.append(True)
+                    added_group_label = True
+
+                values.append(f"group:{id}")
                 labels.append(id)
-            except:
-                pass
-        
+                disabled.append(False)
+
         return {
             "run_name": {
-                "options": get_select_options(labels=labels, values=values),
-                "value": None
+                "options": get_select_options(
+                    labels=labels, values=values, disabled=disabled
+                ),
+                "value": None,
             }
         }
 
@@ -555,7 +589,7 @@ class Plugin(Layout, ABC):
             return [run]
         else:
             # TODO(dwoiwode): Only return runs or also groups?
-            return list(run_handler.runs.values())
+            return self.all_runs
 
     @staticmethod
     def load_inputs(runs) -> dict[str, Any]:
@@ -582,7 +616,7 @@ class Plugin(Layout, ABC):
         return []
 
     @staticmethod
-    def load_outputs(inputs, outputs, groups):
+    def load_outputs(inputs, outputs, runs):
         """
         Returns:
             list or PreventUpdate: List of outputs (for `get_output_layout`) or PreventUpdate if
@@ -592,7 +626,7 @@ class Plugin(Layout, ABC):
         return {}
 
     @staticmethod
-    def load_mpl_outputs(inputs, outputs, groups):
+    def load_mpl_outputs(inputs, outputs, runs):
         return {}
 
     @staticmethod
@@ -601,7 +635,8 @@ class Plugin(Layout, ABC):
         pass
 
     @staticmethod
-    def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
+    def _process(
+        process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs
+    ):
         run = run_handler.from_run_cache_id(run_cache_id)
         return process(run, inputs)
-

@@ -2,7 +2,7 @@ import time
 import warnings
 from functools import cached_property
 from pathlib import Path
-from typing import Optional, Type
+from typing import Optional, Type, Dict
 
 from deepcave import c, rc
 from deepcave.runs.run import Run
@@ -26,7 +26,9 @@ class RunHandler:
         self.failed_to_load = set()
 
         # Mapping: How many runs are converted from this run-class
-        self.available_run_classes: dict[Type[Run], int] = {class_: 0 for class_ in self._available_run_classes}
+        self.available_run_classes: dict[Type[Run], int] = {
+            class_: 0 for class_ in self._available_run_classes
+        }
 
         self.runs: dict[str, Run] = {}  # run_name -> Run
         self.groups: dict[str, GroupedRun] = {}  # group_name -> GroupedRun
@@ -35,9 +37,9 @@ class RunHandler:
         self.load_from_cache()
 
     def load_from_cache(self):
-        working_dir: Path = Path(c.get('working_dir'))
-        selected_runs: list[str] = c.get('selected_run_names')  # run_name
-        groups: dict[str, list[str]] = c.get('groups')  # group_name -> list[run_names]
+        working_dir: Path = Path(c.get("working_dir"))
+        selected_runs: list[str] = c.get("selected_run_names")  # run_name
+        groups: dict[str, list[str]] = c.get("groups")  # group_name -> list[run_names]
 
         print(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
@@ -46,7 +48,9 @@ class RunHandler:
         print(f"Setting groups to {groups}")
         self.update_groups(groups)
 
-    def update_working_directory(self, working_directory: Path, force_clear: bool = False):
+    def update_working_directory(
+        self, working_directory: Path, force_clear: bool = False
+    ):
         """
         Set working directory.
         If it is the same as before -> Do nothing.
@@ -65,10 +69,10 @@ class RunHandler:
         rc.clear()
 
         # Set in cache
-        c.set('working_dir', value=str(working_directory))
+        c.set("working_dir", value=str(working_directory))
 
     def update_runs(self, selected_run_names: Optional[list[str]] = None):
-        """ Loads selected runs and update cache if files changed """
+        """Loads selected runs and update cache if files changed"""
         if selected_run_names is None:
             selected_run_names = c.get("selected_run_names")
         new_runs: dict[str, Run] = {}
@@ -112,16 +116,19 @@ class RunHandler:
 
         # Add to run cache
         rc.add(run)
+
         return run
 
     def update_groups(self, groups: Optional[dict[str, list[str]]] = None):
-        """ Loads chosen groups """
+        """Loads chosen groups"""
         if groups is None:
             groups = c.get("groups")
 
         # Add groups
         groups = {
-            name: GroupedRun(name, [self.runs.get(run_name, None) for run_name in run_names])
+            name: GroupedRun(
+                name, [self.runs.get(run_name, None) for run_name in run_names]
+            )
             for name, run_names in groups.items()
         }
 
@@ -136,10 +143,9 @@ class RunHandler:
         self.groups = groups
         # Save in cache
         groups_for_cache = {
-            name: [run.name for run in group.runs]
-            for name, group in groups.items()
+            name: [run.name for run in group.runs] for name, group in groups.items()
         }
-        c.set('groups', value=groups_for_cache)
+        c.set("groups", value=groups_for_cache)
 
     def get_working_dir(self) -> Path:
         return self.working_dir
@@ -147,7 +153,7 @@ class RunHandler:
     def get_run_names(self) -> list[str]:
         return list(self.runs.keys())
 
-    def from_run_id(self, run_id:str) -> AbstractRun:
+    def from_run_id(self, run_id: str) -> AbstractRun:
         """
         Required format: {prefix}:{run_name}
         """
@@ -171,8 +177,10 @@ class RunHandler:
             if group.run_cache_id == run_cache_id:
                 return group
 
-        raise KeyError(f"Could not find run with run_cache_id {run_cache_id}. "
-                       f"Searched in {len(self.runs)} runs and {len(self.groups)} groups")
+        raise KeyError(
+            f"Could not find run with run_cache_id {run_cache_id}. "
+            f"Searched in {len(self.runs)} runs and {len(self.groups)} groups"
+        )
 
     def get_groups(self) -> dict[str, GroupedRun]:
         return self.groups.copy()
@@ -187,29 +195,50 @@ class RunHandler:
 
         return run_names
 
-    def get_runs(self) -> dict[str, AbstractRun]:
+    def get_runs(self, include_groups=False) -> Dict[str, AbstractRun]:
         """
         self.converter.get_run() might be expensive. Therefore, we cache it here, and only
         reload it, once working directory, run id or the id based on the files changed.
         """
+
+        if include_groups:
+            # TODO: Prevent same name for runs/groups
+            runs = {}
+
+            # Add runs
+            for id, run in self.runs.items():
+                runs[id] = run
+
+            # Add groups
+            for id, group in self.groups.items():
+                runs[id] = group
+
+            return runs
+        else:
+            return self.runs
+
         return self.runs
 
     @cached_property
     def _available_run_classes(self) -> list[Type[Run]]:
         available_converters = set()
 
-        paths = [Path(__file__).parent / 'converters/']
+        paths = [Path(__file__).parent / "converters/"]
         for _, converter_class in auto_import_iter("converter", paths):
             if not issubclass(converter_class, Run) or converter_class == Run:
                 continue
 
             available_converters.add(converter_class)
 
-        print(f"Found available converters:", available_converters)
+        print(f"Found available converters: {available_converters}")
 
-        return sorted(list(available_converters), key=lambda run_class: run_class._initial_order)
+        return sorted(
+            list(available_converters), key=lambda run_class: run_class._initial_order
+        )
 
-    def get_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[Run]:
+    def get_run(
+        self, run_name: str, class_hint: Optional[Type[Run]] = None
+    ) -> Optional[Run]:
         """
         Try to load run from path by using all available converters, until a sufficient class is found.
         Try to load them in order by how many runs were already successfully converted from this class
@@ -219,7 +248,13 @@ class RunHandler:
         if self.working_dir is None or not self.working_dir.is_dir():
             return None
 
-        sorted_classes = list(sorted(self.available_run_classes, key=self.available_run_classes.get, reverse=True))
+        sorted_classes = list(
+            sorted(
+                self.available_run_classes,
+                key=self.available_run_classes.get,
+                reverse=True,
+            )
+        )
 
         if class_hint is not None:
             sorted_classes.insert(0, class_hint)
@@ -236,6 +271,7 @@ class RunHandler:
                 raise
             except:
                 pass
+
         return None
 
 

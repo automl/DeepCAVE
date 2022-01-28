@@ -1,12 +1,19 @@
 from copy import deepcopy
-from typing import Optional, Any
+from typing import List, Optional, Any, Union
 
 import ConfigSpace
 from ConfigSpace import Configuration
+import numpy as np
 
 from deepcave.runs import AbstractRun
 from deepcave.runs.run import Run
 from deepcave.utils.hash import string_to_hash
+
+
+class NotMergeableError(Exception):
+    """Raised if two or more runs are not mergeable"""
+
+    pass
 
 
 class GroupedRun(AbstractRun):
@@ -34,26 +41,34 @@ class GroupedRun(AbstractRun):
             # Also check if budgets are the same
             self.get_budgets()
 
+            # And if objectives are the same
+            self.get_objectives()
+
             # We need new config ids
             current_config_id = 0
 
             # Combine runs here
-            for runs in self.runs:
+            for run in self.runs:
                 config_mapping = {}  # Maps old ones to the new ones
 
                 # Update configs + origins
-                for config_id in runs.configs.keys():
-                    config = runs.configs[config_id]
-                    origin = runs.origins[config_id]
+                for config_id in run.configs.keys():
+                    config = run.configs[config_id]
+                    origin = run.origins[config_id]
 
-                    if config not in self.configs.values():
+                    for added_config_id, added_config in self.configs.items():
+                        if config == added_config:
+                            config_mapping[config_id] = added_config_id
+                            break
+
+                    if config_id not in config_mapping:
                         self.configs[current_config_id] = config
                         self.origins[current_config_id] = origin
-                        current_config_id += 1
                         config_mapping[config_id] = current_config_id
+                        current_config_id += 1
 
                 # Update history + trial_keys
-                for trial in self.history:
+                for trial in run.history:
                     # Deep copy trial
                     trial = deepcopy(trial)
 
@@ -98,7 +113,7 @@ class GroupedRun(AbstractRun):
         cs = self.runs[0].configspace
         for run in self.runs:
             if cs != run.configspace:
-                raise RuntimeError("Configspace of runs are not equal.")
+                raise NotMergeableError("Configspace of runs are not equal.")
 
         return cs
 
@@ -110,8 +125,15 @@ class GroupedRun(AbstractRun):
 
         meta = self.runs[0].get_meta()
         for run in self.runs:
-            if meta != run.get_meta():
-                raise RuntimeError("Meta data of runs are not equal.")
+            meta2 = run.get_meta()
+
+            for k, v in meta.items():
+                # Don't check on objectives or budgets
+                if k == "objectives" or k == "budgets":
+                    continue
+
+                if k not in meta2 or meta2[k] != v:
+                    raise NotMergeableError("Meta data of runs are not equal.")
 
         return meta
 
@@ -121,10 +143,19 @@ class GroupedRun(AbstractRun):
         Otherwise raise an error.
         """
 
-        objectives = self.runs[0].get_objectives()
+        objectives = None
         for run in self.runs:
-            if objectives != run.get_objectives():
-                raise RuntimeError("Meta data of runs is not equal.")
+            objectives2 = run.get_objectives()
+
+            if objectives is None:
+                objectives = objectives2
+                continue
+
+            if len(objectives) != len(objectives2):
+                raise NotMergeableError("Objectives of runs are not equal.")
+
+            for o1, o2 in zip(objectives, objectives2):
+                o1.merge(o2)
 
         return objectives
 
@@ -145,7 +176,7 @@ class GroupedRun(AbstractRun):
         if self.merged_history:
             return self.configs[id]
         else:
-            raise RuntimeError("Run data are not mergeable.")
+            raise NotMergeableError("Run data are not mergeable.")
 
     def get_config_id(self, config: dict):
         """
@@ -161,7 +192,7 @@ class GroupedRun(AbstractRun):
 
             return None
         else:
-            raise RuntimeError("Run data are not mergeable.")
+            raise NotMergeableError("Run data are not mergeable.")
 
     def get_configs(self, budget=None):
         """
@@ -181,9 +212,9 @@ class GroupedRun(AbstractRun):
 
             return configs
         else:
-            raise RuntimeError("Run data are not mergeable.")
+            raise NotMergeableError("Run data are not mergeable.")
 
-    def get_budgets(self, human=False) -> list[str]:
+    def get_budgets(self, human=False) -> Union[List[str], NotMergeableError]:
         """
         Returns all budgets if all runs have the same budgets.
         Otherwise raise an error.
@@ -191,37 +222,28 @@ class GroupedRun(AbstractRun):
 
         budgets = self.runs[0].get_budgets(human=human)
         for run in self.runs:
-            if budgets != run.get_budget(human=human):
-                raise RuntimeError("Budgets of runs are not equal.")
+            if budgets != run.get_budgets(human=human):
+                raise NotMergeableError("Budgets of runs are not equal.")
 
         return budgets
 
-    def get_budget(self, idx: int) -> float:
+    def get_budget(self, idx: int) -> Union[float, NotMergeableError]:
         """
         Returns the budget of index `idx` if all runs have the same budget.
         Otherwise raise an error.
         """
 
-        try:
-            budgets = self.get_budgets()
-            return budgets[idx]
-        except:
-            raise RuntimeError("Budgets of runs are not equal.")
+        budgets = self.get_budgets()
+        return budgets[idx]
 
-
-    def get_highest_budget(self):
+    def get_highest_budget(self) -> Union[float, NotMergeableError]:
         """
         Returns highest budget if all runs have the same budgets.
         Otherwise raise an error.
         """
 
-        try:
-            self.get_budgets()
-            return super().get_highest_budget()
-        except:
-            raise RuntimeError("Budgets of runs are not equal.")
-
-
+        self.get_budgets()
+        return self.runs[0].get_highest_budget()
 
     def get_costs(self, *args, **kwargs):
         """
@@ -231,9 +253,64 @@ class GroupedRun(AbstractRun):
         """
 
         if self.merged_history:
-            return self.get_costs(*args, **kwargs)
+            return super().get_costs(*args, **kwargs)
         else:
-            raise RuntimeError("Run data are not mergeable.")
+            raise NotMergeableError("Run data are not mergeable.")
 
+    def get_min_cost(self, *args, **kwargs):
+        """
+        Return costs if runs are mergeable.
+        Otherwise raise an error.
+        If no budget is given, the highest budget is chosen.
+        """
 
-# TODO(dwoiwode): Folgender Code sollte auch die Trial-Klasse ersetzen können. Ist vielleicht lesbarer als ein vererbter Tuple
+        if self.merged_history:
+            return super().get_min_cost(*args, **kwargs)
+        else:
+            raise NotMergeableError("Run data are not mergeable.")
+
+    def get_trajectory(self, *args, **kwargs):
+
+        # Cache costs
+        run_costs = []
+        run_times = []
+
+        # All x values on which we need y values
+        all_times = []
+
+        for run in self.runs:
+            times, costs_mean, _, _ = run.get_trajectory(*args, **kwargs)
+
+            # Cache st we don't calculate it multiple times
+            run_costs.append(costs_mean)
+            run_times.append(times)
+
+            # Add all times
+            for time in times:
+                if time not in all_times:
+                    all_times.append(time)
+
+        all_times.sort()
+
+        # Now look for corresponding y values
+        all_costs = []
+
+        for time in all_times:
+            y = []
+
+            # Iterate over all runs
+            for costs, times in zip(run_costs, run_times):
+                # Find closest x value
+                idx = min(range(len(times)), key=lambda i: abs(times[i] - time))
+                y.append(costs[idx])
+
+            all_costs.append(y)
+
+        # Make numpy arrays
+        all_costs = np.array(all_costs)
+
+        times = all_times
+        costs_mean = np.mean(all_costs, axis=1)
+        costs_std = np.std(all_costs, axis=1)
+
+        return times, list(costs_mean), list(costs_std), []
