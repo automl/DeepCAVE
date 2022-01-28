@@ -1,12 +1,19 @@
 from abc import ABC, abstractmethod
+import copy
 from enum import IntEnum
 from typing import Optional, Iterator, Iterable, Union
 
 import ConfigSpace
 import numpy as np
 import pandas as pd
-from ConfigSpace import Configuration, CategoricalHyperparameter, UniformFloatHyperparameter, \
-    UniformIntegerHyperparameter, Constant
+from ConfigSpace import (
+    Configuration,
+    CategoricalHyperparameter,
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
+    Constant,
+)
+from deepcave.runs.objective import Objective
 
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
@@ -64,13 +71,28 @@ class AbstractRun(ABC):
         """
         pass
 
+    def get_meta(self):
+        return self.meta
+
     def empty(self):
         return len(self.history) == 0
 
     def get_objectives(self):
-        return self.meta["objectives"]
+        objectives = []
+        for d in self.meta["objectives"]:
+            objective = Objective(name=d["name"],
+                                  lower=d["lower"],
+                                  upper=d["upper"],
+                                  optimize=d["optimize"])
+            
+            objective["lock_lower"] = d["lock_lower"]
+            objective["lock_upper"] = d["lock_upper"]
+            
+            objectives.append(objective)
 
-    def get_trials(self) -> Iterator['Trial']:
+        return objectives
+
+    def get_trials(self) -> Iterator["Trial"]:
         yield from self.history
 
     def get_objective_name(self, objective_names=None):
@@ -285,12 +307,14 @@ class AbstractRun(ABC):
 
         return costs, times, ids
 
-    def get_encoded_configs(self,
-                            objective_names=None,
-                            budget=None,
-                            statuses=None,
-                            for_tree=False,
-                            pandas=False) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
+    def get_encoded_configs(
+        self,
+        objective_names=None,
+        budget=None,
+        statuses=None,
+        for_tree=False,
+        pandas=False,
+    ) -> Union[tuple[np.ndarray, np.ndarray], pd.DataFrame]:
         """
         Args:
             for_tree (bool): Inactives are treated differently.
@@ -335,7 +359,10 @@ class AbstractRun(ABC):
                         conditional[idx] = True
                         if isinstance(hp, CategoricalHyperparameter):
                             impute_values[idx] = len(hp.choices)
-                        elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
+                        elif isinstance(
+                            hp,
+                            (UniformFloatHyperparameter, UniformIntegerHyperparameter),
+                        ):
                             impute_values[idx] = -1
                         elif isinstance(hp, Constant):
                             impute_values[idx] = 1
@@ -354,12 +381,14 @@ class AbstractRun(ABC):
             df = pd.DataFrame(
                 data=data,
                 # Combined Cost
-                columns=[
-                            name for name in self.configspace.get_hyperparameter_names()] + [cost_column])
+                columns=[name for name in self.configspace.get_hyperparameter_names()]
+                + [cost_column],
+            )
 
             return df
 
         return X, Y
+
 
 # @dataclass
 # class Trial:
@@ -386,14 +415,9 @@ class Trial(tuple):
         else:
             return super(Trial, cls).__new__(cls, tuple(args))
 
-    def __init__(self,
-                 config_id,
-                 budget,
-                 costs,
-                 start_time,
-                 end_time,
-                 status,
-                 additional):
+    def __init__(
+        self, config_id, budget, costs, start_time, end_time, status, additional
+    ):
 
         if isinstance(status, int):
             status = Status(status)
@@ -405,7 +429,7 @@ class Trial(tuple):
             "start_time": start_time,
             "end_time": end_time,
             "status": status,
-            "additional": additional
+            "additional": additional,
         }
 
         # Make dict available as member variables

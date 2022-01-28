@@ -1,10 +1,19 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
-from ConfigSpace.hyperparameters import UniformIntegerHyperparameter, NormalIntegerHyperparameter, \
-    UniformFloatHyperparameter, NormalFloatHyperparameter, CategoricalHyperparameter, OrdinalHyperparameter, Constant
+from ConfigSpace.hyperparameters import (
+    UniformIntegerHyperparameter,
+    NormalIntegerHyperparameter,
+    UniformFloatHyperparameter,
+    NormalFloatHyperparameter,
+    CategoricalHyperparameter,
+    OrdinalHyperparameter,
+    Constant,
+)
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs import AbstractRun
+from deepcave.runs.grouped_run import NotMergeableError
 from deepcave.runs.handler import run_handler
 
 
@@ -13,6 +22,14 @@ class Configurations(DynamicPlugin):
     name = "Configurations"
 
     activate_run_selection = True
+
+    @staticmethod
+    def check_compatibility(run: AbstractRun):
+        # TODO: Solve smarter
+        if run.prefix == "group" and not run.merged_history:
+            return False
+
+        return True
 
     @staticmethod
     def process(run, inputs):
@@ -28,10 +45,12 @@ class Configurations(DynamicPlugin):
 
             log = False
             value = None
-            if isinstance(hp, UniformIntegerHyperparameter) or isinstance(hp,
-                                                                          NormalIntegerHyperparameter) or isinstance(hp,
-                                                                                                                     UniformFloatHyperparameter) or isinstance(
-                hp, NormalFloatHyperparameter):
+            if (
+                isinstance(hp, UniformIntegerHyperparameter)
+                or isinstance(hp, NormalIntegerHyperparameter)
+                or isinstance(hp, UniformFloatHyperparameter)
+                or isinstance(hp, NormalFloatHyperparameter)
+            ):
                 value = str([hp.lower, hp.upper])
                 log = hp.log
             elif isinstance(hp, CategoricalHyperparameter):
@@ -51,11 +70,9 @@ class Configurations(DynamicPlugin):
 
         # Get best cost across all objectives, highest budget
         cost, config = run.get_min_cost()
+        print(cost, config)
 
-        best_config = {
-            "Hyperparameter": [],
-            "Value": []
-        }
+        best_config = {"Hyperparameter": [], "Value": []}
 
         for hp_name, value in config.items():
             best_config["Hyperparameter"].append(hp_name)
@@ -73,7 +90,6 @@ class Configurations(DynamicPlugin):
             html.H3("Configuration Space"),
             html.Div(id=register("configspace", "children")),
             html.Hr(),
-
             html.H3("Best Configuration"),
             html.Div(id=register("best_config", "children")),
             html.Div(id=register("min_cost", "children")),
@@ -84,12 +100,13 @@ class Configurations(DynamicPlugin):
         run = run_handler.from_run_id(inputs["run_name"]["value"])
         outputs = outputs[run.name]
 
-        def create_table(output): return dbc.Table.from_dataframe(
-            pd.DataFrame(output), striped=True, bordered=True
-        )
+        def create_table(output):
+            return dbc.Table.from_dataframe(
+                pd.DataFrame(output), striped=True, bordered=True
+            )
 
         return [
             create_table(outputs["configspace"]),
             create_table(outputs["best_config"]),
-            f"With normalized cost: {outputs['min_cost']}"
+            f"With normalized cost: {outputs['min_cost']}",
         ]

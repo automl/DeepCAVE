@@ -3,23 +3,30 @@ import pandas as pd
 from dash import html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs.grouped_run import NotMergeableError
 from deepcave.runs.handler import run_handler
-from deepcave.runs import Status
+from deepcave.runs import AbstractRun, Status
 
 
 class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
 
-    activate_run_selection =  True
+    activate_run_selection = True
+
+    @staticmethod
+    def check_compatibility(run: AbstractRun):
+        # Check if selected runs have same budgets+objectives
+        try:
+            run.get_meta()
+            return True
+        except NotMergeableError:
+            return False
 
     @staticmethod
     def process(run, inputs):
         # Meta
-        meta = {
-            "Attribute": [],
-            "Value": []
-        }
+        meta = {"Attribute": [], "Value": []}
         for k, v in run.get_meta().items():
             if k == "objectives":
                 continue
@@ -31,11 +38,7 @@ class Overview(DynamicPlugin):
             meta["Value"].append(str(v))
 
         # Objectives
-        objectives = {
-            "Name": [],
-            "Lower Bound": [],
-            "Upper Bound": []
-        }
+        objectives = {"Name": [], "Lower Bound": [], "Upper Bound": []}
         for objective in run.get_objectives():
             objectives["Name"].append(objective["name"])
             objectives["Lower Bound"].append(objective["lower"])
@@ -55,10 +58,7 @@ class Overview(DynamicPlugin):
         for trial in run.get_trials():
             stats[trial.budget][trial.status.name] += 1
 
-        statistics = {
-            "Budget": budgets,
-            "Total": []
-        }
+        statistics = {"Budget": budgets, "Total": []}
         for s in Status:
             statistics[s.name] = []
 
@@ -90,14 +90,11 @@ class Overview(DynamicPlugin):
             html.H3("Meta"),
             html.Div(id=register("meta", "children")),
             html.Hr(),
-
             html.H3("Objectives"),
             html.Div(id=register("objectives", "children")),
             html.Hr(),
-
             html.H3("Statistics"),
             html.Div(id=register("statistics", "children")),
-            html.Hr(),
         ]
 
     @staticmethod
@@ -105,9 +102,10 @@ class Overview(DynamicPlugin):
         run = run_handler.from_run_id(inputs["run_name"]["value"])
         outputs = outputs[run.name]
 
-        def create_table(output): return dbc.Table.from_dataframe(
-            pd.DataFrame(output), striped=True, bordered=True
-        )
+        def create_table(output):
+            return dbc.Table.from_dataframe(
+                pd.DataFrame(output), striped=True, bordered=True
+            )
 
         return [
             create_table(outputs["meta"]),
