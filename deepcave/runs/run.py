@@ -25,15 +25,18 @@ class Run(AbstractRun, ABC):
     - origins.json
     - models/1.blub
     """
+
     prefix = "run"
     _initial_order: int
 
-    def __init__(self,
-                 name: str,
-                 configspace=None,
-                 objectives: Union[Objective, list[Objective]] = None,
-                 meta: dict[str, Any] = None,
-                 path: Optional[Union[str, Path]] = None):
+    def __init__(
+        self,
+        name: str,
+        configspace=None,
+        objectives: Union[Objective, list[Objective]] = None,
+        meta: dict[str, Any] = None,
+        path: Optional[Union[str, Path]] = None,
+    ):
         """
         If path is given, runs are loaded from the path.
 
@@ -57,7 +60,8 @@ class Run(AbstractRun, ABC):
 
         if configspace is None and path is None:
             raise RuntimeError(
-                "Please provide a configspace or specify a path to load existing trials.")
+                "Please provide a configspace or specify a path to load existing trials."
+            )
 
         # Objectives
         if not isinstance(objectives, list):
@@ -67,10 +71,7 @@ class Run(AbstractRun, ABC):
             assert isinstance(objective, Objective)
 
         # Meta
-        self.meta = {
-            "objectives": objectives,
-            "budgets": []
-        }
+        self.meta = {"objectives": objectives, "budgets": []}
         self.meta.update(meta)
 
     @classmethod
@@ -113,19 +114,29 @@ class Run(AbstractRun, ABC):
         if self._path is None:
             return False
 
-        return all(f.is_file() for f in (self.meta_fn, self.configspace_fn, self.configs_fn,
-                                         self.origins_fn, self.history_fn))
+        return all(
+            f.is_file()
+            for f in (
+                self.meta_fn,
+                self.configspace_fn,
+                self.configs_fn,
+                self.origins_fn,
+                self.history_fn,
+            )
+        )
 
-    def add(self,
-            costs: Union[list[float], float],
-            config: Union[dict, Configuration],  # either dict or Configuration
-            budget: float = np.inf,
-            start_time: float = 0.,
-            end_time: float = 0.,
-            status: Status = Status.SUCCESS,
-            origin=None,
-            model=None,
-            additional: Optional[dict] = None):
+    def add(
+        self,
+        costs: Union[list[float], float],
+        config: Union[dict, Configuration],  # either dict or Configuration
+        budget: float = np.inf,
+        start_time: float = 0.0,
+        end_time: float = 0.0,
+        status: Status = Status.SUCCESS,
+        origin=None,
+        model=None,
+        additional: Optional[dict] = None,
+    ):
         """
 
         If combination of config and budget already exists, it will be overwritten.
@@ -133,7 +144,7 @@ class Run(AbstractRun, ABC):
         The cost will be calculated on the worst result later on.
 
         Inputs:
-            additional (dict): What's supported by DeepCAVE? Like `ram`, 
+            additional (dict): What's supported by DeepCAVE? Like `ram`,
             costs (float or list of floats)
         """
         if additional is None:
@@ -182,7 +193,7 @@ class Run(AbstractRun, ABC):
             start_time=np.round(start_time, 2),
             end_time=np.round(end_time, 2),
             status=status,
-            additional=additional
+            additional=additional,
         )
 
         trial_key = trial.get_key()
@@ -219,7 +230,7 @@ class Run(AbstractRun, ABC):
         self.origins_fn.write_text(json.dumps(self.origins, indent=4))
 
         # Save history
-        with jsonlines.open(self.history_fn, mode='w') as f:
+        with jsonlines.open(self.history_fn, mode="w") as f:
             for trial in self.history:
                 f.write(trial)
 
@@ -250,7 +261,8 @@ class Run(AbstractRun, ABC):
         self.configs = {int(k): v for k, v in configs.items()}
 
         # Load origins
-        self.origins = json.loads(self.origins_fn.read_text())
+        origins = json.loads(self.origins_fn.read_text())
+        self.origins = {int(k): v for k, v in origins.items()}
 
         # Load history
         with jsonlines.open(self.history_fn) as f:
