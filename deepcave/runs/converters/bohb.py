@@ -1,8 +1,8 @@
 from pathlib import Path
 
+from deepcave.runs import Status
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
-from deepcave.runs import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -27,7 +27,8 @@ class BOHBRun(Run):
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        configspace = cs_json.read((path / 'configspace.json').read_text())
+
+        configspace = cs_json.read((path / "configspace.json").read_text())
 
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
@@ -35,14 +36,11 @@ class BOHBRun(Run):
         objective = Objective("Cost", lower=0)
 
         run = BOHBRun(
-            path.stem,
-            configspace=configspace,
-            objectives=objective,
-            meta={},
-            path=path
+            path.stem, configspace=configspace, objectives=objective, meta={}, path=path
         )
 
         from hpbandster.core.result import logged_results_to_HBS_result
+
         bohb = logged_results_to_HBS_result(str(path))
         config_mapping = bohb.get_id2config_mapping()
 
@@ -63,11 +61,11 @@ class BOHBRun(Run):
             budget = bohb_run.budget
 
             if bohb_run.info is None:
-                status = 'CRASHED'
+                status = "CRASHED"
             else:
                 status = bohb_run.info["state"]
 
-            config = config_mapping[bohb_run.config_id]['config']
+            config = config_mapping[bohb_run.config_id]["config"]
 
             origin = None
             additional = {}

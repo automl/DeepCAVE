@@ -24,12 +24,13 @@ clean:
 buildapi:
 	rm -rf apidoc
 
-	sphinx-apidoc -fePTMo apidoc/ ../smac/ --templatedir themes/smac/templates/apidoc
-	rm apidoc/smac.rst
-	rm apidoc/smac.configspace*
+	sphinx-apidoc -fePTMo apidoc/ ../deepcave/ --templatedir themes/automl/templates/apidoc
 
 html:
 	sphinx-build -b html . html -a
+
+html-noexamples:
+	SPHINX_GALLERY_PLOT=False sphinx-build -b html . html -a
 
 all:
 	make clean

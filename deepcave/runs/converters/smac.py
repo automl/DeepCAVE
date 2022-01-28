@@ -3,10 +3,10 @@ from pathlib import Path
 
 import numpy as np
 
+from deepcave.runs import Status
 from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
-from deepcave.runs import Status
 from deepcave.utils.hash import file_to_hash
 
 
@@ -34,7 +34,8 @@ class SMACRun(Run):
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with (path / 'configspace.json').open('r') as f:
+
+        with (path / "configspace.json").open("r") as f:
             configspace = cs_json.read(f.read())
 
         # Read objectives
@@ -50,7 +51,7 @@ class SMACRun(Run):
             "cutoff": "Algorithm Time Limit",
             "memory_limit": "Memory Limit",
             "wallclock_limit": "Wallclock Limit",
-            "initial_incumbent": "Initial Incumbent"
+            "initial_incumbent": "Initial Incumbent",
         }
 
         meta = {}
@@ -67,10 +68,7 @@ class SMACRun(Run):
                     meta[mapping[arg]] = value
 
         run = SMACRun(
-            path.stem,
-            configspace=configspace,
-            objectives=objective,
-            meta=meta
+            path.stem, configspace=configspace, objectives=objective, meta=meta
         )
 
         # Iterate over the runhistory
@@ -82,7 +80,14 @@ class SMACRun(Run):
 
         first_starttime = None
         seeds = []
-        for (config_id, instance_id, seed, budget), (cost, time, status, starttime, endtime, additional_info) in data:
+        for (config_id, instance_id, seed, budget), (
+            cost,
+            time,
+            status,
+            starttime,
+            endtime,
+            additional_info,
+        ) in data:
 
             config_id = str(config_id)
             config = configs[config_id]

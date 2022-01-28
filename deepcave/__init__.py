@@ -1,7 +1,7 @@
 import sys
 
-from deepcave.__version__ import __version__
 from deepcave.__author__ import __author__
+from deepcave.__version__ import __version__
 from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
@@ -17,10 +17,10 @@ _exec_file = sys.argv[0]
 
 if "server.py" in _exec_file or "worker.py" in _exec_file:
     from deepcave.config import configs
+    from deepcave.queue import Queue  # noqa
+    from deepcave.server import get_app  # noqa
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa
-    from deepcave.server import get_app  # noqa
-    from deepcave.queue import Queue  # noqa
 
     config = configs["default"]
     app = get_app()

@@ -1,10 +1,10 @@
-from pathlib import Path
 from typing import Type
 
+from pathlib import Path
+
 import dash_bootstrap_components as dbc
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output, State, ALL
+from dash import dcc, html
+from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 

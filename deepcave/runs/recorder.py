@@ -1,24 +1,27 @@
+from typing import Optional, Union
+
 import time
 from pathlib import Path
-from typing import Union, Optional
 
 import ConfigSpace
 import numpy as np
 from ConfigSpace import Configuration
 
+from deepcave.runs import Status
 from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.run import Run
-from deepcave.runs import Status
 
 
 class Recorder:
-    def __init__(self,
-                 configspace: ConfigSpace.ConfigurationSpace,
-                 objectives=None,
-                 meta=None,
-                 save_path="logs",
-                 prefix="run",
-                 overwrite=False):
+    def __init__(
+        self,
+        configspace: ConfigSpace.ConfigurationSpace,
+        objectives=None,
+        meta=None,
+        save_path="logs",
+        prefix="run",
+        overwrite=False,
+    ):
         """
         All objectives follow the scheme the lower the better.
         If file
@@ -48,10 +51,7 @@ class Recorder:
 
         # Define trials container
         self.run = DeepCAVERun(
-            self.path.stem,
-            configspace=configspace,
-            objectives=objectives,
-            meta=meta
+            self.path.stem, configspace=configspace, objectives=objectives, meta=meta
         )
 
     def __enter__(self):
@@ -86,13 +86,15 @@ class Recorder:
         else:
             self.path = path / f"{prefix}"
 
-    def start(self,
-              config: Union[dict, Configuration],
-              budget: Optional[float] = None,
-              model=None,
-              origin=None,
-              additional: Optional[dict] = None,
-              start_time: Optional[float] = None):
+    def start(
+        self,
+        config: Union[dict, Configuration],
+        budget: Optional[float] = None,
+        model=None,
+        origin=None,
+        additional: Optional[dict] = None,
+        start_time: Optional[float] = None,
+    ):
         if additional is None:
             additional = {}
 
@@ -109,13 +111,15 @@ class Recorder:
 
         self.last_trial_id = id
 
-    def end(self,
-            costs: float = np.inf,
-            status: Status = Status.SUCCESS,
-            config: Union[dict, Configuration] = None,
-            budget: float = np.inf,
-            additional: Optional[dict] = None,
-            end_time: Optional[float] = None):
+    def end(
+        self,
+        costs: float = np.inf,
+        status: Status = Status.SUCCESS,
+        config: Union[dict, Configuration] = None,
+        budget: float = np.inf,
+        additional: Optional[dict] = None,
+        end_time: Optional[float] = None,
+    ):
         """
         In case of multi-processing, config+budget should be passed as otherwise
         it can't be matched correctly.
@@ -146,7 +150,7 @@ class Recorder:
             end_time=end_time,
             status=status,
             model=model,
-            additional=start_additional
+            additional=start_additional,
         )
 
         # Clean the dicts

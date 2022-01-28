@@ -1,10 +1,11 @@
-from pathlib import Path
 from typing import Type
+
+from pathlib import Path
 
 
 class Config:
     # General config
-    TITLE: str = 'Deep CAVE'
+    TITLE: str = "Deep CAVE"
 
     # Cache dir
     root = Path.cwd()
@@ -17,26 +18,27 @@ class Config:
 
     # Default Meta information which are used across the platform
     META_DEFAULT = {
-        'matplotlib-mode': False,
-        'working_dir': str(DEFAULT_WORKING_DIRECTORY),
-        'selected_runs': [],  # [run_name, ...]
-        'groups': {}  # {group_name: [run_name, ...]}
+        "matplotlib-mode": False,
+        "working_dir": str(DEFAULT_WORKING_DIRECTORY),
+        "selected_runs": [],  # [run_name, ...]
+        "groups": {},  # {group_name: [run_name, ...]}
     }
 
     # Plugins
     @property
-    def PLUGINS(self) -> dict[str, list[Type['Plugin']]]:
+    def PLUGINS(self) -> dict[str, list[Type["Plugin"]]]:
         """
         Returns:
         dictionary [category -> List[Plugins]]
         Plugins are ordered
         """
         from deepcave.plugins.dynamic_plugin.ccube import CCube
-        from deepcave.plugins.dynamic_plugin.overview import Overview
         from deepcave.plugins.dynamic_plugin.configurations import Configurations
         from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
+        from deepcave.plugins.dynamic_plugin.overview import Overview
         from deepcave.plugins.static_plugin.fanova import fANOVA
         from deepcave.plugins.static_plugin.ice import ICE
+
         plugins = {
             "General": [
                 Overview(),
@@ -54,6 +56,4 @@ class Config:
         return plugins
 
 
-configs = {
-    "default": Config()
-}
+configs = {"default": Config()}

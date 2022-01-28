@@ -8,8 +8,8 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.runs.handler import run_handler
 from deepcave.runs import AbstractRun
+from deepcave.runs.handler import run_handler
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
 
@@ -24,39 +24,33 @@ class fANOVA(StaticPlugin):
     def get_input_layout(register):
         return [
             dbc.Label("Number of trees"),
-            dbc.Input(id=register("num_trees", "value"))
+            dbc.Input(id=register("num_trees", "value")),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            html.Div([
-                dbc.Label("Hyperparameters"),
-                dbc.Checklist(
-                    id=register("hyperparameters", ["options", "value"])),
-            ], className="mb-3"),
-
-            html.Div([
-                dbc.Label("Budgets"),
-                dbc.Checklist(
-                    id=register("budgets", ["options", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Hyperparameters"),
+                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Budgets"),
+                    dbc.Checklist(id=register("budgets", ["options", "value"])),
+                ]
+            ),
         ]
 
     @staticmethod
     def load_inputs(runs):
         return {
-            "num_trees": {
-                "value": 16
-            },
-            "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
-            },
-            "budgets": {
-                "options": get_checklist_options(),
-                "value": []
-            },
+            "num_trees": {"value": 16},
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
+            "budgets": {"options": get_checklist_options(), "value": []},
         }
 
     @staticmethod
@@ -95,14 +89,13 @@ class fANOVA(StaticPlugin):
             X, Y = run.get_encoded_configs(budget=budget, for_tree=True)
 
             evaluator = _fANOVA(
-                X, Y,
+                X,
+                Y,
                 configspace=run.configspace,
-                num_trees=int(inputs["num_trees"]["value"])
+                num_trees=int(inputs["num_trees"]["value"]),
             )
             importance_dict = evaluator.quantify_importance(
-                hp_names,
-                depth=1,
-                sort=False
+                hp_names, depth=1, sort=False
             )
 
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
@@ -113,9 +106,7 @@ class fANOVA(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure"))
-        ]
+        return [dcc.Graph(register("graph", "figure"))]
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
@@ -152,11 +143,7 @@ class fANOVA(StaticPlugin):
                 y += [results[1]]
                 error_y += [results[3]]
 
-            data[budget] = (
-                np.array(x),
-                np.array(y),
-                np.array(error_y)
-            )
+            data[budget] = (np.array(x), np.array(y), np.array(error_y))
 
             # if filters["sort"]["value"] == fidelity_id:
             #    selected_fidelity = fidelity
@@ -167,14 +154,16 @@ class fANOVA(StaticPlugin):
 
         bar_data = []
         for budget, values in data.items():
-            bar_data += [go.Bar(
-                name=budget,
-                x=values[0][idx],
-                y=values[1][idx],
-                error_y_array=values[2][idx])
+            bar_data += [
+                go.Bar(
+                    name=budget,
+                    x=values[0][idx],
+                    y=values[1][idx],
+                    error_y_array=values[2][idx],
+                )
             ]
 
         fig = go.Figure(data=bar_data)
-        fig.update_layout(barmode='group')
+        fig.update_layout(barmode="group")
 
         return [fig]

@@ -24,7 +24,9 @@ class ICE:
     def get_data(self) -> dict[int, Any]:
         return self.data
 
-    def fit(self, configspace: ConfigurationSpace, X: np.ndarray, Y: np.ndarray, seed=0):
+    def fit(
+        self, configspace: ConfigurationSpace, X: np.ndarray, Y: np.ndarray, seed=0
+    ):
         # Train random forest here
         if self.model is None:
             self.model = RandomForest(
@@ -70,7 +72,9 @@ class ICE:
 
             self.data[int(s)] = (X_ice, y_ice_mean, y_ice_var)
 
-    def get_ice_data(self, s: int, centered=False, variance_based=False) -> tuple[list[float], list[float]]:
+    def get_ice_data(
+        self, s: int, centered=False, variance_based=False
+    ) -> tuple[list[float], list[float]]:
         """
         Args:
             s (int): The id of the requested hyperparameter.
@@ -107,7 +111,9 @@ class ICE:
 
         return all_x, all_y
 
-    def get_pdp_data(self, s: int, variance_based=False) -> tuple[list[float], list[float], list[float]]:
+    def get_pdp_data(
+        self, s: int, variance_based=False
+    ) -> tuple[list[float], list[float], list[float]]:
         """
         Args:
             s (int): The id of the requested hyperparameter.

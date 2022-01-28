@@ -17,3 +17,6 @@ examples/*
 !run.sh
 .vscode
 *.egg-info
+docs/apidoc
+docs/html
+docs/pages/examples

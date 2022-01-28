@@ -4,7 +4,7 @@
 # These have been configured to only really run short tasks. Longer form tasks
 # are usually completed in github actions.
 
-.PHONY: help install-dev check format pre-commit clean clean-doc clean-build build doc links examples publish test
+.PHONY: help install-dev check format pre-commit clean clean-build build links examples publish test
 
 help:
 	@echo "Makefile deepcave"
@@ -14,11 +14,9 @@ help:
 	@echo "* pre-commit       to run the pre-commit check"
 	@echo "* clean            to clean the dist and doc build files"
 	@echo "* build            to build a dist"
-	@echo "* docs              to generate and view the html files"
-	@echo "* linkcheck        to check the documentation links"
 	@echo "* examples         to run and generate the examples"
 	@echo "* publish          to help publish the current branch to pypi"
-	@echo "* tests             to run the tests"
+	@echo "* tests            to run the tests"
 
 PYTHON ?= python
 CYTHON ?= cython
@@ -35,8 +33,6 @@ FLAKE8 ?= flake8
 
 DIR := ${CURDIR}
 DIST := ${CURDIR}/dist
-DOCS_DIR := ${DIR}/docs
-INDEX_HTML := file://${DOCS_DIR}/html/build/index.html
 
 install-dev:
 	$(PIP) install -e ".[tests,examples,docs]"
@@ -72,37 +68,18 @@ format-isort:
 
 format: format-black format-isort
 
-clean-doc:
-	$(MAKE) -C ${DOCS_DIR} clean
-
 clean-build:
 	$(PYTHON) setup.py clean
 	rm -rf ${DIST}
 
 # Clean up any builds in ./dist as well as doc
 clean:
-	clean-doc
 	clean-build
 	rm -rf cache
 
 # Build a distribution in ./dist
 build:
 	$(PYTHON) setup.py bdist
-
-docs:
-	$(MAKE) -C ${DOCS_DIR} html-noexamples
-	@echo
-	@echo "View docs at:"
-	@echo ${INDEX_HTML}
-
-links:
-	$(MAKE) -C ${DOCS_DIR} linkcheck
-
-examples:
-	$(MAKE) -C ${DOCS_DIR} html
-	@echo
-	@echo "View docs at:"
-	@echo ${INDEX_HTML}
 
 # Publish to testpypi
 # Will echo the commands to actually publish to be run to publish to actual PyPi

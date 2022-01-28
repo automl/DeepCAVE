@@ -1,1 +1,1 @@
-__version__ = "René Sass and  Marius Lindauer"
+__author__ = "René Sass and  Marius Lindauer"

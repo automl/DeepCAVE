@@ -69,7 +69,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"DeepCAVE Documentation"
+project = "DeepCAVE Documentation"
 copyright = "2020-%s, %s" % (datetime.datetime.now().year, deepcave.author)
 author = deepcave.author
 
@@ -319,10 +319,11 @@ html_logo = None  # "images/SMAC3.png"
 # Sphinx-gallery configuration.
 sphinx_gallery_conf = {
     # path to the examples
-    "examples_dirs": "../examples",
+    "examples_dirs": ["../examples/record"],
     "gallery_dirs": "pages/examples",
     "show_signature": "False",
     "show_memory": "False",
-    "plot_gallery": "True",
-    "ignore_pattern": ".*pcs$|.*scenario.txt$|.*spear_qcp$",
+    "plot_gallery": "True",  # Set this to true later on
+    # "filename_pattern": "/record_",
+    "ignore_pattern": "/_.*.py|.*.sh",
 }

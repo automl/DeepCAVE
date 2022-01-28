@@ -1,51 +1,49 @@
 from typing import Optional
 
-import pyrfr
-import pyrfr.regression as regression
-import pyrfr.util
 import itertools as it
 
 import numpy as np
+import pyrfr
+import pyrfr.regression as regression
+import pyrfr.util
 from smac.configspace import ConfigurationSpace
+
 from deepcave.evaluators.epm.forest import Forest
 
 
 class fANOVAForest(Forest):
     def __init__(
-            self,
-            configspace: ConfigurationSpace,
-            seed: int,
-            num_trees: int = 16,
-            bootstrapping=True,
-            points_per_tree=-1,
-            ratio_features: float = 7. / 10.,
-            min_samples_split=0,
-            min_samples_leaf=0,
-            max_depth=64,
-            cutoffs=(-np.inf, np.inf),
+        self,
+        configspace: ConfigurationSpace,
+        seed: int,
+        num_trees: int = 16,
+        bootstrapping=True,
+        points_per_tree=-1,
+        ratio_features: float = 7.0 / 10.0,
+        min_samples_split=0,
+        min_samples_leaf=0,
+        max_depth=64,
+        cutoffs=(-np.inf, np.inf),
+        instance_features: Optional[np.ndarray] = None,
+        pca_components: Optional[int] = None,
+    ):
 
-            instance_features: Optional[np.ndarray] = None,
-            pca_components: Optional[int] = None):
-
-        super().__init__(
-            configspace,
-            seed,
-            instance_features,
-            pca_components
-        )
+        super().__init__(configspace, seed, instance_features, pca_components)
 
         max_features = 0
         if ratio_features <= 1.0:
             max_features = max(1, int(len(self.types) * ratio_features))
 
-        self._set_model_options({
-            'num_trees': num_trees,
-            'do_bootstrapping': bootstrapping,
-            'tree_opts.max_features': max_features,
-            'tree_opts.min_samples_to_split': min_samples_split,
-            'tree_opts.min_samples_in_leaf': min_samples_leaf,
-            'tree_opts.max_depth': max_depth,
-        })
+        self._set_model_options(
+            {
+                "num_trees": num_trees,
+                "do_bootstrapping": bootstrapping,
+                "tree_opts.max_features": max_features,
+                "tree_opts.min_samples_to_split": min_samples_split,
+                "tree_opts.min_samples_in_leaf": min_samples_leaf,
+                "tree_opts.max_depth": max_depth,
+            }
+        )
 
         self.cutoffs = cutoffs
         self.points_per_tree = points_per_tree
@@ -57,7 +55,7 @@ class fANOVAForest(Forest):
     def _train(self, X, Y):
         """
         Inputs:
-            `X`: Must be numerical encoded. 
+            `X`: Must be numerical encoded.
         """
 
         super()._train(X, Y)
@@ -87,8 +85,9 @@ class fANOVAForest(Forest):
                         sizes.append((self.bounds[i][0],))
                 else:
                     # add bounds to split values
-                    sv = np.array([self.bounds[i][0]] +
-                                  list(split_vals) + [self.bounds[i][1]])
+                    sv = np.array(
+                        [self.bounds[i][0]] + list(split_vals) + [self.bounds[i][1]]
+                    )
                     # compute midpoints and sizes
                     midpoints.append((1 / 2) * (sv[1:] + sv[:-1]))
                     sizes.append(sv[1:] - sv[:-1])
@@ -118,7 +117,7 @@ class fANOVAForest(Forest):
         To properly do things like 'improvement over default' the
         fANOVA now supports cutoffs on the y values. These will exclude
         parts of the parameters space where the prediction is not within
-        the provided cutoffs. This is is specialization of 
+        the provided cutoffs. This is is specialization of
         "Generalized Functional ANOVA Diagnostics for High Dimensional
         Functions of Dependent Variables" by Hooker.
         """
@@ -159,13 +158,12 @@ class fANOVAForest(Forest):
         self.V_U_individual[dimensions] = []
         self.V_U_total[dimensions] = []
 
-        if len(dimensions) > depth+1:
+        if len(dimensions) > depth + 1:
             return self.V_U_individual, self.V_U_total
 
         for tree_idx in range(len(self.all_midpoints)):
             # collect all the midpoints and corresponding sizes for that tree
-            midpoints = [self.all_midpoints[tree_idx][dim]
-                         for dim in dimensions]
+            midpoints = [self.all_midpoints[tree_idx][dim] for dim in dimensions]
             sizes = [self.all_sizes[tree_idx][dim] for dim in dimensions]
             stat = pyrfr.util.weighted_running_stats()
 
@@ -179,11 +177,11 @@ class fANOVAForest(Forest):
                 sample[list(dimensions)] = list(m)
 
                 ls = self.model.marginal_prediction_stat_of_tree(
-                    tree_idx, sample.tolist())
+                    tree_idx, sample.tolist()
+                )
                 # self.logger.debug("%s, %s", (sample, ls.mean()))
                 if not np.isnan(ls.mean()):
-                    stat.push(ls.mean(), np.prod(np.array(s))
-                              * ls.sum_of_weights())
+                    stat.push(ls.mean(), np.prod(np.array(s)) * ls.sum_of_weights())
 
             # line 10 in algorithm 2
             # note that V_U^2 can be computed by var(\hat a)^2 - \sum_{subU} var(f_subU)^2

@@ -1,8 +1,9 @@
-from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
-from deepcave.utils.cache import Cache
+from pathlib import Path
+
 from deepcave.runs import AbstractRun
+from deepcave.utils.cache import Cache
 from deepcave.utils.logs import get_logger
 
 logger = get_logger("RunCache")
@@ -46,11 +47,11 @@ class RunCaches:
             cache.set("hash", value=new_hash)
 
     def clear(self):
-        """ Clears all cache """
+        """Clears all cache"""
         self.data.clear()
 
     def clear_all_caches(self):
-        """ Removes all data from caches (but keep run accessible in RunCache) """
+        """Removes all data from caches (but keep run accessible in RunCache)"""
         for cache in self.data.values():
             cache.clear()
 
