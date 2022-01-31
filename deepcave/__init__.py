@@ -2,7 +2,6 @@ import sys
 
 from deepcave.__author__ import __author__
 from deepcave.__version__ import __version__
-from deepcave.runs.handler import RunHandler
 from deepcave.runs.objective import Objective
 from deepcave.runs.recorder import Recorder
 
@@ -22,6 +21,7 @@ if "server.py" in _exec_file or "worker.py" in _exec_file:
     from deepcave.server import get_app  # noqa
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa
+    from deepcave.runs.handler import RunHandler  # noqa
 
     config = configs["default"]
     app = get_app()
@@ -31,11 +31,11 @@ if "server.py" in _exec_file or "worker.py" in _exec_file:
     c = Cache(filename=config.CACHE_DIR / "meta.json", defaults=config.META_DEFAULT)
 
     # Run caches
-    rc = RunCaches(config.CACHE_DIR)
+    rc = RunCaches(config)
 
     # Run Handler
-    run_handler = RunHandler(config.AVAILABLE_CONVERTERS)
+    run_handler = RunHandler(config, c, rc)
 
-    __all__ = ["version", "app", "queue", "c", "rc", "config", "Recorder", "Objective"]
+    __all__ = ["version", "app", "queue", "c", "rc", "run_handler", "config", "Recorder", "Objective"]
 else:
     __all__ = ["version", "Recorder", "Objective"]

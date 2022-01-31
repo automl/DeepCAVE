@@ -3,9 +3,9 @@ import pandas as pd
 import plotly.express as px
 from dash import dcc, html
 
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun
-from deepcave.runs.handler import run_handler
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import (

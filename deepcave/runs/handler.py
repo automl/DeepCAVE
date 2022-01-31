@@ -5,7 +5,6 @@ from functools import cached_property
 from pathlib import Path
 from typing import Optional, Type
 
-from deepcave import c, rc
 from deepcave.config import Config
 from deepcave.runs.run import Run
 from deepcave.runs.grouped_run import GroupedRun
@@ -22,7 +21,9 @@ class RunHandler:
     and switches to the right (plugin) cache.
     """
 
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCache") -> None:
+        self.c = cache
+        self.rc = run_cache
         # Fields set by self.update()
         self.logger = get_logger("RunHandler")
         self.working_dir: Optional[Path] = None
@@ -39,9 +40,9 @@ class RunHandler:
         self.load_from_cache()
 
     def load_from_cache(self):
-        working_dir: Path = Path(c.get("working_dir"))
-        selected_runs: list[str] = c.get("selected_run_names")  # run_name
-        groups: dict[str, list[str]] = c.get("groups")  # group_name -> list[run_names]
+        working_dir: Path = Path(self.c.get("working_dir"))
+        selected_runs: list[str] = self.c.get("selected_run_names")  # run_name
+        groups: dict[str, list[str]] = self.c.get("groups")  # group_name -> list[run_names]
 
         print(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
@@ -68,15 +69,14 @@ class RunHandler:
         self.failed_to_load = set()
         self.update_runs([])
         self.update_groups({})
-        rc.clear()
 
         # Set in cache
-        c.set("working_dir", value=str(working_directory))
+        self.c.set("working_dir", value=str(working_directory))
 
     def update_runs(self, selected_run_names: Optional[list[str]] = None):
         """Loads selected runs and update cache if files changed"""
         if selected_run_names is None:
-            selected_run_names = c.get("selected_run_names")
+            selected_run_names = self.c.get("selected_run_names")
         new_runs: dict[str, Run] = {}
 
         class_hint = None
@@ -88,13 +88,13 @@ class RunHandler:
 
         # Save runs in memory and in cache
         self.runs = new_runs
-        c.set("selected_run_names", value=self.get_run_names())
+        self.c.set("selected_run_names", value=self.get_run_names())
 
     def update_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[Run]:
         # Try to get run from current runs
         if run_name in self.runs:
             run = self.runs[run_name]
-            rc.get_run(run)  # Create cache file and set name/hash. Clear cache if hash got changed
+            self.rc.get_run(run)  # Create cache file and set name/hash. Clear cache if hash got changed
             return run
         else:
             self.logger.info(f"Run {run_name} needs to be initialized")
@@ -112,13 +112,13 @@ class RunHandler:
             return None
 
         # Add to run cache
-        rc.get(run)
+        self.rc.get(run)
         return run
 
     def update_groups(self, groups: Optional[dict[str, list[str]]] = None):
         """Loads chosen groups"""
         if groups is None:
-            groups = c.get("groups")
+            groups = self.c.get("groups")
 
         # Add groups
         groups = {
@@ -130,7 +130,7 @@ class RunHandler:
 
         # Add groups to rc
         for group in groups.values():
-            rc.get_run(group)  # Create cache file and set name/hash. Clear cache if hash got changed
+            self.rc.get_run(group)  # Create cache file and set name/hash. Clear cache if hash got changed
 
         # Save in memory
         self.groups = groups
@@ -139,7 +139,7 @@ class RunHandler:
         groups_for_cache = {
             name: [run.name for run in group.runs] for name, group in groups.items()
         }
-        c.set("groups", value=groups_for_cache)
+        self.c.set("groups", value=groups_for_cache)
 
     def get_working_dir(self) -> Path:
         return self.working_dir

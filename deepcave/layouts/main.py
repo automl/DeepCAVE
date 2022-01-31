@@ -2,14 +2,13 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
-from deepcave import app, queue
+from deepcave import app, queue, run_handler
 from deepcave.layouts import Layout
 from deepcave.layouts.general import GeneralLayout
 from deepcave.layouts.header import HeaderLayout
 from deepcave.layouts.not_found import NotFoundLayout
 from deepcave.layouts.sidebar import SidebarLayout
 from deepcave.plugins import Plugin
-from deepcave.runs.handler import run_handler
 from deepcave.utils.dash import alert
 
 

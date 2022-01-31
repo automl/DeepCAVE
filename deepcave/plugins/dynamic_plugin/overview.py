@@ -2,10 +2,10 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import html
 
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.runs.grouped_run import NotMergeableError
-from deepcave.runs.handler import run_handler
 
 
 class Overview(DynamicPlugin):

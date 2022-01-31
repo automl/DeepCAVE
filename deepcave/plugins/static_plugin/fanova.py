@@ -6,10 +6,10 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
+from deepcave import run_handler
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun
-from deepcave.runs.handler import run_handler
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
 

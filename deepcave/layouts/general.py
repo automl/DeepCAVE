@@ -8,9 +8,8 @@ from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, rc
+from deepcave import app, c, rc, run_handler
 from deepcave.layouts import Layout
-from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run
 
 
@@ -78,7 +77,7 @@ class GeneralLayout(Layout):
         @app.callback(output, input)
         def callback(run_ids: list[str]):
             old_run_names = run_handler.get_run_names()
-            print(f"Old run names: {old_run_names}, Run names: {run_ids}")
+            self.logger.debug(f"Old run names: {old_run_names}, Run names: {run_ids}")
 
             # Reset groups here.
             # Alternatively: Remove all runs which are not selected anymore.
@@ -175,7 +174,7 @@ class GeneralLayout(Layout):
                 groups[group_name] = run_names
 
             # Now save it
-            print("Groups:", groups)
+            self.logger.debug(f"Groups: {groups}")
             run_handler.update_groups(groups)
 
             return
@@ -200,9 +199,9 @@ class GeneralLayout(Layout):
         return runs
 
     @staticmethod
-    def get_converter_text(converters: dict[Type[Run], int]) -> html.Div:
+    def get_converter_text(converters: list[Type[Run]]) -> html.Div:
         converter_texts = []
-        for converter in sorted(converters, key=converters.get, reverse=True):
+        for converter in converters:
             converter_texts += [html.Li([html.I(converter.__name__), html.Span(".")])]
 
         return html.Div(

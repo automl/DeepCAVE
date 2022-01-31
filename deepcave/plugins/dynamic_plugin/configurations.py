@@ -11,9 +11,9 @@ from ConfigSpace.hyperparameters import (
 )
 from dash import html
 
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun
-from deepcave.runs.handler import run_handler
 
 
 class Configurations(DynamicPlugin):

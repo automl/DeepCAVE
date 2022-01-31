@@ -10,11 +10,10 @@ from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c
+from deepcave import app, c, run_handler
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
-from deepcave.runs.handler import run_handler
 from deepcave.runs.run import Run
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options

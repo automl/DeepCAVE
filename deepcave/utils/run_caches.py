@@ -1,7 +1,4 @@
-from typing import Optional, Union
-
-from pathlib import Path
-from typing import Union, Optional, Iterator
+from typing import Optional, Union, Iterator
 
 from deepcave.runs import AbstractRun
 from deepcave.utils.cache import Cache
@@ -13,8 +10,8 @@ class RunCaches:
     Holds the caches for the selected runs.
     """
 
-    def __init__(self, cache_dir: Path):
-        self.cache_dir = cache_dir / "run_cache"
+    def __init__(self, config: "Config"):
+        self.cache_dir = config.CACHE_DIR / "run_cache"
         self.logger = get_logger("RunCache")
 
     def __getitem__(self, run: Union[str, AbstractRun]) -> Cache:
