@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from typing import Iterable, Iterator, Optional, Union, Any
+from typing import Any, Iterable, Iterator, Optional, Union
 
 import copy
+from dataclasses import dataclass
 from enum import IntEnum
 
 import ConfigSpace
@@ -28,6 +28,7 @@ class Status(IntEnum):
     CRASHED = 4
     ABORTED = 5
     RUNNING = 6
+
 
 @dataclass
 class Trial:
@@ -408,7 +409,7 @@ class AbstractRun(ABC):
                 data=data,
                 # Combined Cost
                 columns=[name for name in self.configspace.get_hyperparameter_names()]
-                + [cost_column]
+                + [cost_column],
             )
 
             return df

@@ -1,17 +1,12 @@
-from typing import Dict, Optional, Type
-
-import time
-from functools import cached_property
-from pathlib import Path
 from typing import Optional, Type
 
+import time
+from pathlib import Path
+
 from deepcave.config import Config
-from deepcave.runs.run import Run
-from deepcave.runs.grouped_run import GroupedRun
 from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun
 from deepcave.runs.run import Run
-from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.logs import get_logger
 
 
@@ -42,7 +37,9 @@ class RunHandler:
     def load_from_cache(self):
         working_dir: Path = Path(self.c.get("working_dir"))
         selected_runs: list[str] = self.c.get("selected_run_names")  # run_name
-        groups: dict[str, list[str]] = self.c.get("groups")  # group_name -> list[run_names]
+        groups: dict[str, list[str]] = self.c.get(
+            "groups"
+        )  # group_name -> list[run_names]
 
         print(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
@@ -90,11 +87,15 @@ class RunHandler:
         self.runs = new_runs
         self.c.set("selected_run_names", value=self.get_run_names())
 
-    def update_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[Run]:
+    def update_run(
+        self, run_name: str, class_hint: Optional[Type[Run]] = None
+    ) -> Optional[Run]:
         # Try to get run from current runs
         if run_name in self.runs:
             run = self.runs[run_name]
-            self.rc.get_run(run)  # Create cache file and set name/hash. Clear cache if hash got changed
+            self.rc.get_run(
+                run
+            )  # Create cache file and set name/hash. Clear cache if hash got changed
             return run
         else:
             self.logger.info(f"Run {run_name} needs to be initialized")
@@ -130,7 +131,9 @@ class RunHandler:
 
         # Add groups to rc
         for group in groups.values():
-            self.rc.get_run(group)  # Create cache file and set name/hash. Clear cache if hash got changed
+            self.rc.get_run(
+                group
+            )  # Create cache file and set name/hash. Clear cache if hash got changed
 
         # Save in memory
         self.groups = groups
@@ -209,23 +212,6 @@ class RunHandler:
 
             return runs
         return self.runs
-
-    @cached_property
-    def _available_run_classes(self) -> list[Type[Run]]:
-        available_converters = set()
-
-        paths = [Path(__file__).parent / "converters/"]
-        for _, converter_class in auto_import_iter("converter", paths):
-            if not issubclass(converter_class, Run) or converter_class == Run:
-                continue
-
-            available_converters.add(converter_class)
-
-        print(f"Found available converters: {available_converters}")
-
-        return sorted(
-            list(available_converters), key=lambda run_class: run_class._initial_order
-        )
 
     def get_run(
         self, run_name: str, class_hint: Optional[Type[Run]] = None

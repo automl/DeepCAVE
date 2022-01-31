@@ -51,7 +51,7 @@ class GroupedRun(AbstractRun):
 
             # Combine runs here
             for run in self.runs:
-                config_mapping:dict[str, str] = {}  # Maps old ones to the new ones
+                config_mapping: dict[str, str] = {}  # Maps old ones to the new ones
 
                 # Update configs + origins
                 for config_id in run.configs.keys():

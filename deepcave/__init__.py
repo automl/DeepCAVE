@@ -18,10 +18,10 @@ _exec_file = sys.argv[0]
 if "server.py" in _exec_file or "worker.py" in _exec_file:
     from deepcave.config import configs
     from deepcave.queue import Queue  # noqa
+    from deepcave.runs.handler import RunHandler  # noqa
     from deepcave.server import get_app  # noqa
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa
-    from deepcave.runs.handler import RunHandler  # noqa
 
     config = configs["default"]
     app = get_app()
@@ -36,6 +36,16 @@ if "server.py" in _exec_file or "worker.py" in _exec_file:
     # Run Handler
     run_handler = RunHandler(config, c, rc)
 
-    __all__ = ["version", "app", "queue", "c", "rc", "run_handler", "config", "Recorder", "Objective"]
+    __all__ = [
+        "version",
+        "app",
+        "queue",
+        "c",
+        "rc",
+        "run_handler",
+        "config",
+        "Recorder",
+        "Objective",
+    ]
 else:
     __all__ = ["version", "Recorder", "Objective"]

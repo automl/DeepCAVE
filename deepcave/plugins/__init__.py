@@ -68,7 +68,7 @@ class Plugin(Layout, ABC):
         return True
 
     def register_input(
-            self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False
+        self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False
     ) -> str:
         if isinstance(attributes, str):
             attributes = [attributes]
@@ -190,8 +190,8 @@ class Plugin(Layout, ABC):
 
                         # Reset everything if run name changed.
                         if (
-                                _previous_run_name is not None
-                                and _previous_run_name != _run_name
+                            _previous_run_name is not None
+                            and _previous_run_name != _run_name
                         ):
                             # We can't use load_inputs here only
                             # because `run_name` would be removed.
@@ -300,7 +300,7 @@ class Plugin(Layout, ABC):
         return outputs
 
     def _list_to_dict(
-            self, values: Iterable[str], input=True
+        self, values: Iterable[str], input=True
     ) -> dict[str, dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
@@ -325,7 +325,7 @@ class Plugin(Layout, ABC):
         return mapping
 
     def _dict_to_list(
-            self, d: dict[str, dict[str, str]], input=False
+        self, d: dict[str, dict[str, str]], input=False
     ) -> list[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
@@ -453,9 +453,9 @@ class Plugin(Layout, ABC):
                 id=f"{self.id}-input",
                 className="shadow-sm p-3 mb-3 bg-white rounded-lg",
                 children=run_input_layout
-                         + separator_layout
-                         + input_layout
-                         + [input_control_layout],
+                + separator_layout
+                + input_layout
+                + [input_control_layout],
                 style={}
                 if render_button or input_layout or run_input_layout
                 else {"display": "none"},
@@ -504,7 +504,7 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def get_run_input_layout(
-            register: Callable[[str, Union[str, list[str]]], str]
+        register: Callable[[str, Union[str, list[str]]], str]
     ) -> Component:
         return html.Div(
             [
@@ -517,9 +517,9 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def load_run_inputs(
-            runs: dict[str, Run],
-            groups: dict[str, GroupedRun],
-            check_compatibility: Callable,
+        runs: dict[str, Run],
+        groups: dict[str, GroupedRun],
+        check_compatibility: Callable,
     ) -> dict[str, Any]:
         """
         Set `run_names` and displays both runs and group runs if
@@ -634,7 +634,7 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def _process(
-            process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs
+        process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs
     ):
         run = run_handler.from_run_cache_id(run_cache_id)
         return process(run, inputs)

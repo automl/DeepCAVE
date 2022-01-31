@@ -1,4 +1,4 @@
-from typing import Optional, Union, Iterator
+from typing import Iterator, Optional, Union
 
 from deepcave.runs import AbstractRun
 from deepcave.utils.cache import Cache
@@ -20,7 +20,9 @@ class RunCaches:
         elif isinstance(run, str):  # Expect run_cache_id
             return self.get(run)
         else:
-            raise TypeError(f"Expect Run or str (run_cache_id), but got type {type(run)} ({run})")
+            raise TypeError(
+                f"Expect Run or str (run_cache_id), but got type {type(run)} ({run})"
+            )
 
     def __contains__(self, run: Union[AbstractRun, str]) -> bool:
         # Resolve arguments
@@ -47,21 +49,27 @@ class RunCaches:
         """
         return self.get(run.run_cache_id, run.name, run.hash)
 
-    def get(self,
-            run_cache_id: str,
-            run_name: Optional[str] = None,
-            run_hash: Optional[str] = None) -> Cache:
+    def get(
+        self,
+        run_cache_id: str,
+        run_name: Optional[str] = None,
+        run_hash: Optional[str] = None,
+    ) -> Cache:
         # Create cache
         filename = self.cache_dir / f"{run_cache_id}.json"
         if not filename.exists():
-            self.logger.info(f"Creating new cache file for {run_cache_id} at {filename.absolute().resolve()}")
+            self.logger.info(
+                f"Creating new cache file for {run_cache_id} at {filename.absolute().resolve()}"
+            )
         cache = Cache(filename)
 
         # Check whether hash is up-to-date
         if run_hash is not None:
             current_hash = cache.get("hash")
             if current_hash != run_hash:
-                self.logger.info(f"Hash for {run_cache_id} has changed! ({current_hash} -> {run_hash})")
+                self.logger.info(
+                    f"Hash for {run_cache_id} has changed! ({current_hash} -> {run_hash})"
+                )
                 cache.clear()
             cache.set("hash", value=run_hash)
 

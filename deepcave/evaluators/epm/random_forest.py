@@ -23,9 +23,9 @@ class RandomForest(Forest):
         ratio_features: float = 5.0 / 6.0,
         min_samples_split: int = 3,
         min_samples_leaf: int = 3,
-        max_depth: int = 2 ** 20,
+        max_depth: int = 2**20,
         eps_purity: float = 1e-8,
-        max_num_nodes: int = 2 ** 20,
+        max_num_nodes: int = 2**20,
     ):
 
         super().__init__(configspace, seed)

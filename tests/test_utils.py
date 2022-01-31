@@ -13,7 +13,6 @@ from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.files import make_dirs
 from deepcave.utils.hash import file_to_hash, string_to_hash
-from deepcave.utils.importing import auto_import_iter
 from deepcave.utils.layout import (
     get_checklist_options,
     get_radio_options,
@@ -226,19 +225,6 @@ class TestHash(unittest.TestCase):
         self.assertIsInstance(a, str)
 
 
-class TestImporting(unittest.TestCase):
-    def test_auto_import_iterator(self):
-        # Cannot do futher tests as importing plugin fails due to missing app
-        found = []
-        for name, obj in auto_import_iter(
-            "deepcave.plugins", [Path("./deepcave/plugins")]
-        ):
-            self.assertIsInstance(name, str)
-            found.append(obj)
-
-        self.assertGreater(len(found), 0)
-
-
 class TestLayout(unittest.TestCase):
     @unittest.SkipTest
     def test_get_slider_marks(self):
@@ -394,7 +380,7 @@ class TestUtil(unittest.TestCase):
         fig = plt.Figure()
         ax = fig.gca()
         x = [1, 2, 3, 4, 5]
-        y = [xx ** 2 for xx in x]
+        y = [xx**2 for xx in x]
         ax.plot(x, y)
 
         html_img = matplotlib_to_html_image(fig)

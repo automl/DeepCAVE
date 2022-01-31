@@ -133,7 +133,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, runs:dict[str, AbstractRun]) -> list[Component]:
+    def load_outputs(inputs, outputs, runs: dict[str, AbstractRun]) -> list[Component]:
         """
         show_groups = inputs["groups"]["value"]
         if show_groups is not None:
