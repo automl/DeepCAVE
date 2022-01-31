@@ -10,6 +10,7 @@ from ConfigSpace.hyperparameters import (
     UniformIntegerHyperparameter,
 )
 from dash import html
+from dash.development.base_component import Component
 
 from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
@@ -94,7 +95,7 @@ class Configurations(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, _):
+    def load_outputs(inputs, outputs, _) -> list[Component]:
         run = run_handler.from_run_id(inputs["run_name"]["value"])
         outputs = outputs[run.name]
 

@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
+from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
@@ -132,7 +133,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, runs):
+    def load_outputs(inputs, outputs, runs:dict[str, AbstractRun]) -> list[Component]:
         """
         show_groups = inputs["groups"]["value"]
         if show_groups is not None:
@@ -143,7 +144,7 @@ class CostOverTime(DynamicPlugin):
 
         traces = []
         for idx, (run_name, run) in enumerate(runs.items()):
-            x = outputs[run_name]["times"]
+            x = outputs[run.name]["times"]
             if inputs["xaxis"]["value"] == "configs":
                 x = [i for i in range(len(x))]
 
@@ -151,8 +152,8 @@ class CostOverTime(DynamicPlugin):
                 if run.prefix == "group":
                     continue
 
-            y = np.array(outputs[run_name]["costs_mean"])
-            y_err = np.array(outputs[run_name]["costs_std"])
+            y = np.array(outputs[run.name]["costs_mean"])
+            y_err = np.array(outputs[run.name]["costs_std"])
             y_upper = list(y + y_err)
             y_lower = list(y - y_err)
             y = list(y)

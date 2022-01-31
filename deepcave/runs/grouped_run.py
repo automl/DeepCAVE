@@ -6,6 +6,7 @@ import ConfigSpace
 import numpy as np
 from ConfigSpace import Configuration
 
+from deepcave import Objective
 from deepcave.runs import AbstractRun
 from deepcave.runs.run import Run
 from deepcave.utils.hash import string_to_hash
@@ -24,7 +25,7 @@ class GroupedRun(AbstractRun):
         super(GroupedRun, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
 
-        self.configs: dict[str, Configuration] = {}
+        self.configs: dict[str, Configuration] = {}  # config_id -> Configuration
         self.origins = {}
         self.models = {}
 
@@ -37,7 +38,7 @@ class GroupedRun(AbstractRun):
             # Make sure the same configspace is used
             # Otherwise it does not make sense to merge
             # the histories
-            self.configspace
+            self.configspace  # noqa
 
             # Also check if budgets are the same
             self.get_budgets()
@@ -50,7 +51,7 @@ class GroupedRun(AbstractRun):
 
             # Combine runs here
             for run in self.runs:
-                config_mapping = {}  # Maps old ones to the new ones
+                config_mapping:dict[str, str] = {}  # Maps old ones to the new ones
 
                 # Update configs + origins
                 for config_id in run.configs.keys():
@@ -63,9 +64,9 @@ class GroupedRun(AbstractRun):
                             break
 
                     if config_id not in config_mapping:
-                        self.configs[current_config_id] = config
+                        self.configs[str(current_config_id)] = config
                         self.origins[current_config_id] = origin
-                        config_mapping[config_id] = current_config_id
+                        config_mapping[config_id] = str(current_config_id)
                         current_config_id += 1
 
                 # Update history + trial_keys
@@ -138,7 +139,7 @@ class GroupedRun(AbstractRun):
 
         return meta
 
-    def get_objectives(self) -> dict[str, Any]:
+    def get_objectives(self) -> list[Objective]:
         """
         Returns the objectives if all runs have the same objectives.
         Otherwise raise an error.
