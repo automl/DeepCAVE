@@ -29,6 +29,25 @@ class Status(IntEnum):
     ABORTED = 5
     RUNNING = 6
 
+@dataclass
+class Trial:
+    config_id: str
+    budget: int
+    costs: float
+    start_time: float
+    end_time: float
+    status: Status
+    additional: dict[str, Any]
+
+    def __post_init__(self):
+        if isinstance(self.status, int):
+            self.status = Status(self.status)
+
+        assert isinstance(self.status, Status)
+
+    def get_key(self) -> tuple[str, int]:
+        return self.config_id, self.budget  # noqa
+
 
 class AbstractRun(ABC):
     prefix: str
@@ -97,7 +116,7 @@ class AbstractRun(ABC):
 
         return objectives
 
-    def get_trials(self) -> Iterator["Trial"]:
+    def get_trials(self) -> Iterator[Trial]:
         yield from self.history
 
     def get_objective_name(self, objective_names=None):
@@ -395,23 +414,3 @@ class AbstractRun(ABC):
             return df
 
         return X, Y
-
-
-@dataclass
-class Trial:
-    config_id: str
-    budget: int
-    costs: float
-    start_time: float
-    end_time: float
-    status: Status
-    additional: dict[str, Any]
-
-    def __post_init__(self):
-        if isinstance(self.status, int):
-            self.status = Status(self.status)
-
-        assert isinstance(self.status, Status)
-
-    def get_key(self) -> tuple[str, int]:
-        return self.config_id, self.budget  # noqa
