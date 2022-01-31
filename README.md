@@ -8,7 +8,8 @@ DeepCAVE has two main contributions:
 ## Installation
 
 First, make sure you have
-[swig](https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/) installed on your
+[swig](https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/) and
+[redis-server](https://flaviocopes.com/redis-installation/) installed on your
 computer. Afterwards, follow the instructions:
 
 ```

@@ -128,6 +128,7 @@ class fANOVA:
                     importance_dict[dim_names] = {}
                 else:
                     importance_dict[sub_dims] = {}
+
                 # clean here to catch zero variance in a trees
                 non_zero_idx = np.nonzero(
                     [self.forest.trees_total_variance[t] for t in range(self.num_trees)]
@@ -317,7 +318,10 @@ if __name__ == "__main__":
     gamma2 = CSH.UniformFloatHyperparameter(name="gamma2", lower=0, upper=1)
     gamma3 = CSH.UniformFloatHyperparameter(name="gamma3", lower=0, upper=1)
 
-    cs.add_hyperparameters([alpha, beta, gamma, gamma1, gamma2, gamma3])
+    # Constants do not work
+    # gamma = CSH.Constant(name='gamma', value=1)
+
+    cs.add_hyperparameters([alpha, beta, gamma])
 
     X = []
     Y = []
@@ -362,5 +366,6 @@ if __name__ == "__main__":
     # print(imp)
 
     f = fANOVA(X, Y, cs)
-    imp = f.quantify_importance(cs.get_hyperparameter_names(), depth=1)
+    imp = f.quantify_importance(
+        cs.get_hyperparameter_names(), depth=1, sorted=False)
     print(imp)

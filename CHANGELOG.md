@@ -1,5 +1,9 @@
 # 0.1.2
 
+## Plugins
+- Integrated Parallel Coordinates
+- Configurations Cube and Parallel Coordinates show the real config values and not the encoded anymore
+
 ## Others
 - Added typehints
 - Added tests for caches, basic layouts and other utils
