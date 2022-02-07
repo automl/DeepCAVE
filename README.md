@@ -15,14 +15,9 @@ computer. Afterwards, follow the instructions:
 ```
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
-conda create -n DeepCAVE python=3.9
+conda env create -f environment.yml
 conda activate DeepCAVE
 pip install .
-```
-
-If you want to use DeepCAVE in a different directory set your PYTHONPATH:
-```
-export PYTHONPATH=$(pwd)
 ```
 
 
@@ -54,8 +49,16 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 
 ## Visualizing and Evaluating
 
-The webserver as well as the queue/workers can be started by running ``` ./run.sh ```. 
+The webserver as well as the queue/workers can be started by running
+```
+deepcave
+```
+or
+```
+./start.sh
+```
+
 Visit `http://127.0.0.1:8050/` to get started.
 
-![interface](interface.png)
+![interface](media/interface.png)
 

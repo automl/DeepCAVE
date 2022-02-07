@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-import sys
 import setuptools
 
 
@@ -20,6 +19,7 @@ extras_require = {
         "black",
         "pydocstyle",
         "pre-commit",
+        "flake8",
     ],
     "examples": [
         "matplotlib",
@@ -50,13 +50,18 @@ setuptools.setup(
         "Documentation": "https://github.com/automl/deepcave",
         "Source Code": "https://github.com/automl/deepcave",
     },
-    version=read_file("deepcave/__version__.py").split()[-1].strip("'"),
+    version=read_file("deepcave/__version__.py")
+    .replace('"', "")
+    .replace("version = ", ""),
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
-    python_requires=">3.8, <=3.10",
+    python_requires=">=3.9",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
+    entry_points={
+        "console_scripts": ["deepcave = deepcave.cli:main"],
+    },
     test_suite="pytest",
     platforms=["Linux"],
     classifiers=[

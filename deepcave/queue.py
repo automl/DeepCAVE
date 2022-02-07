@@ -11,8 +11,8 @@ logger = get_logger(__name__)
 
 
 class Queue:
-    def __init__(self, redis_url="redis://localhost:6379"):
-        self._connection = redis.from_url(redis_url)
+    def __init__(self, address: str, port: int):
+        self._connection = redis.from_url(address + ":" + str(port))
         self._queue = _Queue("high", connection=self._connection)
 
     def ready(self):

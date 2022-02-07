@@ -1,11 +1,10 @@
 from typing import Type
-
 from pathlib import Path
 
 
 class Config:
     # General config
-    TITLE: str = "Deep CAVE"
+    TITLE: str = "DeepCAVE"
 
     # Cache dir
     root = Path.cwd()
@@ -14,7 +13,12 @@ class Config:
     CACHE_DIR = root / "cache"
 
     # Redis settings
-    REDIS_URL = "redis://localhost:6379"
+    REDIS_PORT = 6379
+    REDIS_ADDRESS = "redis://localhost"
+
+    # Dash settings (not used right now)
+    DASH_PORT = 8050
+    DASH_ADDRESS = "http://127.0.0.1"
 
     # Default Meta information which are used across the platform
     META_DEFAULT = {
@@ -65,4 +69,4 @@ class Config:
         return [DeepCAVERun, BOHBRun, SMACRun]
 
 
-configs = {"default": Config()}
+config = Config()

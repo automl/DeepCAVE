@@ -40,7 +40,7 @@ known_first_party = ["deepcave"]
 multi_line_output = 3 # https://pycqa.github.io/isort/docs/configuration/multi_line_output_modes.html
 
 [tool.pydocstyle]
-convention = "google"
+convention = "numpy"
 add-ignore = [ # http://www.pydocstyle.org/en/stable/error_codes.html
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
