@@ -11,7 +11,7 @@ from deepcave.utils.hash import file_to_hash
 
 
 class SMACRun(Run):
-    name = "SMAC"
+    prefix = "SMAC"
     _initial_order = 2
 
     @property
