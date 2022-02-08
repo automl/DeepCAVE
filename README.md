@@ -10,7 +10,16 @@ DeepCAVE has two main contributions:
 First, make sure you have
 [swig](https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/) and
 [redis-server](https://flaviocopes.com/redis-installation/) installed on your
-computer. Afterwards, follow the instructions:
+computer.
+
+If you are on an Non-Intel Mac you have to add
+```
+export DISABLE_SPRING=true
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+```
+to your ```~/.bash_profile``` to enable multi-processing.
+
+Afterwards, follow the instructions:
 
 ```
 git clone https://github.com/automl/DeepCAVE.git
