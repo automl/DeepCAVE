@@ -11,7 +11,7 @@ def get_app(config: Config = None):
         __name__,
         title=config.TITLE,
         update_title="",
-        external_stylesheets=[dbc.themes.BOOTSTRAP],
+        external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
         suppress_callback_exceptions=True,
     )
     return app

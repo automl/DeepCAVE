@@ -40,21 +40,25 @@ class Config:
         from deepcave.plugins.dynamic_plugin.configurations import Configurations
         from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
         from deepcave.plugins.dynamic_plugin.overview import Overview
+        from deepcave.plugins.dynamic_plugin.parallel_coordinates import (
+            ParallelCoordinates,
+        )
         from deepcave.plugins.static_plugin.fanova import fANOVA
         from deepcave.plugins.static_plugin.ice import ICE
 
         plugins = {
-            "General": [
+            "Summary": [
                 Overview(),
                 Configurations(),
-            ],
-            "Hyperparameter Analysis": [
-                fANOVA(),
             ],
             "Performance Analysis": [
                 CostOverTime(),
                 CCube(),
+                ParallelCoordinates(),
                 ICE(),
+            ],
+            "Hyperparameter Analysis": [
+                fANOVA(),
             ],
         }
         return plugins

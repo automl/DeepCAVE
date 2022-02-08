@@ -200,12 +200,12 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_converter_text(converters: list[Type[Run]]) -> html.Div:
-        converter_texts = []
+        converter_text = []
         for converter in converters:
-            converter_texts += [html.Li([html.I(converter.__name__), html.Span(".")])]
+            converter_text += [converter.prefix]
 
         return html.Div(
-            [html.Span("Possible run converters:"), html.Ul(converter_texts)],
+            html.Span(f"Available run converters: {', '.join(converter_text)}"),
             className="mt-2",
         )
 

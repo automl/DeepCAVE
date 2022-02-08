@@ -104,13 +104,17 @@ class SidebarLayout(Layout):
                         className="nav-item",
                         children=[
                             html.A(
-                                name, className="nav-link active", href=f"/plugins/{id}"
+                                [html.I(className="far fa-file"), name],
+                                className="nav-link",
+                                href=f"/plugins/{id}",
                             )
                         ],
                     )
                 ]
 
             layouts += [html.Ul(className="nav flex-column", children=point_layouts)]
+
+        icon = {"data-feather": "file-text"}
 
         return html.Nav(
             className="col-md-3 col-lg-2 d-md-block sidebar collapse",
@@ -123,7 +127,9 @@ class SidebarLayout(Layout):
                             className="nav flex-column",
                             children=[
                                 html.A(
-                                    "General", className="nav-link active", href="/"
+                                    "General",
+                                    className="nav-link active",
+                                    href="/",
                                 ),
                             ],
                         ),

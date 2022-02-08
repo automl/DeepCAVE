@@ -39,6 +39,15 @@ label {
 #sidebarMenu {
     background-color: rgb(243, 242, 241);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0px;
+}
+
+thead {
+    border-bottom: 2px solid lightgray;
+}
+
+.nav-link .far {
+    margin-right: 0.5rem;
 }
 
 
