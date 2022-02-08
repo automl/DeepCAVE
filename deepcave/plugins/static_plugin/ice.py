@@ -129,10 +129,7 @@ class ICE(StaticPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            html.H3("Vanilla"),
             dcc.Graph(register("graph-mean", "figure")),
-            html.H3("Uncertainty Quantification"),
-            dcc.Graph(register("graph-var", "figure")),
         ]
 
     @staticmethod
@@ -144,77 +141,71 @@ class ICE(StaticPlugin):
 
         hp_name = inputs["hyperparameters"]["options"][s]["label"]
 
-        figures = []
-        for variance_based in [False, True]:
+        traces = []
+        for idx, (run_name, run_outputs) in enumerate(outputs.items()):
+            data = deserialize(run_outputs["data"], dtype=np.ndarray)
+            evaluator = ICEEvaluator(data)
 
-            traces = []
-            for idx, (run_name, run_outputs) in enumerate(outputs.items()):
-                data = deserialize(run_outputs["data"], dtype=np.ndarray)
-                evaluator = ICEEvaluator(data)
+            all_x, all_y = evaluator.get_ice_data(s, variance_based=False)
+            x, y, y_std = evaluator.get_pdp_data(s, variance_based=False)
 
-                all_x, all_y = evaluator.get_ice_data(s, variance_based=variance_based)
+            y_upper = list(y + y_std)
+            y_lower = list(y - y_std)
+            y_hat = np.mean(y, axis=0)
 
-                x, y, y_std = evaluator.get_pdp_data(s, variance_based=variance_based)
+            traces.append(
+                go.Scatter(
+                    x=x,
+                    y=y,
+                    showlegend=True,
+                    name=f"{run_name} ({np.round(y_hat, 3)})",
+                    line_color=get_color(idx, alpha=1),
+                )
+            )
 
-                y_upper = list(y + y_std)
-                y_lower = list(y - y_std)
-                y_hat = np.mean(y, axis=0)
+            if not inputs["confidence_bands"]["value"]:
+                for x, y in zip(all_x, all_y):
+                    traces.append(
+                        go.Scatter(
+                            x=x,
+                            y=y,
+                            showlegend=False,
+                            line_color=get_color(idx, alpha=0.05),
+                            hoverinfo="skip",
+                        )
+                    )
+            else:
+                traces.append(
+                    go.Scatter(
+                        x=x,
+                        y=y_upper,
+                        line=dict(color=get_color(idx, 0)),
+                        # line_shape='hv',
+                        hoverinfo="skip",
+                        showlegend=False,
+                    )
+                )
 
                 traces.append(
                     go.Scatter(
                         x=x,
-                        y=y,
-                        showlegend=True,
-                        name=f"{run_name} ({np.round(y_hat, 3)})",
-                        line_color=get_color(idx, alpha=1),
+                        y=y_lower,
+                        fill="tonexty",
+                        fillcolor=get_color(idx, 0.2),
+                        line=dict(color=get_color(idx, 0)),
+                        # line_shape='hv',
+                        hoverinfo="skip",
+                        showlegend=False,
                     )
                 )
 
-                if not inputs["confidence_bands"]["value"]:
-                    for x, y in zip(all_x, all_y):
-                        traces.append(
-                            go.Scatter(
-                                x=x,
-                                y=y,
-                                showlegend=False,
-                                line_color=get_color(idx, alpha=0.05),
-                                hoverinfo="skip",
-                            )
-                        )
-                else:
-                    traces.append(
-                        go.Scatter(
-                            x=x,
-                            y=y_upper,
-                            line=dict(color=get_color(idx, 0)),
-                            # line_shape='hv',
-                            hoverinfo="skip",
-                            showlegend=False,
-                        )
-                    )
+        layout = go.Layout(
+            xaxis=dict(
+                title=hp_name,
+            ),
+            yaxis=dict(
+                title=inputs["objective"]["value"],
+            ),
+        )
 
-                    traces.append(
-                        go.Scatter(
-                            x=x,
-                            y=y_lower,
-                            fill="tonexty",
-                            fillcolor=get_color(idx, 0.2),
-                            line=dict(color=get_color(idx, 0)),
-                            # line_shape='hv',
-                            hoverinfo="skip",
-                            showlegend=False,
-                        )
-                    )
-
-            layout = go.Layout(
-                xaxis=dict(
-                    title=hp_name,
-                ),
-                yaxis=dict(
-                    title=inputs["objective"]["value"],
-                ),
-            )
-
-            figures.append(go.Figure(data=traces, layout=layout))
-
-        return figures
+        return go.Figure(data=traces, layout=layout)

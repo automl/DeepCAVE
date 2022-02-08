@@ -130,9 +130,7 @@ class CCube(DynamicPlugin):
         budget = run.get_budget(budget_id)
 
         df, df_labels = run.get_encoded_configs(
-            objective_names=[objective_name],
-            budget=budget,
-            pandas=True
+            objective_names=[objective_name], budget=budget, pandas=True
         )
 
         # Now we also need to know when to use the labels and when to use the encoded data
@@ -146,13 +144,13 @@ class CCube(DynamicPlugin):
         return {
             "df": serialize(df),
             "df_labels": serialize(df_labels),
-            "show_all_labels": show_all_labels
+            "show_all_labels": show_all_labels,
         }
 
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(register("graph", "figure")),
+            dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),
         ]
 
     @staticmethod
@@ -204,11 +202,11 @@ class CCube(DynamicPlugin):
                     for k in frame[y].keys():
                         frame[y][k] = 0
 
-            fig = px.scatter(df, x=x, y=y, color=cost_name,
-                             hover_data=df_labels)
+            fig = px.scatter(df, x=x, y=y, color=cost_name, hover_data=df_labels)
         else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z,
-                                color=cost_name, hover_data=df_labels)
+            fig = px.scatter_3d(
+                df, x=x, y=y, z=z, color=cost_name, hover_data=df_labels
+            )
 
         scene = {}
         for axis, name in zip([x, y, z], ["xaxis", "yaxis", "zaxis"]):

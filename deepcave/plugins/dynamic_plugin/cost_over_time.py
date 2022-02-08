@@ -66,15 +66,8 @@ class CostOverTime(DynamicPlugin):
             ),
             html.Div(
                 [
-                    dbc.Label("Logarithmic"),
-                    dbc.RadioItems(id=register("log", ["options", "value"])),
-                ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
-                    dbc.Label("Show Groups"),
-                    dbc.RadioItems(id=register("groups", ["options", "value"])),
+                    dbc.Label("Display ..."),
+                    dbc.RadioItems(id=register("display", ["options", "value"])),
                 ],
                 className="",
             ),
@@ -88,6 +81,7 @@ class CostOverTime(DynamicPlugin):
         run = list(runs.values())[0]
         readable_budgets = run.get_budgets(human=True)
         objective_names = run.get_objective_names()
+        display_options = ["Runs", "Groups"]
 
         return {
             "objective": {
@@ -103,12 +97,15 @@ class CostOverTime(DynamicPlugin):
             "xaxis": {
                 "options": [
                     {"label": "Time", "value": "times"},
+                    {"label": "Time (logarithmic)", "value": "times_log"},
                     {"label": "Number of evaluated configurations", "value": "configs"},
                 ],
                 "value": "times",
             },
-            "log": {"options": get_radio_options(binary=True), "value": True},
-            "groups": {"options": get_radio_options(binary=True), "value": False},
+            "display": {
+                "options": get_radio_options(display_options),
+                "value": display_options[0],
+            },
         }
 
     @staticmethod
@@ -116,7 +113,7 @@ class CostOverTime(DynamicPlugin):
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
 
-        times, costs_mean, costs_std, _ = run.get_trajectory(
+        times, costs_mean, costs_std, ids = run.get_trajectory(
             objective_names=[inputs["objective"]["value"]], budget=budget
         )
 
@@ -124,6 +121,7 @@ class CostOverTime(DynamicPlugin):
             "times": times,
             "costs_mean": costs_mean,
             "costs_std": costs_std,
+            "ids": ids,
         }
 
     @staticmethod
@@ -134,23 +132,22 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def load_outputs(inputs, outputs, runs: dict[str, AbstractRun]) -> list[Component]:
-        """
-        show_groups = inputs["groups"]["value"]
-        if show_groups is not None:
-            groups = {}
-            for run_name in outputs.keys():
-                groups[run_name] = [run_name]
-        """
 
         traces = []
         for idx, (run_name, run) in enumerate(runs.items()):
             x = outputs[run.name]["times"]
             if inputs["xaxis"]["value"] == "configs":
-                x = [i for i in range(len(x))]
+                x = outputs[run.name]["ids"]
 
-            if not inputs["groups"]["value"]:
+            if inputs["display"]["value"] == "Runs":
                 if run.prefix == "group":
                     continue
+            elif inputs["display"]["value"] == "Groups":
+                # Prefix could be not only run but also the name of the converter
+                if run.prefix != "group":
+                    continue
+            else:
+                raise RuntimeError("Unknown display option")
 
             y = np.array(outputs[run.name]["costs_mean"])
             y_err = np.array(outputs[run.name]["costs_std"])
@@ -193,7 +190,7 @@ class CostOverTime(DynamicPlugin):
             )
 
         type = None
-        if inputs["log"]["value"]:
+        if inputs["xaxis"]["value"] == "times_log":
             type = "log"
 
         xaxis_label = "Wallclock time [s]"

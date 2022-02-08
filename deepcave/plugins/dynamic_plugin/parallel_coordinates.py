@@ -8,86 +8,72 @@ import numpy as np
 from dash import dcc
 from dash import html
 from collections import defaultdict
+from deepcave import run_handler
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.compression import serialize, deserialize
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_checklist_options
+from deepcave.utils.layout import (
+    get_slider_marks,
+    get_select_options,
+    get_checklist_options,
+)
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
 class ParallelCoordinates(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
-
-    @staticmethod
-    def id() -> str:
-        return "parallel_coordinates"
-
-    @staticmethod
-    def name() -> str:
-        return "Parallel Coordinates"
-
-    @staticmethod
-    def position() -> int:
-        return 20
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Hyperparameter Analysis"
-
-    @staticmethod
-    def activate_run_selection():
-        return True
+    id = "parallel_coordinates"
+    name = "Parallel Coordinates"
+    description = """
+        This type of visualisation is used for plotting multivariate, numerical data. Parallel
+        Coordinates Plots are ideal for comparing many variables together and
+        seeing the relationships between them. For example, if you had to compare an array
+        of products with the same attributes (comparing computer or cars specs across
+        different models).
+    """
+    activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):
         return [
-            html.Div([
-                dbc.Label("Objective"),
-                dbc.Select(
-                    id=register("objective", ["options", "value"]),
-                    placeholder="Select objective ..."
-                ),
-            ], className="mb-3"),
-
-            html.Div([
-                dbc.Label("Budget"),
-                dcc.Slider(
-                    id=register("budget", ["min", "max", "marks", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Objective"),
+                    dbc.Select(
+                        id=register("objective", ["options", "value"]),
+                        placeholder="Select objective ...",
+                    ),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Budget"),
+                    dcc.Slider(id=register("budget", ["min", "max", "marks", "value"])),
+                ]
+            ),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            html.Div([
-                dbc.Label("Hyperparameters"),
-                dbc.Checklist(
-                    id=register("hyperparameters", ["options", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Hyperparameters"),
+                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                ]
+            ),
         ]
 
     @staticmethod
     def load_inputs(runs):
         return {
-            "objective": {
-                "options": get_select_options(),
-                "value": None
-            },
-            "budget": {
-                "min": 0,
-                "max": 0,
-                "marks": get_slider_marks(),
-                "value": 0
-            },
-            "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
-            },
+            "objective": {"options": get_select_options(), "value": None},
+            "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
     @staticmethod
@@ -104,7 +90,7 @@ class ParallelCoordinates(DynamicPlugin):
         new_inputs = {
             "objective": {
                 "options": get_select_options(objective_names),
-                "value": objective_value
+                "value": objective_value,
             },
             "budget": {
                 "min": 0,
@@ -126,9 +112,7 @@ class ParallelCoordinates(DynamicPlugin):
         budget = run.get_budget(budget_id)
 
         df, df_labels = run.get_encoded_configs(
-            objective_names=[objective_name],
-            budget=budget,
-            pandas=True
+            objective_names=[objective_name], budget=budget, pandas=True
         )
 
         # Now we also need to know when to use the labels and when to use the encoded data
@@ -142,26 +126,26 @@ class ParallelCoordinates(DynamicPlugin):
         return {
             "df": serialize(df),
             "df_labels": serialize(df_labels),
-            "show_all_labels": show_all_labels
+            "show_all_labels": show_all_labels,
         }
 
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(
-                register("graph", "figure")
-            ),
+            dcc.Graph(register("graph", "figure")),
         ]
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
         hp_names = inputs["hyperparameters"]["value"]
-        run_name = inputs["run_name"]["value"]
-        show_all_labels = outputs[run_name]["show_all_labels"]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
-        df = outputs[run_name]["df"]
+        show_all_labels = outputs["show_all_labels"]
+
+        df = outputs["df"]
         df = deserialize(df, dtype=pd.DataFrame)
-        df_labels = outputs[run_name]["df_labels"]
+        df_labels = outputs["df_labels"]
         df_labels = deserialize(df_labels, dtype=pd.DataFrame)
 
         # Dummy data to understand the structure
@@ -225,12 +209,14 @@ class ParallelCoordinates(DynamicPlugin):
         data[objective]["values"] = df[objective].values
         data[objective]["label"] = objective
 
-        fig = go.Figure(data=go.Parcoords(
-            line=dict(
-                color=data[objective]["values"],
-                showscale=True,
-            ),
-            dimensions=list([d for d in data.values()])
-        ))
+        fig = go.Figure(
+            data=go.Parcoords(
+                line=dict(
+                    color=data[objective]["values"],
+                    showscale=True,
+                ),
+                dimensions=list([d for d in data.values()]),
+            )
+        )
 
         return [fig]
