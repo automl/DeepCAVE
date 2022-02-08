@@ -20,6 +20,7 @@ from deepcave.utils.styled_plotty import get_color
 class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
+    icon: str = "fas fa-chart-line"
 
     @staticmethod
     def check_compatibility(run: AbstractRun):

@@ -20,6 +20,7 @@ from deepcave.runs import AbstractRun
 class Configurations(DynamicPlugin):
     id = "configurations"
     name = "Configurations"
+    icon: str = "fas fa-sliders-h"
 
     activate_run_selection = True
 

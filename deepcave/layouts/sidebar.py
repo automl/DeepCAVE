@@ -17,7 +17,7 @@ class SidebarLayout(Layout):
         nav_points = {category: [] for category in categorized_plugins}
         for category, plugins in categorized_plugins.items():
             for plugin in plugins:
-                nav_points[category].append((plugin.id, plugin.name))
+                nav_points[category].append((plugin.id, plugin.name, plugin.icon))
 
         self.nav_points = nav_points
 
@@ -98,13 +98,13 @@ class SidebarLayout(Layout):
             ]
 
             point_layouts = []
-            for (id, name) in points:
+            for (id, name, icon) in points:
                 point_layouts += [
                     html.Li(
                         className="nav-item",
                         children=[
                             html.A(
-                                [html.I(className="far fa-file"), name],
+                                [html.I(className=icon), name],
                                 className="nav-link",
                                 href=f"/plugins/{id}",
                             )

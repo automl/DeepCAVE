@@ -17,6 +17,7 @@ from deepcave.utils.layout import get_checklist_options
 class fANOVA(StaticPlugin):
     id = "fanova"
     name = "fANOVA"
+    icon: str = "far fa-star"
 
     activate_run_selection = True
 

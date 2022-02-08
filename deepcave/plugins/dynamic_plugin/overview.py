@@ -11,6 +11,7 @@ from deepcave.runs.grouped_run import NotMergeableError
 class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
+    icon: str = "fas fa-search"
 
     activate_run_selection = True
 

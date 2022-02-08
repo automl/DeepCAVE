@@ -25,6 +25,7 @@ logger = get_logger(__name__)
 class CCube(DynamicPlugin):
     id = "ccube"
     name = "Configurations Cube"
+    icon: str = "fas fa-cube"
 
     activate_run_selection = True
 

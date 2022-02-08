@@ -29,6 +29,7 @@ class Plugin(Layout, ABC):
     category: Optional[str] = None
     description: Optional[str] = None
     position: int = 99999
+    icon: str = "far fa-file"
 
     button_caption: str = "Process"
 

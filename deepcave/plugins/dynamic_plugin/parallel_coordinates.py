@@ -34,6 +34,7 @@ class ParallelCoordinates(DynamicPlugin):
         of products with the same attributes (comparing computer or cars specs across
         different models).
     """
+    icon: str = "far fa-map"
     activate_run_selection = True
 
     @staticmethod

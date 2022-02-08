@@ -46,7 +46,7 @@ thead {
     border-bottom: 2px solid lightgray;
 }
 
-.nav-link .far {
+.nav-link .far, .nav-link .fas {
     margin-right: 0.5rem;
 }
 

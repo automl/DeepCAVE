@@ -19,6 +19,7 @@ from deepcave.utils.styled_plotty import get_color
 class ICE(StaticPlugin):
     id = "ice"
     name = "Individual Conditional Expectation"
+    icon: str = "fas fa-grip-lines"
 
     @staticmethod
     def check_compatibility(run: AbstractRun):
