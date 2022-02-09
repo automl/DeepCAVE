@@ -10,28 +10,26 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc, run_handler
 from deepcave.layouts import Layout
-from deepcave.runs.grouped_run import NotMergeableError
+from deepcave.runs import NotMergeableError, NotValidRunError
 from deepcave.runs.run import Run
 
 
 class GeneralLayout(Layout):
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
         self._callback_working_directory_changed()
         self._callback_run_selection_changed()
         self._callback_group_selection_changed()
         self._callback_set_groups()
         self._callback_clear_cache()
 
-    def _callback_working_directory_changed(self):
+    def _callback_working_directory_changed(self) -> None:
         outputs = [
-            Output(
-                "general-working-directory-input", "value"
-            ),  # Working directory input
-            Output("general-converter-label", "children"),  # Converter text
-            Output(
-                "general-runs-checklist", "options"
-            ),  # Runs options : ("labels": , "values":)
-            Output("general-runs-checklist", "value"),  # ???
+            # Working directory input
+            Output("general-working-directory-input", "value"),
+            # Converter text
+            Output("general-converter-label", "children"),
+            Output("general-runs-checklist", "options"),
+            Output("general-runs-checklist", "value"),
         ]
 
         inputs = [
@@ -55,13 +53,8 @@ class GeneralLayout(Layout):
                     run_names,
                 )
 
-            # Check if working dir exists
-            working_dir_path = Path(working_dir)
-            if not working_dir_path.is_dir():
-                raise PreventUpdate()
-
             empty_run_names = []
-            run_handler.update_working_directory(working_dir_path)
+            run_handler.update_working_directory(Path(working_dir))
 
             return (
                 working_dir,
@@ -70,15 +63,15 @@ class GeneralLayout(Layout):
                 empty_run_names,
             )
 
-    def _callback_run_selection_changed(self):
-        output = Output("general-run-names", "value")
+    def _callback_run_selection_changed(self) -> None:
+        output = Output("general-run-names", "data")
         input = Input("general-runs-checklist", "value")
 
         # Save the run ids internally
         @app.callback(output, input)
         def callback(run_ids: list[str]):
             old_run_names = run_handler.get_run_names()
-            self.logger.debug(f"Old run names: {old_run_names}, Run names: {run_ids}")
+            self.logger.debug(f"Old runs: {old_run_names}, Runs: {run_ids}")
 
             # Reset groups here.
             # Alternatively: Remove all runs which are not selected anymore.
@@ -89,17 +82,21 @@ class GeneralLayout(Layout):
                 # Reset last inputs
                 c.set("last_inputs", value={})
 
-            run_handler.update_runs(run_ids)
+            try:
+                run_handler.update_runs(run_ids)
+            except NotValidRunError:
+                return old_run_names
+
             return run_ids
 
-    def _callback_group_selection_changed(self):
+    def _callback_group_selection_changed(self) -> None:
         outputs = [
             Output("general-group-container", "children"),
             Output("general-add-group", "n_clicks"),
         ]
         inputs = [
             Input("general-add-group", "n_clicks"),
-            Input("general-run-names", "value"),
+            Input("general-run-names", "data"),
             Input("general-group-trigger", "data"),
             State("general-group-container", "children"),
         ]
@@ -151,7 +148,7 @@ class GeneralLayout(Layout):
 
             return children, None
 
-    def _callback_set_groups(self):
+    def _callback_set_groups(self) -> None:
         outputs = Output("general-group-trigger", "data")
         inputs = [
             Input({"type": "group-name", "index": ALL}, "value"),
@@ -185,7 +182,7 @@ class GeneralLayout(Layout):
 
             raise PreventUpdate()
 
-    def _callback_clear_cache(self):
+    def _callback_clear_cache(self) -> None:
         output = Output("general-clear-cache-button", "n_clicks")
         input = Input("general-clear-cache-button", "n_clicks")
 
@@ -229,7 +226,7 @@ class GeneralLayout(Layout):
             dbc.FormText(id="general-converter-label"),
             html.Hr(),
             html.H2("Runs"),
-            dbc.Input(id="general-run-names", style={"display": "none"}),
+            dcc.Store(id="general-run-names"),
             dbc.Checklist(id="general-runs-checklist"),
             html.Hr(),
             html.H2("Groups"),

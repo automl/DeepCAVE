@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 
 from deepcave.config import Config
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, NotValidRunError
 from deepcave.runs.grouped_run import GroupedRun
 from deepcave.runs.run import Run
 from deepcave.utils.logs import get_logger
@@ -22,7 +22,6 @@ class RunHandler:
         # Fields set by self.update()
         self.logger = get_logger("RunHandler")
         self.working_dir: Optional[Path] = None
-        self.failed_to_load = set()
 
         # Available converters
         self.available_run_classes: list[Type[Run]] = config.AVAILABLE_CONVERTERS
@@ -43,8 +42,10 @@ class RunHandler:
 
         print(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
+
         print(f"Setting runs to {selected_runs}")
         self.update_runs(selected_runs)
+
         print(f"Setting groups to {groups}")
         self.update_groups(groups)
 
@@ -63,7 +64,6 @@ class RunHandler:
 
         # Set in runtime memory
         self.working_dir = working_directory
-        self.failed_to_load = set()
         self.update_runs([])
         self.update_groups({})
 
@@ -71,7 +71,15 @@ class RunHandler:
         self.c.set("working_dir", value=str(working_directory))
 
     def update_runs(self, selected_run_names: Optional[list[str]] = None):
-        """Loads selected runs and update cache if files changed"""
+        """
+        Loads selected runs and update cache if files changed.
+
+        Raises
+        ------
+        NotValidRunError
+            If directory can not be transformed into a run, an error is thrown.
+
+        """
         if selected_run_names is None:
             selected_run_names = self.c.get("selected_run_names")
         new_runs: dict[str, Run] = {}
@@ -90,6 +98,15 @@ class RunHandler:
     def update_run(
         self, run_name: str, class_hint: Optional[Type[Run]] = None
     ) -> Optional[Run]:
+        """
+
+        Raises
+        ------
+        NotValidRunError
+            If directory can not be transformed into a run, an error is thrown.
+
+        """
+
         # Try to get run from current runs
         if run_name in self.runs:
             run = self.runs[run_name]
@@ -109,8 +126,7 @@ class RunHandler:
         # Run could not be loaded
         if run is None:
             self.logger.warning(f"Run {run_name} could not be loaded")
-            self.failed_to_load.add(run_name)
-            return None
+            raise NotValidRunError()
 
         # Add to run cache
         self.rc.get(run)
@@ -192,11 +208,13 @@ class RunHandler:
 
     def get_available_run_names(self) -> list[str]:
         run_names = []
-        for path in self.working_dir.iterdir():
-            run_name = path.stem
-            if run_name in self.failed_to_load:
-                continue
-            run_names.append(run_name)
+
+        try:
+            for path in self.working_dir.iterdir():
+                run_name = path.stem
+                run_names.append(run_name)
+        except FileNotFoundError:
+            pass
 
         return run_names
 

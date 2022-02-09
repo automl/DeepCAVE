@@ -21,6 +21,18 @@ from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
 
 
+class NotValidRunError(Exception):
+    """Raised if directory is not a valid run."""
+
+    pass
+
+
+class NotMergeableError(Exception):
+    """Raised if two or more runs are not mergeable"""
+
+    pass
+
+
 class Status(IntEnum):
     SUCCESS = 1
     TIMEOUT = 2

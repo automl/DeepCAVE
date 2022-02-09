@@ -1,21 +1,8 @@
-from typing import Any, Dict, List, Optional, Union
-
 from copy import deepcopy
-
-import ConfigSpace
 import numpy as np
-from ConfigSpace import Configuration
-
-from deepcave import Objective
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, NotMergeableError
 from deepcave.runs.run import Run
 from deepcave.utils.hash import string_to_hash
-
-
-class NotMergeableError(Exception):
-    """Raised if two or more runs are not mergeable"""
-
-    pass
 
 
 class GroupedRun(AbstractRun):
