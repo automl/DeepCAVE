@@ -10,6 +10,7 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc, run_handler
 from deepcave.layouts import Layout
+from deepcave.runs.grouped_run import NotMergeableError
 from deepcave.runs.run import Run
 
 
@@ -99,12 +100,13 @@ class GeneralLayout(Layout):
         inputs = [
             Input("general-add-group", "n_clicks"),
             Input("general-run-names", "value"),
+            Input("general-group-trigger", "data"),
             State("general-group-container", "children"),
         ]
 
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
-        def callback(n_clicks: int, run_names, children):
+        def callback(n_clicks: int, run_names, update, children):
             def get_layout(index, options, input_value="", dropdown_value=None):
                 if dropdown_value is None:
                     dropdown_value = []
@@ -150,7 +152,7 @@ class GeneralLayout(Layout):
             return children, None
 
     def _callback_set_groups(self):
-        outputs = Output("general-group-output", "data")
+        outputs = Output("general-group-trigger", "data")
         inputs = [
             Input({"type": "group-name", "index": ALL}, "value"),
             Input({"type": "group-dropdown", "index": ALL}, "value"),
@@ -161,7 +163,7 @@ class GeneralLayout(Layout):
             # Abort on page load
             if self._refresh_groups:
                 self._refresh_groups = False
-                return
+                raise PreventUpdate()
 
             groups = {}
             for group_name, run_names in zip(group_names, all_run_names):
@@ -173,11 +175,15 @@ class GeneralLayout(Layout):
 
                 groups[group_name] = run_names
 
-            # Now save it
-            self.logger.debug(f"Groups: {groups}")
-            run_handler.update_groups(groups)
+            try:
+                # Now save it
+                run_handler.update_groups(groups)
+            except NotMergeableError:
+                return True
 
-            return
+            self.logger.debug(f"Groups: {groups}")
+
+            raise PreventUpdate()
 
     def _callback_clear_cache(self):
         output = Output("general-clear-cache-button", "n_clicks")
@@ -229,7 +235,7 @@ class GeneralLayout(Layout):
             html.H2("Groups"),
             html.Div(id="general-group-container", children=[]),
             dbc.Button("Add Group", id="general-add-group"),
-            dcc.Store(id="general-group-output"),
+            dcc.Store(id="general-group-trigger"),
             html.Hr(),
             html.H2("Caches"),
             dbc.Button(

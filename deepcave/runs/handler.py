@@ -116,8 +116,16 @@ class RunHandler:
         self.rc.get(run)
         return run
 
-    def update_groups(self, groups: Optional[dict[str, list[str]]] = None):
-        """Loads chosen groups"""
+    def update_groups(self, groups: Optional[dict[str, list[str]]] = None) -> None:
+        """
+        Loads chosen groups
+
+        Raises
+        ------
+        NotMergeableError
+            If runs can not be merged, an error is thrown.
+
+        """
         if groups is None:
             groups = self.c.get("groups")
 

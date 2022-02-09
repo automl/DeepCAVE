@@ -53,7 +53,7 @@ class Run(AbstractRun, ABC):
 
         # Reset and load configspace/path
         self.reset()
-        self._configspace = configspace
+        self.configspace = configspace
         self.path = path
         if self.path is not None:
             self.load()
@@ -86,10 +86,6 @@ class Run(AbstractRun, ABC):
     @property
     def path(self) -> Optional[Path]:
         return self._path
-
-    @property
-    def configspace(self) -> ConfigSpace.ConfigurationSpace:
-        return self._configspace
 
     @path.setter
     def path(self, value: Optional[Union[str, Path]]):

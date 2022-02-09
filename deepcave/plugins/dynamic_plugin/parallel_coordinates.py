@@ -1,23 +1,23 @@
 from typing import Optional
 
-import dash_bootstrap_components as dbc
-import pandas as pd
-import plotly.graph_objs as go
-import plotly.express as px
-import numpy as np
-from dash import dcc
-from dash import html
 from collections import defaultdict
-from deepcave import run_handler
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 
+import dash_bootstrap_components as dbc
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objs as go
+from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
+from dash import dcc, html
+
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.utils.compression import serialize, deserialize
+from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import (
-    get_slider_marks,
-    get_select_options,
     get_checklist_options,
+    get_select_options,
+    get_slider_marks,
 )
 from deepcave.utils.logs import get_logger
 

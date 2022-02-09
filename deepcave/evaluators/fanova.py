@@ -366,6 +366,5 @@ if __name__ == "__main__":
     # print(imp)
 
     f = fANOVA(X, Y, cs)
-    imp = f.quantify_importance(
-        cs.get_hyperparameter_names(), depth=1, sorted=False)
+    imp = f.quantify_importance(cs.get_hyperparameter_names(), depth=1, sorted=False)
     print(imp)

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable, Iterator, Optional, Union
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
 
 import copy
 from dataclasses import dataclass
@@ -46,45 +46,33 @@ class Trial:
 
         assert isinstance(self.status, Status)
 
-    def get_key(self) -> tuple[str, int]:
+    def get_key(self) -> Tuple[str, int]:
         return self.config_id, self.budget  # noqa
 
 
 class AbstractRun(ABC):
     prefix: str
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
         self.logger = get_logger(self.__class__.__name__)
 
         # objects created by reset
-        self.configs: dict[int, Configuration] = {}
-        self.origins = {}
-        self.models = {}
+        self.reset()
 
-        self.history = []
-        self.trial_keys = {}
+    def reset(self) -> None:
+        self.meta: Dict[str, Any] = {}
+        self.configspace: Optional[ConfigSpace.ConfigurationSpace] = None
+        self.configs: Dict[int, Configuration] = {}
+        self.origins: Dict[int, str] = {}
+        self.models: Dict[int, Any] = {}
 
-        self.meta = {}
-
-    def reset(self):
-        self.meta = {}
-        self._configspace = None
-        self.configs = {}
-        self.origins = {}
-        self.models = {}
-
-        self.history = []
-        self.trial_keys = {}
+        self.history: List[Trial] = []
+        self.trial_keys: Dict[Tuple[str, int], int] = {}
 
     @property
     def run_cache_id(self) -> str:
         return string_to_hash(f"{self.prefix}:{self.name}")
-
-    @property
-    @abstractmethod
-    def configspace(self) -> Optional[ConfigSpace.ConfigurationSpace]:
-        return None
 
     @property
     @abstractmethod
@@ -94,13 +82,13 @@ class AbstractRun(ABC):
         """
         pass
 
-    def get_meta(self):
+    def get_meta(self) -> None:
         return self.meta
 
-    def empty(self):
+    def empty(self) -> None:
         return len(self.history) == 0
 
-    def get_objectives(self):
+    def get_objectives(self) -> None:
         objectives = []
         for d in self.meta["objectives"]:
             objective = Objective(
@@ -120,7 +108,7 @@ class AbstractRun(ABC):
     def get_trials(self) -> Iterator[Trial]:
         yield from self.history
 
-    def get_objective_name(self, objective_names=None):
+    def get_objective_name(self, objective_names=None) -> str:
         """
         Get the cost name of given objective names.
         Returns "Combined Cost" if multiple objective names were involved.
@@ -140,10 +128,10 @@ class AbstractRun(ABC):
 
         return "Combined Cost"
 
-    def get_objective_names(self) -> list:
+    def get_objective_names(self) -> List:
         return [obj["name"] for obj in self.get_objectives()]
 
-    def get_configs(self, budget=None):
+    def get_configs(self, budget=None) -> List:
         configs = []
         for trial in self.history:
             if budget is not None:
@@ -169,7 +157,7 @@ class AbstractRun(ABC):
     def get_budget(self, id: int) -> float:
         return self.meta["budgets"][id]
 
-    def get_budgets(self, human=False) -> list[str]:
+    def get_budgets(self, human=False) -> List[str]:
         """
         There's at least one budget with None included.
 

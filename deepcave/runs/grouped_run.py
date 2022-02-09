@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from copy import deepcopy
 
@@ -24,27 +24,56 @@ class GroupedRun(AbstractRun):
     def __init__(self, name: str, runs: list[Run]):
         super(GroupedRun, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
+        self.reset()
 
-        self.configs: dict[str, Configuration] = {}  # config_id -> Configuration
-        self.origins = {}
-        self.models = {}
-
-        self.history = []
-        self.trial_keys = {}
-
-        self.merged_history = False
+        if len(self.runs) == 0:
+            return
 
         try:
+            # Merge meta
+            self.meta = self.runs[0].get_meta()
+            for run in self.runs:
+                meta = run.get_meta()
+
+                for k, v in self.meta.items():
+                    # Don't check on objectives or budgets
+                    if k == "objectives" or k == "budgets":
+                        continue
+
+                    if k not in meta or meta[k] != v:
+                        raise NotMergeableError("Meta data of runs are not equal.")
+
             # Make sure the same configspace is used
             # Otherwise it does not make sense to merge
             # the histories
-            self.configspace  # noqa
+            self.configspace = self.runs[0].configspace
+            for run in self.runs:
+                if self.configspace != run.configspace:
+                    raise NotMergeableError("Configspace of runs are not equal.")
 
             # Also check if budgets are the same
-            self.get_budgets()
+            budgets = self.runs[0].get_budgets()
+            for run in self.runs:
+                if budgets != run.get_budgets():
+                    raise NotMergeableError("Budgets of runs are not equal.")
+
+            self.meta["budgets"] = budgets
 
             # And if objectives are the same
-            self.get_objectives()
+            objectives = None
+            for run in self.runs:
+                objectives2 = run.get_objectives()
+
+                if objectives is None:
+                    objectives = objectives2
+                    continue
+
+                if len(objectives) != len(objectives2):
+                    raise NotMergeableError("Objectives of runs are not equal.")
+
+                for o1, o2 in zip(objectives, objectives2):
+                    o1.merge(o2)
+            self.meta["objectives"] = objectives
 
             # We need new config ids
             current_config_id = 0
@@ -89,10 +118,8 @@ class GroupedRun(AbstractRun):
                         self.history.append(trial)
                     else:
                         self.history[self.trial_keys[trial_key]] = trial
-
-            self.merged_history = True
         except:
-            pass
+            raise NotMergeableError("Runs can not be merged.")
 
     def __iter__(self):
         for run in self.runs:
@@ -110,169 +137,7 @@ class GroupedRun(AbstractRun):
     def run_names(self) -> list[str]:
         return [run.name for run in self.runs]
 
-    @property
-    def configspace(self) -> Optional[ConfigSpace.ConfigurationSpace]:
-        cs = self.runs[0].configspace
-        for run in self.runs:
-            if cs != run.configspace:
-                raise NotMergeableError("Configspace of runs are not equal.")
-
-        return cs
-
-    def get_meta(self) -> dict[str, str]:
-        """
-        Returns the meta data if all runs have the same meta data.
-        Otherwise raise an error.
-        """
-
-        meta = self.runs[0].get_meta()
-        for run in self.runs:
-            meta2 = run.get_meta()
-
-            for k, v in meta.items():
-                # Don't check on objectives or budgets
-                if k == "objectives" or k == "budgets":
-                    continue
-
-                if k not in meta2 or meta2[k] != v:
-                    raise NotMergeableError("Meta data of runs are not equal.")
-
-        return meta
-
-    def get_objectives(self) -> list[Objective]:
-        """
-        Returns the objectives if all runs have the same objectives.
-        Otherwise raise an error.
-        """
-
-        objectives = None
-        for run in self.runs:
-            objectives2 = run.get_objectives()
-
-            if objectives is None:
-                objectives = objectives2
-                continue
-
-            if len(objectives) != len(objectives2):
-                raise NotMergeableError("Objectives of runs are not equal.")
-
-            for o1, o2 in zip(objectives, objectives2):
-                o1.merge(o2)
-
-        return objectives
-
-    def get_objective_names(self) -> list:
-        """
-        Returns the objective names if all runs have the same objective names
-        Otherwise raise an error.
-        """
-
-        return [obj["name"] for obj in self.get_objectives()]
-
-    def get_config(self, id):
-        """
-        Returns a config if runs are mergeable.
-        Otherwise raise an error.
-        """
-
-        if self.merged_history:
-            return self.configs[id]
-        else:
-            raise NotMergeableError("Run data are not mergeable.")
-
-    def get_config_id(self, config: dict):
-        """
-        Returns a config id if runs are mergeable.
-        Otherwise raise an error.
-        """
-
-        if self.merged_history:
-            # Find out config id
-            for id, c in self.configs.items():
-                if c == config:
-                    return id
-
-            return None
-        else:
-            raise NotMergeableError("Run data are not mergeable.")
-
-    def get_configs(self, budget=None):
-        """
-        Return all configs if runs are mergeable.
-        Otherwise raise an error.
-        """
-
-        if self.merged_history:
-            configs = []
-            for trial in self.history:
-                if budget is not None:
-                    if budget != trial.budget:
-                        continue
-
-                config = self.configs[trial.config_id]
-                configs += [config]
-
-            return configs
-        else:
-            raise NotMergeableError("Run data are not mergeable.")
-
-    def get_budgets(self, human=False) -> Union[List[str], NotMergeableError]:
-        """
-        Returns all budgets if all runs have the same budgets.
-        Otherwise raise an error.
-        """
-
-        budgets = self.runs[0].get_budgets(human=human)
-        for run in self.runs:
-            if budgets != run.get_budgets(human=human):
-                raise NotMergeableError("Budgets of runs are not equal.")
-
-        return budgets
-
-    def get_budget(self, idx: int) -> Union[float, NotMergeableError]:
-        """
-        Returns the budget of index `idx` if all runs have the same budget.
-        Otherwise raise an error.
-        """
-
-        budgets = self.get_budgets()
-        return budgets[idx]
-
-    def get_highest_budget(self) -> Union[float, NotMergeableError]:
-        """
-        Returns highest budget if all runs have the same budgets.
-        Otherwise raise an error.
-        """
-
-        self.get_budgets()
-        return self.runs[0].get_highest_budget()
-
-    def get_costs(self, *args, **kwargs):
-        """
-        Return costs if runs are mergeable.
-        Otherwise raise an error.
-        If no budget is given, the highest budget is chosen.
-        """
-
-        if self.merged_history:
-            return super().get_costs(*args, **kwargs)
-        else:
-            raise NotMergeableError("Run data are not mergeable.")
-
-    def get_min_cost(self, *args, **kwargs):
-        """
-        Return costs if runs are mergeable.
-        Otherwise raise an error.
-        If no budget is given, the highest budget is chosen.
-        """
-
-        if self.merged_history:
-            return super().get_min_cost(*args, **kwargs)
-        else:
-            raise NotMergeableError("Run data are not mergeable.")
-
     def get_trajectory(self, *args, **kwargs):
-
         # Cache costs
         run_costs = []
         run_times = []

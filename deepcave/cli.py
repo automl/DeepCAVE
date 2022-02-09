@@ -1,7 +1,8 @@
-from typing import List, Any
-from absl import app
-from absl import flags
+from typing import Any, List
+
 import subprocess
+
+from absl import app, flags
 
 FLAGS = flags.FLAGS
 flags.DEFINE_boolean("docker", False, "Uses docker images to start DeepCAVE.")

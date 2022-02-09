@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import setuptools
+from deepcave import version
 
 
 def read_file(file_name):
@@ -50,9 +51,7 @@ setuptools.setup(
         "Documentation": "https://github.com/automl/deepcave",
         "Source Code": "https://github.com/automl/deepcave",
     },
-    version=read_file("deepcave/__version__.py")
-    .replace('"', "")
-    .replace("version = ", ""),
+    version=version,
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
