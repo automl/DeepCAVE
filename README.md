@@ -20,7 +20,6 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 to your ```~/.bash_profile``` to enable multi-processing.
 
 Afterwards, follow the instructions:
-
 ```
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
@@ -60,7 +59,7 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 
 The webserver as well as the queue/workers can be started by running
 ```
-deepcave
+deepcave start
 ```
 or
 ```
