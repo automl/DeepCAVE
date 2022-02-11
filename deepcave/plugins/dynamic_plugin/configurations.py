@@ -1,40 +1,28 @@
-from typing import Optional
-
 import dash_bootstrap_components as dbc
 import pandas as pd
-from ConfigSpace.hyperparameters import UniformIntegerHyperparameter, NormalIntegerHyperparameter, \
-    UniformFloatHyperparameter, NormalFloatHyperparameter, CategoricalHyperparameter, OrdinalHyperparameter, Constant
+from ConfigSpace.hyperparameters import (
+    CategoricalHyperparameter,
+    Constant,
+    NormalFloatHyperparameter,
+    NormalIntegerHyperparameter,
+    OrdinalHyperparameter,
+    UniformFloatHyperparameter,
+    UniformIntegerHyperparameter,
+)
 from dash import html
+from dash.development.base_component import Component
 
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
+from deepcave.runs import AbstractRun
 
 
 class Configurations(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
+    id = "configurations"
+    name = "Configurations"
+    icon = "fas fa-sliders-h"
 
-    @staticmethod
-    def id() -> str:
-        return "configurations"
-
-    @staticmethod
-    def name() -> str:
-        return "Configurations"
-
-    @staticmethod
-    def position() -> int:
-        return 5
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "General"
-
-    @staticmethod
-    def activate_run_selection() -> bool:
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def process(run, inputs):
@@ -50,10 +38,12 @@ class Configurations(DynamicPlugin):
 
             log = False
             value = None
-            if isinstance(hp, UniformIntegerHyperparameter) or isinstance(hp,
-                                                                          NormalIntegerHyperparameter) or isinstance(hp,
-                                                                                                                     UniformFloatHyperparameter) or isinstance(
-                hp, NormalFloatHyperparameter):
+            if (
+                isinstance(hp, UniformIntegerHyperparameter)
+                or isinstance(hp, NormalIntegerHyperparameter)
+                or isinstance(hp, UniformFloatHyperparameter)
+                or isinstance(hp, NormalFloatHyperparameter)
+            ):
                 value = str([hp.lower, hp.upper])
                 log = hp.log
             elif isinstance(hp, CategoricalHyperparameter):
@@ -74,10 +64,7 @@ class Configurations(DynamicPlugin):
         # Get best cost across all objectives, highest budget
         cost, config = run.get_min_cost()
 
-        best_config = {
-            "Hyperparameter": [],
-            "Value": []
-        }
+        best_config = {"Hyperparameter": [], "Value": []}
 
         for hp_name, value in config.items():
             best_config["Hyperparameter"].append(hp_name)
@@ -95,23 +82,23 @@ class Configurations(DynamicPlugin):
             html.H3("Configuration Space"),
             html.Div(id=register("configspace", "children")),
             html.Hr(),
-
             html.H3("Best Configuration"),
             html.Div(id=register("best_config", "children")),
             html.Div(id=register("min_cost", "children")),
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, _):
-        run_name = inputs["run_name"]["value"]
-        outputs = outputs[run_name]
+    def load_outputs(inputs, outputs, _) -> list[Component]:
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
-        def create_table(output): return dbc.Table.from_dataframe(
-            pd.DataFrame(output), striped=True, bordered=True
-        )
+        def create_table(output):
+            return dbc.Table.from_dataframe(
+                pd.DataFrame(output), striped=True, bordered=True
+            )
 
         return [
             create_table(outputs["configspace"]),
             create_table(outputs["best_config"]),
-            f"With normalized cost: {outputs['min_cost']}"
+            f"With normalized cost: {outputs['min_cost']}",
         ]

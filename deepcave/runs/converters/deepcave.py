@@ -1,27 +1,27 @@
 from pathlib import Path
 
-from deepcave.runs.converters.converter import Converter
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class DeepCAVE(Converter):
-    @staticmethod
-    def name() -> str:
-        return "DeepCAVE"
+class DeepCAVERun(Run):
+    prefix = "DeepCAVE"
+    _initial_order = 1
 
-    def get_run_id(self, working_dir: Path, run_name: name) -> str:
+    @property
+    def hash(self) -> str:
         """
-        The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
+        The id from the files in the current working_dir/run_name/*. For example, history.jsonl could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
 
         # Use hash of history.json as id
-        return file_to_hash(working_dir / run_name / "history.jsonl")
+        return file_to_hash(self.path / "history.jsonl")
 
-    def get_run(self, working_dir: Path, run_name: str) -> Run:
+    @classmethod
+    def from_path(cls, path: Path) -> "DeepCAVERun":
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
 
-        return Run(path=working_dir / run_name)
+        return DeepCAVERun(path.stem, path=path)

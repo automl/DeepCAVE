@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, List, Tuple
+from typing import Any, Optional
 
 import numpy as np
 from ConfigSpace import ConfigurationSpace
@@ -7,7 +7,7 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class ICE:
-    def __init__(self, data: Optional[Dict[int, Any]] = None):
+    def __init__(self, data: Optional[dict[int, Any]] = None):
         self.model = None
 
         # Make sure to have int keys
@@ -21,10 +21,12 @@ class ICE:
 
                 self.data[int(k)] = (X, Y_mean, Y_var)
 
-    def get_data(self) -> Dict[int, Any]:
+    def get_data(self) -> dict[int, Any]:
         return self.data
 
-    def fit(self, configspace: ConfigurationSpace, X: np.ndarray, Y: np.ndarray, seed=0):
+    def fit(
+        self, configspace: ConfigurationSpace, X: np.ndarray, Y: np.ndarray, seed=0
+    ):
         # Train random forest here
         if self.model is None:
             self.model = RandomForest(
@@ -70,7 +72,9 @@ class ICE:
 
             self.data[int(s)] = (X_ice, y_ice_mean, y_ice_var)
 
-    def get_ice_data(self, s: int, centered=False, variance_based=False) -> Tuple[List[float], List[float]]:
+    def get_ice_data(
+        self, s: int, centered=False, variance_based=False
+    ) -> tuple[list[float], list[float]]:
         """
         Args:
             s (int): The id of the requested hyperparameter.
@@ -107,7 +111,9 @@ class ICE:
 
         return all_x, all_y
 
-    def get_pdp_data(self, s: int, variance_based=False) -> Tuple[List[float], List[float], List[float]]:
+    def get_pdp_data(
+        self, s: int, variance_based=False
+    ) -> tuple[list[float], list[float], list[float]]:
         """
         Args:
             s (int): The id of the requested hyperparameter.

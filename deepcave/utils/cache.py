@@ -1,6 +1,7 @@
+from typing import Any, Optional
+
 import json
 from pathlib import Path
-from typing import Optional, Any
 
 from deepcave.utils.files import make_dirs
 
@@ -22,24 +23,19 @@ class Cache:
 
     def _setup(self, filename: Path):
         self._data = {}
-
-        if filename is None:
-            self._file = None
-            self.set_dict(self._defaults)
-            return
         self._file = filename
 
-        if not self._file.exists():
+        if filename is None or not self._file.exists():
             self.set_dict(self._defaults)
         else:
             self.read()
 
     def switch(self, filename: Optional[Path]):
-        """ Switch to a new file """
+        """Switch to a new file"""
         self._setup(filename)
 
     def read(self):
-        """ Reads content from a file and load into cache as dictionary """
+        """Reads content from a file and load into cache as dictionary"""
         if not self._file.exists():
             return
 
@@ -47,13 +43,13 @@ class Cache:
             self._data = json.load(f)
 
     def write(self):
-        """ Write content of cache into file """
+        """Write content of cache into file"""
         if self._file is None:
             return
 
-        make_dirs(self._file)
+        self._file.parent.mkdir(exist_ok=True, parents=True)
 
-        with self._file.open('w') as f:
+        with self._file.open("w") as f:
             json.dump(self._data, f, indent=4)
 
     def set(self, *keys, value):
@@ -73,12 +69,12 @@ class Cache:
         self.write()
 
     def set_dict(self, d: dict):
-        """ Updates cache to a specific value """
+        """Updates cache to a specific value"""
         self._data.update(d)
         self.write()
 
     def get(self, *keys) -> Optional[Any]:
-        """ Retrieve value for a specific key """
+        """Retrieve value for a specific key"""
         d = self._data
         for key in keys:
             if key not in d:
@@ -89,7 +85,7 @@ class Cache:
         return d
 
     def has(self, *keys) -> bool:
-        """ Check whether cache has specific key """
+        """Check whether cache has specific key"""
         d = self._data
         for key in keys:
             if key not in d:
@@ -99,7 +95,7 @@ class Cache:
         return True
 
     def clear(self):
-        """ Clear all cache and reset to defaults """
+        """Clear all cache and reset to defaults"""
         self._data = {}
         self._data.update(self._defaults)
         self.write()

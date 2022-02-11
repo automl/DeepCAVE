@@ -1,86 +1,61 @@
-from typing import Optional
+from ast import literal_eval
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
-from ast import literal_eval
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
+from deepcave import run_handler
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
-from deepcave.utils.logs import get_logger
-
-logger = get_logger(__name__)
 
 
 class fANOVA(StaticPlugin):
-    @staticmethod
-    def id() -> str:
-        return "fanova"
+    id = "fanova"
+    name = "fANOVA"
+    icon = "far fa-star"
 
-    @staticmethod
-    def name() -> str:
-        return "fANOVA"
-
-    @staticmethod
-    def position() -> int:
-        return 100
-
-    @staticmethod
-    def category() -> Optional[str]:
-        return "Hyperparameter Analysis"
-
-    @staticmethod
-    def activate_run_selection():
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):
         return [
             dbc.Label("Number of trees"),
-            dbc.Input(id=register("num_trees", "value"))
+            dbc.Input(id=register("num_trees", "value")),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            html.Div([
-                dbc.Label("Hyperparameters"),
-                dbc.Checklist(
-                    id=register("hyperparameters", ["options", "value"])),
-            ], className="mb-3"),
-
-            html.Div([
-                dbc.Label("Budgets"),
-                dbc.Checklist(
-                    id=register("budgets", ["options", "value"])),
-            ]),
+            html.Div(
+                [
+                    dbc.Label("Hyperparameters"),
+                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Budgets"),
+                    dbc.Checklist(id=register("budgets", ["options", "value"])),
+                ]
+            ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
+    def load_inputs(self):
         return {
-            "num_trees": {
-                "value": 16
-            },
-            "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
-            },
-            "budgets": {
-                "options": get_checklist_options(),
-                "value": []
-            },
+            "num_trees": {"value": 16},
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
+            "budgets": {"options": get_checklist_options(), "value": []},
         }
 
-    @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
-        run = runs[inputs["run_name"]["value"]]
-        budgets = run.get_budgets(human=True)
-        hp_names = run.configspace.get_hyperparameter_names()
+    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+        budgets = selected_run.get_budgets(human=True)
+        hp_names = selected_run.configspace.get_hyperparameter_names()
 
         new_inputs = {
             "hyperparameters": {
@@ -94,6 +69,8 @@ class fANOVA(StaticPlugin):
 
         # Restrict to three hyperparameters
         num_trees = inputs["num_trees"]["value"]
+
+        # Reset invalid values
         try:
             int(num_trees)
         except:
@@ -102,7 +79,7 @@ class fANOVA(StaticPlugin):
         return inputs
 
     @staticmethod
-    def process(run, inputs):
+    def process(run: AbstractRun, inputs):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
 
@@ -112,14 +89,14 @@ class fANOVA(StaticPlugin):
             X, Y = run.get_encoded_configs(budget=budget, for_tree=True)
 
             evaluator = _fANOVA(
-                X, Y,
+                X,
+                Y,
                 configspace=run.configspace,
-                num_trees=int(inputs["num_trees"]["value"])
+                num_trees=int(inputs["num_trees"]["value"]),
             )
             importance_dict = evaluator.quantify_importance(
-                hp_names,
-                depth=1,
-                sorted=False)
+                hp_names, depth=1, sort=False
+            )
 
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
 
@@ -129,21 +106,19 @@ class fANOVA(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure"))
-        ]
+        return [dcc.Graph(register("graph", "figure"))]
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-        run_name = inputs["run_name"]["value"]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
-        outputs = outputs[run_name]
         # First selected, should always be shown first
         selected_hyperparameters = inputs["hyperparameters"]["value"]
         selected_budgets = inputs["budgets"]["value"]
 
         if len(selected_hyperparameters) == 0 or len(selected_budgets) == 0:
-            return PreventUpdate
+            raise PreventUpdate()
 
         # TODO: After json serialize/deserialize, budget is not an integer anymore
         convert_type = lambda x: str(float(x))  # type(selected_budgets[0])
@@ -168,11 +143,7 @@ class fANOVA(StaticPlugin):
                 y += [results[1]]
                 error_y += [results[3]]
 
-            data[budget] = (
-                np.array(x),
-                np.array(y),
-                np.array(error_y)
-            )
+            data[budget] = (np.array(x), np.array(y), np.array(error_y))
 
             # if filters["sort"]["value"] == fidelity_id:
             #    selected_fidelity = fidelity
@@ -183,14 +154,16 @@ class fANOVA(StaticPlugin):
 
         bar_data = []
         for budget, values in data.items():
-            bar_data += [go.Bar(
-                name=budget,
-                x=values[0][idx],
-                y=values[1][idx],
-                error_y_array=values[2][idx])
+            bar_data += [
+                go.Bar(
+                    name=budget,
+                    x=values[0][idx],
+                    y=values[1][idx],
+                    error_y_array=values[2][idx],
+                )
             ]
 
         fig = go.Figure(data=bar_data)
-        fig.update_layout(barmode='group')
+        fig.update_layout(barmode="group")
 
         return [fig]

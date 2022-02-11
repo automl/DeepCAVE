@@ -4,20 +4,29 @@ import string
 import unittest
 from pathlib import Path
 
-import dash_html_components as html
 import matplotlib.pyplot as plt
 import pandas as pd
+from dash import html
 
 from deepcave.utils.cache import Cache
-from deepcave.utils.compression import serialize, deserialize
+from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.files import make_dirs
-from deepcave.utils.hash import string_to_hash, file_to_hash
-from deepcave.utils.importing import auto_import_iter
-from deepcave.utils.layout import get_slider_marks, get_select_options, get_radio_options, get_checklist_options
+from deepcave.utils.hash import file_to_hash, string_to_hash
+from deepcave.utils.layout import (
+    get_checklist_options,
+    get_radio_options,
+    get_select_options,
+    get_slider_marks,
+)
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import hex_to_rgb, get_color
-from deepcave.utils.util import get_random_string, matplotlib_to_html_image
+from deepcave.utils.styled_plotty import get_color, hex_to_rgb
+from deepcave.utils.util import (
+    add_prefix_to_dict,
+    add_prefix_to_list,
+    get_random_string,
+    matplotlib_to_html_image,
+)
 
 
 class TestCache(unittest.TestCase):
@@ -115,7 +124,7 @@ class TestCache(unittest.TestCase):
         cache_file.unlink()
 
     def test_cache_file_None(self):
-        """ Cache should still work, even when file is None"""
+        """Cache should still work, even when file is None"""
         cache = Cache(None)
 
         cache.set(1, 2, 3, value=4)
@@ -138,11 +147,14 @@ class TestCompression(unittest.TestCase):
         df = pd.DataFrame([x, y])
 
         df_ser = serialize(df)
-        self.assertEqual('{'
-                         '"0":{"0":1,"1":"a"},'
-                         '"1":{"0":2,"1":"b"},'
-                         '"2":{"0":null,"1":"c"}'
-                         '}', df_ser)
+        self.assertEqual(
+            "{"
+            '"0":{"0":1,"1":"a"},'
+            '"1":{"0":2,"1":"b"},'
+            '"2":{"0":null,"1":"c"}'
+            "}",
+            df_ser,
+        )
         df_cycled = deserialize(df_ser, dtype=pd.DataFrame)
         self.assertIsInstance(df_cycled, pd.DataFrame)
         self.assertTrue(all((df_cycled.to_numpy() == df.to_numpy()).reshape(-1)))
@@ -211,17 +223,6 @@ class TestHash(unittest.TestCase):
         a = file_to_hash(file)
         self.assertGreater(len(a), 5)
         self.assertIsInstance(a, str)
-
-
-class TestImporting(unittest.TestCase):
-    def test_auto_import_iterator(self):
-        # Cannot do futher tests as importing plugin fails due to missing app
-        found = []
-        for name, obj in auto_import_iter("deepcave.plugins", [Path("./deepcave/plugins")]):
-            self.assertIsInstance(name, str)
-            found.append(obj)
-
-        self.assertGreater(len(found), 0)
 
 
 class TestLayout(unittest.TestCase):
@@ -320,9 +321,21 @@ class TestStyledPlottly(unittest.TestCase):
     def test_hex_to_rgb(self):
         def assert_color(hex_code, expected_r, expected_g, expected_b):
             r, g, b = hex_to_rgb(hex_code)
-            self.assertEqual(expected_r, r, f"r value does not match for {hex_code} (wanted {expected_r}, got {r})")
-            self.assertEqual(expected_g, g, f"g value does not match for {hex_code} (wanted {expected_g}, got {g})")
-            self.assertEqual(expected_b, b, f"b value does not match for {hex_code} (wanted {expected_b}, got {b})")
+            self.assertEqual(
+                expected_r,
+                r,
+                f"r value does not match for {hex_code} (wanted {expected_r}, got {r})",
+            )
+            self.assertEqual(
+                expected_g,
+                g,
+                f"g value does not match for {hex_code} (wanted {expected_g}, got {g})",
+            )
+            self.assertEqual(
+                expected_b,
+                b,
+                f"b value does not match for {hex_code} (wanted {expected_b}, got {b})",
+            )
 
         assert_color("#000000", 0, 0, 0)
         assert_color("#FFFFFF", 255, 255, 255)
@@ -367,7 +380,7 @@ class TestUtil(unittest.TestCase):
         fig = plt.Figure()
         ax = fig.gca()
         x = [1, 2, 3, 4, 5]
-        y = [xx ** 2 for xx in x]
+        y = [xx**2 for xx in x]
         ax.plot(x, y)
 
         html_img = matplotlib_to_html_image(fig)
@@ -382,3 +395,40 @@ class TestUtil(unittest.TestCase):
     def test_encode_data_with_cs(self):
         # TODO(dwoiwode): Test with more knowledge about data structure
         pass
+
+    def test_add_prefix_to_dict(self):
+        a = {"a": 4, "b": 1, "c": 9}
+        a_prefixed = add_prefix_to_dict(a, "run:")
+        self.assertIn("run:a", a_prefixed)
+        self.assertIn("run:b", a_prefixed)
+        self.assertIn("run:c", a_prefixed)
+        self.assertNotIn("a", a_prefixed)
+        self.assertNotIn("b", a_prefixed)
+        self.assertNotIn("c", a_prefixed)
+        self.assertEqual(a_prefixed["run:a"], 4)
+        self.assertEqual(a_prefixed["run:b"], 1)
+        self.assertEqual(a_prefixed["run:c"], 9)
+
+        # Other prefix, same dict
+        a_prefixed = add_prefix_to_dict(a, "group:")
+        self.assertIn("group:a", a_prefixed)
+        self.assertIn("group:b", a_prefixed)
+        self.assertIn("group:c", a_prefixed)
+        self.assertNotIn("a", a_prefixed)
+        self.assertNotIn("b", a_prefixed)
+        self.assertNotIn("c", a_prefixed)
+        self.assertEqual(a_prefixed["group:a"], 4)
+        self.assertEqual(a_prefixed["group:b"], 1)
+        self.assertEqual(a_prefixed["group:c"], 9)
+
+    def test_add_prefix_to_list(self):
+        a = ["a", "b", "Hello", "World"]
+        a_prefixed = add_prefix_to_list(a, "run:")
+        self.assertIsInstance(a_prefixed, list)
+        self.assertEqual(4, len(a_prefixed))
+        self.assertEqual("run:a", a_prefixed[0])
+        self.assertEqual("run:b", a_prefixed[1])
+        self.assertEqual("run:Hello", a_prefixed[2])
+
+        a_prefixed = add_prefix_to_list(a, "job:")
+        self.assertEqual("job:World", a_prefixed[3])
