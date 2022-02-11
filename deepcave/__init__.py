@@ -1,6 +1,6 @@
 import sys
 
-author = "René Sass and  Marius Lindauer"
+author = "René Sass and Marius Lindauer"
 version = "0.2"
 
 

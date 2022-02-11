@@ -78,14 +78,14 @@ clean:
 
 # Build a distribution in ./dist
 build:
-	$(PYTHON) setup.py bdist
+	$(PYTHON) setup.py sdist
 
 # Publish to testpypi
 # Will echo the commands to actually publish to be run to publish to actual PyPi
 # This is done to prevent accidental publishing but provide the same conveniences
 publish: clean-build build
 	$(PIP) install twine
-	$(PYTHON) -m twine upload --repository testpypi ${DIST}/*
+	$(PYTHON) -m twine upload --repository testpypi "${DIST}/*"
 	@echo
 	@echo "Test with the following line:"
 	@echo "pip install --index-url https://test.pypi.org/simple/ auto-sklearn"

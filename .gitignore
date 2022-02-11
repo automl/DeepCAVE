@@ -21,3 +21,5 @@ examples/record/_*.py
 docs/apidoc
 docs/html
 docs/pages/examples
+dist
+dist/*
