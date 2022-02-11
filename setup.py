@@ -10,7 +10,8 @@ def read_file(file_name):
 
 
 extras_require = {
-    "tests": [
+    "dev": [
+        # Tests
         "pytest>=4.6",
         "pytest-cov",
         "pytest-xdist",
@@ -21,14 +22,12 @@ extras_require = {
         "pydocstyle",
         "pre-commit",
         "flake8",
-    ],
-    "examples": [
+        # Examples
         "matplotlib",
         "jupyter",
         "notebook",
         "seaborn",
-    ],
-    "docs": [
+        # Docs
         "sphinx<4.3",
         "sphinx-gallery",
         "sphinx_bootstrap_theme",

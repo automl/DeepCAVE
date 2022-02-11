@@ -15,6 +15,9 @@ jobs:
         with:
           python-version: 3.9
       - name: Install dependencies
-        run: conda env update --file environment.yml --name base
+        run: |
+          conda env update --file environment.yml --name base
+          pip install .
+          pip install .[dev]
       - name: Run pytest 
         run: pytest tests
