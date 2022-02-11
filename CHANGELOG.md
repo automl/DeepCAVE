@@ -12,6 +12,7 @@ the encoded anymore.
 load_inputs, load_dependency_inputs).
 - Enhanced native group selection drastically.
 - Added icons to the plugins.
+- Removed ICE for now as too many bugs were found.
 
 ## Others
 - Added typehints.
@@ -45,7 +46,6 @@ load_inputs, load_dependency_inputs).
 - Recorder: Record your runs and save them directly as DeepCAVE files.
 - Matplotlib mode: Alternatively, plugins can output Matplotlib rendered plots.
 
-
 ## Plugins
 
 - StaticPlugin: Uses queue to process the result.
@@ -57,7 +57,6 @@ load_inputs, load_dependency_inputs).
 - Configuration Cube: Shows configurations as points in a cube.
 - Individual Conditional Expectation / Partial Dependency Plots: Shows how individual instances behave.
 - fANOVA: Shows Hyperparameter Importance.
-
 
 ## Converters
 
