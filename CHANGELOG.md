@@ -1,4 +1,10 @@
-# 0.2
+# v0.2.1
+
+## Plugins
+- Added button to receive raw data
+
+
+# v0.2
 
 ## Runs
 - Groups were replaced by `GroupedRun`. Hence, a group can be used as a normal run (`AbstractRun`).
@@ -36,7 +42,7 @@ load_inputs, load_dependency_inputs).
 - Installable via pip
 
 
-# 0.1
+# v0.1
 
 ## Features
 

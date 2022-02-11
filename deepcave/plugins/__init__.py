@@ -6,7 +6,7 @@ import copy
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dash import no_update
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 from pytest import raises
@@ -272,6 +272,26 @@ class Plugin(Layout, ABC):
             else:
                 raise PreventUpdate()
 
+        # Register modal here
+        @app.callback(
+            [
+                Output(self.get_internal_id("raw_data"), "is_open"),
+                Output(self.get_internal_id("raw_data_content"), "value"),
+            ],
+            Input(self.get_internal_id("show_raw_data"), "n_clicks"),
+            State(self.get_internal_id("raw_data"), "is_open"),
+        )
+        def toggle_modal(n, is_open):
+            code = ""
+            if n:
+                if (out := self.raw_outputs) is not None:
+                    # Make list
+                    code = str(out)
+
+                return not is_open, code
+
+            return is_open, code
+
     def update_alert(self, text: str, color: str = "success"):
         self.alert_text = text
         self.alert_color = color
@@ -426,6 +446,7 @@ class Plugin(Layout, ABC):
         """
 
         self.previous_inputs = {}
+        self.raw_outputs = None
         self.runs = run_handler.get_runs()
         groups = run_handler.get_groups()
 
@@ -544,6 +565,49 @@ class Plugin(Layout, ABC):
                     style={} if c.get("matplotlib-mode") else {"display": "none"},
                 )
             ]
+
+        modal = html.Div(
+            [
+                dbc.Button(
+                    "Raw Data",
+                    id=self.get_internal_id("show_raw_data"),
+                    className="mt-3",
+                    n_clicks=0,
+                ),
+                dbc.Modal(
+                    [
+                        dbc.ModalHeader(
+                            [
+                                dbc.ModalTitle("Raw Data"),
+                                dcc.Clipboard(
+                                    target_id=self.get_internal_id("raw_data_content"),
+                                    style={
+                                        "fontSize": 20,
+                                        "marginLeft": "0.5rem",
+                                    },
+                                ),
+                            ]
+                        ),
+                        dbc.ModalBody(
+                            [
+                                dbc.Textarea(
+                                    id=self.get_internal_id("raw_data_content"),
+                                    placeholder="",
+                                    readonly=True,
+                                    rows=20,
+                                ),
+                            ]
+                        ),
+                    ],
+                    id=self.get_internal_id("raw_data"),
+                    size="lg",
+                    scrollable=True,
+                    is_open=False,
+                ),
+            ]
+        )
+
+        components += [modal]
 
         return components
 

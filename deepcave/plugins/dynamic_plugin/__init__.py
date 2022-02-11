@@ -56,6 +56,9 @@ class DynamicPlugin(Plugin, ABC):
 
                 raw_outputs[run.name] = run_outputs
 
+            # Save for modal
+            self.raw_outputs = raw_outputs
+
             # Cache last inputs
             c.set("last_inputs", self.id, value=inputs)
 
