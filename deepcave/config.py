@@ -1,5 +1,4 @@
 from typing import Type
-
 from pathlib import Path
 
 
@@ -45,6 +44,7 @@ class Config:
             ParallelCoordinates,
         )
         from deepcave.plugins.static_plugin.fanova import fANOVA
+        from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
 
         plugins = {
             "Summary": [
@@ -54,6 +54,7 @@ class Config:
             "Performance Analysis": [
                 CostOverTime(),
                 CCube(),
+                ParetoFront(),
                 ParallelCoordinates(),
             ],
             "Hyperparameter Analysis": [
