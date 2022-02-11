@@ -4,7 +4,7 @@
 # These have been configured to only really run short tasks. Longer form tasks
 # are usually completed in github actions.
 
-.PHONY: help install-dev check format pre-commit clean clean-build build links examples publish test
+.PHONY: help install-dev check format pre-commit clean clean-build build publish test
 
 help:
 	@echo "Makefile deepcave"
@@ -14,7 +14,6 @@ help:
 	@echo "* pre-commit       to run the pre-commit check"
 	@echo "* clean            to clean the dist and doc build files"
 	@echo "* build            to build a dist"
-	@echo "* examples         to run and generate the examples"
 	@echo "* publish          to help publish the current branch to pypi"
 	@echo "* tests            to run the tests"
 
@@ -35,7 +34,7 @@ DIR := ${CURDIR}
 DIST := ${CURDIR}/dist
 
 install-dev:
-	$(PIP) install -e ".[tests,examples,docs]"
+	$(PIP) install -e ".[dev]"
 	pre-commit install
 
 check-black:
