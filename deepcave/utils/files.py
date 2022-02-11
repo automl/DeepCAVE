@@ -1,9 +1,11 @@
-import os
+from typing import Union
+
+from pathlib import Path
 
 
-def make_dirs(filename):
-    # Remove last entry
-    filename_array = filename.split("/")[:-1]
-    path = "/".join(filename_array)
+def make_dirs(filename: Union[str, Path], parents=True):
+    path = Path(filename)
+    if path.suffix != "":  # Is file
+        path = path.parent
 
-    os.makedirs(path, exist_ok=True)
+    path.mkdir(exist_ok=True, parents=parents)

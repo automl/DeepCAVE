@@ -1,56 +1,48 @@
-import os
-import json
-import glob
-import pandas as pd
-from typing import Dict, Type, Any
+from pathlib import Path
 
-import ConfigSpace
-from deepcave.runs.run import Status
-from deepcave.runs.converters.converter import Converter
-from deepcave.runs.run import Run
+from deepcave.runs import Status
 from deepcave.runs.objective import Objective
+from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class BOHB(Converter):
-    @staticmethod
-    def name() -> str:
-        return "BOHB"
+class BOHBRun(Run):
+    prefix = "BOHB"
+    _initial_order = 2
 
-    def get_run_id(self, working_dir, run_name) -> str:
+    @property
+    def hash(self) -> str:
         """
-        The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
-        Idea behind: If id changed, then we have to update cached trials.
+        The id from the files in the current working_dir/run_name/*. For example, results.json could be read and hashed.
+        Idea behind: If id changed, then we have to update cached run.
         """
+        # Use hash of results.json as id
+        return file_to_hash(self.path / "results.json")
 
-        # Use hash of history.json as id
-        return file_to_hash(os.path.join(working_dir, run_name, "results.json"))
-
-    def get_run(self, working_dir, run_name) -> Run:
+    @classmethod
+    def from_path(cls, path: Path) -> "BOHBRun":
         """
-        Based on working_dir/run_name/*, return a new trials object.
+        Based on path, return a new run object.
         """
-
-        base = os.path.join(working_dir, run_name)
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
-            configspace = cs_json.read(f.read())
+
+        configspace = cs_json.read((path / "configspace.json").read_text())
 
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
         # Only lock lower
         objective = Objective("Cost", lower=0)
 
-        run = Run(
-            configspace=configspace,
-            objectives=objective,
-            meta={}
+        run = BOHBRun(
+            path.stem, configspace=configspace, objectives=objective, meta={}, path=path
         )
 
         from hpbandster.core.result import logged_results_to_HBS_result
-        bohb = logged_results_to_HBS_result(base)
+
+        bohb = logged_results_to_HBS_result(str(path))
+        config_mapping = bohb.get_id2config_mapping()
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
@@ -67,13 +59,16 @@ class BOHB(Converter):
 
             cost = bohb_run.loss
             budget = bohb_run.budget
-            config = bohb_run.info["config"]
-            # Convert str to dict
-            config = json.loads(config)
+
+            if bohb_run.info is None:
+                status = "CRASHED"
+            else:
+                status = bohb_run.info["state"]
+
+            config = config_mapping[bohb_run.config_id]["config"]
 
             origin = None
             additional = {}
-            status = bohb_run.info["state"]
 
             # QUEUED, RUNNING, CRASHED, REVIEW, TERMINATED, COMPLETED, SUCCESS
             if "SUCCESS" in status or "TERMINATED" in status or "COMPLETED" in status:
@@ -97,8 +92,5 @@ class BOHB(Converter):
                 origin=origin,
                 additional=additional,
             )
-
-        # Save for sanity check
-        # run.save(os.path.join(base, "run"))
 
         return run

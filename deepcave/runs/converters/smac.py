@@ -1,43 +1,41 @@
-import os
 import json
-import glob
-import pandas as pd
-import numpy as np
-from typing import Dict, Type, Any
+from pathlib import Path
 
-import ConfigSpace
-from deepcave.runs.run import Status
-from deepcave.runs.converters.converter import Converter
+import numpy as np
+
+from deepcave.runs import Status
+from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class SMAC(Converter):
-    @staticmethod
-    def name() -> str:
-        return "SMAC"
+class SMACRun(Run):
+    prefix = "SMAC"
+    _initial_order = 2
 
-    def get_run_id(self, working_dir, run_name) -> str:
+    @property
+    def hash(self) -> str:
         """
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
 
         # Use hash of history.json as id
-        return file_to_hash(os.path.join(working_dir, run_name, "runhistory.json"))
+        return file_to_hash(self.path / "runhistory.json")
 
-    def get_run(self, working_dir, run_name) -> Run:
+    @classmethod
+    def from_path(cls, path: Path) -> "SMACRun":
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
 
         # For SMAC, we create a new run object
-        base = os.path.join(working_dir, run_name)
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
-        with open(os.path.join(base, 'configspace.json'), 'r') as f:
+
+        with (path / "configspace.json").open("r") as f:
             configspace = cs_json.read(f.read())
 
         # Read objectives
@@ -53,11 +51,11 @@ class SMAC(Converter):
             "cutoff": "Algorithm Time Limit",
             "memory_limit": "Memory Limit",
             "wallclock_limit": "Wallclock Limit",
-            "initial_incumbent": "Initial Incumbent"
+            "initial_incumbent": "Initial Incumbent",
         }
 
         meta = {}
-        with open(os.path.join(base, "scenario.txt")) as f:
+        with (path / "scenario.txt").open() as f:
             for line in f.readlines():
                 items = line.split(" = ")
                 arg = items[0]
@@ -69,14 +67,12 @@ class SMAC(Converter):
                 if arg in mapping:
                     meta[mapping[arg]] = value
 
-        run = Run(
-            configspace=configspace,
-            objectives=objective,
-            meta=meta
+        run = SMACRun(
+            path.stem, configspace=configspace, objectives=objective, meta=meta
         )
 
         # Iterate over the runhistory
-        with open(os.path.join(base, "runhistory.json")) as json_file:
+        with (path / "runhistory.json").open() as json_file:
             all_data = json.load(json_file)
             data = all_data["data"]
             config_origins = all_data["config_origins"]
@@ -84,7 +80,14 @@ class SMAC(Converter):
 
         first_starttime = None
         seeds = []
-        for (config_id, instance_id, seed, budget), (cost, time, status, starttime, endtime, additional_info) in data:
+        for (config_id, instance_id, seed, budget), (
+            cost,
+            time,
+            status,
+            starttime,
+            endtime,
+            additional_info,
+        ) in data:
 
             config_id = str(config_id)
             config = configs[config_id]
@@ -136,8 +139,5 @@ class SMAC(Converter):
                 origin=config_origins[config_id],
                 additional=additional_info,
             )
-
-        # Save for sanity check
-        # run.save(os.path.join(base, "run"))
 
         return run

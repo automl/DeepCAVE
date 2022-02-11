@@ -1,56 +1,24 @@
-from typing import Dict, Type, Any
-
-from dash import dcc
-from dash import html
 import dash_bootstrap_components as dbc
-import plotly.graph_objs as go
-
 import pandas as pd
-import numpy as np
+from dash import html
 
-from deepcave import app
-from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.utils.logs import get_logger
-from deepcave.runs.run import Status
-
-from deepcave.evaluators.fanova import fANOVA as _fANOVA
-
-
-logger = get_logger(__name__)
+from deepcave.runs import AbstractRun, Status
+from deepcave.runs.grouped_run import NotMergeableError
 
 
 class Overview(DynamicPlugin):
-    def __init__(self):
-        super().__init__()
+    id = "overview"
+    name = "Overview"
+    icon = "fas fa-search"
 
-    @staticmethod
-    def id():
-        return "overview"
-
-    @staticmethod
-    def name():
-        return "Overview"
-
-    @staticmethod
-    def position():
-        return 1
-
-    @staticmethod
-    def category():
-        return "General"
-
-    @staticmethod
-    def activate_run_selection() -> bool:
-        return True
+    activate_run_selection = True
 
     @staticmethod
     def process(run, inputs):
         # Meta
-        meta = {
-            "Attribute": [],
-            "Value": []
-        }
+        meta = {"Attribute": [], "Value": []}
         for k, v in run.get_meta().items():
             if k == "objectives":
                 continue
@@ -62,11 +30,7 @@ class Overview(DynamicPlugin):
             meta["Value"].append(str(v))
 
         # Objectives
-        objectives = {
-            "Name": [],
-            "Lower Bound": [],
-            "Upper Bound": []
-        }
+        objectives = {"Name": [], "Lower Bound": [], "Upper Bound": []}
         for objective in run.get_objectives():
             objectives["Name"].append(objective["name"])
             objectives["Lower Bound"].append(objective["lower"])
@@ -83,13 +47,10 @@ class Overview(DynamicPlugin):
                 for s in Status:
                     stats[budget][s.name] = 0
 
-        for trial in run.history:
+        for trial in run.get_trials():
             stats[trial.budget][trial.status.name] += 1
 
-        statistics = {
-            "Budget": budgets,
-            "Total": []
-        }
+        statistics = {"Budget": budgets, "Total": []}
         for s in Status:
             statistics[s.name] = []
 
@@ -121,24 +82,22 @@ class Overview(DynamicPlugin):
             html.H3("Meta"),
             html.Div(id=register("meta", "children")),
             html.Hr(),
-
             html.H3("Objectives"),
             html.Div(id=register("objectives", "children")),
             html.Hr(),
-
             html.H3("Statistics"),
             html.Div(id=register("statistics", "children")),
-            html.Hr(),
         ]
 
     @staticmethod
     def load_outputs(inputs, outputs, _):
-        run_name = inputs["run_name"]["value"]
-        outputs = outputs[run_name]
+        run = run_handler.from_run_id(inputs["run_name"]["value"])
+        outputs = outputs[run.name]
 
-        def create_table(output): return dbc.Table.from_dataframe(
-            pd.DataFrame(output), striped=True, bordered=True
-        )
+        def create_table(output):
+            return dbc.Table.from_dataframe(
+                pd.DataFrame(output), striped=True, bordered=True
+            )
 
         return [
             create_table(outputs["meta"]),

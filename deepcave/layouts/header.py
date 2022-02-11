@@ -1,11 +1,9 @@
-from dash import html
 import dash_bootstrap_components as dbc
-from dash import dcc
+from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from deepcave.layouts.layout import Layout
-from deepcave import app
-from deepcave import c
+from deepcave import app, c
+from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
@@ -13,13 +11,13 @@ class HeaderLayout(Layout):
         super().register_callbacks()
 
         outputs = [
-            Output('matplotlib-mode-toggle', 'color'),
-            Output('matplotlib-mode-badge', 'children'),
-            Output('matplotlib-mode-refresh', 'href'),
+            Output("matplotlib-mode-toggle", "color"),
+            Output("matplotlib-mode-badge", "children"),
+            Output("matplotlib-mode-refresh", "href"),
         ]
         inputs = [
-            Input('matplotlib-mode-toggle', 'n_clicks'),
-            Input('matplotlib-mode-refresh', 'pathname'),
+            Input("matplotlib-mode-toggle", "n_clicks"),
+            Input("matplotlib-mode-refresh", "pathname"),
         ]
 
         @app.callback(outputs, inputs)
@@ -39,22 +37,29 @@ class HeaderLayout(Layout):
             else:
                 return "secondary", "off", update
 
-    def __call__(self):
-        return html.Header(className='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow', children=[
-            html.A(
-                'DeepCave', className='navbar-brand me-0 px-3', href='#'),
-            html.Button(
-                className='navbar-toggler position-absolute d-md-none collapsed'),
-
-            dcc.Location(id="matplotlib-mode-refresh", refresh=True),
-            dbc.Button(
-                ["Matplotlib", dbc.Badge(
-                    "off", color="light", text_color="black", className="ms-2", id="matplotlib-mode-badge")],
-                color="secondary",
-                className="me-2",
-                id="matplotlib-mode-toggle"
-            ),
-        ])
-
-
-layout = HeaderLayout()
+    def __call__(self) -> html.Header:
+        return html.Header(
+            className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow",
+            children=[
+                html.A("DeepCave", className="navbar-brand me-0 px-3", href="#"),
+                html.Button(
+                    className="navbar-toggler position-absolute d-md-none collapsed"
+                ),
+                dcc.Location(id="matplotlib-mode-refresh", refresh=True),
+                dbc.Button(
+                    [
+                        "Matplotlib",
+                        dbc.Badge(
+                            "off",
+                            color="light",
+                            text_color="black",
+                            className="ms-2",
+                            id="matplotlib-mode-badge",
+                        ),
+                    ],
+                    color="secondary",
+                    className="me-2",
+                    id="matplotlib-mode-toggle",
+                ),
+            ],
+        )
