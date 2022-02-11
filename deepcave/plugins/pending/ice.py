@@ -1,3 +1,4 @@
+from typing import List
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -6,7 +7,7 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.evaluators.ice import ICE as ICEEvaluator
 from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import (
     get_radio_options,
@@ -15,23 +16,12 @@ from deepcave.utils.layout import (
 )
 from deepcave.utils.styled_plotty import get_color
 
-
+"""
 class ICE(StaticPlugin):
     id = "ice"
     name = "Individual Conditional Expectation"
-    icon: str = "fas fa-grip-lines"
-
-    @staticmethod
-    def check_compatibility(run: AbstractRun):
-        # Check if selected runs have same budgets+objectives
-        try:
-            run.get_objective_names()
-            run.get_budgets()
-            run.get_configspace()
-
-            return True
-        except:
-            return False
+    icon = "fas fa-grip-lines"
+    activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):
@@ -77,9 +67,7 @@ class ICE(StaticPlugin):
             ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
-        run = runs[list(runs.keys())[0]]
+    def load_inputs(self):
         hp_names = run.configspace.get_hyperparameter_names()
         hp_idx = [
             run.configspace.get_idx_by_hyperparameter_name(hp_name)
@@ -210,3 +198,4 @@ class ICE(StaticPlugin):
         )
 
         return go.Figure(data=traces, layout=layout)
+"""

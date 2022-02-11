@@ -17,7 +17,7 @@ from deepcave.utils.layout import get_checklist_options
 class fANOVA(StaticPlugin):
     id = "fanova"
     name = "fANOVA"
-    icon: str = "far fa-star"
+    icon = "far fa-star"
 
     activate_run_selection = True
 
@@ -46,19 +46,16 @@ class fANOVA(StaticPlugin):
             ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
+    def load_inputs(self):
         return {
             "num_trees": {"value": 16},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
             "budgets": {"options": get_checklist_options(), "value": []},
         }
 
-    @staticmethod
-    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
-        run = runs[inputs["run_name"]["value"]]
-        budgets = run.get_budgets(human=True)
-        hp_names = run.configspace.get_hyperparameter_names()
+    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+        budgets = selected_run.get_budgets(human=True)
+        hp_names = selected_run.configspace.get_hyperparameter_names()
 
         new_inputs = {
             "hyperparameters": {
@@ -72,6 +69,8 @@ class fANOVA(StaticPlugin):
 
         # Restrict to three hyperparameters
         num_trees = inputs["num_trees"]["value"]
+
+        # Reset invalid values
         try:
             int(num_trees)
         except:

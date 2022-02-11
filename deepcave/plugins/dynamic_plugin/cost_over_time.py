@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -8,7 +8,7 @@ from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.layout import (
     get_radio_options,
     get_select_options,
@@ -20,18 +20,15 @@ from deepcave.utils.styled_plotty import get_color
 class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
-    icon: str = "fas fa-chart-line"
+    icon = "fas fa-chart-line"
 
-    @staticmethod
-    def check_compatibility(run: AbstractRun):
-        # Check if selected runs have same budgets+objectives
-        try:
-            run.get_objective_names()
-            run.get_budgets()
+    def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
+        check_equality(runs, objectives=True, budgets=True)
 
-            return True
-        except:
-            return False
+        # Set some attributes here
+        run = runs[0]
+        self.readable_budgets = run.get_budgets(human=True)
+        self.objective_names = run.get_objective_names()
 
     @staticmethod
     def get_input_layout(register):
@@ -74,25 +71,18 @@ class CostOverTime(DynamicPlugin):
             ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
-        # Just select the first run
-        # Since we already know the budgets+objectives
-        # are the same across the selected runs.
-        run = list(runs.values())[0]
-        readable_budgets = run.get_budgets(human=True)
-        objective_names = run.get_objective_names()
+    def load_inputs(self):
         display_options = ["Runs", "Groups"]
 
         return {
             "objective": {
-                "options": get_select_options(objective_names),
-                "value": objective_names[0],
+                "options": get_select_options(self.objective_names),
+                "value": self.objective_names[0],
             },
             "budget": {
                 "min": 0,
-                "max": len(readable_budgets) - 1,
-                "marks": get_slider_marks(readable_budgets),
+                "max": len(self.readable_budgets) - 1,
+                "marks": get_slider_marks(self.readable_budgets),
                 "value": 0,
             },
             "xaxis": {

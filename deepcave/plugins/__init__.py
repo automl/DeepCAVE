@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Iterable, Optional, Union
+from typing import Any, Callable, Iterable, Optional, Union, List
 
 import copy
 
@@ -9,6 +9,7 @@ from dash.dash import no_update
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
+from pytest import raises
 
 from deepcave import app, c, run_handler
 from deepcave.layouts import Layout
@@ -62,10 +63,46 @@ class Plugin(Layout, ABC):
         super().__init__()
 
     @staticmethod
-    def check_compatibility(run: AbstractRun) -> bool:
+    def check_run_compatibility(run: AbstractRun) -> bool:
         """
-        Checks if a run is compatible with this plugin.
+        Checks if a run is compatible with this plugin. If a plugin is not compatible,
+        you can not select the run.
+
+        Notes
+        -----
+        This function is only called if `activate_run_selection` is True.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            One of the selected runs/groups.
+
+        Returns
+        -------
+        bool
+            Returns True if the run is compatible.
+
         """
+
+        return True
+
+    def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
+        """
+        This function is needed if all selected runs need something in common
+        (e.g. budget or objective). Since this function is called before the layout is created,
+        it can be also used to set common values for the plugin.
+
+        Parameters
+        ----------
+        runs : List[AbstractRun]
+            Selected runs.
+
+        Raises
+        ------
+        NotMergeableError
+            If runs are not compatible, an error is thrown.
+        """
+
         return True
 
     def register_input(
@@ -152,14 +189,14 @@ class Plugin(Layout, ABC):
                     inputs = c.get("last_inputs", self.id)
 
                     if inputs is None:
-                        inputs = self.__class__.load_inputs(self.all_runs)
+                        inputs = self.load_inputs()
 
                         # Also update the run selection
                         if self.activate_run_selection:
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
                                 self.groups,
-                                self.__class__.check_compatibility,
+                                self.__class__.check_run_compatibility,
                             )
                             update_dict(inputs, new_inputs)
 
@@ -182,6 +219,7 @@ class Plugin(Layout, ABC):
                     _previous_inputs = self.previous_inputs.copy()
                     _inputs = inputs.copy()
 
+                    selected_run: Optional[AbstractRun] = None
                     if self.activate_run_selection:
                         if "run_name" in _previous_inputs:
                             _previous_run_name = _previous_inputs["run_name"]["value"]
@@ -197,17 +235,17 @@ class Plugin(Layout, ABC):
                             # We can't use load_inputs here only
                             # because `run_name` would be removed.
                             # Also: We want to keep the current run name.
-                            update_dict(
-                                _inputs, self.__class__.load_inputs(self.all_runs)
-                            )
+                            update_dict(_inputs, self.load_inputs())
 
                             # TODO: Reset only inputs which are not available in another ru.
                             # E.g. if options from budget in run_2 and run_3 are the same
                             # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
+                        selected_run = self.all_runs[inputs["run_name"]["value"]]
+
                     # How to update only parameters which have a dependency?
-                    user_dependencies_inputs = self.__class__.load_dependency_inputs(
-                        self.all_runs, _previous_inputs, _inputs
+                    user_dependencies_inputs = self.load_dependency_inputs(
+                        _previous_inputs, _inputs, selected_run
                     )
 
                     # Update dict
@@ -419,6 +457,12 @@ class Plugin(Layout, ABC):
             ),
         ]
 
+        try:
+            self.check_runs_compatibility(list(self.all_runs.values()))
+        except NotMergeableError as message:
+            self.update_alert(str(message), color="danger")
+            return components
+
         if self.activate_run_selection:
             run_input_layout = [
                 self.__class__.get_run_input_layout(self.register_input)
@@ -520,7 +564,7 @@ class Plugin(Layout, ABC):
     def load_run_inputs(
         runs: dict[str, Run],
         groups: dict[str, GroupedRun],
-        check_compatibility: Callable,
+        check_run_compatibility: Callable,
     ) -> dict[str, Any]:
         """
         Set `run_names` and displays both runs and group runs if
@@ -541,7 +585,7 @@ class Plugin(Layout, ABC):
 
         added_group_label = False
         for id, run in groups.items():
-            if check_compatibility(run):
+            if check_run_compatibility(run):
                 if not added_group_label:
                     values.append("")
                     labels.append("Groups")
@@ -590,12 +634,10 @@ class Plugin(Layout, ABC):
         else:
             return list(self.all_runs.values())
 
-    @staticmethod
-    def load_inputs(runs) -> dict[str, Any]:
+    def load_inputs(self) -> dict[str, Any]:
         return {}
 
-    @staticmethod
-    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
+    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
         return inputs
 
     @staticmethod

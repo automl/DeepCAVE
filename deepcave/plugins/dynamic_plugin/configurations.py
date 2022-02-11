@@ -20,17 +20,9 @@ from deepcave.runs import AbstractRun
 class Configurations(DynamicPlugin):
     id = "configurations"
     name = "Configurations"
-    icon: str = "fas fa-sliders-h"
+    icon = "fas fa-sliders-h"
 
     activate_run_selection = True
-
-    @staticmethod
-    def check_compatibility(run: AbstractRun):
-        # TODO: Solve smarter
-        if run.prefix == "group" and not run.merged_history:
-            return False
-
-        return True
 
     @staticmethod
     def process(run, inputs):

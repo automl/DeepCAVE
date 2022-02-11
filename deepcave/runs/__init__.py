@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple
+from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
 import copy
 from dataclasses import dataclass
@@ -444,3 +444,101 @@ class AbstractRun(ABC):
             return df, df_labels
 
         return X, Y
+
+
+def check_equality(
+    runs: List[AbstractRun],
+    meta: bool = True,
+    configspace: bool = True,
+    objectives: bool = True,
+    budgets: bool = True,
+) -> Dict[str, Any]:
+    """
+    Checks the passed runs on equality based on the selected runs and returns the requested
+    attributes.
+
+    Parameters
+    ----------
+    runs : list[AbstractRun]
+        Runs to check for equality.
+    meta : bool, optional
+        Meta-Data excluding objectives and budgets, by default True
+    configspace : bool, optional
+        ConfigSpace, by default True
+    objectives : bool, optional
+        Objectives, by default True
+    budgets : bool, optional
+        Budgets, by default True
+
+    Returns
+    -------
+    Dict[str, Any]
+        Dictionary containing the checked attributes.
+    """
+
+    result = {}
+
+    if len(runs) == 0:
+        return result
+
+    # Check meta
+    if meta:
+        m1 = runs[0].get_meta()
+        for run in runs:
+            m2 = run.get_meta()
+
+            for k, v in m1.items():
+                # Don't check on objectives or budgets
+                if k == "objectives" or k == "budgets":
+                    continue
+
+                if k not in m2 or m2[k] != v:
+                    raise NotMergeableError("Meta data of runs are not equal.")
+
+        result["meta"] = m1
+
+    # Make sure the same configspace is used
+    # Otherwise it does not make sense to merge
+    # the histories
+    if configspace:
+        cs1 = runs[0].configspace
+        for run in runs:
+            cs2 = run.configspace
+            if cs1 != cs2:
+                raise NotMergeableError("Configspace of runs are not equal.")
+
+        result["configspace"] = cs1
+
+    # Also check if budgets are the same
+    if budgets:
+        b1 = runs[0].get_budgets()
+        for run in runs:
+            b2 = run.get_budgets()
+            if b1 != b2:
+                raise NotMergeableError("Budgets of runs are not equal.")
+
+        result["budgets"] = b1
+        if meta:
+            result["meta"]["budgets"] = b1
+
+    # And if objectives are the same
+    if objectives:
+        o1 = None
+        for run in runs:
+            o2 = run.get_objectives()
+
+            if o1 is None:
+                o1 = o2
+                continue
+
+            if len(o1) != len(o2):
+                raise NotMergeableError("Objectives of runs are not equal.")
+
+            for o1_, o2_ in zip(o1, o2):
+                o1_.merge(o2_)
+
+        result["objectives"] = o1
+        if meta:
+            result["meta"]["objectives"] = o1
+
+    return result

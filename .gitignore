@@ -8,7 +8,6 @@ examples/logs/SMAC
 examples/logs/BOHB
 smac3-output*
 .DS_Store
-pending
 __init__.pyc
 examples/logs*
 examples/*

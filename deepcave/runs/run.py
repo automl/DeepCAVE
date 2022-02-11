@@ -250,7 +250,7 @@ class Run(AbstractRun, ABC):
         self.meta = json.loads(self.meta_fn.read_text())
 
         # Load configspace
-        self._configspace = cs_json.read(self.configspace_fn.read_text())
+        self.configspace = cs_json.read(self.configspace_fn.read_text())
 
         # Load configs
         configs = json.loads(self.configs_fn.read_text())

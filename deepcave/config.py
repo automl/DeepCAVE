@@ -45,7 +45,6 @@ class Config:
             ParallelCoordinates,
         )
         from deepcave.plugins.static_plugin.fanova import fANOVA
-        from deepcave.plugins.static_plugin.ice import ICE
 
         plugins = {
             "Summary": [
@@ -56,7 +55,6 @@ class Config:
                 CostOverTime(),
                 CCube(),
                 ParallelCoordinates(),
-                ICE(),
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),

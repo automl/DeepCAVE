@@ -1,14 +1,14 @@
 from copy import deepcopy
+from typing import List
 import numpy as np
-from deepcave.runs import AbstractRun, NotMergeableError
-from deepcave.runs.run import Run
+from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.hash import string_to_hash
 
 
 class GroupedRun(AbstractRun):
     prefix = "group"
 
-    def __init__(self, name: str, runs: list[Run]):
+    def __init__(self, name: str, runs: List[AbstractRun]):
         super(GroupedRun, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
         self.reset()
@@ -17,50 +17,11 @@ class GroupedRun(AbstractRun):
             return
 
         try:
-            # Merge meta
-            self.meta = self.runs[0].get_meta()
-            for run in self.runs:
-                meta = run.get_meta()
-
-                for k, v in self.meta.items():
-                    # Don't check on objectives or budgets
-                    if k == "objectives" or k == "budgets":
-                        continue
-
-                    if k not in meta or meta[k] != v:
-                        raise NotMergeableError("Meta data of runs are not equal.")
-
-            # Make sure the same configspace is used
-            # Otherwise it does not make sense to merge
-            # the histories
-            self.configspace = self.runs[0].configspace
-            for run in self.runs:
-                if self.configspace != run.configspace:
-                    raise NotMergeableError("Configspace of runs are not equal.")
-
-            # Also check if budgets are the same
-            budgets = self.runs[0].get_budgets()
-            for run in self.runs:
-                if budgets != run.get_budgets():
-                    raise NotMergeableError("Budgets of runs are not equal.")
-
-            self.meta["budgets"] = budgets
-
-            # And if objectives are the same
-            objectives = None
-            for run in self.runs:
-                objectives2 = run.get_objectives()
-
-                if objectives is None:
-                    objectives = objectives2
-                    continue
-
-                if len(objectives) != len(objectives2):
-                    raise NotMergeableError("Objectives of runs are not equal.")
-
-                for o1, o2 in zip(objectives, objectives2):
-                    o1.merge(o2)
-            self.meta["objectives"] = objectives
+            attributes = check_equality(self.runs)
+            self.meta = attributes["meta"]
+            self.configspace = attributes["configspace"]
+            self.objectives = attributes["objectives"]
+            self.budgets = attributes["budgets"]
 
             # We need new config ids
             current_config_id = 0

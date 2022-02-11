@@ -23,7 +23,7 @@ logger = get_logger(__name__)
 class CCube(DynamicPlugin):
     id = "ccube"
     name = "Configurations Cube"
-    icon: str = "fas fa-cube"
+    icon = "fas fa-cube"
 
     activate_run_selection = True
 
@@ -68,8 +68,7 @@ class CCube(DynamicPlugin):
             ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
+    def load_inputs(self):
         return {
             "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
@@ -77,15 +76,13 @@ class CCube(DynamicPlugin):
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
-    @staticmethod
-    def load_dependency_inputs(runs: dict[str, AbstractRun], previous_inputs, inputs):
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
+    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
         budget_id = inputs["budget"]["value"]
-        budgets = run.get_budgets()
-        hp_names = run.configspace.get_hyperparameter_names()
-        readable_budgets = run.get_budgets(human=True)
-        configs = run.get_configs(budget=budgets[budget_id])
-        objective_names = run.get_objective_names()
+        budgets = selected_run.get_budgets()
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+        readable_budgets = selected_run.get_budgets(human=True)
+        configs = selected_run.get_configs(budget=budgets[budget_id])
+        objective_names = selected_run.get_objective_names()
 
         objective_value = inputs["objective"]["value"]
         if objective_value is None:

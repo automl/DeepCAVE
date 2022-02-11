@@ -11,18 +11,9 @@ from deepcave.runs.grouped_run import NotMergeableError
 class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
-    icon: str = "fas fa-search"
+    icon = "fas fa-search"
 
     activate_run_selection = True
-
-    @staticmethod
-    def check_compatibility(run: AbstractRun):
-        # Check if selected runs have same budgets+objectives
-        try:
-            run.get_meta()
-            return True
-        except NotMergeableError:
-            return False
 
     @staticmethod
     def process(run, inputs):

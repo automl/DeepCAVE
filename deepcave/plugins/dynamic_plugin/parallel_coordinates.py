@@ -34,7 +34,7 @@ class ParallelCoordinates(DynamicPlugin):
         of products with the same attributes (comparing computer or cars specs across
         different models).
     """
-    icon: str = "far fa-map"
+    icon = "far fa-map"
     activate_run_selection = True
 
     @staticmethod
@@ -69,20 +69,17 @@ class ParallelCoordinates(DynamicPlugin):
             ),
         ]
 
-    @staticmethod
-    def load_inputs(runs):
+    def load_inputs(self):
         return {
             "objective": {"options": get_select_options(), "value": None},
             "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
-    @staticmethod
-    def load_dependency_inputs(runs, previous_inputs, inputs):
-        run = runs[inputs["run_name"]["value"]]
-        hp_names = run.configspace.get_hyperparameter_names()
-        readable_budgets = run.get_budgets(human=True)
-        objective_names = run.get_objective_names()
+    def load_dependency_inputs(self, previous_inputs, inputs, selected_run):
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+        readable_budgets = selected_run.get_budgets(human=True)
+        objective_names = selected_run.get_objective_names()
 
         objective_value = inputs["objective"]["value"]
         if objective_value is None:
