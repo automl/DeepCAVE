@@ -59,7 +59,7 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 
 The webserver as well as the queue/workers can be started by running
 ```
-deepcave start
+deepcave --start
 ```
 or
 ```

@@ -1,12 +1,26 @@
-# 0.1.2
+# 0.2
+
+## Runs
+- Groups were replaced by `GroupedRun`. Hence, a group can be used as a normal run (`AbstractRun`).
+- Groups are only created if the runs are compatible (via function `check_equality`).
 
 ## Plugins
-- Integrated Parallel Coordinates
-- Configurations Cube and Parallel Coordinates show the real config values and not the encoded anymore
+- Integrated Parallel Coordinates.
+- Configurations Cube and Parallel Coordinates show the real config values and not
+the encoded anymore.
+- Changed plugin interfaces (check_run_compatibility, check_runs_compatibility,
+load_inputs, load_dependency_inputs).
+- Enhanced native group selection drastically.
+- Added icons to the plugins.
 
 ## Others
-- Added typehints
-- Added tests for caches, basic layouts and other utils
+- Added typehints.
+- Added tests for caches, basic layouts and other utils.
+- Added tools (mypy, flake8 and blake)
+- Performance increase in `general` as a folder is only transformed to a run if selected.
+
+## Known Bugs
+- fANOVA does not work if the configspace includes constants.
 
 
 # 0.1.1

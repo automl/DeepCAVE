@@ -1,7 +1,7 @@
 import sys
 
 author = "René Sass and  Marius Lindauer"
-version = "0.1.1"
+version = "0.2"
 
 
 _exec_file = sys.argv[0]
