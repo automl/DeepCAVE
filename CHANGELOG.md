@@ -3,6 +3,9 @@
 ## Plugins
 - Added button to receive raw data
 
+## Bugfixes
+- Fixed path bug for SMAC and BOHB
+
 
 # v0.2
 
