@@ -1,10 +1,18 @@
 # v0.2.1
 
+## Installation
+- Checks if redis-server is installed. Otherwise, aborts to start the server.
+- Added swig to anaconda environment.
+- Increased version of numpy and matplotlib.
+
 ## Plugins
-- Added button to receive raw data
+- Added button to receive raw data.
 
 ## Bugfixes
-- Fixed path bug for SMAC and BOHB
+- Fixed path bug for SMAC and BOHB.
+- Included `start.sh`.
+- Added pytest to requirements.
+- Included logging.yml (before it was loggin.yml).
 
 
 # v0.2
