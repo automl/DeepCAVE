@@ -1,4 +1,3 @@
 include requirements.txt
-include extras_require.json
-include loggin.yml
+include logging.yml
 include start.sh
