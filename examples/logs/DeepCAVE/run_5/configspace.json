@@ -1,0 +1,72 @@
+{
+  "hyperparameters": [
+    {
+      "name": "embedding_dim",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 2,
+      "upper": 5,
+      "default": 3
+    },
+    {
+      "name": "learning_rate_init",
+      "type": "uniform_float",
+      "log": true,
+      "lower": 0.0001,
+      "upper": 1.0,
+      "default": 0.001
+    },
+    {
+      "name": "lossweight1",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.0,
+      "upper": 10.0,
+      "default": 1.0
+    },
+    {
+      "name": "lossweight2",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.0,
+      "upper": 10.0,
+      "default": 1.0
+    },
+    {
+      "name": "lossweight3",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.0,
+      "upper": 10.0,
+      "default": 1.0
+    },
+    {
+      "name": "lossweight4",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.0,
+      "upper": 10.0,
+      "default": 1.0
+    },
+    {
+      "name": "n_compettitors",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 19,
+      "default": 10
+    },
+    {
+      "name": "repellent_share",
+      "type": "uniform_float",
+      "log": false,
+      "lower": 0.0,
+      "upper": 0.8,
+      "default": 0.33
+    }
+  ],
+  "conditions": [],
+  "forbiddens": [],
+  "python_module_version": "0.4.20",
+  "json_format_version": 0.2
+}
