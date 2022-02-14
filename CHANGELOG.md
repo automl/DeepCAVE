@@ -11,7 +11,7 @@
 ## Bugfixes
 - Fixed path bug for SMAC and BOHB.
 - Included `start.sh`.
-- Added pytest to requirements.
+- pytest no longer needed in main code.
 - Included logging.yml (before it was loggin.yml).
 
 

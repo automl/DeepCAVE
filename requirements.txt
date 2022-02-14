@@ -1,6 +1,5 @@
 wheel==0.37.1
 setuptools==60.8.1
-pytest>=7.0.1
 
 absl-py==1.0.0
 jsonlines==2.0.0

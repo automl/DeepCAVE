@@ -9,7 +9,6 @@ from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-from pytest import raises
 
 from deepcave import app, c, run_handler
 from deepcave.layouts import Layout
