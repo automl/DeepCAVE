@@ -89,11 +89,7 @@ class Overview(DynamicPlugin):
             html.Div(id=register("statistics", "children")),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, _):
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        outputs = outputs[run.name]
-
+    def load_outputs(self, inputs, outputs, run):
         def create_table(output):
             return dbc.Table.from_dataframe(
                 pd.DataFrame(output), striped=True, bordered=True

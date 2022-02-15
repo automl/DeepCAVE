@@ -121,8 +121,7 @@ class CostOverTime(DynamicPlugin):
             dcc.Graph(register("graph", "figure")),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, runs: dict[str, AbstractRun]) -> list[Component]:
+    def load_outputs(self, inputs, outputs, runs):
 
         traces = []
         for idx, (run_name, run) in enumerate(runs.items()):

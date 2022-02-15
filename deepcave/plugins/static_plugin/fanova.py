@@ -108,11 +108,7 @@ class fANOVA(StaticPlugin):
     def get_output_layout(register):
         return [dcc.Graph(register("graph", "figure"))]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, _):
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        outputs = outputs[run.name]
-
+    def load_outputs(self, inputs, outputs, run):
         # First selected, should always be shown first
         selected_hyperparameters = inputs["hyperparameters"]["value"]
         selected_budgets = inputs["budgets"]["value"]

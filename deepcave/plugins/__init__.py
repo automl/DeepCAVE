@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Iterable, Optional, Union, List
+from typing import Any, Callable, Dict, Iterable, Optional, Union, List
 
 import copy
 
@@ -323,12 +323,20 @@ class Plugin(Layout, ABC):
 
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
+
+        passed_runs = self.all_runs
+        passed_outputs = raw_outputs
+        if self.activate_run_selection:
+            print(inputs["run_name"]["value"])
+            print(self.all_runs.keys())
+            print(raw_outputs.keys())
+            passed_runs = self.all_runs[inputs["run_name"]["value"]]
+            passed_outputs = raw_outputs[passed_runs.name]
+
         if mpl_active:
-            outputs = self.__class__.load_mpl_outputs(
-                inputs, raw_outputs, self.all_runs
-            )
+            outputs = self.load_mpl_outputs(inputs, passed_outputs, passed_runs)
         else:
-            outputs = self.__class__.load_outputs(inputs, raw_outputs, self.all_runs)
+            outputs = self.load_outputs(inputs, passed_outputs, passed_runs)
 
         if outputs == PreventUpdate:
             raise PreventUpdate()
@@ -719,19 +727,61 @@ class Plugin(Layout, ABC):
     def get_mpl_output_layout(register):
         return []
 
-    @staticmethod
-    def load_outputs(inputs, outputs, runs: dict[str, AbstractRun]) -> list[Component]:
+    def load_outputs(
+        self,
+        inputs: Dict[str, Dict[str, str]],
+        outputs: Dict[str, Union[str, Dict[str, str]]],
+        runs: Union[AbstractRun, dict[str, AbstractRun]],
+    ) -> List[Component]:
         """
-        Returns:
-            list or PreventUpdate: List of outputs (for `get_output_layout`) or PreventUpdate if
-            certain conditions are not met.
+        Reads in the raw data and prepares them for the layout.
+
+        Parameters
+        ----------
+        inputs : Dict[str, Dict[str, str]]
+            Input and filter values from the user.
+        outputs : Dict[str, Union[str, Dict[str, str]]]
+            Raw outputs from the runs. If `activate_run_selection` is set,
+            a Dict[str, str] is returned.
+        runs : Union[AbstractRun, dict[str, AbstractRun]]
+            All selected runs. If `activate_run_selection` is set, only the selected run is
+            returned.
+
+        Returns
+        -------
+        List[Component]
+            The components must be in the same position as defined in `get_output_layout`.
         """
 
         return []
 
-    @staticmethod
-    def load_mpl_outputs(inputs, outputs, runs):
-        return {}
+    def load_mpl_outputs(
+        self,
+        inputs: Dict[str, Dict[str, str]],
+        outputs: Dict[str, Union[str, Dict[str, str]]],
+        runs: Union[AbstractRun, dict[str, AbstractRun]],
+    ) -> List[Component]:
+        """
+        Reads in the raw data and prepares them for the layout.
+
+        Parameters
+        ----------
+        inputs : Dict[str, Dict[str, str]]
+            Input and filter values from the user.
+        outputs : Dict[str, Union[str, Dict[str, str]]]
+            Raw outputs from the runs. If `activate_run_selection` is set,
+            a Dict[str, str] is returned.
+        runs : Union[AbstractRun, dict[str, AbstractRun]]
+            All selected runs. If `activate_run_selection` is set, only the selected run is
+            returned.
+
+        Returns
+        -------
+        List[Component]
+            The components must be in the same position as defined in `get_output_layout`.
+        """
+
+        return []
 
     @staticmethod
     @abstractmethod

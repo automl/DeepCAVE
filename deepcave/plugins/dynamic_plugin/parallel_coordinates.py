@@ -132,12 +132,8 @@ class ParallelCoordinates(DynamicPlugin):
             dcc.Graph(register("graph", "figure")),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, _):
+    def load_outputs(self, inputs, outputs, run):
         hp_names = inputs["hyperparameters"]["value"]
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        outputs = outputs[run.name]
-
         show_all_labels = outputs["show_all_labels"]
 
         df = outputs["df"]

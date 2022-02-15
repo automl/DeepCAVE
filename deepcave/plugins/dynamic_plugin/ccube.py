@@ -150,7 +150,7 @@ class CCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, _):
+    def load_outputs(inputs, outputs, run):
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
         # show_all_labels = outputs[run_name]["show_all_labels"]
@@ -167,10 +167,8 @@ class CCube(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        output = outputs[run.name]
-        df = deserialize(output["df"], dtype=pd.DataFrame)
-        df_labels = deserialize(output["df_labels"], dtype=pd.DataFrame)
+        df = deserialize(outputs["df"], dtype=pd.DataFrame)
+        df_labels = deserialize(outputs["df_labels"], dtype=pd.DataFrame)
 
         # Limit to n_configs
         idx = [str(i) for i in range(n_configs + 1, len(df))]

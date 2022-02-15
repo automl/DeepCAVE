@@ -87,11 +87,7 @@ class Configurations(DynamicPlugin):
             html.Div(id=register("min_cost", "children")),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, _) -> list[Component]:
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        outputs = outputs[run.name]
-
+    def load_outputs(self, inputs, outputs, run):
         def create_table(output):
             return dbc.Table.from_dataframe(
                 pd.DataFrame(output), striped=True, bordered=True
