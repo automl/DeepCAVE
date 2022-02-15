@@ -34,6 +34,7 @@ class ParetoFront(DynamicPlugin):
         # Set some attributes here
         run = runs[0]
         self.readable_budgets = run.get_budgets(human=True)
+        self.objectives = run.get_objectives()
         self.objective_names = run.get_objective_names()
         self.objective_ids = list(range(len(self.objective_names)))
 
@@ -65,6 +66,17 @@ class ParetoFront(DynamicPlugin):
             ),
         ]
 
+    @staticmethod
+    def get_filter_layout(register):
+        return [
+            html.Div(
+                [
+                    dbc.Label("Show all configurations"),
+                    dbc.RadioItems(id=register("all_configs", ["options", "value"])),
+                ],
+            ),
+        ]
+
     def load_inputs(self):
         return {
             "objective1": {
@@ -81,34 +93,71 @@ class ParetoFront(DynamicPlugin):
                 "marks": get_slider_marks(self.readable_budgets),
                 "value": 0,
             },
+            "all_configs": {
+                "options": get_select_options(binary=True),
+                "value": False,
+            },
         }
 
     @staticmethod
     def process(run, inputs) -> dict[str, list[Union[float, str]]]:
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
+        objectives = run.get_objectives()
 
         o1_idx = int(inputs["objective1"]["value"])
         o2_idx = int(inputs["objective2"]["value"])
 
-        points = []
+        points: Union[List, np.ndarray] = []
+        config_ids: Union[List, np.ndarray] = []
         for config_id, costs in run.get_costs(
             budget, statuses=[Status.SUCCESS]
         ).items():
             points += [[costs[o1_idx], costs[o2_idx]]]
+            config_ids += [config_id]
 
         points = np.array(points)
+        config_ids = np.array(config_ids)
 
-        is_efficient = np.ones(points.shape[0], dtype=bool)
-        for i, c in enumerate(points):
-            if is_efficient[i]:
-                # Keep any point with a lower cost
-                is_efficient[is_efficient] = np.any(points[is_efficient] < c, axis=1)
+        sorted_idx = np.argsort(points[:, 0])
+        points = points[sorted_idx]
+        config_ids = config_ids[sorted_idx]
+
+        is_front: Union[List, np.ndarray] = np.ones(points.shape[0], dtype=bool)
+        for point_idx, costs in enumerate(points):
+
+            if is_front[point_idx]:
+                # Keep any point with a lower/upper cost
+                # This loop is a little bit complicated than
+                # is_front[is_front] = np.any(points[is_front] < c, axis=1)
+                # because objectives can be optimized in different directions.
+                # We therefore have to check for each objective separately.
+                select = None
+                for idx, (objective, cost) in enumerate(zip(objectives, costs)):
+                    if objective["optimize"] == "upper":
+                        select2 = np.any(
+                            points[is_front][:, idx, np.newaxis] > [cost], axis=1
+                        )
+                    else:
+                        select2 = np.any(
+                            points[is_front][:, idx, np.newaxis] < [cost], axis=1
+                        )
+
+                    if select is None:
+                        select = select2
+                    else:
+                        select = np.logical_or(select, select2)
+
+                is_front[is_front] = select
 
                 # And keep self
-                is_efficient[i] = True
+                is_front[point_idx] = True
 
-        return {"points": points.tolist(), "pareto_points": is_efficient.tolist()}
+        return {
+            "points": points.tolist(),
+            "pareto_points": is_front.tolist(),
+            "config_ids": config_ids.tolist(),
+        }
 
     @staticmethod
     def get_output_layout(register):
@@ -120,27 +169,69 @@ class ParetoFront(DynamicPlugin):
 
         traces = []
         for idx, (run_name, run) in enumerate(runs.items()):
-            points = outputs[run.name]["points"]
+            points = np.array(outputs[run.name]["points"])
+
+            x, y = [], []
+            x_pareto, y_pareto = [], []
+
             pareto_points = outputs[run.name]["pareto_points"]
-
-            for ((x, y), pareto) in zip(points, pareto_points):
-                color = get_color(idx, alpha=0.1)
+            for point_idx, pareto in enumerate(pareto_points):
                 if pareto:
-                    color = get_color(idx)
+                    x_pareto += [points[point_idx][0]]
+                    y_pareto += [points[point_idx][1]]
+                else:
+                    x += [points[point_idx][0]]
+                    y += [points[point_idx][1]]
 
+            # And get configs for the hovers
+            hovertext = []
+            for config_id in outputs[run.name]["config_ids"]:
+                config = run.get_config(config_id)
+
+                text = f"<br>Config ID: {config_id}<br>"
+                for k, v in config.items():
+                    text += f"{k}: {v}<br>"
+                hovertext += [text]
+
+            color = get_color(idx, alpha=0.1)
+            color_pareto = get_color(idx)
+
+            if inputs["all_configs"]["value"]:
                 traces.append(
                     go.Scatter(
-                        x=[x],
-                        y=[y],
+                        x=x,
+                        y=y,
                         name=run_name,
-                        # line_shape="hv",
+                        mode="markers",
+                        showlegend=False,
                         line=dict(color=color),
                     )
                 )
 
+            # Check if we need hv or vh
+            optimize1 = self.objectives[int(inputs["objective1"]["value"])]["optimize"]
+            optimize2 = self.objectives[int(inputs["objective2"]["value"])]["optimize"]
+
+            if optimize1 == optimize2:
+                line_shape = "vh"
+            else:
+                line_shape = "hv"
+
+            traces.append(
+                go.Scatter(
+                    x=x_pareto,
+                    y=y_pareto,
+                    name=run_name,
+                    line_shape=line_shape,
+                    showlegend=True,
+                    line=dict(color=color_pareto),
+                    hovertext=hovertext,
+                )
+            )
+
         layout = go.Layout(
-            xaxis=dict(title=inputs["objective1"]["value"]),
-            yaxis=dict(title=inputs["objective2"]["value"]),
+            xaxis=dict(title=self.objective_names[int(inputs["objective1"]["value"])]),
+            yaxis=dict(title=self.objective_names[int(inputs["objective2"]["value"])]),
         )
 
         return [go.Figure(data=traces, layout=layout)]

@@ -7,6 +7,9 @@
 
 ## Plugins
 - Added button to receive raw data.
+- Added new plugin: Pareto Front.
+- Changed `load_outputs` and `load_mlp_outputs` to class method. Moreover, if
+`activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
 
 ## Bugfixes
 - Fixed path bug for SMAC and BOHB.
