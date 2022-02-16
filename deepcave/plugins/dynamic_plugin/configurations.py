@@ -61,19 +61,25 @@ class Configurations(DynamicPlugin):
             configspace["Default"].append(default)
             configspace["Log"].append(log)
 
-        # Get best cost across all objectives, highest budget
-        cost, config = run.get_min_cost()
-
         best_config = {"Hyperparameter": [], "Value": []}
+
+        # Get best cost across all objectives, highest budget
+        _, config_id = run.get_min_cost()
+        config = run.get_config(config_id)
 
         for hp_name, value in config.items():
             best_config["Hyperparameter"].append(hp_name)
             best_config["Value"].append(value)
 
+        costs = {"Objective": [], "Cost": []}
+        for idx, cost in enumerate(run.get_cost(config_id)):
+            costs["Objective"].append(run.get_objective_names()[idx])
+            costs["Cost"].append(cost)
+
         return {
             "configspace": configspace,
             "best_config": best_config,
-            "min_cost": cost,
+            "costs": costs,
         }
 
     @staticmethod
@@ -84,17 +90,19 @@ class Configurations(DynamicPlugin):
             html.Hr(),
             html.H3("Best Configuration"),
             html.Div(id=register("best_config", "children")),
-            html.Div(id=register("min_cost", "children")),
+            html.Div(id=register("costs", "children")),
         ]
 
     def load_outputs(self, inputs, outputs, run):
-        def create_table(output):
+        def create_table(output, mb=True):
+            mb = "mb-0" if not mb else ""
+
             return dbc.Table.from_dataframe(
-                pd.DataFrame(output), striped=True, bordered=True
+                pd.DataFrame(output), striped=True, bordered=True, className=mb
             )
 
         return [
             create_table(outputs["configspace"]),
             create_table(outputs["best_config"]),
-            f"With normalized cost: {outputs['min_cost']}",
+            create_table(outputs["costs"], mb=False),
         ]

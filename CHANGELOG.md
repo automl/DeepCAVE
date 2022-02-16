@@ -13,6 +13,7 @@
 `activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
 - Cost Over Time displays maximized objectives correctly now.
 - Pre-selecting highest budget and hyperparameters (#18).
+- Replaced normalized costs with all costs in configurations.
 
 ## Examples
 - Added MLP recorder example.

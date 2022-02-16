@@ -212,7 +212,7 @@ class AbstractRun(ABC):
 
         return budgets[-1]
 
-    def _process_costs(self, costs: Iterable[float]) -> list[float]:
+    def _process_costs(self, costs: Iterable[float]) -> List[float]:
         """
         Get rid of none costs.
         """
@@ -229,6 +229,14 @@ class AbstractRun(ABC):
             new_costs += [cost]
 
         return new_costs
+    
+    def get_cost(self, config_id: int, budget=None) -> List[float]:
+        """
+        If no budget is given, the highest budget is chosen.
+        """
+        
+        costs = self.get_costs(budget)
+        return costs[config_id]
 
     def get_costs(self, budget=None, statuses=None):
         """
@@ -254,7 +262,7 @@ class AbstractRun(ABC):
 
     def get_min_cost(self, objective_names=None, budget=None, statuses=None):
         min_cost = np.inf
-        best_config = None
+        best_config_id = None
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
@@ -262,9 +270,9 @@ class AbstractRun(ABC):
 
             if cost < min_cost:
                 min_cost = cost
-                best_config = self.get_config(config_id)
+                best_config_id = config_id
 
-        return min_cost, best_config
+        return min_cost, best_config_id
 
     def calculate_cost(self, costs, objective_names=None, normalize=False) -> float:
         """
