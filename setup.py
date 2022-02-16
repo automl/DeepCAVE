@@ -27,13 +27,11 @@ extras_require = {
         "jupyter",
         "notebook",
         "seaborn",
+        "torch",
+        "torchvision",
+        "pytorch-lightning",
         # Docs
-        "sphinx<4.3",
-        "sphinx-gallery",
-        "sphinx_bootstrap_theme",
-        "numpydoc",
-        "sphinx_toolbox",
-        "docutils==0.16",
+        "automl-sphinx-theme",
     ],
 }
 

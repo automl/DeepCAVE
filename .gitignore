@@ -156,6 +156,7 @@ cython_debug/
 .DS_Store
 *.rdb
 
+
 # SMAC
 smac3-output*
 
@@ -163,3 +164,5 @@ smac3-output*
 cache
 examples/others
 examples/record/_*
+datasets
+lightning_logs
