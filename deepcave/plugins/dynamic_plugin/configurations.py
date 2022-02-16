@@ -71,10 +71,10 @@ class Configurations(DynamicPlugin):
             best_config["Hyperparameter"].append(hp_name)
             best_config["Value"].append(value)
 
-        costs = {"Objective": [], "Cost": []}
+        costs = {"Objective": [], "Value": []}
         for idx, cost in enumerate(run.get_cost(config_id)):
             costs["Objective"].append(run.get_objective_names()[idx])
-            costs["Cost"].append(cost)
+            costs["Value"].append(cost)
 
         return {
             "configspace": configspace,
