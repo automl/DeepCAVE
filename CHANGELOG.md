@@ -10,12 +10,18 @@
 - Added new plugin: Pareto Front.
 - Changed `load_outputs` and `load_mlp_outputs` to class method. Moreover, if
 `activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
+- Cost Over Time displays maximized objectives correctly now.
+
+## Examples
+- Added MLP recorder example.
+- Added MLP logs for better example visualization.
 
 ## Bugfixes
 - Fixed path bug for SMAC and BOHB.
 - Included `start.sh`.
 - pytest no longer needed in main code.
 - Included logging.yml (before it was loggin.yml).
+- Recorder works again.
 
 
 # v0.2

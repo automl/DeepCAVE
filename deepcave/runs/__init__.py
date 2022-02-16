@@ -61,6 +61,17 @@ class Trial:
     def get_key(self) -> Tuple[str, int]:
         return self.config_id, self.budget  # noqa
 
+    def to_json(self) -> List[Any]:
+        return [
+            self.config_id,
+            self.budget,
+            self.costs,
+            self.start_time,
+            self.end_time,
+            self.status,
+            self.additional,
+        ]
+
 
 class AbstractRun(ABC):
     prefix: str
@@ -100,7 +111,7 @@ class AbstractRun(ABC):
     def empty(self) -> None:
         return len(self.history) == 0
 
-    def get_objectives(self) -> None:
+    def get_objectives(self) -> List[Objective]:
         objectives = []
         for d in self.meta["objectives"]:
             objective = Objective(
@@ -116,6 +127,9 @@ class AbstractRun(ABC):
             objectives.append(objective)
 
         return objectives
+
+    def get_objective(self, id) -> Objective:
+        return self.get_objectives()[id]
 
     def get_trials(self) -> Iterator[Trial]:
         yield from self.history
@@ -300,9 +314,11 @@ class AbstractRun(ABC):
 
         return cost
 
-    def get_trajectory(self, objective_names=None, budget=None):
+    def get_trajectory(self, objective_id, budget=None):
         if budget is None:
             budget = self.get_highest_budget()
+
+        objective = self.get_objective(objective_id)
 
         costs_mean = []
         costs_std = []
@@ -316,15 +332,28 @@ class AbstractRun(ABC):
 
         order.sort(key=lambda tup: tup[1])
 
-        current_cost = np.inf
-        for id, cost in order:
+        # Important: Objective can be minimized or maximized
+        if objective["optimize"] == "lower":
+            current_cost = np.inf
+        else:
+            current_cost = -np.inf
+
+        for id, _ in order:
             trial = self.history[id]
+
             # Only consider selected/last budget
             if trial.budget != budget:
                 continue
 
-            cost = self.calculate_cost(trial.costs, objective_names)
-            if cost < current_cost:
+            cost = trial.costs[objective_id]
+
+            # Now it's important to check whether the cost was minimized or maximized
+            if objective["optimize"] == "lower":
+                improvement = cost < current_cost
+            else:
+                improvement = cost > current_cost
+
+            if improvement:
                 current_cost = cost
 
                 costs_mean.append(cost)
