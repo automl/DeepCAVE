@@ -81,8 +81,12 @@ class ParallelCoordinates(DynamicPlugin):
         objective_names = selected_run.get_objective_names()
 
         objective_value = inputs["objective"]["value"]
+        budget_value = inputs["budget"]["value"]
+        hp_value = inputs["hyperparameters"]["value"]
         if objective_value is None:
             objective_value = objective_names[0]
+            budget_value = len(readable_budgets) - 1
+            hp_value = hp_names
 
         new_inputs = {
             "objective": {
@@ -93,9 +97,11 @@ class ParallelCoordinates(DynamicPlugin):
                 "min": 0,
                 "max": len(readable_budgets) - 1,
                 "marks": get_slider_marks(readable_budgets),
+                "value": budget_value,
             },
             "hyperparameters": {
                 "options": get_select_options(hp_names),
+                "value": hp_value,
             },
         }
         update_dict(inputs, new_inputs)

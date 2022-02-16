@@ -10,13 +10,8 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import Status
-from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import (
-    get_checklist_options,
-    get_select_options,
-    get_slider_marks,
-)
+from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color
 

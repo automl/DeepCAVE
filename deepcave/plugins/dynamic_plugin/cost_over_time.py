@@ -84,7 +84,7 @@ class CostOverTime(DynamicPlugin):
                 "min": 0,
                 "max": len(self.readable_budgets) - 1,
                 "marks": get_slider_marks(self.readable_budgets),
-                "value": 0,
+                "value": len(self.readable_budgets) - 1,
             },
             "xaxis": {
                 "options": [

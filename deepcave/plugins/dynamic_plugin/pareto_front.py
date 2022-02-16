@@ -1,16 +1,13 @@
-from typing import Union, List
+from typing import Dict, Union, List
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
-from dash.development.base_component import Component
-from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun, NotMergeableError, check_equality
+from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import (
-    get_radio_options,
     get_select_options,
     get_slider_marks,
 )
@@ -100,7 +97,7 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs) -> dict[str, list[Union[float, str]]]:
+    def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
         budget_id = inputs["budget"]["value"]
         budget = run.get_budget(budget_id)
         objectives = run.get_objectives()

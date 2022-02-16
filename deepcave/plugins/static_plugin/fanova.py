@@ -6,7 +6,6 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import run_handler
 from deepcave.evaluators.fanova import fANOVA as _fANOVA
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun
@@ -18,7 +17,6 @@ class fANOVA(StaticPlugin):
     id = "fanova"
     name = "fANOVA"
     icon = "far fa-star"
-
     activate_run_selection = True
 
     @staticmethod

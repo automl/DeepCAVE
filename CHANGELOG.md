@@ -12,6 +12,7 @@
 - Changed `load_outputs` and `load_mlp_outputs` to class method. Moreover, if
 `activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
 - Cost Over Time displays maximized objectives correctly now.
+- Pre-selecting highest budget and hyperparameters (#18).
 
 ## Examples
 - Added MLP recorder example.

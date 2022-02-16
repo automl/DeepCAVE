@@ -85,19 +85,25 @@ class CCube(DynamicPlugin):
         objective_names = selected_run.get_objective_names()
 
         objective_value = inputs["objective"]["value"]
+        budget_value = inputs["budget"]["value"]
+        n_configs_value = inputs["n_configs"]["value"]
         if objective_value is None:
             objective_value = objective_names[0]
+            budget_value = len(readable_budgets) - 1
+            n_configs_value = len(configs) - 1
 
         new_inputs = {
             "budget": {
                 "min": 0,
                 "max": len(readable_budgets) - 1,
                 "marks": get_slider_marks(readable_budgets),
+                "value": budget_value,
             },
             "n_configs": {
                 "min": 0,
                 "max": len(configs) - 1,
                 "marks": get_slider_marks(list(range(len(configs)))),
+                "value": n_configs_value,
             },
             "objective": {
                 "options": get_select_options(objective_names),
