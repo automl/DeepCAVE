@@ -154,7 +154,7 @@ class Run(AbstractRun, ABC):
 
         for i in range(len(costs)):
             cost = costs[i]
-            objective = self.get_objectives()[i]
+            objective = self.meta["objectives"][i]
 
             # Update time objective here
             if objective["name"] == "time" and cost is None:
@@ -168,11 +168,11 @@ class Run(AbstractRun, ABC):
             # Update bounds here
             if not objective["lock_lower"]:
                 if cost < objective["lower"]:
-                    self.get_objectives()[i]["lower"] = cost
+                    self.meta["objectives"][i]["lower"] = cost
 
             if not objective["lock_upper"]:
                 if cost > objective["upper"]:
-                    self.get_objectives()[i]["upper"] = cost
+                    self.meta["objectives"][i]["upper"] = cost
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()
@@ -229,7 +229,7 @@ class Run(AbstractRun, ABC):
         # Save history
         with jsonlines.open(self.history_fn, mode="w") as f:
             for trial in self.history:
-                f.write(trial)
+                f.write(trial.to_json())
 
         # TODO: Update general cache file and tell him that self.path was used
         # to save the run.

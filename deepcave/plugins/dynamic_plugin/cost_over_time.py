@@ -29,6 +29,7 @@ class CostOverTime(DynamicPlugin):
         run = runs[0]
         self.readable_budgets = run.get_budgets(human=True)
         self.objective_names = run.get_objective_names()
+        self.objective_ids = list(range(len(self.objective_names)))
 
     @staticmethod
     def get_input_layout(register):
@@ -76,8 +77,8 @@ class CostOverTime(DynamicPlugin):
 
         return {
             "objective": {
-                "options": get_select_options(self.objective_names),
-                "value": self.objective_names[0],
+                "options": get_select_options(self.objective_names, self.objective_ids),
+                "value": self.objective_ids[0],
             },
             "budget": {
                 "min": 0,
@@ -105,7 +106,7 @@ class CostOverTime(DynamicPlugin):
         budget = run.get_budget(budget_id)
 
         times, costs_mean, costs_std, ids = run.get_trajectory(
-            objective_names=[inputs["objective"]["value"]], budget=budget
+            objective_id=int(inputs["objective"]["value"]), budget=budget
         )
 
         return {
@@ -189,9 +190,7 @@ class CostOverTime(DynamicPlugin):
 
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
-            yaxis=dict(
-                title=inputs["objective"]["value"],
-            ),
+            yaxis=dict(title=self.objective_names[int(inputs["objective"]["value"])]),
         )
 
         return [go.Figure(data=traces, layout=layout)]
