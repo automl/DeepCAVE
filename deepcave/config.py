@@ -45,6 +45,7 @@ class Config:
         )
         from deepcave.plugins.static_plugin.fanova import fANOVA
         from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
+        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
 
         plugins = {
             "Summary": [
@@ -56,6 +57,9 @@ class Config:
                 CCube(),
                 ParetoFront(),
                 ParallelCoordinates(),
+            ],
+            "Budget Analysis": [
+                BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),

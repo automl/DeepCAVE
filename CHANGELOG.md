@@ -8,6 +8,7 @@
 ## Plugins
 - Added button to receive raw data.
 - Added new plugin: Pareto Front.
+- Added new plugin: Budget Correlation.
 - Changed `load_outputs` and `load_mlp_outputs` to class method. Moreover, if
 `activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
 - Cost Over Time displays maximized objectives correctly now.
