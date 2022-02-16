@@ -88,7 +88,7 @@ class ParetoFront(DynamicPlugin):
                 "min": 0,
                 "max": len(self.readable_budgets) - 1,
                 "marks": get_slider_marks(self.readable_budgets),
-                "value": 0,
+                "value": len(self.readable_budgets) - 1,
             },
             "all_configs": {
                 "options": get_select_options(binary=True),
@@ -104,6 +104,8 @@ class ParetoFront(DynamicPlugin):
 
         o1_idx = int(inputs["objective1"]["value"])
         o2_idx = int(inputs["objective2"]["value"])
+        o1 = objectives[o1_idx]
+        o2 = objectives[o2_idx]
 
         points: Union[List, np.ndarray] = []
         config_ids: Union[List, np.ndarray] = []
@@ -130,7 +132,7 @@ class ParetoFront(DynamicPlugin):
                 # because objectives can be optimized in different directions.
                 # We therefore have to check for each objective separately.
                 select = None
-                for idx, (objective, cost) in enumerate(zip(objectives, costs)):
+                for idx, (objective, cost) in enumerate(zip([o1, o2], costs)):
                     if objective["optimize"] == "upper":
                         select2 = np.any(
                             points[is_front][:, idx, np.newaxis] > [cost], axis=1
