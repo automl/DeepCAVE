@@ -1,0 +1,102 @@
+{
+    "0": {
+        "num_neurons_layer1": 98,
+        "num_neurons_layer2": 39,
+        "learning_rate": 0.004430375245218269
+    },
+    "1": {
+        "num_neurons_layer1": 81,
+        "num_neurons_layer2": 46,
+        "learning_rate": 0.013981961408994055
+    },
+    "2": {
+        "num_neurons_layer1": 49,
+        "num_neurons_layer2": 71,
+        "learning_rate": 0.006431172050131994
+    },
+    "3": {
+        "num_neurons_layer1": 79,
+        "num_neurons_layer2": 10,
+        "learning_rate": 0.004311710058685493
+    },
+    "4": {
+        "num_neurons_layer1": 16,
+        "num_neurons_layer2": 69,
+        "learning_rate": 0.0018662266976517971
+    },
+    "5": {
+        "num_neurons_layer1": 66,
+        "num_neurons_layer2": 69,
+        "learning_rate": 0.008663279761354562
+    },
+    "6": {
+        "num_neurons_layer1": 18,
+        "num_neurons_layer2": 25,
+        "learning_rate": 0.002054762512591136
+    },
+    "7": {
+        "num_neurons_layer1": 95,
+        "num_neurons_layer2": 17,
+        "learning_rate": 0.04734989304499478
+    },
+    "8": {
+        "num_neurons_layer1": 55,
+        "num_neurons_layer2": 35,
+        "learning_rate": 0.07780155576901421
+    },
+    "9": {
+        "num_neurons_layer1": 44,
+        "num_neurons_layer2": 39,
+        "learning_rate": 0.0014135935551752314
+    },
+    "10": {
+        "num_neurons_layer1": 30,
+        "num_neurons_layer2": 59,
+        "learning_rate": 0.02372330072992195
+    },
+    "11": {
+        "num_neurons_layer1": 79,
+        "num_neurons_layer2": 47,
+        "learning_rate": 0.003860866271460547
+    },
+    "12": {
+        "num_neurons_layer1": 48,
+        "num_neurons_layer2": 99,
+        "learning_rate": 0.005059803874660437
+    },
+    "13": {
+        "num_neurons_layer1": 59,
+        "num_neurons_layer2": 14,
+        "learning_rate": 0.05981221901152557
+    },
+    "14": {
+        "num_neurons_layer1": 6,
+        "num_neurons_layer2": 25,
+        "learning_rate": 0.00016334587611069497
+    },
+    "15": {
+        "num_neurons_layer1": 64,
+        "num_neurons_layer2": 20,
+        "learning_rate": 0.00018255254802399022
+    },
+    "16": {
+        "num_neurons_layer1": 63,
+        "num_neurons_layer2": 67,
+        "learning_rate": 0.00011498870747119459
+    },
+    "17": {
+        "num_neurons_layer1": 64,
+        "num_neurons_layer2": 29,
+        "learning_rate": 0.03146730406166007
+    },
+    "18": {
+        "num_neurons_layer1": 95,
+        "num_neurons_layer2": 49,
+        "learning_rate": 0.021600820741402058
+    },
+    "19": {
+        "num_neurons_layer1": 70,
+        "num_neurons_layer2": 28,
+        "learning_rate": 0.04074144654166233
+    }
+}

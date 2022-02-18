@@ -1,0 +1,27 @@
+{
+    "objectives": [
+        {
+            "name": "accuracy",
+            "lower": 0,
+            "upper": 1,
+            "lock_lower": true,
+            "lock_upper": true,
+            "optimize": "upper"
+        },
+        {
+            "name": "time",
+            "lower": 0,
+            "upper": 6.1966540813446045,
+            "lock_lower": true,
+            "lock_upper": false,
+            "optimize": "lower"
+        }
+    ],
+    "budgets": [
+        1,
+        2,
+        3,
+        4,
+        5
+    ]
+}
