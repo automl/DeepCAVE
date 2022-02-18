@@ -88,7 +88,7 @@ class AbstractRun(ABC):
         self.configspace: Optional[ConfigSpace.ConfigurationSpace] = None
         self.configs: Dict[int, Configuration] = {}
         self.origins: Dict[int, str] = {}
-        self.models: Dict[int, Any] = {}
+        self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}
 
         self.history: List[Trial] = []
         self.trial_keys: Dict[Tuple[str, int], int] = {}
@@ -229,12 +229,12 @@ class AbstractRun(ABC):
             new_costs += [cost]
 
         return new_costs
-    
+
     def get_cost(self, config_id: int, budget=None) -> List[float]:
         """
         If no budget is given, the highest budget is chosen.
         """
-        
+
         costs = self.get_costs(budget)
         return costs[config_id]
 
@@ -321,6 +321,15 @@ class AbstractRun(ABC):
         cost = np.mean(costs).item()
 
         return cost
+
+    def get_model(self, config_id) -> Optional["torch.nn.Module"]:
+        import torch
+
+        filename = self.models_dir / f"{str(config_id)}.pth"
+        if not filename.exists():
+            return None
+
+        return torch.load(filename)
 
     def get_trajectory(self, objective_id, budget=None):
         if budget is None:

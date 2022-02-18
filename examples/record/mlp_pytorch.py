@@ -8,7 +8,7 @@ from deepcave import Recorder, Objective
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 import torchvision.transforms as transforms
 from torchmetrics import Accuracy
 from torchvision.datasets import MNIST
@@ -19,6 +19,8 @@ class MLP(pl.LightningModule):
     def __init__(self, num_neurons=(64, 32), learning_rate=1e-4):
         super().__init__()
 
+        self.data_dir = os.path.join(os.getcwd(), "datasets")
+        self.batch_size = 64
         self.num_classes = 10
         self.dims = (1, 28, 28)
         channels, width, height = self.dims
@@ -73,6 +75,33 @@ class MLP(pl.LightningModule):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return optimizer
 
+    def prepare_data(self):
+        # download
+        MNIST(self.data_dir, train=True, download=True)
+        MNIST(self.data_dir, train=False, download=True)
+
+    def setup(self, stage=None):
+
+        # Assign train/val datasets for use in dataloaders
+        if stage == "fit" or stage is None:
+            mnist_full = MNIST(self.data_dir, train=True, transform=self.transform)
+            self.mnist_train, self.mnist_val = random_split(mnist_full, [20000, 40000])
+
+        # Assign test dataset for use in dataloader(s)
+        if stage == "test" or stage is None:
+            self.mnist_test = MNIST(
+                self.data_dir, train=False, transform=self.transform
+            )
+
+    def train_dataloader(self):
+        return DataLoader(self.mnist_train, batch_size=self.batch_size)
+
+    def val_dataloader(self):
+        return DataLoader(self.mnist_val, batch_size=self.batch_size)
+
+    def test_dataloader(self):
+        return DataLoader(self.mnist_test, batch_size=self.batch_size)
+
 
 def get_configspace(seed):
     configspace = ConfigurationSpace(seed=seed)
@@ -98,26 +127,12 @@ def get_configspace(seed):
 
 
 if __name__ == "__main__":
-    # Get datasets
-    train_dataset = MNIST(
-        os.path.join(os.getcwd(), "datasets"),
-        train=True,
-        download=True,
-        transform=transforms.ToTensor(),
-    )
-    test_dataset = MNIST(
-        os.path.join(os.getcwd(), "datasets"),
-        train=False,
-        download=True,
-        transform=transforms.ToTensor(),
-    )
-
     # Define objectives
     accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
     time = Objective("time", lower=0, optimize="lower")
 
     # Define budgets
-    budgets = [1, 3, 5]
+    budgets = [1, 2, 3, 4, 5]
 
     # Others
     num_configs = 20
@@ -131,26 +146,27 @@ if __name__ == "__main__":
             configspace, objectives=[accuracy, time], save_path=save_path
         ) as r:
             for config in configspace.sample_configuration(num_configs):
+                mlp = MLP(
+                    num_neurons=(
+                        config["num_neurons_layer1"],
+                        config["num_neurons_layer2"],
+                    ),
+                    learning_rate=config["learning_rate"],
+                )
+
                 for budget in budgets:
                     pl.seed_everything(run_id)
-                    r.start(config, budget)
+                    r.start(config, budget, model=mlp)
 
-                    mlp = MLP(
-                        num_neurons=(
-                            config["num_neurons_layer1"],
-                            config["num_neurons_layer2"],
-                        ),
-                        learning_rate=config["learning_rate"],
-                    )
                     trainer = pl.Trainer(
                         num_sanity_val_steps=0,  # No validation sanity
                         auto_scale_batch_size="power",
                         gpus=0,
                         deterministic=True,
-                        max_epochs=budget,
+                        max_epochs=1,
                     )
-                    trainer.fit(mlp, DataLoader(train_dataset))
-                    result = trainer.test(mlp, DataLoader(test_dataset))
+                    trainer.fit(mlp)
+                    result = trainer.test(mlp)
                     score = result[0]["val_acc"]
 
                     r.end(costs=[score, None])

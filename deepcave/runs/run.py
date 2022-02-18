@@ -98,7 +98,6 @@ class Run(AbstractRun, ABC):
             return
 
         self._path = Path(value)
-
         make_dirs(self._path)
 
         self.meta_fn = self._path / "meta.json"
@@ -106,6 +105,7 @@ class Run(AbstractRun, ABC):
         self.configs_fn = self._path / "configs.json"
         self.origins_fn = self._path / "origins.json"
         self.history_fn = self._path / "history.jsonl"
+        self.models_dir = self._path / "models"
 
     def exists(self) -> bool:
         if self._path is None:
@@ -130,8 +130,8 @@ class Run(AbstractRun, ABC):
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
-        origin=None,
-        model=None,
+        origin: str = None,
+        model: Union[str, "torch.nn.Module"] = None,
         additional: Optional[dict] = None,
     ):
         """
@@ -206,13 +206,13 @@ class Run(AbstractRun, ABC):
             self.meta["budgets"].sort()
 
         # Update models
-        self.models[trial_key] = model
+        # Problem: We don't want to have the model in the cache.
+        # Therefore, we first keep the model as it is,
+        # but remove it from the dict and save it to the disk later on.
+        if model is not None:
+            self.models[config_id] = model
 
     def save(self, path: Optional[Union[str, Path]] = None):
-        """
-        If path is none, self.path will be chosen.
-        """
-
         if path is None:
             raise RuntimeError("Please specify a path to save the trials.")
 
@@ -234,6 +234,26 @@ class Run(AbstractRun, ABC):
         # TODO: Update general cache file and tell him that self.path was used
         # to save the run.
         # Then, DeepCAVE can show direct suggestions in the select path dialog.
+
+        # Models
+        if len(self.models) > 0:
+            # We import torch here because we don't want to have it as requirement.
+            import torch
+
+            # Iterate over models and save them if they are a module.
+            for config_id in list(self.models.keys()):
+                filename = self.models_dir / f"{str(config_id)}.pth"
+                if not filename.exists():
+                    make_dirs(filename)
+
+                    model = self.models[config_id]
+                    if isinstance(model, torch.nn.Module):
+                        torch.save(model, filename)
+                    else:
+                        raise RuntimeError("Unknown model type.")
+
+                # Remove from dict
+                del self.models[config_id]
 
     def load(self, path: Optional[Union[str, Path]] = None):
         self.reset()
@@ -271,6 +291,3 @@ class Run(AbstractRun, ABC):
 
                 # Also create trial_keys
                 self.trial_keys[trial.get_key()] = len(self.history) - 1
-
-        # Load models
-        # TODO
