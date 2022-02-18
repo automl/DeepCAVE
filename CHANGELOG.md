@@ -5,6 +5,9 @@
 - Added swig to anaconda environment.
 - Increased version of numpy and matplotlib.
 
+## Run
+- Added model support.
+
 ## Plugins
 - Added button to receive raw data.
 - Added new plugin: Pareto Front.

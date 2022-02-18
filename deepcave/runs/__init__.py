@@ -44,7 +44,7 @@ class Status(IntEnum):
 
 @dataclass
 class Trial:
-    config_id: str
+    config_id: int
     budget: int
     costs: float
     start_time: float
@@ -58,7 +58,7 @@ class Trial:
 
         assert isinstance(self.status, Status)
 
-    def get_key(self) -> Tuple[str, int]:
+    def get_key(self) -> Tuple[int, int]:
         return self.config_id, self.budget  # noqa
 
     def to_json(self) -> List[Any]:

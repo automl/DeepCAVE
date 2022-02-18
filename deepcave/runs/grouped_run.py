@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import Dict, List, Tuple
 import numpy as np
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.hash import string_to_hash
@@ -26,9 +26,12 @@ class GroupedRun(AbstractRun):
             # We need new config ids
             current_config_id = 0
 
+            # Key: new_config_id; Value: (run_id, config_id)
+            self.model_mapping: Dict[int, Tuple[int, int]] = {}
+
             # Combine runs here
-            for run in self.runs:
-                config_mapping: dict[str, str] = {}  # Maps old ones to the new ones
+            for run_id, run in enumerate(self.runs):
+                config_mapping: Dict[int, int] = {}  # Maps old ones to the new ones
 
                 # Update configs + origins
                 for config_id in run.configs.keys():
@@ -41,9 +44,9 @@ class GroupedRun(AbstractRun):
                             break
 
                     if config_id not in config_mapping:
-                        self.configs[str(current_config_id)] = config
+                        self.configs[current_config_id] = config
                         self.origins[current_config_id] = origin
-                        config_mapping[config_id] = str(current_config_id)
+                        config_mapping[config_id] = current_config_id
                         current_config_id += 1
 
                 # Update history + trial_keys
@@ -54,10 +57,10 @@ class GroupedRun(AbstractRun):
                     (config_id, budget) = trial.get_key()
 
                     # Config id might have changed
-                    config_id = config_mapping[config_id]
+                    new_config_id = config_mapping[config_id]
 
                     # Update config id
-                    trial.config_id = config_id
+                    trial.config_id = new_config_id
 
                     # Now we add it to the history
                     trial_key = trial.get_key()
@@ -66,6 +69,9 @@ class GroupedRun(AbstractRun):
                         self.history.append(trial)
                     else:
                         self.history[self.trial_keys[trial_key]] = trial
+
+                    # Get model mapping done
+                    self.model_mapping[new_config_id] = (run_id, config_id)
         except:
             raise NotMergeableError("Runs can not be merged.")
 
@@ -84,6 +90,10 @@ class GroupedRun(AbstractRun):
     @property
     def run_names(self) -> list[str]:
         return [run.name for run in self.runs]
+
+    def get_model(self, config_id):
+        run_id, config_id = self.model_mapping[config_id]
+        return self.runs[run_id].get_model(config_id)
 
     def get_trajectory(self, *args, **kwargs):
         # Cache costs
