@@ -1,3 +1,10 @@
+"""
+Multi-Layer Perceptron via PyTorch
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"""
+
+
 import os
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (

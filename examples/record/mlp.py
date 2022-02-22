@@ -1,3 +1,10 @@
+"""
+Multi-Layer Perceptron
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"""
+
+
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split

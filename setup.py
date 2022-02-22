@@ -22,16 +22,14 @@ extras_require = {
         "pydocstyle",
         "pre-commit",
         "flake8",
+        # Docs
+        "automl-sphinx-theme>=0.1.7",
+    ],
+    "examples": [
         # Examples
-        "matplotlib",
-        "jupyter",
-        "notebook",
-        "seaborn",
         "torch",
         "torchvision",
         "pytorch-lightning",
-        # Docs
-        "automl-sphinx-theme",
     ],
 }
 
@@ -52,6 +50,7 @@ setuptools.setup(
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
+    package_data={"deepcave": ["logging.yml"]},
     python_requires=">=3.9",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,

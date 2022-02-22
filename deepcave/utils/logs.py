@@ -1,10 +1,12 @@
 import logging
 import logging.config
 from pathlib import Path
-
+import deepcave
 import yaml
 
-with (Path() / "logging.yml").open("r") as stream:
+
+path = Path() / deepcave.__file__
+with (path.parent.parent / "logging.yml").open("r") as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 logging.config.dictConfig(config)
 

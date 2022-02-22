@@ -29,6 +29,9 @@
 - Included logging.yml (before it was loggin.yml).
 - Recorder works again.
 
+## Docs
+- Added documentation with some pages.
+
 
 # v0.2
 

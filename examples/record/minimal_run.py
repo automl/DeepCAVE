@@ -1,8 +1,7 @@
 """
-Record Minimal Run
-^^^^^^^^^^^^^^^^^^
+Minimal Run
+^^^^^^^^^^^
 
-...
 """
 
 
