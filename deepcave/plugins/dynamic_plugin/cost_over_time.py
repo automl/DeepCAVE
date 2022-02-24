@@ -1,19 +1,12 @@
-from typing import Union, List
+from typing import Union, List, Dict
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
-from dash.development.base_component import Component
-from dash.exceptions import PreventUpdate
-
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun, NotMergeableError, check_equality
-from deepcave.utils.layout import (
-    get_radio_options,
-    get_select_options,
-    get_slider_marks,
-)
+from deepcave.runs import AbstractRun, check_equality
+from deepcave.utils.layout import get_radio_options, get_select_options
 from deepcave.utils.styled_plotty import get_color
 
 
@@ -27,9 +20,11 @@ class CostOverTime(DynamicPlugin):
 
         # Set some attributes here
         run = runs[0]
-        self.readable_budgets = run.get_budgets(human=True)
-        self.objective_names = run.get_objective_names()
-        self.objective_ids = list(range(len(self.objective_names)))
+
+        budgets = run.get_budgets(human=True)
+        self.budget_options = get_select_options(budgets, range(len(budgets)))
+        objective_names = run.get_objective_names()
+        self.objective_options = get_select_options(objective_names)
 
     @staticmethod
     def get_input_layout(register):
@@ -47,7 +42,10 @@ class CostOverTime(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Budget"),
-                    dcc.Slider(id=register("budget", ["min", "max", "marks", "value"])),
+                    dbc.Select(
+                        id=register("budget", ["options", "value"]),
+                        placeholder="Select budget ...",
+                    ),
                 ],
                 className="",
             ),
@@ -77,14 +75,12 @@ class CostOverTime(DynamicPlugin):
 
         return {
             "objective": {
-                "options": get_select_options(self.objective_names, self.objective_ids),
-                "value": self.objective_ids[0],
+                "options": self.objective_options,
+                "value": self.objective_options[0]["value"],
             },
             "budget": {
-                "min": 0,
-                "max": len(self.readable_budgets) - 1,
-                "marks": get_slider_marks(self.readable_budgets),
-                "value": len(self.readable_budgets) - 1,
+                "options": self.budget_options,
+                "value": self.budget_options[0]["value"],
             },
             "xaxis": {
                 "options": [
@@ -101,13 +97,12 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs) -> dict[str, list[Union[float, str]]]:
+    def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
         budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(budget_id)
+        budget = run.get_budget(int(budget_id))
+        objective = run.get_objective(inputs["objective"]["value"])
 
-        times, costs_mean, costs_std, ids = run.get_trajectory(
-            objective_id=int(inputs["objective"]["value"]), budget=budget
-        )
+        times, costs_mean, costs_std, ids = run.get_trajectory(objective=objective, budget=budget)
 
         return {
             "times": times,
@@ -123,7 +118,6 @@ class CostOverTime(DynamicPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, runs):
-
         traces = []
         for idx, (run_name, run) in enumerate(runs.items()):
             x = outputs[run.name]["times"]
@@ -190,7 +184,7 @@ class CostOverTime(DynamicPlugin):
 
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
-            yaxis=dict(title=self.objective_names[int(inputs["objective"]["value"])]),
+            yaxis=dict(title=inputs["objective"]["value"]),
         )
 
         return [go.Figure(data=traces, layout=layout)]

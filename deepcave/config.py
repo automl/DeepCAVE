@@ -8,7 +8,7 @@ class Config:
 
     # Cache dir
     root = Path.cwd()
-    DEFAULT_WORKING_DIRECTORY = root / "examples" / "logs" / "DeepCAVE"
+    DEFAULT_WORKING_DIRECTORY = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
 
     CACHE_DIR = root / "cache"
 

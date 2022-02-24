@@ -105,6 +105,9 @@ class AbstractRun(ABC):
         """
         pass
 
+    def get_trials(self) -> Iterator[Trial]:
+        yield from self.history
+
     def get_meta(self) -> None:
         return self.meta
 
@@ -128,29 +131,57 @@ class AbstractRun(ABC):
 
         return objectives
 
-    def get_objective(self, id) -> Objective:
-        return self.get_objectives()[id]
+    def get_objective(self, id: Union[str, int]) -> Optional[Objective]:
+        """Returns the objective based on the id or the name.
 
-    def get_trials(self) -> Iterator[Trial]:
-        yield from self.history
+        Parameters
+        ----------
+        id : Union[str, int]
+            The id or name of the objective.
 
-    def get_objective_name(self, objective_names=None) -> str:
+        Returns
+        -------
+        Objective
+            The objective object.
+        """
+
+        objectives = self.get_objectives()
+        if type(id) == int:
+            return objectives[id]
+
+        # Otherwise, iterate till the name is found
+        for objective in objectives:
+            if objective["name"] == id:
+                return objective
+
+        return None
+
+    def get_objective_id(self, objective: Union[Objective, str]) -> Optional[int]:
+        objectives = self.get_objectives()
+        for id, objective2 in enumerate(objectives):
+            if isinstance(objective, Objective):
+                if objective == objective2:
+                    return id
+            else:
+                if objective == objective2["name"]:
+                    return id
+
+        return None
+
+    def get_objective_name(self, objectives: Optional[List[Objective]] = None) -> str:
         """
         Get the cost name of given objective names.
         Returns "Combined Cost" if multiple objective names were involved.
         """
 
-        given_objective_names = self.get_objective_names()
+        available_objective_names = self.get_objective_names()
 
-        if objective_names is None:
-            if len(given_objective_names) == 1:
-                return given_objective_names[0]
+        if objectives is None:
+            if len(available_objective_names) == 1:
+                return available_objective_names[0]
         else:
-            if isinstance(objective_names, str):
-                objective_names = [objective_names]
-
-            if len(objective_names) == 1:
-                return objective_names[0]
+            if len(objectives) == 1:
+                return objectives[0]["name"]
 
         return "Combined Cost"
 
@@ -184,22 +215,14 @@ class AbstractRun(ABC):
         return self.meta["budgets"][id]
 
     def get_budgets(self, human=False) -> List[str]:
-        """
-        There's at least one budget with None included.
-
-        Args:
-
-        """
         budgets = self.meta["budgets"]
         assert len(budgets) > 0
 
         if human:
             readable_budgets = []
             for b in budgets:
-                if b is None:
-                    readable_budgets += ["None"]
-                else:
-                    readable_budgets += [str(np.round(float(b), 2))]
+                if b is not None:
+                    readable_budgets += [float(np.round(float(b), 2))]
 
             return readable_budgets
 
@@ -260,13 +283,13 @@ class AbstractRun(ABC):
 
         return results
 
-    def get_min_cost(self, objective_names=None, budget=None, statuses=None):
+    def get_min_cost(self, objectives=None, budget=None, statuses=None):
         min_cost = np.inf
         best_config_id = None
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
-            cost = self.calculate_cost(costs, objective_names, normalize=True)
+            cost = self.calculate_cost(costs, objectives, normalize=True)
 
             if cost < min_cost:
                 min_cost = cost
@@ -274,7 +297,9 @@ class AbstractRun(ABC):
 
         return min_cost, best_config_id
 
-    def calculate_cost(self, costs, objective_names=None, normalize=False) -> float:
+    def calculate_cost(
+        self, costs, objectives: Optional[List[Objective]] = None, normalize=False
+    ) -> float:
         """
         Calculates cost from multiple costs.
         Normalizes the cost first and weight every cost the same.
@@ -282,23 +307,21 @@ class AbstractRun(ABC):
 
         costs = self._process_costs(costs)
 
-        if objective_names is None:
-            objective_names = self.get_objective_names()
+        if objectives is None:
+            objectives = self.get_objectives()
 
-        assert len(objective_names) > 0
+        assert len(objectives) > 0
 
         # No normalization needed
-        if len(objective_names) == 1 and not normalize:
+        if len(objectives) == 1 and not normalize:
             return costs[0]
-
-        objectives = self.get_objectives()
 
         # First normalize
         filtered_objectives = []
         normalized_costs = []
-        for cost, objective in zip(costs, objectives):
-            if objective["name"] not in objective_names:
-                continue
+        for objective in objectives:
+            objective_id = self.get_objective_id(objective)
+            cost = costs[objective_id]
 
             a = cost - objective["lower"]
             b = objective["upper"] - objective["lower"]
@@ -313,9 +336,7 @@ class AbstractRun(ABC):
             filtered_objectives.append(objective)
 
         # Give the same weight to all objectives (for now)
-        objective_weights = [
-            1 / len(objectives) for _ in range(len(filtered_objectives))
-        ]
+        objective_weights = [1 / len(objectives) for _ in range(len(objectives))]
 
         costs = [u * v for u, v in zip(normalized_costs, objective_weights)]
         cost = np.mean(costs).item()
@@ -331,11 +352,9 @@ class AbstractRun(ABC):
 
         return torch.load(filename)
 
-    def get_trajectory(self, objective_id, budget=None):
+    def get_trajectory(self, objective: Objective, budget=None):
         if budget is None:
             budget = self.get_highest_budget()
-
-        objective = self.get_objective(objective_id)
 
         costs_mean = []
         costs_std = []
@@ -362,7 +381,7 @@ class AbstractRun(ABC):
             if trial.budget != budget:
                 continue
 
-            cost = trial.costs[objective_id]
+            cost = trial.costs[self.get_objective_id(objective)]
 
             # Now it's important to check whether the cost was minimized or maximized
             if objective["optimize"] == "lower":
@@ -382,7 +401,7 @@ class AbstractRun(ABC):
 
     def get_encoded_configs(
         self,
-        objective_names=None,
+        objectives: Optional[List[Objective]] = None,
         budget=None,
         statuses=None,
         for_tree=False,
@@ -409,7 +428,7 @@ class AbstractRun(ABC):
             config = self.configs[config_id]
             config = Configuration(self.configspace, config)
 
-            y = self.calculate_cost(costs, objective_names)
+            y = self.calculate_cost(costs, objectives)
             x = config.get_array()
 
             X.append(x)
@@ -476,10 +495,8 @@ class AbstractRun(ABC):
                     X[nonfinite_mask, idx] = impute_values[idx]
 
         if pandas:
-            cost_column = self.get_objective_name(objective_names)
-            columns = [name for name in self.configspace.get_hyperparameter_names()] + [
-                cost_column
-            ]
+            cost_column = self.get_objective_name(objectives)
+            columns = [name for name in self.configspace.get_hyperparameter_names()] + [cost_column]
 
             Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)

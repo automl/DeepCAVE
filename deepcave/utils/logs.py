@@ -6,8 +6,9 @@ import yaml
 
 
 path = Path() / deepcave.__file__
-with (path.parent.parent / "logging.yml").open("r") as stream:
+with (path.parent / "utils" / "logging.yml").open("r") as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
+
 logging.config.dictConfig(config)
 
 

@@ -2,12 +2,17 @@ import sys
 import datetime
 
 name = "DeepCAVE"
+package_name = "deepcave"
 author = "René Sass and Marius Lindauer"
+author_email = "sass@tnt.uni-hannover.de"
+description = "An interactive framework to visualize and analyze your AutoML process in real-time."
+url = "automl.org"
+project_urls = {
+    "Documentation": "https://automl.github.io/DeepCAVE/main",
+    "Source Code": "https://github.com/automl/deepcave",
+}
+copyright = f"Copyright {datetime.date.today().strftime('%Y')}, René Sass and Marius Lindauer, <<author_email>>"
 version = "0.2.1"
-copyright = (
-    f"Copyright {datetime.date.today().strftime('%Y')}, AutoML.org Freiburg-Hannover"
-)
-
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -9,15 +7,10 @@ import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 
-from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import (
-    get_checklist_options,
-    get_select_options,
-    get_slider_marks,
-)
+from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -52,7 +45,10 @@ class ParallelCoordinates(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Budget"),
-                    dcc.Slider(id=register("budget", ["min", "max", "marks", "value"])),
+                    dbc.Select(
+                        id=register("budget", ["options", "value"]),
+                        placeholder="Select budget ...",
+                    ),
                 ]
             ),
         ]
@@ -71,32 +67,39 @@ class ParallelCoordinates(DynamicPlugin):
     def load_inputs(self):
         return {
             "objective": {"options": get_select_options(), "value": None},
-            "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
+            "budget": {"options": get_select_options(), "value": None},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run):
-        hp_names = selected_run.configspace.get_hyperparameter_names()
-        readable_budgets = selected_run.get_budgets(human=True)
+        # Prepare objetives
         objective_names = selected_run.get_objective_names()
+        objective_options = get_select_options(objective_names)
 
+        # Prepare budgets
+        budgets = selected_run.get_budgets(human=True)
+        budget_options = get_select_options(budgets, range(len(budgets)))
+
+        # Prepare others
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+
+        # Get selected values
         objective_value = inputs["objective"]["value"]
         budget_value = inputs["budget"]["value"]
         hp_value = inputs["hyperparameters"]["value"]
+
         if objective_value is None:
             objective_value = objective_names[0]
-            budget_value = len(readable_budgets) - 1
+            budget_value = budget_options[-1]["value"]
             hp_value = hp_names
 
         new_inputs = {
             "objective": {
-                "options": get_select_options(objective_names),
+                "options": objective_options,
                 "value": objective_value,
             },
             "budget": {
-                "min": 0,
-                "max": len(readable_budgets) - 1,
-                "marks": get_slider_marks(readable_budgets),
+                "options": budget_options,
                 "value": budget_value,
             },
             "hyperparameters": {
@@ -110,13 +113,11 @@ class ParallelCoordinates(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        objective_name = inputs["objective"]["value"]
         budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(budget_id)
+        budget = run.get_budget(int(budget_id))
+        objective = run.get_objective(inputs["objective"]["value"])
 
-        df, df_labels = run.get_encoded_configs(
-            objective_names=[objective_name], budget=budget, pandas=True
-        )
+        df, df_labels = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
 
         # Now we also need to know when to use the labels and when to use the encoded data
         show_all_labels = []
