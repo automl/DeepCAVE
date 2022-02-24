@@ -1,9 +1,14 @@
 # v0.2.1
 
+## General
+- Updated tools.
+- Cleaned up (removed docker files).
+
 ## Installation
 - Checks if redis-server is installed. Otherwise, aborts to start the server.
 - Added swig to anaconda environment.
 - Increased version of numpy and matplotlib.
+- Improved requirements. Fixed only crucical things.
 
 ## Run
 - Added model support.
@@ -30,7 +35,7 @@
 - Recorder works again.
 
 ## Docs
-- Added documentation with some pages.
+- Added documentation with most basic information.
 
 
 # v0.2
