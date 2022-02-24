@@ -71,6 +71,9 @@ class SMACRun(Run):
             path.stem, configspace=configspace, objectives=objective, meta=meta
         )
 
+        # TODO: Make it better
+        run._path = path
+
         # Iterate over the runhistory
         with (path / "runhistory.json").open() as json_file:
             all_data = json.load(json_file)

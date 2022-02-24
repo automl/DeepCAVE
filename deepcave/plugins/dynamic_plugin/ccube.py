@@ -22,9 +22,8 @@ logger = get_logger(__name__)
 
 class CCube(DynamicPlugin):
     id = "ccube"
-    name = "Configurations Cube"
+    name = "Configuration Cube"
     icon = "fas fa-cube"
-
     activate_run_selection = True
 
     @staticmethod
@@ -43,8 +42,11 @@ class CCube(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Budget"),
-                    dcc.Slider(id=register("budget", ["min", "max", "marks", "value"])),
-                ]
+                    dbc.Select(
+                        id=register("budget", ["options", "value"]),
+                        placeholder="Select budget ...",
+                    ),
+                ],
             ),
         ]
 
@@ -55,7 +57,7 @@ class CCube(DynamicPlugin):
                 [
                     dbc.Label("Number of Configurations"),
                     dcc.Slider(
-                        id=register("n_configs", ["min", "max", "marks", "value"])
+                        id=register("n_configs", ["min", "max", "marks", "value"]), step=None
                     ),
                 ],
                 className="mb-3",
@@ -70,38 +72,57 @@ class CCube(DynamicPlugin):
 
     def load_inputs(self):
         return {
-            "budget": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
-            "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "objective": {"options": get_select_options(), "value": None},
+            "budget": {"options": get_select_options(), "value": None},
+            "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
-        budget_id = inputs["budget"]["value"]
-        budgets = selected_run.get_budgets()
-        hp_names = selected_run.configspace.get_hyperparameter_names()
-        readable_budgets = selected_run.get_budgets(human=True)
-        configs = selected_run.get_configs(budget=budgets[budget_id])
+        # Prepare objetives
         objective_names = selected_run.get_objective_names()
-
+        objective_options = get_select_options(objective_names)
         objective_value = inputs["objective"]["value"]
+
+        # Prepare budgets
+        budgets = selected_run.get_budgets(human=True)
+        budget_options = get_select_options(budgets, range(len(budgets)))
+
+        # Prepare others
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+
+        # Get selected values
+        n_configs_value = inputs["n_configs"]["value"]
+
+        # Pre-set values
         if objective_value is None:
             objective_value = objective_names[0]
+            budget_value = budget_options[-1]["value"]
+        else:
+            budget_value = inputs["budget"]["value"]
+
+        budget = selected_run.get_budget(int(budget_value))
+        configs = selected_run.get_configs(budget=budget)
+        if n_configs_value == 0:
+            n_configs_value = len(configs) - 1
+        else:
+            if n_configs_value > len(configs) - 1:
+                n_configs_value = len(configs) - 1
 
         new_inputs = {
+            "objective": {
+                "options": objective_options,
+                "value": objective_value,
+            },
             "budget": {
-                "min": 0,
-                "max": len(readable_budgets) - 1,
-                "marks": get_slider_marks(readable_budgets),
+                "options": budget_options,
+                "value": budget_value,
             },
             "n_configs": {
                 "min": 0,
                 "max": len(configs) - 1,
                 "marks": get_slider_marks(list(range(len(configs)))),
-            },
-            "objective": {
-                "options": get_select_options(objective_names),
-                "value": objective_value,
+                "value": n_configs_value,
             },
             "hyperparameters": {
                 "options": get_select_options(hp_names),
@@ -121,13 +142,11 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        objective_name = inputs["objective"]["value"]
         budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(budget_id)
+        budget = run.get_budget(int(budget_id))
+        objective = run.get_objective(inputs["objective"]["value"])
 
-        df, df_labels = run.get_encoded_configs(
-            objective_names=[objective_name], budget=budget, pandas=True
-        )
+        df, df_labels = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
 
         # Now we also need to know when to use the labels and when to use the encoded data
         show_all_labels = []
@@ -150,7 +169,7 @@ class CCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(inputs, outputs, _):
+    def load_outputs(inputs, outputs, run):
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
         # show_all_labels = outputs[run_name]["show_all_labels"]
@@ -167,10 +186,8 @@ class CCube(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        output = outputs[run.name]
-        df = deserialize(output["df"], dtype=pd.DataFrame)
-        df_labels = deserialize(output["df_labels"], dtype=pd.DataFrame)
+        df = deserialize(outputs["df"], dtype=pd.DataFrame)
+        df_labels = deserialize(outputs["df_labels"], dtype=pd.DataFrame)
 
         # Limit to n_configs
         idx = [str(i) for i in range(n_configs + 1, len(df))]
@@ -200,9 +217,7 @@ class CCube(DynamicPlugin):
 
             fig = px.scatter(df, x=x, y=y, color=cost_name, hover_data=df_labels)
         else:
-            fig = px.scatter_3d(
-                df, x=x, y=y, z=z, color=cost_name, hover_data=df_labels
-            )
+            fig = px.scatter_3d(df, x=x, y=y, z=z, color=cost_name, hover_data=df_labels)
 
         scene = {}
         for axis, name in zip([x, y, z], ["xaxis", "yaxis", "zaxis"]):

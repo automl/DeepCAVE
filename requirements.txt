@@ -1,19 +1,20 @@
-wheel==0.37.1
-setuptools==60.8.1
-
+wheel>=0.37.1
+setuptools>=60.9.3
 absl-py==1.0.0
-jsonlines==2.0.0
-pandas==1.3.4
-numpy==1.21.4
-matplotlib==3.4.3
+jsonlines>=3.0.0
+pandas>=1.3.4
+numpy>=1.22.2
+matplotlib>=3.5.1
 
-redis==4.1.2
-rq==1.10.0
-
-dash==2.0.0
-dash-bootstrap-components==1.0.3
-plotly==5.3.1
-
-ConfigSpace==0.4.20
+# AutoML packages
+ConfigSpace==0.4.21
 smac==1.1.1
 hpbandster==0.7.4
+
+# Upgrading to 2.1.0 or higher breaks the slider because string keys in marks
+# can not be interpreted anymore
+dash==2.0.0
+dash-bootstrap-components==1.0.3
+plotly>=5.6.0
+redis>=4.1.4
+rq>=1.10.1

@@ -1,4 +1,5 @@
-from typing import Any, Optional
+from copy import deepcopy
+from typing import Any, Optional, Dict
 
 import json
 from pathlib import Path
@@ -52,7 +53,7 @@ class Cache:
         with self._file.open("w") as f:
             json.dump(self._data, f, indent=4)
 
-    def set(self, *keys, value):
+    def set(self, *keys, value) -> None:
         """
         Set a value from a chain of keys.
         E.g. set("a", "b", "c", value=4) creates following dictionary:
@@ -60,6 +61,9 @@ class Cache:
         """
         d = self._data
         for key in keys[:-1]:
+            if type(key) != str:
+                raise RuntimeError("Key must be a string. Ints/floats are not supported by JSON.")
+
             if key not in d:
                 d[key] = {}
 
@@ -68,14 +72,16 @@ class Cache:
         d[keys[-1]] = value
         self.write()
 
-    def set_dict(self, d: dict):
+    def set_dict(self, d: dict) -> None:
         """Updates cache to a specific value"""
+
         self._data.update(d)
         self.write()
 
     def get(self, *keys) -> Optional[Any]:
         """Retrieve value for a specific key"""
-        d = self._data
+
+        d = deepcopy(self._data)
         for key in keys:
             if key not in d:
                 return None

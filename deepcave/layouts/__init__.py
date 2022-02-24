@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Union
+from typing import Union, List
 
 from dash.development.base_component import Component
-
 from deepcave.utils.logs import get_logger
 
 
@@ -15,5 +14,5 @@ class Layout(ABC):
         pass
 
     @abstractmethod
-    def __call__(self) -> Union[list[Component], Component]:
+    def __call__(self) -> Union[List[Component], Component]:
         pass

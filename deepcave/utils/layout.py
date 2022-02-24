@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, List, Dict
 
 import base64
 import io
@@ -34,27 +34,28 @@ def display_figure(fig):
     return html.Img(src="data:image/png;base64,{}".format(data))
 
 
-def get_slider_marks(strings: Optional[list[str]] = None, steps=10) -> dict[int, str]:
+def get_slider_marks(strings: Optional[List[Dict[str, Any]]] = None, steps=10) -> Dict[int, str]:
+    marks = {}
     if strings is None:
-        return {0: str("None")}
+        marks[0] = {"label": str("None")}
+        return marks
 
     if len(strings) < steps:
         steps = len(strings)
 
-    marks = {}
     for i, string in enumerate(strings):
         if i % (len(strings) / steps) == 0:
-            marks[i] = str(string)
+            marks[i] = {"label": str(string)}
 
     # Also include the last mark
-    marks[len(strings) - 1] = str(strings[-1])
+    marks[len(strings) - 1] = {"label": str(strings[-1])}
 
     return marks
 
 
 def get_select_options(
     labels=None, values=None, disabled=None, binary=False
-) -> list[dict[str, Any]]:
+) -> List[Dict[str, Any]]:
     """
     If values are none use labels as values.
     If both are none return empty list.
@@ -73,9 +74,7 @@ def get_select_options(
         labels = values
 
     if len(labels) != len(values):
-        raise ValueError(
-            f"Labels and values have unequal length ({len(labels)} != {len(values)})"
-        )
+        raise ValueError(f"Labels and values have unequal length ({len(labels)} != {len(values)})")
 
     options = []
     for idx, (l, v) in enumerate(zip(labels, values)):

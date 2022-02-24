@@ -89,18 +89,16 @@ class Overview(DynamicPlugin):
             html.Div(id=register("statistics", "children")),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, _):
-        run = run_handler.from_run_id(inputs["run_name"]["value"])
-        outputs = outputs[run.name]
+    def load_outputs(self, inputs, outputs, run):
+        def create_table(output, mb=True):
+            mb = "mb-0" if not mb else ""
 
-        def create_table(output):
             return dbc.Table.from_dataframe(
-                pd.DataFrame(output), striped=True, bordered=True
+                pd.DataFrame(output), striped=True, bordered=True, className=mb
             )
 
         return [
             create_table(outputs["meta"]),
             create_table(outputs["objectives"]),
-            create_table(outputs["statistics"]),
+            create_table(outputs["statistics"], mb=False),
         ]

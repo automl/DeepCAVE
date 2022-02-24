@@ -1,15 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Iterable, Optional, Union, List
+from typing import Any, Callable, Dict, Iterable, Optional, Union, List
 
 import copy
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dash import no_update
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-from pytest import raises
 
 from deepcave import app, c, run_handler
 from deepcave.layouts import Layout
@@ -17,6 +16,7 @@ from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
 from deepcave.runs.run import Run
 from deepcave.utils.data_structures import update_dict
+from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.util import add_prefix_to_dict
@@ -44,7 +44,7 @@ class Plugin(Layout, ABC):
     """
     activate_run_selection: bool = False
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.inputs = []
         self.outputs = []
 
@@ -56,9 +56,7 @@ class Plugin(Layout, ABC):
         self.alert_color = "success"
         self.alert_update_required = False
 
-        self.runs: dict[
-            str, AbstractRun
-        ] = {}  # Set in __call__: run_name -> AbstractRun
+        self.runs: dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
 
@@ -153,13 +151,9 @@ class Plugin(Layout, ABC):
             self.__class__.get_run_input_layout(self.register_input)
 
         self.__class__.get_input_layout(self.register_input)
-        self.__class__.get_filter_layout(
-            lambda a, b: self.register_input(a, b, filter=True)
-        )
+        self.__class__.get_filter_layout(lambda a, b: self.register_input(a, b, filter=True))
         self.__class__.get_output_layout(self.register_output)
-        self.__class__.get_mpl_output_layout(
-            lambda a, b: self.register_output(a, b, mpl=True)
-        )
+        self.__class__.get_mpl_output_layout(lambda a, b: self.register_output(a, b, mpl=True))
 
         # Handles the initial and the cashed input values
         outputs = []
@@ -228,10 +222,7 @@ class Plugin(Layout, ABC):
                         _run_name = inputs["run_name"]["value"]
 
                         # Reset everything if run name changed.
-                        if (
-                            _previous_run_name is not None
-                            and _previous_run_name != _run_name
-                        ):
+                        if _previous_run_name is not None and _previous_run_name != _run_name:
                             # We can't use load_inputs here only
                             # because `run_name` would be removed.
                             # Also: We want to keep the current run name.
@@ -272,6 +263,26 @@ class Plugin(Layout, ABC):
             else:
                 raise PreventUpdate()
 
+        # Register modal here
+        @app.callback(
+            [
+                Output(self.get_internal_id("raw_data"), "is_open"),
+                Output(self.get_internal_id("raw_data_content"), "value"),
+            ],
+            Input(self.get_internal_id("show_raw_data"), "n_clicks"),
+            State(self.get_internal_id("raw_data"), "is_open"),
+        )
+        def toggle_modal(n, is_open):
+            code = ""
+            if n:
+                if (out := self.raw_outputs) is not None:
+                    # Make list
+                    code = str(out)
+
+                return not is_open, code
+
+            return is_open, code
+
     def update_alert(self, text: str, color: str = "success"):
         self.alert_text = text
         self.alert_color = color
@@ -304,12 +315,17 @@ class Plugin(Layout, ABC):
 
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
+
+        passed_runs = self.all_runs
+        passed_outputs = raw_outputs
+        if self.activate_run_selection:
+            passed_runs = self.all_runs[inputs["run_name"]["value"]]
+            passed_outputs = raw_outputs[passed_runs.name]
+
         if mpl_active:
-            outputs = self.__class__.load_mpl_outputs(
-                inputs, raw_outputs, self.all_runs
-            )
+            outputs = self.load_mpl_outputs(inputs, passed_outputs, passed_runs)
         else:
-            outputs = self.__class__.load_outputs(inputs, raw_outputs, self.all_runs)
+            outputs = self.load_outputs(inputs, passed_outputs, passed_runs)
 
         if outputs == PreventUpdate:
             raise PreventUpdate()
@@ -338,9 +354,7 @@ class Plugin(Layout, ABC):
 
         return outputs
 
-    def _list_to_dict(
-        self, values: Iterable[str], input=True
-    ) -> dict[str, dict[str, str]]:
+    def _list_to_dict(self, values: Iterable[str], input=True) -> dict[str, dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -363,9 +377,7 @@ class Plugin(Layout, ABC):
 
         return mapping
 
-    def _dict_to_list(
-        self, d: dict[str, dict[str, str]], input=False
-    ) -> list[Optional[str]]:
+    def _dict_to_list(self, d: dict[str, dict[str, str]], input=False) -> list[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
         self.inputs or self.outputs.
@@ -417,7 +429,7 @@ class Plugin(Layout, ABC):
                     if id in new_d:
                         del new_d[id]
 
-        return str(new_d)
+        return string_to_hash(str(new_d))
 
     def __call__(self, render_button=False) -> list[Component]:
         """
@@ -426,6 +438,7 @@ class Plugin(Layout, ABC):
         """
 
         self.previous_inputs = {}
+        self.raw_outputs = None
         self.runs = run_handler.get_runs()
         groups = run_handler.get_groups()
 
@@ -464,9 +477,7 @@ class Plugin(Layout, ABC):
             return components
 
         if self.activate_run_selection:
-            run_input_layout = [
-                self.__class__.get_run_input_layout(self.register_input)
-            ]
+            run_input_layout = [self.__class__.get_run_input_layout(self.register_input)]
         else:
             run_input_layout = []
 
@@ -545,12 +556,53 @@ class Plugin(Layout, ABC):
                 )
             ]
 
+        modal = html.Div(
+            [
+                dbc.Button(
+                    "Raw Data",
+                    id=self.get_internal_id("show_raw_data"),
+                    className="mt-3",
+                    n_clicks=0,
+                ),
+                dbc.Modal(
+                    [
+                        dbc.ModalHeader(
+                            [
+                                dbc.ModalTitle("Raw Data"),
+                                dcc.Clipboard(
+                                    target_id=self.get_internal_id("raw_data_content"),
+                                    style={
+                                        "fontSize": 20,
+                                        "marginLeft": "0.5rem",
+                                    },
+                                ),
+                            ]
+                        ),
+                        dbc.ModalBody(
+                            [
+                                dbc.Textarea(
+                                    id=self.get_internal_id("raw_data_content"),
+                                    placeholder="",
+                                    readonly=True,
+                                    rows=20,
+                                ),
+                            ]
+                        ),
+                    ],
+                    id=self.get_internal_id("raw_data"),
+                    size="lg",
+                    scrollable=True,
+                    is_open=False,
+                ),
+            ]
+        )
+
+        components += [modal]
+
         return components
 
     @staticmethod
-    def get_run_input_layout(
-        register: Callable[[str, Union[str, list[str]]], str]
-    ) -> Component:
+    def get_run_input_layout(register: Callable[[str, Union[str, list[str]]], str]) -> Component:
         return html.Div(
             [
                 dbc.Select(
@@ -598,9 +650,7 @@ class Plugin(Layout, ABC):
 
         return {
             "run_name": {
-                "options": get_select_options(
-                    labels=labels, values=values, disabled=disabled
-                ),
+                "options": get_select_options(labels=labels, values=values, disabled=disabled),
                 "value": None,
             }
         }
@@ -656,19 +706,61 @@ class Plugin(Layout, ABC):
     def get_mpl_output_layout(register):
         return []
 
-    @staticmethod
-    def load_outputs(inputs, outputs, runs: dict[str, AbstractRun]) -> list[Component]:
+    def load_outputs(
+        self,
+        inputs: Dict[str, Dict[str, str]],
+        outputs: Dict[str, Union[str, Dict[str, str]]],
+        runs: Union[AbstractRun, dict[str, AbstractRun]],
+    ) -> List[Component]:
         """
-        Returns:
-            list or PreventUpdate: List of outputs (for `get_output_layout`) or PreventUpdate if
-            certain conditions are not met.
+        Reads in the raw data and prepares them for the layout.
+
+        Parameters
+        ----------
+        inputs : Dict[str, Dict[str, str]]
+            Input and filter values from the user.
+        outputs : Dict[str, Union[str, Dict[str, str]]]
+            Raw outputs from the runs. If `activate_run_selection` is set,
+            a Dict[str, str] is returned.
+        runs : Union[AbstractRun, dict[str, AbstractRun]]
+            All selected runs. If `activate_run_selection` is set, only the selected run is
+            returned.
+
+        Returns
+        -------
+        List[Component]
+            The components must be in the same position as defined in `get_output_layout`.
         """
 
         return []
 
-    @staticmethod
-    def load_mpl_outputs(inputs, outputs, runs):
-        return {}
+    def load_mpl_outputs(
+        self,
+        inputs: Dict[str, Dict[str, str]],
+        outputs: Dict[str, Union[str, Dict[str, str]]],
+        runs: Union[AbstractRun, dict[str, AbstractRun]],
+    ) -> List[Component]:
+        """
+        Reads in the raw data and prepares them for the layout.
+
+        Parameters
+        ----------
+        inputs : Dict[str, Dict[str, str]]
+            Input and filter values from the user.
+        outputs : Dict[str, Union[str, Dict[str, str]]]
+            Raw outputs from the runs. If `activate_run_selection` is set,
+            a Dict[str, str] is returned.
+        runs : Union[AbstractRun, dict[str, AbstractRun]]
+            All selected runs. If `activate_run_selection` is set, only the selected run is
+            returned.
+
+        Returns
+        -------
+        List[Component]
+            The components must be in the same position as defined in `get_output_layout`.
+        """
+
+        return []
 
     @staticmethod
     @abstractmethod
@@ -676,8 +768,6 @@ class Plugin(Layout, ABC):
         pass
 
     @staticmethod
-    def _process(
-        process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs
-    ):
+    def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
         run = run_handler.from_run_cache_id(run_cache_id)
         return process(run, inputs)

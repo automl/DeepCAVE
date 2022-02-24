@@ -35,9 +35,10 @@ class BOHBRun(Run):
         # Only lock lower
         objective = Objective("Cost", lower=0)
 
-        run = BOHBRun(
-            path.stem, configspace=configspace, objectives=objective, meta={}, path=path
-        )
+        run = BOHBRun(path.stem, configspace=configspace, objectives=objective, meta={})
+
+        # TODO: Make it better
+        run._path = path
 
         from hpbandster.core.result import logged_results_to_HBS_result
 

@@ -1,5 +1,4 @@
 from typing import Type
-
 from pathlib import Path
 
 
@@ -9,7 +8,7 @@ class Config:
 
     # Cache dir
     root = Path.cwd()
-    DEFAULT_WORKING_DIRECTORY = root / "examples" / "logs" / "DeepCAVE"
+    DEFAULT_WORKING_DIRECTORY = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
 
     CACHE_DIR = root / "cache"
 
@@ -45,6 +44,8 @@ class Config:
             ParallelCoordinates,
         )
         from deepcave.plugins.static_plugin.fanova import fANOVA
+        from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
+        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
 
         plugins = {
             "Summary": [
@@ -54,7 +55,11 @@ class Config:
             "Performance Analysis": [
                 CostOverTime(),
                 CCube(),
+                ParetoFront(),
                 ParallelCoordinates(),
+            ],
+            "Budget Analysis": [
+                BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),

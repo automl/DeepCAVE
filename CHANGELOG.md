@@ -1,4 +1,44 @@
-# 0.2
+# Version 0.3
+
+## General
+- Updated tools.
+- Cleaned up (removed docker files).
+
+## Installation
+- Checks if redis-server is installed. Otherwise, aborts to start the server.
+- Added swig to anaconda environment.
+- Increased version of numpy and matplotlib.
+- Improved requirements. Fixed only crucical things.
+
+## Run
+- Added model support.
+
+## Plugins
+- Added button to receive raw data.
+- Added new plugin: Pareto Front.
+- Added new plugin: Budget Correlation.
+- Changed `load_outputs` and `load_mlp_outputs` to class method. Moreover, if
+`activate_run_selection` is true, only the the run and runs information in `outputs` is passed.
+- Cost Over Time displays maximized objectives correctly now.
+- Pre-selecting highest budget and hyperparameters (#18).
+- Replaced normalized costs with all costs in configurations.
+
+## Examples
+- Added MLP recorder example.
+- Added MLP logs for better example visualization.
+
+## Bugfixes
+- Fixed path bug for SMAC and BOHB.
+- Included `start.sh`.
+- pytest no longer needed in main code.
+- Included logging.yml (before it was loggin.yml).
+- Recorder works again.
+
+## Docs
+- Added documentation with most basic information.
+
+
+# Version 0.2
 
 ## Runs
 - Groups were replaced by `GroupedRun`. Hence, a group can be used as a normal run (`AbstractRun`).
@@ -24,7 +64,7 @@ load_inputs, load_dependency_inputs).
 - fANOVA does not work if the configspace includes constants.
 
 
-# 0.1.1
+# Version 0.1.1
 
 ## Plugins
 
@@ -36,7 +76,7 @@ load_inputs, load_dependency_inputs).
 - Installable via pip
 
 
-# 0.1
+# Version 0.1
 
 ## Features
 

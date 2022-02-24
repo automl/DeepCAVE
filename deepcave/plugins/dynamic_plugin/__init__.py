@@ -1,4 +1,5 @@
 from abc import ABC
+from dataclasses import replace
 
 from dash.dependencies import Input, Output
 
@@ -55,6 +56,9 @@ class DynamicPlugin(Plugin, ABC):
                     self.logger.debug(f"Found outputs from {run.name} in cache.")
 
                 raw_outputs[run.name] = run_outputs
+
+            # Save for modal
+            self.raw_outputs = raw_outputs
 
             # Cache last inputs
             c.set("last_inputs", self.id, value=inputs)

@@ -1,0 +1,1602 @@
+{
+    "0": {
+        "activation": "logistic",
+        "batch_size": 33,
+        "learning_rate": 0.00010692136940619521,
+        "num_neurons_layer1": 74,
+        "num_neurons_layer2": 42,
+        "solver": "adam"
+    },
+    "1": {
+        "activation": "tanh",
+        "batch_size": 23,
+        "learning_rate": 0.047440469043590935,
+        "num_neurons_layer1": 42,
+        "num_neurons_layer2": 27,
+        "solver": "adam"
+    },
+    "2": {
+        "activation": "logistic",
+        "batch_size": 15,
+        "learning_rate": 0.0002514175724378569,
+        "num_neurons_layer1": 26,
+        "num_neurons_layer2": 61,
+        "solver": "adam"
+    },
+    "3": {
+        "activation": "tanh",
+        "batch_size": 10,
+        "learning_rate": 0.021755843333884646,
+        "num_neurons_layer1": 48,
+        "num_neurons_layer2": 76,
+        "solver": "sgd"
+    },
+    "4": {
+        "activation": "tanh",
+        "batch_size": 99,
+        "learning_rate": 0.05963349696205256,
+        "num_neurons_layer1": 98,
+        "num_neurons_layer2": 63,
+        "solver": "sgd"
+    },
+    "5": {
+        "activation": "relu",
+        "batch_size": 27,
+        "learning_rate": 0.013980935975141372,
+        "num_neurons_layer1": 85,
+        "num_neurons_layer2": 60,
+        "solver": "sgd"
+    },
+    "6": {
+        "activation": "logistic",
+        "batch_size": 54,
+        "learning_rate": 0.002967944931182761,
+        "num_neurons_layer1": 92,
+        "num_neurons_layer2": 21,
+        "solver": "adam"
+    },
+    "7": {
+        "activation": "relu",
+        "batch_size": 45,
+        "learning_rate": 0.002561503235514711,
+        "num_neurons_layer1": 69,
+        "num_neurons_layer2": 70,
+        "solver": "sgd"
+    },
+    "8": {
+        "activation": "logistic",
+        "batch_size": 10,
+        "learning_rate": 0.04447621983542008,
+        "num_neurons_layer1": 47,
+        "num_neurons_layer2": 98,
+        "solver": "adam"
+    },
+    "9": {
+        "activation": "logistic",
+        "batch_size": 36,
+        "learning_rate": 0.0029189736853195668,
+        "num_neurons_layer1": 70,
+        "num_neurons_layer2": 63,
+        "solver": "sgd"
+    },
+    "10": {
+        "activation": "logistic",
+        "batch_size": 47,
+        "learning_rate": 0.0017526792918744634,
+        "num_neurons_layer1": 67,
+        "num_neurons_layer2": 36,
+        "solver": "sgd"
+    },
+    "11": {
+        "activation": "relu",
+        "batch_size": 85,
+        "learning_rate": 0.00033291691126282095,
+        "num_neurons_layer1": 7,
+        "num_neurons_layer2": 82,
+        "solver": "sgd"
+    },
+    "12": {
+        "activation": "tanh",
+        "batch_size": 91,
+        "learning_rate": 0.002666050218950296,
+        "num_neurons_layer1": 93,
+        "num_neurons_layer2": 85,
+        "solver": "adam"
+    },
+    "13": {
+        "activation": "relu",
+        "batch_size": 4,
+        "learning_rate": 0.0224359206505158,
+        "num_neurons_layer1": 57,
+        "num_neurons_layer2": 44,
+        "solver": "sgd"
+    },
+    "14": {
+        "activation": "relu",
+        "batch_size": 51,
+        "learning_rate": 0.0046696924831061935,
+        "num_neurons_layer1": 100,
+        "num_neurons_layer2": 44,
+        "solver": "adam"
+    },
+    "15": {
+        "activation": "logistic",
+        "batch_size": 17,
+        "learning_rate": 0.0003017180180207954,
+        "num_neurons_layer1": 41,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "16": {
+        "activation": "tanh",
+        "batch_size": 78,
+        "learning_rate": 0.00027007730856802744,
+        "num_neurons_layer1": 82,
+        "num_neurons_layer2": 74,
+        "solver": "adam"
+    },
+    "17": {
+        "activation": "tanh",
+        "batch_size": 87,
+        "learning_rate": 0.008879511813180573,
+        "num_neurons_layer1": 49,
+        "num_neurons_layer2": 8,
+        "solver": "adam"
+    },
+    "18": {
+        "activation": "tanh",
+        "batch_size": 42,
+        "learning_rate": 0.004146396146748889,
+        "num_neurons_layer1": 84,
+        "num_neurons_layer2": 45,
+        "solver": "adam"
+    },
+    "19": {
+        "activation": "tanh",
+        "batch_size": 14,
+        "learning_rate": 0.000948537050189139,
+        "num_neurons_layer1": 56,
+        "num_neurons_layer2": 14,
+        "solver": "adam"
+    },
+    "20": {
+        "activation": "logistic",
+        "batch_size": 4,
+        "learning_rate": 0.0002760842836077389,
+        "num_neurons_layer1": 90,
+        "num_neurons_layer2": 98,
+        "solver": "adam"
+    },
+    "21": {
+        "activation": "tanh",
+        "batch_size": 99,
+        "learning_rate": 0.00030172423957608343,
+        "num_neurons_layer1": 89,
+        "num_neurons_layer2": 60,
+        "solver": "adam"
+    },
+    "22": {
+        "activation": "logistic",
+        "batch_size": 38,
+        "learning_rate": 0.0002444764396646405,
+        "num_neurons_layer1": 36,
+        "num_neurons_layer2": 66,
+        "solver": "adam"
+    },
+    "23": {
+        "activation": "logistic",
+        "batch_size": 43,
+        "learning_rate": 0.005454653435023163,
+        "num_neurons_layer1": 43,
+        "num_neurons_layer2": 39,
+        "solver": "adam"
+    },
+    "24": {
+        "activation": "tanh",
+        "batch_size": 6,
+        "learning_rate": 0.00018913874857238286,
+        "num_neurons_layer1": 57,
+        "num_neurons_layer2": 69,
+        "solver": "adam"
+    },
+    "25": {
+        "activation": "relu",
+        "batch_size": 37,
+        "learning_rate": 0.05390563510585588,
+        "num_neurons_layer1": 64,
+        "num_neurons_layer2": 59,
+        "solver": "adam"
+    },
+    "26": {
+        "activation": "logistic",
+        "batch_size": 2,
+        "learning_rate": 0.00017738432633645788,
+        "num_neurons_layer1": 41,
+        "num_neurons_layer2": 79,
+        "solver": "sgd"
+    },
+    "27": {
+        "activation": "relu",
+        "batch_size": 24,
+        "learning_rate": 0.02518461907001484,
+        "num_neurons_layer1": 57,
+        "num_neurons_layer2": 91,
+        "solver": "adam"
+    },
+    "28": {
+        "activation": "logistic",
+        "batch_size": 77,
+        "learning_rate": 0.04279498688749446,
+        "num_neurons_layer1": 16,
+        "num_neurons_layer2": 43,
+        "solver": "sgd"
+    },
+    "29": {
+        "activation": "tanh",
+        "batch_size": 95,
+        "learning_rate": 0.00019071215312697082,
+        "num_neurons_layer1": 70,
+        "num_neurons_layer2": 90,
+        "solver": "sgd"
+    },
+    "30": {
+        "activation": "tanh",
+        "batch_size": 75,
+        "learning_rate": 0.001900717796138371,
+        "num_neurons_layer1": 32,
+        "num_neurons_layer2": 11,
+        "solver": "adam"
+    },
+    "31": {
+        "activation": "relu",
+        "batch_size": 34,
+        "learning_rate": 0.0026282218518668787,
+        "num_neurons_layer1": 9,
+        "num_neurons_layer2": 70,
+        "solver": "sgd"
+    },
+    "32": {
+        "activation": "logistic",
+        "batch_size": 49,
+        "learning_rate": 0.00550289615449773,
+        "num_neurons_layer1": 16,
+        "num_neurons_layer2": 27,
+        "solver": "adam"
+    },
+    "33": {
+        "activation": "tanh",
+        "batch_size": 34,
+        "learning_rate": 0.014084210996912115,
+        "num_neurons_layer1": 15,
+        "num_neurons_layer2": 56,
+        "solver": "adam"
+    },
+    "34": {
+        "activation": "tanh",
+        "batch_size": 18,
+        "learning_rate": 0.00012056103129408214,
+        "num_neurons_layer1": 35,
+        "num_neurons_layer2": 79,
+        "solver": "sgd"
+    },
+    "35": {
+        "activation": "tanh",
+        "batch_size": 18,
+        "learning_rate": 0.015638389292853327,
+        "num_neurons_layer1": 28,
+        "num_neurons_layer2": 76,
+        "solver": "adam"
+    },
+    "36": {
+        "activation": "logistic",
+        "batch_size": 47,
+        "learning_rate": 0.019993577771690973,
+        "num_neurons_layer1": 59,
+        "num_neurons_layer2": 74,
+        "solver": "sgd"
+    },
+    "37": {
+        "activation": "relu",
+        "batch_size": 88,
+        "learning_rate": 0.00010697919037115476,
+        "num_neurons_layer1": 92,
+        "num_neurons_layer2": 51,
+        "solver": "sgd"
+    },
+    "38": {
+        "activation": "logistic",
+        "batch_size": 95,
+        "learning_rate": 0.0008411210506036874,
+        "num_neurons_layer1": 60,
+        "num_neurons_layer2": 23,
+        "solver": "sgd"
+    },
+    "39": {
+        "activation": "relu",
+        "batch_size": 61,
+        "learning_rate": 0.0004995700723029496,
+        "num_neurons_layer1": 62,
+        "num_neurons_layer2": 24,
+        "solver": "sgd"
+    },
+    "40": {
+        "activation": "relu",
+        "batch_size": 60,
+        "learning_rate": 0.0032380405551908596,
+        "num_neurons_layer1": 27,
+        "num_neurons_layer2": 56,
+        "solver": "adam"
+    },
+    "41": {
+        "activation": "logistic",
+        "batch_size": 79,
+        "learning_rate": 0.07263804417047826,
+        "num_neurons_layer1": 60,
+        "num_neurons_layer2": 47,
+        "solver": "adam"
+    },
+    "42": {
+        "activation": "relu",
+        "batch_size": 51,
+        "learning_rate": 0.0047144811393594705,
+        "num_neurons_layer1": 19,
+        "num_neurons_layer2": 98,
+        "solver": "adam"
+    },
+    "43": {
+        "activation": "logistic",
+        "batch_size": 6,
+        "learning_rate": 0.00019606770535518652,
+        "num_neurons_layer1": 37,
+        "num_neurons_layer2": 33,
+        "solver": "sgd"
+    },
+    "44": {
+        "activation": "logistic",
+        "batch_size": 70,
+        "learning_rate": 0.0073288439116415945,
+        "num_neurons_layer1": 65,
+        "num_neurons_layer2": 12,
+        "solver": "adam"
+    },
+    "45": {
+        "activation": "logistic",
+        "batch_size": 100,
+        "learning_rate": 0.038821101159731065,
+        "num_neurons_layer1": 39,
+        "num_neurons_layer2": 74,
+        "solver": "sgd"
+    },
+    "46": {
+        "activation": "tanh",
+        "batch_size": 27,
+        "learning_rate": 0.0002970960154336435,
+        "num_neurons_layer1": 92,
+        "num_neurons_layer2": 98,
+        "solver": "sgd"
+    },
+    "47": {
+        "activation": "tanh",
+        "batch_size": 68,
+        "learning_rate": 0.09490488556677198,
+        "num_neurons_layer1": 89,
+        "num_neurons_layer2": 80,
+        "solver": "sgd"
+    },
+    "48": {
+        "activation": "relu",
+        "batch_size": 87,
+        "learning_rate": 0.00017988841802877849,
+        "num_neurons_layer1": 46,
+        "num_neurons_layer2": 28,
+        "solver": "sgd"
+    },
+    "49": {
+        "activation": "logistic",
+        "batch_size": 76,
+        "learning_rate": 0.00019203206073890733,
+        "num_neurons_layer1": 54,
+        "num_neurons_layer2": 8,
+        "solver": "sgd"
+    },
+    "50": {
+        "activation": "logistic",
+        "batch_size": 97,
+        "learning_rate": 0.007958361618800395,
+        "num_neurons_layer1": 50,
+        "num_neurons_layer2": 44,
+        "solver": "sgd"
+    },
+    "51": {
+        "activation": "tanh",
+        "batch_size": 56,
+        "learning_rate": 0.0704518529429505,
+        "num_neurons_layer1": 22,
+        "num_neurons_layer2": 89,
+        "solver": "adam"
+    },
+    "52": {
+        "activation": "logistic",
+        "batch_size": 22,
+        "learning_rate": 0.06460102686420621,
+        "num_neurons_layer1": 46,
+        "num_neurons_layer2": 46,
+        "solver": "adam"
+    },
+    "53": {
+        "activation": "tanh",
+        "batch_size": 23,
+        "learning_rate": 0.00219854259336382,
+        "num_neurons_layer1": 23,
+        "num_neurons_layer2": 32,
+        "solver": "adam"
+    },
+    "54": {
+        "activation": "relu",
+        "batch_size": 22,
+        "learning_rate": 0.015243652132199952,
+        "num_neurons_layer1": 73,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "55": {
+        "activation": "relu",
+        "batch_size": 57,
+        "learning_rate": 0.0168544247257201,
+        "num_neurons_layer1": 55,
+        "num_neurons_layer2": 79,
+        "solver": "sgd"
+    },
+    "56": {
+        "activation": "logistic",
+        "batch_size": 46,
+        "learning_rate": 0.0008336008866496359,
+        "num_neurons_layer1": 35,
+        "num_neurons_layer2": 63,
+        "solver": "adam"
+    },
+    "57": {
+        "activation": "tanh",
+        "batch_size": 98,
+        "learning_rate": 0.00022872521647046288,
+        "num_neurons_layer1": 5,
+        "num_neurons_layer2": 5,
+        "solver": "adam"
+    },
+    "58": {
+        "activation": "tanh",
+        "batch_size": 69,
+        "learning_rate": 0.002146031177136236,
+        "num_neurons_layer1": 62,
+        "num_neurons_layer2": 94,
+        "solver": "adam"
+    },
+    "59": {
+        "activation": "tanh",
+        "batch_size": 9,
+        "learning_rate": 0.0014973487269811865,
+        "num_neurons_layer1": 67,
+        "num_neurons_layer2": 69,
+        "solver": "sgd"
+    },
+    "60": {
+        "activation": "tanh",
+        "batch_size": 6,
+        "learning_rate": 0.003940465515785955,
+        "num_neurons_layer1": 5,
+        "num_neurons_layer2": 26,
+        "solver": "adam"
+    },
+    "61": {
+        "activation": "relu",
+        "batch_size": 49,
+        "learning_rate": 0.03436157369351681,
+        "num_neurons_layer1": 98,
+        "num_neurons_layer2": 7,
+        "solver": "adam"
+    },
+    "62": {
+        "activation": "relu",
+        "batch_size": 89,
+        "learning_rate": 0.004062783061261975,
+        "num_neurons_layer1": 68,
+        "num_neurons_layer2": 5,
+        "solver": "sgd"
+    },
+    "63": {
+        "activation": "relu",
+        "batch_size": 98,
+        "learning_rate": 0.010985262854329185,
+        "num_neurons_layer1": 33,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "64": {
+        "activation": "logistic",
+        "batch_size": 62,
+        "learning_rate": 0.006722529933292632,
+        "num_neurons_layer1": 24,
+        "num_neurons_layer2": 71,
+        "solver": "adam"
+    },
+    "65": {
+        "activation": "relu",
+        "batch_size": 55,
+        "learning_rate": 0.00019743948524935027,
+        "num_neurons_layer1": 93,
+        "num_neurons_layer2": 72,
+        "solver": "adam"
+    },
+    "66": {
+        "activation": "tanh",
+        "batch_size": 86,
+        "learning_rate": 0.00018883511489192024,
+        "num_neurons_layer1": 34,
+        "num_neurons_layer2": 62,
+        "solver": "sgd"
+    },
+    "67": {
+        "activation": "logistic",
+        "batch_size": 75,
+        "learning_rate": 0.00014719650049655527,
+        "num_neurons_layer1": 43,
+        "num_neurons_layer2": 56,
+        "solver": "sgd"
+    },
+    "68": {
+        "activation": "tanh",
+        "batch_size": 48,
+        "learning_rate": 0.00018180150353275997,
+        "num_neurons_layer1": 65,
+        "num_neurons_layer2": 48,
+        "solver": "sgd"
+    },
+    "69": {
+        "activation": "relu",
+        "batch_size": 68,
+        "learning_rate": 0.000514659366294201,
+        "num_neurons_layer1": 90,
+        "num_neurons_layer2": 62,
+        "solver": "sgd"
+    },
+    "70": {
+        "activation": "logistic",
+        "batch_size": 61,
+        "learning_rate": 0.03300189669194924,
+        "num_neurons_layer1": 46,
+        "num_neurons_layer2": 67,
+        "solver": "adam"
+    },
+    "71": {
+        "activation": "logistic",
+        "batch_size": 72,
+        "learning_rate": 0.0036907242366462432,
+        "num_neurons_layer1": 94,
+        "num_neurons_layer2": 40,
+        "solver": "adam"
+    },
+    "72": {
+        "activation": "relu",
+        "batch_size": 47,
+        "learning_rate": 0.0034611832195954786,
+        "num_neurons_layer1": 61,
+        "num_neurons_layer2": 69,
+        "solver": "adam"
+    },
+    "73": {
+        "activation": "logistic",
+        "batch_size": 46,
+        "learning_rate": 0.008902170759537423,
+        "num_neurons_layer1": 46,
+        "num_neurons_layer2": 48,
+        "solver": "adam"
+    },
+    "74": {
+        "activation": "logistic",
+        "batch_size": 91,
+        "learning_rate": 0.004303012742410712,
+        "num_neurons_layer1": 61,
+        "num_neurons_layer2": 13,
+        "solver": "adam"
+    },
+    "75": {
+        "activation": "logistic",
+        "batch_size": 14,
+        "learning_rate": 0.00012513992401959613,
+        "num_neurons_layer1": 39,
+        "num_neurons_layer2": 27,
+        "solver": "sgd"
+    },
+    "76": {
+        "activation": "logistic",
+        "batch_size": 23,
+        "learning_rate": 0.0055011710496201995,
+        "num_neurons_layer1": 68,
+        "num_neurons_layer2": 12,
+        "solver": "sgd"
+    },
+    "77": {
+        "activation": "logistic",
+        "batch_size": 89,
+        "learning_rate": 0.020571556105355045,
+        "num_neurons_layer1": 67,
+        "num_neurons_layer2": 35,
+        "solver": "adam"
+    },
+    "78": {
+        "activation": "logistic",
+        "batch_size": 91,
+        "learning_rate": 0.0013448681944065045,
+        "num_neurons_layer1": 83,
+        "num_neurons_layer2": 63,
+        "solver": "sgd"
+    },
+    "79": {
+        "activation": "relu",
+        "batch_size": 65,
+        "learning_rate": 0.002972173945010841,
+        "num_neurons_layer1": 43,
+        "num_neurons_layer2": 40,
+        "solver": "adam"
+    },
+    "80": {
+        "activation": "logistic",
+        "batch_size": 33,
+        "learning_rate": 0.08808846480321443,
+        "num_neurons_layer1": 8,
+        "num_neurons_layer2": 74,
+        "solver": "adam"
+    },
+    "81": {
+        "activation": "relu",
+        "batch_size": 52,
+        "learning_rate": 0.0005419437882623262,
+        "num_neurons_layer1": 99,
+        "num_neurons_layer2": 70,
+        "solver": "adam"
+    },
+    "82": {
+        "activation": "tanh",
+        "batch_size": 1,
+        "learning_rate": 0.0013273015144132188,
+        "num_neurons_layer1": 48,
+        "num_neurons_layer2": 18,
+        "solver": "adam"
+    },
+    "83": {
+        "activation": "tanh",
+        "batch_size": 32,
+        "learning_rate": 0.00013708152460778115,
+        "num_neurons_layer1": 95,
+        "num_neurons_layer2": 21,
+        "solver": "sgd"
+    },
+    "84": {
+        "activation": "tanh",
+        "batch_size": 43,
+        "learning_rate": 0.0008515358171613973,
+        "num_neurons_layer1": 69,
+        "num_neurons_layer2": 11,
+        "solver": "adam"
+    },
+    "85": {
+        "activation": "logistic",
+        "batch_size": 89,
+        "learning_rate": 0.03122900876784166,
+        "num_neurons_layer1": 30,
+        "num_neurons_layer2": 30,
+        "solver": "adam"
+    },
+    "86": {
+        "activation": "tanh",
+        "batch_size": 68,
+        "learning_rate": 0.02636747287804367,
+        "num_neurons_layer1": 59,
+        "num_neurons_layer2": 38,
+        "solver": "adam"
+    },
+    "87": {
+        "activation": "tanh",
+        "batch_size": 46,
+        "learning_rate": 0.008319025698678402,
+        "num_neurons_layer1": 96,
+        "num_neurons_layer2": 13,
+        "solver": "sgd"
+    },
+    "88": {
+        "activation": "tanh",
+        "batch_size": 49,
+        "learning_rate": 0.0012714731864073864,
+        "num_neurons_layer1": 15,
+        "num_neurons_layer2": 62,
+        "solver": "adam"
+    },
+    "89": {
+        "activation": "logistic",
+        "batch_size": 79,
+        "learning_rate": 0.0008674808319887651,
+        "num_neurons_layer1": 31,
+        "num_neurons_layer2": 73,
+        "solver": "sgd"
+    },
+    "90": {
+        "activation": "tanh",
+        "batch_size": 23,
+        "learning_rate": 0.025439492908065346,
+        "num_neurons_layer1": 12,
+        "num_neurons_layer2": 20,
+        "solver": "sgd"
+    },
+    "91": {
+        "activation": "relu",
+        "batch_size": 89,
+        "learning_rate": 0.00016268276973912014,
+        "num_neurons_layer1": 78,
+        "num_neurons_layer2": 37,
+        "solver": "adam"
+    },
+    "92": {
+        "activation": "logistic",
+        "batch_size": 32,
+        "learning_rate": 0.01123877252499521,
+        "num_neurons_layer1": 7,
+        "num_neurons_layer2": 74,
+        "solver": "sgd"
+    },
+    "93": {
+        "activation": "tanh",
+        "batch_size": 96,
+        "learning_rate": 0.0013873554193885346,
+        "num_neurons_layer1": 18,
+        "num_neurons_layer2": 68,
+        "solver": "sgd"
+    },
+    "94": {
+        "activation": "relu",
+        "batch_size": 48,
+        "learning_rate": 0.007976141849330721,
+        "num_neurons_layer1": 30,
+        "num_neurons_layer2": 87,
+        "solver": "adam"
+    },
+    "95": {
+        "activation": "logistic",
+        "batch_size": 72,
+        "learning_rate": 0.06034444097220806,
+        "num_neurons_layer1": 88,
+        "num_neurons_layer2": 58,
+        "solver": "adam"
+    },
+    "96": {
+        "activation": "relu",
+        "batch_size": 16,
+        "learning_rate": 0.03646030964215227,
+        "num_neurons_layer1": 22,
+        "num_neurons_layer2": 7,
+        "solver": "sgd"
+    },
+    "97": {
+        "activation": "logistic",
+        "batch_size": 74,
+        "learning_rate": 0.003111959494946525,
+        "num_neurons_layer1": 46,
+        "num_neurons_layer2": 10,
+        "solver": "adam"
+    },
+    "98": {
+        "activation": "tanh",
+        "batch_size": 65,
+        "learning_rate": 0.0019208928344769689,
+        "num_neurons_layer1": 36,
+        "num_neurons_layer2": 12,
+        "solver": "sgd"
+    },
+    "99": {
+        "activation": "relu",
+        "batch_size": 22,
+        "learning_rate": 0.029354747838818043,
+        "num_neurons_layer1": 61,
+        "num_neurons_layer2": 54,
+        "solver": "adam"
+    },
+    "100": {
+        "activation": "relu",
+        "batch_size": 19,
+        "learning_rate": 0.016393804140432084,
+        "num_neurons_layer1": 94,
+        "num_neurons_layer2": 77,
+        "solver": "adam"
+    },
+    "101": {
+        "activation": "tanh",
+        "batch_size": 81,
+        "learning_rate": 0.0021949848219090544,
+        "num_neurons_layer1": 95,
+        "num_neurons_layer2": 8,
+        "solver": "adam"
+    },
+    "102": {
+        "activation": "logistic",
+        "batch_size": 75,
+        "learning_rate": 0.0806694550786967,
+        "num_neurons_layer1": 10,
+        "num_neurons_layer2": 48,
+        "solver": "sgd"
+    },
+    "103": {
+        "activation": "tanh",
+        "batch_size": 68,
+        "learning_rate": 0.0012288072739815529,
+        "num_neurons_layer1": 62,
+        "num_neurons_layer2": 84,
+        "solver": "sgd"
+    },
+    "104": {
+        "activation": "tanh",
+        "batch_size": 28,
+        "learning_rate": 0.0015581184665760632,
+        "num_neurons_layer1": 90,
+        "num_neurons_layer2": 69,
+        "solver": "sgd"
+    },
+    "105": {
+        "activation": "logistic",
+        "batch_size": 18,
+        "learning_rate": 0.01644553391268127,
+        "num_neurons_layer1": 79,
+        "num_neurons_layer2": 57,
+        "solver": "adam"
+    },
+    "106": {
+        "activation": "relu",
+        "batch_size": 71,
+        "learning_rate": 0.002224591549288191,
+        "num_neurons_layer1": 25,
+        "num_neurons_layer2": 61,
+        "solver": "sgd"
+    },
+    "107": {
+        "activation": "relu",
+        "batch_size": 47,
+        "learning_rate": 0.06484150579024106,
+        "num_neurons_layer1": 78,
+        "num_neurons_layer2": 91,
+        "solver": "adam"
+    },
+    "108": {
+        "activation": "relu",
+        "batch_size": 85,
+        "learning_rate": 0.0005911537602431929,
+        "num_neurons_layer1": 23,
+        "num_neurons_layer2": 60,
+        "solver": "adam"
+    },
+    "109": {
+        "activation": "relu",
+        "batch_size": 21,
+        "learning_rate": 0.0013972670627314207,
+        "num_neurons_layer1": 91,
+        "num_neurons_layer2": 45,
+        "solver": "sgd"
+    },
+    "110": {
+        "activation": "tanh",
+        "batch_size": 17,
+        "learning_rate": 0.01234311713671661,
+        "num_neurons_layer1": 5,
+        "num_neurons_layer2": 72,
+        "solver": "adam"
+    },
+    "111": {
+        "activation": "relu",
+        "batch_size": 13,
+        "learning_rate": 0.049114566344388516,
+        "num_neurons_layer1": 13,
+        "num_neurons_layer2": 39,
+        "solver": "sgd"
+    },
+    "112": {
+        "activation": "relu",
+        "batch_size": 73,
+        "learning_rate": 0.00023077015342954962,
+        "num_neurons_layer1": 64,
+        "num_neurons_layer2": 98,
+        "solver": "adam"
+    },
+    "113": {
+        "activation": "relu",
+        "batch_size": 4,
+        "learning_rate": 0.000530440968675949,
+        "num_neurons_layer1": 41,
+        "num_neurons_layer2": 88,
+        "solver": "sgd"
+    },
+    "114": {
+        "activation": "relu",
+        "batch_size": 75,
+        "learning_rate": 0.00048393923062648657,
+        "num_neurons_layer1": 14,
+        "num_neurons_layer2": 20,
+        "solver": "adam"
+    },
+    "115": {
+        "activation": "relu",
+        "batch_size": 10,
+        "learning_rate": 0.0029412232239026948,
+        "num_neurons_layer1": 99,
+        "num_neurons_layer2": 70,
+        "solver": "adam"
+    },
+    "116": {
+        "activation": "logistic",
+        "batch_size": 22,
+        "learning_rate": 0.04726808768246495,
+        "num_neurons_layer1": 91,
+        "num_neurons_layer2": 8,
+        "solver": "sgd"
+    },
+    "117": {
+        "activation": "tanh",
+        "batch_size": 75,
+        "learning_rate": 0.001186649403734664,
+        "num_neurons_layer1": 31,
+        "num_neurons_layer2": 89,
+        "solver": "sgd"
+    },
+    "118": {
+        "activation": "relu",
+        "batch_size": 74,
+        "learning_rate": 0.0014312393090822645,
+        "num_neurons_layer1": 50,
+        "num_neurons_layer2": 86,
+        "solver": "adam"
+    },
+    "119": {
+        "activation": "relu",
+        "batch_size": 5,
+        "learning_rate": 0.05625758149691337,
+        "num_neurons_layer1": 51,
+        "num_neurons_layer2": 53,
+        "solver": "sgd"
+    },
+    "120": {
+        "activation": "tanh",
+        "batch_size": 21,
+        "learning_rate": 0.00021950778184358602,
+        "num_neurons_layer1": 53,
+        "num_neurons_layer2": 17,
+        "solver": "adam"
+    },
+    "121": {
+        "activation": "relu",
+        "batch_size": 29,
+        "learning_rate": 0.007823059343867643,
+        "num_neurons_layer1": 97,
+        "num_neurons_layer2": 64,
+        "solver": "adam"
+    },
+    "122": {
+        "activation": "tanh",
+        "batch_size": 68,
+        "learning_rate": 0.00025029086332139204,
+        "num_neurons_layer1": 14,
+        "num_neurons_layer2": 27,
+        "solver": "adam"
+    },
+    "123": {
+        "activation": "logistic",
+        "batch_size": 7,
+        "learning_rate": 0.001326580908681814,
+        "num_neurons_layer1": 8,
+        "num_neurons_layer2": 65,
+        "solver": "adam"
+    },
+    "124": {
+        "activation": "relu",
+        "batch_size": 56,
+        "learning_rate": 0.0009401877555514359,
+        "num_neurons_layer1": 51,
+        "num_neurons_layer2": 71,
+        "solver": "adam"
+    },
+    "125": {
+        "activation": "relu",
+        "batch_size": 1,
+        "learning_rate": 0.010973536508966776,
+        "num_neurons_layer1": 48,
+        "num_neurons_layer2": 15,
+        "solver": "sgd"
+    },
+    "126": {
+        "activation": "logistic",
+        "batch_size": 84,
+        "learning_rate": 0.02435590314894912,
+        "num_neurons_layer1": 27,
+        "num_neurons_layer2": 50,
+        "solver": "sgd"
+    },
+    "127": {
+        "activation": "relu",
+        "batch_size": 99,
+        "learning_rate": 0.0032493824884104352,
+        "num_neurons_layer1": 10,
+        "num_neurons_layer2": 61,
+        "solver": "sgd"
+    },
+    "128": {
+        "activation": "logistic",
+        "batch_size": 71,
+        "learning_rate": 0.000773975413914706,
+        "num_neurons_layer1": 16,
+        "num_neurons_layer2": 29,
+        "solver": "adam"
+    },
+    "129": {
+        "activation": "logistic",
+        "batch_size": 19,
+        "learning_rate": 0.045486948910724245,
+        "num_neurons_layer1": 87,
+        "num_neurons_layer2": 24,
+        "solver": "sgd"
+    },
+    "130": {
+        "activation": "relu",
+        "batch_size": 52,
+        "learning_rate": 0.0011366105498436872,
+        "num_neurons_layer1": 43,
+        "num_neurons_layer2": 66,
+        "solver": "sgd"
+    },
+    "131": {
+        "activation": "logistic",
+        "batch_size": 59,
+        "learning_rate": 0.016412359190044388,
+        "num_neurons_layer1": 41,
+        "num_neurons_layer2": 78,
+        "solver": "sgd"
+    },
+    "132": {
+        "activation": "relu",
+        "batch_size": 79,
+        "learning_rate": 0.004635363418637764,
+        "num_neurons_layer1": 7,
+        "num_neurons_layer2": 39,
+        "solver": "adam"
+    },
+    "133": {
+        "activation": "relu",
+        "batch_size": 61,
+        "learning_rate": 0.0004023028784865991,
+        "num_neurons_layer1": 40,
+        "num_neurons_layer2": 73,
+        "solver": "sgd"
+    },
+    "134": {
+        "activation": "relu",
+        "batch_size": 22,
+        "learning_rate": 0.004421374364516155,
+        "num_neurons_layer1": 68,
+        "num_neurons_layer2": 61,
+        "solver": "sgd"
+    },
+    "135": {
+        "activation": "logistic",
+        "batch_size": 46,
+        "learning_rate": 0.003621833557929501,
+        "num_neurons_layer1": 65,
+        "num_neurons_layer2": 82,
+        "solver": "sgd"
+    },
+    "136": {
+        "activation": "logistic",
+        "batch_size": 88,
+        "learning_rate": 0.0011126228953059205,
+        "num_neurons_layer1": 92,
+        "num_neurons_layer2": 24,
+        "solver": "adam"
+    },
+    "137": {
+        "activation": "logistic",
+        "batch_size": 50,
+        "learning_rate": 0.00011853862114522085,
+        "num_neurons_layer1": 69,
+        "num_neurons_layer2": 81,
+        "solver": "sgd"
+    },
+    "138": {
+        "activation": "tanh",
+        "batch_size": 72,
+        "learning_rate": 0.0002795682901688766,
+        "num_neurons_layer1": 36,
+        "num_neurons_layer2": 30,
+        "solver": "adam"
+    },
+    "139": {
+        "activation": "relu",
+        "batch_size": 49,
+        "learning_rate": 0.0002486314796195622,
+        "num_neurons_layer1": 35,
+        "num_neurons_layer2": 33,
+        "solver": "adam"
+    },
+    "140": {
+        "activation": "logistic",
+        "batch_size": 71,
+        "learning_rate": 0.013296960787354565,
+        "num_neurons_layer1": 84,
+        "num_neurons_layer2": 98,
+        "solver": "sgd"
+    },
+    "141": {
+        "activation": "tanh",
+        "batch_size": 50,
+        "learning_rate": 0.013403442040482907,
+        "num_neurons_layer1": 79,
+        "num_neurons_layer2": 9,
+        "solver": "adam"
+    },
+    "142": {
+        "activation": "relu",
+        "batch_size": 85,
+        "learning_rate": 0.006842979568500903,
+        "num_neurons_layer1": 31,
+        "num_neurons_layer2": 23,
+        "solver": "sgd"
+    },
+    "143": {
+        "activation": "relu",
+        "batch_size": 20,
+        "learning_rate": 0.010368622161797715,
+        "num_neurons_layer1": 73,
+        "num_neurons_layer2": 55,
+        "solver": "adam"
+    },
+    "144": {
+        "activation": "relu",
+        "batch_size": 78,
+        "learning_rate": 0.00220063295473797,
+        "num_neurons_layer1": 58,
+        "num_neurons_layer2": 41,
+        "solver": "sgd"
+    },
+    "145": {
+        "activation": "tanh",
+        "batch_size": 98,
+        "learning_rate": 0.012252691725045393,
+        "num_neurons_layer1": 43,
+        "num_neurons_layer2": 28,
+        "solver": "sgd"
+    },
+    "146": {
+        "activation": "logistic",
+        "batch_size": 87,
+        "learning_rate": 0.0013645153780983874,
+        "num_neurons_layer1": 55,
+        "num_neurons_layer2": 70,
+        "solver": "adam"
+    },
+    "147": {
+        "activation": "logistic",
+        "batch_size": 79,
+        "learning_rate": 0.00019957040922957947,
+        "num_neurons_layer1": 13,
+        "num_neurons_layer2": 69,
+        "solver": "sgd"
+    },
+    "148": {
+        "activation": "logistic",
+        "batch_size": 99,
+        "learning_rate": 0.07599243367711334,
+        "num_neurons_layer1": 68,
+        "num_neurons_layer2": 97,
+        "solver": "adam"
+    },
+    "149": {
+        "activation": "logistic",
+        "batch_size": 76,
+        "learning_rate": 0.00016493139884159262,
+        "num_neurons_layer1": 7,
+        "num_neurons_layer2": 89,
+        "solver": "sgd"
+    },
+    "150": {
+        "activation": "relu",
+        "batch_size": 1,
+        "learning_rate": 0.00011426199942943551,
+        "num_neurons_layer1": 90,
+        "num_neurons_layer2": 100,
+        "solver": "adam"
+    },
+    "151": {
+        "activation": "relu",
+        "batch_size": 27,
+        "learning_rate": 0.08683998816479349,
+        "num_neurons_layer1": 70,
+        "num_neurons_layer2": 39,
+        "solver": "adam"
+    },
+    "152": {
+        "activation": "logistic",
+        "batch_size": 42,
+        "learning_rate": 0.00027889084822793966,
+        "num_neurons_layer1": 90,
+        "num_neurons_layer2": 9,
+        "solver": "adam"
+    },
+    "153": {
+        "activation": "logistic",
+        "batch_size": 43,
+        "learning_rate": 0.0005971823537755239,
+        "num_neurons_layer1": 5,
+        "num_neurons_layer2": 36,
+        "solver": "adam"
+    },
+    "154": {
+        "activation": "logistic",
+        "batch_size": 30,
+        "learning_rate": 0.0004431864101064889,
+        "num_neurons_layer1": 94,
+        "num_neurons_layer2": 52,
+        "solver": "adam"
+    },
+    "155": {
+        "activation": "tanh",
+        "batch_size": 41,
+        "learning_rate": 0.005492084305509036,
+        "num_neurons_layer1": 96,
+        "num_neurons_layer2": 21,
+        "solver": "sgd"
+    },
+    "156": {
+        "activation": "relu",
+        "batch_size": 13,
+        "learning_rate": 0.08457754120740348,
+        "num_neurons_layer1": 81,
+        "num_neurons_layer2": 13,
+        "solver": "sgd"
+    },
+    "157": {
+        "activation": "logistic",
+        "batch_size": 99,
+        "learning_rate": 0.0006592144277485168,
+        "num_neurons_layer1": 100,
+        "num_neurons_layer2": 48,
+        "solver": "adam"
+    },
+    "158": {
+        "activation": "logistic",
+        "batch_size": 41,
+        "learning_rate": 0.08132521527160806,
+        "num_neurons_layer1": 39,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "159": {
+        "activation": "tanh",
+        "batch_size": 57,
+        "learning_rate": 0.00011925924260862234,
+        "num_neurons_layer1": 86,
+        "num_neurons_layer2": 78,
+        "solver": "sgd"
+    },
+    "160": {
+        "activation": "logistic",
+        "batch_size": 35,
+        "learning_rate": 0.046145687028230985,
+        "num_neurons_layer1": 78,
+        "num_neurons_layer2": 34,
+        "solver": "adam"
+    },
+    "161": {
+        "activation": "relu",
+        "batch_size": 79,
+        "learning_rate": 0.013360617006291386,
+        "num_neurons_layer1": 74,
+        "num_neurons_layer2": 90,
+        "solver": "adam"
+    },
+    "162": {
+        "activation": "tanh",
+        "batch_size": 42,
+        "learning_rate": 0.0006812727544031592,
+        "num_neurons_layer1": 65,
+        "num_neurons_layer2": 71,
+        "solver": "adam"
+    },
+    "163": {
+        "activation": "tanh",
+        "batch_size": 36,
+        "learning_rate": 0.04837150239098818,
+        "num_neurons_layer1": 34,
+        "num_neurons_layer2": 49,
+        "solver": "adam"
+    },
+    "164": {
+        "activation": "tanh",
+        "batch_size": 40,
+        "learning_rate": 0.00012010681702500434,
+        "num_neurons_layer1": 56,
+        "num_neurons_layer2": 30,
+        "solver": "sgd"
+    },
+    "165": {
+        "activation": "logistic",
+        "batch_size": 31,
+        "learning_rate": 0.0075319920341090215,
+        "num_neurons_layer1": 31,
+        "num_neurons_layer2": 60,
+        "solver": "sgd"
+    },
+    "166": {
+        "activation": "logistic",
+        "batch_size": 78,
+        "learning_rate": 0.0009741551536163097,
+        "num_neurons_layer1": 5,
+        "num_neurons_layer2": 23,
+        "solver": "adam"
+    },
+    "167": {
+        "activation": "logistic",
+        "batch_size": 93,
+        "learning_rate": 0.0796825808518875,
+        "num_neurons_layer1": 7,
+        "num_neurons_layer2": 76,
+        "solver": "sgd"
+    },
+    "168": {
+        "activation": "tanh",
+        "batch_size": 33,
+        "learning_rate": 0.00032042708169439796,
+        "num_neurons_layer1": 18,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "169": {
+        "activation": "tanh",
+        "batch_size": 96,
+        "learning_rate": 0.050634783679682265,
+        "num_neurons_layer1": 54,
+        "num_neurons_layer2": 68,
+        "solver": "adam"
+    },
+    "170": {
+        "activation": "relu",
+        "batch_size": 2,
+        "learning_rate": 0.000976802927690476,
+        "num_neurons_layer1": 26,
+        "num_neurons_layer2": 74,
+        "solver": "sgd"
+    },
+    "171": {
+        "activation": "tanh",
+        "batch_size": 54,
+        "learning_rate": 0.04652645518107717,
+        "num_neurons_layer1": 40,
+        "num_neurons_layer2": 20,
+        "solver": "sgd"
+    },
+    "172": {
+        "activation": "logistic",
+        "batch_size": 31,
+        "learning_rate": 0.0034463150474326847,
+        "num_neurons_layer1": 10,
+        "num_neurons_layer2": 76,
+        "solver": "adam"
+    },
+    "173": {
+        "activation": "logistic",
+        "batch_size": 89,
+        "learning_rate": 0.003403194109172742,
+        "num_neurons_layer1": 92,
+        "num_neurons_layer2": 52,
+        "solver": "sgd"
+    },
+    "174": {
+        "activation": "tanh",
+        "batch_size": 26,
+        "learning_rate": 0.0014470430799511046,
+        "num_neurons_layer1": 89,
+        "num_neurons_layer2": 13,
+        "solver": "sgd"
+    },
+    "175": {
+        "activation": "relu",
+        "batch_size": 68,
+        "learning_rate": 0.003892842274718587,
+        "num_neurons_layer1": 91,
+        "num_neurons_layer2": 42,
+        "solver": "sgd"
+    },
+    "176": {
+        "activation": "tanh",
+        "batch_size": 82,
+        "learning_rate": 0.06825310962256337,
+        "num_neurons_layer1": 36,
+        "num_neurons_layer2": 75,
+        "solver": "adam"
+    },
+    "177": {
+        "activation": "tanh",
+        "batch_size": 44,
+        "learning_rate": 0.04770750900045619,
+        "num_neurons_layer1": 73,
+        "num_neurons_layer2": 60,
+        "solver": "adam"
+    },
+    "178": {
+        "activation": "tanh",
+        "batch_size": 76,
+        "learning_rate": 0.010748384636695973,
+        "num_neurons_layer1": 45,
+        "num_neurons_layer2": 34,
+        "solver": "sgd"
+    },
+    "179": {
+        "activation": "logistic",
+        "batch_size": 83,
+        "learning_rate": 0.008261942221286855,
+        "num_neurons_layer1": 33,
+        "num_neurons_layer2": 99,
+        "solver": "adam"
+    },
+    "180": {
+        "activation": "logistic",
+        "batch_size": 38,
+        "learning_rate": 0.004416558764615756,
+        "num_neurons_layer1": 11,
+        "num_neurons_layer2": 60,
+        "solver": "sgd"
+    },
+    "181": {
+        "activation": "logistic",
+        "batch_size": 10,
+        "learning_rate": 0.0006577325783951969,
+        "num_neurons_layer1": 45,
+        "num_neurons_layer2": 95,
+        "solver": "adam"
+    },
+    "182": {
+        "activation": "tanh",
+        "batch_size": 26,
+        "learning_rate": 0.0002784876410356409,
+        "num_neurons_layer1": 42,
+        "num_neurons_layer2": 58,
+        "solver": "sgd"
+    },
+    "183": {
+        "activation": "relu",
+        "batch_size": 60,
+        "learning_rate": 0.037060299993716184,
+        "num_neurons_layer1": 20,
+        "num_neurons_layer2": 59,
+        "solver": "adam"
+    },
+    "184": {
+        "activation": "tanh",
+        "batch_size": 48,
+        "learning_rate": 0.008038414503029114,
+        "num_neurons_layer1": 38,
+        "num_neurons_layer2": 9,
+        "solver": "sgd"
+    },
+    "185": {
+        "activation": "tanh",
+        "batch_size": 49,
+        "learning_rate": 0.0007923744854197723,
+        "num_neurons_layer1": 14,
+        "num_neurons_layer2": 14,
+        "solver": "sgd"
+    },
+    "186": {
+        "activation": "logistic",
+        "batch_size": 46,
+        "learning_rate": 0.0024024763390000257,
+        "num_neurons_layer1": 88,
+        "num_neurons_layer2": 63,
+        "solver": "adam"
+    },
+    "187": {
+        "activation": "logistic",
+        "batch_size": 53,
+        "learning_rate": 0.00011846285407505,
+        "num_neurons_layer1": 69,
+        "num_neurons_layer2": 75,
+        "solver": "sgd"
+    },
+    "188": {
+        "activation": "tanh",
+        "batch_size": 45,
+        "learning_rate": 0.004722753763441332,
+        "num_neurons_layer1": 23,
+        "num_neurons_layer2": 28,
+        "solver": "sgd"
+    },
+    "189": {
+        "activation": "relu",
+        "batch_size": 86,
+        "learning_rate": 0.0012118658610195958,
+        "num_neurons_layer1": 93,
+        "num_neurons_layer2": 97,
+        "solver": "adam"
+    },
+    "190": {
+        "activation": "logistic",
+        "batch_size": 44,
+        "learning_rate": 0.003222022896557763,
+        "num_neurons_layer1": 60,
+        "num_neurons_layer2": 76,
+        "solver": "adam"
+    },
+    "191": {
+        "activation": "relu",
+        "batch_size": 83,
+        "learning_rate": 0.00028898986499238097,
+        "num_neurons_layer1": 48,
+        "num_neurons_layer2": 27,
+        "solver": "sgd"
+    },
+    "192": {
+        "activation": "relu",
+        "batch_size": 51,
+        "learning_rate": 0.0018902659542680419,
+        "num_neurons_layer1": 66,
+        "num_neurons_layer2": 66,
+        "solver": "sgd"
+    },
+    "193": {
+        "activation": "tanh",
+        "batch_size": 9,
+        "learning_rate": 0.052301665858397066,
+        "num_neurons_layer1": 29,
+        "num_neurons_layer2": 37,
+        "solver": "sgd"
+    },
+    "194": {
+        "activation": "tanh",
+        "batch_size": 67,
+        "learning_rate": 0.00010605588446665955,
+        "num_neurons_layer1": 57,
+        "num_neurons_layer2": 74,
+        "solver": "adam"
+    },
+    "195": {
+        "activation": "tanh",
+        "batch_size": 21,
+        "learning_rate": 0.08064775813268976,
+        "num_neurons_layer1": 17,
+        "num_neurons_layer2": 61,
+        "solver": "adam"
+    },
+    "196": {
+        "activation": "relu",
+        "batch_size": 85,
+        "learning_rate": 0.011821733814219023,
+        "num_neurons_layer1": 24,
+        "num_neurons_layer2": 77,
+        "solver": "sgd"
+    },
+    "197": {
+        "activation": "logistic",
+        "batch_size": 69,
+        "learning_rate": 0.00019872347965946876,
+        "num_neurons_layer1": 54,
+        "num_neurons_layer2": 29,
+        "solver": "sgd"
+    },
+    "198": {
+        "activation": "logistic",
+        "batch_size": 18,
+        "learning_rate": 0.0007401634369831802,
+        "num_neurons_layer1": 14,
+        "num_neurons_layer2": 94,
+        "solver": "sgd"
+    },
+    "199": {
+        "activation": "tanh",
+        "batch_size": 7,
+        "learning_rate": 0.004142100579217469,
+        "num_neurons_layer1": 86,
+        "num_neurons_layer2": 100,
+        "solver": "sgd"
+    }
+}

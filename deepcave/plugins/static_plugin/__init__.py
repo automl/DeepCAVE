@@ -88,6 +88,9 @@ class StaticPlugin(Plugin, ABC):
 
                 if inputs_changed or self._refresh_required:
                     c.set("last_inputs", self.id, value=inputs)
+                    
+                    # Save for modal
+                    self.raw_outputs = raw_outputs
 
                     outputs = self._process_raw_outputs(inputs, raw_outputs)
                     self._refresh_required = False

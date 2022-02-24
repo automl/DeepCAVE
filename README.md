@@ -25,7 +25,13 @@ git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
 conda env create -f environment.yml
 conda activate DeepCAVE
-pip install .
+make install
+```
+to your ```~/.bash_profile``` to enable multi-processing.
+
+If you want to contribute to DeepCAVE also install the dev packages:
+```
+make install-dev
 ```
 
 

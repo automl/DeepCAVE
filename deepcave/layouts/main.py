@@ -65,9 +65,7 @@ class MainLayout(Layout):
                                         html.Div(
                                             className="",
                                             children=[
-                                                dcc.Location(
-                                                    id="on-page-load", refresh=False
-                                                ),
+                                                dcc.Location(id="on-page-load", refresh=False),
                                                 html.Div(id="content"),
                                                 html.Div(id="general_message"),
                                             ],

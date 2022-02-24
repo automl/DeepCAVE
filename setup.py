@@ -22,25 +22,20 @@ extras_require = {
         "pydocstyle",
         "pre-commit",
         "flake8",
-        # Examples
-        "matplotlib",
-        "jupyter",
-        "notebook",
-        "seaborn",
         # Docs
-        "sphinx<4.3",
-        "sphinx-gallery",
-        "sphinx_bootstrap_theme",
-        "numpydoc",
-        "sphinx_toolbox",
-        "docutils==0.16",
+        "automl-sphinx-theme>=0.1.8",
+    ],
+    "examples": [
+        "torch",
+        "torchvision",
+        "pytorch-lightning",
     ],
 }
 
 
 setuptools.setup(
     name="deepcave",
-    author_email="{sass, lindauer}@tnt.uni-hannover.de",
+    author_email="sass@tnt.uni-hannover.de",
     description="An interactive framework to visualize and analyze your AutoML process in real-time.",
     long_description=read_file("README.md"),
     long_description_content_type="text/markdown",
@@ -54,7 +49,8 @@ setuptools.setup(
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
-    python_requires=">=3.9",
+    package_data={"deepcave": ["logging.yml"]},
+    python_requires=">=3.8",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
@@ -63,6 +59,7 @@ setuptools.setup(
     test_suite="pytest",
     platforms=["Linux"],
     classifiers=[
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Development Status :: 3 - Alpha",

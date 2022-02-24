@@ -49,6 +49,14 @@ class Objective(dict):
 
         super().__init__(data)
 
+    def __eq__(self, other):
+        attributes = ["name", "lower", "upper", "lock_lower", "lock_upper", "optimize"]
+        for a in attributes:
+            if self[a] != other[a]:
+                return False
+
+        return True
+
     def merge(self, objective: "Objective"):
         from deepcave.runs.grouped_run import NotMergeableError
 

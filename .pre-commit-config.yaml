@@ -1,43 +1,38 @@
+# If you see me, please update my `rev` field using the provided links
+# Click the repo and update to latest tags.
+# If things break on update, raise an issue
 repos:
-
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
       - id: isort
         name: isort imports deepcave
-        files: deepcave/.*
-        args: [--check]
+        files: deepcave
 
       - id: isort
-        name: isort imports test
-        files: test/.*
-        args: [--check]
+        name: isort imports tests
+        files: tests
 
   - repo: https://github.com/ambv/black
-    rev: 21.12b0
+    rev: 22.1.0
     hooks:
       - id: black
         name: black formatter deepcave
-        files: deepcave/.*
-        args: [--check]
+        files: deepcave
 
       - id: black
-        name: black formatter test
-        files: test/.*
-        args: [--check]
+        name: black formatter tests
+        files: tests
 
       - id: black
         name: black formatter examples
-        files: examples/.*
-        args: [--check]
+        files: examples
 
-  # This is disabled as most modules fail this
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.1.1
     hooks:
       - id: pydocstyle
-        files: DISABLED  # deepcave/.*
-        always_run: false
+        files: deepcave
         additional_dependencies: ["toml"] # Needed to parse pyproject.toml
 
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -45,15 +40,15 @@ repos:
     hooks:
       - id: mypy
         name: mypy deepcave
-        files: deepcave/.*
+        files: deepcave
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: 4.0.1
     hooks:
       - id: flake8
         name: flake8 deepcave
-        files: deepcave/.*
+        files: deepcave
 
       - id: flake8
-        name: flake8 test
-        files: test/.*
+        name: flake8 tests
+        files: tests
