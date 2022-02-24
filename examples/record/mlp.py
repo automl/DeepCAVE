@@ -23,24 +23,16 @@ def get_dataset():
     digits = load_digits()
 
     X, y = digits.data, digits.target
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, stratify=y, random_state=0
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=0)
 
     return X_train, X_test, y_train, y_test
 
 
 def get_configspace(seed):
     configspace = ConfigurationSpace(seed=seed)
-    num_neurons_layer1 = UniformIntegerHyperparameter(
-        name="num_neurons_layer1", lower=5, upper=100
-    )
-    num_neurons_layer2 = UniformIntegerHyperparameter(
-        name="num_neurons_layer2", lower=5, upper=100
-    )
-    activation = CategoricalHyperparameter(
-        name="activation", choices=["logistic", "tanh", "relu"]
-    )
+    num_neurons_layer1 = UniformIntegerHyperparameter(name="num_neurons_layer1", lower=5, upper=100)
+    num_neurons_layer2 = UniformIntegerHyperparameter(name="num_neurons_layer2", lower=5, upper=100)
+    activation = CategoricalHyperparameter(name="activation", choices=["logistic", "tanh", "relu"])
     solver = CategoricalHyperparameter(name="solver", choices=["sgd", "adam"])
     batch_size = UniformIntegerHyperparameter(name="batch_size", lower=1, upper=100)
     learning_rate = UniformFloatHyperparameter(
@@ -75,14 +67,12 @@ if __name__ == "__main__":
     # Others
     num_configs = 200
     num_runs = 5
-    save_path = "examples/logs/DeepCAVE/mlp"
+    save_path = "examples/record/logs/DeepCAVE/mlp"
 
     for run_id in range(num_runs):
         configspace = get_configspace(run_id)
 
-        with Recorder(
-            configspace, objectives=[accuracy, time], save_path=save_path
-        ) as r:
+        with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as r:
             for config in configspace.sample_configuration(num_configs):
                 for budget in budgets:
                     r.start(config, budget)
