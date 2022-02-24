@@ -1,13 +1,11 @@
 name: PyTest
 on: [ push ]
-
 jobs:
   pytest:
     name: PyTest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Add conda to system path
         run: |
           # $CONDA is an environment variable pointing to the root of the miniconda directory

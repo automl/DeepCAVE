@@ -1,4 +1,4 @@
-# v0.2.1
+# Version 0.3
 
 ## General
 - Updated tools.
@@ -38,7 +38,7 @@
 - Added documentation with most basic information.
 
 
-# v0.2
+# Version 0.2
 
 ## Runs
 - Groups were replaced by `GroupedRun`. Hence, a group can be used as a normal run (`AbstractRun`).
@@ -64,7 +64,7 @@ load_inputs, load_dependency_inputs).
 - fANOVA does not work if the configspace includes constants.
 
 
-# 0.1.1
+# Version 0.1.1
 
 ## Plugins
 
@@ -76,7 +76,7 @@ load_inputs, load_dependency_inputs).
 - Installable via pip
 
 
-# v0.1
+# Version 0.1
 
 ## Features
 

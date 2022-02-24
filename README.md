@@ -27,6 +27,7 @@ conda env create -f environment.yml
 conda activate DeepCAVE
 make install
 ```
+to your ```~/.bash_profile``` to enable multi-processing.
 
 If you want to contribute to DeepCAVE also install the dev packages:
 ```

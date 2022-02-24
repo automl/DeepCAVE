@@ -59,7 +59,6 @@ class Cache:
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
-
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:

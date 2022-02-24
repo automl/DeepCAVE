@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Union, List
 
 from dash.development.base_component import Component
-
 from deepcave.utils.logs import get_logger
 
 

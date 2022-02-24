@@ -154,7 +154,7 @@ class Run(AbstractRun, ABC):
 
         for i in range(len(costs)):
             cost = costs[i]
-            objective = self.meta["objectives"][i]
+            objective = self.get_objectives()[i]
 
             # Update time objective here
             if objective["name"] == "time" and cost is None:
@@ -168,11 +168,11 @@ class Run(AbstractRun, ABC):
             # Update bounds here
             if not objective["lock_lower"]:
                 if cost < objective["lower"]:
-                    self.meta["objectives"][i]["lower"] = cost
+                    self.get_objectives()[i]["lower"] = cost
 
             if not objective["lock_upper"]:
                 if cost > objective["upper"]:
-                    self.meta["objectives"][i]["upper"] = cost
+                    self.get_objectives()[i]["upper"] = cost
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()

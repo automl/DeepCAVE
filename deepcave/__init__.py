@@ -12,7 +12,7 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, René Sass and Marius Lindauer, <<author_email>>"
-version = "0.2.1"
+version = "0.3"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
