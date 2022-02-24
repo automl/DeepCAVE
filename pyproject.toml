@@ -2,13 +2,16 @@
 # https://learnxinyminutes.com/docs/toml/
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-minversion = "3.9"
-#addopts = "--cov=autosklearn"
+testpaths = ["tests"]      # path to the test directory
+minversion = "3.8"
+addopts = "--cov=deepcave" # Should be package name
 
 [tool.coverage.run]
 branch = true
-context = "deepcave"
+context = "deepcave" # Should be package name
+omit = [
+    "deepcave/__init__.py", # Has variables only needed for setup.py
+]
 
 [tool.coverage.report]
 show_missing = true
@@ -18,25 +21,28 @@ exclude_lines = [
     '\.\.\.',
     "raise NotImplementedError",
     "if TYPE_CHECKING",
-]
+] # These are lines to exclude from coverage
 
 [tool.black]
-target-version = ['py39']
+target-version = ['py38']
+line-length = 100
 
 [tool.isort]
-py_version = "39"
+py_version = "38"
 profile = "black" # Play nicely with black
 src_paths = ["deepcave", "tests"]
 known_types = ["typing", "abc"] # We put these in their own section "types"
+known_test = ["tests"]
+known_first_party = ["deepcave"]
 sections = [
     "FUTURE",
     "TYPES",
     "STDLIB",
     "THIRDPARTY",
     "FIRSTPARTY",
+    "TEST",
     "LOCALFOLDER",
 ] # section ordering
-known_first_party = ["deepcave"]
 multi_line_output = 3 # https://pycqa.github.io/isort/docs/configuration/multi_line_output_modes.html
 
 [tool.pydocstyle]
@@ -53,39 +59,25 @@ add-ignore = [ # http://www.pydocstyle.org/en/stable/error_codes.html
     "D213", # Multi-line docstring summary should start at the second line
     "D400", # First line should end with a period
     "D401", # First line should be in imperative mood
+    "D404", # First word of docstring should not be this
     "D413", # Missing blank line after last section
     "D415", # First line should end with a period, question mark, or exclamation point
 ]
 
 [tool.mypy]
-python_version = "3.9"
-
+python_version = "3.8"
 show_error_codes = true
-
-warn_unused_configs = true # warn about unused [tool.mypy] lines
-
-follow_imports = "normal"      # Type check top level api code we use from imports
-ignore_missing_imports = false # prefer explicit ignores
-
+warn_unused_configs = true         # warn about unused [tool.mypy] lines
+follow_imports = "normal"          # Type check top level api code we use from imports
+ignore_missing_imports = false     # prefer explicit ignores
 disallow_untyped_defs = true       # All functions must have types
 disallow_untyped_decorators = true # ... even decorators
-disallow_incomplete_defs = true    # ...all types
+disallow_incomplete_defs = true    # ... all types
 
-# This is a problem with the tests of `automl_common` being distributed as a submodule
-# probably indicative that is should be a package.
-# exclude = "autosklearn/automl_common/test"
-
-# This is handled by automl_common itself in its own CI
 [[tool.mypy.overrides]]
-module = []
-ignore_errors = true
-
-# Submodules that need to be updated with mypy
-[[tool.mypy.overrides]]
-module = []
-ignore_errors = true
-
-# Packages without exported types
-[[tool.mypy.overrides]]
-module = []
+module = ["setuptools.*"]     # Add modules that give import errors here
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]                # pytest uses decorators which are not typed in 3.8
+disallow_untyped_decorators = false # decorators in testing are not all annotated

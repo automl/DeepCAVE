@@ -1,3 +1,8 @@
+include LICENSE
 include requirements.txt
-include logging.yml
+include deepcave/py.typed
 include start.sh
+include deepcave/utils/logging.yml
+
+prune tests
+prune examples
