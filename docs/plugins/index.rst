@@ -28,6 +28,7 @@ Structure
 ^^^^^^^^^
 
 The plugins in DeepCAVE are structured in a specific way. Basically, three blocks are used:
+
 * Input block
 * Filter block
 * Output block
@@ -42,6 +43,9 @@ In contrast to the input block, the filter block does not trigger any calculatio
 
 Both inputs and filter are used to display the output in the output block. Since the filter inputs
 are low-cost changes, the output will be updated immediately after changing the filter output.
+The following figure shows the described blocks for the cost over time plugin.
+
+.. image:: ../images/plugins/blocks.png
 
 
 Types
@@ -58,13 +62,13 @@ progress is displayed on the left in the sidebar. The plugin automatically updat
 (one check every second) if the result is available and renders the output thereafter.
 
 
-How to integrate my own Plugin?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Custom Plugin
+^^^^^^^^^^^^^
 
 DeepCAVE was designed so that the plugins require a minimal design. We recommend using our
-basic template (in deepcave/plugins/template.py) as a starting point and change it to your needs.
+basic templates (in :ref:`examples<Examples>`) as a starting point and change it to your needs.
 Take inspirations from the other plugins if needed.
 
 After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in `deepcave/conf.py`
+location of your plugin in ``deepcave/conf.py``.
 

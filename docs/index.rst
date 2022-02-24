@@ -6,10 +6,10 @@ Home
    :maxdepth: 2
 
    installation
+   getting_started
    examples/index
-   background
    plugins/index
-   converters/index
+   converters
    api
    glossary
    faq

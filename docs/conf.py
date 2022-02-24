@@ -12,7 +12,8 @@ options = {
         "twitter_url": "https://twitter.com/automl_org?lang=de",
     },
     "sphinx_gallery_conf": {
-        "examples_dirs": "../examples/record",
+        "examples_dirs": "../examples",
+        "ignore_pattern": "logs/*",
     },
 }
 

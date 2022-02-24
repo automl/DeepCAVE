@@ -26,6 +26,4 @@ examples:
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-
-docs: examples linkcheck
-
+docs: html linkcheck
