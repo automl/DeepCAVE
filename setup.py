@@ -49,7 +49,7 @@ setuptools.setup(
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
-    package_data={"deepcave": ["logging.yml"]},
+    package_data={"deepcave": ["deepcave/utils/logging.yml"]},
     python_requires=">=3.8",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
