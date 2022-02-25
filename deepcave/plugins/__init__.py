@@ -27,22 +27,31 @@ logger = get_logger(__name__)
 class Plugin(Layout, ABC):
     id: str
     name: str
-    category: Optional[str] = None
     description: Optional[str] = None
-    position: int = 99999
     icon: str = "far fa-file"
-
     button_caption: str = "Process"
-
-    """
-    activate_run_selection:
-    Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at
-    a time. Moreover, it prevents the plugin to calculate results across all runs.
-
-    The run can be selected by inputs["run_name"]["value"].
-    bool: True if run selection should be shown.
-    """
     activate_run_selection: bool = False
+
+    """
+    Base class for all plugins.
+    
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the plugin.
+    name : str
+        Name of the plugin. It is shown in the navigation and in the title.
+    description : str, optional
+        Description of the plugin. Displayed below the title.
+    icon : str, optional
+        FontAwesome icon. Shown in the navigation.
+    button_caption : str, optional
+        Caption of the button. Shown only, if `StaticPlugin` is used.
+    activate_run_selection : bool, optional
+        Shows a dropdown to select a run in the inputs layout.
+        This feature is useful if only one run could be viewed at a time.
+        Moreover, it prevents the plugin to calculate results across all runs.
+    """
 
     def __init__(self) -> None:
         self.inputs = []
@@ -79,7 +88,6 @@ class Plugin(Layout, ABC):
         -------
         bool
             Returns True if the run is compatible.
-
         """
 
         return True
@@ -106,6 +114,26 @@ class Plugin(Layout, ABC):
     def register_input(
         self, id: str, attributes: Union[str, Iterable[str]] = ("value",), filter=False
     ) -> str:
+        """
+        Registers an input variable for the plugin. It is important to register the inputs
+        because callbacks have to be defined before the server is started.
+        After registering all inputs, an internal mapping is created.
+
+        Parameters
+        ----------
+        id : str
+            Specifies the id of the input.
+        attributes : Union[str, Iterable[str]], optional
+            Attributes which should be passed to the (dash) component, by default ("value",)
+        filter : bool, optional
+            Specifies if the input is a filter, by default False
+
+        Returns
+        -------
+        str
+            Unique id for the input and plugin. This is necessary because ids are defined globally.
+        """
+
         if isinstance(attributes, str):
             attributes = [attributes]
 
@@ -122,6 +150,24 @@ class Plugin(Layout, ABC):
         return self.get_internal_input_id(id)
 
     def register_output(self, id: str, attribute: str = "value", mpl=False) -> str:
+        """
+        Registers an output variable for the plugin.
+
+        Parameters
+        ----------
+        id : str
+            Specifies the id of the output.
+        attribute : str, optional
+            Attribute, by default "value"
+        mpl : bool, optional
+            Specifies if the registration is for matplotlib or default, by default False
+
+        Returns
+        -------
+        str
+            Unique id for the output and plugin. This is necessary because ids are defined globally.
+        """
+
         assert isinstance(attribute, str)
 
         if mpl:
@@ -142,7 +188,15 @@ class Plugin(Layout, ABC):
     def get_internal_output_id(self, id: str) -> str:
         return f"{self.id}-{id}-output"
 
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
+        """
+        Registers basic callbacks for the plugin. Following callbacks are registered:
+        - If inputs changes, the changes are pasted back. This is in particular
+        interest if input dependencies are used.
+        - Alert messages.
+        - Raw data dialog.
+        """
+
         # We have to call the output layout one time to register
         # the values
         # Problem: Inputs/Outputs can't be changed afterwards anymore.
@@ -284,6 +338,16 @@ class Plugin(Layout, ABC):
             return is_open, code
 
     def update_alert(self, text: str, color: str = "success"):
+        """
+        Update the alert text and color. Will automatically trigger the alert callback.
+
+        Parameters
+        ----------
+        text : str
+            The text to display.
+        color : str, optional
+            The color to display, by default "success"
+        """
         self.alert_text = text
         self.alert_color = color
         self.alert_update_required = True
@@ -603,6 +667,20 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def get_run_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> Component:
+        """
+        Generates the run selection input.
+        This is only the case if `activate_run_selection` is True.
+
+        Parameters
+        ----------
+        register : Callable[[str, Union[str, List[str]]], str]
+            The register method to register (user) variables.
+
+        Returns
+        -------
+        Component
+            The layout of the run selection input.
+        """
         return html.Div(
             [
                 dbc.Select(
@@ -614,13 +692,27 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def load_run_inputs(
-        runs: Dict[str, Run],
+        runs: Dict[str, AbstractRun],
         groups: Dict[str, GroupedRun],
-        check_run_compatibility: Callable,
+        check_run_compatibility: Callable[[AbstractRun], bool],
     ) -> Dict[str, Any]:
         """
-        Set `run_names` and displays both runs and group runs if
-        they are compatible.
+        Loads the options for `get_run_input_layout`.
+        Both runs and groups are displayed.
+
+        Parameters
+        ----------
+        runs : Dict[str, Run]
+            The runs to display.
+        groups : Dict[str, GroupedRun]
+            The groups to display.
+        check_run_compatibility : Callable[[AbstractRun], bool]
+            If a single run is compatible. If not, the run is not shown.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Both runs and groups, separated by a separator.
         """
 
         labels = []
@@ -658,11 +750,23 @@ class Plugin(Layout, ABC):
     def get_selected_runs(self, inputs: Dict[str, Any]) -> List[AbstractRun]:
         """
         Parses selected runs from inputs.
-        If self.activate_run_selection is set return only selected run
+        If self.activate_run_selection is set, return only selected run. Otherwise, return all
+        possible runs.
 
-        Otherwise, return all possible runs
+        Parameters
+        ----------
+        inputs : Dict[str, Any]
+            The inputs to parse.
 
-        Can raise PreventUpdate() if activate_run_selection is set, but run_name not available
+        Returns
+        -------
+        List[AbstractRun]
+            The selected runs.
+
+        Raises
+        ------
+        PreventUpdate
+            If `activate_run_selection` is set but `run_name` is not available.
         """
 
         # Special case: If run selection is active
@@ -685,25 +789,116 @@ class Plugin(Layout, ABC):
             return list(self.all_runs.values())
 
     def load_inputs(self) -> Dict[str, Any]:
+        """
+        Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.
+        This method is necessary to pre-load contents for the inputs. So, if the plugin is
+        called for the first time or there are no results in the cache, the plugin gets its
+        content from this method.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Content to be filled.
+        """
         return {}
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+    def load_dependency_inputs(
+        self,
+        previous_inputs: Dict[str, Any],
+        inputs: Dict[str, Any],
+        selected_run: Optional[Union[AbstractRun, List[AbstractRun]]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Same as `load_inputs` but called after inputs have changed. Provides a lot of flexibility.
+
+        Parameters
+        ----------
+        previous_inputs : Dict[str, Any]
+            Previous content of the inputs.
+        inputs : Dict[str, Any]
+            Current content of the inputs.
+        selected_run : Optional[Union[AbstractRun, List[AbstractRun]]], optional
+            The selected run from the user. In case of `activate_run_selection`, a list of runs
+            are passed. Defaults to None.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Content to be filled.
+        """
+
         return inputs
 
     @staticmethod
-    def get_input_layout(register) -> List[Component]:
+    def get_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> List[Component]:
+        """
+        Layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable[[str, Union[str, List[str]]], str]
+            The register method to register (user) variables.
+
+        Returns
+        -------
+        List[Component]
+            Layouts for the input block.
+        """
+
         return []
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable[[str, Union[str, List[str]]], str]):
+        """
+        Layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable[[str, Union[str, List[str]]], str]
+            The register method to register (user) variables.
+
+        Returns
+        -------
+        List[Component]
+            Layouts for the filter block.
+        """
+
         return []
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable[[str, Union[str, List[str]]], str]):
+        """
+        Layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable[[str, Union[str, List[str]]], str]
+            The register method to register outputs.
+
+        Returns
+        -------
+        List[Component]
+            Layouts for the output block.
+        """
+
         return []
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable[[str, Union[str, List[str]]], str]):
+        """
+        Layout for the matplotlib output block.
+
+        Parameters
+        ----------
+        register : Callable[[str, Union[str, List[str]]], str]
+            The register method to register outputs.
+
+        Returns
+        -------
+        List[Component]
+            Layout for the matplotlib output block.
+        """
+
         return []
 
     def load_outputs(
@@ -764,7 +959,22 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     @abstractmethod
-    def process(run: AbstractRun, inputs):
+    def process(run: AbstractRun, inputs: Dict[str, Any]):
+        """
+        Returns raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs : Dict[str, Any]
+            Input data.
+        """
+
         pass
 
     @staticmethod
