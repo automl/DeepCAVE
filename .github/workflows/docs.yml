@@ -42,7 +42,7 @@ jobs:
         make docs
 
     - name: Pull latest gh-pages
-      if: (contains(github.ref, 'main'))
+      if: (contains(github.ref, 'development') || contains(github.ref, 'main'))
       run: |
         cd ..
         git clone https://github.com/automl/${{ env.name }}.git --branch gh-pages --single-branch gh-pages
