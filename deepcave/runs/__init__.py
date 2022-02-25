@@ -50,7 +50,7 @@ class Trial:
     start_time: float
     end_time: float
     status: Status
-    additional: dict[str, Any]
+    additional: Dict[str, Any]
 
     def __post_init__(self):
         if isinstance(self.status, int):

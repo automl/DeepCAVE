@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Dict, List
 
 import json
 from pathlib import Path
@@ -34,8 +34,8 @@ class Run(AbstractRun, ABC):
         self,
         name: str,
         configspace=None,
-        objectives: Union[Objective, list[Objective]] = None,
-        meta: dict[str, Any] = None,
+        objectives: Union[Objective, List[Objective]] = None,
+        meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
     ):
         """
@@ -124,15 +124,15 @@ class Run(AbstractRun, ABC):
 
     def add(
         self,
-        costs: Union[list[float], float],
-        config: Union[dict, Configuration],  # either dict or Configuration
+        costs: Union[List[float], float],
+        config: Union[Dict, Configuration],  # either dict or Configuration
         budget: float = np.inf,
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
         origin: str = None,
         model: Union[str, "torch.nn.Module"] = None,
-        additional: Optional[dict] = None,
+        additional: Optional[Dict] = None,
     ):
         """
 

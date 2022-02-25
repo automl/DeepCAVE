@@ -56,7 +56,7 @@ class Plugin(Layout, ABC):
         self.alert_color = "success"
         self.alert_update_required = False
 
-        self.runs: dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
+        self.runs: Dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
 
@@ -354,7 +354,7 @@ class Plugin(Layout, ABC):
 
         return outputs
 
-    def _list_to_dict(self, values: Iterable[str], input=True) -> dict[str, dict[str, str]]:
+    def _list_to_dict(self, values: Iterable[str], input=True) -> Dict[str, Dict[str, str]]:
         """
         Maps the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
@@ -377,7 +377,7 @@ class Plugin(Layout, ABC):
 
         return mapping
 
-    def _dict_to_list(self, d: dict[str, dict[str, str]], input=False) -> list[Optional[str]]:
+    def _dict_to_list(self, d: Dict[str, Dict[str, str]], input=False) -> List[Optional[str]]:
         """
         Maps the given dict to a list, regarding the sorting from either
         self.inputs or self.outputs.
@@ -407,7 +407,7 @@ class Plugin(Layout, ABC):
 
         return result
 
-    def _dict_as_key(self, d: dict[str, Any], remove_filters=False) -> Optional[str]:
+    def _dict_as_key(self, d: Dict[str, Any], remove_filters=False) -> Optional[str]:
         """
         Converts a dictionary to a key. Only ids from self.inputs are considered.
 
@@ -431,7 +431,7 @@ class Plugin(Layout, ABC):
 
         return string_to_hash(str(new_d))
 
-    def __call__(self, render_button=False) -> list[Component]:
+    def __call__(self, render_button=False) -> List[Component]:
         """
         We overwrite the get_layout method here as we use a different
         interface compared to layout.
@@ -602,7 +602,7 @@ class Plugin(Layout, ABC):
         return components
 
     @staticmethod
-    def get_run_input_layout(register: Callable[[str, Union[str, list[str]]], str]) -> Component:
+    def get_run_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> Component:
         return html.Div(
             [
                 dbc.Select(
@@ -614,10 +614,10 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def load_run_inputs(
-        runs: dict[str, Run],
-        groups: dict[str, GroupedRun],
+        runs: Dict[str, Run],
+        groups: Dict[str, GroupedRun],
         check_run_compatibility: Callable,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Set `run_names` and displays both runs and group runs if
         they are compatible.
@@ -655,7 +655,7 @@ class Plugin(Layout, ABC):
             }
         }
 
-    def get_selected_runs(self, inputs: dict[str, Any]) -> list[AbstractRun]:
+    def get_selected_runs(self, inputs: Dict[str, Any]) -> List[AbstractRun]:
         """
         Parses selected runs from inputs.
         If self.activate_run_selection is set return only selected run
@@ -684,14 +684,14 @@ class Plugin(Layout, ABC):
         else:
             return list(self.all_runs.values())
 
-    def load_inputs(self) -> dict[str, Any]:
+    def load_inputs(self) -> Dict[str, Any]:
         return {}
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
         return inputs
 
     @staticmethod
-    def get_input_layout(register) -> list[Component]:
+    def get_input_layout(register) -> List[Component]:
         return []
 
     @staticmethod
@@ -710,7 +710,7 @@ class Plugin(Layout, ABC):
         self,
         inputs: Dict[str, Dict[str, str]],
         outputs: Dict[str, Union[str, Dict[str, str]]],
-        runs: Union[AbstractRun, dict[str, AbstractRun]],
+        runs: Union[AbstractRun, Dict[str, AbstractRun]],
     ) -> List[Component]:
         """
         Reads in the raw data and prepares them for the layout.
@@ -722,7 +722,7 @@ class Plugin(Layout, ABC):
         outputs : Dict[str, Union[str, Dict[str, str]]]
             Raw outputs from the runs. If `activate_run_selection` is set,
             a Dict[str, str] is returned.
-        runs : Union[AbstractRun, dict[str, AbstractRun]]
+        runs : Union[AbstractRun, Dict[str, AbstractRun]]
             All selected runs. If `activate_run_selection` is set, only the selected run is
             returned.
 
@@ -738,7 +738,7 @@ class Plugin(Layout, ABC):
         self,
         inputs: Dict[str, Dict[str, str]],
         outputs: Dict[str, Union[str, Dict[str, str]]],
-        runs: Union[AbstractRun, dict[str, AbstractRun]],
+        runs: Union[AbstractRun, Dict[str, AbstractRun]],
     ) -> List[Component]:
         """
         Reads in the raw data and prepares them for the layout.
@@ -750,7 +750,7 @@ class Plugin(Layout, ABC):
         outputs : Dict[str, Union[str, Dict[str, str]]]
             Raw outputs from the runs. If `activate_run_selection` is set,
             a Dict[str, str] is returned.
-        runs : Union[AbstractRun, dict[str, AbstractRun]]
+        runs : Union[AbstractRun, Dict[str, AbstractRun]]
             All selected runs. If `activate_run_selection` is set, only the selected run is
             returned.
 
