@@ -67,13 +67,9 @@ The webserver as well as the queue/workers can be started by running
 ```
 deepcave --start
 ```
-or
-```
-./start.sh
-```
 
-Visit `http://127.0.0.1:8050/` to get started. The following image gives
-you an idea of the look from DeepCAVE. You can find more interface insights
+Visit `http://127.0.0.1:8050/` to get started. The following figures gives
+you a first impression of DeepCAVE. You can find more screenshots
 in the documentation.
 
 ![interface](docs/images/plugins/pareto_front.png)
