@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.plugins.dynamic_plugin" href="deepcave.plugins.dynamic_plugin.html" />
-    <link rel="prev" title="deepcave.layouts.sidebar" href="deepcave.layouts.sidebar.html" />
+    <link rel="prev" title="deepcave.runs.run" href="deepcave.runs.run.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -231,23 +231,13 @@ style="width: 100%;">
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.layouts.html">
-     deepcave.layouts
+    <a class="reference internal" href="deepcave.runs.html">
+     deepcave.runs
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      deepcave.plugins
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.runs.html">
-     deepcave.runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.utils.html">
-     deepcave.utils
     </a>
    </li>
   </ul>
@@ -308,30 +298,15 @@ style="width: 100%;">
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.Plugin" title="deepcave.plugins.Plugin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plugin</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Base class for all plugins.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="deepcave.layouts.html#deepcave.layouts.Layout" title="deepcave.layouts.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.layouts.Layout</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.Plugin.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_button</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>We overwrite the get_layout method here as we use a different
-interface compared to layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="deepcave.plugins.Plugin.activate_run_selection">
-<span class="sig-name descname"><span class="pre">activate_run_selection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#deepcave.plugins.Plugin.activate_run_selection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Base class for all plugins.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.layouts.Layout</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Base class for all plugins.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#deepcave.plugins.Plugin.id" title="Permalink to this definition">¶</a></dt>
@@ -388,8 +363,8 @@ interface compared to layout.</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">activate_run_selection</span></span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.activate_run_selection">
+<span class="sig-name descname"><span class="pre">activate_run_selection</span></span><a class="headerlink" href="#deepcave.plugins.Plugin.activate_run_selection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shows a dropdown to select a run in the inputs layout.
 This feature is useful if only one run could be viewed at a time.
 Moreover, it prevents the plugin to calculate results across all runs.</p>
@@ -400,6 +375,19 @@ Moreover, it prevents the plugin to calculate results across all runs.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_button</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the components for the plugin. Basically, all blocks and elements of the plugin
+are stacked-up here</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Layout as list of components.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Component]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -772,11 +760,11 @@ After registering all inputs, an internal mapping is created.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.layouts.sidebar.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.runs.run.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.layouts.sidebar</p>
+            <p class="prev-next-title">deepcave.runs.run</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="deepcave.plugins.dynamic_plugin.html" title="next page">

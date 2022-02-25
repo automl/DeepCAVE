@@ -231,23 +231,13 @@ style="width: 100%;">
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.layouts.html">
-     deepcave.layouts
+    <a class="reference internal" href="deepcave.runs.html">
+     deepcave.runs
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="reference internal" href="deepcave.plugins.html">
      deepcave.plugins
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.runs.html">
-     deepcave.runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="deepcave.utils.html">
-     deepcave.utils
     </a>
    </li>
   </ul>
@@ -319,8 +309,16 @@ style="width: 100%;">
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.DynamicPlugin.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin.html#DynamicPlugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.DynamicPlugin.__call__" title="Permalink to this definition">¶</a></dt>
-<dd><p>We overwrite the get_layout method here as we use a different
-interface compared to layout.</p>
+<dd><p>Returns the components for the plugin. Basically, all blocks and elements of the plugin
+are stacked-up here</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Layout as list of components.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>List[Component]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

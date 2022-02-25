@@ -229,23 +229,13 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../api/deepcave.layouts.html">
-     deepcave.layouts
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../api/deepcave.plugins.html">
-     deepcave.plugins
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../../api/deepcave.runs.html">
      deepcave.runs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../api/deepcave.utils.html">
-     deepcave.utils
+    <a class="reference internal" href="../../api/deepcave.plugins.html">
+     deepcave.plugins
     </a>
    </li>
   </ul>
@@ -310,16 +300,9 @@ style="width: 100%;">
 
 
 <div class="viewcode-block" id="Plugin"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin">[docs]</a><span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="n">Layout</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;far fa-file&quot;</span>
-    <span class="n">button_caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Process&quot;</span>
-    <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all plugins.</span>
-<span class="sd">    </span>
+
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    id : int</span>
@@ -337,6 +320,13 @@ style="width: 100%;">
 <span class="sd">        This feature is useful if only one run could be viewed at a time.</span>
 <span class="sd">        Moreover, it prevents the plugin to calculate results across all runs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;far fa-file&quot;</span>
+    <span class="n">button_caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Process&quot;</span>
+    <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -780,10 +770,15 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">new_d</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Plugin.__call__"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_button</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+<div class="viewcode-block" id="Plugin.__call__"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_button</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        We overwrite the get_layout method here as we use a different</span>
-<span class="sd">        interface compared to layout.</span>
+<span class="sd">        Returns the components for the plugin. Basically, all blocks and elements of the plugin</span>
+<span class="sd">        are stacked-up here</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layout as list of components.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span> <span class="o">=</span> <span class="p">{}</span>
