@@ -1,0 +1,57 @@
+﻿deepcave.runs
+=============
+
+.. automodule:: deepcave.runs
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      check_equality
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      AbstractRun
+      Status
+      Trial
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      NotMergeableError
+      NotValidRunError
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   deepcave.runs.converters
+   deepcave.runs.grouped_run
+   deepcave.runs.handler
+   deepcave.runs.objective
+   deepcave.runs.recorder
+   deepcave.runs.run
+

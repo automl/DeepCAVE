@@ -1,0 +1,29 @@
+deepcave.plugins.dynamic\_plugin.ccube
+======================================
+
+.. automodule:: deepcave.plugins.dynamic_plugin.ccube
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CCube
+   
+   
+
+   
+   
+   
+
+
+

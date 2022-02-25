@@ -1,0 +1,29 @@
+deepcave.plugins.dynamic\_plugin.budget\_correlation
+====================================================
+
+.. automodule:: deepcave.plugins.dynamic_plugin.budget_correlation
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      BudgetCorrelation
+   
+   
+
+   
+   
+   
+
+
+

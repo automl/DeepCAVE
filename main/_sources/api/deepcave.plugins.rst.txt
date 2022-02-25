@@ -1,0 +1,38 @@
+﻿deepcave.plugins
+================
+
+.. automodule:: deepcave.plugins
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Plugin
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   deepcave.plugins.dynamic_plugin
+   deepcave.plugins.static_plugin
+
