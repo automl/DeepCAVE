@@ -25,16 +25,9 @@ logger = get_logger(__name__)
 
 
 class Plugin(Layout, ABC):
-    id: str
-    name: str
-    description: Optional[str] = None
-    icon: str = "far fa-file"
-    button_caption: str = "Process"
-    activate_run_selection: bool = False
-
     """
     Base class for all plugins.
-    
+
     Attributes
     ----------
     id : int
@@ -52,6 +45,13 @@ class Plugin(Layout, ABC):
         This feature is useful if only one run could be viewed at a time.
         Moreover, it prevents the plugin to calculate results across all runs.
     """
+
+    id: str
+    name: str
+    description: Optional[str] = None
+    icon: str = "far fa-file"
+    button_caption: str = "Process"
+    activate_run_selection: bool = False
 
     def __init__(self) -> None:
         self.inputs = []
@@ -495,10 +495,15 @@ class Plugin(Layout, ABC):
 
         return string_to_hash(str(new_d))
 
-    def __call__(self, render_button=False) -> List[Component]:
+    def __call__(self, render_button: bool = False) -> List[Component]:
         """
-        We overwrite the get_layout method here as we use a different
-        interface compared to layout.
+        Returns the components for the plugin. Basically, all blocks and elements of the plugin
+        are stacked-up here
+
+        Returns
+        -------
+        List[Component]
+            Layout as list of components.
         """
 
         self.previous_inputs = {}
