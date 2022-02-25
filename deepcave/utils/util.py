@@ -1,4 +1,4 @@
-from typing import Any, Iterable, Optional, Union
+from typing import Any, Iterable, Optional, Union, Tuple, List, Dict
 
 import base64
 import random
@@ -35,14 +35,12 @@ def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
     # display any kind of image taken from
     # https://github.com/plotly/dash/issues/71
     encoded_image = base64.b64encode(buffer.read())
-    return html.Img(
-        src=f"data:image/png;base64,{encoded_image.decode()}", className="img-fluid"
-    )
+    return html.Img(src=f"data:image/png;base64,{encoded_image.decode()}", className="img-fluid")
 
 
 def encode_data(
     data: pd.DataFrame, cs: Optional[ConfigurationSpace] = None
-) -> Union[pd.DataFrame, tuple[pd.DataFrame, dict[pd.Series, pd.Series]]]:
+) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[pd.Series, pd.Series]]]:
     # converts only columns with "config." prefix
     if cs:
         return _encode(data, cs)
@@ -82,9 +80,7 @@ def _encode(data: pd.DataFrame, cs: Optional):
         if transformer_class is OneHotEncoder:
             add_kwargs = {"sparse": False}
         data[to_cols] = pd.DataFrame(
-            transformer_class(categories=choices, **add_kwargs).fit_transform(
-                data[from_cols]
-            ),
+            transformer_class(categories=choices, **add_kwargs).fit_transform(data[from_cols]),
             columns=to_cols,
             index=data.index,
         )
@@ -127,11 +123,11 @@ def _encode(data: pd.DataFrame, cs: Optional):
     return data, org_cols
 
 
-def add_prefix_to_dict(data: dict[str, Any], prefix: str) -> dict[str, Any]:
+def add_prefix_to_dict(data: Dict[str, Any], prefix: str) -> Dict[str, Any]:
     """Adds a prefix to every key in a dictionary"""
     return {f"{prefix}{key}": value for key, value in data.items()}
 
 
-def add_prefix_to_list(data: Iterable[str], prefix: str) -> list[str]:
+def add_prefix_to_list(data: Iterable[str], prefix: str) -> List[str]:
     """Adds a prefix to every item in an iterable (e.g. a list). Returns a list"""
     return [f"{prefix}{item}" for item in data]

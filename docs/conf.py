@@ -13,7 +13,7 @@ options = {
     },
     "sphinx_gallery_conf": {
         "examples_dirs": "../examples",
-        "ignore_pattern": "logs/*",
+        "ignore_pattern": ".*logs$|.*__pycache__$|.*_pending$",
     },
 }
 

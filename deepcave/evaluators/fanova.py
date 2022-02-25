@@ -161,8 +161,7 @@ class fANOVA:
 
         if sort:
             sorted_importance_dict = {
-                k: v
-                for k, v in sorted(importance_dict.items(), key=lambda item: item[1][1])
+                k: v for k, v in sorted(importance_dict.items(), key=lambda item: item[1][1])
             }
 
             return sorted_importance_dict
@@ -277,15 +276,11 @@ class fANOVA:
                 self.cs_params[combi[1]].name,
                 self.cs_params[combi[2]].name,
             ]
-            triple_marginals.append(
-                (tot_imp, combi_names[0], combi_names[1], combi_names[2])
-            )
+            triple_marginals.append((tot_imp, combi_names[0], combi_names[1], combi_names[2]))
 
         triple_marginal_performance = sorted(triple_marginals, reverse=True)
         if params:
-            triple_marginal_performance = triple_marginal_performance[
-                : len(list(triplets))
-            ]
+            triple_marginal_performance = triple_marginal_performance[: len(list(triplets))]
 
         for marginal, p1, p2, p3 in triple_marginal_performance:
             self.tot_imp_dict[(p1, p2, p3)] = marginal
@@ -348,9 +343,7 @@ if __name__ == "__main__":
                 conditional[idx] = True
                 if isinstance(hp, CategoricalHyperparameter):
                     impute_values[idx] = len(hp.choices)
-                elif isinstance(
-                    hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)
-                ):
+                elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
                     impute_values[idx] = -1
                 elif isinstance(hp, Constant):
                     impute_values[idx] = 1

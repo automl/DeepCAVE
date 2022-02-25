@@ -72,7 +72,7 @@ class Cache:
         d[keys[-1]] = value
         self.write()
 
-    def set_dict(self, d: dict) -> None:
+    def set_dict(self, d: Dict) -> None:
         """Updates cache to a specific value"""
 
         self._data.update(d)
