@@ -1,7 +1,8 @@
+from typing import Tuple
 import plotly.express as px
 
 
-def hex_to_rgb(hex_string: str) -> tuple[int, int, int]:
+def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     """
     Converts a hex_string to a tuple of rgb values.
     Requires format including #, e.g.:

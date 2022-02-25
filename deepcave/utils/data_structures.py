@@ -1,4 +1,7 @@
-def update_dict(a: dict[str, dict], b: dict[str, dict]):
+from typing import Dict
+
+
+def update_dict(a: Dict[str, Dict], b: Dict[str, Dict]):
     """
     Updates a from b inplace.
     """

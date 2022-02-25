@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Dict, List
 from pathlib import Path
 
 
@@ -30,7 +30,7 @@ class Config:
 
     # Plugins
     @property
-    def PLUGINS(self) -> dict[str, list[Type["Plugin"]]]:
+    def PLUGINS(self) -> Dict[str, List["Plugin"]]:
         """
         Returns:
         dictionary [category -> List[Plugins]]
@@ -69,7 +69,7 @@ class Config:
 
     # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> list[Type["Run"]]:
+    def AVAILABLE_CONVERTERS(self) -> List["Run"]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun

@@ -88,7 +88,7 @@ class GroupedRun(AbstractRun):
         return string_to_hash(total_hash_str)
 
     @property
-    def run_names(self) -> list[str]:
+    def run_names(self) -> List[str]:
         return [run.name for run in self.runs]
 
     def get_model(self, config_id):

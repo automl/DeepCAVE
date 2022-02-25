@@ -8,11 +8,13 @@ on:
   push:
     branches:
       - main
+      - development
 
   # Trigger on any push to a PR that targets master
   pull_request:
     branches:
       - main
+      - development
 
 env:
   name: DeepCAVE
@@ -27,22 +29,20 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.9
 
     - name: Install dependencies
       run: |
-        pip install -e ".[dev]"
+        pip install .
+        pip install .[dev]
 
     - name: Make docs
       run: |
+        cd docs
         make docs
 
-    - name: Make Examples
-      run: |
-        make examples
-
     - name: Pull latest gh-pages
-      if: (contains(github.ref, 'main'))
+      if: (contains(github.ref, 'development') || contains(github.ref, 'main'))
       run: |
         cd ..
         git clone https://github.com/automl/${{ env.name }}.git --branch gh-pages --single-branch gh-pages
@@ -56,7 +56,7 @@ jobs:
         cp -r ../${{ env.name }}/docs/build/html $branch_name
 
     - name: Push to gh-pages
-      if: (contains(github.ref, 'main'))
+      if: (contains(github.ref, 'development') || contains(github.ref, 'main'))
       run: |
         last_commit=$(git log --pretty=format:"%an: %s")
         cd ../gh-pages

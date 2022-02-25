@@ -1,10 +1,8 @@
-from typing import Any, Callable
-
 import redis
+from typing import Any, Callable, List, Dict
 from rq import Queue as _Queue
 from rq import Worker
 from rq.job import Job
-
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -25,11 +23,7 @@ class Queue:
         return False
 
     def is_processed(self, job_id):
-        if (
-            self.is_running(job_id)
-            or self.is_pending(job_id)
-            or self.is_finished(job_id)
-        ):
+        if self.is_running(job_id) or self.is_pending(job_id) or self.is_finished(job_id):
             return True
 
         return False
@@ -55,7 +49,7 @@ class Queue:
 
         return False
 
-    def get_jobs(self, registry="running") -> list[Job]:
+    def get_jobs(self, registry="running") -> List[Job]:
         if registry == "running":
             registry = self._queue.started_job_registry
         elif registry == "pending":
@@ -72,13 +66,13 @@ class Queue:
 
         return results
 
-    def get_running_jobs(self) -> list[Job]:
+    def get_running_jobs(self) -> List[Job]:
         return self.get_jobs(registry="running")
 
-    def get_pending_jobs(self) -> list[Job]:
+    def get_pending_jobs(self) -> List[Job]:
         return self.get_jobs(registry="pending")
 
-    def get_finished_jobs(self) -> list[Job]:
+    def get_finished_jobs(self) -> List[Job]:
         return self.get_jobs(registry="finished")
 
     def delete_job(self, job_id: str):
@@ -94,9 +88,7 @@ class Queue:
             except:
                 pass
 
-    def enqueue(
-        self, func: Callable[[Any], Any], args: Any, job_id: str, meta: dict[str, str]
-    ):
+    def enqueue(self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]):
         # First check if job_id is already in use
         if self.is_processed(job_id):
             logger.debug("Job was not added because it was processed already.")

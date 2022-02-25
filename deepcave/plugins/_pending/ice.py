@@ -5,7 +5,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.evaluators.ice import ICE as ICEEvaluator
+from deepcave.evaluators.pending.ice import ICE as ICEEvaluator
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.compression import deserialize, serialize

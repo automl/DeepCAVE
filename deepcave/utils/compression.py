@@ -1,14 +1,15 @@
-from typing import TypeVar, Union
+from typing import TypeVar, Union, Dict, List
 
 import json
-
 import numpy as np
 import pandas as pd
 
+
 JSON_DENSE_SEPARATORS = (",", ":")
+TYPE = TypeVar("TYPE")
 
 
-def serialize(data: Union[dict, list, pd.DataFrame]) -> str:
+def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """
     Serialize a dataframe to a string.
     """
@@ -24,9 +25,6 @@ def serialize(data: Union[dict, list, pd.DataFrame]) -> str:
         return json.dumps(json.loads(data.to_json()), separators=JSON_DENSE_SEPARATORS)
 
     return json.dumps(data, cls=Encoder, separators=JSON_DENSE_SEPARATORS)
-
-
-TYPE = TypeVar("TYPE")
 
 
 def deserialize(string: str, dtype: TYPE = pd.DataFrame) -> TYPE:

@@ -49,8 +49,8 @@ setuptools.setup(
     packages=setuptools.find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
-    package_data={"deepcave": ["logging.yml"]},
-    python_requires=">=3.8",
+    package_data={"deepcave": ["utils/logging.yml"]},
+    python_requires=">=3.8, <3.10",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
@@ -61,7 +61,6 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
         "Environment :: Console",
