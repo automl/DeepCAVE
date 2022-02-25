@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepcave.layouts.general &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../../../index.html">
+    <img src="../../../_static/logo.png" class="logo" alt="logo">
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../../search.html" method="get"
+style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
+<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/minimal_run.html">
+     Record Minimal Run
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/mlp.html">
+     Multi-Layer Perceptron
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/mlp_pytorch.html">
+     Multi-Layer Perceptron via PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/templates/multiple_runs.html">
+     Multiple Runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/templates/single_run.html">
+     Single Run
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/fanova.html">
+     fANOVA
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for deepcave.layouts.general</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">ALL</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">State</span>
+<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">run_handler</span>
+<span class="kn">from</span> <span class="nn">deepcave.layouts</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">NotMergeableError</span><span class="p">,</span> <span class="n">NotValidRunError</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs.run</span> <span class="kn">import</span> <span class="n">Run</span>
+
+
+<div class="viewcode-block" id="GeneralLayout"><a class="viewcode-back" href="../../../api/deepcave.layouts.general.html#deepcave.layouts.general.GeneralLayout">[docs]</a><span class="k">class</span> <span class="nc">GeneralLayout</span><span class="p">(</span><span class="n">Layout</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_working_directory_changed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_run_selection_changed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_group_selection_changed</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_set_groups</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_clear_cache</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_callback_working_directory_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># Working directory input</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-working-directory-input&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+            <span class="c1"># Converter text</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-converter-label&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-runs-checklist&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">),</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-runs-checklist&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;on-page-load&quot;</span><span class="p">,</span> <span class="s2">&quot;href&quot;</span><span class="p">),</span>
+            <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-working-directory-input&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Register updates from inputs</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># `working_dir` is only none on page load</span>
+            <span class="k">if</span> <span class="n">working_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">handler_working_dir</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_working_dir</span><span class="p">()</span>
+                <span class="n">run_names</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run_names</span><span class="p">()</span>
+                <span class="n">converter</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">available_run_classes</span>
+
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">handler_working_dir</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">get_converter_text</span><span class="p">(</span><span class="n">converter</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">get_run_options</span><span class="p">(),</span>
+                    <span class="n">run_names</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">empty_run_names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">run_handler</span><span class="o">.</span><span class="n">update_working_directory</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">working_dir</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">working_dir</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_converter_text</span><span class="p">(</span><span class="n">run_handler</span><span class="o">.</span><span class="n">available_run_classes</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_run_options</span><span class="p">(),</span>
+                <span class="n">empty_run_names</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_callback_run_selection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-run-names&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-runs-checklist&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save the run ids internally</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">run_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+            <span class="n">old_run_names</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run_names</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Old runs: </span><span class="si">{</span><span class="n">old_run_names</span><span class="si">}</span><span class="s2">, Runs: </span><span class="si">{</span><span class="n">run_ids</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Reset groups here.</span>
+            <span class="c1"># Alternatively: Remove all runs which are not selected anymore.</span>
+            <span class="k">if</span> <span class="n">run_ids</span> <span class="o">!=</span> <span class="n">old_run_names</span><span class="p">:</span>
+                <span class="n">run_handler</span><span class="o">.</span><span class="n">update_groups</span><span class="p">({})</span>
+
+                <span class="c1"># Also really important:</span>
+                <span class="c1"># Reset last inputs</span>
+                <span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;last_inputs&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="p">{})</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">run_handler</span><span class="o">.</span><span class="n">update_runs</span><span class="p">(</span><span class="n">run_ids</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">NotValidRunError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">old_run_names</span>
+
+            <span class="k">return</span> <span class="n">run_ids</span>
+
+    <span class="k">def</span> <span class="nf">_callback_group_selection_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-group-container&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
+            <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-add-group&quot;</span><span class="p">,</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-add-group&quot;</span><span class="p">,</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
+            <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-run-names&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">),</span>
+            <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-group-trigger&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">),</span>
+            <span class="n">State</span><span class="p">(</span><span class="s2">&quot;general-group-container&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Let&#39;s take care of the groups here</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">run_names</span><span class="p">,</span> <span class="n">update</span><span class="p">,</span> <span class="n">children</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">get_layout</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">input_value</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">dropdown_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">dropdown_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">dropdown_value</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group-name&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">},</span>
+                            <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+                            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
+                            <span class="n">value</span><span class="o">=</span><span class="n">input_value</span><span class="p">,</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;margin-bottom&quot;</span><span class="p">:</span> <span class="s2">&quot;-1px&quot;</span><span class="p">},</span>
+                        <span class="p">),</span>
+                        <span class="n">dcc</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group-dropdown&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">index</span><span class="p">},</span>
+                            <span class="n">options</span><span class="o">=</span><span class="p">[</span>
+                                <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">}</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">options</span>
+                            <span class="p">],</span>
+                            <span class="n">value</span><span class="o">=</span><span class="n">dropdown_value</span><span class="p">,</span>
+                            <span class="n">multi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-2&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">groups</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_groups</span><span class="p">()</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="c1"># Load from cache if page is loaded</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">grouped_run</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">group_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">get_layout</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">run_names</span><span class="p">,</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">grouped_run</span><span class="o">.</span><span class="n">run_names</span><span class="p">)</span>
+                <span class="p">)</span>
+
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">n_clicks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">run_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">get_layout</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">run_names</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">children</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_callback_set_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-group-trigger&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Input</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group-name&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">ALL</span><span class="p">},</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+            <span class="n">Input</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;group-dropdown&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">ALL</span><span class="p">},</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
+
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">group_names</span><span class="p">,</span> <span class="n">all_run_names</span><span class="p">):</span>
+            <span class="c1"># Abort on page load</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_groups</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_groups</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">raise</span> <span class="n">PreventUpdate</span><span class="p">()</span>
+
+            <span class="n">groups</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">run_names</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">group_names</span><span class="p">,</span> <span class="n">all_run_names</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">group_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">group_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">run_names</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">run_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">groups</span><span class="p">[</span><span class="n">group_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_names</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Now save it</span>
+                <span class="n">run_handler</span><span class="o">.</span><span class="n">update_groups</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">NotMergeableError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Groups: </span><span class="si">{</span><span class="n">groups</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">raise</span> <span class="n">PreventUpdate</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_callback_clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;general-clear-cache-button&quot;</span><span class="p">,</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">)</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;general-clear-cache-button&quot;</span><span class="p">,</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">)</span>
+
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">n_clicks</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rc</span><span class="o">.</span><span class="n">clear_all_caches</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_run_options</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="n">runs</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">run_name</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">run_name</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">run_name</span> <span class="ow">in</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_available_run_names</span><span class="p">()</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">runs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_converter_text</span><span class="p">(</span><span class="n">converters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Run</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">:</span>
+        <span class="n">converter_text</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">converter</span> <span class="ow">in</span> <span class="n">converters</span><span class="p">:</span>
+            <span class="n">converter_text</span> <span class="o">+=</span> <span class="p">[</span><span class="n">converter</span><span class="o">.</span><span class="n">prefix</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Available run converters: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">converter_text</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mt-2&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="GeneralLayout.__call__"><a class="viewcode-back" href="../../../api/deepcave.layouts.general.html#deepcave.layouts.general.GeneralLayout.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_groups</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="s2">&quot;General&quot;</span><span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Working Directory&quot;</span><span class="p">),</span>
+            <span class="c1"># html.Div(&quot;Working Directory&quot;),</span>
+            <span class="c1"># dbc.FormText(&quot;Absolute path to your runs.&quot;),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-working-directory-input&quot;</span><span class="p">,</span> <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text&quot;</span>
+            <span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">FormText</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-converter-label&quot;</span><span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H2</span><span class="p">(</span><span class="s2">&quot;Runs&quot;</span><span class="p">),</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-run-names&quot;</span><span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-runs-checklist&quot;</span><span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H2</span><span class="p">(</span><span class="s2">&quot;Groups&quot;</span><span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-group-container&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[]),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="s2">&quot;Add Group&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-add-group&quot;</span><span class="p">),</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-group-trigger&quot;</span><span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H2</span><span class="p">(</span><span class="s2">&quot;Caches&quot;</span><span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
+                <span class="s2">&quot;Clear Plugin Caches&quot;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;general-clear-cache-button&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span>
+            <span class="p">),</span>
+        <span class="p">]</span></div></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+4.4.0. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

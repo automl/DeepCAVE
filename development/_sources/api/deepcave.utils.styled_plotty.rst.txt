@@ -1,0 +1,30 @@
+deepcave.utils.styled\_plotty
+=============================
+
+.. automodule:: deepcave.utils.styled_plotty
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_color
+      hex_to_rgb
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

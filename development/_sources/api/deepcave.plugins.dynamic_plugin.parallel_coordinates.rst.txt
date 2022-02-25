@@ -1,0 +1,29 @@
+deepcave.plugins.dynamic\_plugin.parallel\_coordinates
+======================================================
+
+.. automodule:: deepcave.plugins.dynamic_plugin.parallel_coordinates
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParallelCoordinates
+   
+   
+
+   
+   
+   
+
+
+

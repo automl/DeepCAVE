@@ -1,0 +1,29 @@
+deepcave.runs.grouped\_run
+==========================
+
+.. automodule:: deepcave.runs.grouped_run
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      GroupedRun
+   
+   
+
+   
+   
+   
+
+
+

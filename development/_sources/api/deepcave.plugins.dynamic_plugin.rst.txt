@@ -1,0 +1,43 @@
+deepcave.plugins.dynamic\_plugin
+================================
+
+.. automodule:: deepcave.plugins.dynamic_plugin
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      DynamicPlugin
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :recursive:
+
+   deepcave.plugins.dynamic_plugin.budget_correlation
+   deepcave.plugins.dynamic_plugin.ccube
+   deepcave.plugins.dynamic_plugin.configurations
+   deepcave.plugins.dynamic_plugin.cost_over_time
+   deepcave.plugins.dynamic_plugin.overview
+   deepcave.plugins.dynamic_plugin.parallel_coordinates
+   deepcave.plugins.dynamic_plugin.pareto_front
+

@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepcave.plugins &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="deepcave.plugins.dynamic_plugin" href="deepcave.plugins.dynamic_plugin.html" />
+    <link rel="prev" title="deepcave.layouts.sidebar" href="deepcave.layouts.sidebar.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../index.html">
+    <img src="../_static/logo.png" class="logo" alt="logo">
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../search.html" method="get"
+style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
+<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/minimal_run.html">
+     Record Minimal Run
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/mlp.html">
+     Multi-Layer Perceptron
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/mlp_pytorch.html">
+     Multi-Layer Perceptron via PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/templates/multiple_runs.html">
+     Multiple Runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/templates/single_run.html">
+     Single Run
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/fanova.html">
+     fANOVA
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../api.html">
+   API References
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="deepcave.runs.html">
+     deepcave.runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="section" id="module-deepcave.plugins">
+<span id="deepcave-plugins"></span><h1>deepcave.plugins<a class="headerlink" href="#module-deepcave.plugins" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Classes</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.Plugin" title="deepcave.plugins.Plugin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plugin</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.</span></span><span class="sig-name descname"><span class="pre">Plugin</span></span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="deepcave.layouts.html#deepcave.layouts.Layout" title="deepcave.layouts.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.layouts.Layout</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">render_button</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>We overwrite the get_layout method here as we use a different
+interface compared to layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.button_caption">
+<span class="sig-name descname"><span class="pre">button_caption</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Process'</span></em><a class="headerlink" href="#deepcave.plugins.Plugin.button_caption" title="Permalink to this definition">¶</a></dt>
+<dd><p>activate_run_selection:
+Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at
+a time. Moreover, it prevents the plugin to calculate results across all runs.</p>
+<p>The run can be selected by inputs[“run_name”][“value”].
+bool: True if run selection should be shown.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.check_run_compatibility">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_run_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.check_run_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.check_run_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a run is compatible with this plugin. If a plugin is not compatible,
+you can not select the run.</p>
+<p class="rubric">Notes</p>
+<p>This function is only called if <cite>activate_run_selection</cite> is True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – One of the selected runs/groups.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns True if the run is compatible.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.check_runs_compatibility">
+<span class="sig-name descname"><span class="pre">check_runs_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.check_runs_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.check_runs_compatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is needed if all selected runs need something in common
+(e.g. budget or objective). Since this function is called before the layout is created,
+it can be also used to set common values for the plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>runs</strong> (<em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – Selected runs.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.html#deepcave.runs.NotMergeableError" title="deepcave.runs.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs are not compatible, an error is thrown.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.get_selected_runs">
+<span class="sig-name descname"><span class="pre">get_selected_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.get_selected_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.get_selected_runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses selected runs from inputs.
+If self.activate_run_selection is set return only selected run</p>
+<p>Otherwise, return all possible runs</p>
+<p>Can raise PreventUpdate() if activate_run_selection is set, but run_name not available</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRun</span></code></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_mpl_outputs">
+<span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_mpl_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
+a Dict[str, str] is returned.</p></li>
+<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
+returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_outputs">
+<span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
+a Dict[str, str] is returned.</p></li>
+<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
+returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_run_inputs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_run_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_run_compatibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_run_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_run_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set <cite>run_names</cite> and displays both runs and group runs if
+they are compatible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p class="rubric">Modules</p>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.plugins.dynamic_plugin.html#module-deepcave.plugins.dynamic_plugin" title="deepcave.plugins.dynamic_plugin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.plugins.dynamic_plugin</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.plugins.static_plugin.html#module-deepcave.plugins.static_plugin" title="deepcave.plugins.static_plugin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.plugins.static_plugin</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="deepcave.layouts.sidebar.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">deepcave.layouts.sidebar</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="deepcave.plugins.dynamic_plugin.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">deepcave.plugins.dynamic_plugin</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+4.4.0. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Overview: module code &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../index.html">
+    <img src="../_static/logo.png" class="logo" alt="logo">
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../search.html" method="get"
+style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
+<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/minimal_run.html">
+     Record Minimal Run
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/mlp.html">
+     Multi-Layer Perceptron
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/mlp_pytorch.html">
+     Multi-Layer Perceptron via PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/templates/multiple_runs.html">
+     Multiple Runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/templates/single_run.html">
+     Single Run
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/fanova.html">
+     fANOVA
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>All modules for which code is available</h1>
+<ul><li><a href="deepcave/layouts.html">deepcave.layouts</a></li>
+<ul><li><a href="deepcave/layouts/general.html">deepcave.layouts.general</a></li>
+<li><a href="deepcave/layouts/header.html">deepcave.layouts.header</a></li>
+<li><a href="deepcave/layouts/main.html">deepcave.layouts.main</a></li>
+<li><a href="deepcave/layouts/not_found.html">deepcave.layouts.not_found</a></li>
+<li><a href="deepcave/layouts/sidebar.html">deepcave.layouts.sidebar</a></li>
+</ul><li><a href="deepcave/plugins.html">deepcave.plugins</a></li>
+<ul><li><a href="deepcave/plugins/dynamic_plugin.html">deepcave.plugins.dynamic_plugin</a></li>
+<ul><li><a href="deepcave/plugins/dynamic_plugin/budget_correlation.html">deepcave.plugins.dynamic_plugin.budget_correlation</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/ccube.html">deepcave.plugins.dynamic_plugin.ccube</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/configurations.html">deepcave.plugins.dynamic_plugin.configurations</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/cost_over_time.html">deepcave.plugins.dynamic_plugin.cost_over_time</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/overview.html">deepcave.plugins.dynamic_plugin.overview</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/parallel_coordinates.html">deepcave.plugins.dynamic_plugin.parallel_coordinates</a></li>
+<li><a href="deepcave/plugins/dynamic_plugin/pareto_front.html">deepcave.plugins.dynamic_plugin.pareto_front</a></li>
+</ul><li><a href="deepcave/plugins/static_plugin.html">deepcave.plugins.static_plugin</a></li>
+<ul><li><a href="deepcave/plugins/static_plugin/fanova.html">deepcave.plugins.static_plugin.fanova</a></li>
+</ul></ul><li><a href="deepcave/runs.html">deepcave.runs</a></li>
+<ul><li><a href="deepcave/runs/converters/bohb.html">deepcave.runs.converters.bohb</a></li>
+<li><a href="deepcave/runs/converters/deepcave.html">deepcave.runs.converters.deepcave</a></li>
+<li><a href="deepcave/runs/converters/smac.html">deepcave.runs.converters.smac</a></li>
+<li><a href="deepcave/runs/grouped_run.html">deepcave.runs.grouped_run</a></li>
+<li><a href="deepcave/runs/handler.html">deepcave.runs.handler</a></li>
+<li><a href="deepcave/runs/objective.html">deepcave.runs.objective</a></li>
+<li><a href="deepcave/runs/run.html">deepcave.runs.run</a></li>
+</ul><li><a href="deepcave/utils/compression.html">deepcave.utils.compression</a></li>
+<li><a href="deepcave/utils/dash.html">deepcave.utils.dash</a></li>
+<li><a href="deepcave/utils/data_structures.html">deepcave.utils.data_structures</a></li>
+<li><a href="deepcave/utils/layout.html">deepcave.utils.layout</a></li>
+<li><a href="deepcave/utils/run_caches.html">deepcave.utils.run_caches</a></li>
+<li><a href="deepcave/utils/styled_plot.html">deepcave.utils.styled_plot</a></li>
+<li><a href="deepcave/utils/styled_plotty.html">deepcave.utils.styled_plotty</a></li>
+<li><a href="deepcave/utils/util.html">deepcave.utils.util</a></li>
+</ul>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+4.4.0. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

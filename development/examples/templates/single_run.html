@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Single Run &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Plugins" href="../../plugins/index.html" />
+    <link rel="prev" title="Multiple Runs" href="multiple_runs.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../../index.html">
+    <img src="../../_static/logo.png" class="logo" alt="logo">
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../search.html" method="get"
+style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
+<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../index.html">
+   Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../record/minimal_run.html">
+     Record Minimal Run
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../record/mlp.html">
+     Multi-Layer Perceptron
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../record/mlp_pytorch.html">
+     Multi-Layer Perceptron via PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="multiple_runs.html">
+     Multiple Runs
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Single Run
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/fanova.html">
+     fANOVA
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-templates-single-run-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="single-run">
+<span id="sphx-glr-examples-templates-single-run-py"></span><h1>Single Run<a class="headerlink" href="#single-run" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">SingleRun</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;single_run&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Single Run&quot;</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                        <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                        <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select budget ...&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameters&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Default values if the plugin never was used before</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="p">):</span>
+        <span class="c1"># Prepare objetives</span>
+        <span class="n">objective_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
+        <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)</span>
+
+        <span class="c1"># Prepare budgets</span>
+        <span class="n">budgets</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)))</span>
+
+        <span class="c1"># Prepare others</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+
+        <span class="c1"># Get selected values</span>
+        <span class="n">objective_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Pre-set values</span>
+        <span class="k">if</span> <span class="n">objective_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">objective_value</span> <span class="o">=</span> <span class="n">objective_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">budget_value</span> <span class="o">=</span> <span class="n">budget_options</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="n">hp_value</span> <span class="o">=</span> <span class="n">hp_names</span>
+
+        <span class="n">new_inputs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">budget_value</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp_value</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Use this method if you only change some inputs in `new_inputs`</span>
+        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">inputs</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="n">budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">))</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+
+        <span class="n">test</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Make sure the output is serializable</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="n">test</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+        <span class="c1"># The selected values from the user</span>
+        <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hyperparameter_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Get the data from `process`</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Do some filtering stuff here if needed</span>
+        <span class="c1"># ...</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()]</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-templates-single-run-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/dbe6f8bd2a124fe3e347effd1d591661/single_run.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">single_run.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/803912e00b7e01e0db8b2fc5782691b5/single_run.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">single_run.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="multiple_runs.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Multiple Runs</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../../plugins/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Plugins</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+4.4.0. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
