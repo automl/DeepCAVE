@@ -8,11 +8,13 @@ on:
   push:
     branches:
       - main
+      - development
 
   # Trigger on any push to a PR that targets master
   pull_request:
     branches:
       - main
+      - development
 
 env:
   name: DeepCAVE
