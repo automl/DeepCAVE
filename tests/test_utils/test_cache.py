@@ -127,8 +127,8 @@ class TestCache(unittest.TestCase):
         """Cache should still work, even when file is None"""
         cache = Cache(None)
 
-        cache.set(1, 2, 3, value=4)
-        self.assertEqual(4, cache.get(1, 2, 3))
+        cache.set("1", "2", "3", value=4)
+        self.assertEqual(4, cache.get("1", "2", "3"))
 
 
 class TestCompression(unittest.TestCase):
@@ -148,11 +148,7 @@ class TestCompression(unittest.TestCase):
 
         df_ser = serialize(df)
         self.assertEqual(
-            "{"
-            '"0":{"0":1,"1":"a"},'
-            '"1":{"0":2,"1":"b"},'
-            '"2":{"0":null,"1":"c"}'
-            "}",
+            "{" '"0":{"0":1,"1":"a"},' '"1":{"0":2,"1":"b"},' '"2":{"0":null,"1":"c"}' "}",
             df_ser,
         )
         df_cycled = deserialize(df_ser, dtype=pd.DataFrame)

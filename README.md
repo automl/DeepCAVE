@@ -72,7 +72,9 @@ or
 ./start.sh
 ```
 
-Visit `http://127.0.0.1:8050/` to get started.
+Visit `http://127.0.0.1:8050/` to get started. The following image gives
+you an idea of the look from DeepCAVE. You can find more interface insights
+in the documentation.
 
-![interface](media/interface.png)
+![interface](docs/images/plugins/pareto_front.png)
 
