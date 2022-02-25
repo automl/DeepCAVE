@@ -33,15 +33,13 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install -e ".[dev]"
+        pip install .
+        pip install .[dev]
 
     - name: Make docs
       run: |
+        cd docs
         make docs
-
-    - name: Make Examples
-      run: |
-        make examples
 
     - name: Pull latest gh-pages
       if: (contains(github.ref, 'main'))
