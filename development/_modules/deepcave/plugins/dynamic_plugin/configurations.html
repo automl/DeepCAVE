@@ -35,7 +35,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -310,7 +309,7 @@ style="width: 100%;">
 
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Configurations.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
 
         <span class="n">configspace</span> <span class="o">=</span> <span class="p">{</span>
@@ -366,9 +365,9 @@ style="width: 100%;">
             <span class="s2">&quot;configspace&quot;</span><span class="p">:</span> <span class="n">configspace</span><span class="p">,</span>
             <span class="s2">&quot;best_config&quot;</span><span class="p">:</span> <span class="n">best_config</span><span class="p">,</span>
             <span class="s2">&quot;costs&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Configurations.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Configuration Space&quot;</span><span class="p">),</span>
@@ -377,7 +376,7 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Best Configuration&quot;</span><span class="p">),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;best_config&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;costs&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Configurations.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">mb</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>

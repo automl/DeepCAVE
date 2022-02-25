@@ -35,7 +35,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -301,7 +300,7 @@ style="width: 100%;">
 
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Overview.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.overview.html#deepcave.plugins.dynamic_plugin.overview.Overview.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Meta</span>
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Attribute&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
@@ -360,9 +359,9 @@ style="width: 100%;">
             <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="n">meta</span><span class="p">,</span>
             <span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">objectives</span><span class="p">,</span>
             <span class="s2">&quot;statistics&quot;</span><span class="p">:</span> <span class="n">statistics</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Overview.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.overview.html#deepcave.plugins.dynamic_plugin.overview.Overview.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Meta&quot;</span><span class="p">),</span>
@@ -373,7 +372,7 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Statistics&quot;</span><span class="p">),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;statistics&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Overview.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.overview.html#deepcave.plugins.dynamic_plugin.overview.Overview.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">mb</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>

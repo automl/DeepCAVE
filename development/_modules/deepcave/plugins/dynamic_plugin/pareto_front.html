@@ -35,7 +35,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -323,7 +322,7 @@ style="width: 100%;">
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ParetoFront.get_input_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
@@ -352,9 +351,9 @@ style="width: 100%;">
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ParetoFront.get_filter_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
@@ -363,9 +362,9 @@ style="width: 100%;">
                     <span class="n">dbc</span><span class="o">.</span><span class="n">RadioItems</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;all_configs&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
                 <span class="p">],</span>
             <span class="p">),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ParetoFront.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;objective1&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_options</span><span class="p">,</span>
@@ -383,9 +382,9 @@ style="width: 100%;">
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
             <span class="p">},</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ParetoFront.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
         <span class="c1"># Get budget</span>
         <span class="n">budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
@@ -440,13 +439,13 @@ style="width: 100%;">
             <span class="s2">&quot;points&quot;</span><span class="p">:</span> <span class="n">points</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">&quot;pareto_points&quot;</span><span class="p">:</span> <span class="n">is_front</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">&quot;config_ids&quot;</span><span class="p">:</span> <span class="n">config_ids</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ParetoFront.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="ParetoFront.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
 

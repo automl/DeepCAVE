@@ -35,7 +35,6 @@
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -312,7 +311,7 @@ style="width: 100%;">
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CostOverTime.get_input_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
@@ -335,9 +334,9 @@ style="width: 100%;">
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CostOverTime.get_filter_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
@@ -354,9 +353,9 @@ style="width: 100%;">
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CostOverTime.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">display_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Runs&quot;</span><span class="p">,</span> <span class="s2">&quot;Groups&quot;</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="p">{</span>
@@ -380,9 +379,9 @@ style="width: 100%;">
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_radio_options</span><span class="p">(</span><span class="n">display_options</span><span class="p">),</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">display_options</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="p">},</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CostOverTime.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
         <span class="n">budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">))</span>
@@ -395,13 +394,13 @@ style="width: 100%;">
             <span class="s2">&quot;costs_mean&quot;</span><span class="p">:</span> <span class="n">costs_mean</span><span class="p">,</span>
             <span class="s2">&quot;costs_std&quot;</span><span class="p">:</span> <span class="n">costs_std</span><span class="p">,</span>
             <span class="s2">&quot;ids&quot;</span><span class="p">:</span> <span class="n">ids</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CostOverTime.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span>
-        <span class="p">]</span>
+        <span class="p">]</span></div>
 
 <div class="viewcode-block" id="CostOverTime.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
         <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>

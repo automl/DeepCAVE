@@ -35,7 +35,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.plugins.static_plugin.fanova" href="deepcave.plugins.static_plugin.fanova.html" />
@@ -333,6 +332,16 @@ style="width: 100%;">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin.html#StaticPlugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.StaticPlugin.__call__" title="Permalink to this definition">¶</a></dt>
 <dd><p>We overwrite the get_layout method here as we use a different
 interface compared to layout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.StaticPlugin.register_callbacks">
+<span class="sig-name descname"><span class="pre">register_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin.html#StaticPlugin.register_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.StaticPlugin.register_callbacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers basic callbacks for the plugin. Following callbacks are registered:
+- If inputs changes, the changes are pasted back. This is in particular
+interest if input dependencies are used.
+- Alert messages.
+- Raw data dialog.</p>
 </dd></dl>
 
 </dd></dl>

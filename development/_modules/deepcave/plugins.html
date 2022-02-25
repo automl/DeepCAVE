@@ -35,7 +35,6 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -313,22 +312,31 @@ style="width: 100%;">
 <div class="viewcode-block" id="Plugin"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin">[docs]</a><span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="n">Layout</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">category</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">99999</span>
     <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;far fa-file&quot;</span>
-
     <span class="n">button_caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Process&quot;</span>
+    <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    activate_run_selection:</span>
-<span class="sd">    Shows a dropdown to select a run in the inputs layout. This feature is useful if only one run could be viewed at</span>
-<span class="sd">    a time. Moreover, it prevents the plugin to calculate results across all runs.</span>
-
-<span class="sd">    The run can be selected by inputs[&quot;run_name&quot;][&quot;value&quot;].</span>
-<span class="sd">    bool: True if run selection should be shown.</span>
+<span class="sd">    Base class for all plugins.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : int</span>
+<span class="sd">        Unique identifier for the plugin.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of the plugin. It is shown in the navigation and in the title.</span>
+<span class="sd">    description : str, optional</span>
+<span class="sd">        Description of the plugin. Displayed below the title.</span>
+<span class="sd">    icon : str, optional</span>
+<span class="sd">        FontAwesome icon. Shown in the navigation.</span>
+<span class="sd">    button_caption : str, optional</span>
+<span class="sd">        Caption of the button. Shown only, if `StaticPlugin` is used.</span>
+<span class="sd">    activate_run_selection : bool, optional</span>
+<span class="sd">        Shows a dropdown to select a run in the inputs layout.</span>
+<span class="sd">        This feature is useful if only one run could be viewed at a time.</span>
+<span class="sd">        Moreover, it prevents the plugin to calculate results across all runs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -365,7 +373,6 @@ style="width: 100%;">
 <span class="sd">        -------</span>
 <span class="sd">        bool</span>
 <span class="sd">            Returns True if the run is compatible.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="kc">True</span></div>
@@ -389,9 +396,29 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="kc">True</span></div>
 
-    <span class="k">def</span> <span class="nf">register_input</span><span class="p">(</span>
+<div class="viewcode-block" id="Plugin.register_input"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">[docs]</a>    <span class="k">def</span> <span class="nf">register_input</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,),</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Registers an input variable for the plugin. It is important to register the inputs</span>
+<span class="sd">        because callbacks have to be defined before the server is started.</span>
+<span class="sd">        After registering all inputs, an internal mapping is created.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        id : str</span>
+<span class="sd">            Specifies the id of the input.</span>
+<span class="sd">        attributes : Union[str, Iterable[str]], optional</span>
+<span class="sd">            Attributes which should be passed to the (dash) component, by default (&quot;value&quot;,)</span>
+<span class="sd">        filter : bool, optional</span>
+<span class="sd">            Specifies if the input is a filter, by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Unique id for the input and plugin. This is necessary because ids are defined globally.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">attributes</span><span class="p">]</span>
 
@@ -405,9 +432,27 @@ style="width: 100%;">
         <span class="c1"># shift them to the front.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Plugin.register_output"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">[docs]</a>    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Registers an output variable for the plugin.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        id : str</span>
+<span class="sd">            Specifies the id of the output.</span>
+<span class="sd">        attribute : str, optional</span>
+<span class="sd">            Attribute, by default &quot;value&quot;</span>
+<span class="sd">        mpl : bool, optional</span>
+<span class="sd">            Specifies if the registration is for matplotlib or default, by default False</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Unique id for the output and plugin. This is necessary because ids are defined globally.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">mpl</span><span class="p">:</span>
@@ -417,7 +462,7 @@ style="width: 100%;">
         <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">get_internal_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -428,7 +473,15 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">get_internal_output_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">-output&quot;</span>
 
-    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Plugin.register_callbacks"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Registers basic callbacks for the plugin. Following callbacks are registered:</span>
+<span class="sd">        - If inputs changes, the changes are pasted back. This is in particular</span>
+<span class="sd">        interest if input dependencies are used.</span>
+<span class="sd">        - Alert messages.</span>
+<span class="sd">        - Raw data dialog.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="c1"># We have to call the output layout one time to register</span>
         <span class="c1"># the values</span>
         <span class="c1"># Problem: Inputs/Outputs can&#39;t be changed afterwards anymore.</span>
@@ -567,12 +620,22 @@ style="width: 100%;">
 
                 <span class="k">return</span> <span class="ow">not</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span>
 
-            <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span>
+            <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span></div>
 
-    <span class="k">def</span> <span class="nf">update_alert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Plugin.update_alert"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.update_alert">[docs]</a>    <span class="k">def</span> <span class="nf">update_alert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the alert text and color. Will automatically trigger the alert callback.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            The text to display.</span>
+<span class="sd">        color : str, optional</span>
+<span class="sd">            The color to display, by default &quot;success&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alert_text</span> <span class="o">=</span> <span class="n">text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alert_color</span> <span class="o">=</span> <span class="n">color</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alert_update_required</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_update_required</span> <span class="o">=</span> <span class="kc">True</span></div>
 
     <span class="k">def</span> <span class="nf">_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">last_inputs</span><span class="p">):</span>
         <span class="c1"># Check if last_inputs are the same as the given inputs.</span>
@@ -887,8 +950,22 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">components</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Plugin.get_run_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_run_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_run_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Component</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the run selection input.</span>
+<span class="sd">        This is only the case if `activate_run_selection` is True.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable[[str, Union[str, List[str]]], str]</span>
+<span class="sd">            The register method to register (user) variables.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Component</span>
+<span class="sd">            The layout of the run selection input.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
@@ -896,17 +973,31 @@ style="width: 100%;">
                     <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select run ...&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">]</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Plugin.load_run_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">load_run_inputs</span><span class="p">(</span>
-        <span class="n">runs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Run</span><span class="p">],</span>
+        <span class="n">runs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">],</span>
         <span class="n">groups</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">GroupedRun</span><span class="p">],</span>
-        <span class="n">check_run_compatibility</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+        <span class="n">check_run_compatibility</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">AbstractRun</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set `run_names` and displays both runs and group runs if</span>
-<span class="sd">        they are compatible.</span>
+<span class="sd">        Loads the options for `get_run_input_layout`.</span>
+<span class="sd">        Both runs and groups are displayed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        runs : Dict[str, Run]</span>
+<span class="sd">            The runs to display.</span>
+<span class="sd">        groups : Dict[str, GroupedRun]</span>
+<span class="sd">            The groups to display.</span>
+<span class="sd">        check_run_compatibility : Callable[[AbstractRun], bool]</span>
+<span class="sd">            If a single run is compatible. If not, the run is not shown.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            Both runs and groups, separated by a separator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
@@ -944,11 +1035,23 @@ style="width: 100%;">
 <div class="viewcode-block" id="Plugin.get_selected_runs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">[docs]</a>    <span class="k">def</span> <span class="nf">get_selected_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parses selected runs from inputs.</span>
-<span class="sd">        If self.activate_run_selection is set return only selected run</span>
+<span class="sd">        If self.activate_run_selection is set, return only selected run. Otherwise, return all</span>
+<span class="sd">        possible runs.</span>
 
-<span class="sd">        Otherwise, return all possible runs</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            The inputs to parse.</span>
 
-<span class="sd">        Can raise PreventUpdate() if activate_run_selection is set, but run_name not available</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[AbstractRun]</span>
+<span class="sd">            The selected runs.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        PreventUpdate</span>
+<span class="sd">            If `activate_run_selection` is set but `run_name` is not available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Special case: If run selection is active</span>
@@ -970,27 +1073,118 @@ style="width: 100%;">
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">{}</span>
+<div class="viewcode-block" id="Plugin.load_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.</span>
+<span class="sd">        This method is necessary to pre-load contents for the inputs. So, if the plugin is</span>
+<span class="sd">        called for the first time or there are no results in the cache, the plugin gets its</span>
+<span class="sd">        content from this method.</span>
 
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">inputs</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            Content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{}</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">[]</span>
+<div class="viewcode-block" id="Plugin.load_dependency_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">selected_run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Same as `load_inputs` but called after inputs have changed. Provides a lot of flexibility.</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        previous_inputs : Dict[str, Any]</span>
+<span class="sd">            Previous content of the inputs.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            Current content of the inputs.</span>
+<span class="sd">        selected_run : Optional[Union[AbstractRun, List[AbstractRun]]], optional</span>
+<span class="sd">            The selected run from the user. In case of `activate_run_selection`, a list of runs</span>
+<span class="sd">            are passed. Defaults to None.</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[]</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            Content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">inputs</span></div>
+
+<div class="viewcode-block" id="Plugin.get_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable[[str, Union[str, List[str]]], str]</span>
+<span class="sd">            The register method to register (user) variables.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layouts for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Plugin.get_filter_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Layout for the filter block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable[[str, Union[str, List[str]]], str]</span>
+<span class="sd">            The register method to register (user) variables.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layouts for the filter block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Plugin.get_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable[[str, Union[str, List[str]]], str]</span>
+<span class="sd">            The register method to register outputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layouts for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="Plugin.get_mpl_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_mpl_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Layout for the matplotlib output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable[[str, Union[str, List[str]]], str]</span>
+<span class="sd">            The register method to register outputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layout for the matplotlib output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Plugin.load_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1048,10 +1242,25 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="p">[]</span></div>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Plugin.process"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
-        <span class="k">pass</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns raw data based on a run and input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run : AbstractRun</span>
+<span class="sd">            The run to process.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            Input data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">pass</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_process</span><span class="p">(</span><span class="n">process</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">run_cache_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>

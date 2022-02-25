@@ -35,7 +35,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.runs" href="deepcave.runs.html" />
@@ -318,6 +317,96 @@ style="width: 100%;">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.static_plugin.fanova.</span></span><span class="sig-name descname"><span class="pre">fANOVA</span></span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin" title="deepcave.plugins.static_plugin.StaticPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.plugins.static_plugin.StaticPlugin</span></code></a></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.get_filter_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.get_filter_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout for the filter block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Layouts for the filter block.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.get_input_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.get_input_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout for the input block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Layouts for the input block.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.get_output_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.get_output_layout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Layout for the output block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Layouts for the output block.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.load_dependency_inputs">
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <cite>load_inputs</cite> but called after inputs have changed. Provides a lot of flexibility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>previous_inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Previous content of the inputs.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Current content of the inputs.</p></li>
+<li><p><strong>selected_run</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The selected run from the user. In case of <cite>activate_run_selection</cite>, a list of runs
+are passed. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Content to be filled.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.load_inputs">
+<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.load_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the content for the defined inputs in <cite>get_input_layout</cite> and <cite>get_filter_layout</cite>.
+This method is necessary to pre-load contents for the inputs. So, if the plugin is
+called for the first time or there are no results in the cache, the plugin gets its
+content from this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Content to be filled.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.load_outputs">
 <span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.load_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in the raw data and prepares them for the layout.</p>
@@ -336,6 +425,24 @@ returned.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.static_plugin.fanova.fANOVA.process">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static_plugin/fanova.html#fANOVA.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static_plugin.fanova.fANOVA.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns raw data based on a run and input data.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The returned data must be JSON serializable.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
