@@ -122,7 +122,7 @@ class RunHandler:
             raise NotValidRunError()
 
         # Add to run cache
-        self.rc.get(run)
+        self.rc.get_run(run)
         return run
 
     def update_groups(self, groups: Optional[Dict[str, List[str]]] = None) -> None:
