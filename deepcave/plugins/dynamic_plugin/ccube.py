@@ -168,8 +168,7 @@ class CCube(DynamicPlugin):
             dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),
         ]
 
-    @staticmethod
-    def load_outputs(inputs, outputs, run):
+    def load_outputs(self, inputs, outputs, run):
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
         # show_all_labels = outputs[run_name]["show_all_labels"]
