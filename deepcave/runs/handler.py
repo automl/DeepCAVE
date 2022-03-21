@@ -248,7 +248,7 @@ class RunHandler:
         for run_class in self.available_run_classes:
             try:
                 run = run_class.from_path(self.working_dir / run_name)
-                self.logger.info(f"Successfully loaded {run_name} with {run_class}")
+                self.logger.info(f"Successfully loaded {run_name} with {run_class.__name__}")
                 return run
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt

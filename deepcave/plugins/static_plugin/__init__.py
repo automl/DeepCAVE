@@ -1,14 +1,16 @@
+import traceback
 from abc import ABC
-
 from enum import Enum
+from typing import Callable, Any
 
 from dash import dcc
 from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, queue, rc
+from deepcave import app, c, queue, rc, run_handler
 from deepcave.plugins import Plugin
+from deepcave.runs import AbstractRun
 
 
 class PluginState(Enum):
@@ -16,6 +18,15 @@ class PluginState(Enum):
     READY = 0
     NEEDS_PROCESSING = 1
     PROCESSING = 2
+
+
+def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
+    run = run_handler.from_run_cache_id(run_cache_id)
+    try:
+        return process(run, inputs)
+    except:
+        traceback.print_exc()
+        raise
 
 
 class StaticPlugin(Plugin, ABC):
@@ -88,7 +99,7 @@ class StaticPlugin(Plugin, ABC):
 
                 if inputs_changed or self._refresh_required:
                     c.set("last_inputs", self.id, value=inputs)
-                    
+
                     # Save for modal
                     self.raw_outputs = raw_outputs
 
@@ -109,7 +120,7 @@ class StaticPlugin(Plugin, ABC):
 
                         # We already got our results or it was already processed
                         if raw_outputs[run.name] is not None or queue.is_processed(
-                            job_id
+                                job_id
                         ):
                             continue
 
@@ -124,7 +135,7 @@ class StaticPlugin(Plugin, ABC):
 
                         # Start the task in rq
                         queue.enqueue(
-                            self._process,
+                            _process,
                             args=[self.process, run.run_cache_id, inputs],
                             job_id=job_id,
                             meta=job_meta,

@@ -982,7 +982,3 @@ class Plugin(Layout, ABC):
 
         pass
 
-    @staticmethod
-    def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
-        run = run_handler.from_run_cache_id(run_cache_id)
-        return process(run, inputs)
