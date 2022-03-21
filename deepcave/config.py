@@ -1,5 +1,5 @@
-from typing import Dict, List
 from pathlib import Path
+from typing import Dict, List
 
 
 class Config:
@@ -36,6 +36,7 @@ class Config:
         dictionary [category -> List[Plugins]]
         Plugins are ordered
         """
+        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
         from deepcave.plugins.dynamic_plugin.ccube import CCube
         from deepcave.plugins.dynamic_plugin.configurations import Configurations
         from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
@@ -43,9 +44,10 @@ class Config:
         from deepcave.plugins.dynamic_plugin.parallel_coordinates import (
             ParallelCoordinates,
         )
-        from deepcave.plugins.static_plugin.fanova import fANOVA
         from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
-        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.static_plugin.fanova import fANOVA
+        from deepcave.plugins.static_plugin.ice import ICEPlugin
+        from deepcave.plugins.static_plugin.pdp import PDPPlugin
 
         plugins = {
             "Summary": [
@@ -63,6 +65,8 @@ class Config:
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),
+                ICEPlugin(),
+                PDPPlugin(),
             ],
         }
         return plugins

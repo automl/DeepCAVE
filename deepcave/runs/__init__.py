@@ -46,7 +46,7 @@ class Status(IntEnum):
 class Trial:
     config_id: int
     budget: int
-    costs: float
+    costs: list[float]
     start_time: float
     end_time: float
     status: Status
