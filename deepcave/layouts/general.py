@@ -217,23 +217,25 @@ class GeneralLayout(Layout):
 
         return [
             html.H1("General"),
+            # Working dir
             dbc.Label("Working Directory"),
-            # html.Div("Working Directory"),
-            # dbc.FormText("Absolute path to your runs."),
             dbc.Input(
                 id="general-working-directory-input", placeholder="", type="text"
             ),
             dbc.FormText(id="general-converter-label"),
             html.Hr(),
+            # Runs
             html.H2("Runs"),
             dcc.Store(id="general-run-names"),
             dbc.Checklist(id="general-runs-checklist"),
             html.Hr(),
+            # Groups
             html.H2("Groups"),
             html.Div(id="general-group-container", children=[]),
             dbc.Button("Add Group", id="general-add-group"),
             dcc.Store(id="general-group-trigger"),
             html.Hr(),
+            # Cache
             html.H2("Caches"),
             dbc.Button(
                 "Clear Plugin Caches", id="general-clear-cache-button", color="primary"

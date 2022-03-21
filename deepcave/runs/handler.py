@@ -6,6 +6,7 @@ from pathlib import Path
 from deepcave.config import Config
 from deepcave.runs import AbstractRun, NotValidRunError
 from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs.run import Run
 from deepcave.utils.logs import get_logger
 
 
@@ -23,7 +24,7 @@ class RunHandler:
         self.working_dir: Optional[Path] = None
 
         # Available converters
-        self.available_run_classes: List[AbstractRun] = config.AVAILABLE_CONVERTERS
+        self.available_run_classes: List[Type[Run]] = config.AVAILABLE_CONVERTERS
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
@@ -37,13 +38,13 @@ class RunHandler:
         selected_runs: List[str] = self.c.get("selected_run_names")  # run_name
         groups: Dict[str, List[str]] = self.c.get("groups")  # group_name -> List[run_names]
 
-        print(f"Resetting working directory to {working_dir}")
+        self.logger.debug(f"Resetting working directory to {working_dir}")
         self.update_working_directory(working_dir)
 
-        print(f"Setting runs to {selected_runs}")
+        self.logger.debug(f"Setting runs to {selected_runs}")
         self.update_runs(selected_runs)
 
-        print(f"Setting groups to {groups}")
+        self.logger.debug(f"Setting groups to {groups}")
         self.update_groups(groups)
 
     def update_working_directory(self, working_directory: Path, force_clear: bool = False):
@@ -90,7 +91,7 @@ class RunHandler:
         self.runs = new_runs
         self.c.set("selected_run_names", value=self.get_run_names())
 
-    def update_run(self, run_name: str, class_hint: Optional[AbstractRun] = None) -> Optional[AbstractRun]:
+    def update_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[AbstractRun]:
         """
 
         Raises
@@ -108,13 +109,13 @@ class RunHandler:
             )  # Create cache file and set name/hash. Clear cache if hash got changed
             return run
         else:
-            self.logger.info(f"Run {run_name} needs to be initialized")
+            self.logger.debug(f"Run {run_name} needs to be initialized")
 
         # Load run
         t1 = time.perf_counter()
         run = self.get_run(run_name, class_hint=class_hint)
         t2 = time.perf_counter()
-        self.logger.info(f"... {run_name} was loaded. (took {t2 - t1} seconds)")
+        self.logger.debug(f"Run {run_name} was loaded. (took {t2 - t1} seconds)")
 
         # Run could not be loaded
         if run is None:
@@ -202,6 +203,8 @@ class RunHandler:
 
         try:
             for path in self.working_dir.iterdir():
+                if path.is_file():
+                    continue
                 run_name = path.stem
                 run_names.append(run_name)
         except FileNotFoundError:
@@ -230,7 +233,7 @@ class RunHandler:
             return runs
         return self.runs
 
-    def get_run(self, run_name: str, class_hint: Optional[AbstractRun] = None) -> Optional[AbstractRun]:
+    def get_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[Run]:
         """
         Try to load run from path by using all available converters, until a sufficient class is found.
         Try to load them in order by how many runs were already successfully converted from this class
@@ -248,7 +251,7 @@ class RunHandler:
         for run_class in self.available_run_classes:
             try:
                 run = run_class.from_path(self.working_dir / run_name)
-                self.logger.info(f"Successfully loaded {run_name} with {run_class.__name__}")
+                self.logger.debug(f"Successfully loaded {run_name} with {run_class.__name__}")
                 return run
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt

@@ -19,7 +19,7 @@ logger = get_logger("PDPPlugin")
 class PDPPlugin(StaticPlugin):
     id = "pdp"
     name = "PDP"
-    icon = "far fa-line-chart"
+    icon = "far fa-star"
     activate_run_selection = True
 
     @staticmethod
@@ -171,7 +171,7 @@ class PDPPlugin(StaticPlugin):
             run.configspace.get_idx_by_hyperparameter_name(hp)
             for hp in selected_hyperparameters
         ]
-        show_confidences = True
+        show_confidences = inputs["confidences"]["value"] == "true"
         # Parse outputs
         x = np.asarray(outputs["x"])
         y = np.asarray(outputs["y"])

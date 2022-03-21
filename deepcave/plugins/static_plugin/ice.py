@@ -19,7 +19,7 @@ logger = get_logger("ICEPlugin")
 class ICEPlugin(StaticPlugin):
     id = "ice"
     name = "ICE"
-    icon = "far fa-linechart"
+    icon = "far fa-star"
     activate_run_selection = True
 
     @staticmethod
