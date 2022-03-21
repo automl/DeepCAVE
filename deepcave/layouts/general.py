@@ -12,6 +12,7 @@ from deepcave import app, c, rc, run_handler
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError, NotValidRunError
 from deepcave.runs.run import Run
+from deepcave.utils.dash import flash
 
 
 class GeneralLayout(Layout):
@@ -118,9 +119,7 @@ class GeneralLayout(Layout):
                         ),
                         dcc.Dropdown(
                             id={"type": "group-dropdown", "index": index},
-                            options=[
-                                {"label": name, "value": name} for name in options
-                            ],
+                            options=[{"label": name, "value": name} for name in options],
                             value=dropdown_value,
                             multi=True,
                         ),
@@ -137,9 +136,7 @@ class GeneralLayout(Layout):
                 if group_name is None:
                     continue
 
-                children.append(
-                    get_layout(index, run_names, group_name, grouped_run.run_names)
-                )
+                children.append(get_layout(index, run_names, group_name, grouped_run.run_names))
 
                 index += 1
 
@@ -190,6 +187,7 @@ class GeneralLayout(Layout):
         def callback(n_clicks):
             if n_clicks is not None:
                 rc.clear_all_caches()
+                return flash("Cache cleared successfully")
 
             return None
 
@@ -219,9 +217,7 @@ class GeneralLayout(Layout):
             html.H1("General"),
             # Working dir
             dbc.Label("Working Directory"),
-            dbc.Input(
-                id="general-working-directory-input", placeholder="", type="text"
-            ),
+            dbc.Input(id="general-working-directory-input", placeholder="", type="text"),
             dbc.FormText(id="general-converter-label"),
             html.Hr(),
             # Runs
@@ -237,7 +233,5 @@ class GeneralLayout(Layout):
             html.Hr(),
             # Cache
             html.H2("Caches"),
-            dbc.Button(
-                "Clear Plugin Caches", id="general-clear-cache-button", color="primary"
-            ),
+            dbc.Button("Clear Plugin Caches", id="general-clear-cache-button", color="primary"),
         ]

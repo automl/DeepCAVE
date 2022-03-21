@@ -1,9 +1,10 @@
 import logging
 import logging.config
 from pathlib import Path
-import deepcave
+
 import yaml
 
+import deepcave
 
 path = Path() / deepcave.__file__
 with (path.parent / "utils" / "logging.yml").open("r") as stream:

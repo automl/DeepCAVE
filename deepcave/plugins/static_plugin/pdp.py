@@ -19,7 +19,7 @@ logger = get_logger("PDPPlugin")
 class PDPPlugin(StaticPlugin):
     id = "pdp"
     name = "PDP"
-    icon = "far fa-star"
+    icon = "far fa-grip-lines"
     activate_run_selection = True
 
     @staticmethod
@@ -67,10 +67,7 @@ class PDPPlugin(StaticPlugin):
 
     def load_inputs(self):
         return {
-            "hyperparameters": {
-                "options": get_checklist_options(),
-                "value": []
-            },
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
             "objective": {
                 "options": get_select_options(),
                 "value": [],
@@ -117,7 +114,9 @@ class PDPPlugin(StaticPlugin):
         try:
             int(num_grid_points_per_axis)
         except (TypeError, ValueError):
-            inputs["num_grid_points_per_axis"]["value"] = previous_inputs["num_grid_points_per_axis"]["value"]
+            inputs["num_grid_points_per_axis"]["value"] = previous_inputs[
+                "num_grid_points_per_axis"
+            ]["value"]
 
         return inputs
 
@@ -144,13 +143,15 @@ class PDPPlugin(StaticPlugin):
         selected_hyperparameters = inputs["hyperparameters"]["value"]
         num_samples = inputs["num_samples"]["value"]
         num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]
-        logger.debug(f"Create pdp with {num_grid_points_per_axis} grid points per axis and {num_samples} "
-                     f"for hyperparameters: {selected_hyperparameters}")
+        logger.debug(
+            f"Create pdp with {num_grid_points_per_axis} grid points per axis and {num_samples} "
+            f"for hyperparameters: {selected_hyperparameters}"
+        )
         pdp = PDP.from_random_points(
             surrogate_model,
             selected_hyperparameter=selected_hyperparameters,
             num_samples=int(num_samples),
-            num_grid_points_per_axis=int(num_grid_points_per_axis)
+            num_grid_points_per_axis=int(num_grid_points_per_axis),
         )
         logger.debug("Returning...")
         return {
@@ -168,8 +169,7 @@ class PDPPlugin(StaticPlugin):
         selected_hyperparameters = inputs["hyperparameters"]["value"]
 
         hyperparameter_idx = [
-            run.configspace.get_idx_by_hyperparameter_name(hp)
-            for hp in selected_hyperparameters
+            run.configspace.get_idx_by_hyperparameter_name(hp) for hp in selected_hyperparameters
         ]
         show_confidences = inputs["confidences"]["value"] == "true"
         # Parse outputs
@@ -204,7 +204,7 @@ class PDPPlugin(StaticPlugin):
             fig.update_layout(
                 title="1D PDP" + " with confidences" * show_confidences,
                 xaxis_title=selected_hyperparameters[0],
-                yaxis_title=run.get_objective(int(inputs["objective"]["value"]))["name"]
+                yaxis_title=run.get_objective(int(inputs["objective"]["value"]))["name"],
             )
         elif len(selected_hyperparameters) == 2:  # 2D
             num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]

@@ -67,9 +67,7 @@ class SMACRun(Run):
                 if arg in mapping:
                     meta[mapping[arg]] = value
 
-        run = SMACRun(
-            path.stem, configspace=configspace, objectives=objective, meta=meta
-        )
+        run = SMACRun(path.stem, configspace=configspace, objectives=objective, meta=meta)
 
         # TODO: Make it better
         run._path = path

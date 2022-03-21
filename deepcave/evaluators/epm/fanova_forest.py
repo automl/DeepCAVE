@@ -85,9 +85,7 @@ class fANOVAForest(Forest):
                         sizes.append((self.bounds[i][0],))
                 else:
                     # add bounds to split values
-                    sv = np.array(
-                        [self.bounds[i][0]] + list(split_vals) + [self.bounds[i][1]]
-                    )
+                    sv = np.array([self.bounds[i][0]] + list(split_vals) + [self.bounds[i][1]])
                     # compute midpoints and sizes
                     midpoints.append((1 / 2) * (sv[1:] + sv[:-1]))
                     sizes.append(sv[1:] - sv[:-1])
@@ -176,9 +174,7 @@ class fANOVAForest(Forest):
             for i, (m, s) in enumerate(zip(prod_midpoints, prod_sizes)):
                 sample[list(dimensions)] = list(m)
 
-                ls = self.model.marginal_prediction_stat_of_tree(
-                    tree_idx, sample.tolist()
-                )
+                ls = self.model.marginal_prediction_stat_of_tree(tree_idx, sample.tolist())
                 # self.logger.debug("%s, %s", (sample, ls.mean()))
                 if not np.isnan(ls.mean()):
                     stat.push(ls.mean(), np.prod(np.array(s)) * ls.sum_of_weights())

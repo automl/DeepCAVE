@@ -1,9 +1,9 @@
-from typing import TypeVar, Union, Dict, List
+from typing import Dict, List, TypeVar, Union
 
 import json
+
 import numpy as np
 import pandas as pd
-
 
 JSON_DENSE_SEPARATORS = (",", ":")
 TYPE = TypeVar("TYPE")

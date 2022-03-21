@@ -1,7 +1,8 @@
-import traceback
 from abc import ABC
+from typing import Any, Callable
+
+import traceback
 from enum import Enum
-from typing import Callable, Any
 
 from dash import dcc
 from dash.dash import no_update
@@ -125,9 +126,7 @@ class StaticPlugin(Plugin, ABC):
                         job_id = self._get_job_id(run.name, inputs_key)
 
                         # We already got our results or it was already processed
-                        if raw_outputs[run.name] is not None or queue.is_processed(
-                                job_id
-                        ):
+                        if raw_outputs[run.name] is not None or queue.is_processed(job_id):
                             continue
 
                         job_meta = {
@@ -163,9 +162,7 @@ class StaticPlugin(Plugin, ABC):
                             self.logger.debug(f"Job `{job_id}`")
 
                             # Save results in cache
-                            rc.get(job_run_name).set(
-                                self.id, job_inputs_key, value=job_run_outputs
-                            )
+                            rc.get(job_run_name).set(self.id, job_inputs_key, value=job_run_outputs)
                             self.logger.debug(f"... cached")
 
                             queue.delete_job(job_id)

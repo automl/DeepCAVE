@@ -1,4 +1,4 @@
-from typing import Dict, Union, List
+from typing import Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -6,13 +6,9 @@ import plotly.graph_objs as go
 from dash import dcc, html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun, check_equality
-from deepcave.utils.layout import (
-    get_select_options,
-    get_slider_marks,
-)
+from deepcave.runs import AbstractRun, Status, check_equality
+from deepcave.utils.layout import get_select_options, get_slider_marks
 from deepcave.utils.styled_plotty import get_color
-from deepcave.runs import Status
 
 
 class ParetoFront(DynamicPlugin):

@@ -59,9 +59,7 @@ class StyledPlot:
     #    #self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0, alpha=0.5)
 
     def boxplot(self, values, positions, color, widths=0.5):
-        bp = self.plt.boxplot(
-            values, positions=positions, patch_artist=True, widths=widths
-        )
+        bp = self.plt.boxplot(values, positions=positions, patch_artist=True, widths=widths)
 
         for box in bp["boxes"]:
             box.set_facecolor(color)

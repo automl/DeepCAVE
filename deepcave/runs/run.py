@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Union, Dict, List
+from typing import Any, Dict, List, Optional, Union
 
 import json
 from pathlib import Path
 
-import ConfigSpace
 import jsonlines
 import numpy as np
 from ConfigSpace.configuration_space import Configuration

@@ -1,5 +1,5 @@
-import sys
 import datetime
+import sys
 
 name = "DeepCAVE"
 package_name = "deepcave"

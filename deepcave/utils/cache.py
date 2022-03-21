@@ -1,8 +1,8 @@
-import logging
-from copy import deepcopy
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 import json
+import logging
+from copy import deepcopy
 from pathlib import Path
 
 from deepcave.utils.files import make_dirs

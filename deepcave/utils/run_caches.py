@@ -20,9 +20,7 @@ class RunCaches:
         elif isinstance(run, str):  # Expect run_cache_id
             return self.get(run)
         else:
-            raise TypeError(
-                f"Expect Run or str (run_cache_id), but got type {type(run)} ({run})"
-            )
+            raise TypeError(f"Expect Run or str (run_cache_id), but got type {type(run)} ({run})")
 
     def __contains__(self, run: Union[AbstractRun, str]) -> bool:
         # Resolve arguments

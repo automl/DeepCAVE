@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Iterable, Optional, Union, List
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
 import copy
 
@@ -981,4 +981,3 @@ class Plugin(Layout, ABC):
         """
 
         pass
-

@@ -1,4 +1,4 @@
-from typing import Optional, Type, Dict, List
+from typing import Dict, List, Optional, Type
 
 import time
 from pathlib import Path
@@ -92,7 +92,9 @@ class RunHandler:
         self.runs = new_runs
         self.c.set("selected_run_names", value=self.get_run_names())
 
-    def update_run(self, run_name: str, class_hint: Optional[Type[Run]] = None) -> Optional[AbstractRun]:
+    def update_run(
+        self, run_name: str, class_hint: Optional[Type[Run]] = None
+    ) -> Optional[AbstractRun]:
         """
 
         Raises

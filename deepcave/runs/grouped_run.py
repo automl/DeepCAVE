@@ -1,6 +1,9 @@
-from copy import deepcopy
 from typing import Dict, List, Tuple
+
+from copy import deepcopy
+
 import numpy as np
+
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.hash import string_to_hash
 

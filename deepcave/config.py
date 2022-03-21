@@ -1,5 +1,6 @@
-from pathlib import Path
 from typing import Dict, List, Type
+
+from pathlib import Path
 
 
 class Config:

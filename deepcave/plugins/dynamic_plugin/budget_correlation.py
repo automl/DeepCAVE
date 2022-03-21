@@ -5,8 +5,8 @@ from collections import defaultdict
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
-from scipy import stats
 from dash.exceptions import PreventUpdate
+from scipy import stats
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import Status
@@ -88,9 +88,7 @@ class BudgetCorrelation(DynamicPlugin):
                     c1 += [costs1[config_id][objective_id]]
                     c2 += [costs2[config_id][objective_id]]
 
-                correlations[budget1][budget2] = round(
-                    stats.spearmanr(c1, c2).correlation, 2
-                )
+                correlations[budget1][budget2] = round(stats.spearmanr(c1, c2).correlation, 2)
 
         return {"correlations": correlations}
 
