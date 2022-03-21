@@ -16,7 +16,7 @@ class RunHandler:
     and switches to the right (plugin) cache.
     """
 
-    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCache") -> None:
+    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCaches") -> None:
         self.c = cache
         self.rc = run_cache
         # Fields set by self.update()
@@ -34,6 +34,7 @@ class RunHandler:
         self.load_from_cache()
 
     def load_from_cache(self):
+        self.c.read()
         working_dir: Path = Path(self.c.get("working_dir"))
         selected_runs: List[str] = self.c.get("selected_run_names")  # run_name
         groups: Dict[str, List[str]] = self.c.get("groups")  # group_name -> List[run_names]

@@ -21,7 +21,13 @@ class PluginState(Enum):
 
 
 def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
-    run = run_handler.from_run_cache_id(run_cache_id)
+    run_handler.load_from_cache()
+    try:
+        run = run_handler.from_run_cache_id(run_cache_id)
+    except KeyError:
+        print(f"Could not find run for {run_cache_id}!")
+        raise
+
     try:
         return process(run, inputs)
     except:

@@ -1,3 +1,4 @@
+import logging
 from copy import deepcopy
 from typing import Any, Optional, Dict
 
@@ -13,6 +14,7 @@ class Cache:
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
         """
+        self._logger = logging.getLogger(f"deepcave.cache")
         self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
@@ -59,6 +61,7 @@ class Cache:
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
+        self._logger.debug(f"{self._file}: Set {keys} -> {value}")
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:

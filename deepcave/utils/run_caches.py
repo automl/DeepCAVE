@@ -54,10 +54,13 @@ class RunCaches:
         run_cache_id: str,
         run_name: Optional[str] = None,
         run_hash: Optional[str] = None,
+        create_new_if_missing=True,
     ) -> Cache:
         # Create cache
         filename = self.cache_dir / f"{run_cache_id}.json"
         if not filename.exists():
+            if not create_new_if_missing:
+                raise FileNotFoundError(f"Could not find cache for {run_cache_id}: {filename}")
             self.logger.info(
                 f"Creating new cache file for {run_cache_id} at {filename.absolute().resolve()}"
             )

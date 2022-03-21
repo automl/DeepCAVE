@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Type
 
 
 class Config:
@@ -73,7 +73,7 @@ class Config:
 
     # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> List["Run"]:
+    def AVAILABLE_CONVERTERS(self) -> List[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun
