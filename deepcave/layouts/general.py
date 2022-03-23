@@ -1,16 +1,15 @@
-from typing import Type
-
+from typing import Type, Dict, Optional, List
 from pathlib import Path
 
 import dash_bootstrap_components as dbc
-from dash import dcc, html
+from dash import dcc, html, MATCH
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
 from deepcave import app, c, rc, run_handler
 from deepcave.layouts import Layout
-from deepcave.runs import NotMergeableError, NotValidRunError
+from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run
 from deepcave.utils.dash import flash
 
@@ -18,96 +17,196 @@ from deepcave.utils.dash import flash
 class GeneralLayout(Layout):
     def register_callbacks(self) -> None:
         self._callback_working_directory_changed()
-        self._callback_run_selection_changed()
-        self._callback_group_selection_changed()
-        self._callback_set_groups()
+        self._callback_display_available_runs()
+        self._callback_display_selected_runs()
+        self._callback_manage_run()
+        self._callback_display_groups()
+        self._callback_manage_groups()
         self._callback_clear_cache()
 
     def _callback_working_directory_changed(self) -> None:
+        inputs = [
+            Input("on-page-load", "href"),
+            Input("general-working-directory-input", "value"),
+            # Those inputs are for changing working directory quickly
+            # (if someone is pressing on a directory)
+            # Only works with "ALL"
+            State({"type": "general-dynamic-available-run-path", "index": ALL}, "data"),
+            Input({"type": "general-dynamic-change-directory", "index": ALL}, "n_clicks"),
+        ]
+
         outputs = [
             # Working directory input
             Output("general-working-directory-input", "value"),
             # Converter text
             Output("general-converter-label", "children"),
-            Output("general-runs-checklist", "options"),
-            Output("general-runs-checklist", "value"),
-        ]
-
-        inputs = [
-            Input("on-page-load", "href"),
-            Input("general-working-directory-input", "value"),
+            Output("general-available-runs", "data"),
         ]
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def callback(_, working_dir: str):
+        def callback(
+            _,
+            working_dir: str,
+            dynamic_working_dirs: List[str],
+            dynamic_n_clicks: List[Optional[int]],
+        ):
             # `working_dir` is only none on page load
             if working_dir is None:
-                handler_working_dir = run_handler.get_working_dir()
-                run_names = run_handler.get_run_names()
+                # Handler working directory
+                working_dir = run_handler.get_working_directory()
+                converter = run_handler.available_run_classes
+            else:
+                for dir, n_clicks in zip(dynamic_working_dirs, dynamic_n_clicks):
+                    if n_clicks is not None:
+                        working_dir = dir
+
+                run_handler.set_working_directory(Path(working_dir))
                 converter = run_handler.available_run_classes
 
-                return (
-                    str(handler_working_dir),
-                    self.get_converter_text(converter),
-                    self.get_run_options(),
-                    run_names,
-                )
-
-            empty_run_names = []
-            run_handler.update_working_directory(Path(working_dir))
-
             return (
-                working_dir,
-                self.get_converter_text(run_handler.available_run_classes),
-                self.get_run_options(),
-                empty_run_names,
+                str(working_dir),
+                self.get_converter_text(converter),
+                run_handler.get_available_run_paths(),
             )
 
-    def _callback_run_selection_changed(self) -> None:
-        output = Output("general-run-names", "data")
-        input = Input("general-runs-checklist", "value")
+    def _callback_display_available_runs(self) -> None:
+        output = Output("general-available-runs-container", "children")
+        input = Input("general-available-runs", "data")
 
-        # Save the run ids internally
         @app.callback(output, input)
-        def callback(run_ids: list[str]):
-            old_run_names = run_handler.get_run_names()
-            self.logger.debug(f"Old runs: {old_run_names}, Runs: {run_ids}")
+        def callback(run_paths: List[str]):
+            children = []
 
-            # Reset groups here.
-            # Alternatively: Remove all runs which are not selected anymore.
-            if run_ids != old_run_names:
-                run_handler.update_groups({})
+            for i, run_path in enumerate(run_paths):
+                run_name = run_handler.get_run_name(run_path)
+                new_element = html.Div(
+                    [
+                        dbc.Button("+", id={"type": "general-dynamic-add-run", "index": i}),
+                        dbc.Button(
+                            run_name,
+                            id={"type": "general-dynamic-change-directory", "index": i},
+                            color="link",
+                        ),
+                        dcc.Store(
+                            id={"type": "general-dynamic-available-run-path", "index": i},
+                            data=run_path,
+                        ),
+                    ],
+                    className="mb-1",
+                )
+                children.append(new_element)
 
-                # Also really important:
-                # Reset last inputs
-                c.set("last_inputs", value={})
+            if len(children) == 0:
+                return html.Div("No runs found.")
 
-            try:
-                run_handler.update_runs(run_ids)
-            except NotValidRunError:
-                return old_run_names
+            return children
 
-            return run_ids
+    def _callback_display_selected_runs(self) -> None:
+        output = Output("general-selected-runs-container", "children")
+        input = Input("general-selected-runs", "data")
 
-    def _callback_group_selection_changed(self) -> None:
+        @app.callback(output, input)
+        def callback(run_paths: List[str]):
+            children = []
+
+            for i, run_path in enumerate(run_paths):
+                run_name = run_handler.get_run_name(run_path)
+
+                shown_characters = 30
+                shortened_run_path = (
+                    "..." + run_path[len(run_path) - shown_characters :]
+                    if len(run_path) > shown_characters
+                    else run_path
+                )
+
+                new_element = html.Div(
+                    [
+                        dbc.Button(
+                            "-",
+                            id={"type": "general-dynamic-remove-run", "index": i},
+                            color="danger",
+                        ),
+                        html.Span(
+                            [
+                                run_name,
+                                html.I(
+                                    f"({shortened_run_path})",
+                                    style={"font-size": "10px", "margin-left": "6px"},
+                                ),
+                            ],
+                            # color="light",
+                            style={"margin-left": "12px"},
+                        ),
+                        dcc.Store(
+                            id={"type": "general-dynamic-selected-run-path", "index": i},
+                            data=run_path,
+                        ),
+                    ],
+                    className="mb-1",
+                )
+                children.append(new_element)
+
+            if len(children) == 0:
+                return html.Div("No runs selected.")
+
+            return children
+
+    def _callback_manage_run(self) -> None:
+        outputs = [
+            Output({"type": "general-dynamic-add-run", "index": ALL}, "n_clicks"),
+            Output({"type": "general-dynamic-remove-run", "index": ALL}, "n_clicks"),
+            Output("general-selected-runs", "data"),
+        ]
+
+        inputs = [
+            Input({"type": "general-dynamic-add-run", "index": ALL}, "n_clicks"),
+            Input({"type": "general-dynamic-remove-run", "index": ALL}, "n_clicks"),
+        ]
+
+        states = [
+            State({"type": "general-dynamic-available-run-path", "index": ALL}, "data"),
+            State({"type": "general-dynamic-selected-run-path", "index": ALL}, "data"),
+        ]
+
+        @app.callback(outputs, inputs, states)
+        def callback(add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths):
+            # Add run path
+            for n_click, run_path in zip(add_n_clicks, available_run_paths):
+                if n_click is not None:
+                    run_handler.add_run(run_path)
+
+            # Remove run path
+            for n_click, run_path in zip(remove_n_clicks, selected_run_paths):
+                if n_click is not None:
+                    run_handler.remove_run(run_path)
+
+            # Reset clicks
+            add_n_clicks = [None for _ in add_n_clicks]
+            remove_n_clicks = [None for _ in remove_n_clicks]
+
+            return add_n_clicks, remove_n_clicks, run_handler.get_selected_run_paths()
+
+    def _callback_display_groups(self) -> None:
         outputs = [
             Output("general-group-container", "children"),
             Output("general-add-group", "n_clicks"),
         ]
         inputs = [
             Input("general-add-group", "n_clicks"),
-            Input("general-run-names", "data"),
-            Input("general-group-trigger", "data"),
+            Input("general-selected-runs-container", "children"),
             State("general-group-container", "children"),
         ]
 
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
-        def callback(n_clicks: int, run_names, update, children):
-            def get_layout(index, options, input_value="", dropdown_value=None):
+        def callback(n_clicks: int, _, children):
+            def get_layout(
+                index: int, options: Dict[str, str], input_value: str = "", dropdown_value=None
+            ):
                 if dropdown_value is None:
                     dropdown_value = []
+
                 return html.Div(
                     [
                         dbc.Input(
@@ -119,7 +218,7 @@ class GeneralLayout(Layout):
                         ),
                         dcc.Dropdown(
                             id={"type": "group-dropdown", "index": index},
-                            options=[{"label": name, "value": name} for name in options],
+                            options=[{"label": v, "value": k} for k, v in options.items()],
                             value=dropdown_value,
                             multi=True,
                         ),
@@ -128,24 +227,26 @@ class GeneralLayout(Layout):
                 )
 
             groups = run_handler.get_groups()
+            selected_run_paths = run_handler.get_selected_run_paths()
+            selected_runs = {p: run_handler.get_run_name(p) for p in selected_run_paths}
             index = 0
 
             # Load from cache if page is loaded
             children = []
-            for group_name, grouped_run in groups.items():
-                if group_name is None:
+            for name, paths in groups.items():
+                if name is None:
                     continue
 
-                children.append(get_layout(index, run_names, group_name, grouped_run.run_names))
+                children.append(get_layout(index, selected_runs, name, paths))
 
                 index += 1
 
-            if n_clicks is not None and len(run_names) > 0:
-                children.append(get_layout(index, run_names))
+            if n_clicks is not None and len(selected_runs) > 0:
+                children.append(get_layout(index, selected_runs))
 
             return children, None
 
-    def _callback_set_groups(self) -> None:
+    def _callback_manage_groups(self) -> None:
         outputs = Output("general-group-trigger", "data")
         inputs = [
             Input({"type": "group-name", "index": ALL}, "value"),
@@ -187,20 +288,11 @@ class GeneralLayout(Layout):
         def callback(n_clicks):
             if n_clicks is not None:
                 rc.clear_all_caches()
-                return flash("Cache cleared successfully")
 
             return None
 
     @staticmethod
-    def get_run_options() -> list[dict[str, str]]:
-        runs = [
-            {"label": run_name, "value": run_name}
-            for run_name in run_handler.get_available_run_names()
-        ]
-        return runs
-
-    @staticmethod
-    def get_converter_text(converters: list[Type[Run]]) -> html.Div:
+    def get_converter_text(converters: List[Type[Run]]) -> html.Div:
         converter_text = []
         for converter in converters:
             converter_text += [converter.prefix]
@@ -210,7 +302,7 @@ class GeneralLayout(Layout):
             className="mt-2",
         )
 
-    def __call__(self) -> list[Component]:
+    def __call__(self) -> List[Component]:
         self._refresh_groups = True
 
         return [
@@ -219,11 +311,13 @@ class GeneralLayout(Layout):
             dbc.Label("Working Directory"),
             dbc.Input(id="general-working-directory-input", placeholder="", type="text"),
             dbc.FormText(id="general-converter-label"),
+            dcc.Store(id="general-available-runs", data={}),
+            html.Div(id="general-available-runs-container", className="mt-2"),
             html.Hr(),
-            # Runs
-            html.H2("Runs"),
-            dcc.Store(id="general-run-names"),
-            dbc.Checklist(id="general-runs-checklist"),
+            # Selected Runs
+            html.H2("Selected Runs"),
+            dcc.Store(id="general-selected-runs", data={}),
+            html.Div(id="general-selected-runs-container", className="mt-2"),
             html.Hr(),
             # Groups
             html.H2("Groups"),

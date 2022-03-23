@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
-import copy
+from pathlib import Path
 from dataclasses import dataclass
 from enum import IntEnum
 
@@ -46,7 +46,7 @@ class Status(IntEnum):
 class Trial:
     config_id: int
     budget: int
-    costs: list[float]
+    costs: List[float]
     start_time: float
     end_time: float
     status: Status
@@ -77,7 +77,8 @@ class AbstractRun(ABC):
     prefix: str
 
     def __init__(self, name: str) -> None:
-        self.name = name
+        self.name: str = name
+        self.path: Optional[Path] = None
         self.logger = get_logger(self.__class__.__name__)
 
         # objects created by reset
@@ -94,14 +95,30 @@ class AbstractRun(ABC):
         self.trial_keys: Dict[Tuple[str, int], int] = {}
 
     @property
-    def run_cache_id(self) -> str:
-        return string_to_hash(f"{self.prefix}:{self.name}")
-
-    @property
     @abstractmethod
     def hash(self) -> str:
         """
-        Hash of current run. If hash changes, cache has to be cleared, as something has changed
+        Hash of the current run. If hash changes, cache has to be cleared. This ensures that
+        the cache always holds the latest results of the run.
+        
+        Returns
+        -------
+        str
+            Hash of the run.
+        """
+        pass
+    
+    @property
+    @abstractmethod
+    def id(self) -> str:
+        """
+        Hash of the file. This is used to identify the file.
+        In contrast to `hash`, this hash should not be changed throughout the run.
+
+        Returns
+        -------
+        str
+            Hash of the run.
         """
         pass
 

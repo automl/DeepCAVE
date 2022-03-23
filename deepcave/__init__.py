@@ -1,5 +1,6 @@
 import datetime
 import sys
+import os
 
 name = "DeepCAVE"
 package_name = "deepcave"
@@ -33,6 +34,9 @@ if any(file in _exec_file for file in _exec_files):
 
     # Meta cache
     c = Cache(filename=config.CACHE_DIR / "meta.json", defaults=config.META_DEFAULT)
+
+    # Set working directory to current directory
+    # c.set("working_dir", value=os.getcwd())
 
     # Run caches
     rc = RunCaches(config)

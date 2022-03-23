@@ -25,8 +25,8 @@ class Config:
     META_DEFAULT = {
         "matplotlib-mode": False,
         "working_dir": str(DEFAULT_WORKING_DIRECTORY),
-        "selected_runs": [],  # [run_name, ...]
-        "groups": {},  # {group_name: [run_name, ...]}
+        "selected_run_paths": [],
+        "groups": {},  # {group_name: [run_path, ...]}
     }
 
     # Plugins

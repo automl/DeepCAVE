@@ -91,6 +91,15 @@ class GroupedRun(AbstractRun):
         return string_to_hash(total_hash_str)
 
     @property
+    def id(self) -> str:
+        # Groups do not have a path, therefore we use the name.
+        return string_to_hash(f"{self.prefix}:{self.name}")
+
+    @property
+    def run_paths(self) -> List[str]:
+        return [str(run.path) for run in self.runs]
+
+    @property
     def run_names(self) -> List[str]:
         return [run.name for run in self.runs]
 

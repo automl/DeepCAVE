@@ -40,21 +40,21 @@ class DynamicPlugin(Plugin, ABC):
 
             raw_outputs = {}
             for run in runs:
-                run_cache = rc.get_run(run)
+                run_cache = rc[run]
                 run_outputs = run_cache.get(self.id, inputs_key)
                 if run_outputs is None:
                     self.logger.debug(f"Process {run.name}.")
                     run_outputs = self.process(run, inputs)
 
                     # Here's the thing:
-                    # We have to remove `run_name` from the inputs completely
+                    # We have to remove `run` from the inputs completely
 
                     # Cache it
                     run_cache.set(self.id, inputs_key, value=run_outputs)
                 else:
                     self.logger.debug(f"Found outputs from {run.name} in cache.")
 
-                raw_outputs[run.name] = run_outputs
+                raw_outputs[run.id] = run_outputs
 
             # Save for modal
             self.raw_outputs = raw_outputs

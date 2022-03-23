@@ -171,7 +171,6 @@ class CCube(DynamicPlugin):
     def load_outputs(self, inputs, outputs, run):
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
-        # show_all_labels = outputs[run_name]["show_all_labels"]
 
         if n_configs == 0 or len(hp_names) == 0:
             return [px.scatter()]

@@ -41,7 +41,7 @@ class HeaderLayout(Layout):
         return html.Header(
             className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow",
             children=[
-                html.A("DeepCave", className="navbar-brand me-0 px-3", href="#"),
+                html.A("DeepCAVE", className="navbar-brand me-0 px-3", href="#"),
                 html.Button(className="navbar-toggler position-absolute d-md-none collapsed"),
                 dcc.Location(id="matplotlib-mode-refresh", refresh=True),
                 dbc.Button(

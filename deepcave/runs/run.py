@@ -12,6 +12,7 @@ from ConfigSpace.read_and_write import json as cs_json
 from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
+from deepcave.utils.hash import string_to_hash
 
 
 class Run(AbstractRun, ABC):
@@ -36,7 +37,7 @@ class Run(AbstractRun, ABC):
         objectives: Union[Objective, List[Objective]] = None,
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
-    ):
+    ) -> None:
         """
         If path is given, runs are loaded from the path.
 
@@ -81,6 +82,10 @@ class Run(AbstractRun, ABC):
         Based on a path, return a new Run object.
         """
         pass
+
+    @property
+    def id(self) -> str:
+        return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
     def path(self) -> Optional[Path]:

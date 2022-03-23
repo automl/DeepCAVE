@@ -1,3 +1,19 @@
+# Version 0.3.1
+
+## General
+- Runs are sorted now and only "important" directories are shown.
+- Mechanics to select runs changed.
+    - Runs can be selected across different working directories now.
+    - Another section to display selected runs.
+    - Press on directory name changes the working directory directly. Makes it easier to navigate.
+    - Internally, a run has two hashes now
+        - `id`: Based on prefix and path/name. This hash is used to select runs now. No need to
+        distinguish between run and grouped run anymore.
+        - `hash`: Changes based on content.
+- Cleaned-up run handler immensively.
+- Logs are better readable.
+
+
 # Version 0.3
 
 ## General

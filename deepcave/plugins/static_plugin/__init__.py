@@ -94,9 +94,9 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.name] = rc.get_run(run).get(self.id, inputs_key)
+                raw_outputs[run.id] = rc[run].get(self.id, inputs_key)
 
-                if raw_outputs[run.name] is None:
+                if raw_outputs[run.id] is None:
                     raw_outputs_available = False
 
             # Process
@@ -123,16 +123,16 @@ class StaticPlugin(Plugin, ABC):
 
                     # Check if we need to process
                     for run in runs:
-                        job_id = self._get_job_id(run.name, inputs_key)
+                        job_id = self._get_job_id(run.id, inputs_key)
 
                         # We already got our results or it was already processed
-                        if raw_outputs[run.name] is not None or queue.is_processed(job_id):
+                        if raw_outputs[run.id] is not None or queue.is_processed(job_id):
                             continue
 
                         job_meta = {
                             "display_name": self.name,
                             "run_name": run.name,
-                            "run_cache_id": run.run_cache_id,
+                            "run_id": run.id,
                             "inputs_key": inputs_key,
                         }
 
@@ -141,7 +141,7 @@ class StaticPlugin(Plugin, ABC):
                         # Start the task in rq
                         queue.enqueue(
                             _process,
-                            args=[self.process, run.run_cache_id, inputs],
+                            args=[self.process, run.id, inputs],
                             job_id=job_id,
                             meta=job_meta,
                         )
@@ -157,12 +157,12 @@ class StaticPlugin(Plugin, ABC):
                             job_run_outputs = job.result
                             job_meta = job.meta
                             job_inputs_key = job_meta["inputs_key"]
-                            job_run_name = job_meta["run_cache_id"]
+                            job_run_id = job_meta["run_id"]
 
                             self.logger.debug(f"Job `{job_id}`")
 
                             # Save results in cache
-                            rc.get(job_run_name).set(self.id, job_inputs_key, value=job_run_outputs)
+                            rc.get(job_run_id).set(self.id, job_inputs_key, value=job_run_outputs)
                             self.logger.debug(f"... cached")
 
                             queue.delete_job(job_id)

@@ -37,7 +37,7 @@ class MainLayout(Layout):
             else:
                 if not queue.ready():
                     return alert("At least one worker has to be enabled.")
-                if len(run_handler.get_run_names()) == 0:
+                if len(run_handler.get_runs()) == 0:
                     return alert("Please select a run first.")
                 else:
                     if paths[0] == "plugins":

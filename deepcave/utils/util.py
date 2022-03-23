@@ -121,13 +121,3 @@ def _encode(data: pd.DataFrame, cs: Optional):
     data = _transform(data, ord_from_cols, ord_to_cols, ord_choices, OrdinalEncoder)
 
     return data, org_cols
-
-
-def add_prefix_to_dict(data: Dict[str, Any], prefix: str) -> Dict[str, Any]:
-    """Adds a prefix to every key in a dictionary"""
-    return {f"{prefix}{key}": value for key, value in data.items()}
-
-
-def add_prefix_to_list(data: Iterable[str], prefix: str) -> List[str]:
-    """Adds a prefix to every item in an iterable (e.g. a list). Returns a list"""
-    return [f"{prefix}{item}" for item in data]

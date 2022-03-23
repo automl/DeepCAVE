@@ -68,8 +68,6 @@ class SMACRun(Run):
                     meta[mapping[arg]] = value
 
         run = SMACRun(path.stem, configspace=configspace, objectives=objective, meta=meta)
-
-        # TODO: Make it better
         run._path = path
 
         # Iterate over the runhistory

@@ -61,7 +61,7 @@ class Cache:
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
-        self._logger.debug(f"{self._file}: Set {keys} -> {value}")
+        self._logger.debug(f"{self._file.name}: Set \"{','.join(keys)}\" to \"{value}\".")
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:
