@@ -24,7 +24,7 @@ class Config:
     # Default Meta information which are used across the platform
     META_DEFAULT = {
         "matplotlib-mode": False,
-        "working_dir": str(DEFAULT_WORKING_DIRECTORY),
+        "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
         "selected_run_paths": [],
         "groups": {},  # {group_name: [run_path, ...]}
     }

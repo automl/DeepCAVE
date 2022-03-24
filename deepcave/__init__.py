@@ -12,8 +12,8 @@ project_urls = {
     "Documentation": "https://automl.github.io/DeepCAVE/main",
     "Source Code": "https://github.com/automl/deepcave",
 }
-copyright = f"Copyright {datetime.date.today().strftime('%Y')}, René Sass and Marius Lindauer, <<author_email>>"
-version = "0.3"
+copyright = f"Copyright {datetime.date.today().strftime('%Y')}, René Sass and Marius Lindauer"
+version = "0.4"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
@@ -36,7 +36,8 @@ if any(file in _exec_file for file in _exec_files):
     c = Cache(filename=config.CACHE_DIR / "meta.json", defaults=config.META_DEFAULT)
 
     # Set working directory to current directory
-    # c.set("working_dir", value=os.getcwd())
+    if c.get("working_dir") is None:
+        c.set("working_dir", value=os.getcwd())
 
     # Run caches
     rc = RunCaches(config)
