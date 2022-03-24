@@ -127,7 +127,7 @@ class RunHandler:
     def get_groups(self) -> Dict[str, List[str]]:
         return self.c.get("groups")
 
-    def add_run(self, run_path: str) -> None:
+    def add_run(self, run_path: str) -> bool:
         """
         Adds a run path to the cache. If run path is already in cache, do nothing.
 
@@ -135,6 +135,11 @@ class RunHandler:
         ----------
         run_path : str
             Path of a run.
+
+        Returns
+        -------
+        bool
+            True if all selected runs could be loaded, False otherwise.
         """
         selected_run_paths = self.get_selected_run_paths()
 
@@ -142,7 +147,9 @@ class RunHandler:
             selected_run_paths.append(run_path)
             self.c.set("selected_run_paths", value=selected_run_paths)
 
-            self.update_runs()
+            return self.update_runs()
+
+        return True
 
     def remove_run(self, run_path: str) -> None:
         """Removes a run path from the cache. If run path is not in cache, do nothing.
@@ -172,7 +179,7 @@ class RunHandler:
             self.c.set("last_inputs", value={})
             self.update_runs()
 
-    def update_runs(self) -> None:
+    def update_runs(self) -> bool:
         """
         Loads selected runs and update cache if files changed.
 
@@ -181,8 +188,13 @@ class RunHandler:
         NotValidRunError
             If directory can not be transformed into a run, an error is thrown.
 
+        Returns
+        -------
+        bool
+            True if all selected runs could be loaded, False otherwise.
         """
         runs: Dict[str, AbstractRun] = {}  # run_path: Run
+        success = True
 
         class_hint = None
         updated_paths = []
@@ -192,12 +204,16 @@ class RunHandler:
                 runs[run_path] = run
                 class_hint = run.__class__
                 updated_paths += [run_path]
+            else:
+                success = False
 
         # Save in cache again
         self.c.set("selected_run_paths", value=updated_paths)
 
         # Save runs in memory
         self.runs = runs
+
+        return success
 
     def update_run(
         self, run_path: str, class_hint: Optional[Type[Run]] = None

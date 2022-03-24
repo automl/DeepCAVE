@@ -10,11 +10,10 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, run_handler
+from deepcave import app, c, run_handler, notification
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
-from deepcave.runs.run import Run
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
@@ -58,12 +57,6 @@ class Plugin(Layout, ABC):
 
         # Processing right now?
         self.blocked = False
-
-        # Alert texts
-        self.alert_text = ""
-        self.alert_color = "success"
-        self.alert_update_required = False
-
         self.runs: List[AbstractRun] = []  # Set in __call__
 
         super().__init__()
@@ -192,7 +185,6 @@ class Plugin(Layout, ABC):
         Registers basic callbacks for the plugin. Following callbacks are registered:
         - If inputs changes, the changes are pasted back. This is in particular
         interest if input dependencies are used.
-        - Alert messages.
         - Raw data dialog.
         """
 
@@ -302,20 +294,6 @@ class Plugin(Layout, ABC):
 
                 return inputs_list
 
-        # Update internal alert state to divs
-        @app.callback(
-            Output(self.get_internal_id("alert"), "children"),
-            Output(self.get_internal_id("alert"), "color"),
-            Output(self.get_internal_id("alert"), "is_open"),
-            Input(self.get_internal_id("alert-interval"), "n_intervals"),
-        )
-        def update_alert(_):
-            if self.alert_update_required:
-                self.alert_update_required = False
-                return self.alert_text, self.alert_color, True
-            else:
-                raise PreventUpdate()
-
         # Register modal here
         @app.callback(
             [
@@ -335,21 +313,6 @@ class Plugin(Layout, ABC):
                 return not is_open, code
 
             return is_open, code
-
-    def update_alert(self, text: str, color: str = "success"):
-        """
-        Update the alert text and color. Will automatically trigger the alert callback.
-
-        Parameters
-        ----------
-        text : str
-            The text to display.
-        color : str, optional
-            The color to display, by default "success"
-        """
-        self.alert_text = text
-        self.alert_color = color
-        self.alert_update_required = True
 
     def _inputs_changed(self, inputs, last_inputs):
         # Check if last_inputs are the same as the given inputs.
@@ -515,25 +478,10 @@ class Plugin(Layout, ABC):
         if self.description is not None:
             components += [html.P(self.description)]
 
-        # Register alerts
-        components += [
-            dcc.Interval(
-                id=self.get_internal_id("alert-interval"),
-                interval=1 * 500,
-                n_intervals=5,
-            ),
-            dbc.Alert(
-                id=self.get_internal_id("alert"),
-                is_open=False,
-                dismissable=True,
-                fade=True,
-            ),
-        ]
-
         try:
             self.check_runs_compatibility(self.all_runs)
         except NotMergeableError as message:
-            self.update_alert(str(message), color="danger")
+            notification.update(str(message))
             return components
 
         if self.activate_run_selection:

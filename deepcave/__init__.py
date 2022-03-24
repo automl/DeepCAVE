@@ -28,6 +28,7 @@ if any(file in _exec_file for file in _exec_files):
     from deepcave.server import get_app  # noqa
     from deepcave.utils.cache import Cache  # noqa
     from deepcave.utils.run_caches import RunCaches  # noqa
+    from deepcave.utils.notification import Notification
 
     app = get_app()
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
@@ -45,6 +46,9 @@ if any(file in _exec_file for file in _exec_files):
     # Run Handler
     run_handler = RunHandler(config, c, rc)
 
+    # Notifications
+    notification = Notification()
+
     __all__ = [
         "version",
         "app",
@@ -52,6 +56,7 @@ if any(file in _exec_file for file in _exec_files):
         "c",
         "rc",
         "run_handler",
+        "notification",
         "config",
         "Recorder",
         "Objective",

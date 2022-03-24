@@ -8,6 +8,7 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 from scipy import stats
 
+from deepcave import notification
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import Status
 from deepcave.utils.data_structures import update_dict
@@ -100,7 +101,7 @@ class BudgetCorrelation(DynamicPlugin):
 
     def load_outputs(self, inputs, outputs, run):
         if len(run.get_budgets()) == 1:
-            self.update_alert("Only on budget found but need at least two.")
+            notification.update("Only on budget found but need at least two.")
             raise PreventUpdate()
 
         traces = []

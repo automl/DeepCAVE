@@ -7,7 +7,7 @@ from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, rc, run_handler
+from deepcave import app, c, rc, run_handler, notification
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run
@@ -195,7 +195,9 @@ class GeneralLayout(Layout):
             # Add run path
             for n_click, run_path in zip(add_n_clicks, available_run_paths):
                 if n_click is not None:
-                    run_handler.add_run(run_path)
+                    success = run_handler.add_run(run_path)
+                    if not success:
+                        notification.update("The run could not be added.")
 
             # Remove run path
             for n_click, run_path in zip(remove_n_clicks, selected_run_paths):
@@ -308,7 +310,11 @@ class GeneralLayout(Layout):
         @app.callback(output, input)
         def callback(n_clicks):
             if n_clicks is not None:
-                rc.clear_all_caches()
+                try:
+                    rc.clear_all_caches()
+                    notification.update("Plugin caches successfully cleared.", "success")
+                except FileNotFoundError:
+                    notification.update("Plugin caches could not be cleared because none exist.")
 
             return None
 

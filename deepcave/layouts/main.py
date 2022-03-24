@@ -1,3 +1,4 @@
+from typing import Dict, List
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
@@ -8,17 +9,19 @@ from deepcave.layouts.general import GeneralLayout
 from deepcave.layouts.header import HeaderLayout
 from deepcave.layouts.not_found import NotFoundLayout
 from deepcave.layouts.sidebar import SidebarLayout
+from deepcave.layouts.notification import NotificationLayout
 from deepcave.plugins import Plugin
 from deepcave.utils.dash import alert
 
 
 class MainLayout(Layout):
-    def __init__(self, categorized_plugins: dict[str, list[Plugin]]):
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):
         super().__init__()
         self.plugins = {}
         self.sidebar_layout = SidebarLayout(categorized_plugins)
         self.header_layout = HeaderLayout()
         self.general_layout = GeneralLayout()
+        self.notification_layout = NotificationLayout()
         self.not_found_layout = NotFoundLayout  # Needs to be class here to add url
         for plugins in categorized_plugins.values():
             for plugin in plugins:
@@ -50,6 +53,7 @@ class MainLayout(Layout):
     def __call__(self) -> Component:
         return html.Div(
             children=[
+                dcc.Interval(id="global-update", interval=500),
                 self.header_layout(),
                 html.Div(
                     id="main-container",
@@ -66,8 +70,8 @@ class MainLayout(Layout):
                                             className="",
                                             children=[
                                                 dcc.Location(id="on-page-load", refresh=False),
+                                                self.notification_layout(),
                                                 html.Div(id="content"),
-                                                html.Div(id="general_message"),
                                             ],
                                         )
                                     ],

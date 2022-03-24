@@ -1,3 +1,4 @@
+import shutil
 from typing import Iterator, Optional, Union
 
 from deepcave.runs import AbstractRun
@@ -37,7 +38,7 @@ class RunCaches:
 
         # Set name after hash (otherwise might be cleared)
         cache.set("name", value=run.name)
-        
+
         if run.path is not None:
             cache.set("path", value=str(run.path))
 
@@ -60,8 +61,6 @@ class RunCaches:
         for cache_file in self.cache_dir.iterdir():
             yield Cache(cache_file)
 
-    def clear_all_caches(self):
+    def clear_all_caches(self) -> None:
         """Removes all caches"""
-        files = list(self.cache_dir.iterdir())
-        for file in files:
-            file.unlink()
+        shutil.rmtree(self.cache_dir)
