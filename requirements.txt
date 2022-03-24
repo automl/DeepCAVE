@@ -14,10 +14,10 @@ hpbandster==0.7.4
 # Upgrading to 2.1.0 or higher breaks the slider because string keys in marks
 # can not be interpreted anymore
 dash==2.0.0
+dash-extensions==0.0.71
 dash-bootstrap-components==1.0.3
 plotly>=5.6.0
 redis>=4.1.4
 rq>=1.10.1
-
 
 pyPDPPartitioner

@@ -1,17 +1,20 @@
 # Version 0.3.1
 
 ## General
+- Added dash-extensions so that multiple outputs, no outputs and trigger can be used.
 - Runs are sorted now and only "important" directories are shown.
 - Mechanics to select runs changed.
     - Runs can be selected across different working directories now.
     - Another section to display selected runs.
     - Press on directory name changes the working directory directly. Makes it easier to navigate.
+    There's also a button to go to parent directory.
     - Internally, a run has two hashes now
         - `id`: Based on prefix and path/name. This hash is used to select runs now. No need to
         distinguish between run and grouped run anymore.
         - `hash`: Changes based on content.
 - Cleaned-up run handler immensively.
 - Logs are better readable.
+- If DeepCAVE was not started before, the path of execution is used as working directory.
 
 
 # Version 0.3
