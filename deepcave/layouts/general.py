@@ -31,8 +31,8 @@ class GeneralLayout(Layout):
             # Those inputs are for changing working directory quickly
             # (if someone is pressing on a directory)
             # Only works with "ALL"
-            State({"type": "general-dynamic-available-run-path", "index": ALL}, "data"),
             Input({"type": "general-dynamic-change-directory", "index": ALL}, "n_clicks"),
+            State({"type": "general-dynamic-available-run-path", "index": ALL}, "data"),
         ]
 
         outputs = [
@@ -48,8 +48,8 @@ class GeneralLayout(Layout):
         def callback(
             _,
             working_dir: str,
-            dynamic_working_dirs: List[str],
             dynamic_n_clicks: List[Optional[int]],
+            dynamic_working_dirs: List[str],
         ):
             # `working_dir` is only none on page load
             if working_dir is None:
@@ -60,8 +60,9 @@ class GeneralLayout(Layout):
                 for dir, n_clicks in zip(dynamic_working_dirs, dynamic_n_clicks):
                     if n_clicks is not None:
                         working_dir = dir
+                        break
 
-                run_handler.set_working_directory(Path(working_dir))
+                run_handler.set_working_directory(working_dir)
                 converter = run_handler.available_run_classes
 
             return (
@@ -77,6 +78,26 @@ class GeneralLayout(Layout):
         @app.callback(output, input)
         def callback(run_paths: List[str]):
             children = []
+
+            # Add text to go to parent directory
+            new_element = html.Div(
+                [
+                    dbc.Button(
+                        "+", id={"type": "general-dynamic-add-run", "index": -1}, disabled=True
+                    ),
+                    dbc.Button(
+                        "..",
+                        id={"type": "general-dynamic-change-directory", "index": -1},
+                        color="link",
+                    ),
+                    dcc.Store(
+                        id={"type": "general-dynamic-available-run-path", "index": -1},
+                        data=str(Path(run_handler.get_working_directory()).parent.absolute()),
+                    ),
+                ],
+                className="mb-1",
+            )
+            children.append(new_element)
 
             for i, run_path in enumerate(run_paths):
                 run_name = run_handler.get_run_name(run_path)
