@@ -10,7 +10,7 @@ from scipy import stats
 
 from deepcave import notification
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import Status
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
@@ -28,6 +28,14 @@ class BudgetCorrelation(DynamicPlugin):
         to each other. The budget shown in the legend is compared to all other (lower) budgets.
     """
     activate_run_selection = True
+
+    @staticmethod
+    def check_run_compatibility(run: AbstractRun) -> bool:
+        if len(run.get_budgets()) == 1:
+            notification.update(f"{run.name} can not be selected because it has only one budget.")
+            return False
+
+        return True
 
     @staticmethod
     def get_input_layout(register):
@@ -96,14 +104,10 @@ class BudgetCorrelation(DynamicPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            dcc.Graph(register("graph", "figure")),
+            dcc.Graph(id=register("graph", "figure"))
         ]
 
     def load_outputs(self, inputs, outputs, run):
-        if len(run.get_budgets()) == 1:
-            notification.update("Only on budget found but need at least two.")
-            raise PreventUpdate()
-
         traces = []
 
         correlations = outputs["correlations"]

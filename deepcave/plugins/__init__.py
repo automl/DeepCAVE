@@ -378,6 +378,9 @@ class Plugin(Layout, ABC):
         else:
             outputs = outputs + [no_update for _ in range(count_mpl_outputs)]
 
+        if len(outputs) == 1:
+            return outputs[0]
+
         return outputs
 
     def _list_to_dict(self, values: Iterable[str], input=True) -> Dict[str, Dict[str, str]]:
