@@ -310,11 +310,11 @@ class GeneralLayout(Layout):
         @app.callback(output, input)
         def callback(n_clicks):
             if n_clicks is not None:
-                try:
-                    rc.clear_all_caches()
-                    notification.update("Plugin caches successfully cleared.", "success")
-                except FileNotFoundError:
-                    notification.update("Plugin caches could not be cleared because none exist.")
+                rc.clear_all_caches()
+
+                # We have to call `update_runs` now to create the run caches again
+                run_handler.update_runs()
+                notification.update("Plugin caches successfully cleared.", "success")
 
             return None
 
