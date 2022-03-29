@@ -22,8 +22,8 @@ class PluginState(Enum):
 
 
 def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -> Any:
-    run_handler.update_runs()
-    run_handler.update_groups()
+    # run_handler.update_runs()
+    # run_handler.update_groups()
 
     try:
         run = run_handler.get_run(run_id)
@@ -32,7 +32,10 @@ def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -
         raise
 
     try:
-        return process(run, inputs)
+        print("YES")
+        a = process(run, inputs)
+        print("JUP")
+        return a
     except:
         traceback.print_exc()
         raise
@@ -142,7 +145,7 @@ class StaticPlugin(Plugin, ABC):
                             "inputs_key": inputs_key,
                         }
 
-                        self.logger.debug(f"Enqueued {run.name}.")
+                        self.logger.debug(f"Enqueued {run.name} ({run.id}).")
 
                         # Start the task in rq
                         queue.enqueue(
@@ -165,10 +168,11 @@ class StaticPlugin(Plugin, ABC):
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
 
-                            self.logger.debug("Job `{job_id}`")
+                            self.logger.debug(f"Job {job_id}")
+                            run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
-                            rc.get(job_run_id).set(self.id, job_inputs_key, value=job_run_outputs)
+                            rc[run].set(self.id, job_inputs_key, value=job_run_outputs)
                             self.logger.debug("... cached")
 
                             queue.delete_job(job_id)
@@ -197,7 +201,7 @@ class StaticPlugin(Plugin, ABC):
     def _callback_loop_trigger_main_loop(self) -> None:
         output = Output(self.get_internal_id("update-interval-output"), "data")
         inputs = [
-            Input("global-update", "n_intervals"),
+            Input(self.get_internal_id("update-interval"), "n_intervals"),
             State(self.get_internal_id("update-interval-output"), "data"),
         ]
 
@@ -242,12 +246,15 @@ class StaticPlugin(Plugin, ABC):
         return f"{run_name}-{inputs_key}"
 
     def __call__(self):
-        self._state = PluginState.NEEDS_PROCESSING
+        self._state = PluginState.UNSET
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False
 
-        components = [dcc.Store(id=self.get_internal_id("update-interval-output"), data=0)]
+        components = [
+            dcc.Interval(id=self.get_internal_id("update-interval"), interval=200),
+            dcc.Store(id=self.get_internal_id("update-interval-output"), data=0),
+        ]
         components += super().__call__(True)
 
         return components
