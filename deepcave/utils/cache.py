@@ -43,7 +43,8 @@ class Cache:
             return
 
         with self._file.open("r") as f:
-            self._data = json.load(f)
+            self._data = self._defaults.copy()
+            self._data.update(json.load(f))
 
     def write(self):
         """Write content of cache into file"""
