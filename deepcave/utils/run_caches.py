@@ -1,10 +1,11 @@
-import shutil
 from typing import Iterator, Optional, Union
+
+import shutil
 
 from deepcave.runs import AbstractRun
 from deepcave.utils.cache import Cache
-from deepcave.utils.logs import get_logger
 from deepcave.utils.hash import string_to_hash
+from deepcave.utils.logs import get_logger
 
 
 class RunCaches:
