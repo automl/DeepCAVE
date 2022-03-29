@@ -23,11 +23,18 @@ class RunCaches:
 
         # Create cache
         filename = self.cache_dir / f"{run.id}.json"
+        cache = Cache(filename)
+
         if not filename.exists():
             self.logger.info(
                 f"Creating new cache file for {run.name} at {filename.absolute().resolve()}"
             )
-        cache = Cache(filename)
+
+            # Set name and path to better identify the cache
+            cache.set("name", value=run.name)
+
+            if run.path is not None:
+                cache.set("path", value=str(run.path))
 
         # Check whether hash is up-to-date
         current_hash = cache.get("hash")
@@ -35,12 +42,6 @@ class RunCaches:
             self.logger.info(f"Hash for {run.name} has changed!")
             cache.clear()
             cache.set("hash", value=run.hash)
-
-        # Set name after hash (otherwise might be cleared)
-        cache.set("name", value=run.name)
-
-        if run.path is not None:
-            cache.set("path", value=str(run.path))
 
         return cache
 
