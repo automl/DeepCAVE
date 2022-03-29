@@ -165,18 +165,24 @@ class StaticPlugin(Plugin, ABC):
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
 
-                            self.logger.debug(f"Job {job_id}")
+                            self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}")
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
                             rc[run].set(self.id, job_inputs_key, value=job_run_outputs)
-                            self.logger.debug("... cached")
+                            self.logger.debug(f"Job {job_id} cached")
 
                             queue.delete_job(job_id)
-                            self.logger.debug("... deleted")
-                        except:
+                            self.logger.debug(f"Job {job_id} deleted")
+                        except Exception as e:
+                            self.logger.error(f"Job {job_id} failed with exception {e}")
                             queue.delete_job(job_id)
-                            self.logger.debug("... deleted")
+                            self.logger.debug(f"Job {job_id} deleted")
+                        except KeyboardInterrupt:
+                            self.logger.error(f"Job {job_id} got interrupted by KeyboardInterrupt")
+                            queue.delete_job(job_id)
+                            self.logger.debug(f"Job {job_id} deleted")
+                            raise
 
                     # Check if queue is still running
                     queue_running = False

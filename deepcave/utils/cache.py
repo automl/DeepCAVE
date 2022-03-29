@@ -6,6 +6,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from deepcave.utils.compression import JSON_DENSE_SEPARATORS
+from deepcave.utils.util import short_string
 
 
 class Cache:
@@ -72,12 +73,7 @@ class Cache:
         if hasattr(self._file, "name"):
             name = self._file.name
 
-        shortened_value = str(value)
-        shortened_value = (
-            shortened_value[:60] + "..." if len(shortened_value) > 60 else shortened_value
-        )
-
-        self._logger.debug(f"{name}: Set \"{','.join(keys)}\" to \"{shortened_value}\".")
+        self._logger.debug(f"{name}: Set \"{','.join(keys)}\" to \"{short_string(value, 60, mode='suffix')}\".")
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:

@@ -2,7 +2,7 @@ import base64
 import random
 import string
 from io import BytesIO
-from typing import Dict, Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union, Any
 
 import pandas as pd
 from ConfigSpace import ConfigurationSpace
@@ -24,6 +24,19 @@ def get_random_string(length: int) -> str:
     return "".join(random.choice(letters) for i in range(length))
 
 
+def short_string(value: Any, length: int = 30, *, mode="prefix") -> str:
+    value = str(value)
+    if len(value) <= length:
+        return value
+
+    cutlength = length - 3  # For 3 dots (...)
+    if mode == "prefix":
+        return f"...{value[-cutlength:]}"
+    elif mode == "suffix":
+        return f"{value[:cutlength]}..."
+    raise ValueError(f"Unknown mode '{mode}'")
+
+
 def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
     # TODO(dwoiwode): Duplicate code (see ./layout.py)?
     # create a virtual file which matplotlib can use to save the figure
@@ -38,7 +51,8 @@ def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
 
 
 def encode_data(
-    data: pd.DataFrame, cs: Optional[ConfigurationSpace] = None
+        data: pd.DataFrame,
+        cs: Optional[ConfigurationSpace] = None
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[pd.Series, pd.Series]]]:
     # converts only columns with "config." prefix
     if cs:

@@ -11,7 +11,7 @@ from deepcave import app, c, rc, run_handler, notification
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run
-from deepcave.utils.dash import flash
+from deepcave.utils.util import short_string
 
 
 class GeneralLayout(Layout):
@@ -134,12 +134,7 @@ class GeneralLayout(Layout):
             for i, run_path in enumerate(run_paths):
                 run_name = run_handler.get_run_name(run_path)
 
-                shown_characters = 30
-                shortened_run_path = (
-                    "..." + run_path[len(run_path) - shown_characters :]
-                    if len(run_path) > shown_characters
-                    else run_path
-                )
+                shortened_run_path = short_string(run_path, 30, mode="prefix")
 
                 new_element = html.Div(
                     [
