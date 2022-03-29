@@ -28,14 +28,11 @@ def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -
     try:
         run = run_handler.get_run(run_id)
     except KeyError:
-        print(f"Could not find run for {run_id}!")
+        print(f"Could not find run for {run_id}.")
         raise
 
     try:
-        print("YES")
-        a = process(run, inputs)
-        print("JUP")
-        return a
+        return process(run, inputs)
     except:
         traceback.print_exc()
         raise
