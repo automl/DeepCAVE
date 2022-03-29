@@ -5,11 +5,11 @@ import logging
 from copy import deepcopy
 from pathlib import Path
 
-from deepcave.utils.files import make_dirs
+from deepcave.utils.compression import JSON_DENSE_SEPARATORS
 
 
 class Cache:
-    def __init__(self, filename: Optional[Path] = None, defaults=None) -> None:
+    def __init__(self, filename: Optional[Path] = None, defaults=None, *, debug=False) -> None:
         """
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
@@ -20,6 +20,7 @@ class Cache:
         # Fields set by self._setup()
         self._data = {}
         self._file: Optional[Path] = None
+        self._debug = debug
 
         # Initial setup
         self._setup(filename)
@@ -43,7 +44,8 @@ class Cache:
             return
 
         with self._file.open("r") as f:
-            self._data = json.load(f)
+            self._data = self._defaults.copy()
+            self._data.update(json.load(f))
 
     def write(self) -> None:
         """Write content of cache into file"""
@@ -52,10 +54,14 @@ class Cache:
 
         self._file.parent.mkdir(exist_ok=True, parents=True)
 
+        self._logger.debug(f"{self._file.name}: Write to file. Debug: {self._debug}")
         with self._file.open("w") as f:
-            json.dump(self._data, f, indent=4)
+            if self._debug:
+                json.dump(self._data, f, indent=4)
+            else:
+                json.dump(self._data, f, separators=JSON_DENSE_SEPARATORS)
 
-    def set(self, *keys, value) -> None:
+    def set(self, *keys, value, write_file=True) -> None:
         """
         Set a value from a chain of keys.
         E.g. set("a", "b", "c", value=4) creates following dictionary:
@@ -78,7 +84,8 @@ class Cache:
             d = d[key]
 
         d[keys[-1]] = value
-        self.write()
+        if write_file:
+            self.write()
 
     def set_dict(self, d: Dict) -> None:
         """Updates cache to a specific value"""

@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 JSON_DENSE_SEPARATORS = (",", ":")
+JSON_DEFAULT_SEPARATORS = (',', ': ')
 TYPE = TypeVar("TYPE")
 
 

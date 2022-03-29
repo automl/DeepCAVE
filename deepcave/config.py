@@ -1,4 +1,4 @@
-from typing import Dict, List, Type
+from typing import Type, Any, Union
 
 from pathlib import Path
 
@@ -6,23 +6,25 @@ from pathlib import Path
 class Config:
     # General config
     TITLE: str = "DeepCAVE"
+    DEBUG: bool = False
 
     # Cache dir
-    root = Path.cwd()
-    DEFAULT_WORKING_DIRECTORY = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
+    root: Path = Path.cwd()
+    DEFAULT_WORKING_DIRECTORY: Path = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
 
-    CACHE_DIR = root / "cache"
+    CACHE_DIR: Path = root / "cache"
 
     # Redis settings
-    REDIS_PORT = 6379
-    REDIS_ADDRESS = "redis://localhost"
+    REDIS_PORT: int = 6379
+    REDIS_ADDRESS: str = "redis://localhost"
 
     # Dash settings (not used right now)
-    DASH_PORT = 8050
-    DASH_ADDRESS = "http://127.0.0.1"
+    DASH_PORT: int = 8050
+    DASH_ADDRESS: str = "http://127.0.0.1"
+    SERVER_NAME = f"{DASH_ADDRESS}:{DASH_PORT}"  # Automatically used in Flask app
 
     # Default Meta information which are used across the platform
-    META_DEFAULT = {
+    META_DEFAULT: dict[str, Any] = {
         "matplotlib-mode": False,
         "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
         "selected_run_paths": [],
@@ -31,10 +33,10 @@ class Config:
 
     # Plugins
     @property
-    def PLUGINS(self) -> Dict[str, List["Plugin"]]:
+    def PLUGINS(self) -> dict[str, list["Plugin"]]:
         """
         Returns:
-        dictionary [category -> List[Plugins]]
+        dictionary {category -> List[Plugins]}
         Plugins are ordered
         """
         from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
@@ -74,7 +76,7 @@ class Config:
 
     # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> List[Type["Run"]]:
+    def AVAILABLE_CONVERTERS(self) -> list[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun
@@ -82,4 +84,22 @@ class Config:
         return [DeepCAVERun, BOHBRun, SMACRun]
 
 
-config = Config()
+class DevelopmentConfig(Config):
+    DEBUG = True
+
+
+configs: dict[str, Config] = {
+    "production": Config(),
+    "dev": DevelopmentConfig()
+}
+configs["default"] = configs["production"]
+
+
+def parse_config(config: Union[None, Config, str] = None) -> Config:
+    if config is None:
+        config = "default"
+    if isinstance(config, str):
+        config = configs[config]
+
+    assert isinstance(config, Config)
+    return config

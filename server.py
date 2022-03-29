@@ -6,7 +6,7 @@ if __name__ == "__main__":
     print("\n-------------STARTING SERVER-------------")
     app.layout = MainLayout(config.PLUGINS)()
     app.run_server(
-        debug=True,
-        # port=config.PORT,
-        # host=config.ADDRESS
+        debug=config.DEBUG,
+        # port=config.DASH_PORT,
+        # host=config.DASH_ADDRESS
     )
