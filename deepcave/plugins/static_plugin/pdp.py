@@ -4,9 +4,9 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
-from pyPDP.surrogate_models.sklearn_surrogates import GaussianProcessSurrogate
 from pyPDP.utils.utils import config_list_to_array
 
+from deepcave.evaluators.epm.surrogates import RandomForestSurrogate
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
@@ -25,6 +25,12 @@ class PDPPlugin(StaticPlugin):
     @staticmethod
     def get_input_layout(register):
         return [
+            html.Div(
+                [
+                    dbc.Label("Budget"),
+                    dbc.Select(id=register("budget", ["options", "value"])),
+                ]
+            ),
             html.Div(
                 [
                     dbc.Label("Selected Hyperparameters"),
@@ -78,9 +84,11 @@ class PDPPlugin(StaticPlugin):
             },
             "num_grid_points_per_axis": {"value": 20},
             "num_samples": {"value": 1000},
+            "budget": {"options": get_select_options(), "value": []},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+        budgets = selected_run.get_budgets(human=True)
         hp_names = selected_run.configspace.get_hyperparameter_names()
         objective_names = selected_run.get_objective_names()
         objective_ids = list(range(len(objective_names)))
@@ -96,6 +104,9 @@ class PDPPlugin(StaticPlugin):
             "objective": {
                 "options": get_select_options(objective_names, objective_ids),
                 "value": current_objective,
+            },
+            "budget": {
+                "options": get_select_options(budgets),
             },
         }
         update_dict(inputs, new_inputs)
@@ -124,15 +135,19 @@ class PDPPlugin(StaticPlugin):
     def process(run: AbstractRun, inputs):
         # Surrogate
         objective_id = int(inputs["objective"]["value"])
+        selected_budget = int(inputs["budget"]["value"])
 
         logger.debug("Initialize Surrogate")
-        surrogate_model = GaussianProcessSurrogate(run.configspace)
+        surrogate_model = RandomForestSurrogate(run.configspace)
+        logger.debug("Get trials")
+        trials = list(filter(lambda trial: trial.budget == selected_budget, run.get_trials()))
+        logger.debug(f"Got {len(trials)} trials for budget {selected_budget}")
         logger.debug("Get y")
-        y = [trial.costs[objective_id] for trial in run.get_trials()]
+        y = [trial.costs[objective_id] for trial in trials]
         logger.debug("Get configs")
         configs = [
             CS.Configuration(run.configspace, values=run.get_config(trial.config_id))
-            for trial in run.get_trials()
+            for trial in trials
         ]
         logger.debug("Get X")
         X = config_list_to_array(configs)

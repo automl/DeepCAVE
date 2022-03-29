@@ -7,6 +7,7 @@ from pyPDP.algorithms.ice import ICE
 from pyPDP.surrogate_models.sklearn_surrogates import GaussianProcessSurrogate
 from pyPDP.utils.utils import config_list_to_array
 
+from deepcave.evaluators.epm.surrogates import RandomForestSurrogate
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
@@ -27,8 +28,14 @@ class ICEPlugin(StaticPlugin):
         return [
             html.Div(
                 [
+                    dbc.Label("Budget"),
+                    dbc.Select(id=register("budget", ["options", "value"])),
+                ]
+            ),
+            html.Div(
+                [
                     dbc.Label("Selected Hyperparameters"),
-                    dbc.Select(id=register("hyperparameters", ["options", "value"])),
+                    dbc.Select(id=register("hyperparameter", ["options", "value"])),
                 ],
                 className="mb-3",
             ),
@@ -59,16 +66,18 @@ class ICEPlugin(StaticPlugin):
 
     def load_inputs(self):
         return {
-            "hyperparameters": {"options": get_select_options(), "value": []},
+            "hyperparameter": {"options": get_select_options(), "value": []},
             "objective": {
                 "options": get_select_options(),
                 "value": [],
             },
             "num_grid_points_per_axis": {"value": 20},
             "num_samples": {"value": 1000},
+            "budget": {"options": get_select_options(), "value": []},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+        budgets = selected_run.get_budgets(human=True)
         hp_names = selected_run.configspace.get_hyperparameter_names()
         objective_names = selected_run.get_objective_names()
         objective_ids = list(range(len(objective_names)))
@@ -77,15 +86,18 @@ class ICEPlugin(StaticPlugin):
         if current_objective is None:
             current_objective = objective_ids[0]
 
-        current_hp = inputs["hyperparameters"]["value"]
+        current_hp = inputs["hyperparameter"]["value"]
         if current_hp is None:
             current_hp = hp_names[0]
 
         new_inputs = {
-            "hyperparameters": {"options": get_select_options(hp_names), "value": current_hp},
+            "hyperparameter": {"options": get_select_options(hp_names), "value": current_hp},
             "objective": {
                 "options": get_select_options(objective_names, objective_ids),
                 "value": current_objective,
+            },
+            "budget": {
+                "options": get_select_options(budgets),
             },
         }
         update_dict(inputs, new_inputs)
@@ -114,9 +126,10 @@ class ICEPlugin(StaticPlugin):
     def process(run: AbstractRun, inputs):
         # Surrogate
         objective_id = int(inputs["objective"]["value"])
+        selected_budget = int(inputs["budget"]["value"])
 
         logger.debug("Initialize Surrogate")
-        surrogate_model = GaussianProcessSurrogate(run.configspace)
+        surrogate_model = RandomForestSurrogate(run.configspace)
         logger.debug("Get y")
         xy = [
             (
@@ -124,7 +137,7 @@ class ICEPlugin(StaticPlugin):
                 trial.costs[objective_id],
             )
             for trial in run.get_trials()
-            if trial.costs[objective_id] is not None
+            if trial.costs[objective_id] is not None and trial.budget == selected_budget
         ]
         logger.debug("Get configs")
         configs, y = list(zip(*xy))
@@ -134,7 +147,7 @@ class ICEPlugin(StaticPlugin):
         surrogate_model.fit(X, y)
 
         # ICE
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
+        selected_hyperparameters = inputs["hyperparameter"]["value"]
         num_samples = inputs["num_samples"]["value"]
         num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]
         logger.debug(
@@ -160,32 +173,27 @@ class ICEPlugin(StaticPlugin):
 
     def load_outputs(self, inputs, outputs, run):
         # Parse inputs
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
+        selected_hyperparameter = inputs["hyperparameter"]["value"]
 
-        hyperparameter_idx = [
-            run.configspace.get_idx_by_hyperparameter_name(hp) for hp in selected_hyperparameters
-        ]
+        hyperparameter_idx = run.configspace.get_idx_by_hyperparameter_name(selected_hyperparameter)
 
         # Parse outputs
         x = np.asarray(outputs["x"])
         y = np.asarray(outputs["y"])
 
         fig = go.Figure()
-        if len(selected_hyperparameters) == 1:  # 1D
-            for x_row, y_row in zip(x, y):
-                fig.add_trace(
-                    go.Scatter(
-                        name="ICE",
-                        x=x_row[:, hyperparameter_idx[0]],
-                        y=y_row,
-                    )
+        for x_row, y_row in zip(x, y):
+            fig.add_trace(
+                go.Scatter(
+                    name="ICE",
+                    x=x_row[:, hyperparameter_idx],
+                    y=y_row,
                 )
-            fig.update_layout(
-                title="1D ICE-Curves",
-                xaxis_title=selected_hyperparameters[0],
-                yaxis_title=run.get_objective(int(inputs["objective"]["value"]))["name"],
             )
-        else:
-            pass
+        fig.update_layout(
+            title="1D ICE-Curves",
+            xaxis_title=selected_hyperparameter,
+            yaxis_title=run.get_objective(int(inputs["objective"]["value"]))["name"],
+        )
 
         return [fig]
