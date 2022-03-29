@@ -13,7 +13,7 @@ hpbandster==0.7.4
 
 # Upgrading to 2.1.0 or higher breaks the slider because string keys in marks
 # can not be interpreted anymore (2.0.0 works nicely)
-dash==2.3.0
+dash==2.0.0
 dash-extensions==0.0.71
 dash-bootstrap-components==1.0.3
 redis>=4.1.4
