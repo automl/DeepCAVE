@@ -46,6 +46,10 @@ class StaticPlugin(Plugin, ABC):
     def __init__(self) -> None:
         self._state: PluginState = PluginState.UNSET
         self._refresh_required = True
+        self._reset_button = False
+
+        # Processing right now?
+        self._blocked = False
 
         super().__init__()
 

@@ -18,6 +18,6 @@ dash-extensions==0.0.71
 dash-bootstrap-components==1.0.3
 redis>=4.1.4
 rq>=1.10.1
-werkzeug==2.0.3
+werkzeug==2.0.3  # Pinned due to https://github.com/plotly/dash/issues/1992 . Pinning might be removed for dash>2.3.0
 
 pyPDPPartitioner

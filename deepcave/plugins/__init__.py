@@ -55,8 +55,6 @@ class Plugin(Layout, ABC):
         self.inputs = []
         self.outputs = []
 
-        # Processing right now?
-        self.blocked = False
         self.runs: List[AbstractRun] = []  # Set in __call__
 
         super().__init__()
@@ -216,12 +214,8 @@ class Plugin(Layout, ABC):
 
             @app.callback(outputs, inputs)
             def plugin_input_update(*inputs_list):
-                init = True
                 # Simple check if page was loaded for the first time
-                for input in inputs_list:
-                    if input is not None:
-                        init = False
-                        break
+                init = all(input is None for input in inputs_list)
 
                 # Reload our inputs
                 if init:
