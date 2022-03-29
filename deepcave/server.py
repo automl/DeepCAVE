@@ -1,15 +1,14 @@
-import dash
+from typing import Union
+
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import DashProxy, TriggerTransform, MultiplexerTransform, NoOutputTransform
 
 from deepcave.config import Config
+from deepcave.utils.util import parse_config
 
 
-def get_app(config: Config = None):
-    if config is None:
-        config = Config()
-
-    #app = dash.Dash(
+def get_app(config: Union[Config, str] = None):
+    config = parse_config(config)
     app = DashProxy(
         __name__,
         title=config.TITLE,

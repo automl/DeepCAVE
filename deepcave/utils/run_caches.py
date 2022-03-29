@@ -16,6 +16,7 @@ class RunCaches:
     def __init__(self, config: "Config"):
         self.cache_dir = config.CACHE_DIR / "run_cache"
         self.logger = get_logger("RunCache")
+        self._debug_mode = config.DEBUG
 
     def __getitem__(self, run: AbstractRun) -> Cache:
         if not isinstance(run, AbstractRun):
@@ -27,7 +28,7 @@ class RunCaches:
             self.logger.info(
                 f"Creating new cache file for {run.name} at {filename.absolute().resolve()}"
             )
-        cache = Cache(filename)
+        cache = Cache(filename, debug=self._debug_mode)
 
         # Check whether hash is up-to-date
         current_hash = cache.get("hash")
@@ -59,7 +60,7 @@ class RunCaches:
 
     def __iter__(self) -> Iterator[Cache]:
         for cache_file in self.cache_dir.iterdir():
-            yield Cache(cache_file)
+            yield Cache(cache_file, debug=self._debug_mode)
 
     def clear_all_caches(self) -> None:
         """Removes all caches"""

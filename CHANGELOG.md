@@ -3,8 +3,9 @@
 ## Code related
 - Added dash-extensions so that multiple outputs, no outputs and trigger can be used.
 - Added global notification.
-- Cleaned-up run handler immensively.
+- Cleaned-up run handler immensely.
 - Logs are better readable.
+- Improved config loading and add development config
 
 ## General
 - Runs are sorted now and only "important" directories are shown.
@@ -18,6 +19,11 @@
         distinguish between run and grouped run anymore.
         - `hash`: Changes based on content.
 - If DeepCAVE was not started before, the path of execution is used as working directory.
+- Added ICE and PDP
+
+## Bugfixes
+- Files are no longer shown in run selection
+- Runs reloaded from disk in worker
 
 
 # Version 0.3

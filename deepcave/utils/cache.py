@@ -9,7 +9,7 @@ from deepcave.utils.files import make_dirs
 
 
 class Cache:
-    def __init__(self, filename: Optional[Path] = None, defaults=None):
+    def __init__(self, filename: Optional[Path] = None, defaults=None, *, debug=False):
         """
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
@@ -20,6 +20,7 @@ class Cache:
         # Fields set by self._setup()
         self._data = {}
         self._file: Optional[Path] = None
+        self._debug = debug
 
         # Initial setup
         self._setup(filename)

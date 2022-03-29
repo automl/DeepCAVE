@@ -2,6 +2,8 @@ import datetime
 import sys
 import os
 
+from deepcave.utils.util import parse_config
+
 name = "DeepCAVE"
 package_name = "deepcave"
 author = "René Sass and Marius Lindauer"
@@ -20,7 +22,7 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 
 
 if any(file in _exec_file for file in _exec_files):
-    from deepcave.config import config
+    from deepcave.config import configs
     from deepcave.queue import Queue  # noqa
     from deepcave.runs.handler import RunHandler  # noqa
     from deepcave.runs.objective import Objective  # noqa
@@ -30,7 +32,8 @@ if any(file in _exec_file for file in _exec_files):
     from deepcave.utils.run_caches import RunCaches  # noqa
     from deepcave.utils.notification import Notification
 
-    app = get_app()
+    config = parse_config()
+    app = get_app(config)
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
 
     # Meta cache
