@@ -14,7 +14,7 @@ class Cache:
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
         """
-        self._logger = logging.getLogger(f"deepcave.cache")
+        self._logger = logging.getLogger("deepcave.cache")
         self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
@@ -72,7 +72,12 @@ class Cache:
         if hasattr(self._file, "name"):
             name = self._file.name
 
-        self._logger.debug(f"{name}: Set \"{','.join(keys)}\" to \"{value}\".")
+        shortened_value = str(value)
+        shortened_value = (
+            shortened_value[:60] + "..." if len(shortened_value) > 60 else shortened_value
+        )
+
+        self._logger.debug(f"{name}: Set \"{','.join(keys)}\" to \"{shortened_value}\".")
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:
