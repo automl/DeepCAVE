@@ -21,12 +21,14 @@ class PluginState(Enum):
     PROCESSING = 2
 
 
-def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
-    run_handler.load_from_cache()
+def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -> Any:
+    run_handler.update_runs()
+    run_handler.update_groups()
+
     try:
-        run = run_handler.from_run_cache_id(run_cache_id)
+        run = run_handler.get_run(run_id)
     except KeyError:
-        print(f"Could not find run for {run_cache_id}!")
+        print(f"Could not find run for {run_id}!")
         raise
 
     try:
@@ -41,19 +43,19 @@ class StaticPlugin(Plugin, ABC):
     Calculation with queue. Made for time-consuming tasks.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._state: PluginState = PluginState.UNSET
         self._refresh_required = True
 
         super().__init__()
 
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
         super().register_callbacks()
         self._callback_inputs_changed()
         self._callback_loop_update_status_label()
         self._callback_loop_trigger_main_loop()
 
-    def _callback_inputs_changed(self):
+    def _callback_inputs_changed(self) -> None:
         # Plugin specific outputs
         outputs = []
         for id, attribute, _ in self.outputs:
@@ -159,23 +161,23 @@ class StaticPlugin(Plugin, ABC):
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
 
-                            self.logger.debug(f"Job `{job_id}`")
+                            self.logger.debug("Job `{job_id}`")
 
                             # Save results in cache
                             rc.get(job_run_id).set(self.id, job_inputs_key, value=job_run_outputs)
-                            self.logger.debug(f"... cached")
+                            self.logger.debug("... cached")
 
                             queue.delete_job(job_id)
-                            self.logger.debug(f"... deleted")
+                            self.logger.debug("... deleted")
                         except:
                             queue.delete_job(job_id)
-                            self.logger.debug(f"... deleted")
+                            self.logger.debug("... deleted")
 
                     # Check if queue is still running
                     queue_running = False
                     queue_pending = False
                     for run in runs:
-                        job_id = self._get_job_id(run.name, inputs_key)
+                        job_id = self._get_job_id(run.id, inputs_key)
                         if queue.is_running(job_id):
                             queue_running = True
 
@@ -188,10 +190,10 @@ class StaticPlugin(Plugin, ABC):
             self._blocked = False
             raise PreventUpdate
 
-    def _callback_loop_trigger_main_loop(self):
+    def _callback_loop_trigger_main_loop(self) -> None:
         output = Output(self.get_internal_id("update-interval-output"), "data")
         inputs = [
-            Input(self.get_internal_id("update-interval"), "n_intervals"),
+            Input("global-update", "n_intervals"),
             State(self.get_internal_id("update-interval-output"), "data"),
         ]
 
@@ -206,7 +208,7 @@ class StaticPlugin(Plugin, ABC):
             # This will trigger the main loop
             return data + 1
 
-    def _callback_loop_update_status_label(self):
+    def _callback_loop_update_status_label(self) -> None:
         output = [
             Output(self.get_internal_id("processing-info"), "children"),
             Output(self.get_internal_id("update-button"), "n_clicks"),
@@ -236,15 +238,12 @@ class StaticPlugin(Plugin, ABC):
         return f"{run_name}-{inputs_key}"
 
     def __call__(self):
-        self._state = 1
+        self._state = PluginState.NEEDS_PROCESSING
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False
 
-        components = [
-            dcc.Interval(id=self.get_internal_id("update-interval"), interval=200),
-            dcc.Store(id=self.get_internal_id("update-interval-output"), data=0),
-        ]
+        components = [dcc.Store(id=self.get_internal_id("update-interval-output"), data=0)]
         components += super().__call__(True)
 
         return components
