@@ -9,7 +9,7 @@ from deepcave.utils.files import make_dirs
 
 
 class Cache:
-    def __init__(self, filename: Optional[Path] = None, defaults=None):
+    def __init__(self, filename: Optional[Path] = None, defaults=None) -> None:
         """
         Cache handles a json file. Decided not to use flask_caching
         since code is easier to change to our needs.
@@ -24,7 +24,7 @@ class Cache:
         # Initial setup
         self._setup(filename)
 
-    def _setup(self, filename: Path):
+    def _setup(self, filename: Path) -> None:
         self._data = {}
         self._file = filename
 
@@ -33,11 +33,11 @@ class Cache:
         else:
             self.read()
 
-    def switch(self, filename: Optional[Path]):
+    def switch(self, filename: Optional[Path]) -> None:
         """Switch to a new file"""
         self._setup(filename)
 
-    def read(self):
+    def read(self) -> None:
         """Reads content from a file and load into cache as dictionary"""
         if not self._file.exists():
             return
@@ -45,7 +45,7 @@ class Cache:
         with self._file.open("r") as f:
             self._data = json.load(f)
 
-    def write(self):
+    def write(self) -> None:
         """Write content of cache into file"""
         if self._file is None:
             return
@@ -61,7 +61,12 @@ class Cache:
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
-        self._logger.debug(f"{self._file.name}: Set \"{','.join(keys)}\" to \"{value}\".")
+
+        name = "(empty)"
+        if hasattr(self._file, "name"):
+            name = self._file.name
+
+        self._logger.debug(f"{name}: Set \"{','.join(keys)}\" to \"{value}\".")
         d = self._data
         for key in keys[:-1]:
             if type(key) != str:
