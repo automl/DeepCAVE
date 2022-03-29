@@ -35,14 +35,15 @@ class RunCaches:
         if current_hash != run.hash:
             self.logger.info(f"Hash for {run.name} has changed!")
             cache.clear()
-            cache.set("hash", value=run.hash)
+            cache.set("hash", value=run.hash, write_file=False)
 
         # Set name after hash (otherwise might be cleared)
-        cache.set("name", value=run.name)
+        cache.set("name", value=run.name, write_file=False)
 
         if run.path is not None:
-            cache.set("path", value=str(run.path))
+            cache.set("path", value=str(run.path), write_file=False)
 
+        cache.write()
         return cache
 
     def __contains__(self, run: Union[AbstractRun, str]) -> bool:

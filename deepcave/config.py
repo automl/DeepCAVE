@@ -1,4 +1,4 @@
-from typing import Type, Any
+from typing import Type, Any, Union
 
 from pathlib import Path
 
@@ -93,3 +93,13 @@ configs: dict[str, Config] = {
     "dev": DevelopmentConfig()
 }
 configs["default"] = configs["production"]
+
+
+def parse_config(config: Union[None, Config, str] = None) -> Config:
+    if config is None:
+        config = "default"
+    if isinstance(config, str):
+        config = configs[config]
+
+    assert isinstance(config, Config)
+    return config

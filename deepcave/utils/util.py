@@ -1,9 +1,8 @@
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
-
 import base64
 import random
 import string
 from io import BytesIO
+from typing import Dict, Optional, Tuple, Union
 
 import pandas as pd
 from ConfigSpace import ConfigurationSpace
@@ -16,8 +15,6 @@ from ConfigSpace.hyperparameters import (
 from dash import html
 from matplotlib import pyplot as plt
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
-
-from deepcave.config import Config, configs
 
 
 def get_random_string(length: int) -> str:
@@ -123,13 +120,3 @@ def _encode(data: pd.DataFrame, cs: Optional):
     data = _transform(data, ord_from_cols, ord_to_cols, ord_choices, OrdinalEncoder)
 
     return data, org_cols
-
-
-def parse_config(config:Union[None, Config, str]=None) -> Config:
-    if config is None:
-        config = "default"
-    if isinstance(config, str):
-        config = configs[config]
-
-    assert isinstance(config, Config)
-    return config
