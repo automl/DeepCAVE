@@ -55,8 +55,6 @@ class Plugin(Layout, ABC):
         self.inputs = []
         self.outputs = []
 
-        self.runs: List[AbstractRun] = []  # Set in __call__
-
         super().__init__()
 
     @staticmethod
@@ -454,6 +452,18 @@ class Plugin(Layout, ABC):
 
         return string_to_hash(str(new_d))
 
+    @property
+    def runs(self):
+        return run_handler.get_runs()
+
+    @property
+    def grouped_runs(self):
+        return run_handler.get_grouped_runs()
+
+    @property
+    def all_runs(self):
+        return run_handler.get_runs(include_groups=True)
+
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
         Returns the components for the plugin. Basically, all blocks and elements of the plugin
@@ -467,9 +477,6 @@ class Plugin(Layout, ABC):
 
         self.previous_inputs = {}
         self.raw_outputs = None
-        self.runs = run_handler.get_runs()
-        self.grouped_runs = run_handler.get_grouped_runs()
-        self.all_runs = run_handler.get_runs(include_groups=True)
 
         components = [html.H1(self.name)]
         if self.description is not None:

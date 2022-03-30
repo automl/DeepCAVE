@@ -23,6 +23,10 @@ class SMACRun(Run):
 
         # Use hash of history.json as id
         return file_to_hash(self.path / "runhistory.json")
+    
+    @property
+    def latest_change(self) -> int:
+        return Path(self.path / "runhistory.jsonl").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Path) -> "SMACRun":

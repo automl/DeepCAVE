@@ -21,11 +21,13 @@
 - If DeepCAVE was not started before, the path of execution is used as working directory.
 
 ## Plugins
+- Overview: Redesigned with barplot and heatmap for statuses. Also includes configspace now.
 - Added ICE and PDP again.
 
 ## Bugfixes
 - Files are no longer shown in run selection.
 - Runs reloaded from disk in worker.
+- Internal runs are updated now if they changed.
 
 
 # Version 0.3

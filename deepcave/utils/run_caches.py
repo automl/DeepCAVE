@@ -31,21 +31,20 @@ class RunCaches:
             self.logger.info(
                 f"Creating new cache file for {run.name} at {filename.absolute().resolve()}"
             )
+            cache.initialize_run(run)
 
-            # Set name and path to better identify the cache
-            cache.set("name", value=run.name)
+        return cache
 
-            if run.path is not None:
-                cache.set("path", value=str(run.path))
+    def update_required(self, run: AbstractRun) -> bool:
+        cache = self[run]
 
         # Check whether hash is up-to-date
         current_hash = cache.get("hash")
         if current_hash != run.hash:
             self.logger.info(f"Hash for {run.name} has changed!")
-            cache.clear()
-            cache.set("hash", value=run.hash)
+            return True
 
-        return cache
+        return False
 
     def __contains__(self, run: Union[AbstractRun, str]) -> bool:
         if isinstance(run, AbstractRun):

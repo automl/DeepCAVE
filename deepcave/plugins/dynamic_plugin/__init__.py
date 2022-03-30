@@ -46,9 +46,6 @@ class DynamicPlugin(Plugin, ABC):
                     self.logger.debug(f"Process {run.name}.")
                     run_outputs = self.process(run, inputs)
 
-                    # Here's the thing:
-                    # We have to remove `run` from the inputs completely
-
                     # Cache it
                     run_cache.set(self.id, inputs_key, value=run_outputs)
                 else:

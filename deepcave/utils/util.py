@@ -1,6 +1,7 @@
 import base64
 import random
 import string
+import datetime
 from io import BytesIO
 from typing import Dict, Optional, Tuple, Union, Any
 
@@ -37,6 +38,23 @@ def short_string(value: Any, length: int = 30, *, mode="prefix") -> str:
     raise ValueError(f"Unknown mode '{mode}'")
 
 
+def get_latest_change(st_mtime: int) -> str:
+    t = datetime.datetime.fromtimestamp(st_mtime)
+    s_diff = (datetime.datetime.now() - t).seconds
+    d_diff = (datetime.datetime.now() - t).days
+
+    if s_diff < 60:
+        return "Some seconds ago"
+    elif s_diff < 3600:
+        return f"{int(s_diff / 60)} minutes ago"
+    elif s_diff < 86400:
+        return f"{int(s_diff / 60 / 60)} hours ago"
+    elif d_diff < 7:
+        return f"{d_diff} days ago"
+    else:
+        return t.strftime("%Y/%m/%d")
+
+
 def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
     # TODO(dwoiwode): Duplicate code (see ./layout.py)?
     # create a virtual file which matplotlib can use to save the figure
@@ -51,8 +69,7 @@ def matplotlib_to_html_image(fig: plt.Figure) -> html.Img:
 
 
 def encode_data(
-        data: pd.DataFrame,
-        cs: Optional[ConfigurationSpace] = None
+    data: pd.DataFrame, cs: Optional[ConfigurationSpace] = None
 ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, Dict[pd.Series, pd.Series]]]:
     # converts only columns with "config." prefix
     if cs:

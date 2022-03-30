@@ -179,6 +179,28 @@ class RunHandler:
             self.c.set("last_inputs", value={})
             self.update_runs()
 
+    def update(self) -> None:
+        """Updates the internal run and group instances but only if a hash changed."""
+
+        update_required = False
+        for run_path in list(self.runs.keys()):
+            run = self.runs[run_path]
+
+            # Get cache
+            cache = self.rc[run]
+            if self.rc.update_required(run):
+                cache.initialize_run(run)
+
+                # It's important to delete the run from self.runs here because
+                # otherwise this object is kept in memory though it has changed
+                del self.runs[run_path]
+
+                update_required = True
+
+        if update_required:
+            self.update_runs()
+            self.update_groups()
+
     def update_runs(self) -> bool:
         """
         Loads selected runs and update cache if files changed.
@@ -208,7 +230,8 @@ class RunHandler:
                 success = False
 
         # Save in cache again
-        self.c.set("selected_run_paths", value=updated_paths)
+        if self.get_selected_run_paths() != updated_paths:
+            self.c.set("selected_run_paths", value=updated_paths)
 
         # Save runs in memory
         self.runs = runs
@@ -341,6 +364,7 @@ class RunHandler:
         List[GroupedRun]
             Instances of grouped runs.
         """
+        self.update()
         return list(self.groups.values())
 
     def get_runs(self, include_groups=False) -> List[AbstractRun]:
@@ -358,9 +382,10 @@ class RunHandler:
         List[AbstractRun]
             Instances of runs.
         """
+        self.update()
         runs = list(self.runs.values())
 
         if include_groups:
-            runs += self.get_grouped_runs()
+            runs += list(self.groups.values())
 
         return runs
