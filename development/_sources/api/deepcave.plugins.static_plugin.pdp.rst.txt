@@ -1,0 +1,29 @@
+deepcave.plugins.static\_plugin.pdp
+===================================
+
+.. automodule:: deepcave.plugins.static_plugin.pdp
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PDPPlugin
+   
+   
+
+   
+   
+   
+
+
+

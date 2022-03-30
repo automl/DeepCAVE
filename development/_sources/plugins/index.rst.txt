@@ -70,5 +70,5 @@ basic templates (in :ref:`examples<Examples>`) as a starting point and change it
 Take inspirations from the other plugins if needed.
 
 After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in ``deepcave/conf.py``.
+location of your plugin in ``deepcave/config.py``.
 

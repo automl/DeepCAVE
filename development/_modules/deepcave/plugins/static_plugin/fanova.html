@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.static_plugin.fanova &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <title>deepcave.plugins.static_plugin.fanova &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -111,7 +111,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -367,9 +367,7 @@ style="width: 100%;">
                 <span class="n">configspace</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span>
                 <span class="n">num_trees</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_trees&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]),</span>
             <span class="p">)</span>
-            <span class="n">importance_dict</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">quantify_importance</span><span class="p">(</span>
-                <span class="n">hp_names</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
+            <span class="n">importance_dict</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">quantify_importance</span><span class="p">(</span><span class="n">hp_names</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
             <span class="n">importance_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importance_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
@@ -383,21 +381,19 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="fANOVA.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="c1"># First selected, should always be shown first</span>
-        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">selected_budgets</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">selected_hyperparameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">selected_budgets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_budgets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PreventUpdate</span><span class="p">()</span>
 
         <span class="c1"># TODO: After json serialize/deserialize, budget is not an integer anymore</span>
-        <span class="n">convert_type</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1"># type(selected_budgets[0])</span>
+        <span class="n">convert_type</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># type(selected_budgets[0])</span>
 
         <span class="c1"># Collect data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">budget</span><span class="p">,</span> <span class="n">importance_dict</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">budget</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="n">convert_type</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
-
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
                 <span class="k">continue</span>
 
@@ -457,14 +453,14 @@ style="width: 100%;">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

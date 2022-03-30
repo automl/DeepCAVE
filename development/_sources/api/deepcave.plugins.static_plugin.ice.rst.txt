@@ -1,0 +1,29 @@
+deepcave.plugins.static\_plugin.ice
+===================================
+
+.. automodule:: deepcave.plugins.static_plugin.ice
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ICEPlugin
+   
+   
+
+   
+   
+   
+
+
+

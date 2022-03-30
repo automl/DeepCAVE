@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <title>Index &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -111,7 +111,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -315,11 +315,13 @@ style="width: 100%;">
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun">AbstractRun (class in deepcave.runs)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.activate_run_selection">activate_run_selection (deepcave.plugins.Plugin attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.add">add() (deepcave.runs.run.Run method)</a>
+</li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.add_run">add_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -351,8 +353,12 @@ style="width: 100%;">
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.check_equality">check_equality() (in module deepcave.runs)</a>
 </li>
-      <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">check_run_compatibility() (deepcave.plugins.Plugin static method)</a>
+      <li><a href="api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.check_run_compatibility">check_run_compatibility() (deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation static method)</a>
+
+      <ul>
+        <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">(deepcave.plugins.Plugin static method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.check_runs_compatibility">check_runs_compatibility() (deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime method)</a>
@@ -416,6 +422,13 @@ style="width: 100%;">
 </li>
       </ul></li>
       <li>
+    deepcave.plugins.dynamic_plugin.local_parameter_importance
+
+      <ul>
+        <li><a href="api/deepcave.plugins.dynamic_plugin.local_parameter_importance.html#module-deepcave.plugins.dynamic_plugin.local_parameter_importance">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.plugins.dynamic_plugin.overview
 
       <ul>
@@ -450,8 +463,22 @@ style="width: 100%;">
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#module-deepcave.plugins.static_plugin.fanova">module</a>
 </li>
       </ul></li>
+      <li>
+    deepcave.plugins.static_plugin.ice
+
+      <ul>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#module-deepcave.plugins.static_plugin.ice">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    deepcave.plugins.static_plugin.pdp
+
+      <ul>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#module-deepcave.plugins.static_plugin.pdp">module</a>
+</li>
+      </ul></li>
       <li>
     deepcave.runs
 
@@ -547,17 +574,13 @@ style="width: 100%;">
 </li>
       </ul></li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.from_run_cache_id">from_run_cache_id() (deepcave.runs.handler.RunHandler method)</a>
-</li>
-      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.from_run_id">from_run_id() (deepcave.runs.handler.RunHandler method)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_available_run_paths">get_available_run_paths() (deepcave.runs.handler.RunHandler method)</a>
+</li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_cost">get_cost() (deepcave.runs.AbstractRun method)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">get_costs() (deepcave.runs.AbstractRun method)</a>
@@ -577,7 +600,13 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.get_filter_layout">(deepcave.plugins.static_plugin.fanova.fANOVA static method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.get_filter_layout">(deepcave.plugins.static_plugin.ice.ICEPlugin static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_filter_layout">(deepcave.plugins.static_plugin.pdp.PDPPlugin static method)</a>
+</li>
       </ul></li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_grouped_runs">get_grouped_runs() (deepcave.runs.handler.RunHandler method)</a>
+</li>
       <li><a href="api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.get_input_layout">get_input_layout() (deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation static method)</a>
 
       <ul>
@@ -592,6 +621,10 @@ style="width: 100%;">
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">(deepcave.plugins.Plugin static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.get_input_layout">(deepcave.plugins.static_plugin.fanova.fANOVA static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.get_input_layout">(deepcave.plugins.static_plugin.ice.ICEPlugin static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_input_layout">(deepcave.plugins.static_plugin.pdp.PDPPlugin static method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -621,14 +654,26 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.get_output_layout">(deepcave.plugins.static_plugin.fanova.fANOVA static method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.get_output_layout">(deepcave.plugins.static_plugin.ice.ICEPlugin static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_output_layout">(deepcave.plugins.static_plugin.pdp.PDPPlugin static method)</a>
+</li>
       </ul></li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_run">get_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_run_input_layout">get_run_input_layout() (deepcave.plugins.Plugin static method)</a>
 </li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_run_name">get_run_name() (deepcave.runs.handler.RunHandler method)</a>
+</li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_runs">get_runs() (deepcave.runs.handler.RunHandler method)</a>
 </li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_selected_run_names">get_selected_run_names() (deepcave.runs.handler.RunHandler method)</a>
+</li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_selected_run_paths">get_selected_run_paths() (deepcave.runs.handler.RunHandler method)</a>
+</li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">get_selected_runs() (deepcave.plugins.Plugin method)</a>
+</li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_working_directory">get_working_directory() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun">GroupedRun (class in deepcave.runs.grouped_run)</a>
 </li>
@@ -656,12 +701,20 @@ style="width: 100%;">
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin">ICEPlugin (class in deepcave.plugins.static_plugin.ice)</a>
+</li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.icon">icon (deepcave.plugins.Plugin attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.id">id (deepcave.plugins.Plugin attribute)</a>
+
+      <ul>
+        <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.id">(deepcave.runs.AbstractRun property)</a>
 </li>
+        <li><a href="api/deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun.id">(deepcave.runs.grouped_run.GroupedRun property)</a>
+</li>
+        <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.id">(deepcave.runs.run.Run property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -679,6 +732,10 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_dependency_inputs">(deepcave.plugins.static_plugin.fanova.fANOVA method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.load_dependency_inputs">(deepcave.plugins.static_plugin.ice.ICEPlugin method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_dependency_inputs">(deepcave.plugins.static_plugin.pdp.PDPPlugin method)</a>
+</li>
       </ul></li>
       <li><a href="api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.load_inputs">load_inputs() (deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation method)</a>
 
@@ -695,6 +752,10 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_inputs">(deepcave.plugins.static_plugin.fanova.fANOVA method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.load_inputs">(deepcave.plugins.static_plugin.ice.ICEPlugin method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_inputs">(deepcave.plugins.static_plugin.pdp.PDPPlugin method)</a>
+</li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -703,7 +764,7 @@ style="width: 100%;">
       <li><a href="api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.load_outputs">load_outputs() (deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation method)</a>
 
       <ul>
-        <li><a href="api/deepcave.plugins.dynamic_plugin.ccube.html#deepcave.plugins.dynamic_plugin.ccube.CCube.load_outputs">(deepcave.plugins.dynamic_plugin.ccube.CCube static method)</a>
+        <li><a href="api/deepcave.plugins.dynamic_plugin.ccube.html#deepcave.plugins.dynamic_plugin.ccube.CCube.load_outputs">(deepcave.plugins.dynamic_plugin.ccube.CCube method)</a>
 </li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_outputs">(deepcave.plugins.dynamic_plugin.configurations.Configurations method)</a>
 </li>
@@ -719,8 +780,14 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_outputs">(deepcave.plugins.static_plugin.fanova.fANOVA method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.load_outputs">(deepcave.plugins.static_plugin.ice.ICEPlugin method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_outputs">(deepcave.plugins.static_plugin.pdp.PDPPlugin method)</a>
+</li>
       </ul></li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">load_run_inputs() (deepcave.plugins.Plugin static method)</a>
+</li>
+      <li><a href="api/deepcave.plugins.dynamic_plugin.local_parameter_importance.html#deepcave.plugins.dynamic_plugin.local_parameter_importance.LocalParameterImportance">LocalParameterImportance (class in deepcave.plugins.dynamic_plugin.local_parameter_importance)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -744,6 +811,8 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.cost_over_time.html#module-deepcave.plugins.dynamic_plugin.cost_over_time">deepcave.plugins.dynamic_plugin.cost_over_time</a>
 </li>
+        <li><a href="api/deepcave.plugins.dynamic_plugin.local_parameter_importance.html#module-deepcave.plugins.dynamic_plugin.local_parameter_importance">deepcave.plugins.dynamic_plugin.local_parameter_importance</a>
+</li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.overview.html#module-deepcave.plugins.dynamic_plugin.overview">deepcave.plugins.dynamic_plugin.overview</a>
 </li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#module-deepcave.plugins.dynamic_plugin.parallel_coordinates">deepcave.plugins.dynamic_plugin.parallel_coordinates</a>
@@ -753,6 +822,10 @@ style="width: 100%;">
         <li><a href="api/deepcave.plugins.static_plugin.html#module-deepcave.plugins.static_plugin">deepcave.plugins.static_plugin</a>
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#module-deepcave.plugins.static_plugin.fanova">deepcave.plugins.static_plugin.fanova</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#module-deepcave.plugins.static_plugin.ice">deepcave.plugins.static_plugin.ice</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#module-deepcave.plugins.static_plugin.pdp">deepcave.plugins.static_plugin.pdp</a>
 </li>
         <li><a href="api/deepcave.runs.html#module-deepcave.runs">deepcave.runs</a>
 </li>
@@ -815,6 +888,8 @@ style="width: 100%;">
 </li>
       <li><a href="api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront">ParetoFront (class in deepcave.plugins.dynamic_plugin.pareto_front)</a>
 </li>
+      <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin">PDPPlugin (class in deepcave.plugins.static_plugin.pdp)</a>
+</li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin">Plugin (class in deepcave.plugins)</a>
 </li>
       <li><a href="api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.PluginState">PluginState (class in deepcave.plugins.static_plugin)</a>
@@ -828,6 +903,8 @@ style="width: 100%;">
 </li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.cost_over_time.html#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.process">(deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime static method)</a>
 </li>
+        <li><a href="api/deepcave.plugins.dynamic_plugin.local_parameter_importance.html#deepcave.plugins.dynamic_plugin.local_parameter_importance.LocalParameterImportance.process">(deepcave.plugins.dynamic_plugin.local_parameter_importance.LocalParameterImportance static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.overview.html#deepcave.plugins.dynamic_plugin.overview.Overview.process">(deepcave.plugins.dynamic_plugin.overview.Overview static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.process">(deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates static method)</a>
@@ -837,6 +914,10 @@ style="width: 100%;">
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.process">(deepcave.plugins.Plugin static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.process">(deepcave.plugins.static_plugin.fanova.fANOVA static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.ice.html#deepcave.plugins.static_plugin.ice.ICEPlugin.process">(deepcave.plugins.static_plugin.ice.ICEPlugin static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.process">(deepcave.plugins.static_plugin.pdp.PDPPlugin static method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -853,11 +934,13 @@ style="width: 100%;">
         <li><a href="api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin.register_callbacks">(deepcave.plugins.static_plugin.StaticPlugin method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">register_input() (deepcave.plugins.Plugin method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">register_output() (deepcave.plugins.Plugin method)</a>
+</li>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.remove_run">remove_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run">Run (class in deepcave.runs.run)</a>
 </li>
@@ -869,12 +952,14 @@ style="width: 100%;">
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-SMAC"><strong>SMAC</strong></a>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.set_working_directory">set_working_directory() (deepcave.runs.handler.RunHandler method)</a>
 </li>
-      <li><a href="api/deepcave.runs.converters.smac.html#deepcave.runs.converters.smac.SMACRun">SMACRun (class in deepcave.runs.converters.smac)</a>
+      <li><a href="glossary.html#term-SMAC"><strong>SMAC</strong></a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.runs.converters.smac.html#deepcave.runs.converters.smac.SMACRun">SMACRun (class in deepcave.runs.converters.smac)</a>
+</li>
       <li><a href="api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin">StaticPlugin (class in deepcave.plugins.static_plugin)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.Status">Status (class in deepcave.runs)</a>
@@ -893,7 +978,7 @@ style="width: 100%;">
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.update_alert">update_alert() (deepcave.plugins.Plugin method)</a>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update">update() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_groups">update_groups() (deepcave.runs.handler.RunHandler method)</a>
 </li>
@@ -902,8 +987,6 @@ style="width: 100%;">
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_run">update_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_runs">update_runs() (deepcave.runs.handler.RunHandler method)</a>
-</li>
-      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_working_directory">update_working_directory() (deepcave.runs.handler.RunHandler method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -929,14 +1012,14 @@ style="width: 100%;">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

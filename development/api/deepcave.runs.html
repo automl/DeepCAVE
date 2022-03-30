@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.runs &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <title>deepcave.runs &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -113,7 +113,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -291,7 +291,7 @@ style="width: 100%;">
   <div class="section" id="module-deepcave.runs">
 <span id="deepcave-runs"></span><h1>deepcave.runs<a class="headerlink" href="#module-deepcave.runs" title="Permalink to this headline">¶</a></h1>
 <p class="rubric">Functions</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -303,7 +303,7 @@ style="width: 100%;">
 </tbody>
 </table>
 <p class="rubric">Classes</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -321,7 +321,7 @@ style="width: 100%;">
 </tbody>
 </table>
 <p class="rubric">Exceptions</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -422,10 +422,29 @@ Returns “Combined Cost” if multiple objective names were involved.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.hash">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.AbstractRun.hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hash of current run. If hash changes, cache has to be cleared, as something has changed</p>
+<dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
+the cache always holds the latest results of the run.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Hash of the run.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.id">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.AbstractRun.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hash of the file. This is used to identify the file.
+In contrast to <cite>hash</cite>, this hash should not be changed throughout the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Hash of the run.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -484,7 +503,7 @@ attributes.</p>
 </dd></dl>
 
 <p class="rubric">Modules</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -546,14 +565,14 @@ attributes.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

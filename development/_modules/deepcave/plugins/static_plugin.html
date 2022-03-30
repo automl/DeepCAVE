@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.static_plugin &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <title>deepcave.plugins.static_plugin &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -111,7 +111,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -274,7 +274,9 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.plugins.static_plugin</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
 
+<span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span>
@@ -282,8 +284,9 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">State</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">rc</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">run_handler</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 
 
 <div class="viewcode-block" id="PluginState"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.PluginState">[docs]</a><span class="k">class</span> <span class="nc">PluginState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -293,24 +296,45 @@ style="width: 100%;">
     <span class="n">PROCESSING</span> <span class="o">=</span> <span class="mi">2</span></div>
 
 
+<span class="k">def</span> <span class="nf">_process</span><span class="p">(</span><span class="n">process</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="c1"># run_handler.update_runs()</span>
+    <span class="c1"># run_handler.update_groups()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find run for </span><span class="si">{</span><span class="n">run_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="k">raise</span>
+
+
 <div class="viewcode-block" id="StaticPlugin"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin">[docs]</a><span class="k">class</span> <span class="nc">StaticPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation with queue. Made for time-consuming tasks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">:</span> <span class="n">PluginState</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_required</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Processing right now?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="StaticPlugin.register_callbacks"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin.register_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="StaticPlugin.register_callbacks"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin.register_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_callbacks</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_inputs_changed</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_loop_update_status_label</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_loop_trigger_main_loop</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_callback_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_callback_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Plugin specific outputs</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
@@ -351,9 +375,9 @@ style="width: 100%;">
             <span class="n">raw_outputs</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">raw_outputs_available</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-                <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">run</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
+                <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">raw_outputs_available</span> <span class="o">=</span> <span class="kc">False</span>
 
             <span class="c1"># Process</span>
@@ -363,7 +387,7 @@ style="width: 100%;">
 
                 <span class="k">if</span> <span class="n">inputs_changed</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_required</span><span class="p">:</span>
                     <span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;last_inputs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
-                    
+
                     <span class="c1"># Save for modal</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">raw_outputs</span> <span class="o">=</span> <span class="n">raw_outputs</span>
 
@@ -380,27 +404,25 @@ style="width: 100%;">
 
                     <span class="c1"># Check if we need to process</span>
                     <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-                        <span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_job_id</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
+                        <span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_job_id</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
 
                         <span class="c1"># We already got our results or it was already processed</span>
-                        <span class="k">if</span> <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">queue</span><span class="o">.</span><span class="n">is_processed</span><span class="p">(</span>
-                            <span class="n">job_id</span>
-                        <span class="p">):</span>
+                        <span class="k">if</span> <span class="n">raw_outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">queue</span><span class="o">.</span><span class="n">is_processed</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
                             <span class="k">continue</span>
 
                         <span class="n">job_meta</span> <span class="o">=</span> <span class="p">{</span>
                             <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                             <span class="s2">&quot;run_name&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                            <span class="s2">&quot;run_cache_id&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">run_cache_id</span><span class="p">,</span>
+                            <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                             <span class="s2">&quot;inputs_key&quot;</span><span class="p">:</span> <span class="n">inputs_key</span><span class="p">,</span>
                         <span class="p">}</span>
 
-                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enqueued </span><span class="si">{</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Enqueued </span><span class="si">{</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">).&quot;</span><span class="p">)</span>
 
                         <span class="c1"># Start the task in rq</span>
                         <span class="n">queue</span><span class="o">.</span><span class="n">enqueue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">_process</span><span class="p">,</span>
-                            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="n">run</span><span class="o">.</span><span class="n">run_cache_id</span><span class="p">,</span> <span class="n">inputs</span><span class="p">],</span>
+                            <span class="n">_process</span><span class="p">,</span>
+                            <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs</span><span class="p">],</span>
                             <span class="n">job_id</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
                             <span class="n">meta</span><span class="o">=</span><span class="n">job_meta</span><span class="p">,</span>
                         <span class="p">)</span>
@@ -416,27 +438,32 @@ style="width: 100%;">
                             <span class="n">job_run_outputs</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">result</span>
                             <span class="n">job_meta</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">meta</span>
                             <span class="n">job_inputs_key</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;inputs_key&quot;</span><span class="p">]</span>
-                            <span class="n">job_run_name</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;run_cache_id&quot;</span><span class="p">]</span>
+                            <span class="n">job_run_id</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;run_id&quot;</span><span class="p">]</span>
 
-                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job `</span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2">`&quot;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> for run_id </span><span class="si">{</span><span class="n">job_meta</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="n">run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">job_run_id</span><span class="p">)</span>
 
                             <span class="c1"># Save results in cache</span>
-                            <span class="n">rc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">job_run_name</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">job_inputs_key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">job_run_outputs</span>
-                            <span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;... cached&quot;</span><span class="p">)</span>
+                            <span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">job_inputs_key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">job_run_outputs</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> cached&quot;</span><span class="p">)</span>
 
                             <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;... deleted&quot;</span><span class="p">)</span>
-                        <span class="k">except</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> deleted&quot;</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> failed with exception </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                             <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;... deleted&quot;</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> deleted&quot;</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> got interrupted by KeyboardInterrupt&quot;</span><span class="p">)</span>
+                            <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> deleted&quot;</span><span class="p">)</span>
+                            <span class="k">raise</span>
 
                     <span class="c1"># Check if queue is still running</span>
                     <span class="n">queue_running</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="n">queue_pending</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-                        <span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_job_id</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
+                        <span class="n">job_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_job_id</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">queue</span><span class="o">.</span><span class="n">is_running</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
                             <span class="n">queue_running</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -449,7 +476,7 @@ style="width: 100%;">
             <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">raise</span> <span class="n">PreventUpdate</span>
 
-    <span class="k">def</span> <span class="nf">_callback_loop_trigger_main_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_callback_loop_trigger_main_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-interval-output&quot;</span><span class="p">),</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-interval&quot;</span><span class="p">),</span> <span class="s2">&quot;n_intervals&quot;</span><span class="p">),</span>
@@ -467,7 +494,7 @@ style="width: 100%;">
             <span class="c1"># This will trigger the main loop</span>
             <span class="k">return</span> <span class="n">data</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="k">def</span> <span class="nf">_callback_loop_update_status_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_callback_loop_update_status_label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;processing-info&quot;</span><span class="p">),</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
             <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
@@ -497,7 +524,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">inputs_key</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="StaticPlugin.__call__"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_required</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
@@ -530,14 +557,14 @@ style="width: 100%;">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

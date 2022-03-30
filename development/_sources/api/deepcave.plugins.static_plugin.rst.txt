@@ -35,4 +35,6 @@ deepcave.plugins.static\_plugin
    :recursive:
 
    deepcave.plugins.static_plugin.fanova
+   deepcave.plugins.static_plugin.ice
+   deepcave.plugins.static_plugin.pdp
 

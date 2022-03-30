@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <title>deepcave.plugins &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -113,7 +113,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -291,7 +291,7 @@ style="width: 100%;">
   <div class="section" id="module-deepcave.plugins">
 <span id="deepcave-plugins"></span><h1>deepcave.plugins<a class="headerlink" href="#module-deepcave.plugins" title="Permalink to this headline">¶</a></h1>
 <p class="rubric">Classes</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -532,7 +532,7 @@ possible runs.</p>
 <dd class="field-odd"><p>List[<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun">AbstractRun</a>]</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>PreventUpdate</strong> – If <cite>activate_run_selection</cite> is set but <cite>run_name</cite> is not available.</p>
+<dd class="field-even"><p><strong>PreventUpdate</strong> – If <cite>activate_run_selection</cite> is set but <cite>run</cite> is not available.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -624,14 +624,14 @@ returned.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_run_inputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_run_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_run_compatibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_run_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_run_inputs" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_run_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grouped_runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_run_compatibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_run_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_run_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the options for <cite>get_run_input_layout</cite>.
 Both runs and groups are displayed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>runs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><em>Run</em></a><em>]</em>) – The runs to display.</p></li>
-<li><p><strong>groups</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun" title="deepcave.runs.grouped_run.GroupedRun"><em>GroupedRun</em></a><em>]</em>) – The groups to display.</p></li>
+<li><p><strong>grouped_runs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun" title="deepcave.runs.grouped_run.GroupedRun"><em>GroupedRun</em></a><em>]</em>) – The groups to display.</p></li>
 <li><p><strong>check_run_compatibility</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>, </em><em>bool</em><em>]</em>) – If a single run is compatible. If not, the run is not shown.</p></li>
 </ul>
 </dd>
@@ -668,7 +668,6 @@ Both runs and groups are displayed.</p>
 <dd><p>Registers basic callbacks for the plugin. Following callbacks are registered:
 - If inputs changes, the changes are pasted back. This is in particular
 interest if input dependencies are used.
-- Alert messages.
 - Raw data dialog.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -721,24 +720,10 @@ After registering all inputs, an internal mapping is created.</p>
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.Plugin.update_alert">
-<span class="sig-name descname"><span class="pre">update_alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'success'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.update_alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.update_alert" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the alert text and color. Will automatically trigger the alert callback.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<em>str</em>) – The text to display.</p></li>
-<li><p><strong>color</strong> (<em>str</em><em>, </em><em>optional</em>) – The color to display, by default “success”</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <p class="rubric">Modules</p>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -788,14 +773,14 @@ After registering all inputs, an internal mapping is created.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
