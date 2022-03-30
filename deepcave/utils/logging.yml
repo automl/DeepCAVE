@@ -17,6 +17,10 @@ loggers:
     level: INFO
     handlers: [ console ]
     propagate: no
+  werkzeug:
+    level: ERROR
+    handlers: [ console ]
+    propagate: no
 root:
   level: DEBUG
   handlers: [console]

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Callable, Dict, Iterable, Optional, Union, List
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
 import copy
 
@@ -10,16 +10,14 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, run_handler
+from deepcave import app, c, run_handler, notification
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
-from deepcave.runs.run import Run
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
-from deepcave.utils.util import add_prefix_to_dict
 
 logger = get_logger(__name__)
 
@@ -56,16 +54,6 @@ class Plugin(Layout, ABC):
     def __init__(self) -> None:
         self.inputs = []
         self.outputs = []
-
-        # Processing right now?
-        self.blocked = False
-
-        # Alert texts
-        self.alert_text = ""
-        self.alert_color = "success"
-        self.alert_update_required = False
-
-        self.runs: Dict[str, AbstractRun] = {}  # Set in __call__: run_name -> AbstractRun
 
         super().__init__()
 
@@ -193,7 +181,6 @@ class Plugin(Layout, ABC):
         Registers basic callbacks for the plugin. Following callbacks are registered:
         - If inputs changes, the changes are pasted back. This is in particular
         interest if input dependencies are used.
-        - Alert messages.
         - Raw data dialog.
         """
 
@@ -225,12 +212,8 @@ class Plugin(Layout, ABC):
 
             @app.callback(outputs, inputs)
             def plugin_input_update(*inputs_list):
-                init = True
                 # Simple check if page was loaded for the first time
-                for input in inputs_list:
-                    if input is not None:
-                        init = False
-                        break
+                init = all(input is None for input in inputs_list)
 
                 # Reload our inputs
                 if init:
@@ -243,7 +226,7 @@ class Plugin(Layout, ABC):
                         if self.activate_run_selection:
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
-                                self.groups,
+                                self.grouped_runs,
                                 self.__class__.check_run_compatibility,
                             )
                             update_dict(inputs, new_inputs)
@@ -269,16 +252,16 @@ class Plugin(Layout, ABC):
 
                     selected_run: Optional[AbstractRun] = None
                     if self.activate_run_selection:
-                        if "run_name" in _previous_inputs:
-                            _previous_run_name = _previous_inputs["run_name"]["value"]
+                        if "run" in _previous_inputs:
+                            _previous_run_id = _previous_inputs["run"]["value"]
                         else:
-                            _previous_run_name = None
-                        _run_name = inputs["run_name"]["value"]
+                            _previous_run_id = None
+                        _run_id = inputs["run"]["value"]
 
                         # Reset everything if run name changed.
-                        if _previous_run_name is not None and _previous_run_name != _run_name:
+                        if _previous_run_id is not None and _previous_run_id != _run_id:
                             # We can't use load_inputs here only
-                            # because `run_name` would be removed.
+                            # because `run` would be removed.
                             # Also: We want to keep the current run name.
                             update_dict(_inputs, self.load_inputs())
 
@@ -286,7 +269,7 @@ class Plugin(Layout, ABC):
                             # E.g. if options from budget in run_2 and run_3 are the same
                             # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
 
-                        selected_run = self.all_runs[inputs["run_name"]["value"]]
+                        selected_run = run_handler.get_run(inputs["run"]["value"])
 
                     # How to update only parameters which have a dependency?
                     user_dependencies_inputs = self.load_dependency_inputs(
@@ -302,20 +285,6 @@ class Plugin(Layout, ABC):
                 self.previous_inputs = inputs
 
                 return inputs_list
-
-        # Update internal alert state to divs
-        @app.callback(
-            Output(self.get_internal_id("alert"), "children"),
-            Output(self.get_internal_id("alert"), "color"),
-            Output(self.get_internal_id("alert"), "is_open"),
-            Input(self.get_internal_id("alert-interval"), "n_intervals"),
-        )
-        def update_alert(_):
-            if self.alert_update_required:
-                self.alert_update_required = False
-                return self.alert_text, self.alert_color, True
-            else:
-                raise PreventUpdate()
 
         # Register modal here
         @app.callback(
@@ -337,21 +306,6 @@ class Plugin(Layout, ABC):
 
             return is_open, code
 
-    def update_alert(self, text: str, color: str = "success"):
-        """
-        Update the alert text and color. Will automatically trigger the alert callback.
-
-        Parameters
-        ----------
-        text : str
-            The text to display.
-        color : str, optional
-            The color to display, by default "success"
-        """
-        self.alert_text = text
-        self.alert_color = color
-        self.alert_update_required = True
-
     def _inputs_changed(self, inputs, last_inputs):
         # Check if last_inputs are the same as the given inputs.
         inputs_changed = False
@@ -363,7 +317,7 @@ class Plugin(Layout, ABC):
             for (id, attribute, filter) in self.inputs:
 
                 if self.activate_run_selection:
-                    if id == "run_name":
+                    if id == "run":
                         continue
 
                 if inputs[id][attribute] != last_inputs[id][attribute]:
@@ -383,8 +337,8 @@ class Plugin(Layout, ABC):
         passed_runs = self.all_runs
         passed_outputs = raw_outputs
         if self.activate_run_selection:
-            passed_runs = self.all_runs[inputs["run_name"]["value"]]
-            passed_outputs = raw_outputs[passed_runs.name]
+            passed_runs = run_handler.get_run(inputs["run"]["value"])
+            passed_outputs = raw_outputs[passed_runs.id]
 
         if mpl_active:
             outputs = self.load_mpl_outputs(inputs, passed_outputs, passed_runs)
@@ -415,6 +369,9 @@ class Plugin(Layout, ABC):
             outputs = [no_update for _ in range(count_outputs)] + outputs
         else:
             outputs = outputs + [no_update for _ in range(count_mpl_outputs)]
+
+        if len(outputs) == 1:
+            return outputs[0]
 
         return outputs
 
@@ -495,6 +452,18 @@ class Plugin(Layout, ABC):
 
         return string_to_hash(str(new_d))
 
+    @property
+    def runs(self):
+        return run_handler.get_runs()
+
+    @property
+    def grouped_runs(self):
+        return run_handler.get_grouped_runs()
+
+    @property
+    def all_runs(self):
+        return run_handler.get_runs(include_groups=True)
+
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
         Returns the components for the plugin. Basically, all blocks and elements of the plugin
@@ -508,41 +477,15 @@ class Plugin(Layout, ABC):
 
         self.previous_inputs = {}
         self.raw_outputs = None
-        self.runs = run_handler.get_runs()
-        groups = run_handler.get_groups()
-
-        self.groups = {
-            name: GroupedRun(name, [self.runs[run_id] for run_id in run_ids])
-            for name, run_ids in groups.items()
-        }
-
-        self.all_runs = {}
-        self.all_runs.update(add_prefix_to_dict(self.runs, "run:"))
-        self.all_runs.update(add_prefix_to_dict(self.groups, "group:"))
 
         components = [html.H1(self.name)]
         if self.description is not None:
             components += [html.P(self.description)]
 
-        # Register alerts
-        components += [
-            dcc.Interval(
-                id=self.get_internal_id("alert-interval"),
-                interval=1 * 500,
-                n_intervals=5,
-            ),
-            dbc.Alert(
-                id=self.get_internal_id("alert"),
-                is_open=False,
-                dismissable=True,
-                fade=True,
-            ),
-        ]
-
         try:
-            self.check_runs_compatibility(list(self.all_runs.values()))
+            self.check_runs_compatibility(self.all_runs)
         except NotMergeableError as message:
-            self.update_alert(str(message), color="danger")
+            notification.update(str(message))
             return components
 
         if self.activate_run_selection:
@@ -689,7 +632,7 @@ class Plugin(Layout, ABC):
         return html.Div(
             [
                 dbc.Select(
-                    id=register("run_name", ["options", "value"]),
+                    id=register("run", ["options", "value"]),
                     placeholder="Select run ...",
                 ),
             ]
@@ -697,8 +640,8 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     def load_run_inputs(
-        runs: Dict[str, AbstractRun],
-        groups: Dict[str, GroupedRun],
+        runs: List[AbstractRun],
+        grouped_runs: List[GroupedRun],
         check_run_compatibility: Callable[[AbstractRun], bool],
     ) -> Dict[str, Any]:
         """
@@ -709,7 +652,7 @@ class Plugin(Layout, ABC):
         ----------
         runs : Dict[str, Run]
             The runs to display.
-        groups : Dict[str, GroupedRun]
+        grouped_runs : Dict[str, GroupedRun]
             The groups to display.
         check_run_compatibility : Callable[[AbstractRun], bool]
             If a single run is compatible. If not, the run is not shown.
@@ -724,16 +667,16 @@ class Plugin(Layout, ABC):
         values = []
         disabled = []
 
-        for id, run in runs.items():
+        for run in runs:
             try:
-                values.append(f"run:{id}")
-                labels.append(id)
+                values.append(run.id)
+                labels.append(run.name)
                 disabled.append(False)
             except:
                 pass
 
         added_group_label = False
-        for id, run in groups.items():
+        for run in grouped_runs:
             if check_run_compatibility(run):
                 if not added_group_label:
                     values.append("")
@@ -741,12 +684,12 @@ class Plugin(Layout, ABC):
                     disabled.append(True)
                     added_group_label = True
 
-                values.append(f"group:{id}")
-                labels.append(id)
+                values.append(run.id)
+                labels.append(run.name)
                 disabled.append(False)
 
         return {
-            "run_name": {
+            "run": {
                 "options": get_select_options(labels=labels, values=values, disabled=disabled),
                 "value": None,
             }
@@ -771,27 +714,27 @@ class Plugin(Layout, ABC):
         Raises
         ------
         PreventUpdate
-            If `activate_run_selection` is set but `run_name` is not available.
+            If `activate_run_selection` is set but `run` is not available.
         """
 
         # Special case: If run selection is active
         # Don't update anything if the inputs haven't changed
         if self.activate_run_selection:
-            if inputs["run_name"]["value"] is None:
+            if (run_id := inputs["run"]["value"]) is None:
                 raise PreventUpdate()
 
             # Update runs
-            run = run_handler.from_run_id(inputs["run_name"]["value"])
+            run = run_handler.get_run(run_id)
 
             # Also:
-            # Remove `run_name` from inputs_key because
+            # Remove `run` from inputs_key because
             # we don't want the run names included.
             _inputs = inputs.copy()
-            del _inputs["run_name"]
+            del _inputs["run"]
 
             return [run]
         else:
-            return list(self.all_runs.values())
+            return self.all_runs
 
     def load_inputs(self) -> Dict[str, Any]:
         """
@@ -981,8 +924,3 @@ class Plugin(Layout, ABC):
         """
 
         pass
-
-    @staticmethod
-    def _process(process: Callable[[AbstractRun, Any], None], run_cache_id: str, inputs):
-        run = run_handler.from_run_cache_id(run_cache_id)
-        return process(run, inputs)

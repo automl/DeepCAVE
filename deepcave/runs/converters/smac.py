@@ -23,6 +23,10 @@ class SMACRun(Run):
 
         # Use hash of history.json as id
         return file_to_hash(self.path / "runhistory.json")
+    
+    @property
+    def latest_change(self) -> int:
+        return Path(self.path / "runhistory.jsonl").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Path) -> "SMACRun":
@@ -67,11 +71,7 @@ class SMACRun(Run):
                 if arg in mapping:
                     meta[mapping[arg]] = value
 
-        run = SMACRun(
-            path.stem, configspace=configspace, objectives=objective, meta=meta
-        )
-
-        # TODO: Make it better
+        run = SMACRun(path.stem, configspace=configspace, objectives=objective, meta=meta)
         run._path = path
 
         # Iterate over the runhistory

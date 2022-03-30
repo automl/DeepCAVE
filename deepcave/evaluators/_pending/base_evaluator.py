@@ -2,12 +2,17 @@ class AbstractEvaluator(object):
     """
     Abstract implementation of Importance evaluator
     """
-    def __init__(self, scenario: Scenario,
-                 cs: ConfigurationSpace,
-                 model: RandomForestWithInstances,
-                 to_evaluate: int, rng,
-                 verbose: bool=True,
-                 **kwargs):
+
+    def __init__(
+        self,
+        scenario: Scenario,
+        cs: ConfigurationSpace,
+        model: RandomForestWithInstances,
+        to_evaluate: int,
+        rng,
+        verbose: bool = True,
+        **kwargs,
+    ):
         self._logger = None
         self.scenario = scenario
         self.cs = cs
@@ -16,10 +21,10 @@ class AbstractEvaluator(object):
         self.verbose = verbose
 
         if self.model is not None:
-            if 'X' in kwargs and 'y' in kwargs:
-                self._train_model(kwargs['X'], kwargs['y'], **kwargs)
-            if 'features' in kwargs:
-                self.features = kwargs['features']
+            if "X" in kwargs and "y" in kwargs:
+                self._train_model(kwargs["X"], kwargs["y"], **kwargs)
+            if "features" in kwargs:
+                self.features = kwargs["features"]
             else:
                 self.features = self.model.instance_features
 
@@ -36,13 +41,12 @@ class AbstractEvaluator(object):
             self.to_evaluate = to_evaluate  # num of parameters to evaluate
 
         self.evaluated_parameter_importance = OrderedDict()
-        self.name = 'Base'
+        self.name = "Base"
 
         self.IMPORTANCE_THRESHOLD = 0.05
-        self.AXIS_FONT = {'family': 'monospace'}
-        self.LABEL_FONT = {'family': 'sans-serif'}
-        self.LINE_FONT = {'lw': 4,
-                          'color': (0.125, 0.125, 0.125)}
+        self.AXIS_FONT = {"family": "monospace"}
+        self.LABEL_FONT = {"family": "sans-serif"}
+        self.LINE_FONT = {"lw": 4, "color": (0.125, 0.125, 0.125)}
         self.area_color = (0.25, 0.25, 0.45)
         self.unimportant_area_color = (0.125, 0.125, 0.225)
         self.MAX_PARAMS_TO_PLOT = 15
@@ -59,11 +63,11 @@ class AbstractEvaluator(object):
         self.model.train(X, y, **kwargs)
 
     def __str__(self):
-        tmp = 'Parameter Importance Evaluation Method %s\n' % self.name
-        tmp += '{:^15s}: {:<8s}\n'.format('Parameter', 'Value')
+        tmp = "Parameter Importance Evaluation Method %s\n" % self.name
+        tmp += "{:^15s}: {:<8s}\n".format("Parameter", "Value")
         for key in self.evaluated_parameter_importance:
             value = self.evaluated_parameter_importance[key]
-            tmp += '{:>15s}: {:<3.4f}\n'.format(key, value)
+            tmp += "{:>15s}: {:<3.4f}\n".format(key, value)
         return tmp
 
     @property
@@ -89,11 +93,17 @@ class AbstractEvaluator(object):
         # We need to fake config-space bypass imputation of inactive values in random forest implementation
         fake_cs = ConfigurationSpace(name="fake-cs-for-configurator-footprint")
         # We need to add fake hyperparameters
-        fake_cs.add_hyperparameters([
-            UniformFloatHyperparameter('fake-%s' % i, lower=0., upper=100000., default_value=0.,
-                                       log=False) for i in range(len(types))
-        ])
+        fake_cs.add_hyperparameters(
+            [
+                UniformFloatHyperparameter(
+                    "fake-%s" % i, lower=0.0, upper=100000.0, default_value=0.0, log=False
+                )
+                for i in range(len(types))
+            ]
+        )
 
-        self.model = RandomForestWithInstances(fake_cs, types, bounds, seed=12345, do_bootstrapping=True)
+        self.model = RandomForestWithInstances(
+            fake_cs, types, bounds, seed=12345, do_bootstrapping=True
+        )
         self.model.rf_opts.compute_oob_error = True
         self.model.train(X, y)

@@ -1,11 +1,12 @@
-from typing import Optional, Type, Dict, List
+from typing import Dict, List, Optional, Type, Union
 
 import time
 from pathlib import Path
 
 from deepcave.config import Config
-from deepcave.runs import AbstractRun, NotValidRunError
+from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs.run import Run
 from deepcave.utils.logs import get_logger
 
 
@@ -15,57 +16,192 @@ class RunHandler:
     and switches to the right (plugin) cache.
     """
 
-    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCache") -> None:
+    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCaches") -> None:
         self.c = cache
         self.rc = run_cache
         # Fields set by self.update()
         self.logger = get_logger("RunHandler")
-        self.working_dir: Optional[Path] = None
 
         # Available converters
-        self.available_run_classes: List[AbstractRun] = config.AVAILABLE_CONVERTERS
+        self.available_run_classes: List[Type[Run]] = config.AVAILABLE_CONVERTERS
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
         self.groups: Dict[str, GroupedRun] = {}  # group_name -> GroupedRun
 
-        # Read from cache
-        self.load_from_cache()
+        # Read from cache and update
+        self.c.read()
+        self.update_runs()
+        self.update_groups()
 
-    def load_from_cache(self):
-        working_dir: Path = Path(self.c.get("working_dir"))
-        selected_runs: List[str] = self.c.get("selected_run_names")  # run_name
-        groups: Dict[str, List[str]] = self.c.get("groups")  # group_name -> List[run_names]
-
-        print(f"Resetting working directory to {working_dir}")
-        self.update_working_directory(working_dir)
-
-        print(f"Setting runs to {selected_runs}")
-        self.update_runs(selected_runs)
-
-        print(f"Setting groups to {groups}")
-        self.update_groups(groups)
-
-    def update_working_directory(self, working_directory: Path, force_clear: bool = False):
+    def set_working_directory(self, working_directory: Union[Path, str]) -> None:
         """
-        Set working directory.
-        If it is the same as before -> Do nothing.
-        Otherwise, reset all groups and run_names and clear caches.
-        This can be forced with `force_clear`
+        Sets the working directoy to the meta cache.
+
+        Parameters
+        ----------
+        working_directory : Union[Path, str]
+            Directory to be set.
         """
-        if working_directory == self.working_dir and not force_clear:
-            # Same directory as current directory -> Keep everything
-            return
-
-        # Set in runtime memory
-        self.working_dir = working_directory
-        self.update_runs([])
-        self.update_groups({})
-
-        # Set in cache
         self.c.set("working_dir", value=str(working_directory))
 
-    def update_runs(self, selected_run_names: Optional[List[str]] = None):
+    def get_working_directory(self) -> Path:
+        """
+        Returns the current working directory in the cache.
+
+        Returns
+        -------
+        Path
+            Path of the working directory.
+        """
+        return Path(self.c.get("working_dir"))
+
+    def get_available_run_paths(self) -> Dict[str, str]:
+        """
+        Returns the available run paths from the current directory.
+
+        Returns
+        -------
+        Dict[str, str]
+            Run path as key and run name as value.
+        """
+        runs = {}
+        working_dir = self.get_working_directory()
+
+        try:
+            for path in working_dir.iterdir():
+                run_name = path.stem
+
+                # Ignore files and unwanted directories
+                if path.is_file() or run_name[0] in [".", "_"]:
+                    continue
+
+                runs[str(path)] = run_name
+
+            # Sort run_names alphabetically
+            runs = {k: v for k, v in sorted(runs.items(), key=lambda item: item[1])}
+
+        except FileNotFoundError:
+            pass
+
+        return runs
+
+    def get_selected_run_paths(self) -> List[str]:
+        """
+        Returns the selected run paths from the cache.
+
+        Returns
+        -------
+        Dict[str, str]
+            Run paths as a list.
+        """
+        return self.c.get("selected_run_paths")
+
+    def get_selected_run_names(self) -> List[str]:
+        """
+        Returns the run names of the selected runs.
+
+        Returns
+        -------
+        List[str]
+            List of run names of the selected runs.
+        """
+        return [self.get_run_name(run_path) for run_path in self.runs.keys()]
+
+    def get_run_name(self, run_path: Union[Path, str]) -> str:
+        """
+        Returns the stem of the path.
+
+        Parameters
+        ----------
+        run_path : Union[Path, str]
+            Path, which should be converted to a name.
+
+        Returns
+        -------
+        str
+            Run name of the path.
+        """
+        return Path(run_path).stem
+
+    def get_groups(self) -> Dict[str, List[str]]:
+        return self.c.get("groups")
+
+    def add_run(self, run_path: str) -> bool:
+        """
+        Adds a run path to the cache. If run path is already in cache, do nothing.
+
+        Parameters
+        ----------
+        run_path : str
+            Path of a run.
+
+        Returns
+        -------
+        bool
+            True if all selected runs could be loaded, False otherwise.
+        """
+        selected_run_paths = self.get_selected_run_paths()
+
+        if run_path not in selected_run_paths:
+            selected_run_paths.append(run_path)
+            self.c.set("selected_run_paths", value=selected_run_paths)
+
+            return self.update_runs()
+
+        return True
+
+    def remove_run(self, run_path: str) -> None:
+        """Removes a run path from the cache. If run path is not in cache, do nothing.
+
+        Parameters
+        ----------
+        run_path : str
+            Path of a run.
+        """
+        selected_run_paths = self.c.get("selected_run_paths")
+
+        if run_path in selected_run_paths:
+            selected_run_paths.remove(run_path)
+            self.c.set("selected_run_paths", value=selected_run_paths)
+
+            # We have to check the groups here because the removed run_path may
+            # still be included
+            groups = {}
+            for group_name, run_paths in self.c.get("groups").items():
+                if run_path in run_paths:
+                    run_paths.remove(run_path)
+                groups[group_name] = run_paths
+
+            self.c.set("groups", value=groups)
+
+            # We also remove last inputs here
+            self.c.set("last_inputs", value={})
+            self.update_runs()
+
+    def update(self) -> None:
+        """Updates the internal run and group instances but only if a hash changed."""
+
+        update_required = False
+        for run_path in list(self.runs.keys()):
+            run = self.runs[run_path]
+
+            # Get cache
+            cache = self.rc[run]
+            if self.rc.update_required(run):
+                cache.initialize_run(run)
+
+                # It's important to delete the run from self.runs here because
+                # otherwise this object is kept in memory though it has changed
+                del self.runs[run_path]
+
+                update_required = True
+
+        if update_required:
+            self.update_runs()
+            self.update_groups()
+
+    def update_runs(self) -> bool:
         """
         Loads selected runs and update cache if files changed.
 
@@ -74,24 +210,39 @@ class RunHandler:
         NotValidRunError
             If directory can not be transformed into a run, an error is thrown.
 
+        Returns
+        -------
+        bool
+            True if all selected runs could be loaded, False otherwise.
         """
-        if selected_run_names is None:
-            selected_run_names = self.c.get("selected_run_names")
-        new_runs: Dict[str, AbstractRun] = {}
+        runs: Dict[str, AbstractRun] = {}  # run_path: Run
+        success = True
 
         class_hint = None
-        for run_name in selected_run_names:
-            run = self.update_run(run_name, class_hint=class_hint)
+        updated_paths = []
+        for run_path in self.get_selected_run_paths():
+            run = self.update_run(run_path, class_hint=class_hint)
             if run is not None:
-                new_runs[run_name] = run
+                runs[run_path] = run
                 class_hint = run.__class__
+                updated_paths += [run_path]
+            else:
+                success = False
 
-        # Save runs in memory and in cache
-        self.runs = new_runs
-        self.c.set("selected_run_names", value=self.get_run_names())
+        # Save in cache again
+        if self.get_selected_run_paths() != updated_paths:
+            self.c.set("selected_run_paths", value=updated_paths)
 
-    def update_run(self, run_name: str, class_hint: Optional[AbstractRun] = None) -> Optional[AbstractRun]:
+        # Save runs in memory
+        self.runs = runs
+
+        return success
+
+    def update_run(
+        self, run_path: str, class_hint: Optional[Type[Run]] = None
+    ) -> Optional[AbstractRun]:
         """
+        Loads the run from `self.runs` or creates a new one.
 
         Raises
         ------
@@ -101,33 +252,50 @@ class RunHandler:
         """
 
         # Try to get run from current runs
-        if run_name in self.runs:
-            run = self.runs[run_name]
-            self.rc.get_run(
-                run
-            )  # Create cache file and set name/hash. Clear cache if hash got changed
+        if run_path in self.runs:
+            run = self.runs[run_path]
+
+            # Create cache file and set name/hash. Clear cache if hash got changed.
+            self.rc[run]
             return run
         else:
-            self.logger.info(f"Run {run_name} needs to be initialized")
+            run = None
+            self.logger.debug(f'Run "{Path(run_path).stem}" needs to be initialized.')
 
         # Load run
-        t1 = time.perf_counter()
-        run = self.get_run(run_name, class_hint=class_hint)
-        t2 = time.perf_counter()
-        self.logger.info(f"... {run_name} was loaded. (took {t2 - t1} seconds)")
+        if class_hint is not None:
+            self.available_run_classes.remove(class_hint)
+            self.available_run_classes.insert(0, class_hint)
+
+        # Go through all converter classes found in the order of
+        # how many runs have already been converted.
+        for run_class in self.available_run_classes:
+            try:
+                t1 = time.perf_counter()
+                run = run_class.from_path(Path(run_path))
+                t2 = time.perf_counter()
+                self.logger.debug(
+                    f'Run "{Path(run_path).stem}" was successfully loaded (took {round(t2 - t1, 2)} seconds).'
+                )
+            except KeyboardInterrupt:
+                # Pass KeyboardInterrupt through try-except, so it can actually interrupt.
+                raise
+            except:
+                pass
 
         # Run could not be loaded
         if run is None:
-            self.logger.warning(f"Run {run_name} could not be loaded")
-            raise NotValidRunError()
+            self.logger.warning(f"Run {run_path} could not be loaded.")
+        else:
+            # Add to run cache
+            self.rc[run]
 
-        # Add to run cache
-        self.rc.get(run)
         return run
 
-    def update_groups(self, groups: Optional[Dict[str, List[str]]] = None) -> None:
+    def update_groups(self, groups: Optional[Dict[str, str]] = None) -> None:
         """
-        Loads chosen groups
+        Loads chosen groups. If `groups` is passed, it is used to instantiate the groups and
+        saved to the cache. Otherwise, `groups` is loaded from the cache.
 
         Raises
         ------
@@ -135,125 +303,89 @@ class RunHandler:
             If runs can not be merged, an error is thrown.
 
         """
+        instantiated_groups = {}
         if groups is None:
             groups = self.c.get("groups")
+        else:
+            self.c.set("groups", value=groups)
 
-        # Add groups
-        groups = {
-            name: GroupedRun(name, [self.runs.get(run_name, None) for run_name in run_names])
-            for name, run_names in groups.items()
-        }
+        # Add grouped runs
+        for group_name, run_paths in groups.items():
+            runs = []
+            for run_path, run in self.runs.items():
+                if run_path in run_paths:
+                    runs += [run]
+
+            if len(runs) == 0:
+                continue
+
+            instantiated_groups[group_name] = GroupedRun(group_name, runs)
 
         # Add groups to rc
-        for group in groups.values():
-            self.rc.get_run(
-                group
-            )  # Create cache file and set name/hash. Clear cache if hash got changed
+        for group in instantiated_groups.values():
+            # Create cache file and set name/hash. Clear cache if hash got changed
+            self.rc[group]
 
         # Save in memory
-        self.groups = groups
+        self.groups = instantiated_groups
 
-        # Save in cache
-        groups_for_cache = {
-            name: [run.name for run in group.runs] for name, group in groups.items()
-        }
-        self.c.set("groups", value=groups_for_cache)
-
-    def get_working_dir(self) -> Path:
-        return self.working_dir
-
-    def get_run_names(self) -> List[str]:
-        return list(self.runs.keys())
-
-    def from_run_id(self, run_id: str) -> AbstractRun:
+    def get_run(self, run_id: str) -> AbstractRun:
         """
-        Required format: {prefix}:{run_name}
-        """
-        run_type, name = run_id.split(":", maxsplit=1)
-        if run_type == GroupedRun.prefix:
-            return self.groups[name]
-        else:
-            return self.runs[name]
+        Looks inside `self.runs` and `self.groups` and if the run id is found, returns the run.
 
-    def from_run_cache_id(self, run_cache_id: str) -> AbstractRun:
+        Parameters
+        ----------
+        run_id : str
+            Internal id of the run. Referred to `run.id`.
+
+        Returns
+        -------
+        AbstractRun
+            Run
+
+        Raises
+        ------
+        RuntimeError
+            If `run_id` was not found in `self.runs` or `self.groups`.
         """
-        Required format: run.run_cache_id.
-        """
-        # Search in runs
-        for run in self.runs.values():
-            if run.run_cache_id == run_cache_id:
+        runs = self.get_runs(include_groups=True)
+        for run in runs:
+            if run.id == run_id:
                 return run
 
-        # Search in groups
-        for group in self.groups.values():
-            if group.run_cache_id == run_cache_id:
-                return group
+        raise RuntimeError("Run not found.")
 
-        raise KeyError(
-            f"Could not find run with run_cache_id {run_cache_id}. "
-            f"Searched in {len(self.runs)} runs and {len(self.groups)} groups"
-        )
-
-    def get_groups(self) -> Dict[str, GroupedRun]:
-        return self.groups.copy()
-
-    def get_available_run_names(self) -> List[str]:
-        run_names = []
-
-        try:
-            for path in self.working_dir.iterdir():
-                run_name = path.stem
-                run_names.append(run_name)
-        except FileNotFoundError:
-            pass
-
-        return run_names
-
-    def get_runs(self, include_groups=False) -> Dict[str, AbstractRun]:
+    def get_grouped_runs(self) -> List[GroupedRun]:
         """
-        self.converter.get_run() might be expensive. Therefore, we cache it here, and only
-        reload it, once working directory, run id or the id based on the files changed.
+        Returns instantiated grouped runs.
+
+        Returns
+        -------
+        List[GroupedRun]
+            Instances of grouped runs.
         """
+        self.update()
+        return list(self.groups.values())
+
+    def get_runs(self, include_groups=False) -> List[AbstractRun]:
+        """
+        Returns the runs from the internal cache. The runs are already loaded and ready to use.
+        Optional, if `include_groups` is set to True, the groups are also included.
+
+        Parameters
+        ----------
+        include_groups : bool, optional
+            Includes the groups, by default False
+
+        Returns
+        -------
+        List[AbstractRun]
+            Instances of runs.
+        """
+        self.update()
+        runs = list(self.runs.values())
 
         if include_groups:
-            # TODO: Prevent same name for runs/groups
-            runs = {}
+            runs += list(self.groups.values())
 
-            # Add runs
-            for id, run in self.runs.items():
-                runs[id] = run
-
-            # Add groups
-            for id, group in self.groups.items():
-                runs[id] = group
-
-            return runs
-        return self.runs
-
-    def get_run(self, run_name: str, class_hint: Optional[AbstractRun] = None) -> Optional[AbstractRun]:
-        """
-        Try to load run from path by using all available converters, until a sufficient class is found.
-        Try to load them in order by how many runs were already successfully converted from this class
-
-        You might hint the class type if you know it with a class_hint
-        """
-        if self.working_dir is None or not self.working_dir.is_dir():
-            return None
-
-        if class_hint is not None:
-            self.available_run_classes.remove(class_hint)
-            self.available_run_classes.insert(0, class_hint)
-
-        # Go through all converter run classes found in the order of how many runs have already been converted
-        for run_class in self.available_run_classes:
-            try:
-                run = run_class.from_path(self.working_dir / run_name)
-                self.logger.info(f"Successfully loaded {run_name} with {run_class}")
-                return run
-            except KeyboardInterrupt:
-                # Pass KeyboardInterrupt through try-except, so it can actually interrupt
-                raise
-            except:
-                pass
-
-        return None
+        return runs

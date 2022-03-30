@@ -96,9 +96,7 @@ class MLP(pl.LightningModule):
 
         # Assign test dataset for use in dataloader(s)
         if stage == "test" or stage is None:
-            self.mnist_test = MNIST(
-                self.data_dir, train=False, transform=self.transform
-            )
+            self.mnist_test = MNIST(self.data_dir, train=False, transform=self.transform)
 
     def train_dataloader(self):
         return DataLoader(self.mnist_train, batch_size=self.batch_size)
@@ -112,12 +110,8 @@ class MLP(pl.LightningModule):
 
 def get_configspace(seed):
     configspace = ConfigurationSpace(seed=seed)
-    num_neurons_layer1 = UniformIntegerHyperparameter(
-        name="num_neurons_layer1", lower=5, upper=100
-    )
-    num_neurons_layer2 = UniformIntegerHyperparameter(
-        name="num_neurons_layer2", lower=5, upper=100
-    )
+    num_neurons_layer1 = UniformIntegerHyperparameter(name="num_neurons_layer1", lower=5, upper=100)
+    num_neurons_layer2 = UniformIntegerHyperparameter(name="num_neurons_layer2", lower=5, upper=100)
     learning_rate = UniformFloatHyperparameter(
         name="learning_rate", lower=0.0001, upper=0.1, log=True
     )
@@ -149,9 +143,7 @@ if __name__ == "__main__":
     for run_id in range(num_runs):
         configspace = get_configspace(run_id)
 
-        with Recorder(
-            configspace, objectives=[accuracy, time], save_path=save_path
-        ) as r:
+        with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as r:
             for config in configspace.sample_configuration(num_configs):
                 mlp = MLP(
                     num_neurons=(

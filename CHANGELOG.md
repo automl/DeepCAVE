@@ -1,3 +1,35 @@
+# Version 0.3.1
+
+## Code related
+- Added dash-extensions so that multiple outputs, no outputs and trigger can be used.
+- Added global notification.
+- Cleaned-up run handler immensely.
+- Logs are better readable.
+- Improved config loading and add development config.
+
+## General
+- Runs are sorted now and only "important" directories are shown.
+- Mechanics to select runs changed.
+    - Runs can be selected across different working directories now.
+    - Another section to display selected runs.
+    - Press on directory name changes the working directory directly. Makes it easier to navigate.
+    There's also a button to go to parent directory.
+    - Internally, a run has two hashes now
+        - `id`: Based on prefix and path/name. This hash is used to select runs now. No need to
+        distinguish between run and grouped run anymore.
+        - `hash`: Changes based on content.
+- If DeepCAVE was not started before, the path of execution is used as working directory.
+
+## Plugins
+- Overview: Redesigned with barplot and heatmap for statuses. Also includes configspace now.
+- Added ICE and PDP again.
+
+## Bugfixes
+- Files are no longer shown in run selection.
+- Runs reloaded from disk in worker.
+- Internal runs are updated now if they changed.
+
+
 # Version 0.3
 
 ## General

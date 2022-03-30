@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from deepcave.runs import Status
@@ -19,6 +20,10 @@ class BOHBRun(Run):
         # Use hash of results.json as id
         return file_to_hash(self.path / "results.json")
 
+    @property
+    def latest_change(self) -> int:
+        return Path(self.path / "results.json").stat().st_mtime
+
     @classmethod
     def from_path(cls, path: Path) -> "BOHBRun":
         """
@@ -36,8 +41,6 @@ class BOHBRun(Run):
         objective = Objective("Cost", lower=0)
 
         run = BOHBRun(path.stem, configspace=configspace, objectives=objective, meta={})
-
-        # TODO: Make it better
         run._path = path
 
         from hpbandster.core.result import logged_results_to_HBS_result

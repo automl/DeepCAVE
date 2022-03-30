@@ -1,6 +1,9 @@
-from copy import deepcopy
 from typing import Dict, List, Tuple
+
+from copy import deepcopy
+
 import numpy as np
+
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.hash import string_to_hash
 
@@ -86,6 +89,24 @@ class GroupedRun(AbstractRun):
             total_hash_str += run.hash
 
         return string_to_hash(total_hash_str)
+
+    @property
+    def id(self) -> str:
+        # Groups do not have a path, therefore we use the name.
+        return string_to_hash(f"{self.prefix}:{self.name}")
+
+    @property
+    def latest_change(self) -> int:
+        latest_change = 0
+        for run in self.runs:
+            if run.latest_change > latest_change:
+                latest_change = run.latest_change
+
+        return latest_change
+
+    @property
+    def run_paths(self) -> List[str]:
+        return [str(run.path) for run in self.runs]
 
     @property
     def run_names(self) -> List[str]:

@@ -1,9 +1,10 @@
-from typing import Union, List, Dict
+from typing import Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
+
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_radio_options, get_select_options
@@ -119,10 +120,10 @@ class CostOverTime(DynamicPlugin):
 
     def load_outputs(self, inputs, outputs, runs):
         traces = []
-        for idx, (run_name, run) in enumerate(runs.items()):
-            x = outputs[run.name]["times"]
+        for idx, run in enumerate(runs):
+            x = outputs[run.id]["times"]
             if inputs["xaxis"]["value"] == "configs":
-                x = outputs[run.name]["ids"]
+                x = outputs[run.id]["ids"]
 
             if inputs["display"]["value"] == "Runs":
                 if run.prefix == "group":
@@ -134,8 +135,8 @@ class CostOverTime(DynamicPlugin):
             else:
                 raise RuntimeError("Unknown display option")
 
-            y = np.array(outputs[run.name]["costs_mean"])
-            y_err = np.array(outputs[run.name]["costs_std"])
+            y = np.array(outputs[run.id]["costs_mean"])
+            y_err = np.array(outputs[run.id]["costs_std"])
             y_upper = list(y + y_err)
             y_lower = list(y - y_err)
             y = list(y)
@@ -144,7 +145,7 @@ class CostOverTime(DynamicPlugin):
                 go.Scatter(
                     x=x,
                     y=y,
-                    name=run_name,
+                    name=run.name,
                     line_shape="hv",
                     line=dict(color=get_color(idx)),
                 )

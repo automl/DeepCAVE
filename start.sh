@@ -4,6 +4,13 @@
 trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
+# Save config value
+CONFIG=$1
+if ! [ $CONFIG ]; then
+  CONFIG="default"
+fi
+echo "Using config '$CONFIG'"
+
 # Check if redis-server is installed
 if ! [ -x "$(command -v redis-server)" ]; then
     echo "Error: redis-server is not installed." >&2
@@ -28,5 +35,5 @@ else
 fi
 
 # Start worker in background
-python worker.py &
-python server.py
+python worker.py --config $CONFIG &
+python server.py --config $CONFIG

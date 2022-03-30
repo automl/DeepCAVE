@@ -17,6 +17,10 @@ class DeepCAVERun(Run):
 
         # Use hash of history.json as id
         return file_to_hash(self.path / "history.jsonl")
+    
+    @property
+    def latest_change(self) -> int:
+        return Path(self.path / "history.jsonl").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Path) -> "DeepCAVERun":

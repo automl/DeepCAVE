@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
-import copy
+from pathlib import Path
 from dataclasses import dataclass
 from enum import IntEnum
 
@@ -40,13 +40,14 @@ class Status(IntEnum):
     CRASHED = 4
     ABORTED = 5
     RUNNING = 6
+    NOTFOUND = 7
 
 
 @dataclass
 class Trial:
     config_id: int
     budget: int
-    costs: float
+    costs: List[float]
     start_time: float
     end_time: float
     status: Status
@@ -59,7 +60,7 @@ class Trial:
         assert isinstance(self.status, Status)
 
     def get_key(self) -> Tuple[int, int]:
-        return self.config_id, self.budget  # noqa
+        return AbstractRun.get_trial_key(self.config_id, self.budget)
 
     def to_json(self) -> List[Any]:
         return [
@@ -77,7 +78,8 @@ class AbstractRun(ABC):
     prefix: str
 
     def __init__(self, name: str) -> None:
-        self.name = name
+        self.name: str = name
+        self.path: Optional[Path] = None
         self.logger = get_logger(self.__class__.__name__)
 
         # objects created by reset
@@ -94,16 +96,42 @@ class AbstractRun(ABC):
         self.trial_keys: Dict[Tuple[str, int], int] = {}
 
     @property
-    def run_cache_id(self) -> str:
-        return string_to_hash(f"{self.prefix}:{self.name}")
-
-    @property
     @abstractmethod
     def hash(self) -> str:
         """
-        Hash of current run. If hash changes, cache has to be cleared, as something has changed
+        Hash of the current run. If hash changes, cache has to be cleared. This ensures that
+        the cache always holds the latest results of the run.
+
+        Returns
+        -------
+        str
+            Hash of the run.
         """
         pass
+
+    @property
+    @abstractmethod
+    def id(self) -> str:
+        """
+        Hash of the file. This is used to identify the file.
+        In contrast to `hash`, this hash should not be changed throughout the run.
+
+        Returns
+        -------
+        str
+            Hash of the run.
+        """
+        pass
+
+    @staticmethod
+    def get_trial_key(config_id, budget):
+        return (config_id, budget)
+
+    def get_trial(self, trial_key) -> Optional[Trial]:
+        if trial_key not in self.trial_keys:
+            return None
+
+        return self.history[self.trial_keys[trial_key]]
 
     def get_trials(self) -> Iterator[Trial]:
         yield from self.history
@@ -189,14 +217,18 @@ class AbstractRun(ABC):
         return [obj["name"] for obj in self.get_objectives()]
 
     def get_configs(self, budget=None) -> List:
+        config_ids = []
         configs = []
         for trial in self.history:
             if budget is not None:
                 if budget != trial.budget:
                     continue
 
-            config = self.configs[trial.config_id]
-            configs += [config]
+            if (config_id := trial.config_id) not in config_ids:
+                config = self.configs[config_id]
+
+                config_ids += [config_id]
+                configs += [config]
 
         return configs
 
@@ -210,6 +242,9 @@ class AbstractRun(ABC):
                 return id
 
         return None
+
+    def get_num_configs(self, budget=None) -> int:
+        return len(self.get_configs(budget=budget))
 
     def get_budget(self, id: int) -> float:
         return self.meta["budgets"][id]

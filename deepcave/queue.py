@@ -1,8 +1,10 @@
+from typing import Any, Callable, Dict, List
+
 import redis
-from typing import Any, Callable, List, Dict
 from rq import Queue as _Queue
 from rq import Worker
 from rq.job import Job
+
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)

@@ -1,4 +1,4 @@
-from typing import Dict, Union, List
+from typing import Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -6,13 +6,9 @@ import plotly.graph_objs as go
 from dash import dcc, html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun, check_equality
-from deepcave.utils.layout import (
-    get_select_options,
-    get_slider_marks,
-)
+from deepcave.runs import AbstractRun, Status, check_equality
+from deepcave.utils.layout import get_select_options, get_slider_marks
 from deepcave.utils.styled_plotty import get_color
-from deepcave.runs import Status
 
 
 class ParetoFront(DynamicPlugin):
@@ -158,20 +154,18 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure")),
-        ]
+        return [dcc.Graph(register("graph", "figure"))]
 
     def load_outputs(self, inputs, outputs, runs):
 
         traces = []
-        for idx, (run_name, run) in enumerate(runs.items()):
-            points = np.array(outputs[run.name]["points"])
+        for idx, run in enumerate(runs):
+            points = np.array(outputs[run.id]["points"])
 
             x, y = [], []
             x_pareto, y_pareto = [], []
 
-            pareto_points = outputs[run.name]["pareto_points"]
+            pareto_points = outputs[run.id]["pareto_points"]
             for point_idx, pareto in enumerate(pareto_points):
                 if pareto:
                     x_pareto += [points[point_idx][0]]
@@ -182,7 +176,7 @@ class ParetoFront(DynamicPlugin):
 
             # And get configs for the hovers
             hovertext = []
-            for config_id in outputs[run.name]["config_ids"]:
+            for config_id in outputs[run.id]["config_ids"]:
                 config = run.get_config(config_id)
 
                 text = f"<br>Config ID: {config_id}<br>"
@@ -198,7 +192,7 @@ class ParetoFront(DynamicPlugin):
                     go.Scatter(
                         x=x,
                         y=y,
-                        name=run_name,
+                        name=run.name,
                         mode="markers",
                         showlegend=False,
                         line=dict(color=color),
@@ -218,7 +212,7 @@ class ParetoFront(DynamicPlugin):
                 go.Scatter(
                     x=x_pareto,
                     y=y_pareto,
-                    name=run_name,
+                    name=run.name,
                     line_shape=line_shape,
                     showlegend=True,
                     line=dict(color=color_pareto),

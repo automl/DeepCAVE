@@ -92,9 +92,7 @@ class fANOVA(StaticPlugin):
                 configspace=run.configspace,
                 num_trees=int(inputs["num_trees"]["value"]),
             )
-            importance_dict = evaluator.quantify_importance(
-                hp_names, depth=1, sort=False
-            )
+            importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
 
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
 
@@ -108,21 +106,19 @@ class fANOVA(StaticPlugin):
 
     def load_outputs(self, inputs, outputs, run):
         # First selected, should always be shown first
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
-        selected_budgets = inputs["budgets"]["value"]
+        selected_hyperparameters: list[str] = inputs["hyperparameters"]["value"]
+        selected_budgets: list[int] = inputs["budgets"]["value"]
 
         if len(selected_hyperparameters) == 0 or len(selected_budgets) == 0:
             raise PreventUpdate()
 
         # TODO: After json serialize/deserialize, budget is not an integer anymore
-        convert_type = lambda x: str(float(x))  # type(selected_budgets[0])
+        convert_type = lambda x: literal_eval(x)  # type(selected_budgets[0])
 
         # Collect data
         data = {}
         for budget, importance_dict in outputs.items():
-            budget = literal_eval(budget) if isinstance(budget, str) else budget
             budget = convert_type(budget)
-
             if budget not in inputs["budgets"]["value"]:
                 continue
 

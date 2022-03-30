@@ -1,6 +1,7 @@
-from typing import Union
+from typing import Union, Dict, List
 
 from dash import dcc, html
+from dash_extensions.enrich import Trigger
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
@@ -10,7 +11,7 @@ from deepcave.plugins import Plugin
 
 
 class SidebarLayout(Layout):
-    def __init__(self, categorized_plugins: dict[str, list[Plugin]]):
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):
         super().__init__()
         self.plugins = categorized_plugins
 
@@ -21,13 +22,13 @@ class SidebarLayout(Layout):
 
         self.nav_points = nav_points
 
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
         # Update queue information panel
         @app.callback(
             Output("queue-info", "children"),
-            Input("queue-info-interval", "n_intervals"),
+            Trigger("global-update", "n_intervals"),
         )
-        def update_queue_info(_):
+        def update_queue_info():
             try:
                 jobs = {}
 
@@ -86,7 +87,7 @@ class SidebarLayout(Layout):
             except:
                 return
 
-    def __call__(self) -> Union[list[Component], Component]:
+    def __call__(self) -> Union[List[Component], Component]:
 
         layouts = []
         for category, points in self.nav_points.items():
@@ -136,7 +137,6 @@ class SidebarLayout(Layout):
                         *layouts,
                     ],
                 ),
-                dcc.Interval(id="queue-info-interval", interval=1000),
                 html.Div(id="queue-info"),
             ],
         )

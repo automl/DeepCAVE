@@ -78,13 +78,10 @@ class RandomForestWithInstances(Forest):
             raise ValueError("Expected 2d array, got %dd array!" % len(X.shape))
         if X.shape[1] != len(self.types):
             raise ValueError(
-                "Rows in X should have %d entries but have %d!"
-                % (len(self.types), X.shape[1])
+                "Rows in X should have %d entries but have %d!" % (len(self.types), X.shape[1])
             )
         if cov_return_type != "diagonal_cov":
-            raise ValueError(
-                "'cov_return_type' can only take 'diagonal_cov' for this model"
-            )
+            raise ValueError("'cov_return_type' can only take 'diagonal_cov' for this model")
 
         X = self._impute_inactive(X)
 
@@ -101,17 +98,14 @@ class RandomForestWithInstances(Forest):
 
             # Transform list of 2d arrays into a 3d array
             preds_as_array = (
-                np.zeros((X.shape[0], self.forest_options.num_trees, third_dimension))
-                * np.NaN
+                np.zeros((X.shape[0], self.forest_options.num_trees, third_dimension)) * np.NaN
             )
             for i, preds_per_tree in enumerate(all_preds):
                 for j, pred in enumerate(preds_per_tree):
                     preds_as_array[i, j, : len(pred)] = pred
 
             # Do all necessary computation with vectorized functions
-            preds_as_array = np.log(
-                np.nanmean(np.exp(preds_as_array), axis=2) + VERY_SMALL_NUMBER
-            )
+            preds_as_array = np.log(np.nanmean(np.exp(preds_as_array), axis=2) + VERY_SMALL_NUMBER)
 
             # Compute the mean and the variance across the different trees
             means = preds_as_array.mean(axis=1)
@@ -128,9 +122,7 @@ class RandomForestWithInstances(Forest):
 
         return means.reshape((-1, 1)), vars_.reshape((-1, 1))
 
-    def predict_marginalized_over_instances(
-        self, X: np.ndarray
-    ) -> tuple[np.ndarray, np.ndarray]:
+    def predict_marginalized_over_instances(self, X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         """Predict mean and variance marginalized over all instances.
         Returns the predictive mean and variance marginalised over all
         instances for a set of configurations.
@@ -165,8 +157,7 @@ class RandomForestWithInstances(Forest):
             raise ValueError("Expected 2d array, got %dd array!" % len(X.shape))
         if X.shape[1] != len(self.bounds):
             raise ValueError(
-                "Rows in X should have %d entries but have %d!"
-                % (len(self.bounds), X.shape[1])
+                "Rows in X should have %d entries but have %d!" % (len(self.bounds), X.shape[1])
             )
 
         X = self._impute_inactive(X)
@@ -189,9 +180,7 @@ class RandomForestWithInstances(Forest):
             # 2. average in each tree
             if self.log_y:
                 for tree_id in range(self.forest_options.num_trees):
-                    dat_[i, tree_id] = np.log(
-                        np.exp(np.array(preds_trees[tree_id])).mean()
-                    )
+                    dat_[i, tree_id] = np.log(np.exp(np.array(preds_trees[tree_id])).mean())
             else:
                 for tree_id in range(self.forest_options.num_trees):
                     dat_[i, tree_id] = np.array(preds_trees[tree_id]).mean()
