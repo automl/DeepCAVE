@@ -51,6 +51,10 @@ thead {
 }
 
 
+table.table {
+    table-layout: fixed;
+}
+
 /*
 .loading-container > *[data-dash-is-loading="true"] {
     height: 10px;
