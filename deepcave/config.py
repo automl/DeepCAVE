@@ -88,11 +88,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
-configs: dict[str, Config] = {
-    "production": Config(),
-    "dev": DevelopmentConfig()
-}
-configs["default"] = configs["production"]
+configs: dict[str, Config] = {"production": Config(), "dev": DevelopmentConfig()}
+configs["default"] = configs["dev"]
 
 
 def parse_config(config: Union[None, Config, str] = None) -> Config:
