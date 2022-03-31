@@ -34,15 +34,6 @@ class Overview(DynamicPlugin):
         # Get best cost across all objectives, highest budget
         _, config_id = run.get_min_cost()
 
-        # for hp_name, value in config.items():
-        #    best_config["Hyperparameter"].append(hp_name)
-        #    best_config["Value"].append(value)
-
-        # costs = {"Objective": [], "Value": []}
-        # for idx, cost in enumerate(run.get_cost(config_id)):
-        #    costs["Objective"].append(run.get_objective_names()[idx])
-        #    costs["Value"].append(cost)
-
         best_performance = {}
         for idx, cost in enumerate(run.get_cost(config_id)):
             best_performance[run.get_objective_names()[idx]] = cost
@@ -87,6 +78,12 @@ class Overview(DynamicPlugin):
 
         for trial in run.get_trials():
             status_statistics[trial.budget][trial.status.name] += 1
+
+        # Now remove status that are not used
+        for budget in list(status_statistics.keys()):
+            for status in list(status_statistics[budget].keys()):
+                if status_statistics[budget][status] == 0:
+                    del status_statistics[budget][status]
 
         # It is interesting to see on which budget a configuration was evaluated
         config_statistics = {"X": budgets}
