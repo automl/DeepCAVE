@@ -50,6 +50,11 @@ thead {
     margin-right: 0.5rem;
 }
 
+#navigation-items .nav-link.active {
+    background-color: rgb(232, 232, 232) !important;
+    border-right: 3px solid #0d6efd;
+}
+
 
 table.table {
     table-layout: fixed;
