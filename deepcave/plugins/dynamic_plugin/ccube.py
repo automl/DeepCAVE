@@ -5,9 +5,7 @@ import plotly.express as px
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 
-from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import (
@@ -128,6 +126,8 @@ class CCube(DynamicPlugin):
                 "options": get_select_options(hp_names),
             },
         }
+
+        # We merge the new inputs with the previous inputs
         update_dict(inputs, new_inputs)
 
         # Restrict to three hyperparameters

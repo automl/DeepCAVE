@@ -1,4 +1,4 @@
-from typing import Type, Any, Union
+from typing import Type, Any, Union, Dict, List
 
 from pathlib import Path
 
@@ -24,7 +24,7 @@ class Config:
     SERVER_NAME = f"{DASH_ADDRESS}:{DASH_PORT}"  # Automatically used in Flask app
 
     # Default Meta information which are used across the platform
-    META_DEFAULT: dict[str, Any] = {
+    META_DEFAULT: Dict[str, Any] = {
         "matplotlib-mode": False,
         "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
         "selected_run_paths": [],
@@ -33,7 +33,7 @@ class Config:
 
     # Plugins
     @property
-    def PLUGINS(self) -> dict[str, list["Plugin"]]:
+    def PLUGINS(self) -> Dict[str, List["Plugin"]]:
         """
         Returns:
         dictionary {category -> List[Plugins]}
@@ -76,7 +76,7 @@ class Config:
 
     # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> list[Type["Run"]]:
+    def AVAILABLE_CONVERTERS(self) -> List[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun
@@ -88,7 +88,10 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
-configs: dict[str, Config] = {"production": Config(), "dev": DevelopmentConfig()}
+configs: Dict[str, Config] = {
+    "production": Config(),
+    "dev": DevelopmentConfig()
+}
 configs["default"] = configs["dev"]
 
 

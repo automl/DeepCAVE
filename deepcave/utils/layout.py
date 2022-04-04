@@ -1,5 +1,8 @@
+from os import access
 from typing import Any, Dict, List, Optional
 
+import pandas as pd
+import dash_bootstrap_components as dbc
 import base64
 import io
 
@@ -34,7 +37,9 @@ def display_figure(fig):
     return html.Img(src="data:image/png;base64,{}".format(data))
 
 
-def get_slider_marks(strings: Optional[List[Dict[str, Any]]] = None, steps=10) -> Dict[int, str]:
+def get_slider_marks(
+    strings: Optional[List[Dict[str, Any]]] = None, steps=10, access_all=False
+) -> Dict[int, str]:
     marks = {}
     if strings is None:
         marks[0] = {"label": str("None")}
@@ -46,6 +51,9 @@ def get_slider_marks(strings: Optional[List[Dict[str, Any]]] = None, steps=10) -
     for i, string in enumerate(strings):
         if i % (len(strings) / steps) == 0:
             marks[i] = {"label": str(string)}
+        else:
+            if access_all:
+                marks[i] = {"label": ""}
 
     # Also include the last mark
     marks[len(strings) - 1] = {"label": str(strings[-1])}
@@ -92,3 +100,9 @@ def get_checklist_options(labels=None, values=None, binary=False):
 
 def get_radio_options(labels=None, values=None, binary=False):
     return get_select_options(labels=labels, values=values, binary=binary)
+
+
+def create_table(output: Dict[str, str], mb=True) -> dbc.Table:
+    mb = "mb-0" if not mb else ""
+
+    return dbc.Table.from_dataframe(pd.DataFrame(output), striped=True, bordered=True, className=mb)

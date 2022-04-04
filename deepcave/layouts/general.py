@@ -307,6 +307,9 @@ class GeneralLayout(Layout):
             if n_clicks is not None:
                 rc.clear_all_caches()
 
+                # Also remove last inputs
+                c.set("last_inputs", value={})
+
                 # We have to call `update_runs` now to create the run caches again
                 run_handler.update_runs()
                 notification.update("Plugin caches successfully cleared.", "success")

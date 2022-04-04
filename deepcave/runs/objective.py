@@ -82,3 +82,9 @@ class Objective(dict):
         else:
             if self["upper"] < objective["upper"]:
                 self["upper"] = objective["upper"]
+
+    def get_worst_value(self) -> float:
+        if self["optimize"] == "lower":
+            return self["upper"]
+        else:
+            return self["lower"]

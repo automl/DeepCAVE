@@ -5,7 +5,6 @@ from collections import defaultdict
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
-from dash.exceptions import PreventUpdate
 from scipy import stats
 
 from deepcave import notification
@@ -70,6 +69,8 @@ class BudgetCorrelation(DynamicPlugin):
                 "value": value,
             },
         }
+
+        # We merge the new inputs with the previous inputs
         update_dict(inputs, new_inputs)
 
         return inputs
@@ -103,9 +104,7 @@ class BudgetCorrelation(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(id=register("graph", "figure"))
-        ]
+        return [dcc.Graph(id=register("graph", "figure"))]
 
     def load_outputs(self, inputs, outputs, run):
         traces = []
