@@ -1,4 +1,4 @@
-from typing import List, Tuple, Any
+from typing import List, Optional, Tuple, Any
 import numpy as np
 import plotly.express as px
 import itertools
@@ -102,3 +102,91 @@ def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]])
         zmax=1,
         hoverinfo="skip",
     )
+
+
+def get_tick_data(
+    values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
+) -> Tuple[List, List]:
+    """
+    Generates tick data for both values and labels. The background is that
+    you might have encoded data but you don't want to show all of them.
+    With this function, only 6 (default) values are shown. This behaviour is
+    ignored if `values` is a list of strings.
+
+    Parameters
+    ----------
+    values : List
+        List of values.
+    labels : List
+        List of labels. Must be the same size as `values`.
+    forced : List[bool], optional
+        List of booleans. If True, displaying the particular tick is enforced.
+        Independent from `ticks`.
+    ticks : int, optional
+        Number of ticks and labels to show. By default 6.
+
+    Returns
+    -------
+    Tuple[List, List]
+        Returns tickvals and ticktext as list.
+    """
+    assert len(values) == len(labels)
+
+    unique_values = []  # df[hp_name].unique()
+    unique_labels = []  # df_labels[hp_name].unique()
+    for value, label in zip(values, labels):
+        if value not in unique_values and label not in unique_labels:
+            unique_values.append(value)
+            unique_labels.append(label)
+
+    return_all = False
+    for v1, v2 in zip(unique_values, unique_values[1:]):
+        if isinstance(v1, str) or isinstance(v2, str):
+            if type(v1) != type(v2):
+                raise RuntimeError("Values have strings and non-strings.")
+
+            return_all = True
+
+    tickvals = []
+    ticktext = []
+
+    # If we have less than x values, we also show them
+    if return_all or len(unique_values) <= ticks:
+        # Make sure we don't have multiple (same) labels for the same value
+        for value, label in zip(unique_values, unique_labels):
+            tickvals.append(value)
+            ticktext.append(label)
+    else:
+        # Add min+max values
+        for idx in [np.argmin(values), np.argmax(values)]:
+            tickvals.append(values[idx])
+            ticktext.append(labels[idx])
+
+        # After we added min and max values, we want to add
+        # intermediate values too
+        min_v = np.min(values)
+        max_v = np.max(values)
+
+        # Get values for each tick
+        factors = [i / (ticks - 1) for i in range(1, ticks - 2)]
+
+        for factor in factors:
+            new_v = (factor * (max_v - min_v)) + min_v
+            idx = np.abs(unique_values - new_v).argmin(axis=-1)
+
+            value = unique_values[idx]
+            label = unique_labels[idx]
+
+            # Ignore if they are already in the list
+            if value not in tickvals:
+                tickvals.append(value)
+                ticktext.append(label)
+
+    # Show forced ones
+    if forced is not None:
+        for value, label, force in zip(values, labels, forced):
+            if force and value not in tickvals:
+                tickvals.append(value)
+                ticktext.append(label)
+
+    return tickvals, ticktext

@@ -216,19 +216,17 @@ class AbstractRun(ABC):
     def get_objective_names(self) -> List:
         return [obj["name"] for obj in self.get_objectives()]
 
-    def get_configs(self, budget=None) -> List:
-        config_ids = []
-        configs = []
+    def get_configs(self, budget=None) -> Dict[int, Dict]:
+        configs = {}
         for trial in self.history:
             if budget is not None:
                 if budget != trial.budget:
                     continue
 
-            if (config_id := trial.config_id) not in config_ids:
+            if (config_id := trial.config_id) not in configs:
                 config = self.configs[config_id]
 
-                config_ids += [config_id]
-                configs += [config]
+                configs[config_id] = config
 
         return configs
 
@@ -288,12 +286,16 @@ class AbstractRun(ABC):
 
         return new_costs
 
-    def get_cost(self, config_id: int, budget=None) -> List[float]:
+    def get_cost(self, config_id: int, budget=None) -> Optional[List[float]]:
         """
         If no budget is given, the highest budget is chosen.
         """
 
         costs = self.get_costs(budget)
+
+        if config_id not in costs:
+            return None
+
         return costs[config_id]
 
     def get_costs(self, budget=None, statuses=None):
@@ -434,6 +436,47 @@ class AbstractRun(ABC):
 
         return times, costs_mean, costs_std, ids
 
+    def get_encoded_config(self, config: Union[int, Dict[Any, Any]]) -> Tuple[List, List]:
+        """
+        Encodes a given config (id) to a normalized list with the corresponding labels.
+        If a config is passed, no look-up has to be done.
+
+        Parameters
+        ----------
+        config : Union[int, Dict[Any]]
+            Either the config id or the config in dict form itself.
+
+        Returns
+        -------
+        Tuple[List, List]
+            The encoded config and its labels.
+        """
+        if isinstance(config, int):
+            config = self.configs[config]
+
+        c = Configuration(self.configspace, config)
+        x = list(c.get_array())
+
+        labels = []
+        for hp_name in self.configspace.get_hyperparameter_names():
+            # hyperparameter name may not be in config
+            if hp_name in config:
+                label = config[hp_name]
+
+                # Scientific notation
+                if type(label) == float:
+                    if str(label).startswith("0.000") or "e-" in str(label):
+                        label = np.format_float_scientific(label, precision=2)
+                    else:
+                        # Round to 2 decimals
+                        label = np.round(label, 2)
+
+                labels += [label]
+            else:
+                labels += ["NaN"]
+
+        return x, labels
+
     def get_encoded_configs(
         self,
         objectives: Optional[List[Objective]] = None,
@@ -460,35 +503,14 @@ class AbstractRun(ABC):
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
-            config = self.configs[config_id]
-            config = Configuration(self.configspace, config)
-
+            x, labels_ = self.get_encoded_config(config_id)
             y = self.calculate_cost(costs, objectives)
-            x = config.get_array()
+
+            # y is directly added to the labels to "merge" it
+            labels_ += [y]
 
             X.append(x)
             Y.append(y)
-
-            labels_ = []
-            for hp_name in hp_names:
-                # hyperparameter name may not be in config
-                if hp_name in config:
-                    label = config[hp_name]
-
-                    # Scientific notation
-                    if type(label) == float:
-                        if str(label).startswith("0.000") or "e-" in str(label):
-                            label = np.format_float_scientific(label, precision=2)
-                        else:
-                            # Round to 2 decimals
-                            label = np.round(label, 2)
-
-                    labels_ += [label]
-                else:
-                    labels_ += ["NaN"]
-
-            # We append y here directly
-            labels_ += [y]
             labels.append(labels_)
 
         X = np.array(X)

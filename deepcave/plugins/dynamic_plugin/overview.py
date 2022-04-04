@@ -1,13 +1,10 @@
-from tracemalloc import Statistic
 import dash_bootstrap_components as dbc
 import pandas as pd
 from dash import dcc, html
 import plotly.graph_objs as go
 
-from deepcave import run_handler
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
-from deepcave.runs import AbstractRun, Status
-from deepcave.runs.grouped_run import NotMergeableError
+from deepcave.runs import Status
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
     Constant,
@@ -17,8 +14,8 @@ from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+from deepcave.utils.layout import create_table
 from deepcave.utils.styled_plotty import get_discrete_heatmap
-
 from deepcave.utils.util import get_latest_change
 
 
@@ -91,8 +88,7 @@ class Overview(DynamicPlugin):
         y = []
         z_values = []
         z_labels = []
-        for config in configs:
-            config_id = run.get_config_id(config)
+        for config_id, config in configs.items():
             column_values = []
             column_labels = []
             for budget in budgets:
@@ -220,13 +216,6 @@ class Overview(DynamicPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, run):
-        def create_table(output, mb=True):
-            mb = "mb-0" if not mb else ""
-
-            return dbc.Table.from_dataframe(
-                pd.DataFrame(output), striped=True, bordered=True, className=mb
-            )
-
         stats_data = []
         for budget, stats in outputs["status_statistics"].items():
             trace = go.Bar(x=list(stats.keys()), y=list(stats.values()), name=budget)
