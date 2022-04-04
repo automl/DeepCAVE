@@ -7,6 +7,8 @@ from deepcave.plugins import Plugin
 
 
 class DynamicPlugin(Plugin, ABC):
+    use_cache = True
+
     def __init__(self):
         super().__init__()
 
@@ -47,7 +49,8 @@ class DynamicPlugin(Plugin, ABC):
                     run_outputs = self.process(run, inputs)
 
                     # Cache it
-                    run_cache.set(self.id, inputs_key, value=run_outputs)
+                    if self.use_cache:
+                        run_cache.set(self.id, inputs_key, value=run_outputs)
                 else:
                     self.logger.debug(f"Found outputs from {run.name} in cache.")
 
