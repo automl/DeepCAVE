@@ -41,7 +41,11 @@ if any(file in _exec_file for file in _exec_files):
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
 
     # Meta cache
-    c = Cache(filename=config.CACHE_DIR / "meta.json", defaults=config.META_DEFAULT)
+    c = Cache(
+        filename=config.CACHE_DIR / "meta.json",
+        defaults=config.META_DEFAULT,
+        debug=config.DEBUG,
+    )
 
     # Set working directory to current directory
     if c.get("working_dir") is None:
