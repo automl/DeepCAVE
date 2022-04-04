@@ -280,7 +280,6 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
-<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">notification</span>
@@ -345,6 +344,8 @@ style="width: 100%;">
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">}</span>
+
+        <span class="c1"># We merge the new inputs with the previous inputs</span>
         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">inputs</span></div>
@@ -378,9 +379,7 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="BudgetCorrelation.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span>
-            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">))</span>
-        <span class="p">]</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">))]</span></div>
 
 <div class="viewcode-block" id="BudgetCorrelation.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.budget_correlation.html#deepcave.plugins.dynamic_plugin.budget_correlation.BudgetCorrelation.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>

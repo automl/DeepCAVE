@@ -491,19 +491,17 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">get_objective_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()]</span>
 
-    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
-        <span class="n">config_ids</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">configs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">]:</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">budget</span> <span class="o">!=</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="n">config_id</span> <span class="o">:=</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_ids</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">config_id</span> <span class="o">:=</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
                 <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
 
-                <span class="n">config_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-                <span class="n">configs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">config</span><span class="p">]</span>
+                <span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
 
         <span class="k">return</span> <span class="n">configs</span>
 
@@ -563,12 +561,16 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">new_costs</span>
 
-<div class="viewcode-block" id="AbstractRun.get_cost"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_cost">[docs]</a>    <span class="k">def</span> <span class="nf">get_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="AbstractRun.get_cost"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_cost">[docs]</a>    <span class="k">def</span> <span class="nf">get_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        If no budget is given, the highest budget is chosen.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
         <span class="k">return</span> <span class="n">costs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>    <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -709,6 +711,47 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">costs_mean</span><span class="p">,</span> <span class="n">costs_std</span><span class="p">,</span> <span class="n">ids</span>
 
+<div class="viewcode-block" id="AbstractRun.get_encoded_config"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_config">[docs]</a>    <span class="k">def</span> <span class="nf">get_encoded_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a given config (id) to a normalized list with the corresponding labels.</span>
+<span class="sd">        If a config is passed, no look-up has to be done.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : Union[int, Dict[Any]]</span>
+<span class="sd">            Either the config id or the config in dict form itself.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[List, List]</span>
+<span class="sd">            The encoded config and its labels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">]</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get_array</span><span class="p">())</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">():</span>
+            <span class="c1"># hyperparameter name may not be in config</span>
+            <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
+
+                <span class="c1"># Scientific notation</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0.000&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;e-&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_scientific</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Round to 2 decimals</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;NaN&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">labels</span></div>
+
 <div class="viewcode-block" id="AbstractRun.get_encoded_configs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_configs">[docs]</a>    <span class="k">def</span> <span class="nf">get_encoded_configs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -735,35 +778,14 @@ style="width: 100%;">
 
         <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-
+            <span class="n">x</span><span class="p">,</span> <span class="n">labels_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_encoded_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
             <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_array</span><span class="p">()</span>
+
+            <span class="c1"># y is directly added to the labels to &quot;merge&quot; it</span>
+            <span class="n">labels_</span> <span class="o">+=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
 
             <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-
-            <span class="n">labels_</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
-                <span class="c1"># hyperparameter name may not be in config</span>
-                <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
-
-                    <span class="c1"># Scientific notation</span>
-                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0.000&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;e-&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
-                            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_scientific</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="c1"># Round to 2 decimals</span>
-                            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-
-                    <span class="n">labels_</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">labels_</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;NaN&quot;</span><span class="p">]</span>
-
-            <span class="c1"># We append y here directly</span>
-            <span class="n">labels_</span> <span class="o">+=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
             <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels_</span><span class="p">)</span>
 
         <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>

@@ -287,6 +287,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_tick_data</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -394,18 +395,9 @@ style="width: 100%;">
 
         <span class="n">df</span><span class="p">,</span> <span class="n">df_labels</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># Now we also need to know when to use the labels and when to use the encoded data</span>
-        <span class="n">show_all_labels</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
-                <span class="n">show_all_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">show_all_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
             <span class="s2">&quot;df_labels&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">),</span>
-            <span class="s2">&quot;show_all_labels&quot;</span><span class="p">:</span> <span class="n">show_all_labels</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -416,7 +408,6 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="ParallelCoordinates.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">show_all_labels</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;show_all_labels&quot;</span><span class="p">]</span>
 
         <span class="n">df</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
@@ -436,49 +427,17 @@ style="width: 100%;">
         <span class="c1"># }</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">show_all</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hp_names</span><span class="p">,</span> <span class="n">show_all_labels</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
             <span class="n">labels</span> <span class="o">=</span> <span class="n">df_labels</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-            <span class="n">unique_values</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># df[hp_name].unique()</span>
-            <span class="n">unique_labels</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># df_labels[hp_name].unique()</span>
-            <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_values</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_labels</span><span class="p">:</span>
-                    <span class="n">unique_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                    <span class="n">unique_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hp_name</span>
 
-            <span class="n">selected_values</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">selected_labels</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-            <span class="c1"># If we have less than 10 values, we also show them</span>
-            <span class="k">if</span> <span class="n">show_all</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
-                <span class="c1"># Make sure we don&#39;t have multiple (same) labels for the same value</span>
-                <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_values</span><span class="p">,</span> <span class="n">unique_labels</span><span class="p">):</span>
-                    <span class="n">selected_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                    <span class="n">selected_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># Add min+max values</span>
-                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">values</span><span class="p">)]:</span>
-                    <span class="n">selected_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-                    <span class="n">selected_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-
-                <span class="c1"># After we added min and max values, we want to add</span>
-                <span class="c1"># intermediate values too</span>
-                <span class="n">min_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-                <span class="n">max_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]:</span>
-                    <span class="n">new_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_v</span> <span class="o">-</span> <span class="n">min_v</span><span class="p">))</span> <span class="o">+</span> <span class="n">min_v</span>
-                    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">unique_values</span> <span class="o">-</span> <span class="n">new_v</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-
-                    <span class="n">selected_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unique_values</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-                    <span class="n">selected_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unique_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
-
-            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected_values</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">selected_labels</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>
 
         <span class="n">objective</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">data</span><span class="p">[</span><span class="n">objective</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">objective</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>

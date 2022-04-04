@@ -280,9 +280,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">CategoricalHyperparameter</span><span class="p">,</span> <span class="n">Constant</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="p">(</span>
@@ -403,6 +401,8 @@ style="width: 100%;">
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span>
             <span class="p">},</span>
         <span class="p">}</span>
+
+        <span class="c1"># We merge the new inputs with the previous inputs</span>
         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
         <span class="c1"># Restrict to three hyperparameters</span>

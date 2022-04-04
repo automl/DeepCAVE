@@ -273,16 +273,13 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.plugins.dynamic_plugin.overview</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">tracemalloc</span> <span class="kn">import</span> <span class="n">Statistic</span>
-<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.grouped_run</span> <span class="kn">import</span> <span class="n">NotMergeableError</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
     <span class="n">Constant</span><span class="p">,</span>
@@ -292,8 +289,8 @@ style="width: 100%;">
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_discrete_heatmap</span>
-
 <span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">get_latest_change</span>
 
 
@@ -308,15 +305,6 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Get best cost across all objectives, highest budget</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_min_cost</span><span class="p">()</span>
-
-        <span class="c1"># for hp_name, value in config.items():</span>
-        <span class="c1">#    best_config[&quot;Hyperparameter&quot;].append(hp_name)</span>
-        <span class="c1">#    best_config[&quot;Value&quot;].append(value)</span>
-
-        <span class="c1"># costs = {&quot;Objective&quot;: [], &quot;Value&quot;: []}</span>
-        <span class="c1"># for idx, cost in enumerate(run.get_cost(config_id)):</span>
-        <span class="c1">#    costs[&quot;Objective&quot;].append(run.get_objective_names()[idx])</span>
-        <span class="c1">#    costs[&quot;Value&quot;].append(cost)</span>
 
         <span class="n">best_performance</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_cost</span><span class="p">(</span><span class="n">config_id</span><span class="p">)):</span>
@@ -363,14 +351,19 @@ style="width: 100%;">
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trials</span><span class="p">():</span>
             <span class="n">status_statistics</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">][</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
+        <span class="c1"># Now remove status that are not used</span>
+        <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">status_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">status</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">del</span> <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">status</span><span class="p">]</span>
+
         <span class="c1"># It is interesting to see on which budget a configuration was evaluated</span>
         <span class="n">config_statistics</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">budgets</span><span class="p">}</span>
         <span class="n">configs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">z_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">z_labels</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
-            <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">column_values</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">column_labels</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
@@ -498,13 +491,6 @@ style="width: 100%;">
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Overview.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.overview.html#deepcave.plugins.dynamic_plugin.overview.Overview.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">mb</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-            <span class="n">mb</span> <span class="o">=</span> <span class="s2">&quot;mb-0&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mb</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span>
-                <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">striped</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bordered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">className</span><span class="o">=</span><span class="n">mb</span>
-            <span class="p">)</span>
-
         <span class="n">stats_data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">budget</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;status_statistics&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">y</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">name</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>

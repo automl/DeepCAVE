@@ -273,23 +273,17 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.plugins.dynamic_plugin.configurations</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
-    <span class="n">Constant</span><span class="p">,</span>
-    <span class="n">NormalFloatHyperparameter</span><span class="p">,</span>
-    <span class="n">NormalIntegerHyperparameter</span><span class="p">,</span>
-    <span class="n">OrdinalHyperparameter</span><span class="p">,</span>
-    <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
-    <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span>
-<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
-
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span><span class="p">,</span> <span class="n">dcc</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_tick_data</span>
 
 
 <div class="viewcode-block" id="Configurations"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations">[docs]</a><span class="k">class</span> <span class="nc">Configurations</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
@@ -298,89 +292,215 @@ style="width: 100%;">
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-sliders-h&quot;</span>
 
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Configurations.get_input_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Configuration ID&quot;</span><span class="p">),</span>
+                    <span class="n">dcc</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;config_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;marks&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
+                <span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="Configurations.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;config_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;marks&quot;</span><span class="p">:</span> <span class="n">get_slider_marks</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="Configurations.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Get selected values</span>
+        <span class="n">config_id_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;config_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">config_id_value</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">config_id_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="n">new_inputs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;config_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s2">&quot;marks&quot;</span><span class="p">:</span> <span class="n">get_slider_marks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">access_all</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">config_id_value</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># We merge the new inputs with the previous inputs</span>
+        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">inputs</span></div>
 
 <div class="viewcode-block" id="Configurations.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+        <span class="n">selected_config_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;config_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="n">configspace</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Hyperparameter&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Possible Values&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Log&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="p">}</span>
+        <span class="n">performances</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">objective_id</span><span class="p">,</span> <span class="n">objective</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">performances</span><span class="p">:</span>
+                <span class="n">performances</span><span class="p">[</span><span class="n">objective</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">():</span>
+                <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_cost</span><span class="p">(</span><span class="n">selected_config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
 
-            <span class="n">log</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">NormalIntegerHyperparameter</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">UniformFloatHyperparameter</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">NormalFloatHyperparameter</span><span class="p">)</span>
-            <span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">([</span><span class="n">hp</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">upper</span><span class="p">])</span>
-                <span class="n">log</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">log</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">OrdinalHyperparameter</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hp</span><span class="o">.</span><span class="n">sequence</span><span class="p">])</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">costs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="n">objective</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]][</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># objective.get_worst_value()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">performances</span><span class="p">[</span><span class="n">objective</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]][</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]</span>
 
-            <span class="n">default</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span>
-            <span class="n">log</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+        <span class="c1"># Let&#39;s start with the configspace</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">Labels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cs_table_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
-            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
-            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Possible Values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
-            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Log&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+            <span class="n">highlight</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">config_id</span> <span class="o">==</span> <span class="n">selected_config_id</span><span class="p">:</span>
+                <span class="n">highlight</span> <span class="o">=</span> <span class="mi">1</span>
 
-        <span class="n">best_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Add accurate data for our table here</span>
+                    <span class="n">cs_table_data</span><span class="p">[</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">cs_table_data</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">v</span><span class="p">]</span>
 
-        <span class="c1"># Get best cost across all objectives, highest budget</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_min_cost</span><span class="p">()</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+            <span class="c1"># We simply add highlight as a new column</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">highlight</span><span class="p">]</span>
+            <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">best_config</span><span class="p">[</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
-            <span class="n">best_config</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="c1"># And add it to the lists</span>
+            <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">Labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 
-        <span class="n">costs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Objective&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_cost</span><span class="p">(</span><span class="n">config_id</span><span class="p">)):</span>
-            <span class="n">costs</span><span class="p">[</span><span class="s2">&quot;Objective&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()[</span><span class="n">idx</span><span class="p">])</span>
-            <span class="n">costs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;highlighted&quot;</span><span class="p">]</span>
+
+        <span class="n">cs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">cs_df_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">Labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;configspace&quot;</span><span class="p">:</span> <span class="n">configspace</span><span class="p">,</span>
-            <span class="s2">&quot;best_config&quot;</span><span class="p">:</span> <span class="n">best_config</span><span class="p">,</span>
-            <span class="s2">&quot;costs&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">,</span>
+            <span class="s2">&quot;performances&quot;</span><span class="p">:</span> <span class="n">performances</span><span class="p">,</span>
+            <span class="s2">&quot;cs_df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cs_df</span><span class="p">),</span>
+            <span class="s2">&quot;cs_df_labels&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cs_df_labels</span><span class="p">),</span>
+            <span class="s2">&quot;cs_table_data&quot;</span><span class="p">:</span> <span class="n">cs_table_data</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="Configurations.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Configuration Space&quot;</span><span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Best Configuration&quot;</span><span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;best_config&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;costs&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Objectives&quot;</span><span class="p">),</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performances&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Configuration&quot;</span><span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_table&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="c1"># html.Div(id=register(&quot;configspace&quot;, &quot;children&quot;)),</span>
+            <span class="c1"># html.Hr(),</span>
+            <span class="c1"># html.H3(&quot;Best Configuration&quot;),</span>
+            <span class="c1"># html.Div(id=register(&quot;best_config&quot;, &quot;children&quot;)),</span>
+            <span class="c1"># html.Div(id=register(&quot;costs&quot;, &quot;children&quot;)),</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Configurations.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">mb</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-            <span class="n">mb</span> <span class="o">=</span> <span class="s2">&quot;mb-0&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">mb</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Table</span><span class="o">.</span><span class="n">from_dataframe</span><span class="p">(</span>
-                <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">striped</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bordered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">className</span><span class="o">=</span><span class="n">mb</span>
-            <span class="p">)</span>
-
         <span class="k">return</span> <span class="p">[</span>
-            <span class="n">create_table</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;configspace&quot;</span><span class="p">]),</span>
-            <span class="n">create_table</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;best_config&quot;</span><span class="p">]),</span>
-            <span class="n">create_table</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;costs&quot;</span><span class="p">],</span> <span class="n">mb</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-        <span class="p">]</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_objective_figure</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_configspace_figure</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">),</span>
+            <span class="n">create_table</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cs_table_data&quot;</span><span class="p">]),</span>
+        <span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_objective_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+        <span class="n">objective_data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;performances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="n">trace_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+                <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">metric</span><span class="p">,</span>
+                <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="s2">&quot;tozeroy&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">trace_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;yaxis&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;y</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
+
+            <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="o">**</span><span class="n">trace_kwargs</span><span class="p">)</span>
+            <span class="n">objective_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+
+        <span class="n">layout_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()),</span> <span class="mi">1</span><span class="p">]},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># We create an axis for each objective now</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">objective</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()):</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="s2">&quot;yaxis&quot;</span>
+            <span class="k">if</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># yaxis, yaxis2, yaxis3, ...</span>
+                <span class="n">yaxis</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;yaxis</span><span class="si">{</span><span class="nb">id</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="n">layout_kwargs</span><span class="p">[</span><span class="n">yaxis</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="c1"># &quot;title&quot;: objective[&quot;name&quot;],</span>
+                <span class="s2">&quot;titlefont&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">get_color</span><span class="p">(</span><span class="nb">id</span><span class="p">)},</span>
+                <span class="s2">&quot;tickfont&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">get_color</span><span class="p">(</span><span class="nb">id</span><span class="p">)},</span>
+                <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]],</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">layout_kwargs</span><span class="p">[</span><span class="n">yaxis</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;anchor&quot;</span><span class="p">:</span> <span class="s2">&quot;free&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;overlaying&quot;</span><span class="p">:</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;side&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="nb">id</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="n">objective_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="o">**</span><span class="n">layout_kwargs</span><span class="p">)</span>
+        <span class="n">objective_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">objective_data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">objective_layout</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">objective_figure</span>
+
+    <span class="k">def</span> <span class="nf">_get_configspace_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cs_df&quot;</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cs_df_labels&quot;</span><span class="p">]</span>
+        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+
+        <span class="n">highlighted</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;highlighted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+
+        <span class="c1"># We have to make sure that we print the label of the selected hyperparameter</span>
+        <span class="n">forced</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">highlight</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">highlight</span> <span class="ow">in</span> <span class="n">highlighted</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">df_labels</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hp_name</span>
+
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">forced</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>
+
+            <span class="c1"># print(&quot;----&quot;)</span>
+            <span class="c1"># print(values[idx], tickvals)</span>
+            <span class="c1"># print(labels[idx], ticktext)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Parcoords</span><span class="p">(</span>
+                <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">color</span><span class="o">=</span><span class="n">highlighted</span><span class="p">,</span>
+                    <span class="n">showscale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">colorscale</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rgba(255,255,255,0.1)&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">],</span>
+                <span class="p">),</span>
+                <span class="n">dimensions</span><span class="o">=</span><span class="nb">list</span><span class="p">([</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()]),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
 </pre></div>
 
               </div>
