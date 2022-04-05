@@ -154,7 +154,8 @@ class Run(AbstractRun, ABC):
         if not isinstance(costs, list):
             costs = [costs]
 
-        assert len(costs) == len(self.get_objectives())
+        if len(costs) != len(self.get_objectives()):
+            raise RuntimeError("Number of costs does not match number of objectives.")
 
         updated_objectives = []
         for i in range(len(costs)):
@@ -167,17 +168,15 @@ class Run(AbstractRun, ABC):
                 cost = costs[i]
 
             # If cost is none, replace it later with the highest cost
-            if cost is None:
-                continue
+            if cost is not None:
+                # Update bounds here
+                if not objective["lock_lower"]:
+                    if cost < objective["lower"]:
+                        objective["lower"] = cost
 
-            # Update bounds here
-            if not objective["lock_lower"]:
-                if cost < objective["lower"]:
-                    objective["lower"] = cost
-
-            if not objective["lock_upper"]:
-                if cost > objective["upper"]:
-                    objective["upper"] = cost
+                if not objective["lock_upper"]:
+                    if cost > objective["upper"]:
+                        objective["upper"] = cost
 
             updated_objectives += [objective]
 
