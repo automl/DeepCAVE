@@ -156,6 +156,7 @@ class Run(AbstractRun, ABC):
 
         assert len(costs) == len(self.get_objectives())
 
+        updated_objectives = []
         for i in range(len(costs)):
             cost = costs[i]
             objective = self.get_objectives()[i]
@@ -172,11 +173,15 @@ class Run(AbstractRun, ABC):
             # Update bounds here
             if not objective["lock_lower"]:
                 if cost < objective["lower"]:
-                    self.get_objectives()[i]["lower"] = cost
+                    objective["lower"] = cost
 
             if not objective["lock_upper"]:
                 if cost > objective["upper"]:
-                    self.get_objectives()[i]["upper"] = cost
+                    objective["upper"] = cost
+
+            updated_objectives += [objective]
+
+        self.meta["objectives"] = updated_objectives
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()
