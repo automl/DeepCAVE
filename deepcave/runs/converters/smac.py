@@ -26,7 +26,7 @@ class SMACRun(Run):
     
     @property
     def latest_change(self) -> int:
-        return Path(self.path / "runhistory.jsonl").stat().st_mtime
+        return Path(self.path / "runhistory.json").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Path) -> "SMACRun":
