@@ -285,7 +285,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">run_handler</span><span class="p">,</span> <span class="n">notification</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">run_handler</span><span class="p">,</span> <span class="n">notification</span><span class="p">,</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.layouts</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.grouped_run</span> <span class="kn">import</span> <span class="n">GroupedRun</span><span class="p">,</span> <span class="n">NotMergeableError</span>
@@ -293,6 +293,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">parse_url</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -331,6 +332,18 @@ style="width: 100%;">
         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Plugin.get_base_url"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_base_url">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_base_url</span><span class="p">(</span><span class="n">plugin_id</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates the url for the plugin.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Url for the plugin as string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_ADDRESS</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_PORT</span><span class="si">}</span><span class="s2">/plugins/</span><span class="si">{</span><span class="n">plugin_id</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 <div class="viewcode-block" id="Plugin.check_run_compatibility"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_run_compatibility</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -473,8 +486,7 @@ style="width: 100%;">
 
         <span class="c1"># Handles the initial and the cashed input values</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># [Input(self.get_internal_id(&quot;update-button&quot;), &#39;n_clicks&#39;)]</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s2">&quot;on-page-load&quot;</span><span class="p">,</span> <span class="s2">&quot;href&quot;</span><span class="p">)]</span>
 
         <span class="c1"># Define also inputs if they are declared as interactive</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
@@ -486,15 +498,48 @@ style="width: 100%;">
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
             <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-            <span class="k">def</span> <span class="nf">plugin_input_update</span><span class="p">(</span><span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">plugin_input_update</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>
                 <span class="c1"># Simple check if page was loaded for the first time</span>
                 <span class="n">init</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="nb">input</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs_list</span><span class="p">)</span>
 
                 <span class="c1"># Reload our inputs</span>
                 <span class="k">if</span> <span class="n">init</span><span class="p">:</span>
                     <span class="n">inputs</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;last_inputs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="n">passed_inputs</span> <span class="o">=</span> <span class="n">parse_url</span><span class="p">(</span><span class="n">pathname</span><span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">passed_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># First get normal inputs</span>
+                        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">()</span>
+                        
+                        <span class="c1"># Overwrite/set the passed inputs</span>
+                        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">passed_inputs</span><span class="p">)</span>
+                        
+                        <span class="c1"># Then we have to take care of the run_selection</span>
+                        <span class="n">selected_run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
+                            <span class="c1"># If run_selection is active and we don&#39;t have an id, then</span>
+                            <span class="c1"># the passed inputs have no use.</span>
+                            <span class="k">try</span><span class="p">:</span>
+                                <span class="n">run_id</span> <span class="o">=</span> <span class="n">passed_inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No run id found.&quot;</span><span class="p">)</span>
+                            <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+                            
+                            <span class="c1"># Update run_selection</span>
+                            <span class="n">new_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load_run_inputs</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">grouped_runs</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">check_run_compatibility</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            
+                            <span class="c1"># Overwrite `run_id` and update the whole dict.</span>
+                            <span class="n">new_inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_id</span>
+                            <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
+
+                        <span class="c1"># And lastly update with the dependencies here</span>
+                        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">()</span>
 
                         <span class="c1"># Also update the run selection</span>
@@ -513,6 +558,12 @@ style="width: 100%;">
 
                             <span class="k">if</span> <span class="n">attribute</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]:</span>
                                 <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+                    <span class="c1"># Overwrite from query</span>
+                    <span class="c1"># if (passed_inputs := parse_url(pathname)) is not None:</span>
+                    <span class="c1">#    update_dict(inputs, passed_inputs)</span>
+
+                    <span class="c1">#    # We have to call dependency inputs here because</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Map the list `inputs` to a dict.</span>
                     <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">)</span>

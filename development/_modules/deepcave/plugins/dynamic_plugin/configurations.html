@@ -280,10 +280,12 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span><span class="p">,</span> <span class="n">dcc</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_tick_data</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">create_url</span>
 
 
 <div class="viewcode-block" id="Configurations"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations">[docs]</a><span class="k">class</span> <span class="nc">Configurations</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
@@ -293,6 +295,33 @@ style="width: 100%;">
 
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Configurations.get_link"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.get_link">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a link to a specific configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run : AbstractRun</span>
+<span class="sd">            Selected run.</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            Configuration, which should be visited.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Link to the configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create &quot;fake&quot; inputs to overwrite the selection.</span>
+        <span class="c1"># Everything else will be taken from `load_inputs` and `load_dependency_inputs`.</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;run&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+            <span class="s2">&quot;config_id&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">config_id</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">Configurations</span><span class="o">.</span><span class="n">get_base_url</span><span class="p">(</span><span class="n">Configurations</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">create_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Configurations.get_input_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -327,6 +356,7 @@ style="width: 100%;">
         <span class="p">}</span>
 
         <span class="c1"># We merge the new inputs with the previous inputs</span>
+        <span class="c1"># It&#39;s important because `inputs` keeps the selected run</span>
         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">inputs</span></div>
@@ -397,11 +427,6 @@ style="width: 100%;">
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_table&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">),</span>
                 <span class="p">]</span>
             <span class="p">),</span>
-            <span class="c1"># html.Div(id=register(&quot;configspace&quot;, &quot;children&quot;)),</span>
-            <span class="c1"># html.Hr(),</span>
-            <span class="c1"># html.H3(&quot;Best Configuration&quot;),</span>
-            <span class="c1"># html.Div(id=register(&quot;best_config&quot;, &quot;children&quot;)),</span>
-            <span class="c1"># html.Div(id=register(&quot;costs&quot;, &quot;children&quot;)),</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Configurations.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.configurations.html#deepcave.plugins.dynamic_plugin.configurations.Configurations.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
@@ -484,10 +509,6 @@ style="width: 100%;">
 
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>
-
-            <span class="c1"># print(&quot;----&quot;)</span>
-            <span class="c1"># print(values[idx], tickvals)</span>
-            <span class="c1"># print(labels[idx], ticktext)</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Parcoords</span><span class="p">(</span>
