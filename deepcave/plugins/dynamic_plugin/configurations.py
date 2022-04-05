@@ -5,10 +5,12 @@ import pandas as pd
 from dash import html, dcc
 import plotly.graph_objs as go
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import create_table, get_slider_marks
 from deepcave.utils.styled_plotty import get_color, get_tick_data
+from deepcave.utils.url import create_url
 
 
 class Configurations(DynamicPlugin):
@@ -18,6 +20,33 @@ class Configurations(DynamicPlugin):
 
     activate_run_selection = True
     use_cache = False
+
+    @staticmethod
+    def get_link(run: AbstractRun, config_id: int) -> str:
+        """
+        Creates a link to a specific configuration.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            Selected run.
+        config_id : int
+            Configuration, which should be visited.
+
+        Returns
+        -------
+        str
+            Link to the configuration.
+        """
+        # Create "fake" inputs to overwrite the selection.
+        # Everything else will be taken from `load_inputs` and `load_dependency_inputs`.
+        inputs = {
+            "run": dict(value=run.id),
+            "config_id": dict(value=config_id),
+        }
+        url = Configurations.get_base_url(Configurations.id)
+
+        return create_url(url, inputs)
 
     @staticmethod
     def get_input_layout(register):
@@ -52,6 +81,7 @@ class Configurations(DynamicPlugin):
         }
 
         # We merge the new inputs with the previous inputs
+        # It's important because `inputs` keeps the selected run
         update_dict(inputs, new_inputs)
 
         return inputs
@@ -122,11 +152,6 @@ class Configurations(DynamicPlugin):
                     dbc.Tab(html.Div(id=register("configspace_table", "children")), label="Table"),
                 ]
             ),
-            # html.Div(id=register("configspace", "children")),
-            # html.Hr(),
-            # html.H3("Best Configuration"),
-            # html.Div(id=register("best_config", "children")),
-            # html.Div(id=register("costs", "children")),
         ]
 
     def load_outputs(self, inputs, outputs, run):
@@ -209,10 +234,6 @@ class Configurations(DynamicPlugin):
 
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext
-
-            # print("----")
-            # print(values[idx], tickvals)
-            # print(labels[idx], ticktext)
 
         fig = go.Figure(
             data=go.Parcoords(
