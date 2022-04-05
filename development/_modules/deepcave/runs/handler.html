@@ -273,7 +273,8 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.runs.handler</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -544,6 +545,7 @@ style="width: 100%;">
 
         <span class="c1"># Go through all converter classes found in the order of</span>
         <span class="c1"># how many runs have already been converted.</span>
+        <span class="n">exceptions</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">run_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_run_classes</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
@@ -555,12 +557,16 @@ style="width: 100%;">
             <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
                 <span class="c1"># Pass KeyboardInterrupt through try-except, so it can actually interrupt.</span>
                 <span class="k">raise</span>
-            <span class="k">except</span><span class="p">:</span>
-                <span class="k">pass</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">exceptions</span><span class="p">[</span><span class="n">run_class</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span>
 
         <span class="c1"># Run could not be loaded</span>
         <span class="k">if</span> <span class="n">run</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> could not be loaded.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Run </span><span class="si">{</span><span class="n">run_path</span><span class="si">}</span><span class="s2"> could not be loaded. Please check the logs.&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Print all exceptions</span>
+            <span class="k">for</span> <span class="n">run_class</span><span class="p">,</span> <span class="n">exception</span> <span class="ow">in</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_class</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exception</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Add to run cache</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span>
