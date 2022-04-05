@@ -431,6 +431,7 @@ style="width: 100%;">
 
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">())</span>
 
+        <span class="n">updated_objectives</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">costs</span><span class="p">)):</span>
             <span class="n">cost</span> <span class="o">=</span> <span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">objective</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
@@ -447,11 +448,15 @@ style="width: 100%;">
             <span class="c1"># Update bounds here</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+                    <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()[</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+                    <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+
+            <span class="n">updated_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_objectives</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
