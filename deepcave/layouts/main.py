@@ -1,4 +1,5 @@
 from typing import Dict, List
+from urllib.parse import urlparse
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
@@ -33,6 +34,7 @@ class MainLayout(Layout):
 
         @app.callback(output, input)
         def display_page(pathname: str):
+            pathname = urlparse(pathname).path
             paths = pathname.split("/")[1:]
 
             if paths[0] == "":

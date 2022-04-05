@@ -10,7 +10,7 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, run_handler, notification
+from deepcave import app, c, run_handler, notification, config
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
@@ -18,6 +18,7 @@ from deepcave.utils.data_structures import update_dict
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
+from deepcave.utils.url import parse_url
 
 logger = get_logger(__name__)
 
@@ -56,6 +57,18 @@ class Plugin(Layout, ABC):
         self.outputs = []
 
         super().__init__()
+
+    @staticmethod
+    def get_base_url(plugin_id) -> str:
+        """
+        Generates the url for the plugin.
+
+        Returns
+        -------
+        str
+            Url for the plugin as string.
+        """
+        return f"{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{plugin_id}"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
@@ -198,8 +211,7 @@ class Plugin(Layout, ABC):
 
         # Handles the initial and the cashed input values
         outputs = []
-        # [Input(self.get_internal_id("update-button"), 'n_clicks')]
-        inputs = []
+        inputs = [Input("on-page-load", "href")]
 
         # Define also inputs if they are declared as interactive
         for id, attribute, _ in self.inputs:
@@ -211,15 +223,48 @@ class Plugin(Layout, ABC):
         if len(outputs) > 0:
 
             @app.callback(outputs, inputs)
-            def plugin_input_update(*inputs_list):
+            def plugin_input_update(pathname, *inputs_list):
                 # Simple check if page was loaded for the first time
                 init = all(input is None for input in inputs_list)
 
                 # Reload our inputs
                 if init:
                     inputs = c.get("last_inputs", self.id)
+                    passed_inputs = parse_url(pathname)
 
-                    if inputs is None:
+                    if passed_inputs is not None:
+                        # First get normal inputs
+                        inputs = self.load_inputs()
+                        
+                        # Overwrite/set the passed inputs
+                        update_dict(inputs, passed_inputs)
+                        
+                        # Then we have to take care of the run_selection
+                        selected_run: Optional[AbstractRun] = None
+                        if self.activate_run_selection:
+                            # If run_selection is active and we don't have an id, then
+                            # the passed inputs have no use.
+                            try:
+                                run_id = passed_inputs["run"]["value"]
+                            except Exception:
+                                raise RuntimeError("No run id found.")
+                            selected_run = run_handler.get_run(run_id)
+                            
+                            # Update run_selection
+                            new_inputs = self.__class__.load_run_inputs(
+                                self.runs,
+                                self.grouped_runs,
+                                self.__class__.check_run_compatibility,
+                            )
+                            
+                            # Overwrite `run_id` and update the whole dict.
+                            new_inputs["run"]["value"] = run_id
+                            update_dict(inputs, new_inputs)
+
+                        # And lastly update with the dependencies here
+                        inputs = self.load_dependency_inputs(inputs, inputs, selected_run)
+
+                    elif inputs is None:
                         inputs = self.load_inputs()
 
                         # Also update the run selection
@@ -238,6 +283,12 @@ class Plugin(Layout, ABC):
 
                             if attribute not in inputs[id]:
                                 inputs[id][attribute] = None
+
+                    # Overwrite from query
+                    # if (passed_inputs := parse_url(pathname)) is not None:
+                    #    update_dict(inputs, passed_inputs)
+
+                    #    # We have to call dependency inputs here because
                 else:
                     # Map the list `inputs` to a dict.
                     inputs = self._list_to_dict(inputs_list)

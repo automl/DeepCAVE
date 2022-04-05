@@ -47,7 +47,7 @@ class SidebarLayout(Layout):
                             children=[
                                 html.A(
                                     [html.I(className=icon), name],
-                                    className=f"nav-link {'active' if href == pathname else ''}",
+                                    className=f"nav-link {'active' if href in pathname else ''}",
                                     href=href,
                                 )
                             ],
