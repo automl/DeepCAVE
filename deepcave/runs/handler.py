@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List, Optional, Type, Union
 
 import time
@@ -269,6 +270,7 @@ class RunHandler:
 
         # Go through all converter classes found in the order of
         # how many runs have already been converted.
+        exceptions = {}
         for run_class in self.available_run_classes:
             try:
                 t1 = time.perf_counter()
@@ -280,12 +282,16 @@ class RunHandler:
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt.
                 raise
-            except:
-                pass
+            except Exception as e:
+                exceptions[run_class] = e
 
         # Run could not be loaded
         if run is None:
-            self.logger.warning(f"Run {run_path} could not be loaded.")
+            self.logger.warning(f"Run {run_path} could not be loaded. Please check the logs.")
+
+            # Print all exceptions
+            for run_class, exception in exceptions.items():
+                self.logger.warning(f"{run_class.prefix}: {exception}.")
         else:
             # Add to run cache
             self.rc[run]

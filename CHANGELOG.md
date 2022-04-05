@@ -19,6 +19,7 @@
         distinguish between run and grouped run anymore.
         - `hash`: Changes based on content.
 - If DeepCAVE was not started before, the path of execution is used as working directory.
+- Shows the errors now if a run could not be converted.
 
 ## Plugins
 - Overview: Redesigned with barplot and heatmap for statuses. Also includes configspace now.
