@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
+from deepcave.constants import VALUE_RANGE
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.utils.compression import deserialize, serialize
@@ -140,7 +141,7 @@ class ParallelCoordinates(DynamicPlugin):
         for hp_name in hp_names:
             data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
-            data[hp_name]["range"] = [-0.2, 1]
+            data[hp_name]["range"] = VALUE_RANGE
 
             hp = run.configspace.get_hyperparameter(hp_name)
             tickvals, ticktext = get_tick_data(hp, ticks=4, include_nan=True)

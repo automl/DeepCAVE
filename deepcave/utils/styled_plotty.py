@@ -1,4 +1,5 @@
 from typing import List, Optional, Tuple, Any, Union
+from deepcave.constants import NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
 import numpy as np
 import plotly.express as px
 import itertools
@@ -176,7 +177,7 @@ def get_tick_data(
         tickvals = [hp._inverse_transform(choice) / (len(hp.choices) - 1) for choice in hp.choices]
         ticktext = hp.choices
     elif isinstance(hp, Constant):
-        tickvals = [1.0]
+        tickvals = [CONSTANT_VALUE]
         ticktext = [hp.value]
     else:
         min_v = 0
@@ -212,7 +213,7 @@ def get_tick_data(
             if additional_values is not None:
                 # Now we add additional values
                 for value in additional_values:
-                    if not (value is None or np.isnan(value) or value == -0.2):
+                    if not (value is None or np.isnan(value) or value == NAN_VALUE):
                         label = hp._transform_scalar(value)
                         value = hp._inverse_transform(label)
 
@@ -228,7 +229,7 @@ def get_tick_data(
                 # Now we add additional values
                 for value in additional_values:
                     if (
-                        not (value is None or np.isnan(value) or value == -0.2)
+                        not (value is None or np.isnan(value) or value == NAN_VALUE)
                         and value not in tickvals
                     ):
                         tickvals += [value]
@@ -237,8 +238,8 @@ def get_tick_data(
     ticktext = [prettify_label(label) for label in ticktext]
 
     if include_nan:
-        tickvals += [-0.2]
-        ticktext += ["NaN"]
+        tickvals += [NAN_VALUE]
+        ticktext += [NAN_LABEL]
 
     return tickvals, ticktext
 

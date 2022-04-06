@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from dash import html, dcc
 import plotly.graph_objs as go
+from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
@@ -219,7 +220,7 @@ class Configurations(DynamicPlugin):
         for hp_name in hp_names:
             data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
-            data[hp_name]["range"] = [-0.2, 1]
+            data[hp_name]["range"] = VALUE_RANGE
 
             hp = run.configspace.get_hyperparameter(hp_name)
             tickvals, ticktext = get_tick_data(

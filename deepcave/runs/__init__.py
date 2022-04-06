@@ -15,6 +15,7 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
 
 from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
@@ -468,13 +469,13 @@ class AbstractRun(ABC):
         for value, hp in zip(values, hps):
             # NaNs should be encoded as -0.5
             if np.isnan(value):
-                value = -0.2
+                value = NAN_VALUE
             # Categorical values should be between 0..1
             elif isinstance(hp, CategoricalHyperparameter):
                 value = value / (len(hp.choices) - 1)
             # Constants should be encoded as 1.0 (from 0)
             elif isinstance(hp, Constant):
-                value = 1.0
+                value = CONSTANT_VALUE
 
             x += [value]
 
@@ -513,7 +514,7 @@ class AbstractRun(ABC):
             for hp_name in self.configspace.get_hyperparameter_names():
                 # `hp_name` might not be in config (e.g. if hp is inactive)
                 if hp_name not in config:
-                    label = "NaN"
+                    label = NAN_LABEL
                 else:
                     label = prettify_label(config[hp_name])
 
