@@ -290,6 +290,7 @@ style="width: 100%;">
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">CONSTANT_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">NAN_VALUE</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
@@ -743,13 +744,13 @@ style="width: 100%;">
         <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">hps</span><span class="p">):</span>
             <span class="c1"># NaNs should be encoded as -0.5</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.2</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">NAN_VALUE</span>
             <span class="c1"># Categorical values should be between 0..1</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
             <span class="c1"># Constants should be encoded as 1.0 (from 0)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">CONSTANT_VALUE</span>
 
             <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
 
@@ -788,7 +789,7 @@ style="width: 100%;">
             <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">():</span>
                 <span class="c1"># `hp_name` might not be in config (e.g. if hp is inactive)</span>
                 <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;NaN&quot;</span>
+                    <span class="n">label</span> <span class="o">=</span> <span class="n">NAN_LABEL</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">label</span> <span class="o">=</span> <span class="n">prettify_label</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
 
