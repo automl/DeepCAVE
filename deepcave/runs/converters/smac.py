@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Union
 
 import numpy as np
 
@@ -20,19 +21,25 @@ class SMACRun(Run):
         The id from the files in the current working_dir/run_name/*. For example, history.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached trials.
         """
+        if self.path is None:
+            return ""
 
         # Use hash of history.json as id
         return file_to_hash(self.path / "runhistory.json")
-    
+
     @property
-    def latest_change(self) -> int:
+    def latest_change(self) -> float:
+        if self.path is None:
+            return 0
+
         return Path(self.path / "runhistory.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path: Path) -> "SMACRun":
+    def from_path(cls, path: Union[str, Path]) -> "SMACRun":
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
+        path = Path(path)
 
         # For SMAC, we create a new run object
 

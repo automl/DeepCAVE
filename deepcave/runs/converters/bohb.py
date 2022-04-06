@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Union
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -13,6 +14,9 @@ class BOHBRun(Run):
 
     @property
     def hash(self) -> str:
+        if self.path is None:
+            return ""
+
         """
         The id from the files in the current working_dir/run_name/*. For example, results.json could be read and hashed.
         Idea behind: If id changed, then we have to update cached run.
@@ -21,14 +25,18 @@ class BOHBRun(Run):
         return file_to_hash(self.path / "results.json")
 
     @property
-    def latest_change(self) -> int:
+    def latest_change(self) -> float:
+        if self.path is None:
+            return 0
+
         return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path: Path) -> "BOHBRun":
+    def from_path(cls, path: Union[str, Path]) -> "BOHBRun":
         """
         Based on path, return a new run object.
         """
+        path = Path(path)
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
