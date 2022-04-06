@@ -84,7 +84,7 @@ class fANOVA(StaticPlugin):
         # Collect data
         data = {}
         for budget in budgets:
-            X, Y = run.get_encoded_configs(budget=budget, for_tree=True)
+            X, Y = run.get_encoded_configs(budget=budget, specific=True)
 
             evaluator = _fANOVA(
                 X,
