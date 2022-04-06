@@ -359,7 +359,7 @@ style="width: 100%;">
         <span class="c1"># Collect data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">for_tree</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">evaluator</span> <span class="o">=</span> <span class="n">_fANOVA</span><span class="p">(</span>
                 <span class="n">X</span><span class="p">,</span>
