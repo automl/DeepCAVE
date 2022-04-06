@@ -48,7 +48,7 @@ class Status(IntEnum):
 @dataclass
 class Trial:
     config_id: int
-    budget: int
+    budget: Union[int, float]
     costs: List[float]
     start_time: float
     end_time: float
@@ -126,7 +126,7 @@ class AbstractRun(ABC):
         pass
 
     @staticmethod
-    def get_trial_key(config_id, budget):
+    def get_trial_key(config_id: int, budget: Union[int, float]):
         return (config_id, budget)
 
     def get_trial(self, trial_key) -> Optional[Trial]:
@@ -218,7 +218,7 @@ class AbstractRun(ABC):
     def get_objective_names(self) -> List:
         return [obj["name"] for obj in self.get_objectives()]
 
-    def get_configs(self, budget=None) -> Dict[int, Dict]:
+    def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Dict]:
         configs = {}
         for trial in self.history:
             if budget is not None:
@@ -232,10 +232,10 @@ class AbstractRun(ABC):
 
         return configs
 
-    def get_config(self, id):
+    def get_config(self, id: int):
         return self.configs[id]
 
-    def get_config_id(self, config: dict):
+    def get_config_id(self, config: Dict):
         # Find out config id
         for id, c in self.configs.items():
             if c == config:
@@ -243,13 +243,13 @@ class AbstractRun(ABC):
 
         return None
 
-    def get_num_configs(self, budget=None) -> int:
+    def get_num_configs(self, budget: Union[int, float] = None) -> int:
         return len(self.get_configs(budget=budget))
 
     def get_budget(self, id: int) -> float:
         return self.meta["budgets"][id]
 
-    def get_budgets(self, human=False) -> List[str]:
+    def get_budgets(self, human: bool = False) -> List[str]:
         budgets = self.meta["budgets"]
         assert len(budgets) > 0
 
@@ -263,7 +263,7 @@ class AbstractRun(ABC):
 
         return budgets
 
-    def get_highest_budget(self):
+    def get_highest_budget(self) -> Union[int, float]:
         budgets = self.meta["budgets"]
         if len(budgets) == 0:
             return None
@@ -288,7 +288,7 @@ class AbstractRun(ABC):
 
         return new_costs
 
-    def get_cost(self, config_id: int, budget=None) -> Optional[List[float]]:
+    def get_cost(self, config_id: int, budget: Union[int, float] = None) -> Optional[List[float]]:
         """
         If no budget is given, the highest budget is chosen.
         """
@@ -300,7 +300,9 @@ class AbstractRun(ABC):
 
         return costs[config_id]
 
-    def get_costs(self, budget=None, statuses=None):
+    def get_costs(
+        self, budget: Optional[Union[int, float]] = None, statuses: Optional[List[Status]] = None
+    ):
         """
         If no budget is given, the highest budget is chosen.
         """
@@ -322,7 +324,12 @@ class AbstractRun(ABC):
 
         return results
 
-    def get_min_cost(self, objectives=None, budget=None, statuses=None):
+    def get_min_cost(
+        self,
+        objectives: Optional[List[Objective]] = None,
+        budget: Optional[Union[int, float]] = None,
+        statuses: Optional[List[Status]] = None,
+    ):
         min_cost = np.inf
         best_config_id = None
 
@@ -337,7 +344,7 @@ class AbstractRun(ABC):
         return min_cost, best_config_id
 
     def calculate_cost(
-        self, costs, objectives: Optional[List[Objective]] = None, normalize=False
+        self, costs, objectives: Optional[List[Objective]] = None, normalize: bool = False
     ) -> float:
         """
         Calculates cost from multiple costs.
@@ -382,7 +389,7 @@ class AbstractRun(ABC):
 
         return cost
 
-    def get_model(self, config_id) -> Optional["torch.nn.Module"]:
+    def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:
         import torch
 
         filename = self.models_dir / f"{str(config_id)}.pth"
@@ -391,7 +398,7 @@ class AbstractRun(ABC):
 
         return torch.load(filename)
 
-    def get_trajectory(self, objective: Objective, budget=None):
+    def get_trajectory(self, objective: Objective, budget: Optional[Union[int, float]] = None):
         if budget is None:
             budget = self.get_highest_budget()
 
