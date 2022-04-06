@@ -320,11 +320,14 @@ style="width: 100%;">
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.converters.bohb.BOHBRun.hash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.bohb.BOHBRun.hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>The id from the files in the current working_dir/run_name/<a href="#id1"><span class="problematic" id="id2">*</span></a>. For example, results.json could be read and hashed.
-Idea behind: If id changed, then we have to update cached run.</p>
+<dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
+the cache always holds the latest results of the run.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Hash of the run.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
