@@ -380,10 +380,9 @@ style="width: 100%;">
 
         <span class="c1"># Let&#39;s start with the configspace</span>
         <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">Labels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">cs_table_data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
             <span class="n">highlight</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">if</span> <span class="n">config_id</span> <span class="o">==</span> <span class="n">selected_config_id</span><span class="p">:</span>
@@ -396,22 +395,18 @@ style="width: 100%;">
 
             <span class="c1"># We simply add highlight as a new column</span>
             <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">highlight</span><span class="p">]</span>
-            <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
 
             <span class="c1"># And add it to the lists</span>
             <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">Labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 
         <span class="n">columns</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
         <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;highlighted&quot;</span><span class="p">]</span>
 
         <span class="n">cs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
-        <span class="n">cs_df_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">Labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;performances&quot;</span><span class="p">:</span> <span class="n">performances</span><span class="p">,</span>
             <span class="s2">&quot;cs_df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cs_df</span><span class="p">),</span>
-            <span class="s2">&quot;cs_df_labels&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">cs_df_labels</span><span class="p">),</span>
             <span class="s2">&quot;cs_table_data&quot;</span><span class="p">:</span> <span class="n">cs_table_data</span><span class="p">,</span>
         <span class="p">}</span></div>
 
@@ -488,24 +483,23 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">_get_configspace_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cs_df&quot;</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cs_df_labels&quot;</span><span class="p">]</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
 
         <span class="n">highlighted</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;highlighted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
 
-        <span class="c1"># We have to make sure that we print the label of the selected hyperparameter</span>
-        <span class="n">forced</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">highlight</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">highlight</span> <span class="ow">in</span> <span class="n">highlighted</span><span class="p">]</span>
+        <span class="c1"># Get highlighted column</span>
+        <span class="n">highlighted_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;highlighted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">df_labels</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hp_name</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">forced</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span>
+                <span class="n">hp</span><span class="p">,</span> <span class="n">additional_values</span><span class="o">=</span><span class="n">highlighted_df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>

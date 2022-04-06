@@ -393,11 +393,10 @@ style="width: 100%;">
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">))</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
 
-        <span class="n">df</span><span class="p">,</span> <span class="n">df_labels</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
-            <span class="s2">&quot;df_labels&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">),</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -411,30 +410,15 @@ style="width: 100%;">
 
         <span class="n">df</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df_labels&quot;</span><span class="p">]</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
-
-        <span class="c1"># Dummy data to understand the structure</span>
-        <span class="c1"># data = {</span>
-        <span class="c1">#     &quot;hp1&quot;: {</span>
-        <span class="c1">#         &quot;values&quot;: [0, 1, 2],</span>
-        <span class="c1">#         &quot;label&quot;: &quot;HP1&quot;,</span>
-        <span class="c1">#     },</span>
-        <span class="c1">#     &quot;hp2&quot;: {</span>
-        <span class="c1">#         &quot;values&quot;: [0, 4, 2],</span>
-        <span class="c1">#         &quot;label&quot;: &quot;HP2&quot;,</span>
-        <span class="c1">#     },</span>
-        <span class="c1"># }</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-            <span class="n">labels</span> <span class="o">=</span> <span class="n">df_labels</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hp_name</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
-            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+            <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>

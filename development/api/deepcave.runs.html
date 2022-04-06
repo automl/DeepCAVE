@@ -352,6 +352,27 @@ Normalizes the cost first and weight every cost the same.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.encode_config">
+<span class="sig-name descname"><span class="pre">encode_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.encode_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.encode_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes a given config (id) to a normalized list.
+If a config is passed, no look-up has to be done.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>Dict</em><em>[</em><em>Any</em><em>, </em><em>Any</em><em>]</em><em>]</em>) – Either the config id or the config in dict form itself.</p></li>
+<li><p><strong>specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use specific encoding for fanova tree, by default False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The encoded config as list.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_cost">
 <span class="sig-name descname"><span class="pre">get_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>If no budget is given, the highest budget is chosen.</p>
@@ -369,30 +390,12 @@ Normalizes the cost first and weight every cost the same.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_encoded_config">
-<span class="sig-name descname"><span class="pre">get_encoded_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encodes a given config (id) to a normalized list with the corresponding labels.
-If a config is passed, no look-up has to be done.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>config</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>Dict</em><em>[</em><em>Any</em><em>]</em><em>]</em>) – Either the config id or the config in dict form itself.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The encoded config and its labels.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Tuple[List, List]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_encoded_configs">
-<span class="sig-name descname"><span class="pre">get_encoded_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">for_tree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_configs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_encoded_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_configs" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>for_tree</strong> (<em>bool</em>) – Inactives are treated differently. If false, all inactives are set to</p></li>
+<li><p><strong>specific</strong> (<em>bool</em>) – Inactives are treated differently. If false, all inactives are set to</p></li>
 <li><p><strong>-1.</strong> – </p></li>
 <li><p><strong>normalize</strong> (<em>bool</em>) – Normalize the configuration between 0 and 1.</p></li>
 <li><p><strong>pandas</strong> (<em>bool</em>) – Return pandas DataFrame instead of X and Y.</p></li>
@@ -400,7 +403,7 @@ If a config is passed, no look-up has to be done.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Encoded configurations OR
-df, df_labels (pd.DataFrame): Encoded dataframes if pandas equals True.</p>
+df (pd.DataFrame): Encoded dataframes if pandas equals True.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>X, Y (np.array)</p>
