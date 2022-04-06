@@ -105,10 +105,9 @@ class Configurations(DynamicPlugin):
 
         # Let's start with the configspace
         X = []
-        Labels = []
         cs_table_data = {"Hyperparameter": [], "Value": []}
         for config_id, config in run.get_configs().items():
-            x, labels = run.get_encoded_config(config)
+            x = run.encode_config(config)
 
             highlight = 0
             if config_id == selected_config_id:
@@ -121,22 +120,18 @@ class Configurations(DynamicPlugin):
 
             # We simply add highlight as a new column
             x += [highlight]
-            labels += [""]
 
             # And add it to the lists
             X.append(x)
-            Labels.append(labels)
 
         columns = run.configspace.get_hyperparameter_names()
         columns += ["highlighted"]
 
         cs_df = pd.DataFrame(data=X, columns=columns)
-        cs_df_labels = pd.DataFrame(data=Labels, columns=columns)
 
         return {
             "performances": performances,
             "cs_df": serialize(cs_df),
-            "cs_df_labels": serialize(cs_df_labels),
             "cs_table_data": cs_table_data,
         }
 
@@ -213,24 +208,23 @@ class Configurations(DynamicPlugin):
     def _get_configspace_figure(self, inputs, outputs, run):
         df = outputs["cs_df"]
         df = deserialize(df, dtype=pd.DataFrame)
-        df_labels = outputs["cs_df_labels"]
-        df_labels = deserialize(df_labels, dtype=pd.DataFrame)
 
         highlighted = df["highlighted"].values
         hp_names = run.configspace.get_hyperparameter_names()
 
-        # We have to make sure that we print the label of the selected hyperparameter
-        forced = [True if highlight else False for highlight in highlighted]
+        # Get highlighted column
+        highlighted_df = df[df["highlighted"] == 1]
 
         data = defaultdict(dict)
         for hp_name in hp_names:
-            values = df[hp_name].values
-            labels = df_labels[hp_name].values
-
-            data[hp_name]["values"] = values
+            data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
+            data[hp_name]["range"] = [-0.2, 1]
 
-            tickvals, ticktext = get_tick_data(values, labels, forced, ticks=2)
+            hp = run.configspace.get_hyperparameter(hp_name)
+            tickvals, ticktext = get_tick_data(
+                hp, additional_values=highlighted_df[hp_name].values, ticks=4, include_nan=True
+            )
 
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext

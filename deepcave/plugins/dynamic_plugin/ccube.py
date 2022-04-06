@@ -14,6 +14,7 @@ from deepcave.utils.layout import (
     get_slider_marks,
 )
 from deepcave.utils.logs import get_logger
+from deepcave.utils.styled_plotty import get_tick_data
 
 logger = get_logger(__name__)
 
@@ -146,20 +147,12 @@ class CCube(DynamicPlugin):
         budget = run.get_budget(int(budget_id))
         objective = run.get_objective(inputs["objective"]["value"])
 
-        df, df_labels = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
-
-        # Now we also need to know when to use the labels and when to use the encoded data
-        show_all_labels = []
-        for hp in run.configspace.get_hyperparameters():
-            if isinstance(hp, CategoricalHyperparameter) or isinstance(hp, Constant):
-                show_all_labels.append(True)
-            else:
-                show_all_labels.append(False)
-
+        df_data, df_labels = run.get_encoded_configs(
+            objectives=[objective], budget=budget, specific=False, pandas=True
+        )
         return {
-            "df": serialize(df),
+            "df_data": serialize(df_data),
             "df_labels": serialize(df_labels),
-            "show_all_labels": show_all_labels,
         }
 
     @staticmethod
@@ -169,6 +162,8 @@ class CCube(DynamicPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, run):
+        df_data = deserialize(outputs["df_data"], dtype=pd.DataFrame)
+        df_labels = deserialize(outputs["df_labels"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
 
@@ -184,97 +179,74 @@ class CCube(DynamicPlugin):
             if i == 2:
                 z = hp_name
 
-        df = deserialize(outputs["df"], dtype=pd.DataFrame)
-        df_labels = deserialize(outputs["df_labels"], dtype=pd.DataFrame)
-
         # Limit to n_configs
-        idx = [str(i) for i in range(n_configs + 1, len(df))]
-        df = df.drop(idx)
+        idx = [str(i) for i in range(n_configs, len(df_data))]
+        df_data = df_data.drop(idx)
         df_labels = df_labels.drop(idx)
 
-        column_names = df.columns.tolist()
+        column_names = df_data.columns.tolist()
         cost_name = column_names[-1]
 
         if x is None:
             return [px.scatter()]
-
-        # hovertemplate = ""
-        # for name in column_names:
-        #    hovertemplate += name + ": %{df_labels[name]}<br>"
 
         if z is None:
             # Add another column with zeros
             if y is None:
                 y = ""
 
-                # Do it for both dataframes
-                for frame in [df, df_labels]:
-                    frame[y] = frame[cost_name]
-                    for k in frame[y].keys():
-                        frame[y][k] = 0
+                for df in [df_data, df_labels]:
+                    df[y] = df[cost_name]
+                    for k in df[y].keys():
+                        df[y][k] = 0
 
-            fig = px.scatter(df, x=x, y=y, color=cost_name, hover_data=df_labels)
+            fig = px.scatter(
+                df_data,
+                x=x,
+                y=y,
+                color=cost_name,
+            )
         else:
-            fig = px.scatter_3d(df, x=x, y=y, z=z, color=cost_name, hover_data=df_labels)
+
+            fig = px.scatter_3d(
+                df_data,
+                x=x,
+                y=y,
+                z=z,
+                color=cost_name,
+            )
 
         scene = {}
         for axis, name in zip([x, y, z], ["xaxis", "yaxis", "zaxis"]):
-            if axis is None:
+            if axis is None or axis == "":
                 continue
 
-            values = df[axis].values
-            labels = df_labels[axis].values
+            # Get hyperparameter
+            hp = run.configspace.get_hyperparameter(axis)
+            tickvals, ticktext = get_tick_data(hp, ticks=4, include_nan=True)
 
-            unique_values = []  # df[hp_name].unique()
-            unique_labels = []  # df_labels[hp_name].unique()
-            for value, label in zip(values, labels):
-                if value not in unique_values and label not in unique_labels:
-                    unique_values.append(value)
-                    unique_labels.append(label)
-
-            selected_values = []
-            selected_labels = []
-
-            # If we have less than 10 values, we also show them
-            # if show_all_labels[axis] or len(unique_values) < 10:
-            if len(unique_values) < 10:
-                # Make sure we don't have multiple (same) labels for the same value
-                for value, label in zip(unique_values, unique_labels):
-                    selected_values.append(value)
-                    selected_labels.append(label)
-
-            else:
-                # Add min+max values
-                for idx in [np.argmin(values), np.argmax(values)]:
-                    selected_values.append(values[idx])
-                    selected_labels.append(labels[idx])
-
-                # After we added min and max values, we want to add
-                # intermediate values too
-                min_v = np.min(values)
-                max_v = np.max(values)
-                for factor in [0.2, 0.4, 0.6, 0.8]:
-                    new_v = (factor * (max_v - min_v)) + min_v
-                    idx = np.abs(unique_values - new_v).argmin(axis=-1)
-
-                    selected_values.append(unique_values[idx])
-                    selected_labels.append(unique_labels[idx])
-
-            kwargs = {
+            scene_kwargs = {
                 name: {
-                    "tickvals": selected_values,
-                    "ticktext": selected_labels,
+                    "tickvals": tickvals,
+                    "ticktext": ticktext,
                 }
             }
-            fig.update_scenes(**kwargs)
+            fig.update_scenes(**scene_kwargs)
 
             if axis is None:
                 continue
 
             # scatter and scatter3d handle the zaxis differently
-            scene[name] = kwargs[name]
+            scene[name] = scene_kwargs[name]
 
         if z is None:
             fig.update_layout(**scene)
+
+        fig.update_traces(
+            {
+                "hovertemplate": None,
+                "hoverinfo": "skip",
+            }
+        )
 
         return [fig]

@@ -19,6 +19,7 @@ from ConfigSpace import (
 from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
+from deepcave.utils.styled_plotty import prettify_label
 
 
 class NotValidRunError(Exception):
@@ -436,82 +437,92 @@ class AbstractRun(ABC):
 
         return times, costs_mean, costs_std, ids
 
-    def get_encoded_config(self, config: Union[int, Dict[Any, Any]]) -> Tuple[List, List]:
+    def encode_config(self, config: Union[int, Dict[Any, Any]], specific: bool = False) -> List:
         """
-        Encodes a given config (id) to a normalized list with the corresponding labels.
+        Encodes a given config (id) to a normalized list.
         If a config is passed, no look-up has to be done.
 
         Parameters
         ----------
-        config : Union[int, Dict[Any]]
+        config : Union[int, Dict[Any, Any]]
             Either the config id or the config in dict form itself.
+        specific : bool, optional
+            Use specific encoding for fanova tree, by default False.
 
         Returns
         -------
-        Tuple[List, List]
-            The encoded config and its labels.
+        List
+            The encoded config as list.
         """
         if isinstance(config, int):
             config = self.configs[config]
 
-        c = Configuration(self.configspace, config)
-        x = list(c.get_array())
+        hps = self.configspace.get_hyperparameters()
+        config = Configuration(self.configspace, config)
+        values = list(config.get_array())
 
-        labels = []
-        for hp_name in self.configspace.get_hyperparameter_names():
-            # hyperparameter name may not be in config
-            if hp_name in config:
-                label = config[hp_name]
+        if specific:
+            return values
 
-                # Scientific notation
-                if type(label) == float:
-                    if str(label).startswith("0.000") or "e-" in str(label):
-                        label = np.format_float_scientific(label, precision=2)
-                    else:
-                        # Round to 2 decimals
-                        label = np.round(label, 2)
+        x = []
+        for value, hp in zip(values, hps):
+            # NaNs should be encoded as -0.5
+            if np.isnan(value):
+                value = -0.2
+            # Categorical values should be between 0..1
+            elif isinstance(hp, CategoricalHyperparameter):
+                value = value / (len(hp.choices) - 1)
+            # Constants should be encoded as 1.0 (from 0)
+            elif isinstance(hp, Constant):
+                value = 1.0
 
-                labels += [label]
-            else:
-                labels += ["NaN"]
+            x += [value]
 
-        return x, labels
+        # print(x)
+
+        return x
 
     def get_encoded_configs(
         self,
         objectives: Optional[List[Objective]] = None,
         budget=None,
-        statuses=None,
-        for_tree=False,
-        pandas=False,
-    ):
+        statuses: Optional[List[Status]] = None,
+        specific: bool = False,
+        pandas: bool = False,
+    ) -> Union[Tuple[np.ndarray, np.ndarray], Tuple[pd.DataFrame, pd.DataFrame]]:
         """
         Args:
-            for_tree (bool): Inactives are treated differently. If false, all inactives are set to
+            specific (bool): Inactives are treated differently. If false, all inactives are set to
             -1.
             normalize (bool): Normalize the configuration between 0 and 1.
             pandas (bool): Return pandas DataFrame instead of X and Y.
         Returns:
             X, Y (np.array): Encoded configurations OR
-            df, df_labels (pd.DataFrame): Encoded dataframes if pandas equals True.
+            df (pd.DataFrame): Encoded dataframes if pandas equals True.
         """
-
-        hp_names = self.configspace.get_hyperparameter_names()
-
         X, Y = [], []
-        labels = []
+        Labels = []
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
-            x, labels_ = self.get_encoded_config(config_id)
+            config = self.configs[config_id]
+            x = self.encode_config(config, specific=specific)
             y = self.calculate_cost(costs, objectives)
 
-            # y is directly added to the labels to "merge" it
-            labels_ += [y]
+            labels = []
+            for hp_name in self.configspace.get_hyperparameter_names():
+                # `hp_name` might not be in config (e.g. if hp is inactive)
+                if hp_name not in config:
+                    label = "NaN"
+                else:
+                    label = prettify_label(config[hp_name])
+
+                labels += [label]
+            labels += [prettify_label(y)]
 
             X.append(x)
             Y.append(y)
-            labels.append(labels_)
+            Labels.append(labels)
 
         X = np.array(X)
         Y = np.array(Y)
@@ -521,10 +532,7 @@ class AbstractRun(ABC):
         # we also have to use different inactives to be compatible
         # with the random forests.
         # https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45
-
-        if not for_tree:
-            X[np.isnan(X)] = -1
-        else:
+        if specific:
             conditional = {}
             impute_values = {}
 
@@ -558,10 +566,10 @@ class AbstractRun(ABC):
             Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)
 
-            df = pd.DataFrame(data=data, columns=columns)
-            df_labels = pd.DataFrame(data=labels, columns=columns)
+            df_data = pd.DataFrame(data=data, columns=columns)
+            df_labels = pd.DataFrame(data=Labels, columns=columns)
 
-            return df, df_labels
+            return df_data, df_labels
 
         return X, Y
 

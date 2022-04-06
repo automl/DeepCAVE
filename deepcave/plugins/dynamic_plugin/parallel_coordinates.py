@@ -118,11 +118,10 @@ class ParallelCoordinates(DynamicPlugin):
         budget = run.get_budget(int(budget_id))
         objective = run.get_objective(inputs["objective"]["value"])
 
-        df, df_labels = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
+        df, _ = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
 
         return {
             "df": serialize(df),
-            "df_labels": serialize(df_labels),
         }
 
     @staticmethod
@@ -136,30 +135,15 @@ class ParallelCoordinates(DynamicPlugin):
 
         df = outputs["df"]
         df = deserialize(df, dtype=pd.DataFrame)
-        df_labels = outputs["df_labels"]
-        df_labels = deserialize(df_labels, dtype=pd.DataFrame)
-
-        # Dummy data to understand the structure
-        # data = {
-        #     "hp1": {
-        #         "values": [0, 1, 2],
-        #         "label": "HP1",
-        #     },
-        #     "hp2": {
-        #         "values": [0, 4, 2],
-        #         "label": "HP2",
-        #     },
-        # }
 
         data = defaultdict(dict)
         for hp_name in hp_names:
-            values = df[hp_name].values
-            labels = df_labels[hp_name].values
-
-            data[hp_name]["values"] = values
+            data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
+            data[hp_name]["range"] = [-0.2, 1]
 
-            tickvals, ticktext = get_tick_data(values, labels)
+            hp = run.configspace.get_hyperparameter(hp_name)
+            tickvals, ticktext = get_tick_data(hp, ticks=4, include_nan=True)
 
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext

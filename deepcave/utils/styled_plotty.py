@@ -1,8 +1,14 @@
-from typing import List, Optional, Tuple, Any
+from typing import List, Optional, Tuple, Any, Union
 import numpy as np
 import plotly.express as px
 import itertools
 import plotly.graph_objs as go
+from ConfigSpace.hyperparameters import (
+    Hyperparameter,
+    CategoricalHyperparameter,
+    Constant,
+    IntegerHyperparameter,
+)
 
 
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
@@ -104,7 +110,140 @@ def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]])
     )
 
 
+def prettify_label(label: Union[str, float, int]) -> str:
+    """
+    Takes a label and prettifies it. E.g. floats are shortened.
+
+    Parameters
+    ----------
+    label : Union[str, float, int]
+        Label, which should be prettified.
+
+    Returns
+    -------
+    str
+        Prettified label.
+    """
+    if type(label) == float:
+        if str(label).startswith("0.00") or "e-" in str(label):
+            label = np.format_float_scientific(label, precision=2)
+
+            # Replace 1.00e-03 to 1e-03
+            if ".00" in label:
+                label = label.replace(".00", "")
+
+            # Replace 1e-03 to 1e-3
+            if "e-0" in label:
+                label = label.replace("e-0", "e-")
+        else:
+            # Round to 2 decimals
+            label = np.round(label, 2)
+
+    return str(label)
+
+
 def get_tick_data(
+    hp: Hyperparameter,
+    additional_values: Optional[List] = None,
+    ticks: int = 6,
+    include_nan: bool = True,
+) -> Tuple[List, List]:
+    """
+    Generates tick data for both tickvals and ticktext. The background is that
+    you might have encoded data but you don't want to show all of them.
+    With this function, only 6 (default) values are shown. This behaviour is
+    ignored if `hp` is categorical.
+
+    Parameters
+    ----------
+    hp : Hyperparameter
+        Hyperparameter to generate ticks from.
+    additional_values : Optional[List], optional
+        Additional values, which are forced in addition. By default None.
+    ticks : int, optional
+        Number of ticks, by default 6
+    include_nan : bool, optional
+        Whether "nan" as tick should be included. By default True.
+
+    Returns
+    -------
+    Tuple[List, List]
+        tickvals and ticktext.
+    """
+
+    # This is basically the inverse of `encode_config`.
+    if isinstance(hp, CategoricalHyperparameter):
+        tickvals = [hp._inverse_transform(choice) / (len(hp.choices) - 1) for choice in hp.choices]
+        ticktext = hp.choices
+    elif isinstance(hp, Constant):
+        tickvals = [1.0]
+        ticktext = [hp.value]
+    else:
+        min_v = 0
+        max_v = 1
+
+        values = [min_v]
+
+        # Get values for each tick
+        factors = [i / (ticks - 1) for i in range(1, ticks - 1)]
+
+        for factor in factors:
+            new_v = (factor * (max_v - min_v)) + min_v
+            values += [new_v]
+
+        values += [max_v]
+
+        tickvals = []
+        ticktext = []
+
+        inverse_values = []
+        for value in values:
+            inverse_values += [hp._transform_scalar(value)]
+
+        # Integers are rounded, so we map then back
+        if isinstance(hp, IntegerHyperparameter):
+            for label in inverse_values:
+                value = hp._inverse_transform(label)
+
+                if value not in tickvals:
+                    tickvals += [value]
+                    ticktext += [label]
+
+            if additional_values is not None:
+                # Now we add additional values
+                for value in additional_values:
+                    if not (value is None or np.isnan(value) or value == -0.2):
+                        label = hp._transform_scalar(value)
+                        value = hp._inverse_transform(label)
+
+                        if value not in tickvals:
+                            tickvals += [value]
+                            ticktext += [label]
+        else:
+            for value, label in zip(values, inverse_values):
+                tickvals += [value]
+                ticktext += [label]
+
+            if additional_values is not None:
+                # Now we add additional values
+                for value in additional_values:
+                    if (
+                        not (value is None or np.isnan(value) or value == -0.2)
+                        and value not in tickvals
+                    ):
+                        tickvals += [value]
+                        ticktext += [hp._transform_scalar(value)]
+
+    ticktext = [prettify_label(label) for label in ticktext]
+
+    if include_nan:
+        tickvals += [-0.2]
+        ticktext += ["NaN"]
+
+    return tickvals, ticktext
+
+
+def get_tick_data_from_values(
     values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
 ) -> Tuple[List, List]:
     """
