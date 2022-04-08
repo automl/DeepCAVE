@@ -47,6 +47,7 @@ class Config:
         from deepcave.plugins.dynamic_plugin.parallel_coordinates import (
             ParallelCoordinates,
         )
+        from deepcave.plugins.dynamic_plugin.footprint import FootPrint
         from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
         from deepcave.plugins.static_plugin.fanova import fANOVA
         from deepcave.plugins.static_plugin.ice import ICEPlugin
@@ -56,6 +57,7 @@ class Config:
             "Summary": [
                 Overview(),
                 Configurations(),
+                FootPrint(),
             ],
             "Performance Analysis": [
                 CostOverTime(),
@@ -88,10 +90,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
 
-configs: Dict[str, Config] = {
-    "production": Config(),
-    "dev": DevelopmentConfig()
-}
+configs: Dict[str, Config] = {"production": Config(), "dev": DevelopmentConfig()}
 configs["default"] = configs["dev"]
 
 

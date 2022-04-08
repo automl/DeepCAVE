@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.manifold import MDS
 from deepcave.runs import AbstractRun, Status
-from ConfigSpace import Hyperparameter, CategoricalHyperparameter
+from ConfigSpace.hyperparameters import Hyperparameter, CategoricalHyperparameter
 
 from deepcave.runs.objective import Objective
 
@@ -86,7 +86,7 @@ class Footprint:
             for j in range(i + 1, n_configs):
                 d = np.abs(X[i, :] - X[j, :])
                 d[np.isnan(d)] = 1
-                d[np.logical_and(is_categorical, distances != 0)] = 1
+                d[np.logical_and(is_categorical, d != 0)] = 1
                 d = np.sum(d / depth)
                 distances[i, j] = d
                 distances[j, i] = d
@@ -167,15 +167,20 @@ class Footprint:
         """
 
         # Train a random forest
-        model = RandomForestRegressor()
+        model = RandomForestRegressor(random_state=0)
         model.fit(X_scaled, Y)
 
         # Create meshgrid
         x_min, x_max = X_scaled[:, 0].min() - 1, X_scaled[:, 0].max() + 1
         y_min, y_max = X_scaled[:, 1].min() - 1, X_scaled[:, 1].max() + 1
-        x, y = np.meshgrid(np.arange(x_min, x_max, 0.2), np.arange(y_min, y_max, 0.2))
+
+        x = np.arange(x_min, x_max, 0.1)
+        y = np.arange(y_min, y_max, 0.1)
+        x, y = np.meshgrid(x, y)
+        conc = np.c_[x.ravel(), y.ravel()]
 
         # Predict the values
-        z = model.predict(np.c_[x.ravel(), y.ravel()])
+        z = model.predict(conc)
+        z = z.reshape(x.shape)
 
-        return x, y, z
+        return z

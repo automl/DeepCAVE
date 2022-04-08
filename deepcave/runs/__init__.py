@@ -246,7 +246,23 @@ class AbstractRun(ABC):
     def get_num_configs(self, budget: Union[int, float] = None) -> int:
         return len(self.get_configs(budget=budget))
 
-    def get_budget(self, id: int) -> float:
+    def get_budget(self, id: Union[int, str]) -> float:
+        """
+        Gets the budget given an id.
+
+        Parameters
+        ----------
+        id : Union[int, str]
+            Id of the wanted budget. If id is a string, it is converted to an integer.
+
+        Returns
+        -------
+        float
+            Budget.
+        """
+        if type(id) == str:
+            id = int(id)
+
         return self.meta["budgets"][id]
 
     def get_budgets(self, human: bool = False) -> List[str]:
@@ -510,6 +526,7 @@ class AbstractRun(ABC):
         """
         X, Y = [], []
         Labels = []
+        config_ids = []
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
@@ -531,6 +548,7 @@ class AbstractRun(ABC):
             X.append(x)
             Y.append(y)
             Labels.append(labels)
+            config_ids.append(config_id)
 
         X = np.array(X)
         Y = np.array(Y)
@@ -579,7 +597,7 @@ class AbstractRun(ABC):
 
             return df_data, df_labels
 
-        return X, Y
+        return X, Y  # , config_ids
 
 
 def check_equality(
