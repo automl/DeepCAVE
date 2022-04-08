@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.dynamic_plugin.cost_over_time &#8212; DeepCAVE Documentation 0.4 documentation</title>
+    <title>deepcave.plugins.dynamic_plugin.footprint &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -37,8 +37,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.plugins.dynamic_plugin.footprint" href="deepcave.plugins.dynamic_plugin.footprint.html" />
-    <link rel="prev" title="deepcave.plugins.dynamic_plugin.configurations" href="deepcave.plugins.dynamic_plugin.configurations.html" />
+    <link rel="next" title="deepcave.plugins.dynamic_plugin.local_parameter_importance" href="deepcave.plugins.dynamic_plugin.local_parameter_importance.html" />
+    <link rel="prev" title="deepcave.plugins.dynamic_plugin.cost_over_time" href="deepcave.plugins.dynamic_plugin.cost_over_time.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -288,8 +288,8 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="module-deepcave.plugins.dynamic_plugin.cost_over_time">
-<span id="deepcave-plugins-dynamic-plugin-cost-over-time"></span><h1>deepcave.plugins.dynamic_plugin.cost_over_time<a class="headerlink" href="#module-deepcave.plugins.dynamic_plugin.cost_over_time" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-deepcave.plugins.dynamic_plugin.footprint">
+<span id="deepcave-plugins-dynamic-plugin-footprint"></span><h1>deepcave.plugins.dynamic_plugin.footprint<a class="headerlink" href="#module-deepcave.plugins.dynamic_plugin.footprint" title="Permalink to this headline">¶</a></h1>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
@@ -297,54 +297,18 @@ style="width: 100%;">
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime" title="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CostOverTime</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint" title="deepcave.plugins.dynamic_plugin.footprint.FootPrint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FootPrint</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.dynamic_plugin.cost_over_time.</span></span><span class="sig-name descname"><span class="pre">CostOverTime</span></span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.dynamic_plugin.footprint.</span></span><span class="sig-name descname"><span class="pre">FootPrint</span></span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.dynamic_plugin.html#deepcave.plugins.dynamic_plugin.DynamicPlugin" title="deepcave.plugins.dynamic_plugin.DynamicPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.plugins.dynamic_plugin.DynamicPlugin</span></code></a></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.check_runs_compatibility">
-<span class="sig-name descname"><span class="pre">check_runs_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.check_runs_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.check_runs_compatibility" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function is needed if all selected runs need something in common
-(e.g. budget or objective). Since this function is called before the layout is created,
-it can be also used to set common values for the plugin.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>runs</strong> (<em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – Selected runs.</p>
-</dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.html#deepcave.runs.NotMergeableError" title="deepcave.runs.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs are not compatible, an error is thrown.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_filter_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_filter_layout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Layout for the filter block.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Layouts for the filter block.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[Component]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_input_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_input_layout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_input_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_input_layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layout for the input block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -360,8 +324,8 @@ it can be also used to set common values for the plugin.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_output_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.get_output_layout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_output_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_output_layout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -377,8 +341,30 @@ it can be also used to set common values for the plugin.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_inputs">
-<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_inputs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_dependency_inputs">
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as <cite>load_inputs</cite> but called after inputs have changed. Provides a lot of flexibility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>previous_inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Previous content of the inputs.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Current content of the inputs.</p></li>
+<li><p><strong>selected_run</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The selected run from the user. In case of <cite>activate_run_selection</cite>, a list of runs
+are passed. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Content to be filled.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_inputs">
+<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the content for the defined inputs in <cite>get_input_layout</cite> and <cite>get_filter_layout</cite>.
 This method is necessary to pre-load contents for the inputs. So, if the plugin is
 called for the first time or there are no results in the cache, the plugin gets its
@@ -394,8 +380,8 @@ content from this method.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_outputs">
-<span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.load_outputs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_outputs">
+<span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in the raw data and prepares them for the layout.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -417,8 +403,8 @@ returned.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.process">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/cost_over_time.html#CostOverTime.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.cost_over_time.CostOverTime.process" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.dynamic_plugin.footprint.FootPrint.process">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/dynamic_plugin/footprint.html#FootPrint.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.dynamic_plugin.footprint.FootPrint.process" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns raw data based on a run and input data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -432,7 +418,7 @@ returned.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]]]</p>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,17 +433,17 @@ returned.</p></li>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.plugins.dynamic_plugin.configurations.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.plugins.dynamic_plugin.cost_over_time.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.plugins.dynamic_plugin.configurations</p>
+            <p class="prev-next-title">deepcave.plugins.dynamic_plugin.cost_over_time</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.plugins.dynamic_plugin.footprint.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.plugins.dynamic_plugin.local_parameter_importance.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.plugins.dynamic_plugin.footprint</p>
+        <p class="prev-next-title">deepcave.plugins.dynamic_plugin.local_parameter_importance</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
