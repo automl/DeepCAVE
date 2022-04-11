@@ -283,7 +283,7 @@ style="width: 100%;">
 
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.epm.surrogates</span> <span class="kn">import</span> <span class="n">RandomForestSurrogate</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static_plugin</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
@@ -293,7 +293,7 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="PDPPlugin"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin">[docs]</a><span class="k">class</span> <span class="nc">PDPPlugin</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;pdp&quot;</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;PDP&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Partial Dependence Plot&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;far fa-grip-lines&quot;</span>
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -302,36 +302,54 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
-                <span class="p">]</span>
-            <span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Selected Hyperparameters&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
-                <span class="p">],</span>
-                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
-                <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                        <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Number of Grid Points per Axis&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)),</span>
-                <span class="p">]</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span> <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select budget ...&quot;</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Number of Samples&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;num_samples&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)),</span>
-                <span class="p">]</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameter #1&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameter1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select hyperparameter ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameter #2&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameter2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select hyperparameter ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
             <span class="p">),</span>
+            <span class="c1"># html.Div(</span>
+            <span class="c1">#    [</span>
+            <span class="c1">#        dbc.Label(&quot;Number of Samples&quot;),</span>
+            <span class="c1">#        dbc.Input(id=register(&quot;num_samples&quot;, &quot;value&quot;)),</span>
+            <span class="c1">#    ]</span>
+            <span class="c1"># ),</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.get_filter_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -339,111 +357,87 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;With confidences&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show confidence&quot;</span><span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;confidences&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
-                <span class="p">],</span>
-                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
             <span class="p">)</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
-            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;confidences&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
-            <span class="s2">&quot;num_samples&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span>
-            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameter1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameter2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;confidences&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">budgets</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
-        <span class="n">objective_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
-        <span class="n">objective_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)))</span>
 
-        <span class="n">current_objective</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">current_objective</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">current_objective</span> <span class="o">=</span> <span class="n">objective_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">objective_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
+        <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)</span>
+
+        <span class="n">budgets</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)))</span>
+
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+
+        <span class="c1"># Get selected values</span>
+        <span class="n">objective_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">objective_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">objective_value</span> <span class="o">=</span> <span class="n">objective_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">budget_value</span> <span class="o">=</span> <span class="n">budget_options</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+            <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">new_inputs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">),</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">current_objective</span><span class="p">,</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">),</span>
+            <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value</span><span class="p">},</span>
+            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">budget_value</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameter1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp1_value</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameter2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">hp_names</span><span class="p">),</span>
             <span class="p">},</span>
         <span class="p">}</span>
+
         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
-
-        <span class="n">num_grid_points_per_axis</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Reset invalid values</span>
-        <span class="c1"># Num Samples</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-            <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">previous_inputs</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Num Grid Points per Axis</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">num_grid_points_per_axis</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-            <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">previous_inputs</span><span class="p">[</span>
-                <span class="s2">&quot;num_grid_points_per_axis&quot;</span>
-            <span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-
         <span class="k">return</span> <span class="n">inputs</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Surrogate</span>
-        <span class="n">objective_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
-        <span class="n">selected_budget</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+        <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">objective_name</span><span class="p">)</span>
+        <span class="n">budget_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_id</span><span class="p">)</span>
+        <span class="n">hp1</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp2</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initialize Surrogate&quot;</span><span class="p">)</span>
-        <span class="n">surrogate_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get trials&quot;</span><span class="p">)</span>
-        <span class="n">trials</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">trial</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">==</span> <span class="n">selected_budget</span><span class="p">,</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trials</span><span class="p">()))</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">trials</span><span class="p">)</span><span class="si">}</span><span class="s2"> trials for budget </span><span class="si">{</span><span class="n">selected_budget</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get y&quot;</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">trials</span><span class="p">]</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get configs&quot;</span><span class="p">)</span>
-        <span class="n">configs</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">CS</span><span class="o">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">trials</span>
-        <span class="p">]</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Get X&quot;</span><span class="p">)</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="n">config_list_to_array</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fit Surrogate&quot;</span><span class="p">)</span>
-        <span class="n">surrogate_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">objective</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Objective not found.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># PDP</span>
-        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_samples&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">num_grid_points_per_axis</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Create pdp with </span><span class="si">{</span><span class="n">num_grid_points_per_axis</span><span class="si">}</span><span class="s2"> grid points per axis and </span><span class="si">{</span><span class="n">num_samples</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;for hyperparameters: </span><span class="si">{</span><span class="n">selected_hyperparameters</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="c1"># Encode data</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">],</span> <span class="n">encode_y</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+
+        <span class="c1"># Let&#39;s initialize the surrogate</span>
+        <span class="n">surrogate_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">)</span>
+        <span class="n">surrogate_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+        <span class="c1"># Prepare the hyperparameters</span>
+        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hp2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selected_hyperparameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp2</span><span class="p">]</span>
+
+        <span class="c1"># And finally call PDP</span>
         <span class="n">pdp</span> <span class="o">=</span> <span class="n">PDP</span><span class="o">.</span><span class="n">from_random_points</span><span class="p">(</span>
             <span class="n">surrogate_model</span><span class="p">,</span>
             <span class="n">selected_hyperparameter</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">,</span>
-            <span class="n">num_samples</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">num_samples</span><span class="p">),</span>
-            <span class="n">num_grid_points_per_axis</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">num_grid_points_per_axis</span><span class="p">),</span>
+            <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Returning...&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">pdp</span><span class="o">.</span><span class="n">x_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
@@ -456,23 +450,27 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="PDPPlugin.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="c1"># Parse inputs</span>
-        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-
-        <span class="n">hyperparameter_idx</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span> <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">selected_hyperparameters</span>
-        <span class="p">]</span>
+        <span class="n">hp1_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp2_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp1_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hp2_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hp2_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hp2_idx</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">show_confidences</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;confidences&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
         <span class="c1"># Parse outputs</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;variances&quot;</span><span class="p">]))</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># 1D</span>
+        <span class="k">if</span> <span class="n">hp2_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># 1D</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
                 <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
                     <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PDP&quot;</span><span class="p">,</span>
-                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hyperparameter_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
                     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -480,21 +478,21 @@ style="width: 100%;">
                 <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
                     <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
                         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1-Sigma&quot;</span><span class="p">,</span>
-                        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hyperparameter_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
                         <span class="n">y</span><span class="o">=</span><span class="n">y</span> <span class="o">+</span> <span class="n">sigmas</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
                     <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
                         <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1-Sigma&quot;</span><span class="p">,</span>
-                        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hyperparameter_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
                         <span class="n">y</span><span class="o">=</span><span class="n">y</span> <span class="o">-</span> <span class="n">sigmas</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
                 <span class="n">title</span><span class="o">=</span><span class="s2">&quot;1D PDP&quot;</span> <span class="o">+</span> <span class="s2">&quot; with confidences&quot;</span> <span class="o">*</span> <span class="n">show_confidences</span><span class="p">,</span>
-                <span class="n">xaxis_title</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">yaxis_title</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]))[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">xaxis_title</span><span class="o">=</span><span class="n">hp1_name</span><span class="p">,</span>
+                <span class="n">yaxis_title</span><span class="o">=</span><span class="n">objective_name</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 2D</span>
             <span class="n">num_grid_points_per_axis</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>

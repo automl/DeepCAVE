@@ -283,7 +283,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">check_equality</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">get_slider_marks</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hovertext_from_config</span>
 
 
 <div class="viewcode-block" id="ParetoFront"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.pareto_front.html#deepcave.plugins.dynamic_plugin.pareto_front.ParetoFront">[docs]</a><span class="k">class</span> <span class="nc">ParetoFront</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
@@ -436,6 +436,7 @@ style="width: 100%;">
         <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
             <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;points&quot;</span><span class="p">])</span>
+            <span class="n">config_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;config_ids&quot;</span><span class="p">]</span>
 
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
             <span class="n">x_pareto</span><span class="p">,</span> <span class="n">y_pareto</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -448,16 +449,6 @@ style="width: 100%;">
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="n">point_idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
                     <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">points</span><span class="p">[</span><span class="n">point_idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
-
-            <span class="c1"># And get configs for the hovers</span>
-            <span class="n">hovertext</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;config_ids&quot;</span><span class="p">]:</span>
-                <span class="n">config</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-
-                <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;br&gt;Config ID: </span><span class="si">{</span><span class="n">config_id</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                    <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
-                <span class="n">hovertext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">text</span><span class="p">]</span>
 
             <span class="n">color</span> <span class="o">=</span> <span class="n">get_color</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
             <span class="n">color_pareto</span> <span class="o">=</span> <span class="n">get_color</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
@@ -482,6 +473,8 @@ style="width: 100%;">
                 <span class="n">line_shape</span> <span class="o">=</span> <span class="s2">&quot;vh&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">line_shape</span> <span class="o">=</span> <span class="s2">&quot;hv&quot;</span>
+                
+            <span class="n">hovertext</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span><span class="p">]</span>
 
             <span class="n">traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>

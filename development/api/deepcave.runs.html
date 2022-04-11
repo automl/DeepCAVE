@@ -340,19 +340,6 @@ style="width: 100%;">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">AbstractRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.calculate_cost">
-<span class="sig-name descname"><span class="pre">calculate_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.calculate_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.calculate_cost" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates cost from multiple costs.
-Normalizes the cost first and weight every cost the same.
-The lower the normalized cost, the better.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.encode_config">
 <span class="sig-name descname"><span class="pre">encode_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.encode_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.encode_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes a given config (id) to a normalized list.
@@ -391,6 +378,23 @@ If a config is passed, no look-up has to be done.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_budgets">
+<span class="sig-name descname"><span class="pre">get_budgets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">human</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_budgets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_budgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the budgets from the meta data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>human</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make the output better readable. By default False.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of budgets.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Union[int, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_cost">
 <span class="sig-name descname"><span class="pre">get_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>If no budget is given, the highest budget is chosen.</p>
@@ -404,7 +408,23 @@ If a config is passed, no look-up has to be done.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_costs">
 <span class="sig-name descname"><span class="pre">get_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_costs" title="Permalink to this definition">¶</a></dt>
-<dd><p>If no budget is given, the highest budget is chosen.</p>
+<dd><p>Get costs with their config ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to select the costs. If no budget is given, the highest budget is chosen.
+By default None.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Only selected stati are considered. If no status is given, all stati are considered.
+By default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Costs with their config ids.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, List[float]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -440,6 +460,44 @@ forest implementation. By default False.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_highest_budget">
+<span class="sig-name descname"><span class="pre">get_highest_budget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_highest_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_highest_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the highest budget. If no budget is available, None is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The highest budget or None if no budget was specified.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Optional[Union[int, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_incumbent">
+<span class="sig-name descname"><span class="pre">get_incumbent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_incumbent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_incumbent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the incumbent with its normalized cost.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considerd objectives. By default None. If None, all objectives are considered.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default None. If None, the highest budget is chosen.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered statuses. By default None. If None, all stati are considered.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Incumbent with its normalized cost.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[Configuration, float]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If no incumbent was found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_objective">
 <span class="sig-name descname"><span class="pre">get_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_objective" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the objective based on the id or the name.</p>
@@ -452,6 +510,23 @@ forest implementation. By default False.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective">Objective</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_objective_id">
+<span class="sig-name descname"><span class="pre">get_objective_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_objective_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_objective_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the id of the objective if it is found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>objective</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>str</em><em>]</em>) – The objective for which the id is returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Objective id or None if not found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[int]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -494,6 +569,30 @@ In contrast to <cite>hash</cite>, this hash should not be changed throughout the
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.merge_costs">
+<span class="sig-name descname"><span class="pre">merge_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.merge_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.merge_costs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates one cost value from multiple costs.
+Normalizes the cost first and weight every cost the same.
+The lower the normalized cost, the better.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>costs</strong> (<em>Iterable</em><em>[</em><em>float</em><em>]</em>) – The costs, which should be merged. Must be the same length as the original number of objectives.</p></li>
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – The considered objectives to the costs. By default None.
+If None, all objectives are considered. The passed objectives can differ from the
+original number objectives.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged costs.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
