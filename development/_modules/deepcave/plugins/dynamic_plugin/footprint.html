@@ -280,20 +280,19 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.plugins.static_plugin</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">check_equality</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_radio_options</span><span class="p">,</span> <span class="n">get_select_options</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_radio_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">get_slider_marks</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hovertext_from_config</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.footprint</span> <span class="kn">import</span> <span class="n">Footprint</span> <span class="k">as</span> <span class="n">Evaluator</span>
 
 
-<div class="viewcode-block" id="FootPrint"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint">[docs]</a><span class="k">class</span> <span class="nc">FootPrint</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+<div class="viewcode-block" id="FootPrint"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint">[docs]</a><span class="k">class</span> <span class="nc">FootPrint</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;footprint&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Configuration Footprint&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-shoe-prints&quot;</span>
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
 
 <div class="viewcode-block" id="FootPrint.get_input_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -320,9 +319,23 @@ style="width: 100%;">
             <span class="p">),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Details&quot;</span><span class="p">),</span>
+                    <span class="n">dcc</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;details&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+                        <span class="nb">min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                        <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">step</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                        <span class="n">marks</span><span class="o">=</span><span class="p">{</span><span class="mf">0.1</span><span class="p">:</span> <span class="s2">&quot;High&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">:</span> <span class="s2">&quot;Medium&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;Low&quot;</span><span class="p">},</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Include Border Configurations&quot;</span><span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;include_borders&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                        <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select ...&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -333,7 +346,8 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
             <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
-            <span class="s2">&quot;include_borders&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+            <span class="s2">&quot;include_borders&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="FootPrint.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -371,17 +385,15 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
-        <span class="n">include_borders</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;include_borders&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="n">include_borders</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">include_borders</span><span class="p">))</span>
+        <span class="n">include_borders</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;include_borders&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;details&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
         <span class="c1"># Initialize the evaluator</span>
         <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
         <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">include_borders</span><span class="o">=</span><span class="n">include_borders</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(),</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">),</span>
             <span class="s2">&quot;config_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;configs&quot;</span><span class="p">),</span>
             <span class="s2">&quot;border_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;borders&quot;</span><span class="p">),</span>
             <span class="s2">&quot;incumbent_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;incumbents&quot;</span><span class="p">),</span>
@@ -393,7 +405,7 @@ style="width: 100%;">
             <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="s2">&quot;50vh&quot;</span><span class="p">}),</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="FootPrint.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
+<div class="viewcode-block" id="FootPrint.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
 
         <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">z_</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -431,6 +443,9 @@ style="width: 100%;">
                     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
                     <span class="n">marker_symbol</span><span class="o">=</span><span class="n">marker_symbol</span><span class="p">,</span>
                     <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">},</span>
+                    <span class="n">hovertext</span><span class="o">=</span><span class="p">[</span>
+                        <span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span>
+                    <span class="p">],</span>
                 <span class="p">)</span>
             <span class="p">]</span>
 
