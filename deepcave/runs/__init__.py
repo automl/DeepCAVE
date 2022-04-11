@@ -365,6 +365,7 @@ class AbstractRun(ABC):
         """
         Calculates cost from multiple costs.
         Normalizes the cost first and weight every cost the same.
+        The lower the normalized cost, the better.
         """
 
         costs = self._process_costs(costs)
@@ -461,15 +462,17 @@ class AbstractRun(ABC):
 
         return times, costs_mean, costs_std, ids
 
-    def encode_config(self, config: Union[int, Dict[Any, Any]], specific: bool = False) -> List:
+    def encode_config(
+        self, config: Union[int, Dict[Any, Any], Configuration], specific: bool = False
+    ) -> List:
         """
         Encodes a given config (id) to a normalized list.
         If a config is passed, no look-up has to be done.
 
         Parameters
         ----------
-        config : Union[int, Dict[Any, Any]]
-            Either the config id or the config in dict form itself.
+        config : Union[int, Dict[Any, Any], Configuration]
+            Either the config id, config as dict, or Configuration itself.
         specific : bool, optional
             Use specific encoding for fanova tree, by default False.
 
@@ -478,11 +481,13 @@ class AbstractRun(ABC):
         List
             The encoded config as list.
         """
-        if isinstance(config, int):
-            config = self.configs[config]
+        if not isinstance(config, Configuration):
+            if isinstance(config, int):
+                config = self.configs[config]
+
+            config = Configuration(self.configspace, config)
 
         hps = self.configspace.get_hyperparameters()
-        config = Configuration(self.configspace, config)
         values = list(config.get_array())
 
         if specific:
@@ -502,28 +507,51 @@ class AbstractRun(ABC):
 
             x += [value]
 
-        # print(x)
-
         return x
 
     def get_encoded_configs(
         self,
         objectives: Optional[List[Objective]] = None,
-        budget=None,
+        budget: Optional[Union[int, float]] = None,
         statuses: Optional[List[Status]] = None,
+        encode_y: bool = False,
         specific: bool = False,
         pandas: bool = False,
-    ) -> Union[Tuple[np.ndarray, np.ndarray], Tuple[pd.DataFrame, pd.DataFrame]]:
+    ) -> Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]:
         """
-        Args:
-            specific (bool): Inactives are treated differently. If false, all inactives are set to
-            -1.
-            normalize (bool): Normalize the configuration between 0 and 1.
-            pandas (bool): Return pandas DataFrame instead of X and Y.
-        Returns:
-            X, Y (np.array): Encoded configurations OR
-            df (pd.DataFrame): Encoded dataframes if pandas equals True.
+        Encodes configurations to process them further. After the configurations are encoded,
+        they can be used in model prediction.
+
+        Parameters
+        ----------
+        objectives : Optional[List[Objective]], optional
+            Which objectives should be considered. By default None. If None, all objectives are
+            considered.
+        budget : Optional[List[Status]], optional
+            Which budget should be considered. By default None. If None, only the highest budget
+            is considered.
+        statuses : Optional[List[Status]], optional
+            Which statuses should be considered. By default None. If None, all statuses are
+            considered.
+        encode_y : bool, optional
+            Whether y should be normalized too. By default False.
+        specific : bool, optional
+            Whether a specific encoding should be used. This encoding is compatible with fANOVA
+            forest implementation. By default False.
+        pandas : bool, optional
+            Whether the data should be returned as pandas or numpy array. By default False.
+
+        Returns
+        -------
+        Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]
+            Encoded configurations or encoded dataframes if `pandas` equals true.
+
+        Raises
+        ------
+        ValueError
+            If a hyperparameter is not supported.
         """
+
         X, Y = [], []
         Labels = []
         config_ids = []
@@ -532,7 +560,17 @@ class AbstractRun(ABC):
         for config_id, costs in results.items():
             config = self.configs[config_id]
             x = self.encode_config(config, specific=specific)
-            y = self.calculate_cost(costs, objectives)
+
+            if encode_y:
+                y = [self.calculate_cost(costs, objectives)]
+            else:
+                y = []
+                # Iterate over the objectives
+                if objectives is None:
+                    objectives = self.get_objectives()
+
+                for i in range(len(objectives)):
+                    y.append(costs[i])
 
             labels = []
             for hp_name in self.configspace.get_hyperparameter_names():
@@ -543,7 +581,9 @@ class AbstractRun(ABC):
                     label = prettify_label(config[hp_name])
 
                 labels += [label]
-            labels += [prettify_label(y)]
+
+            # Also prettify y values
+            labels += [prettify_label(y_) for y_ in y]
 
             X.append(x)
             Y.append(y)
@@ -588,16 +628,14 @@ class AbstractRun(ABC):
         if pandas:
             cost_column = self.get_objective_name(objectives)
             columns = [name for name in self.configspace.get_hyperparameter_names()] + [cost_column]
-
-            Y = Y.reshape(-1, 1)
             data = np.concatenate((X, Y), axis=1)
 
             df_data = pd.DataFrame(data=data, columns=columns)
             df_labels = pd.DataFrame(data=Labels, columns=columns)
 
             return df_data, df_labels
-
-        return X, Y  # , config_ids
+        else:
+            return X, Y, config_ids
 
 
 def check_equality(
