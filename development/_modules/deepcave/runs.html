@@ -640,6 +640,7 @@ style="width: 100%;">
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates cost from multiple costs.</span>
 <span class="sd">        Normalizes the cost first and weight every cost the same.</span>
+<span class="sd">        The lower the normalized cost, the better.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span>
@@ -736,15 +737,17 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">costs_mean</span><span class="p">,</span> <span class="n">costs_std</span><span class="p">,</span> <span class="n">ids</span>
 
-<div class="viewcode-block" id="AbstractRun.encode_config"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.encode_config">[docs]</a>    <span class="k">def</span> <span class="nf">encode_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<div class="viewcode-block" id="AbstractRun.encode_config"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.encode_config">[docs]</a>    <span class="k">def</span> <span class="nf">encode_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Configuration</span><span class="p">],</span> <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a given config (id) to a normalized list.</span>
 <span class="sd">        If a config is passed, no look-up has to be done.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        config : Union[int, Dict[Any, Any]]</span>
-<span class="sd">            Either the config id or the config in dict form itself.</span>
+<span class="sd">        config : Union[int, Dict[Any, Any], Configuration]</span>
+<span class="sd">            Either the config id, config as dict, or Configuration itself.</span>
 <span class="sd">        specific : bool, optional</span>
 <span class="sd">            Use specific encoding for fanova tree, by default False.</span>
 
@@ -753,11 +756,13 @@ style="width: 100%;">
 <span class="sd">        List</span>
 <span class="sd">            The encoded config as list.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config</span><span class="p">]</span>
+
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
 
         <span class="n">hps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">()</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
         <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_array</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="n">specific</span><span class="p">:</span>
@@ -777,28 +782,51 @@ style="width: 100%;">
 
             <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
 
-        <span class="c1"># print(x)</span>
-
         <span class="k">return</span> <span class="n">x</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_encoded_configs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_configs">[docs]</a>    <span class="k">def</span> <span class="nf">get_encoded_configs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">budget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">encode_y</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">pandas</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Args:</span>
-<span class="sd">            specific (bool): Inactives are treated differently. If false, all inactives are set to</span>
-<span class="sd">            -1.</span>
-<span class="sd">            normalize (bool): Normalize the configuration between 0 and 1.</span>
-<span class="sd">            pandas (bool): Return pandas DataFrame instead of X and Y.</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            X, Y (np.array): Encoded configurations OR</span>
-<span class="sd">            df (pd.DataFrame): Encoded dataframes if pandas equals True.</span>
+<span class="sd">        Encodes configurations to process them further. After the configurations are encoded,</span>
+<span class="sd">        they can be used in model prediction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        objectives : Optional[List[Objective]], optional</span>
+<span class="sd">            Which objectives should be considered. By default None. If None, all objectives are</span>
+<span class="sd">            considered.</span>
+<span class="sd">        budget : Optional[List[Status]], optional</span>
+<span class="sd">            Which budget should be considered. By default None. If None, only the highest budget</span>
+<span class="sd">            is considered.</span>
+<span class="sd">        statuses : Optional[List[Status]], optional</span>
+<span class="sd">            Which statuses should be considered. By default None. If None, all statuses are</span>
+<span class="sd">            considered.</span>
+<span class="sd">        encode_y : bool, optional</span>
+<span class="sd">            Whether y should be normalized too. By default False.</span>
+<span class="sd">        specific : bool, optional</span>
+<span class="sd">            Whether a specific encoding should be used. This encoding is compatible with fANOVA</span>
+<span class="sd">            forest implementation. By default False.</span>
+<span class="sd">        pandas : bool, optional</span>
+<span class="sd">            Whether the data should be returned as pandas or numpy array. By default False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]</span>
+<span class="sd">            Encoded configurations or encoded dataframes if `pandas` equals true.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If a hyperparameter is not supported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="n">Labels</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">config_ids</span> <span class="o">=</span> <span class="p">[]</span>
@@ -807,7 +835,17 @@ style="width: 100%;">
         <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="n">specific</span><span class="p">)</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">encode_y</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">calculate_cost</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="c1"># Iterate over the objectives</span>
+                <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">)):</span>
+                    <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
             <span class="n">labels</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">():</span>
@@ -818,7 +856,9 @@ style="width: 100%;">
                     <span class="n">label</span> <span class="o">=</span> <span class="n">prettify_label</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
 
                 <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
-            <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">prettify_label</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+
+            <span class="c1"># Also prettify y values</span>
+            <span class="n">labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">prettify_label</span><span class="p">(</span><span class="n">y_</span><span class="p">)</span> <span class="k">for</span> <span class="n">y_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
 
             <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -863,16 +903,14 @@ style="width: 100%;">
         <span class="k">if</span> <span class="n">pandas</span><span class="p">:</span>
             <span class="n">cost_column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objective_name</span><span class="p">(</span><span class="n">objectives</span><span class="p">)</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()]</span> <span class="o">+</span> <span class="p">[</span><span class="n">cost_column</span><span class="p">]</span>
-
-            <span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="n">df_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
             <span class="n">df_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">Labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">df_data</span><span class="p">,</span> <span class="n">df_labels</span>
-
-        <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span>  <span class="c1"># , config_ids</span></div></div>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">config_ids</span></div></div>
 
 
 <div class="viewcode-block" id="check_equality"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.check_equality">[docs]</a><span class="k">def</span> <span class="nf">check_equality</span><span class="p">(</span>

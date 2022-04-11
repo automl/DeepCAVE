@@ -282,6 +282,7 @@ style="width: 100%;">
 
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic_plugin</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">check_equality</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_radio_options</span><span class="p">,</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.footprint</span> <span class="kn">import</span> <span class="n">Footprint</span> <span class="k">as</span> <span class="n">Evaluator</span>
@@ -315,6 +316,15 @@ style="width: 100%;">
                         <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select budget ...&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Include Border Configurations&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;include_borders&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">]</span></div>
@@ -323,6 +333,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
             <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;include_borders&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="FootPrint.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -342,7 +353,7 @@ style="width: 100%;">
         <span class="k">else</span><span class="p">:</span>
             <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="p">{</span>
+        <span class="n">new_inputs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;objective&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value</span><span class="p">,</span>
@@ -351,18 +362,30 @@ style="width: 100%;">
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">budget_value</span><span class="p">,</span>
             <span class="p">},</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+
+        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">inputs</span></div>
 
 <div class="viewcode-block" id="FootPrint.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+        <span class="n">include_borders</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;include_borders&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="n">include_borders</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">include_borders</span><span class="p">))</span>
 
         <span class="c1"># Initialize the evaluator</span>
         <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+        <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">include_borders</span><span class="o">=</span><span class="n">include_borders</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">z</span><span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(),</span>
+            <span class="s2">&quot;config_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;configs&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;border_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;borders&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;incumbent_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;incumbents&quot;</span><span class="p">),</span>
+        <span class="p">}</span></div>
 
 <div class="viewcode-block" id="FootPrint.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -371,14 +394,52 @@ style="width: 100%;">
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="FootPrint.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">],</span> <span class="n">zsmooth</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">)</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span><span class="p">,</span> <span class="n">z_</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
+        <span class="c1"># First add the Heatmap</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">x_</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">y_</span><span class="p">,</span>
+            <span class="n">z</span><span class="o">=</span><span class="n">z_</span><span class="p">,</span>
+            <span class="n">zsmooth</span><span class="o">=</span><span class="s2">&quot;best&quot;</span><span class="p">,</span>
+            <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+            <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="nb">len</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">title</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+
+        <span class="c1"># Now add the points</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">points</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="p">[</span><span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="s2">&quot;Border Configuration&quot;</span><span class="p">,</span> <span class="s2">&quot;Incumbent&quot;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s2">&quot;config_points&quot;</span><span class="p">,</span> <span class="s2">&quot;border_points&quot;</span><span class="p">,</span> <span class="s2">&quot;incumbent_points&quot;</span><span class="p">],</span>
+        <span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">config_ids</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">points</span><span class="p">]</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span>
+            <span class="n">marker_symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+            <span class="k">if</span> <span class="n">points</span> <span class="o">==</span> <span class="s2">&quot;incumbent_points&quot;</span><span class="p">:</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span>
+                <span class="n">marker_symbol</span> <span class="o">=</span> <span class="s2">&quot;triangle-up&quot;</span>
+            <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+                    <span class="n">marker_symbol</span><span class="o">=</span><span class="n">marker_symbol</span><span class="p">,</span>
+                    <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">},</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
 
         <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;MDS X-Axis&quot;</span><span class="p">,</span> <span class="n">tickvals</span><span class="o">=</span><span class="p">[]),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;MDS Y-Axis&quot;</span><span class="p">,</span> <span class="n">tickvals</span><span class="o">=</span><span class="p">[]),</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)]</span></div></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)]</span></div></div>
 </pre></div>
 
               </div>
