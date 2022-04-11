@@ -1,5 +1,5 @@
 from typing import List, Optional, Tuple, Any, Union
-from deepcave.constants import NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
+from deepcave.constants import BORDER_CONFIG_ID, NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
 import numpy as np
 import plotly.express as px
 import itertools
@@ -330,3 +330,16 @@ def get_tick_data_from_values(
                 ticktext.append(label)
 
     return tickvals, ticktext
+
+
+def get_hovertext_from_config(run, config_id: int):
+    if config_id == BORDER_CONFIG_ID:
+        return ""
+    
+    string = f"Configuration ID: {config_id}<br><br>"
+
+    config = run.get_config(config_id)
+    for k, v in config.items():
+        string += f"{k}: {v}<br>"
+
+    return string

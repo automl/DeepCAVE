@@ -5,20 +5,19 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import get_radio_options, get_select_options
-from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.layout import get_radio_options, get_select_options, get_slider_marks
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 from deepcave.evaluators.footprint import Footprint as Evaluator
 
 
-class FootPrint(DynamicPlugin):
+class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
     activate_run_selection = True
-    use_cache = False
 
     @staticmethod
     def get_input_layout(register):
@@ -45,9 +44,23 @@ class FootPrint(DynamicPlugin):
             ),
             html.Div(
                 [
+                    dbc.Label("Details"),
+                    dcc.Slider(
+                        id=register("details", "value"),
+                        min=0.1,
+                        max=1,
+                        step=0.1,
+                        marks={0.1: "High", 0.5: "Medium", 1: "Low"},
+                    ),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
                     dbc.Label("Include Border Configurations"),
                     dbc.Select(
                         id=register("include_borders", ["options", "value"]),
+                        placeholder="Select ...",
                     ),
                 ],
                 className="",
@@ -58,7 +71,8 @@ class FootPrint(DynamicPlugin):
         return {
             "objective": {"options": get_select_options(), "value": None},
             "budget": {"options": get_select_options(), "value": None},
-            "include_borders": {"options": get_select_options(binary=True), "value": True},
+            "details": {"value": 0.5},
+            "include_borders": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
@@ -96,17 +110,15 @@ class FootPrint(DynamicPlugin):
     def process(run, inputs) -> Dict[str, Any]:
         budget = run.get_budget(inputs["budget"]["value"])
         objective = run.get_objective(inputs["objective"]["value"])
-        include_borders = bool(inputs["include_borders"]["value"])
-
-        print(include_borders)
-        print(type(include_borders))
+        include_borders = inputs["include_borders"]["value"] == "true"
+        details = inputs["details"]["value"]
 
         # Initialize the evaluator
         evaluator = Evaluator(run)
         evaluator.calculate(objective, budget, include_borders=include_borders)
 
         return {
-            "data": evaluator.get_surface(),
+            "data": evaluator.get_surface(details=details),
             "config_points": evaluator.get_points("configs"),
             "border_points": evaluator.get_points("borders"),
             "incumbent_points": evaluator.get_points("incumbents"),
@@ -118,7 +130,7 @@ class FootPrint(DynamicPlugin):
             dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),
         ]
 
-    def load_outputs(self, inputs, outputs, runs):
+    def load_outputs(self, inputs, outputs, run):
 
         traces = []
         x_, y_, z_ = outputs["data"]
@@ -156,6 +168,9 @@ class FootPrint(DynamicPlugin):
                     mode="markers",
                     marker_symbol=marker_symbol,
                     marker={"size": size},
+                    hovertext=[
+                        get_hovertext_from_config(run, config_id) for config_id in config_ids
+                    ],
                 )
             ]
 

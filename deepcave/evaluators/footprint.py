@@ -30,7 +30,7 @@ class Footprint:
         include_borders: bool = True,
     ) -> None:
         """
-        Calculates the MDS and returns the contour data.
+        Calculates the distances and trains the model.
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class Footprint:
         Tuple[np.ndarray, np.ndarray, np.ndarray]
             x, y, z for contour plots.
         """
-        
+
         # Get encoded configs
         X, Y, config_ids = self.run.get_encoded_configs(
             objectives=[objective],
@@ -70,10 +70,8 @@ class Footprint:
             ):
                 best_y = y
                 self._incumbent_id = config_id
-        print(include_borders)
-        print(type(include_borders))
+
         if include_borders:
-            print("YES")
             X_borders, Y_borders_performance = [], []
             border_configs = get_border_configs(self.cs)
             for config in border_configs:
@@ -88,26 +86,26 @@ class Footprint:
             Y_borders_performance = np.array(Y_borders_performance)
 
             X = np.concatenate((X, X_borders), axis=0)
-            Y_performance = np.concatenate((Y, Y_borders_performance), axis=0)
+            Y = np.concatenate((Y, Y_borders_performance), axis=0)
 
         # Get distance between configs
         distances = self._get_distances(X)
 
         # Calculate MDS now to get 2D coordinates
         X_scaled = self._get_mds(distances)
-        self._train(X_scaled, Y_performance.ravel())
+        self._train(X_scaled, Y.ravel())
 
         # And we set those points so we can reach them later again
         self._X = X_scaled
         self._config_ids = config_ids
 
-    def get_surface(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def get_surface(self, details: float = 0.1) -> Tuple[List, List, List]:
         """
         Get surface of the MDS plot.
 
         Returns
         -------
-        Tuple[np.ndarray, np.ndarray, np.ndarray]
+        Tuple[List, List, List]
             x (1D), y (1D) and z (2D) arrays for heatmap.
         """
         if self._X is None:
@@ -117,15 +115,15 @@ class Footprint:
         x_min, x_max = self._X[:, 0].min() - 1, self._X[:, 0].max() + 1
         y_min, y_max = self._X[:, 1].min() - 1, self._X[:, 1].max() + 1
 
-        x = np.arange(x_min, x_max, 0.1)
-        y = np.arange(y_min, y_max, 0.1)
+        x = np.arange(x_min, x_max, details)
+        y = np.arange(y_min, y_max, details)
         x_mesh, y_mesh = np.meshgrid(x, y)
         conc = np.c_[x_mesh.ravel(), y_mesh.ravel()]
 
         z = self._model.predict(conc)
         z = z.reshape(x_mesh.shape)
 
-        return x, y, z
+        return x.tolist(), y.tolist(), z.tolist()
 
     def get_points(self, category="configs"):
         if category not in ["configs", "borders", "incumbents"]:
