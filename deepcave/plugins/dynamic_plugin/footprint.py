@@ -7,6 +7,7 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
+from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_radio_options, get_select_options
 from deepcave.utils.styled_plotty import get_color
 from deepcave.evaluators.footprint import Footprint as Evaluator
@@ -40,6 +41,15 @@ class FootPrint(DynamicPlugin):
                         placeholder="Select budget ...",
                     ),
                 ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Include Border Configurations"),
+                    dbc.Select(
+                        id=register("include_borders", ["options", "value"]),
+                    ),
+                ],
                 className="",
             ),
         ]
@@ -48,6 +58,7 @@ class FootPrint(DynamicPlugin):
         return {
             "objective": {"options": get_select_options(), "value": None},
             "budget": {"options": get_select_options(), "value": None},
+            "include_borders": {"options": get_select_options(binary=True), "value": True},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
@@ -67,7 +78,7 @@ class FootPrint(DynamicPlugin):
         else:
             budget_value = inputs["budget"]["value"]
 
-        return {
+        new_inputs = {
             "objective": {
                 "options": objective_options,
                 "value": objective_value,
@@ -78,16 +89,28 @@ class FootPrint(DynamicPlugin):
             },
         }
 
+        update_dict(inputs, new_inputs)
+        return inputs
+
     @staticmethod
     def process(run, inputs) -> Dict[str, Any]:
         budget = run.get_budget(inputs["budget"]["value"])
         objective = run.get_objective(inputs["objective"]["value"])
+        include_borders = bool(inputs["include_borders"]["value"])
+
+        print(include_borders)
+        print(type(include_borders))
 
         # Initialize the evaluator
         evaluator = Evaluator(run)
-        z = evaluator.calculate(objective, budget)
+        evaluator.calculate(objective, budget, include_borders=include_borders)
 
-        return {"z": z}
+        return {
+            "data": evaluator.get_surface(),
+            "config_points": evaluator.get_points("configs"),
+            "border_points": evaluator.get_points("borders"),
+            "incumbent_points": evaluator.get_points("incumbents"),
+        }
 
     @staticmethod
     def get_output_layout(register):
@@ -96,11 +119,49 @@ class FootPrint(DynamicPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, runs):
-        data = go.Heatmap(z=outputs["z"], zsmooth="best")
+
+        traces = []
+        x_, y_, z_ = outputs["data"]
+
+        # First add the Heatmap
+        data = go.Heatmap(
+            x=x_,
+            y=y_,
+            z=z_,
+            zsmooth="best",
+            hoverinfo="skip",
+            colorbar=dict(
+                len=0.5,
+                title=inputs["objective"]["value"],
+            ),
+        )
+        traces += [data]
+
+        # Now add the points
+        for name, points in zip(
+            ["Configuration", "Border Configuration", "Incumbent"],
+            ["config_points", "border_points", "incumbent_points"],
+        ):
+            x, y, config_ids = outputs[points]
+            size = 5
+            marker_symbol = "x"
+            if points == "incumbent_points":
+                size = 10
+                marker_symbol = "triangle-up"
+            traces += [
+                go.Scatter(
+                    name=name,
+                    x=x,
+                    y=y,
+                    mode="markers",
+                    marker_symbol=marker_symbol,
+                    marker={"size": size},
+                )
+            ]
 
         layout = go.Layout(
             xaxis=dict(title="MDS X-Axis", tickvals=[]),
             yaxis=dict(title="MDS Y-Axis", tickvals=[]),
         )
 
-        return [go.Figure(data=data, layout=layout)]
+        return [go.Figure(data=traces, layout=layout)]
