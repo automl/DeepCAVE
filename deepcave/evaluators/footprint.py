@@ -99,14 +99,24 @@ class Footprint:
         self._X = X_scaled
         self._config_ids = config_ids
 
-    def get_surface(self, details: float = 0.1) -> Tuple[List, List, List]:
+    def get_surface(self, details: float = 0.5) -> Tuple[List, List, List]:
         """
         Get surface of the MDS plot.
+
+        Parameters
+        ----------
+        details : float, optional
+            Steps to create the meshgrid. By default 0.5.
 
         Returns
         -------
         Tuple[List, List, List]
             x (1D), y (1D) and z (2D) arrays for heatmap.
+
+        Raises
+        ------
+        RuntimeError
+            If `calculate` was not called before.
         """
         if self._X is None:
             raise RuntimeError("You need to call `calculate` first.")
@@ -125,7 +135,26 @@ class Footprint:
 
         return x.tolist(), y.tolist(), z.tolist()
 
-    def get_points(self, category="configs"):
+    def get_points(self, category="configs") -> Tuple[List[float], List[float], List[int]]:
+        """
+        Returns the points of the MDS plot.
+
+        Parameters
+        ----------
+        category : str, optional
+            Points of a specific category. Chose between `configs`, `borders` or `incumbents`.
+            By default "configs".
+
+        Returns
+        -------
+        Tuple[List[float], List[float], List[int]]
+            X, Y and config_ids as lists.
+
+        Raises
+        ------
+        RuntimeError
+            If category is not supported.
+        """
         if category not in ["configs", "borders", "incumbents"]:
             raise RuntimeError("Unknown category.")
 

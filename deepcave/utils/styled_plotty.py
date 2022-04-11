@@ -335,8 +335,9 @@ def get_tick_data_from_values(
 def get_hovertext_from_config(run, config_id: int):
     if config_id == BORDER_CONFIG_ID:
         return ""
-    
-    string = f"Configuration ID: {config_id}<br><br>"
+
+    string = f"Configuration ID: {config_id}<br>"
+    string += "-----------------------------<br>"
 
     config = run.get_config(config_id)
     for k, v in config.items():
