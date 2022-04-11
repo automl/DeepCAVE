@@ -8,7 +8,7 @@ from pyPDP.utils.utils import config_list_to_array
 
 from deepcave.evaluators.epm.surrogates import RandomForestSurrogate
 from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.logs import get_logger
@@ -18,7 +18,7 @@ logger = get_logger("PDPPlugin")
 
 class PDPPlugin(StaticPlugin):
     id = "pdp"
-    name = "PDP"
+    name = "Partial Dependence Plot"
     icon = "far fa-grip-lines"
     activate_run_selection = True
 
@@ -27,36 +27,54 @@ class PDPPlugin(StaticPlugin):
         return [
             html.Div(
                 [
-                    dbc.Label("Budget"),
-                    dbc.Select(id=register("budget", ["options", "value"])),
-                ]
-            ),
-            html.Div(
-                [
-                    dbc.Label("Selected Hyperparameters"),
-                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
-                ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
                     dbc.Label("Objective"),
-                    dbc.Select(id=register("objective", ["options", "value"])),
+                    dbc.Select(
+                        id=register("objective", ["options", "value"]),
+                        placeholder="Select objective ...",
+                    ),
                 ],
                 className="mb-3",
             ),
             html.Div(
                 [
-                    dbc.Label("Number of Grid Points per Axis"),
-                    dbc.Input(id=register("num_grid_points_per_axis", "value")),
-                ]
+                    dbc.Label("Budget"),
+                    dbc.Select(
+                        id=register("budget", ["options", "value"]), placeholder="Select budget ..."
+                    ),
+                ],
+                className="mb-3",
             ),
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Number of Samples"),
-                    dbc.Input(id=register("num_samples", "value")),
-                ]
+                    dbc.Col(
+                        [
+                            dbc.Label("Hyperparameter #1"),
+                            dbc.Select(
+                                id=register("hyperparameter1", ["options", "value"]),
+                                placeholder="Select hyperparameter ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Hyperparameter #2"),
+                            dbc.Select(
+                                id=register("hyperparameter2", ["options", "value"]),
+                                placeholder="Select hyperparameter ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                ],
+                className="mb-3",
             ),
+            # html.Div(
+            #    [
+            #        dbc.Label("Number of Samples"),
+            #        dbc.Input(id=register("num_samples", "value")),
+            #    ]
+            # ),
         ]
 
     @staticmethod
@@ -64,111 +82,87 @@ class PDPPlugin(StaticPlugin):
         return [
             html.Div(
                 [
-                    dbc.Label("With confidences"),
+                    dbc.Label("Show confidence"),
                     dbc.Select(id=register("confidences", ["options", "value"])),
-                ],
-                className="mb-3",
+                ]
             )
         ]
 
     def load_inputs(self):
         return {
-            "hyperparameters": {"options": get_checklist_options(), "value": []},
-            "objective": {
-                "options": get_select_options(),
-                "value": [],
-            },
-            "confidences": {
-                "options": get_select_options(binary=True),
-                "value": True,
-            },
-            "num_grid_points_per_axis": {"value": 20},
-            "num_samples": {"value": 1000},
-            "budget": {"options": get_select_options(), "value": []},
+            "objective": {"value": None},
+            "budget": {"value": None},
+            "hyperparameter1": {"value": None},
+            "hyperparameter2": {"value": None},
+            "confidences": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
-        budgets = selected_run.get_budgets(human=True)
-        hp_names = selected_run.configspace.get_hyperparameter_names()
-        objective_names = selected_run.get_objective_names()
-        objective_ids = list(range(len(objective_names)))
 
-        current_objective = inputs["objective"]["value"]
-        if current_objective is None:
-            current_objective = objective_ids[0]
+        objective_names = selected_run.get_objective_names()
+        objective_options = get_select_options(objective_names)
+
+        budgets = selected_run.get_budgets(human=True)
+        budget_options = get_select_options(budgets, range(len(budgets)))
+
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+
+        # Get selected values
+        objective_value = inputs["objective"]["value"]
+        budget_value = inputs["budget"]["value"]
+        hp1_value = inputs["hyperparameter1"]["value"]
+
+        if objective_value is None:
+            objective_value = objective_names[0]
+            budget_value = budget_options[-1]["value"]
+            hp1_value = hp_names[0]
 
         new_inputs = {
-            "hyperparameters": {
-                "options": get_checklist_options(hp_names),
-            },
-            "objective": {
-                "options": get_select_options(objective_names, objective_ids),
-                "value": current_objective,
-            },
-            "budget": {
-                "options": get_select_options(budgets),
+            "objective": {"options": objective_options, "value": objective_value},
+            "budget": {"options": budget_options, "value": budget_value},
+            "hyperparameter1": {"options": get_checklist_options(hp_names), "value": hp1_value},
+            "hyperparameter2": {
+                "options": get_checklist_options([None] + hp_names),
             },
         }
+
         update_dict(inputs, new_inputs)
-
-        num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]
-        num_samples = inputs["num_samples"]["value"]
-
-        # Reset invalid values
-        # Num Samples
-        try:
-            int(num_samples)
-        except (TypeError, ValueError):
-            inputs["num_samples"]["value"] = previous_inputs["num_samples"]["value"]
-
-        # Num Grid Points per Axis
-        try:
-            int(num_grid_points_per_axis)
-        except (TypeError, ValueError):
-            inputs["num_grid_points_per_axis"]["value"] = previous_inputs[
-                "num_grid_points_per_axis"
-            ]["value"]
-
         return inputs
 
     @staticmethod
     def process(run: AbstractRun, inputs):
         # Surrogate
-        objective_id = int(inputs["objective"]["value"])
-        selected_budget = int(inputs["budget"]["value"])
+        objective_name = inputs["objective"]["value"]
+        objective = run.get_objective(objective_name)
+        budget_id = int(inputs["budget"]["value"])
+        budget = run.get_budget(budget_id)
+        hp1 = inputs["hyperparameter1"]["value"]
+        hp2 = inputs["hyperparameter2"]["value"]
 
-        logger.debug("Initialize Surrogate")
-        surrogate_model = RandomForestSurrogate(run.configspace)
-        logger.debug("Get trials")
-        trials = list(filter(lambda trial: trial.budget == selected_budget, run.get_trials()))
-        logger.debug(f"Got {len(trials)} trials for budget {selected_budget}")
-        logger.debug("Get y")
-        y = [trial.costs[objective_id] for trial in trials]
-        logger.debug("Get configs")
-        configs = [
-            CS.Configuration(run.configspace, values=run.get_config(trial.config_id))
-            for trial in trials
-        ]
-        logger.debug("Get X")
-        X = config_list_to_array(configs)
-        logger.debug("Fit Surrogate")
-        surrogate_model.fit(X, y)
+        if objective is None:
+            raise RuntimeError("Objective not found.")
 
-        # PDP
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
-        num_samples = inputs["num_samples"]["value"]
-        num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]
-        logger.debug(
-            f"Create pdp with {num_grid_points_per_axis} grid points per axis and {num_samples} "
-            f"for hyperparameters: {selected_hyperparameters}"
+        # Encode data
+        X, Y, _ = run.get_encoded_configs(
+            [objective], budget, statuses=[Status.SUCCESS], encode_y=False
         )
+
+        # Let's initialize the surrogate
+        surrogate_model = RandomForestSurrogate(run.configspace)
+        surrogate_model.fit(X, Y)
+
+        # Prepare the hyperparameters
+        selected_hyperparameters = [hp1]
+        if hp2 is not None:
+            selected_hyperparameters += [hp2]
+
+        # And finally call PDP
         pdp = PDP.from_random_points(
             surrogate_model,
             selected_hyperparameter=selected_hyperparameters,
-            num_samples=int(num_samples),
-            num_grid_points_per_axis=int(num_grid_points_per_axis),
+            seed=0,
         )
-        logger.debug("Returning...")
+
         return {
             "x": pdp.x_pdp.tolist(),
             "y": pdp.y_pdp.tolist(),
@@ -181,23 +175,27 @@ class PDPPlugin(StaticPlugin):
 
     def load_outputs(self, inputs, outputs, run):
         # Parse inputs
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
-
-        hyperparameter_idx = [
-            run.configspace.get_idx_by_hyperparameter_name(hp) for hp in selected_hyperparameters
-        ]
+        hp1_name = inputs["hyperparameter1"]["value"]
+        hp2_name = inputs["hyperparameter2"]["value"]
+        hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
+        if hp2_name is not None:
+            hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
+        else:
+            hp2_idx = None
         show_confidences = inputs["confidences"]["value"] == "true"
+        objective_name = inputs["objective"]["value"]
+
         # Parse outputs
         x = np.asarray(outputs["x"])
         y = np.asarray(outputs["y"])
         sigmas = np.sqrt(np.asarray(outputs["variances"]))
 
         fig = go.Figure()
-        if len(selected_hyperparameters) == 1:  # 1D
+        if hp2_idx is None:  # 1D
             fig.add_trace(
                 go.Scatter(
                     name="PDP",
-                    x=x[:, hyperparameter_idx[0]],
+                    x=x[:, hp1_idx],
                     y=y,
                 )
             )
@@ -205,21 +203,21 @@ class PDPPlugin(StaticPlugin):
                 fig.add_trace(
                     go.Scatter(
                         name="1-Sigma",
-                        x=x[:, hyperparameter_idx[0]],
+                        x=x[:, hp1_idx],
                         y=y + sigmas,
                     )
                 )
                 fig.add_trace(
                     go.Scatter(
                         name="1-Sigma",
-                        x=x[:, hyperparameter_idx[0]],
+                        x=x[:, hp1_idx],
                         y=y - sigmas,
                     )
                 )
             fig.update_layout(
                 title="1D PDP" + " with confidences" * show_confidences,
-                xaxis_title=selected_hyperparameters[0],
-                yaxis_title=run.get_objective(int(inputs["objective"]["value"]))["name"],
+                xaxis_title=hp1_name,
+                yaxis_title=objective_name,
             )
         elif len(selected_hyperparameters) == 2:  # 2D
             num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]

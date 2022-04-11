@@ -187,6 +187,19 @@ class AbstractRun(ABC):
         return None
 
     def get_objective_id(self, objective: Union[Objective, str]) -> Optional[int]:
+        """
+        Returns the id of the objective if it is found.
+
+        Parameters
+        ----------
+        objective : Union[Objective, str]
+            The objective for which the id is returned.
+
+        Returns
+        -------
+        Optional[int]
+            Objective id or None if not found.
+        """
         objectives = self.get_objectives()
         for id, objective2 in enumerate(objectives):
             if isinstance(objective, Objective):
@@ -215,10 +228,10 @@ class AbstractRun(ABC):
 
         return "Combined Cost"
 
-    def get_objective_names(self) -> List:
+    def get_objective_names(self) -> List[str]:
         return [obj["name"] for obj in self.get_objectives()]
 
-    def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Dict]:
+    def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
         configs = {}
         for trial in self.history:
             if budget is not None:
@@ -226,16 +239,19 @@ class AbstractRun(ABC):
                     continue
 
             if (config_id := trial.config_id) not in configs:
-                config = self.configs[config_id]
-
+                config = self.get_config(config_id)
                 configs[config_id] = config
 
         return configs
 
-    def get_config(self, id: int):
-        return self.configs[id]
+    def get_config(self, id: int) -> Configuration:
+        config = Configuration(self.configspace, self.configs[id])
+        return config
 
-    def get_config_id(self, config: Dict):
+    def get_config_id(self, config: Union[Configuration, Dict]) -> Optional[int]:
+        if isinstance(config, Configuration):
+            config = config.get_dictionary()
+
         # Find out config id
         for id, c in self.configs.items():
             if c == config:
@@ -265,9 +281,21 @@ class AbstractRun(ABC):
 
         return self.meta["budgets"][id]
 
-    def get_budgets(self, human: bool = False) -> List[str]:
+    def get_budgets(self, human: bool = False) -> List[Union[int, float]]:
+        """
+        Returns the budgets from the meta data.
+
+        Parameters
+        ----------
+        human : bool, optional
+            Make the output better readable. By default False.
+
+        Returns
+        -------
+        List[Union[int, float]]
+            List of budgets.
+        """
         budgets = self.meta["budgets"]
-        assert len(budgets) > 0
 
         if human:
             readable_budgets = []
@@ -279,7 +307,15 @@ class AbstractRun(ABC):
 
         return budgets
 
-    def get_highest_budget(self) -> Union[int, float]:
+    def get_highest_budget(self) -> Optional[Union[int, float]]:
+        """
+        Returns the highest budget. If no budget is available, None is returned.
+
+        Returns
+        -------
+        Optional[Union[int, float]]
+            The highest budget or None if no budget was specified.
+        """
         budgets = self.meta["budgets"]
         if len(budgets) == 0:
             return None
@@ -288,18 +324,24 @@ class AbstractRun(ABC):
 
     def _process_costs(self, costs: Iterable[float]) -> List[float]:
         """
-        Get rid of none costs.
-        """
+        Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the
+        objective.
 
+        Parameters
+        ----------
+        costs : Iterable[float]
+            Costs, which should be processed. Must be the same length as the number of objectives.
+
+        Returns
+        -------
+        List[float]
+            Processed costs without NaN values.
+        """
         new_costs = []
-        for cost, obj in zip(costs, self.get_objectives()):
+        for cost, objective in zip(costs, self.get_objectives()):
             # Replace with the worst cost
             if cost is None:
-                if obj["optimize"] == "lower":
-                    cost = obj["upper"]
-                else:
-                    cost = obj["lower"]
-
+                cost = objective.get_worst_value()
             new_costs += [cost]
 
         return new_costs
@@ -308,9 +350,7 @@ class AbstractRun(ABC):
         """
         If no budget is given, the highest budget is chosen.
         """
-
         costs = self.get_costs(budget)
-
         if config_id not in costs:
             return None
 
@@ -318,11 +358,24 @@ class AbstractRun(ABC):
 
     def get_costs(
         self, budget: Optional[Union[int, float]] = None, statuses: Optional[List[Status]] = None
-    ):
+    ) -> Dict[int, List[float]]:
         """
-        If no budget is given, the highest budget is chosen.
-        """
+        Get costs with their config ids.
 
+        Parameters
+        ----------
+        budget : Optional[Union[int, float]], optional
+            Budget to select the costs. If no budget is given, the highest budget is chosen.
+            By default None.
+        statuses : Optional[List[Status]], optional
+            Only selected stati are considered. If no status is given, all stati are considered.
+            By default None.
+
+        Returns
+        -------
+        Dict[int, List[float]]
+            Costs with their config ids.
+        """
         if budget is None:
             budget = self.get_highest_budget()
 
@@ -340,50 +393,95 @@ class AbstractRun(ABC):
 
         return results
 
-    def get_min_cost(
+    def get_incumbent(
         self,
         objectives: Optional[List[Objective]] = None,
         budget: Optional[Union[int, float]] = None,
         statuses: Optional[List[Status]] = None,
-    ):
+    ) -> Tuple[float, Configuration]:
+        """
+        Returns the incumbent with its normalized cost.
+
+        Parameters
+        ----------
+        objectives : Optional[List[Objective]], optional
+            Considerd objectives. By default None. If None, all objectives are considered.
+        budget : Optional[Union[int, float]], optional
+            Considered budget. By default None. If None, the highest budget is chosen.
+        statuses : Optional[List[Status]], optional
+            Considered statuses. By default None. If None, all stati are considered.
+
+        Returns
+        -------
+        Tuple[Configuration, float]
+            Incumbent with its normalized cost.
+
+        Raises
+        ------
+        RuntimeError
+            If no incumbent was found.
+        """
         min_cost = np.inf
         best_config_id = None
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
-            cost = self.calculate_cost(costs, objectives, normalize=True)
+            cost = self.merge_costs(costs, objectives)
 
             if cost < min_cost:
                 min_cost = cost
                 best_config_id = config_id
 
-        return min_cost, best_config_id
+        if best_config_id is None:
+            raise RuntimeError("No incumbent found.")
 
-    def calculate_cost(
-        self, costs, objectives: Optional[List[Objective]] = None, normalize: bool = False
+        config = self.get_config(best_config_id)
+        config = Configuration(self.configspace, config)
+        normalized_cost = min_cost
+
+        return config, normalized_cost
+
+    def merge_costs(
+        self, costs: Iterable[float], objectives: Optional[List[Objective]] = None
     ) -> float:
         """
-        Calculates cost from multiple costs.
+        Calculates one cost value from multiple costs.
         Normalizes the cost first and weight every cost the same.
         The lower the normalized cost, the better.
-        """
 
+        Parameters
+        ----------
+        costs : Iterable[float]
+            The costs, which should be merged. Must be the same length as the original number of objectives.
+        objectives : Optional[List[Objective]], optional
+            The considered objectives to the costs. By default None.
+            If None, all objectives are considered. The passed objectives can differ from the
+            original number objectives.
+
+        Returns
+        -------
+        float
+            Merged costs.
+        """
+        # Get rid of NaN values
         costs = self._process_costs(costs)
 
         if objectives is None:
             objectives = self.get_objectives()
 
-        assert len(objectives) > 0
-
-        # No normalization needed
-        if len(objectives) == 1 and not normalize:
-            return costs[0]
+        if len(costs) != len(self.get_objectives()):
+            raise RuntimeError(
+                "The number of costs must be the same as the original number of objectives."
+            )
 
         # First normalize
         filtered_objectives = []
         normalized_costs = []
         for objective in objectives:
             objective_id = self.get_objective_id(objective)
+
+            if objective_id is None:
+                raise RuntimeError("The objective was not found.")
             cost = costs[objective_id]
 
             a = cost - objective["lower"]
@@ -415,9 +513,15 @@ class AbstractRun(ABC):
 
         return torch.load(filename)
 
-    def get_trajectory(self, objective: Objective, budget: Optional[Union[int, float]] = None):
+    def get_trajectory(
+        self, objective: Objective, budget: Optional[Union[int, float]] = None
+    ) -> Tuple[List[float], List[float], List[float], List[int]]:
         if budget is None:
             budget = self.get_highest_budget()
+
+        objective_id = self.get_objective_id(objective)
+        if objective_id is None:
+            raise RuntimeError("The passed objective is invalid.")
 
         costs_mean = []
         costs_std = []
@@ -444,7 +548,9 @@ class AbstractRun(ABC):
             if trial.budget != budget:
                 continue
 
-            cost = trial.costs[self.get_objective_id(objective)]
+            cost = trial.costs[objective_id]
+            if cost is None:
+                continue
 
             # Now it's important to check whether the cost was minimized or maximized
             if objective["optimize"] == "lower":
@@ -556,19 +662,19 @@ class AbstractRun(ABC):
         Labels = []
         config_ids = []
 
+        if objectives is None:
+            objectives = self.get_objectives()
+
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
             config = self.configs[config_id]
             x = self.encode_config(config, specific=specific)
 
             if encode_y:
-                y = [self.calculate_cost(costs, objectives)]
+                y = [self.merge_costs(costs, objectives)]
             else:
                 y = []
                 # Iterate over the objectives
-                if objectives is None:
-                    objectives = self.get_objectives()
-
                 for i in range(len(objectives)):
                     y.append(costs[i])
 
@@ -590,8 +696,8 @@ class AbstractRun(ABC):
             Labels.append(labels)
             config_ids.append(config_id)
 
-        X = np.array(X)
-        Y = np.array(Y)
+        X = np.array(X)  # type: ignore
+        Y = np.array(Y)  # type: ignore
 
         # Imputation: Easiest case is to replace all nans with -1
         # However, since Stefan used different values for inactives
@@ -626,8 +732,12 @@ class AbstractRun(ABC):
                     X[nonfinite_mask, idx] = impute_values[idx]
 
         if pandas:
-            cost_column = self.get_objective_name(objectives)
-            columns = [name for name in self.configspace.get_hyperparameter_names()] + [cost_column]
+            if encode_y:
+                cost_columns = [self.get_objective_name(objectives)]
+            else:
+                cost_columns = [objective["name"] for objective in objectives]
+
+            columns = [name for name in self.configspace.get_hyperparameter_names()] + cost_columns
             data = np.concatenate((X, Y), axis=1)
 
             df_data = pd.DataFrame(data=data, columns=columns)

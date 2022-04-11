@@ -332,7 +332,7 @@ def get_tick_data_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run, config_id: int):
+def get_hovertext_from_config(run, config_id: int) -> str:
     if config_id == BORDER_CONFIG_ID:
         return ""
 

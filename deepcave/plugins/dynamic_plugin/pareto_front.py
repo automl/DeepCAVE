@@ -8,7 +8,7 @@ from dash import dcc, html
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, get_slider_marks
-from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
 
 class ParetoFront(DynamicPlugin):
@@ -161,6 +161,7 @@ class ParetoFront(DynamicPlugin):
         traces = []
         for idx, run in enumerate(runs):
             points = np.array(outputs[run.id]["points"])
+            config_ids = outputs[run.id]["config_ids"]
 
             x, y = [], []
             x_pareto, y_pareto = [], []
@@ -173,16 +174,6 @@ class ParetoFront(DynamicPlugin):
                 else:
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
-
-            # And get configs for the hovers
-            hovertext = []
-            for config_id in outputs[run.id]["config_ids"]:
-                config = run.get_config(config_id)
-
-                text = f"<br>Config ID: {config_id}<br>"
-                for k, v in config.items():
-                    text += f"{k}: {v}<br>"
-                hovertext += [text]
 
             color = get_color(idx, alpha=0.1)
             color_pareto = get_color(idx)
@@ -207,6 +198,8 @@ class ParetoFront(DynamicPlugin):
                 line_shape = "vh"
             else:
                 line_shape = "hv"
+                
+            hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
 
             traces.append(
                 go.Scatter(

@@ -70,7 +70,7 @@ class Config:
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),
-                ICEPlugin(),
+                # ICEPlugin(),
                 PDPPlugin(),
             ],
         }

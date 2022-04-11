@@ -29,7 +29,8 @@ class Overview(DynamicPlugin):
     @staticmethod
     def process(run, inputs):
         # Get best cost across all objectives, highest budget
-        _, config_id = run.get_min_cost()
+        config, _ = run.get_incumbent()
+        config_id = run.get_config_id(config)
 
         best_performance = {}
         for idx, cost in enumerate(run.get_cost(config_id)):

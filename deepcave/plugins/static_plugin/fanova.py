@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.evaluators.fanova import fANOVA as _fANOVA
+from deepcave.evaluators.fanova import fANOVA as Evaluator
 from deepcave.plugins.static_plugin import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
@@ -32,14 +32,16 @@ class fANOVA(StaticPlugin):
             html.Div(
                 [
                     dbc.Label("Hyperparameters"),
-                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                    dbc.Checklist(
+                        id=register("hyperparameters", ["options", "value"]), inline=True
+                    ),
                 ],
                 className="mb-3",
             ),
             html.Div(
                 [
                     dbc.Label("Budgets"),
-                    dbc.Checklist(id=register("budgets", ["options", "value"])),
+                    dbc.Checklist(id=register("budgets", ["options", "value"]), inline=True),
                 ]
             ),
         ]
@@ -55,12 +57,24 @@ class fANOVA(StaticPlugin):
         budgets = selected_run.get_budgets(human=True)
         hp_names = selected_run.configspace.get_hyperparameter_names()
 
+        hp_value = inputs["hyperparameters"]["value"]
+        budget_value = inputs["budgets"]["value"]
+
+        # Pre-selection of the hyperparameters
+        if selected_run is not None:
+            if len(hp_value) == 0:
+                hp_value = hp_names
+            if len(budget_value) == 0:
+                budget_value = [budgets[-1]]
+
         new_inputs = {
             "hyperparameters": {
                 "options": get_checklist_options(hp_names),
+                "value": hp_value,
             },
             "budgets": {
                 "options": get_checklist_options(budgets),
+                "value": budget_value,
             },
         }
         update_dict(inputs, new_inputs)
@@ -71,7 +85,7 @@ class fANOVA(StaticPlugin):
         # Reset invalid values
         try:
             int(num_trees)
-        except:
+        except Exception:
             inputs["num_trees"]["value"] = previous_inputs["num_trees"]["value"]
 
         return inputs
@@ -84,16 +98,16 @@ class fANOVA(StaticPlugin):
         # Collect data
         data = {}
         for budget in budgets:
-            X, Y = run.get_encoded_configs(budget=budget, specific=True)
+            X, Y, _ = run.get_encoded_configs(budget=budget, specific=True)
 
-            evaluator = _fANOVA(
+            evaluator = Evaluator(
                 X,
                 Y,
                 configspace=run.configspace,
                 num_trees=int(inputs["num_trees"]["value"]),
             )
-            importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
 
+            importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
 
             data[budget] = importance_dict
