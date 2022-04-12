@@ -279,10 +279,11 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.dash</span> <span class="kn">import</span> <span class="n">no_update</span>
 <span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">State</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">run_handler</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
@@ -319,12 +320,12 @@ style="width: 100%;">
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">:</span> <span class="n">PluginState</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_required</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># self._state: PluginState = PluginState.UNSET</span>
+        <span class="c1"># self._refresh_required = True</span>
+        <span class="c1"># self._reset_button = False</span>
 
         <span class="c1"># Processing right now?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># self._blocked = False</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -397,7 +398,7 @@ style="width: 100%;">
                     <span class="k">return</span> <span class="n">outputs</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Load from process</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">NEEDS_PROCESSING</span>
 
                 <span class="k">if</span> <span class="n">button_pressed</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">!=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">PROCESSING</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Button pressed.&quot;</span><span class="p">)</span>
@@ -496,8 +497,9 @@ style="width: 100%;">
 
     <span class="k">def</span> <span class="nf">_callback_loop_update_status_label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">output</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;processing-info&quot;</span><span class="p">),</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
+            <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
             <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
+            <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;disabled&quot;</span><span class="p">),</span>
         <span class="p">]</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-interval&quot;</span><span class="p">),</span> <span class="s2">&quot;n_intervals&quot;</span><span class="p">)</span>
 
@@ -505,26 +507,45 @@ style="width: 100%;">
         <span class="c1"># Register updates from inputs</span>
         <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">plugin_update_status</span><span class="p">(</span><span class="n">_</span><span class="p">):</span>
-            <span class="n">status_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="c1"># Important so we don&#39;t update the button every time (would result in an ugly spinner)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">PreventUpdate</span>
+
+            <span class="c1"># This is a special case where the main loop goes into &quot;needs processing&quot;</span>
+            <span class="c1"># although the result is already there. This is because the queue needs a second</span>
+            <span class="c1"># to be updated.</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">PROCESSING</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">NEEDS_PROCESSING</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="n">PreventUpdate</span>
+
+            <span class="n">button_text</span> <span class="o">=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_caption</span><span class="p">)]</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">READY</span><span class="p">:</span>
-                <span class="n">status_str</span> <span class="o">=</span> <span class="s2">&quot;Ready.&quot;</span>
-            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">NEEDS_PROCESSING</span><span class="p">:</span>
-                <span class="n">status_str</span> <span class="o">=</span> <span class="s2">&quot;Processing Necessary.&quot;</span>
+                <span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">PROCESSING</span><span class="p">:</span>
-                <span class="n">status_str</span> <span class="o">=</span> <span class="s2">&quot;Processing ...&quot;</span>
+                <span class="n">button_text</span> <span class="o">+=</span> <span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Spinner</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s2">&quot;sm&quot;</span><span class="p">,</span> <span class="n">spinner_class_name</span><span class="o">=</span><span class="s2">&quot;ms-2&quot;</span><span class="p">)]</span>
+                <span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
 
             <span class="n">button</span> <span class="o">=</span> <span class="n">no_update</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
                 <span class="n">button</span> <span class="o">=</span> <span class="kc">None</span>
 
-            <span class="k">return</span> <span class="n">status_str</span><span class="p">,</span> <span class="n">button</span>
+            <span class="c1"># Update the previous state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+            <span class="k">return</span> <span class="n">button_text</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="n">disabled</span>
 
     <span class="k">def</span> <span class="nf">_get_job_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_name</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">inputs_key</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="StaticPlugin.__call__"><a class="viewcode-back" href="../../../api/deepcave.plugins.static_plugin.html#deepcave.plugins.static_plugin.StaticPlugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>  <span class="c1"># Set in the main loop to track what&#39;s going on right now</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>  <span class="c1"># Used for updating status</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_required</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
