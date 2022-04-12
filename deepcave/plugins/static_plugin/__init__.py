@@ -4,10 +4,11 @@ from typing import Any, Callable
 import traceback
 from enum import Enum
 
-from dash import dcc
+from dash import dcc, html
 from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+import dash_bootstrap_components as dbc
 
 from deepcave import app, c, queue, rc, run_handler
 from deepcave.plugins import Plugin
@@ -44,12 +45,12 @@ class StaticPlugin(Plugin, ABC):
     """
 
     def __init__(self) -> None:
-        self._state: PluginState = PluginState.UNSET
-        self._refresh_required = True
-        self._reset_button = False
+        # self._state: PluginState = PluginState.UNSET
+        # self._refresh_required = True
+        # self._reset_button = False
 
         # Processing right now?
-        self._blocked = False
+        # self._blocked = False
 
         super().__init__()
 
@@ -122,7 +123,7 @@ class StaticPlugin(Plugin, ABC):
                     return outputs
             else:
                 # Load from process
-                self._state = 1
+                self._state = PluginState.NEEDS_PROCESSING
 
                 if button_pressed and self._state != PluginState.PROCESSING:
                     self.logger.debug("Button pressed.")
@@ -221,8 +222,9 @@ class StaticPlugin(Plugin, ABC):
 
     def _callback_loop_update_status_label(self) -> None:
         output = [
-            Output(self.get_internal_id("processing-info"), "children"),
+            Output(self.get_internal_id("update-button"), "children"),
             Output(self.get_internal_id("update-button"), "n_clicks"),
+            Output(self.get_internal_id("update-button"), "disabled"),
         ]
         input = Input(self.get_internal_id("update-interval"), "n_intervals")
 
@@ -230,26 +232,45 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(output, input)
         def plugin_update_status(_):
-            status_str = ""
+            # Important so we don't update the button every time (would result in an ugly spinner)
+            if self._previous_state == self._state:
+                raise PreventUpdate
+
+            # This is a special case where the main loop goes into "needs processing"
+            # although the result is already there. This is because the queue needs a second
+            # to be updated.
+            if (
+                self._previous_state == PluginState.PROCESSING
+                and self._state == PluginState.NEEDS_PROCESSING
+            ):
+                raise PreventUpdate
+
+            button_text = [html.Span(self.button_caption)]
+
             if self._state == PluginState.READY:
-                status_str = "Ready."
-            elif self._state == PluginState.NEEDS_PROCESSING:
-                status_str = "Processing Necessary."
+                disabled = True
             elif self._state == PluginState.PROCESSING:
-                status_str = "Processing ..."
+                button_text += [dbc.Spinner(size="sm", spinner_class_name="ms-2")]
+                disabled = True
+            else:
+                disabled = False
 
             button = no_update
             if self._reset_button:
                 self._reset_button = False
                 button = None
 
-            return status_str, button
+            # Update the previous state
+            self._previous_state = self._state
+
+            return button_text, button, disabled
 
     def _get_job_id(self, run_name, inputs_key) -> str:
         return f"{run_name}-{inputs_key}"
 
     def __call__(self):
-        self._state = PluginState.UNSET
+        self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
+        self._previous_state = PluginState.UNSET  # Used for updating status
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False

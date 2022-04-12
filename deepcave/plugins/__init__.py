@@ -558,10 +558,6 @@ class Plugin(Layout, ABC):
                     children=self.button_caption,
                     id=self.get_internal_id("update-button"),
                 ),
-                html.Span(
-                    html.Em(id=self.get_internal_id("processing-info")),
-                    className="ms-3 align-baseline",
-                ),
             ],
         )
 
