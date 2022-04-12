@@ -83,15 +83,21 @@ class fANOVA(StaticPlugin):
         num_trees = inputs["num_trees"]["value"]
 
         # Reset invalid values
-        try:
-            int(num_trees)
-        except Exception:
-            inputs["num_trees"]["value"] = previous_inputs["num_trees"]["value"]
+        if num_trees != "":
+            try:
+                int(num_trees)
+            except Exception:
+                inputs["num_trees"]["value"] = previous_inputs["num_trees"]["value"]
 
         return inputs
 
     @staticmethod
     def process(run: AbstractRun, inputs):
+        if (num_trees := inputs["num_trees"]["value"]) == "":
+            num_trees = 16
+        else:
+            num_trees = int(num_trees)
+
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
 
@@ -104,7 +110,7 @@ class fANOVA(StaticPlugin):
                 X,
                 Y,
                 configspace=run.configspace,
-                num_trees=int(inputs["num_trees"]["value"]),
+                num_trees=num_trees,
             )
 
             importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
@@ -168,6 +174,9 @@ class fANOVA(StaticPlugin):
             ]
 
         fig = go.Figure(data=bar_data)
-        fig.update_layout(barmode="group")
+        fig.update_layout(
+            barmode="group",
+            yaxis_title="Importance",
+        )
 
         return [fig]
