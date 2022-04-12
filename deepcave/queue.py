@@ -50,6 +50,13 @@ class Queue:
                 return True
 
         return False
+    
+    def has_failed(self, job_id):
+        for id in self._queue.failed_job_registry.get_job_ids():
+            if job_id == id:
+                return True
+
+        return False
 
     def get_jobs(self, registry="running") -> List[Job]:
         if registry == "running":
@@ -58,6 +65,8 @@ class Queue:
             registry = self._queue
         elif registry == "finished":
             registry = self._queue.finished_job_registry
+        elif registry == "failed":
+            registry = self._queue.failed_job_registry
         else:
             raise NotImplementedError()
 

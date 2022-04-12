@@ -10,7 +10,7 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 
-from deepcave import app, c, queue, rc, run_handler
+from deepcave import app, c, queue, rc, run_handler, notification
 from deepcave.plugins import Plugin
 from deepcave.runs import AbstractRun
 
@@ -20,6 +20,7 @@ class PluginState(Enum):
     READY = 0
     NEEDS_PROCESSING = 1
     PROCESSING = 2
+    FAILED = 3
 
 
 def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -> Any:
@@ -196,6 +197,9 @@ class StaticPlugin(Plugin, ABC):
                         if queue.is_pending(job_id):
                             queue_pending = True
 
+                        if queue.has_failed(job_id):
+                            self._state = PluginState.FAILED
+
                     if queue_running or queue_pending:
                         self._state = PluginState.PROCESSING
 
@@ -244,6 +248,12 @@ class StaticPlugin(Plugin, ABC):
                 and self._state == PluginState.NEEDS_PROCESSING
             ):
                 raise PreventUpdate
+
+            if self._state == PluginState.FAILED:
+                notification.update(
+                    "The job failed. Check the logs or make sure the worker is still running. "
+                    "Most of the times, a simple restart might help."
+                )
 
             button_text = [html.Span(self.button_caption)]
 
