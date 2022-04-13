@@ -277,6 +277,7 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">CategoricalHyperparameter</span><span class="p">,</span> <span class="n">Constant</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
@@ -289,7 +290,8 @@ style="width: 100%;">
     <span class="n">get_slider_marks</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_tick_data</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_hovertext_from_config</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -339,7 +341,9 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameters&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">),</span>
                 <span class="p">]</span>
             <span class="p">),</span>
         <span class="p">]</span></div>
@@ -422,13 +426,10 @@ style="width: 100%;">
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">))</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
 
-        <span class="n">df_data</span><span class="p">,</span> <span class="n">df_labels</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span>
-            <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pandas</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span>
+            <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span> <span class="n">include_config_ids</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;df_data&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df_data</span><span class="p">),</span>
-            <span class="s2">&quot;df_labels&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df_labels</span><span class="p">),</span>
-        <span class="p">}</span></div>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">)}</span></div>
 
 <div class="viewcode-block" id="CCube.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.ccube.html#deepcave.plugins.dynamic_plugin.ccube.CCube.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -437,13 +438,61 @@ style="width: 100%;">
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="CCube.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.ccube.html#deepcave.plugins.dynamic_plugin.ccube.CCube.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
-        <span class="n">df_data</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df_data&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df_labels&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">n_configs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_configs&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">n_configs</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">()]</span>
+        <span class="c1"># Limit to n_configs</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_configs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+
+        <span class="n">costs</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">objective_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">config_ids</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;config_id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Specify layout kwargs</span>
+        <span class="n">layout_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">n_configs</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">hp_name</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">hp_names</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;xaxis&quot;</span><span class="p">,</span> <span class="s2">&quot;yaxis&quot;</span><span class="p">,</span> <span class="s2">&quot;zaxis&quot;</span><span class="p">])):</span>
+                <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+                <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">layout_kwargs</span><span class="p">[</span><span class="n">axis_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">tickvals</span><span class="p">,</span>
+                    <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">ticktext</span><span class="p">,</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp_name</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># Specify scatter kwargs</span>
+        <span class="n">scatter_kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;markers&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;marker&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">,</span>
+                <span class="s2">&quot;colorbar&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thickness&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">objective_name</span><span class="p">},</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;hovertext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span><span class="p">],</span>
+            <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;colorbar&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">},</span>
+            <span class="s2">&quot;hoverinfo&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">)</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">({</span><span class="s2">&quot;scene&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">**</span><span class="n">layout_kwargs</span><span class="p">}})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))],</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">scatter_kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[],</span> <span class="n">y</span><span class="o">=</span><span class="p">[])</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="o">**</span><span class="n">layout_kwargs</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span>
 
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hp_names</span><span class="p">):</span>
@@ -455,11 +504,10 @@ style="width: 100%;">
                 <span class="n">z</span> <span class="o">=</span> <span class="n">hp_name</span>
 
         <span class="c1"># Limit to n_configs</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_configs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_data</span><span class="p">))]</span>
-        <span class="n">df_data</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
-        <span class="n">df_labels</span> <span class="o">=</span> <span class="n">df_labels</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_configs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
-        <span class="n">column_names</span> <span class="o">=</span> <span class="n">df_data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">column_names</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
         <span class="n">cost_name</span> <span class="o">=</span> <span class="n">column_names</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -470,13 +518,12 @@ style="width: 100%;">
             <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-                <span class="k">for</span> <span class="n">df</span> <span class="ow">in</span> <span class="p">[</span><span class="n">df_data</span><span class="p">,</span> <span class="n">df_labels</span><span class="p">]:</span>
-                    <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cost_name</span><span class="p">]</span>
-                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                        <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cost_name</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">df</span><span class="p">[</span><span class="n">y</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-                <span class="n">df_data</span><span class="p">,</span>
+                <span class="n">df</span><span class="p">,</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                 <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
                 <span class="n">color</span><span class="o">=</span><span class="n">cost_name</span><span class="p">,</span>
@@ -484,7 +531,7 @@ style="width: 100%;">
         <span class="k">else</span><span class="p">:</span>
 
             <span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter_3d</span><span class="p">(</span>
-                <span class="n">df_data</span><span class="p">,</span>
+                <span class="n">df</span><span class="p">,</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                 <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
                 <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
@@ -498,7 +545,7 @@ style="width: 100%;">
 
             <span class="c1"># Get hyperparameter</span>
             <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
-            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">scene_kwargs</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">name</span><span class="p">:</span> <span class="p">{</span>

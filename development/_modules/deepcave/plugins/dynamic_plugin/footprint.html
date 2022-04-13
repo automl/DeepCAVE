@@ -393,11 +393,16 @@ style="width: 100%;">
         <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
         <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">include_borders</span><span class="o">=</span><span class="n">include_borders</span><span class="p">)</span>
 
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">)</span>
+        <span class="n">config_points</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;configs&quot;</span><span class="p">)</span>
+        <span class="n">border_points</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;borders&quot;</span><span class="p">)</span>
+        <span class="n">incumbent_points</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;incumbents&quot;</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_surface</span><span class="p">(</span><span class="n">details</span><span class="o">=</span><span class="n">details</span><span class="p">),</span>
-            <span class="s2">&quot;config_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;configs&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;border_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;borders&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;incumbent_points&quot;</span><span class="p">:</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_points</span><span class="p">(</span><span class="s2">&quot;incumbents&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
+            <span class="s2">&quot;config_points&quot;</span><span class="p">:</span> <span class="n">config_points</span><span class="p">,</span>
+            <span class="s2">&quot;border_points&quot;</span><span class="p">:</span> <span class="n">border_points</span><span class="p">,</span>
+            <span class="s2">&quot;incumbent_points&quot;</span><span class="p">:</span> <span class="n">incumbent_points</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="FootPrint.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.footprint.html#deepcave.plugins.dynamic_plugin.footprint.FootPrint.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -447,6 +452,7 @@ style="width: 100%;">
                     <span class="n">hovertext</span><span class="o">=</span><span class="p">[</span>
                         <span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span>
                     <span class="p">],</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">]</span>
 

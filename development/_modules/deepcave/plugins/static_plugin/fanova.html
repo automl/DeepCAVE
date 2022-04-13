@@ -273,13 +273,13 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.plugins.static_plugin.fanova</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">literal_eval</span>
-
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">COMBINED_COST_NAME</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span> <span class="k">as</span> <span class="n">Evaluator</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static_plugin</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
@@ -324,31 +324,34 @@ style="width: 100%;">
 <div class="viewcode-block" id="fANOVA.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;num_trees&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">},</span>
-            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
             <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+            <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="fANOVA.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
-
-        <span class="n">hp_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)))</span>
+        <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="n">budget_ids</span><span class="p">)</span>
         <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">hp_options</span> <span class="o">=</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
+        <span class="n">hp_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
         <span class="c1"># Pre-selection of the hyperparameters</span>
         <span class="k">if</span> <span class="n">selected_run</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">hp_value</span> <span class="o">=</span> <span class="n">hp_names</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">budget_value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">budget_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">budgets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">budget_value</span> <span class="o">=</span> <span class="p">[</span><span class="n">budget_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
         <span class="n">new_inputs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">hp_options</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp_value</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">),</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">budget_value</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">}</span>
@@ -378,8 +381,10 @@ style="width: 100%;">
 
         <span class="c1"># Collect data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
-            <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">budgets</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_combined_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_names</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">COMBINED_COST_NAME</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>  <span class="c1"># type: ignore</span>
 
             <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Evaluator</span><span class="p">(</span>
                 <span class="n">X</span><span class="p">,</span>
@@ -391,7 +396,7 @@ style="width: 100%;">
             <span class="n">importance_dict</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">quantify_importance</span><span class="p">(</span><span class="n">hp_names</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">importance_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importance_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
-            <span class="n">data</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="n">importance_dict</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">importance_dict</span>
 
         <span class="k">return</span> <span class="n">data</span></div>
 
@@ -401,20 +406,17 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="fANOVA.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.fanova.html#deepcave.plugins.static_plugin.fanova.fANOVA.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="c1"># First selected, should always be shown first</span>
-        <span class="n">selected_hyperparameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">selected_budgets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">selected_budget_ids</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_budgets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_budget_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PreventUpdate</span><span class="p">()</span>
-
-        <span class="c1"># TODO: After json serialize/deserialize, budget is not an integer anymore</span>
-        <span class="n">convert_type</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># type(selected_budgets[0])</span>
 
         <span class="c1"># Collect data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">budget</span><span class="p">,</span> <span class="n">importance_dict</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="n">convert_type</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">importance_dict</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">budget_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">budget_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_budget_ids</span><span class="p">:</span>
                 <span class="k">continue</span>
 
             <span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
@@ -428,17 +430,15 @@ style="width: 100%;">
                 <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                 <span class="n">error_y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
 
-            <span class="n">data</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error_y</span><span class="p">))</span>
-
-            <span class="c1"># if filters[&quot;sort&quot;][&quot;value&quot;] == fidelity_id:</span>
-            <span class="c1">#    selected_fidelity = fidelity</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error_y</span><span class="p">))</span>
 
         <span class="c1"># Sort by last fidelity now</span>
-        <span class="n">last_selected_budget</span> <span class="o">=</span> <span class="n">selected_budgets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">last_selected_budget</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">last_selected_budget_id</span> <span class="o">=</span> <span class="n">selected_budget_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">last_selected_budget_id</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">bar_data</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">budget</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_id</span><span class="p">)</span>
             <span class="n">bar_data</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>

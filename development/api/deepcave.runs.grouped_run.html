@@ -306,6 +306,32 @@ style="width: 100%;">
 <dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.grouped_run.</span></span><span class="sig-name descname"><span class="pre">GroupedRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/grouped_run.html#GroupedRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.runs.AbstractRun</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun.get_trajectory">
+<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/grouped_run.html#GroupedRun.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun.get_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the trajectory of the given objective and budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a>) – Objective to calculate the trajectory for.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to calculate the trajectory for. If no budget is given, then the highest budget
+is chosen. By default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>times</strong> (<em>List[float]</em>) – Times of the trajectory.</p></li>
+<li><p><strong>costs_mean</strong> (<em>List[float]</em>) – Costs of the trajectory.</p></li>
+<li><p><strong>costs_std</strong> (<em>List[float]</em>) – Standard deviation of the costs of the trajectory. This is particularly useful for
+grouped runs.</p></li>
+<li><p><strong>ids</strong> (<em>List[int]</em>) – The “global” ids of the selected trials.</p></li>
+<li><p><strong>config_ids</strong> (<em>List[int]</em>) – Config ids of the selected trials.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun.hash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun.hash" title="Permalink to this definition">¶</a></dt>

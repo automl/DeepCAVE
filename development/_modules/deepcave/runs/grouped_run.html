@@ -391,7 +391,7 @@ style="width: 100%;">
         <span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GroupedRun.get_trajectory"><a class="viewcode-back" href="../../../api/deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun.get_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># Cache costs</span>
         <span class="n">run_costs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">run_times</span> <span class="o">=</span> <span class="p">[]</span>
@@ -434,7 +434,7 @@ style="width: 100%;">
         <span class="n">costs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_costs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">costs_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">all_costs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_mean</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_std</span><span class="p">),</span> <span class="p">[]</span></div>
+        <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_mean</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_std</span><span class="p">),</span> <span class="p">[]</span></div></div>
 </pre></div>
 
               </div>

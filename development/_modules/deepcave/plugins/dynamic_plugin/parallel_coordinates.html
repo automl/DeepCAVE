@@ -288,7 +288,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_tick_data</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_hyperparameter_ticks</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -391,14 +391,11 @@ style="width: 100%;">
 <div class="viewcode-block" id="ParallelCoordinates.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">))</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_id</span><span class="p">)</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
 
-        <span class="n">df</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span><span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">pandas</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
-        <span class="p">}</span></div>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">)}</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.dynamic_plugin.parallel_coordinates.html#deepcave.plugins.dynamic_plugin.parallel_coordinates.ParallelCoordinates.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -419,7 +416,7 @@ style="width: 100%;">
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VALUE_RANGE</span>
 
             <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
-            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;tickvals&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tickvals</span>
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;ticktext&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticktext</span>

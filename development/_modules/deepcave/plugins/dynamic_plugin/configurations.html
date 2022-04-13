@@ -285,7 +285,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_tick_data</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">create_url</span>
 
 
@@ -498,7 +498,7 @@ style="width: 100%;">
             <span class="n">data</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">VALUE_RANGE</span>
 
             <span class="n">hp</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
-            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_tick_data</span><span class="p">(</span>
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span>
                 <span class="n">hp</span><span class="p">,</span> <span class="n">additional_values</span><span class="o">=</span><span class="n">highlighted_df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">include_nan</span><span class="o">=</span><span class="kc">True</span>
             <span class="p">)</span>
 

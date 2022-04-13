@@ -285,7 +285,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">run_handler</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">rc</span><span class="p">,</span> <span class="n">run_handler</span><span class="p">,</span> <span class="n">notification</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 
@@ -294,7 +294,8 @@ style="width: 100%;">
     <span class="n">UNSET</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">READY</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">NEEDS_PROCESSING</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">PROCESSING</span> <span class="o">=</span> <span class="mi">2</span></div>
+    <span class="n">PROCESSING</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="mi">3</span></div>
 
 
 <span class="k">def</span> <span class="nf">_process</span><span class="p">(</span><span class="n">process</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
@@ -471,6 +472,12 @@ style="width: 100%;">
                         <span class="k">if</span> <span class="n">queue</span><span class="o">.</span><span class="n">is_pending</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
                             <span class="n">queue_pending</span> <span class="o">=</span> <span class="kc">True</span>
 
+                        <span class="k">if</span> <span class="n">queue</span><span class="o">.</span><span class="n">has_failed</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">FAILED</span>
+                            
+                            <span class="c1"># Delete it after it was detected</span>
+                            <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
+
                     <span class="k">if</span> <span class="n">queue_running</span> <span class="ow">or</span> <span class="n">queue_pending</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">PROCESSING</span>
 
@@ -519,6 +526,12 @@ style="width: 100%;">
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">NEEDS_PROCESSING</span>
             <span class="p">):</span>
                 <span class="k">raise</span> <span class="n">PreventUpdate</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+                <span class="n">notification</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="s2">&quot;The job failed. Check the logs or make sure the worker is still running. &quot;</span>
+                    <span class="s2">&quot;Most of the times, a simple restart might help.&quot;</span>
+                <span class="p">)</span>
 
             <span class="n">button_text</span> <span class="o">=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_caption</span><span class="p">)]</span>
 

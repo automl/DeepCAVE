@@ -414,7 +414,7 @@ If a config is passed, no look-up has to be done.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to select the costs. If no budget is given, the highest budget is chosen.
 By default None.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Only selected stati are considered. If no status is given, all stati are considered.
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Only selected stati are considered. If no status is given, all stati are considered.
 By default None.</p></li>
 </ul>
 </dd>
@@ -428,30 +428,33 @@ By default None.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_encoded_configs">
-<span class="sig-name descname"><span class="pre">get_encoded_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encode_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pandas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_configs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_encoded_data">
+<span class="sig-name descname"><span class="pre">get_encoded_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_config_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_combined_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes configurations to process them further. After the configurations are encoded,
 they can be used in model prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which objectives should be considered. By default None. If None, all objectives are
-considered.</p></li>
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which objectives should be considered. If None, all objectives are
+considered. By default None.</p></li>
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which budget should be considered. By default None. If None, only the highest budget
 is considered.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which statuses should be considered. By default None. If None, all statuses are
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which statuses should be considered. By default None. If None, all statuses are
 considered.</p></li>
 <li><p><strong>encode_y</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether y should be normalized too. By default False.</p></li>
 <li><p><strong>specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether a specific encoding should be used. This encoding is compatible with fANOVA
 forest implementation. By default False.</p></li>
-<li><p><strong>pandas</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the data should be returned as pandas or numpy array. By default False.</p></li>
+<li><p><strong>include_config_ids</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include config ids. By default False.</p></li>
+<li><p><strong>include_combined_cost</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include combined cost. Note that the combined cost is calculated by the
+passed objectives only. By default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Encoded configurations or encoded dataframes if <cite>pandas</cite> equals true.</p>
+<dd class="field-even"><p>Encoded dataframes with the following columns:
+[CONFIG_ID, HP1, HP2, …, HPn, OBJ1, OBJ2, …, OBJm, COMBINED_COST]</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]</p>
+<dd class="field-odd"><p>Tuple[pd.DataFrame, pd.DataFrame]</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If a hyperparameter is not supported.</p>
@@ -482,7 +485,7 @@ forest implementation. By default False.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considerd objectives. By default None. If None, all objectives are considered.</p></li>
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default None. If None, the highest budget is chosen.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered statuses. By default None. If None, all stati are considered.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered statuses. By default None. If None, all stati are considered.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -520,13 +523,16 @@ forest implementation. By default False.</p></li>
 <dd><p>Returns the id of the objective if it is found.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>objective</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>str</em><em>]</em>) – The objective for which the id is returned.</p>
+<dd class="field-odd"><p><strong>objective</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>str</em><em>]</em>) – The objective or objective name for which the id is returned.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Objective id or None if not found.</p>
+<dd class="field-even"><p><strong>objective_id</strong> – Objective id from the passed objective.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Optional[int]</p>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If objective was not found.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,6 +545,35 @@ Returns “Combined Cost” if multiple objective names were involved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_trajectory">
+<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the trajectory of the given objective and budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a>) – Objective to calculate the trajectory for.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to calculate the trajectory for. If no budget is given, then the highest budget
+is chosen. By default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>times</strong> (<em>List[float]</em>) – Times of the trajectory.</p></li>
+<li><p><strong>costs_mean</strong> (<em>List[float]</em>) – Costs of the trajectory.</p></li>
+<li><p><strong>costs_std</strong> (<em>List[float]</em>) – Standard deviation of the costs of the trajectory. This is particularly useful for
+grouped runs.</p></li>
+<li><p><strong>ids</strong> (<em>List[int]</em>) – The “global” ids of the selected trials.</p></li>
+<li><p><strong>config_ids</strong> (<em>List[int]</em>) – Config ids of the selected trials.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

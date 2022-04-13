@@ -462,6 +462,7 @@ style="width: 100%;">
                         <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;markers&quot;</span><span class="p">,</span>
                         <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                         <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">),</span>
+                        <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
 
@@ -473,7 +474,7 @@ style="width: 100%;">
                 <span class="n">line_shape</span> <span class="o">=</span> <span class="s2">&quot;vh&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">line_shape</span> <span class="o">=</span> <span class="s2">&quot;hv&quot;</span>
-                
+
             <span class="n">hovertext</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span><span class="p">]</span>
 
             <span class="n">traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -485,6 +486,7 @@ style="width: 100%;">
                     <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color_pareto</span><span class="p">),</span>
                     <span class="n">hovertext</span><span class="o">=</span><span class="n">hovertext</span><span class="p">,</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
 
