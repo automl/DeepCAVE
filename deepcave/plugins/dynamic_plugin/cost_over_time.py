@@ -8,7 +8,7 @@ from dash import dcc, html
 from deepcave.plugins.dynamic_plugin import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_radio_options, get_select_options
-from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
 
 class CostOverTime(DynamicPlugin):
@@ -103,13 +103,16 @@ class CostOverTime(DynamicPlugin):
         budget = run.get_budget(int(budget_id))
         objective = run.get_objective(inputs["objective"]["value"])
 
-        times, costs_mean, costs_std, ids = run.get_trajectory(objective=objective, budget=budget)
+        times, costs_mean, costs_std, ids, config_ids = run.get_trajectory(
+            objective=objective, budget=budget
+        )
 
         return {
             "times": times,
             "costs_mean": costs_mean,
             "costs_std": costs_std,
             "ids": ids,
+            "config_ids": config_ids,
         }
 
     @staticmethod
@@ -121,6 +124,7 @@ class CostOverTime(DynamicPlugin):
     def load_outputs(self, inputs, outputs, runs):
         traces = []
         for idx, run in enumerate(runs):
+            config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"]["value"] == "configs":
                 x = outputs[run.id]["ids"]
@@ -148,6 +152,10 @@ class CostOverTime(DynamicPlugin):
                     name=run.name,
                     line_shape="hv",
                     line=dict(color=get_color(idx)),
+                    hovertext=[
+                        get_hovertext_from_config(run, config_id) for config_id in config_ids
+                    ],
+                    hoverinfo="text",
                 )
             )
 

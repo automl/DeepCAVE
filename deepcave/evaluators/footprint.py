@@ -48,29 +48,28 @@ class Footprint:
         """
 
         # Get encoded configs
-        X, Y, config_ids = self.run.get_encoded_configs(
-            objectives=[objective],
-            budget=budget,
-            statuses=[Status.SUCCESS],
-            encode_y=False,
-            specific=True,
-            pandas=False,
+        data = self.run.get_encoded_data(
+            objective, budget, statuses=Status.SUCCESS, specific=True, include_config_ids=True
         )
+        hp_names = self.run.configspace.get_hyperparameter_names()
+
+        # Make numpy arrays
+        X = data[hp_names].to_numpy()
+        Y = data[objective["name"]].to_numpy()
+        config_ids = data["config_id"].values.tolist()
 
         best_y = np.inf
         if objective["optimize"] == "upper":
             best_y = -best_y
 
         for y, config_id in zip(Y, config_ids):
-            # y is an array of objective values
-            # Since we know we only have one objective, we just select it.
-            y = y[0]
             if (objective["optimize"] == "lower" and y < best_y) or (
                 objective["optimize"] == "upper" and y > best_y
             ):
                 best_y = y
                 self._incumbent_id = config_id
 
+        Y = Y.reshape(-1, 1)
         if include_borders:
             X_borders, Y_borders_performance = [], []
             border_configs = get_border_configs(self.cs)
@@ -80,7 +79,7 @@ class Footprint:
                 Y_borders_performance.append([objective.get_worst_value()])
 
                 # Add negative config_id to indicate border config
-                config_ids += [BORDER_CONFIG_ID]
+                config_ids.append(BORDER_CONFIG_ID)
 
             X_borders = np.array(X_borders)
             Y_borders_performance = np.array(Y_borders_performance)
@@ -167,9 +166,10 @@ class Footprint:
                 or (category == "borders" and config_id == BORDER_CONFIG_ID)
                 or (category == "incumbents" and config_id == self._incumbent_id)
             ):
+                x = x.tolist()  # type: ignore
                 X += [x[0]]
                 Y += [x[1]]
-                config_ids.append(config_id)
+                config_ids += [config_id]
 
         return X, Y, config_ids
 

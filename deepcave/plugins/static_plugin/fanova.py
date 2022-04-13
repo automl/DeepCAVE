@@ -1,10 +1,10 @@
-from ast import literal_eval
-
+from typing import List
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
+from deepcave.constants import COMBINED_COST_NAME
 
 from deepcave.evaluators.fanova import fANOVA as Evaluator
 from deepcave.plugins.static_plugin import StaticPlugin
@@ -49,31 +49,34 @@ class fANOVA(StaticPlugin):
     def load_inputs(self):
         return {
             "num_trees": {"value": 16},
-            "hyperparameters": {"options": get_checklist_options(), "value": []},
             "budgets": {"options": get_checklist_options(), "value": []},
+            "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
         budgets = selected_run.get_budgets(human=True)
-        hp_names = selected_run.configspace.get_hyperparameter_names()
-
-        hp_value = inputs["hyperparameters"]["value"]
+        budget_ids = list(range(len(budgets)))
+        budget_options = get_checklist_options(budgets, budget_ids)
         budget_value = inputs["budgets"]["value"]
+
+        hp_names = selected_run.configspace.get_hyperparameter_names()
+        hp_options = get_checklist_options(hp_names)
+        hp_value = inputs["hyperparameters"]["value"]
 
         # Pre-selection of the hyperparameters
         if selected_run is not None:
             if len(hp_value) == 0:
                 hp_value = hp_names
             if len(budget_value) == 0:
-                budget_value = [budgets[-1]]
+                budget_value = [budget_ids[-1]]
 
         new_inputs = {
             "hyperparameters": {
-                "options": get_checklist_options(hp_names),
+                "options": hp_options,
                 "value": hp_value,
             },
             "budgets": {
-                "options": get_checklist_options(budgets),
+                "options": budget_options,
                 "value": budget_value,
             },
         }
@@ -103,8 +106,10 @@ class fANOVA(StaticPlugin):
 
         # Collect data
         data = {}
-        for budget in budgets:
-            X, Y, _ = run.get_encoded_configs(budget=budget, specific=True)
+        for budget_id, budget in enumerate(budgets):
+            df = run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
+            X = df[hp_names].to_numpy()
+            Y = df[COMBINED_COST_NAME].to_numpy()  # type: ignore
 
             evaluator = Evaluator(
                 X,
@@ -116,7 +121,7 @@ class fANOVA(StaticPlugin):
             importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
             importance_dict = {k[0]: v for k, v in importance_dict.items()}
 
-            data[budget] = importance_dict
+            data[budget_id] = importance_dict
 
         return data
 
@@ -126,20 +131,17 @@ class fANOVA(StaticPlugin):
 
     def load_outputs(self, inputs, outputs, run):
         # First selected, should always be shown first
-        selected_hyperparameters: list[str] = inputs["hyperparameters"]["value"]
-        selected_budgets: list[int] = inputs["budgets"]["value"]
+        selected_hyperparameters = inputs["hyperparameters"]["value"]
+        selected_budget_ids = inputs["budgets"]["value"]
 
-        if len(selected_hyperparameters) == 0 or len(selected_budgets) == 0:
+        if len(selected_hyperparameters) == 0 or len(selected_budget_ids) == 0:
             raise PreventUpdate()
-
-        # TODO: After json serialize/deserialize, budget is not an integer anymore
-        convert_type = lambda x: literal_eval(x)  # type(selected_budgets[0])
 
         # Collect data
         data = {}
-        for budget, importance_dict in outputs.items():
-            budget = convert_type(budget)
-            if budget not in inputs["budgets"]["value"]:
+        for budget_id, importance_dict in outputs.items():
+            budget_id = int(budget_id)
+            if budget_id not in selected_budget_ids:
                 continue
 
             x = []
@@ -153,17 +155,15 @@ class fANOVA(StaticPlugin):
                 y += [results[1]]
                 error_y += [results[3]]
 
-            data[budget] = (np.array(x), np.array(y), np.array(error_y))
-
-            # if filters["sort"]["value"] == fidelity_id:
-            #    selected_fidelity = fidelity
+            data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
         # Sort by last fidelity now
-        last_selected_budget = selected_budgets[-1]
-        idx = np.argsort(data[last_selected_budget][1], axis=None)[::-1]
+        last_selected_budget_id = selected_budget_ids[-1]
+        idx = np.argsort(data[last_selected_budget_id][1], axis=None)[::-1]
 
         bar_data = []
-        for budget, values in data.items():
+        for budget_id, values in data.items():
+            budget = run.get_budget(budget_id)
             bar_data += [
                 go.Bar(
                     name=budget,

@@ -187,6 +187,7 @@ class ParetoFront(DynamicPlugin):
                         mode="markers",
                         showlegend=False,
                         line=dict(color=color),
+                        hoverinfo="skip"
                     )
                 )
 
@@ -198,7 +199,7 @@ class ParetoFront(DynamicPlugin):
                 line_shape = "vh"
             else:
                 line_shape = "hv"
-                
+
             hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
 
             traces.append(
@@ -210,6 +211,7 @@ class ParetoFront(DynamicPlugin):
                     showlegend=True,
                     line=dict(color=color_pareto),
                     hovertext=hovertext,
+                    hoverinfo="text",
                 )
             )
 

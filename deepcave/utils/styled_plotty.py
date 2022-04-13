@@ -143,7 +143,7 @@ def prettify_label(label: Union[str, float, int]) -> str:
     return str(label)
 
 
-def get_tick_data(
+def get_hyperparameter_ticks(
     hp: Hyperparameter,
     additional_values: Optional[List] = None,
     ticks: int = 6,
@@ -244,7 +244,7 @@ def get_tick_data(
     return tickvals, ticktext
 
 
-def get_tick_data_from_values(
+def get_hyperparameter_ticks_from_values(
     values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
 ) -> Tuple[List, List]:
     """
@@ -336,7 +336,7 @@ def get_hovertext_from_config(run, config_id: int) -> str:
     if config_id == BORDER_CONFIG_ID:
         return ""
 
-    string = f"Configuration ID: {config_id}<br>"
+    string = f"Configuration ID: {int(config_id)}<br>"
     string += "-----------------------------<br>"
 
     config = run.get_config(config_id)

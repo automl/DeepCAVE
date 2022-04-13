@@ -11,11 +11,11 @@ logger = get_logger(__name__)
 
 
 class Queue:
-    def __init__(self, address: str, port: int):
+    def __init__(self, address: str, port: int) -> None:
         self._connection = redis.from_url(address + ":" + str(port))
         self._queue = _Queue("high", connection=self._connection)
 
-    def ready(self):
+    def ready(self) -> bool:
         # Check if at least one worker is in use:
         workers = Worker.all(queue=self._queue)
 
@@ -24,41 +24,41 @@ class Queue:
 
         return False
 
-    def is_processed(self, job_id):
+    def is_processed(self, job_id: str) -> bool:
         if self.is_running(job_id) or self.is_pending(job_id) or self.is_finished(job_id):
             return True
 
         return False
 
-    def is_running(self, job_id):
+    def is_running(self, job_id: str) -> bool:
         for id in self._queue.started_job_registry.get_job_ids():
             if job_id == id:
                 return True
 
         return False
 
-    def is_pending(self, job_id):
+    def is_pending(self, job_id: str) -> bool:
         for id in self._queue.get_job_ids():
             if job_id == id:
                 return True
 
         return False
 
-    def is_finished(self, job_id):
+    def is_finished(self, job_id: str) -> bool:
         for id in self._queue.finished_job_registry.get_job_ids():
             if job_id == id:
                 return True
 
         return False
-    
-    def has_failed(self, job_id):
+
+    def has_failed(self, job_id: str) -> bool:
         for id in self._queue.failed_job_registry.get_job_ids():
             if job_id == id:
                 return True
 
         return False
 
-    def get_jobs(self, registry="running") -> List[Job]:
+    def get_jobs(self, registry: str = "running") -> List[Job]:
         if registry == "running":
             registry = self._queue.started_job_registry
         elif registry == "pending":
@@ -86,20 +86,23 @@ class Queue:
     def get_finished_jobs(self) -> List[Job]:
         return self.get_jobs(registry="finished")
 
-    def delete_job(self, job_id: str):
+    def delete_job(self, job_id: str) -> None:
         registries = [
             self._queue.finished_job_registry,
             self._queue,
             self._queue.started_job_registry,
+            self._queue.failed_job_registry,
         ]
 
         for r in registries:
             try:
                 r.remove(job_id, delete_job=True)
-            except:
+            except Exception:
                 pass
 
-    def enqueue(self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]):
+    def enqueue(
+        self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]
+    ) -> None:
         # First check if job_id is already in use
         if self.is_processed(job_id):
             logger.debug("Job was not added because it was processed already.")

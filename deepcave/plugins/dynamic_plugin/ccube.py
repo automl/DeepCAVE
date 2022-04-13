@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 
@@ -14,7 +15,8 @@ from deepcave.utils.layout import (
     get_slider_marks,
 )
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import get_tick_data
+from deepcave.utils.styled_plotty import get_hovertext_from_config, get_hyperparameter_ticks
+from deepcave.runs import Status
 
 logger = get_logger(__name__)
 
@@ -64,7 +66,9 @@ class CCube(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Hyperparameters"),
-                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                    dbc.Checklist(
+                        id=register("hyperparameters", ["options", "value"]), inline=True
+                    ),
                 ]
             ),
         ]
@@ -147,13 +151,10 @@ class CCube(DynamicPlugin):
         budget = run.get_budget(int(budget_id))
         objective = run.get_objective(inputs["objective"]["value"])
 
-        df_data, df_labels = run.get_encoded_configs(
-            objectives=[objective], budget=budget, specific=False, pandas=True
+        df = run.get_encoded_data(
+            objectives=objective, budget=budget, statuses=Status.SUCCESS, include_config_ids=True
         )
-        return {
-            "df_data": serialize(df_data),
-            "df_labels": serialize(df_labels),
-        }
+        return {"df": serialize(df)}
 
     @staticmethod
     def get_output_layout(register):
@@ -162,13 +163,61 @@ class CCube(DynamicPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, run):
-        df_data = deserialize(outputs["df_data"], dtype=pd.DataFrame)
-        df_labels = deserialize(outputs["df_labels"], dtype=pd.DataFrame)
+        df = deserialize(outputs["df"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameters"]["value"]
         n_configs = inputs["n_configs"]["value"]
+        objective_name = inputs["objective"]["value"]
 
-        if n_configs == 0 or len(hp_names) == 0:
-            return [px.scatter()]
+        # Limit to n_configs
+        idx = [str(i) for i in range(n_configs, len(df))]
+        df = df.drop(idx)
+
+        costs = df[objective_name].values.tolist()
+        config_ids = df["config_id"].values.tolist()
+        data = []
+
+        # Specify layout kwargs
+        layout_kwargs = {}
+        if n_configs > 0 and len(hp_names) > 0:
+            for i, (hp_name, axis_name) in enumerate(zip(hp_names, ["xaxis", "yaxis", "zaxis"])):
+                hp = run.configspace.get_hyperparameter(hp_name)
+                values = df[hp_name].values.tolist()
+
+                tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)
+                layout_kwargs[axis_name] = {
+                    "tickvals": tickvals,
+                    "ticktext": ticktext,
+                    "title": hp_name,
+                }
+                data.append(values)
+
+        # Specify scatter kwargs
+        scatter_kwargs = {
+            "mode": "markers",
+            "marker": {
+                "size": 5,
+                "color": costs,
+                "colorbar": {"thickness": 30, "title": objective_name},
+            },
+            "hovertext": [get_hovertext_from_config(run, config_id) for config_id in config_ids],
+            "meta": {"colorbar": costs},
+            "hoverinfo": "text",
+        }
+
+        if len(data) == 3:
+            trace = go.Scatter3d(x=data[0], y=data[1], z=data[2], **scatter_kwargs)
+            layout = go.Layout({"scene": {**layout_kwargs}})
+        else:
+            if len(data) == 1:
+                trace = go.Scatter(x=data[0], y=[0 for _ in range(len(data[0]))], **scatter_kwargs)
+            elif len(data) == 2:
+                trace = go.Scatter(x=data[0], y=data[1], **scatter_kwargs)
+            else:
+                trace = go.Scatter(x=[], y=[])
+            layout = go.Layout(**layout_kwargs)
+
+        fig = go.Figure(data=trace, layout=layout)
+        return fig
 
         x, y, z = None, None, None
         for i, hp_name in enumerate(hp_names):
@@ -180,11 +229,10 @@ class CCube(DynamicPlugin):
                 z = hp_name
 
         # Limit to n_configs
-        idx = [str(i) for i in range(n_configs, len(df_data))]
-        df_data = df_data.drop(idx)
-        df_labels = df_labels.drop(idx)
+        idx = [str(i) for i in range(n_configs, len(df))]
+        df = df.drop(idx)
 
-        column_names = df_data.columns.tolist()
+        column_names = df.columns.tolist()
         cost_name = column_names[-1]
 
         if x is None:
@@ -195,13 +243,12 @@ class CCube(DynamicPlugin):
             if y is None:
                 y = ""
 
-                for df in [df_data, df_labels]:
-                    df[y] = df[cost_name]
-                    for k in df[y].keys():
-                        df[y][k] = 0
+                df[y] = df[cost_name]
+                for k in df[y].keys():
+                    df[y][k] = 0
 
             fig = px.scatter(
-                df_data,
+                df,
                 x=x,
                 y=y,
                 color=cost_name,
@@ -209,7 +256,7 @@ class CCube(DynamicPlugin):
         else:
 
             fig = px.scatter_3d(
-                df_data,
+                df,
                 x=x,
                 y=y,
                 z=z,
@@ -223,7 +270,7 @@ class CCube(DynamicPlugin):
 
             # Get hyperparameter
             hp = run.configspace.get_hyperparameter(axis)
-            tickvals, ticktext = get_tick_data(hp, ticks=4, include_nan=True)
+            tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)
 
             scene_kwargs = {
                 name: {

@@ -13,7 +13,7 @@ from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import get_tick_data
+from deepcave.utils.styled_plotty import get_hyperparameter_ticks
 
 logger = get_logger(__name__)
 
@@ -116,14 +116,11 @@ class ParallelCoordinates(DynamicPlugin):
     @staticmethod
     def process(run, inputs):
         budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(int(budget_id))
+        budget = run.get_budget(budget_id)
         objective = run.get_objective(inputs["objective"]["value"])
 
-        df, _ = run.get_encoded_configs(objectives=[objective], budget=budget, pandas=True)
-
-        return {
-            "df": serialize(df),
-        }
+        df = run.get_encoded_data(objective, budget)
+        return {"df": serialize(df)}
 
     @staticmethod
     def get_output_layout(register):
@@ -144,7 +141,7 @@ class ParallelCoordinates(DynamicPlugin):
             data[hp_name]["range"] = VALUE_RANGE
 
             hp = run.configspace.get_hyperparameter(hp_name)
-            tickvals, ticktext = get_tick_data(hp, ticks=4, include_nan=True)
+            tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)
 
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext

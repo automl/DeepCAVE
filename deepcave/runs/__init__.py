@@ -15,7 +15,7 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
-from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
+from deepcave.constants import COMBINED_COST_NAME, CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
 
 from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
@@ -186,19 +186,24 @@ class AbstractRun(ABC):
 
         return None
 
-    def get_objective_id(self, objective: Union[Objective, str]) -> Optional[int]:
+    def get_objective_id(self, objective: Union[Objective, str]) -> int:
         """
         Returns the id of the objective if it is found.
 
         Parameters
         ----------
         objective : Union[Objective, str]
-            The objective for which the id is returned.
+            The objective or objective name for which the id is returned.
 
         Returns
         -------
-        Optional[int]
-            Objective id or None if not found.
+        objective_id : int
+            Objective id from the passed objective.
+
+        Raises
+        ------
+        RuntimeError
+            If objective was not found.
         """
         objectives = self.get_objectives()
         for id, objective2 in enumerate(objectives):
@@ -209,7 +214,7 @@ class AbstractRun(ABC):
                 if objective == objective2["name"]:
                     return id
 
-        return None
+        raise RuntimeError("Objective was not found.")
 
     def get_objective_name(self, objectives: Optional[List[Objective]] = None) -> str:
         """
@@ -226,7 +231,7 @@ class AbstractRun(ABC):
             if len(objectives) == 1:
                 return objectives[0]["name"]
 
-        return "Combined Cost"
+        return COMBINED_COST_NAME
 
     def get_objective_names(self) -> List[str]:
         return [obj["name"] for obj in self.get_objectives()]
@@ -357,7 +362,9 @@ class AbstractRun(ABC):
         return costs[config_id]
 
     def get_costs(
-        self, budget: Optional[Union[int, float]] = None, statuses: Optional[List[Status]] = None
+        self,
+        budget: Optional[Union[int, float]] = None,
+        statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Dict[int, List[float]]:
         """
         Get costs with their config ids.
@@ -367,7 +374,7 @@ class AbstractRun(ABC):
         budget : Optional[Union[int, float]], optional
             Budget to select the costs. If no budget is given, the highest budget is chosen.
             By default None.
-        statuses : Optional[List[Status]], optional
+        statuses : Optional[Union[Status, List[Status]]], optional
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
 
@@ -386,6 +393,9 @@ class AbstractRun(ABC):
                     continue
 
             if statuses is not None:
+                if isinstance(statuses, Status):
+                    statuses = [statuses]
+
                 if trial.status not in statuses:
                     continue
 
@@ -397,8 +407,8 @@ class AbstractRun(ABC):
         self,
         objectives: Optional[List[Objective]] = None,
         budget: Optional[Union[int, float]] = None,
-        statuses: Optional[List[Status]] = None,
-    ) -> Tuple[float, Configuration]:
+        statuses: Optional[Union[Status, List[Status]]] = None,
+    ) -> Tuple[Configuration, float]:
         """
         Returns the incumbent with its normalized cost.
 
@@ -408,7 +418,7 @@ class AbstractRun(ABC):
             Considerd objectives. By default None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.
-        statuses : Optional[List[Status]], optional
+        statuses : Optional[Union[Status, List[Status]]], optional
             Considered statuses. By default None. If None, all stati are considered.
 
         Returns
@@ -442,7 +452,7 @@ class AbstractRun(ABC):
         return config, normalized_cost
 
     def merge_costs(
-        self, costs: Iterable[float], objectives: Optional[List[Objective]] = None
+        self, costs: Iterable[float], objectives: Optional[Union[Objective, List[Objective]]] = None
     ) -> float:
         """
         Calculates one cost value from multiple costs.
@@ -468,6 +478,9 @@ class AbstractRun(ABC):
 
         if objectives is None:
             objectives = self.get_objectives()
+
+        if isinstance(objectives, Objective):
+            objectives = [objectives]
 
         if len(costs) != len(self.get_objectives()):
             raise RuntimeError(
@@ -515,17 +528,41 @@ class AbstractRun(ABC):
 
     def get_trajectory(
         self, objective: Objective, budget: Optional[Union[int, float]] = None
-    ) -> Tuple[List[float], List[float], List[float], List[int]]:
+    ) -> Tuple[List[float], List[float], List[float], List[int], List[int]]:
+        """
+        Calculates the trajectory of the given objective and budget.
+
+        Parameters
+        ----------
+        objective : Objective
+            Objective to calculate the trajectory for.
+        budget : Optional[Union[int, float]], optional
+            Budget to calculate the trajectory for. If no budget is given, then the highest budget
+            is chosen. By default None.
+
+        Returns
+        -------
+        times : List[float]
+            Times of the trajectory.
+        costs_mean : List[float]
+            Costs of the trajectory.
+        costs_std : List[float]
+            Standard deviation of the costs of the trajectory. This is particularly useful for
+            grouped runs.
+        ids : List[int]
+            The "global" ids of the selected trials.
+        config_ids : List[int]
+            Config ids of the selected trials.
+        """
         if budget is None:
             budget = self.get_highest_budget()
 
         objective_id = self.get_objective_id(objective)
-        if objective_id is None:
-            raise RuntimeError("The passed objective is invalid.")
 
         costs_mean = []
         costs_std = []
         ids = []
+        config_ids = []
         times = []
 
         order = []
@@ -565,8 +602,9 @@ class AbstractRun(ABC):
                 costs_std.append(0)
                 times.append(trial.end_time)
                 ids.append(id)
+                config_ids.append(trial.config_id)
 
-        return times, costs_mean, costs_std, ids
+        return times, costs_mean, costs_std, ids, config_ids
 
     def encode_config(
         self, config: Union[int, Dict[Any, Any], Configuration], specific: bool = False
@@ -615,28 +653,28 @@ class AbstractRun(ABC):
 
         return x
 
-    def get_encoded_configs(
+    def get_encoded_data(
         self,
-        objectives: Optional[List[Objective]] = None,
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
         budget: Optional[Union[int, float]] = None,
-        statuses: Optional[List[Status]] = None,
-        encode_y: bool = False,
+        statuses: Optional[Union[Status, List[Status]]] = None,
         specific: bool = False,
-        pandas: bool = False,
-    ) -> Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]:
+        include_config_ids: bool = False,
+        include_combined_cost: bool = False,
+    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Encodes configurations to process them further. After the configurations are encoded,
         they can be used in model prediction.
 
         Parameters
         ----------
-        objectives : Optional[List[Objective]], optional
-            Which objectives should be considered. By default None. If None, all objectives are
-            considered.
+        objectives : Optional[Union[Objective, List[Objective]]], optional
+            Which objectives should be considered. If None, all objectives are
+            considered. By default None.
         budget : Optional[List[Status]], optional
             Which budget should be considered. By default None. If None, only the highest budget
             is considered.
-        statuses : Optional[List[Status]], optional
+        statuses : Optional[Union[Status, List[Status]]], optional
             Which statuses should be considered. By default None. If None, all statuses are
             considered.
         encode_y : bool, optional
@@ -644,13 +682,17 @@ class AbstractRun(ABC):
         specific : bool, optional
             Whether a specific encoding should be used. This encoding is compatible with fANOVA
             forest implementation. By default False.
-        pandas : bool, optional
-            Whether the data should be returned as pandas or numpy array. By default False.
+        include_config_ids : bool, optional
+            Whether to include config ids. By default False.
+        include_combined_cost : bool, optional
+            Whether to include combined cost. Note that the combined cost is calculated by the
+            passed objectives only. By default False.
 
         Returns
         -------
-        Union[Tuple[np.ndarray, np.ndarray, List[int]], Tuple[pd.DataFrame, pd.DataFrame]]
-            Encoded configurations or encoded dataframes if `pandas` equals true.
+        Tuple[pd.DataFrame, pd.DataFrame]
+            Encoded dataframes with the following columns:
+            [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
 
         Raises
         ------
@@ -658,46 +700,37 @@ class AbstractRun(ABC):
             If a hyperparameter is not supported.
         """
 
-        X, Y = [], []
-        Labels = []
-        config_ids = []
-
         if objectives is None:
             objectives = self.get_objectives()
+
+        if isinstance(objectives, Objective):
+            objectives = [objectives]
+
+        X, Y = [], []
+        config_ids = []
 
         results = self.get_costs(budget, statuses)
         for config_id, costs in results.items():
             config = self.configs[config_id]
             x = self.encode_config(config, specific=specific)
+            y = []
 
-            if encode_y:
-                y = [self.merge_costs(costs, objectives)]
-            else:
-                y = []
-                # Iterate over the objectives
-                for i in range(len(objectives)):
-                    y.append(costs[i])
+            # Add all objectives
+            for objective in objectives:
+                objective_id = self.get_objective_id(objective)
+                y += [costs[objective_id]]
 
-            labels = []
-            for hp_name in self.configspace.get_hyperparameter_names():
-                # `hp_name` might not be in config (e.g. if hp is inactive)
-                if hp_name not in config:
-                    label = NAN_LABEL
-                else:
-                    label = prettify_label(config[hp_name])
-
-                labels += [label]
-
-            # Also prettify y values
-            labels += [prettify_label(y_) for y_ in y]
+            # Add combined cost
+            if include_combined_cost:
+                y += [self.merge_costs(costs, objectives)]
 
             X.append(x)
             Y.append(y)
-            Labels.append(labels)
             config_ids.append(config_id)
 
         X = np.array(X)  # type: ignore
         Y = np.array(Y)  # type: ignore
+        config_ids = np.array(config_ids).reshape(-1, 1)  # type: ignore
 
         # Imputation: Easiest case is to replace all nans with -1
         # However, since Stefan used different values for inactives
@@ -725,27 +758,33 @@ class AbstractRun(ABC):
                         elif isinstance(hp, Constant):
                             impute_values[idx] = 1
                         else:
-                            raise ValueError
+                            raise ValueError("Hyperparameter not supported.")
 
                 if conditional[idx] is True:
                     nonfinite_mask = ~np.isfinite(X[:, idx])
                     X[nonfinite_mask, idx] = impute_values[idx]
 
-        if pandas:
-            if encode_y:
-                cost_columns = [self.get_objective_name(objectives)]
-            else:
-                cost_columns = [objective["name"] for objective in objectives]
+        # Now we create dataframes for both values and labels
+        # [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
+        if include_config_ids:
+            columns = ["config_id"]
+        else:
+            columns = []
 
-            columns = [name for name in self.configspace.get_hyperparameter_names()] + cost_columns
+        columns += [name for name in self.configspace.get_hyperparameter_names()]
+        columns += [objective["name"] for objective in objectives]
+
+        if include_combined_cost:
+            columns += [COMBINED_COST_NAME]
+
+        if include_config_ids:
+            data = np.concatenate((config_ids, X, Y), axis=1)
+        else:
             data = np.concatenate((X, Y), axis=1)
 
-            df_data = pd.DataFrame(data=data, columns=columns)
-            df_labels = pd.DataFrame(data=Labels, columns=columns)
+        data = pd.DataFrame(data=data, columns=columns)
 
-            return df_data, df_labels
-        else:
-            return X, Y, config_ids
+        return data
 
 
 def check_equality(

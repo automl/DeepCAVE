@@ -10,7 +10,7 @@ from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import create_table, get_slider_marks
-from deepcave.utils.styled_plotty import get_color, get_tick_data
+from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
 from deepcave.utils.url import create_url
 
 
@@ -223,7 +223,7 @@ class Configurations(DynamicPlugin):
             data[hp_name]["range"] = VALUE_RANGE
 
             hp = run.configspace.get_hyperparameter(hp_name)
-            tickvals, ticktext = get_tick_data(
+            tickvals, ticktext = get_hyperparameter_ticks(
                 hp, additional_values=highlighted_df[hp_name].values, ticks=4, include_nan=True
             )
 

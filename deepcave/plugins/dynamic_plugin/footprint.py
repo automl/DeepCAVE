@@ -118,11 +118,16 @@ class FootPrint(StaticPlugin):
         evaluator = Evaluator(run)
         evaluator.calculate(objective, budget, include_borders=include_borders)
 
+        data = evaluator.get_surface(details=details)
+        config_points = evaluator.get_points("configs")
+        border_points = evaluator.get_points("borders")
+        incumbent_points = evaluator.get_points("incumbents")
+
         return {
-            "data": evaluator.get_surface(details=details),
-            "config_points": evaluator.get_points("configs"),
-            "border_points": evaluator.get_points("borders"),
-            "incumbent_points": evaluator.get_points("incumbents"),
+            "data": data,
+            "config_points": config_points,
+            "border_points": border_points,
+            "incumbent_points": incumbent_points,
         }
 
     @staticmethod
@@ -172,6 +177,7 @@ class FootPrint(StaticPlugin):
                     hovertext=[
                         get_hovertext_from_config(run, config_id) for config_id in config_ids
                     ],
+                    hoverinfo="text",
                 )
             ]
 
