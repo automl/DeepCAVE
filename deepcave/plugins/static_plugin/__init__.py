@@ -199,6 +199,9 @@ class StaticPlugin(Plugin, ABC):
 
                         if queue.has_failed(job_id):
                             self._state = PluginState.FAILED
+                            
+                            # Delete it after it was detected
+                            queue.delete_job(job_id)
 
                     if queue_running or queue_pending:
                         self._state = PluginState.PROCESSING
