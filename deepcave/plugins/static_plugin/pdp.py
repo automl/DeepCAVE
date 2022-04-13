@@ -12,8 +12,15 @@ from deepcave.runs import AbstractRun, Status
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.logs import get_logger
+from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
 
 logger = get_logger("PDPPlugin")
+
+
+GRID_POINTS_PER_AXIS = 20
+SAMPLES_PER_HP = 20
+MAX_SAMPLES = 10000
+MAX_SHOWN_SAMPLES = 50
 
 
 class PDPPlugin(StaticPlugin):
@@ -67,25 +74,41 @@ class PDPPlugin(StaticPlugin):
                         md=6,
                     ),
                 ],
-                className="mb-3",
             ),
-            # html.Div(
-            #    [
-            #        dbc.Label("Number of Samples"),
-            #        dbc.Input(id=register("num_samples", "value")),
-            #    ]
-            # ),
         ]
 
     @staticmethod
     def get_filter_layout(register):
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Show confidence"),
-                    dbc.Select(id=register("confidences", ["options", "value"])),
-                ]
-            )
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dbc.Label("Show confidence"),
+                                    dbc.Select(
+                                        id=register("show_confidence", ["options", "value"])
+                                    ),
+                                ]
+                            )
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dbc.Label("Show ICE curves"),
+                                    dbc.Select(id=register("show_ice", ["options", "value"])),
+                                ]
+                            )
+                        ],
+                        md=6,
+                    ),
+                ],
+                className="mb-3",
+            ),
         ]
 
     def load_inputs(self):
@@ -94,11 +117,11 @@ class PDPPlugin(StaticPlugin):
             "budget": {"value": None},
             "hyperparameter1": {"value": None},
             "hyperparameter2": {"value": None},
-            "confidences": {"options": get_select_options(binary=True), "value": "true"},
+            "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
+            "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
-
         objective_names = selected_run.get_objective_names()
         objective_options = get_select_options(objective_names)
 
@@ -132,6 +155,7 @@ class PDPPlugin(StaticPlugin):
     @staticmethod
     def process(run: AbstractRun, inputs):
         # Surrogate
+        hp_names = run.configspace.get_hyperparameter_names()
         objective_name = inputs["objective"]["value"]
         objective = run.get_objective(objective_name)
         budget_id = int(inputs["budget"]["value"])
@@ -143,9 +167,14 @@ class PDPPlugin(StaticPlugin):
             raise RuntimeError("Objective not found.")
 
         # Encode data
-        X, Y, _ = run.get_encoded_configs(
-            [objective], budget, statuses=[Status.SUCCESS], encode_y=False
+        df = run.get_encoded_data(
+            objective,
+            budget,
+            statuses=Status.SUCCESS,
         )
+
+        X = df[hp_names].to_numpy()
+        Y = df[objective_name].to_numpy()
 
         # Let's initialize the surrogate
         surrogate_model = RandomForestSurrogate(run.configspace)
@@ -153,20 +182,40 @@ class PDPPlugin(StaticPlugin):
 
         # Prepare the hyperparameters
         selected_hyperparameters = [hp1]
-        if hp2 is not None:
+        if hp2 is not None and hp2 != "":
             selected_hyperparameters += [hp2]
+
+        num_samples = SAMPLES_PER_HP * len(X)
+        # We limit the samples to max 10k
+        if num_samples > MAX_SAMPLES:
+            num_samples = MAX_SAMPLES
 
         # And finally call PDP
         pdp = PDP.from_random_points(
             surrogate_model,
             selected_hyperparameter=selected_hyperparameters,
             seed=0,
+            num_grid_points_per_axis=GRID_POINTS_PER_AXIS,
+            num_samples=num_samples,
         )
 
+        x = pdp.x_pdp.tolist()
+        y = pdp.y_pdp.tolist()
+
+        # We have to cut the ICE curves because it's too much data
+        x_ice = pdp._ice.x_ice.tolist()
+        y_ice = pdp._ice.y_ice.tolist()
+
+        if len(x_ice) > MAX_SHOWN_SAMPLES:
+            x_ice = x_ice[:MAX_SHOWN_SAMPLES]
+            y_ice = y_ice[:MAX_SHOWN_SAMPLES]
+
         return {
-            "x": pdp.x_pdp.tolist(),
-            "y": pdp.y_pdp.tolist(),
+            "x": x,
+            "y": y,
             "variances": pdp.y_variances.tolist(),
+            "x_ice": x_ice,
+            "y_ice": y_ice,
         }
 
     @staticmethod
@@ -176,13 +225,18 @@ class PDPPlugin(StaticPlugin):
     def load_outputs(self, inputs, outputs, run):
         # Parse inputs
         hp1_name = inputs["hyperparameter1"]["value"]
-        hp2_name = inputs["hyperparameter2"]["value"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        if hp2_name is not None:
+        hp1 = run.configspace.get_hyperparameter(hp1_name)
+
+        hp2_name = inputs["hyperparameter2"]["value"]
+        hp2_idx = None
+        hp2 = None
+        if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-        else:
-            hp2_idx = None
-        show_confidences = inputs["confidences"]["value"] == "true"
+            hp2 = run.configspace.get_hyperparameter(hp2_name)
+
+        show_confidence = inputs["show_confidence"]["value"] == "true"
+        show_ice = inputs["show_ice"]["value"] == "true"
         objective_name = inputs["objective"]["value"]
 
         # Parse outputs
@@ -190,64 +244,102 @@ class PDPPlugin(StaticPlugin):
         y = np.asarray(outputs["y"])
         sigmas = np.sqrt(np.asarray(outputs["variances"]))
 
-        fig = go.Figure()
+        x_ice = np.asarray(outputs["x_ice"])
+        y_ice = np.asarray(outputs["y_ice"])
+
+        traces = []
         if hp2_idx is None:  # 1D
-            fig.add_trace(
-                go.Scatter(
-                    name="PDP",
-                    x=x[:, hp1_idx],
-                    y=y,
-                )
-            )
-            if show_confidences:
-                fig.add_trace(
+            # Add ICE curves
+            if show_ice:
+                for x_, y_ in zip(x_ice, y_ice):
+                    traces += [
+                        go.Scatter(
+                            x=x_[:, hp1_idx],
+                            y=y_,
+                            line=dict(color=get_color(1, 0.1)),
+                            hoverinfo="skip",
+                            showlegend=False,
+                        )
+                    ]
+
+            if show_confidence:
+                traces += [
                     go.Scatter(
-                        name="1-Sigma",
                         x=x[:, hp1_idx],
                         y=y + sigmas,
+                        line=dict(color=get_color(0, 0.1)),
+                        hoverinfo="skip",
+                        showlegend=False,
                     )
-                )
-                fig.add_trace(
+                ]
+
+                traces += [
                     go.Scatter(
-                        name="1-Sigma",
                         x=x[:, hp1_idx],
                         y=y - sigmas,
+                        fill="tonexty",
+                        fillcolor=get_color(0, 0.2),
+                        line=dict(color=get_color(0, 0.1)),
+                        hoverinfo="skip",
+                        showlegend=False,
                     )
-                )
-            fig.update_layout(
-                title="1D PDP" + " with confidences" * show_confidences,
-                xaxis_title=hp1_name,
-                yaxis_title=objective_name,
-            )
-        elif len(selected_hyperparameters) == 2:  # 2D
-            num_grid_points_per_axis = inputs["num_grid_points_per_axis"]["value"]
-            if show_confidences:
-                fig.add_trace(
-                    go.Contour(
-                        z=np.reshape(sigmas, (num_grid_points_per_axis, num_grid_points_per_axis)),
-                        # x=[-9, -6, -5, -3, -1],  # horizontal axis
-                        # y=[0, 1, 4, 5, 7]  # vertical axis
-                    )
-                )
-                fig.update_layout(
-                    title="2D PDP (Confidences)",
-                    xaxis_title=selected_hyperparameters[0],
-                    yaxis_title=selected_hyperparameters[1],
-                )
-            else:
-                fig.add_trace(
-                    go.Contour(
-                        z=np.reshape(y, (num_grid_points_per_axis, num_grid_points_per_axis)),
-                        # x=[-9, -6, -5, -3, -1],  # horizontal axis
-                        # y=[0, 1, 4, 5, 7]  # vertical axis
-                    )
-                )
-                fig.update_layout(
-                    title="2D PDP (Values)",
-                    xaxis_title=selected_hyperparameters[0],
-                    yaxis_title=selected_hyperparameters[1],
-                )
-        else:
-            pass
+                ]
 
-        return [fig]
+            traces += [
+                go.Scatter(
+                    x=x[:, hp1_idx],
+                    y=y,
+                    line=dict(color=get_color(0, 1)),
+                    hoverinfo="skip",
+                    showlegend=False,
+                )
+            ]
+
+            tickvals, ticktext = get_hyperparameter_ticks(hp1)
+            layout = go.Layout(
+                {
+                    "xaxis": {
+                        "tickvals": tickvals,
+                        "ticktext": ticktext,
+                        "title": hp1_name,
+                    },
+                    "yaxis": {
+                        "title": objective_name,
+                    },
+                }
+            )
+        else:
+            z = y
+            if show_confidence:
+                z = sigmas
+            traces += [
+                go.Contour(
+                    z=z,
+                    x=x[:, hp1_idx],
+                    y=x[:, hp2_idx],
+                    colorbar=dict(
+                        title=objective_name if not show_confidence else "Confidence (1-Sigma)",
+                    ),
+                    hoverinfo="skip",
+                )
+            ]
+
+            x_tickvals, x_ticktext = get_hyperparameter_ticks(hp1)
+            y_tickvals, y_ticktext = get_hyperparameter_ticks(hp2)
+
+            layout = go.Layout(
+                {
+                    "xaxis": {
+                        "tickvals": x_tickvals,
+                        "ticktext": x_ticktext,
+                        "title": hp1_name,
+                    },
+                    "yaxis": {
+                        "tickvals": y_tickvals,
+                        "ticktext": y_ticktext,
+                        "title": hp2_name,
+                    },
+                }
+            )
+
+        return go.Figure(data=traces, layout=layout)

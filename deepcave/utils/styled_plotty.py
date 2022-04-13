@@ -146,7 +146,7 @@ def prettify_label(label: Union[str, float, int]) -> str:
 def get_hyperparameter_ticks(
     hp: Hyperparameter,
     additional_values: Optional[List] = None,
-    ticks: int = 6,
+    ticks: int = 4,
     include_nan: bool = True,
 ) -> Tuple[List, List]:
     """
