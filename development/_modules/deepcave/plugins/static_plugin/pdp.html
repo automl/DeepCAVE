@@ -287,8 +287,15 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;PDPPlugin&quot;</span><span class="p">)</span>
+
+
+<span class="n">GRID_POINTS_PER_AXIS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">SAMPLES_PER_HP</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">MAX_SAMPLES</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">MAX_SHOWN_SAMPLES</span> <span class="o">=</span> <span class="mi">50</span>
 
 
 <div class="viewcode-block" id="PDPPlugin"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin">[docs]</a><span class="k">class</span> <span class="nc">PDPPlugin</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
@@ -342,25 +349,41 @@ style="width: 100%;">
                         <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
-                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-            <span class="c1"># html.Div(</span>
-            <span class="c1">#    [</span>
-            <span class="c1">#        dbc.Label(&quot;Number of Samples&quot;),</span>
-            <span class="c1">#        dbc.Input(id=register(&quot;num_samples&quot;, &quot;value&quot;)),</span>
-            <span class="c1">#    ]</span>
-            <span class="c1"># ),</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.get_filter_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show confidence&quot;</span><span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;confidences&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
-                <span class="p">]</span>
-            <span class="p">)</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show confidence&quot;</span><span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])</span>
+                                    <span class="p">),</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show ICE curves&quot;</span><span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_ice&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">])),</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">]</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.load_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -369,11 +392,11 @@ style="width: 100%;">
             <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
             <span class="s2">&quot;hyperparameter1&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
             <span class="s2">&quot;hyperparameter2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
-            <span class="s2">&quot;confidences&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;show_confidence&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;show_ice&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">selected_run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)</span>
 
@@ -407,6 +430,7 @@ style="width: 100%;">
 <div class="viewcode-block" id="PDPPlugin.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Surrogate</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">objective_name</span><span class="p">)</span>
         <span class="n">budget_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
@@ -418,9 +442,14 @@ style="width: 100%;">
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Objective not found.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Encode data</span>
-        <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_configs</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">objective</span><span class="p">],</span> <span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">],</span> <span class="n">encode_y</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span>
+            <span class="n">objective</span><span class="p">,</span>
+            <span class="n">budget</span><span class="p">,</span>
+            <span class="n">statuses</span><span class="o">=</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span>
         <span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_names</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">objective_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
         <span class="c1"># Let&#39;s initialize the surrogate</span>
         <span class="n">surrogate_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">)</span>
@@ -428,20 +457,40 @@ style="width: 100%;">
 
         <span class="c1"># Prepare the hyperparameters</span>
         <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp1</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">hp2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">hp2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp2</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">selected_hyperparameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp2</span><span class="p">]</span>
+
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">SAMPLES_PER_HP</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="c1"># We limit the samples to max 10k</span>
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">MAX_SAMPLES</span><span class="p">:</span>
+            <span class="n">num_samples</span> <span class="o">=</span> <span class="n">MAX_SAMPLES</span>
 
         <span class="c1"># And finally call PDP</span>
         <span class="n">pdp</span> <span class="o">=</span> <span class="n">PDP</span><span class="o">.</span><span class="n">from_random_points</span><span class="p">(</span>
             <span class="n">surrogate_model</span><span class="p">,</span>
             <span class="n">selected_hyperparameter</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">,</span>
             <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">num_grid_points_per_axis</span><span class="o">=</span><span class="n">GRID_POINTS_PER_AXIS</span><span class="p">,</span>
+            <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
         <span class="p">)</span>
 
+        <span class="n">x</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">x_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># We have to cut the ICE curves because it&#39;s too much data</span>
+        <span class="n">x_ice</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">_ice</span><span class="o">.</span><span class="n">x_ice</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">y_ice</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">_ice</span><span class="o">.</span><span class="n">y_ice</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_ice</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_SHOWN_SAMPLES</span><span class="p">:</span>
+            <span class="n">x_ice</span> <span class="o">=</span> <span class="n">x_ice</span><span class="p">[:</span><span class="n">MAX_SHOWN_SAMPLES</span><span class="p">]</span>
+            <span class="n">y_ice</span> <span class="o">=</span> <span class="n">y_ice</span><span class="p">[:</span><span class="n">MAX_SHOWN_SAMPLES</span><span class="p">]</span>
+
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">pdp</span><span class="o">.</span><span class="n">x_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
-            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
             <span class="s2">&quot;variances&quot;</span><span class="p">:</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_variances</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;x_ice&quot;</span><span class="p">:</span> <span class="n">x_ice</span><span class="p">,</span>
+            <span class="s2">&quot;y_ice&quot;</span><span class="p">:</span> <span class="n">y_ice</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="PDPPlugin.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -451,13 +500,18 @@ style="width: 100%;">
 <div class="viewcode-block" id="PDPPlugin.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.static_plugin.pdp.html#deepcave.plugins.static_plugin.pdp.PDPPlugin.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="c1"># Parse inputs</span>
         <span class="n">hp1_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-        <span class="n">hp2_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">hp1_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">hp2_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">hp1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
+
+        <span class="n">hp2_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp2_idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">hp2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">hp2_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp2_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">hp2_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">hp2_idx</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">show_confidences</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;confidences&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+            <span class="n">hp2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
+
+        <span class="n">show_confidence</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">show_ice</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_ice&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
         <span class="c1"># Parse outputs</span>
@@ -465,67 +519,105 @@ style="width: 100%;">
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>
         <span class="n">sigmas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;variances&quot;</span><span class="p">]))</span>
 
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+        <span class="n">x_ice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;x_ice&quot;</span><span class="p">])</span>
+        <span class="n">y_ice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;y_ice&quot;</span><span class="p">])</span>
+
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">hp2_idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># 1D</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
-                <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
-                    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;PDP&quot;</span><span class="p">,</span>
-                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
-                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">show_confidences</span><span class="p">:</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+            <span class="c1"># Add ICE curves</span>
+            <span class="k">if</span> <span class="n">show_ice</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">x_</span><span class="p">,</span> <span class="n">y_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_ice</span><span class="p">,</span> <span class="n">y_ice</span><span class="p">):</span>
+                    <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
+                        <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                            <span class="n">x</span><span class="o">=</span><span class="n">x_</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
+                            <span class="n">y</span><span class="o">=</span><span class="n">y_</span><span class="p">,</span>
+                            <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)),</span>
+                            <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                            <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">show_confidence</span><span class="p">:</span>
+                <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
                     <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1-Sigma&quot;</span><span class="p">,</span>
                         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
                         <span class="n">y</span><span class="o">=</span><span class="n">y</span> <span class="o">+</span> <span class="n">sigmas</span><span class="p">,</span>
+                        <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)),</span>
+                        <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                        <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
+                <span class="p">]</span>
+
+                <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
                     <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
-                        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;1-Sigma&quot;</span><span class="p">,</span>
                         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
                         <span class="n">y</span><span class="o">=</span><span class="n">y</span> <span class="o">-</span> <span class="n">sigmas</span><span class="p">,</span>
+                        <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;tonexty&quot;</span><span class="p">,</span>
+                        <span class="n">fillcolor</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+                        <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)),</span>
+                        <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                        <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="p">)</span>
-                <span class="p">)</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
-                <span class="n">title</span><span class="o">=</span><span class="s2">&quot;1D PDP&quot;</span> <span class="o">+</span> <span class="s2">&quot; with confidences&quot;</span> <span class="o">*</span> <span class="n">show_confidences</span><span class="p">,</span>
-                <span class="n">xaxis_title</span><span class="o">=</span><span class="n">hp1_name</span><span class="p">,</span>
-                <span class="n">yaxis_title</span><span class="o">=</span><span class="n">objective_name</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 2D</span>
-            <span class="n">num_grid_points_per_axis</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;num_grid_points_per_axis&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">show_confidences</span><span class="p">:</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
-                    <span class="n">go</span><span class="o">.</span><span class="n">Contour</span><span class="p">(</span>
-                        <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">sigmas</span><span class="p">,</span> <span class="p">(</span><span class="n">num_grid_points_per_axis</span><span class="p">,</span> <span class="n">num_grid_points_per_axis</span><span class="p">)),</span>
-                        <span class="c1"># x=[-9, -6, -5, -3, -1],  # horizontal axis</span>
-                        <span class="c1"># y=[0, 1, 4, 5, 7]  # vertical axis</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
-                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;2D PDP (Confidences)&quot;</span><span class="p">,</span>
-                    <span class="n">xaxis_title</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="n">yaxis_title</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span>
-                    <span class="n">go</span><span class="o">.</span><span class="n">Contour</span><span class="p">(</span>
-                        <span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">num_grid_points_per_axis</span><span class="p">,</span> <span class="n">num_grid_points_per_axis</span><span class="p">)),</span>
-                        <span class="c1"># x=[-9, -6, -5, -3, -1],  # horizontal axis</span>
-                        <span class="c1"># y=[0, 1, 4, 5, 7]  # vertical axis</span>
-                    <span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
-                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;2D PDP (Values)&quot;</span><span class="p">,</span>
-                    <span class="n">xaxis_title</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="n">yaxis_title</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span>
+                <span class="p">]</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="n">fig</span><span class="p">]</span></div></div>
+            <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                    <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp1</span><span class="p">)</span>
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">tickvals</span><span class="p">,</span>
+                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">ticktext</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp1_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;yaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">objective_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">y</span>
+            <span class="k">if</span> <span class="n">show_confidence</span><span class="p">:</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="n">sigmas</span>
+            <span class="n">traces</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Contour</span><span class="p">(</span>
+                    <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">x</span><span class="p">[:,</span> <span class="n">hp2_idx</span><span class="p">],</span>
+                    <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">objective_name</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">show_confidence</span> <span class="k">else</span> <span class="s2">&quot;Confidence (1-Sigma)&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">x_tickvals</span><span class="p">,</span> <span class="n">x_ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp1</span><span class="p">)</span>
+            <span class="n">y_tickvals</span><span class="p">,</span> <span class="n">y_ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp2</span><span class="p">)</span>
+
+            <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">x_tickvals</span><span class="p">,</span>
+                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">x_ticktext</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp1_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;yaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">y_tickvals</span><span class="p">,</span>
+                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">y_ticktext</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp2_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span></div></div>
 </pre></div>
 
               </div>
