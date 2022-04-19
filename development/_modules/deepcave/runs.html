@@ -955,8 +955,9 @@ style="width: 100%;">
 <span class="sd">        encode_y : bool, optional</span>
 <span class="sd">            Whether y should be normalized too. By default False.</span>
 <span class="sd">        specific : bool, optional</span>
-<span class="sd">            Whether a specific encoding should be used. This encoding is compatible with fANOVA</span>
-<span class="sd">            forest implementation. By default False.</span>
+<span class="sd">            Whether a specific encoding should be used. This encoding is compatible with pyrfr.</span>
+<span class="sd">            A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.</span>
+<span class="sd">            By default False.</span>
 <span class="sd">        include_config_ids : bool, optional</span>
 <span class="sd">            Whether to include config ids. By default False.</span>
 <span class="sd">        include_combined_cost : bool, optional</span>
@@ -965,8 +966,8 @@ style="width: 100%;">
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Tuple[pd.DataFrame, pd.DataFrame]</span>
-<span class="sd">            Encoded dataframes with the following columns:</span>
+<span class="sd">        df : pd.DataFrame</span>
+<span class="sd">            Encoded dataframe with the following columns (depending on the parameters):</span>
 <span class="sd">            [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]</span>
 
 <span class="sd">        Raises</span>

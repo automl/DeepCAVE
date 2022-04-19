@@ -30,7 +30,7 @@ Multiple Runs
     import plotly.graph_objs as go
     from typing import List
     from dash import dcc, html
-    from deepcave.plugins.dynamic_plugin import DynamicPlugin
+    from deepcave.plugins.dynamic_plugin.dynamic import DynamicPlugin
     from deepcave.utils.layout import get_select_options
     from deepcave.utils.logs import get_logger
     from deepcave.runs import AbstractRun, check_equality

@@ -442,19 +442,20 @@ is considered.</p></li>
 <li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which statuses should be considered. By default None. If None, all statuses are
 considered.</p></li>
 <li><p><strong>encode_y</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether y should be normalized too. By default False.</p></li>
-<li><p><strong>specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether a specific encoding should be used. This encoding is compatible with fANOVA
-forest implementation. By default False.</p></li>
+<li><p><strong>specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether a specific encoding should be used. This encoding is compatible with pyrfr.
+A wrapper for pyrfr is implemented in <code class="docutils literal notranslate"><span class="pre">deepcave.evaluators.epm</span></code>.
+By default False.</p></li>
 <li><p><strong>include_config_ids</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include config ids. By default False.</p></li>
 <li><p><strong>include_combined_cost</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include combined cost. Note that the combined cost is calculated by the
 passed objectives only. By default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Encoded dataframes with the following columns:
+<dd class="field-even"><p><strong>df</strong> – Encoded dataframe with the following columns (depending on the parameters):
 [CONFIG_ID, HP1, HP2, …, HPn, OBJ1, OBJ2, …, OBJm, COMBINED_COST]</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Tuple[pd.DataFrame, pd.DataFrame]</p>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If a hyperparameter is not supported.</p>

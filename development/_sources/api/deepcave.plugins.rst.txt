@@ -33,6 +33,6 @@
    :toctree:
    :recursive:
 
-   deepcave.plugins.dynamic_plugin
-   deepcave.plugins.static_plugin
+   deepcave.plugins.dynamic
+   deepcave.plugins.static
 

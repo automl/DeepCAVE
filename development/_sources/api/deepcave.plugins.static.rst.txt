@@ -1,0 +1,30 @@
+deepcave.plugins.static
+=======================
+
+.. automodule:: deepcave.plugins.static
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      PluginState
+      StaticPlugin
+   
+   
+
+   
+   
+   
+
+
+
