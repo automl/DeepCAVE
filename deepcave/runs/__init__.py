@@ -680,8 +680,9 @@ class AbstractRun(ABC):
         encode_y : bool, optional
             Whether y should be normalized too. By default False.
         specific : bool, optional
-            Whether a specific encoding should be used. This encoding is compatible with fANOVA
-            forest implementation. By default False.
+            Whether a specific encoding should be used. This encoding is compatible with pyrfr.
+            A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.
+            By default False.
         include_config_ids : bool, optional
             Whether to include config ids. By default False.
         include_combined_cost : bool, optional
@@ -690,8 +691,8 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        Tuple[pd.DataFrame, pd.DataFrame]
-            Encoded dataframes with the following columns:
+        df : pd.DataFrame
+            Encoded dataframe with the following columns (depending on the parameters):
             [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
 
         Raises

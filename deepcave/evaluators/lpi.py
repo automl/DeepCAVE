@@ -29,7 +29,9 @@ class LPI:
         self.run = run
         self.cs = run.configspace
 
-    def run(self, budget, continous_neighbors=500, quantify_importance_via_variance=False) -> None:
+    def calculate(
+        self, budget, continous_neighbors=500, quantify_importance_via_variance=False
+    ) -> None:
         # TODO: Set and train model
 
         self.continous_neighbors = continous_neighbors
