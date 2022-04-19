@@ -8,7 +8,7 @@ from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 from deepcave.constants import VALUE_RANGE
 
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options

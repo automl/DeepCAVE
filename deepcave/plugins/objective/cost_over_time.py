@@ -5,7 +5,7 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_radio_options, get_select_options
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config

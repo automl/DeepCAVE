@@ -7,7 +7,7 @@ Single Run
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic_plugin.dynamic import DynamicPlugin
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.logs import get_logger

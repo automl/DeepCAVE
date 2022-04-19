@@ -8,7 +8,7 @@ from dash import dcc, html
 from scipy import stats
 
 from deepcave import notification
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options

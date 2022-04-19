@@ -3,7 +3,7 @@ import pandas as pd
 from dash import dcc, html
 import plotly.graph_objs as go
 
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,

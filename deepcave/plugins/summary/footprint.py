@@ -5,8 +5,8 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.plugins.static_plugin import StaticPlugin
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.static import StaticPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_radio_options, get_select_options, get_slider_marks

@@ -21,7 +21,7 @@ class RunCaches:
 
     def __getitem__(self, run: AbstractRun) -> Cache:
         if not isinstance(run, AbstractRun):
-            raise TypeError(f"Expect Run but got type {type(run)} ({run})")
+            raise TypeError(f"Expect Run but got type {type(run)} ({run}).")
 
         # Create cache
         filename = self.cache_dir / f"{run.id}.json"

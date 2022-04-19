@@ -1,20 +1,15 @@
-import ConfigSpace as CS
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
-from pyPDP.utils.utils import config_list_to_array
 
-from deepcave.evaluators.epm.surrogates import RandomForestSurrogate
-from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
+from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
-from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
-
-logger = get_logger("PDPPlugin")
 
 
 GRID_POINTS_PER_AXIS = 20
@@ -23,9 +18,9 @@ MAX_SAMPLES = 10000
 MAX_SHOWN_SAMPLES = 50
 
 
-class PDPPlugin(StaticPlugin):
+class PartialDependencies(StaticPlugin):
     id = "pdp"
-    name = "Partial Dependence Plot"
+    name = "Partial Dependencies"
     icon = "far fa-grip-lines"
     activate_run_selection = True
 
@@ -107,7 +102,6 @@ class PDPPlugin(StaticPlugin):
                         md=6,
                     ),
                 ],
-                className="mb-3",
             ),
         ]
 

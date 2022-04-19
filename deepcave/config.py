@@ -39,19 +39,18 @@ class Config:
         dictionary {category -> List[Plugins]}
         Plugins are ordered
         """
-        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
-        from deepcave.plugins.dynamic_plugin.ccube import CCube
-        from deepcave.plugins.dynamic_plugin.configurations import Configurations
-        from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
-        from deepcave.plugins.dynamic_plugin.overview import Overview
-        from deepcave.plugins.dynamic_plugin.parallel_coordinates import (
+        from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.objective.ccube import CCube
+        from deepcave.plugins.summary.configurations import Configurations
+        from deepcave.plugins.objective.cost_over_time import CostOverTime
+        from deepcave.plugins.summary.overview import Overview
+        from deepcave.plugins.objective.parallel_coordinates import (
             ParallelCoordinates,
         )
-        from deepcave.plugins.dynamic_plugin.footprint import FootPrint
-        from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
-        from deepcave.plugins.static_plugin.fanova import fANOVA
-        from deepcave.plugins.static_plugin.ice import ICEPlugin
-        from deepcave.plugins.static_plugin.pdp import PDPPlugin
+        from deepcave.plugins.summary.footprint import FootPrint
+        from deepcave.plugins.objective.pareto_front import ParetoFront
+        from deepcave.plugins.hyperparameter.fanova import fANOVA
+        from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 
         plugins = {
             "Summary": [
@@ -59,7 +58,7 @@ class Config:
                 Configurations(),
                 FootPrint(),
             ],
-            "Performance Analysis": [
+            "Objective Analysis": [
                 CostOverTime(),
                 CCube(),
                 ParetoFront(),
@@ -70,8 +69,7 @@ class Config:
             ],
             "Hyperparameter Analysis": [
                 fANOVA(),
-                # ICEPlugin(),
-                PDPPlugin(),
+                PartialDependencies(),
             ],
         }
         return plugins

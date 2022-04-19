@@ -4,10 +4,9 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
-from deepcave.constants import COMBINED_COST_NAME
 
 from deepcave.evaluators.fanova import fANOVA as Evaluator
-from deepcave.plugins.static_plugin import StaticPlugin
+from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options
@@ -104,24 +103,16 @@ class fANOVA(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
 
+        # Intiatize the evaluator
+        evaluator = Evaluator(run)
+
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
-            df = run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
-            X = df[hp_names].to_numpy()
-            Y = df[COMBINED_COST_NAME].to_numpy()  # type: ignore
+            evaluator.calculate(budget, n_trees=num_trees, seed=0)
 
-            evaluator = Evaluator(
-                X,
-                Y,
-                configspace=run.configspace,
-                num_trees=num_trees,
-            )
-
-            importance_dict = evaluator.quantify_importance(hp_names, depth=1, sort=False)
-            importance_dict = {k[0]: v for k, v in importance_dict.items()}
-
-            data[budget_id] = importance_dict
+            importances = evaluator.get_importances(hp_names, depth=1, sort=False)
+            data[budget_id] = importances
 
         return data
 
@@ -139,7 +130,7 @@ class fANOVA(StaticPlugin):
 
         # Collect data
         data = {}
-        for budget_id, importance_dict in outputs.items():
+        for budget_id, importances in outputs.items():
             budget_id = int(budget_id)
             if budget_id not in selected_budget_ids:
                 continue
@@ -147,7 +138,7 @@ class fANOVA(StaticPlugin):
             x = []
             y = []
             error_y = []
-            for hp_name, results in importance_dict.items():
+            for hp_name, results in importances.items():
                 if hp_name not in inputs["hyperparameters"]["value"]:
                     continue
 

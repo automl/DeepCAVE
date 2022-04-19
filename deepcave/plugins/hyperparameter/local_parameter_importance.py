@@ -3,7 +3,7 @@ from typing import Any, Dict
 import dash_bootstrap_components as dbc
 from dash import html
 
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun
 
 

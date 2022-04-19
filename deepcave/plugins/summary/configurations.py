@@ -5,7 +5,7 @@ import pandas as pd
 from dash import html, dcc
 import plotly.graph_objs as go
 from deepcave.constants import VALUE_RANGE
-from deepcave.plugins.dynamic_plugin import DynamicPlugin
+from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
