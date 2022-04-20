@@ -1,3 +1,5 @@
+from random import random
+from typing import Union, Optional, Dict, Tuple, List
 from collections import OrderedDict
 import numpy as np
 
@@ -19,7 +21,8 @@ from ConfigSpace.util import (
     get_one_exchange_neighbourhood,
 )
 from ConfigSpace.c_util import change_hp_value, check_forbidden
-
+from deepcave.constants import COMBINED_COST_NAME
+from deepcave.evaluators.epm.random_forest import RandomForest
 from deepcave.runs import AbstractRun
 
 
@@ -28,16 +31,46 @@ class LPI:
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
+        self.hp_names = self.cs.get_hyperparameter_names()
+        self.variances = None
+        self.importances = None
 
     def calculate(
-        self, budget, continous_neighbors=500, quantify_importance_via_variance=False
+        self,
+        budget: Union[int, float],
+        continous_neighbors: int = 500,
+        seed: Optional[int] = None,
     ) -> None:
-        # TODO: Set and train model
+        """
+        Prepares the data and trains a RandomForest model.
 
+        Parameters
+        ----------
+        budget : Union[int, float]
+            Only trials of this budget are considered.
+        continous_neighbors : int, optional
+            How many neighbors should be chosen for continous hyperparameters. By default 500.
+        """
+        # Set variables
         self.continous_neighbors = continous_neighbors
         self.incumbent, _ = self.run.get_incumbent(budget=budget)
         self.default = self.cs.get_default_configuration()
         self.incumbent_array = self.incumbent.get_array()
+
+        # Set the seed
+        if seed is None:
+            seed = int(random() * 9999)
+        self.seed = seed
+        self.rs = np.random.RandomState(seed)
+
+        # Get data
+        df = self.run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
+        X = df[self.hp_names].to_numpy()
+        Y = df[COMBINED_COST_NAME].to_numpy()
+
+        # Get model and train it
+        self._model = RandomForest(self.cs, seed=seed)
+        self._model.train(X, Y)
 
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()
@@ -46,7 +79,6 @@ class LPI:
         def_perf, def_var = self._predict_mean_var(self.default)
         inc_perf, inc_var = self._predict_mean_var(self.incumbent)
         delta = def_perf - inc_perf
-        evaluated_parameter_importance = {}
 
         # These are used for plotting and hold the predictions for each neighbor of each parameter.
         # That means performances holds the mean, variances the variance of the forest.
@@ -87,7 +119,7 @@ class LPI:
 
                 # Get the leaf values
                 x = np.array(new_config.get_array())
-                leaf_values = self.model.rf.all_leaf_values(x)
+                leaf_values = self._model.get_leaf_values(x)
 
                 # And the prediction/performance/variance
                 predictions[hp_name].append([np.mean(tree_pred) for tree_pred in leaf_values])
@@ -149,35 +181,42 @@ class LPI:
             for p, trees in overall_var_per_tree.items()
         }
 
-        for hp_name in performances.keys():
-            if self.quantify_importance_via_variance:
-                evaluated_parameter_importance[hp_name] = np.mean(overall_var_per_tree[hp_name])
-            else:
-                evaluated_parameter_importance[hp_name] = importances[hp_name][0]
+        self.variances = overall_var_per_tree
+        self.importances = importances
 
-        only_show = sorted(
-            list(evaluated_parameter_importance.keys()),
-            key=lambda p: evaluated_parameter_importance[p],
-        )[: min(self.to_evaluate, len(evaluated_parameter_importance.keys()))]
+    def get_importances(self, hp_names: List[str]) -> Dict[str, Tuple[float, float]]:
+        """
+        Returns the importances.
 
-        self.neighborhood = neighborhood
-        self.performances = performances
-        self.variances = variances
-        self.evaluated_parameter_importance = OrderedDict(
-            [(p, evaluated_parameter_importance[p]) for p in only_show]
-        )
+        Parameters
+        ----------
+        hp_names : List[str]
+            Selected hyperparameter names to get the importance scores from.
 
-        if self.quantify_importance_via_variance:
-            self.evaluated_parameter_importance_uncertainty = OrderedDict(
-                [(p, np.std(overall_var_per_tree[p])) for p in only_show]
-            )
+        Returns
+        -------
+        importances : Dict[str, Tuple[float, float]]
+            Hyperparameter name and mean+var importance.
+        """
 
-        all_res = {
-            "imp": self.evaluated_parameter_importance,
-            "order": list(self.evaluated_parameter_importance.keys()),
-        }
+        if self.importances is None or self.variances is None:
+            raise RuntimeError("Importance scores must be calculated first.")
 
-        return all_res
+        importances = {}
+        for hp_name in hp_names:
+            mean = 0
+            std = 0
+
+            if hp_name in self.importances:
+                mean = self.importances[hp_name][0]
+                std = np.std(self.variances[hp_name])
+
+            # Use this to quantify importance via variance
+            # mean = np.mean(overall_var_per_tree[hp_name])
+
+            importances[hp_name] = (mean, std)
+
+        return importances
 
     def _get_neighborhood(self):
         """
@@ -185,7 +224,6 @@ class LPI:
         parameter values and samples more neighbors in one go. Further we need to rigorously
         check each and every neighbor if it is forbidden or not.
         """
-
         hp_names = self.cs.get_hyperparameter_names()
 
         neighborhood = {}
@@ -197,7 +235,7 @@ class LPI:
             hp_neighborhood = []
             checked_neighbors = []  # On unit cube
             checked_neighbors_non_unit_cube = []  # Not on unit cube
-            hp = self.configspace.get_hyperparameter(hp_name)
+            hp = self.cs.get_hyperparameter(hp_name)
             num_neighbors = hp.get_num_neighbors(self.incumbent[hp_name])
 
             if num_neighbors == 0:
@@ -218,7 +256,7 @@ class LPI:
                     neighbors = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
                 neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors))
             else:
-                neighbors = hp.get_neighbors(self.incumbent_array[hp_name], self.seed)
+                neighbors = hp.get_neighbors(self.incumbent_array[hp_idx], self.rs)
 
             for neighbor in neighbors:
                 if neighbor in checked_neighbors:
@@ -274,8 +312,8 @@ class LPI:
             the variance over the instance set. If logged values are used, the variance might not be able to be used
         """
 
+        config = impute_inactive_values(config)
         array = np.array([config.get_array()])
-        array = impute_inactive_values(array)
-        mean, var = self.model.predict_marginalized_over_instances(array)
+        mean, var = self._model.predict_marginalized(array)
 
         return mean.squeeze(), var.squeeze()
