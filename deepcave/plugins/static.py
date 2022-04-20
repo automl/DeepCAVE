@@ -199,7 +199,7 @@ class StaticPlugin(Plugin, ABC):
 
                         if queue.has_failed(job_id):
                             self._state = PluginState.FAILED
-                            
+
                             # Delete it after it was detected
                             queue.delete_job(job_id)
 
@@ -250,6 +250,9 @@ class StaticPlugin(Plugin, ABC):
                 self._previous_state == PluginState.PROCESSING
                 and self._state == PluginState.NEEDS_PROCESSING
             ):
+                # However: We have to unset the previous state so if we really change the inputs
+                # the visualizes will be updated.
+                self._previous_state = PluginState.UNSET
                 raise PreventUpdate
 
             if self._state == PluginState.FAILED:
