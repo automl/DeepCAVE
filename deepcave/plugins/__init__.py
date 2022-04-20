@@ -235,10 +235,10 @@ class Plugin(Layout, ABC):
                     if passed_inputs is not None:
                         # First get normal inputs
                         inputs = self.load_inputs()
-                        
+
                         # Overwrite/set the passed inputs
                         update_dict(inputs, passed_inputs)
-                        
+
                         # Then we have to take care of the run_selection
                         selected_run: Optional[AbstractRun] = None
                         if self.activate_run_selection:
@@ -249,14 +249,14 @@ class Plugin(Layout, ABC):
                             except Exception:
                                 raise RuntimeError("No run id found.")
                             selected_run = run_handler.get_run(run_id)
-                            
+
                             # Update run_selection
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
                                 self.grouped_runs,
                                 self.__class__.check_run_compatibility,
                             )
-                            
+
                             # Overwrite `run_id` and update the whole dict.
                             new_inputs["run"]["value"] = run_id
                             update_dict(inputs, new_inputs)
@@ -283,12 +283,20 @@ class Plugin(Layout, ABC):
 
                             if attribute not in inputs[id]:
                                 inputs[id][attribute] = None
+                    elif inputs is not None:
+                        # We have to update the options of the run selection here.
+                        # This is important if the user have added/removed runs.
+                        if self.activate_run_selection:
+                            run_value = inputs["run"]["value"]
+                            new_inputs = self.__class__.load_run_inputs(
+                                self.runs,
+                                self.grouped_runs,
+                                self.__class__.check_run_compatibility,
+                            )
+                            update_dict(inputs, new_inputs)
 
-                    # Overwrite from query
-                    # if (passed_inputs := parse_url(pathname)) is not None:
-                    #    update_dict(inputs, passed_inputs)
-
-                    #    # We have to call dependency inputs here because
+                            # Keep the run value
+                            inputs["run"]["value"] = run_value
                 else:
                     # Map the list `inputs` to a dict.
                     inputs = self._list_to_dict(inputs_list)
