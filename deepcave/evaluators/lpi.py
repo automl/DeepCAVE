@@ -22,7 +22,7 @@ from ConfigSpace.util import (
 )
 from ConfigSpace.c_util import change_hp_value, check_forbidden
 from deepcave.constants import COMBINED_COST_NAME
-from deepcave.evaluators.epm.random_forest import RandomForest
+from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
 
 
@@ -69,7 +69,8 @@ class LPI:
         Y = df[COMBINED_COST_NAME].to_numpy()
 
         # Get model and train it
-        self._model = RandomForest(self.cs, seed=seed)
+        # Use same forest as for fanova
+        self._model = FanovaForest(self.cs, seed=seed)
         self._model.train(X, Y)
 
         # Get neighborhood sampled on an unit-hypercube.

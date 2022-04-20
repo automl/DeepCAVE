@@ -15,8 +15,8 @@ class FanovaForest(RandomForest):
     def __init__(
         self,
         configspace: ConfigurationSpace,
-        n_trees: int = 16,
-        ratio_features: float = 7.0 / 10.0,
+        n_trees: int = 10,
+        ratio_features: float = 1.0,
         min_samples_split: int = 0,
         min_samples_leaf: int = 0,
         max_depth: int = 64,
