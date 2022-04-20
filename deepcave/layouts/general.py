@@ -7,7 +7,7 @@ from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, rc, run_handler, notification
+from deepcave import app, c, rc, run_handler, notification, queue
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run
@@ -309,6 +309,9 @@ class GeneralLayout(Layout):
 
                 # Also remove last inputs
                 c.set("last_inputs", value={})
+
+                # Also: We have to stop all running jobs
+                queue.delete_job()
 
                 # We have to call `update_runs` now to create the run caches again
                 run_handler.update_runs()

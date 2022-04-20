@@ -86,7 +86,15 @@ class Queue:
     def get_finished_jobs(self) -> List[Job]:
         return self.get_jobs(registry="finished")
 
-    def delete_job(self, job_id: str) -> None:
+    def delete_job(self, job_id: str = None) -> None:
+        """
+        Delete a job from the queue. If no job_id is given, delete all jobs.
+
+        Parameters
+        ----------
+        job_id : str, optional
+            Id of the job, which should be removed. By default None.
+        """
         registries = [
             self._queue.finished_job_registry,
             self._queue,
@@ -95,10 +103,15 @@ class Queue:
         ]
 
         for r in registries:
-            try:
-                r.remove(job_id, delete_job=True)
-            except Exception:
-                pass
+            if job_id is not None:
+                try:
+                    r.remove(job_id, delete_job=True)
+                except Exception:
+                    pass
+            else:
+                # Remove all
+                for job_id in r.get_job_ids():
+                    r.remove(job_id)
 
     def enqueue(
         self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]
