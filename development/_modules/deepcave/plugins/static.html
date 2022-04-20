@@ -474,7 +474,7 @@ style="width: 100%;">
 
                         <span class="k">if</span> <span class="n">queue</span><span class="o">.</span><span class="n">has_failed</span><span class="p">(</span><span class="n">job_id</span><span class="p">):</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">FAILED</span>
-                            
+
                             <span class="c1"># Delete it after it was detected</span>
                             <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
 
@@ -525,6 +525,9 @@ style="width: 100%;">
                 <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">PROCESSING</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">NEEDS_PROCESSING</span>
             <span class="p">):</span>
+                <span class="c1"># However: We have to unset the previous state so if we really change the inputs</span>
+                <span class="c1"># the visualizes will be updated.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_previous_state</span> <span class="o">=</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">UNSET</span>
                 <span class="k">raise</span> <span class="n">PreventUpdate</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">PluginState</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>

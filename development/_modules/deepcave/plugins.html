@@ -510,10 +510,10 @@ style="width: 100%;">
                     <span class="k">if</span> <span class="n">passed_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="c1"># First get normal inputs</span>
                         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">()</span>
-                        
+
                         <span class="c1"># Overwrite/set the passed inputs</span>
                         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">passed_inputs</span><span class="p">)</span>
-                        
+
                         <span class="c1"># Then we have to take care of the run_selection</span>
                         <span class="n">selected_run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
@@ -524,14 +524,14 @@ style="width: 100%;">
                             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No run id found.&quot;</span><span class="p">)</span>
                             <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
-                            
+
                             <span class="c1"># Update run_selection</span>
                             <span class="n">new_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load_run_inputs</span><span class="p">(</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="n">grouped_runs</span><span class="p">,</span>
                                 <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">check_run_compatibility</span><span class="p">,</span>
                             <span class="p">)</span>
-                            
+
                             <span class="c1"># Overwrite `run_id` and update the whole dict.</span>
                             <span class="n">new_inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_id</span>
                             <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
@@ -558,12 +558,20 @@ style="width: 100%;">
 
                             <span class="k">if</span> <span class="n">attribute</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]:</span>
                                 <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">elif</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># We have to update the options of the run selection here.</span>
+                        <span class="c1"># This is important if the user have added/removed runs.</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
+                            <span class="n">run_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+                            <span class="n">new_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load_run_inputs</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">grouped_runs</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">check_run_compatibility</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
-                    <span class="c1"># Overwrite from query</span>
-                    <span class="c1"># if (passed_inputs := parse_url(pathname)) is not None:</span>
-                    <span class="c1">#    update_dict(inputs, passed_inputs)</span>
-
-                    <span class="c1">#    # We have to call dependency inputs here because</span>
+                            <span class="c1"># Keep the run value</span>
+                            <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_value</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Map the list `inputs` to a dict.</span>
                     <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">)</span>
