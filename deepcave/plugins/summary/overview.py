@@ -96,7 +96,7 @@ class Overview(DynamicPlugin):
                 trial_key = run.get_trial_key(config_id, budget)
                 trial = run.get_trial(trial_key)
 
-                status = Status.NOTFOUND
+                status = Status.NOT_EVALUATED
                 if trial is not None:
                     status = trial.status
 

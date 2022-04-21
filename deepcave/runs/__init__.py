@@ -42,7 +42,7 @@ class Status(IntEnum):
     CRASHED = 4
     ABORTED = 5
     RUNNING = 6
-    NOTFOUND = 7
+    NOT_EVALUATED = 7
 
 
 @dataclass
