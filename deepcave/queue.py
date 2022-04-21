@@ -1,10 +1,14 @@
 from typing import Any, Callable, Dict, List
 
+import time
 import redis
+from requests import delete
 from rq import Queue as _Queue
 from rq import Worker
+from rq.registry import BaseRegistry
 from rq.job import Job
-
+from rq.command import send_stop_job_command
+from rq.command import send_kill_horse_command
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -13,16 +17,26 @@ logger = get_logger(__name__)
 class Queue:
     def __init__(self, address: str, port: int) -> None:
         self._connection = redis.from_url(address + ":" + str(port))
-        self._queue = _Queue("high", connection=self._connection)
+        self._queue = _Queue("high", connection=self._connection, default_timeout=-1)
 
     def ready(self) -> bool:
         # Check if at least one worker is in use:
-        workers = Worker.all(queue=self._queue)
+        workers = self.get_workers()
 
         if len(workers) > 0:
             return True
 
         return False
+
+    def get_worker(self, worker_name) -> Worker:
+        for worker in self.get_workers():
+            if worker.name == worker_name:
+                return worker
+
+        raise ValueError("Worker not found.")
+
+    def get_workers(self):
+        return Worker.all(queue=self._queue)
 
     def is_processed(self, job_id: str) -> bool:
         if self.is_running(job_id) or self.is_pending(job_id) or self.is_finished(job_id):
@@ -58,21 +72,24 @@ class Queue:
 
         return False
 
+    def get_job(self, job_id: str) -> Job:
+        return Job.fetch(job_id, connection=self._connection)
+
     def get_jobs(self, registry: str = "running") -> List[Job]:
         if registry == "running":
-            registry = self._queue.started_job_registry
+            r = self._queue.started_job_registry
         elif registry == "pending":
-            registry = self._queue
+            r = self._queue
         elif registry == "finished":
-            registry = self._queue.finished_job_registry
+            r = self._queue.finished_job_registry
         elif registry == "failed":
-            registry = self._queue.failed_job_registry
+            r = self._queue.failed_job_registry
         else:
             raise NotImplementedError()
 
         results = []
-        for job_id in registry.get_job_ids():
-            job = Job.fetch(job_id, connection=self._connection)
+        for job_id in r.get_job_ids():
+            job = self.get_job(job_id)
             results.append(job)
 
         return results
@@ -95,23 +112,58 @@ class Queue:
         job_id : str, optional
             Id of the job, which should be removed. By default None.
         """
-        registries = [
-            self._queue.finished_job_registry,
-            self._queue,
-            self._queue.started_job_registry,
-            self._queue.failed_job_registry,
-        ]
 
-        for r in registries:
+        def remove_jobs(registry: BaseRegistry, job_id: str = None) -> None:
             if job_id is not None:
                 try:
-                    r.remove(job_id, delete_job=True)
+                    registry.remove(job_id, delete_job=True)
                 except Exception:
                     pass
             else:
                 # Remove all
-                for job_id in r.get_job_ids():
-                    r.remove(job_id)
+                for job_id in registry.get_job_ids():
+                    try:
+                        registry.remove(job_id, delete_job=True)
+                    except Exception:
+                        registry.remove(job_id)
+
+        remove_jobs(self._queue, job_id)
+        remove_jobs(self._queue.finished_job_registry, job_id)
+        remove_jobs(self._queue.canceled_job_registry, job_id)
+
+        # Started jobs perform differently
+        # We have to "kill" the worker
+        for worker in self.get_workers():
+            job_id_ = str(worker._job_id)  # b'cbece'
+            job_id_ = job_id_.replace("b'", "").replace("'", "")
+
+            if job_id is not None:
+                if job_id != job_id_:
+                    continue
+
+            if worker.state == "busy":
+                # This will add the job to the failed registry
+                send_kill_horse_command(self._connection, worker.name)
+
+        # Iterate again and wait till all jobs have finished
+        for worker in self.get_workers():
+            job_id_ = str(worker._job_id)  # b'cbece'
+            job_id_ = job_id_.replace("b'", "").replace("'", "")
+
+            if job_id is not None:
+                if job_id != job_id_:
+                    continue
+
+            # Wait till the job is actually cancled
+            while worker.state == "busy":
+                # We need to "update" the worker every time
+                worker = self.get_worker(worker.name)
+
+        # Now we also have to remove the failed jobs caused by the kill horse command
+        remove_jobs(self._queue.failed_job_registry, job_id)
+
+    def delete_jobs(self) -> None:
+        self.delete_job()
 
     def enqueue(
         self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]

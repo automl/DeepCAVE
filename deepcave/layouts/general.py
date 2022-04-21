@@ -311,7 +311,7 @@ class GeneralLayout(Layout):
                 c.set("last_inputs", value={})
 
                 # Also: We have to stop all running jobs
-                queue.delete_job()
+                queue.delete_jobs()
 
                 # We have to call `update_runs` now to create the run caches again
                 run_handler.update_runs()
