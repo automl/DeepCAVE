@@ -49,8 +49,7 @@ class Config:
         )
         from deepcave.plugins.summary.footprint import FootPrint
         from deepcave.plugins.objective.pareto_front import ParetoFront
-        from deepcave.plugins.hyperparameter.fanova import fANOVA
-        from deepcave.plugins.hyperparameter.lpi import LPI
+        from deepcave.plugins.hyperparameter.importances import Importances
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 
         plugins = {
@@ -69,8 +68,7 @@ class Config:
                 BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
-                fANOVA(),
-                LPI(),
+                Importances(),
                 PartialDependencies(),
             ],
         }

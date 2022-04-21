@@ -5,22 +5,32 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.evaluators.lpi import LPI as Evaluator
+from deepcave.evaluators.lpi import LPI as LocalEvaluator
+from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import get_checklist_options
+from deepcave.utils.layout import get_checklist_options, get_select_options
 
 
-class LPI(StaticPlugin):
-    id = "lpi"
-    name = "Local Parameter Importance"
+class Importances(StaticPlugin):
+    id = "importances"
+    name = "Importances"
     icon = "far fa-star"
     activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):
-        return []
+        return [
+            html.Div(
+                [
+                    dbc.Label("Method"),
+                    dbc.Select(
+                        id=register("method", ["options", "value"]), placeholder="Select ..."
+                    ),
+                ],
+            ),
+        ]
 
     @staticmethod
     def get_filter_layout(register):
@@ -43,7 +53,14 @@ class LPI(StaticPlugin):
         ]
 
     def load_inputs(self):
+        method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
+        method_values = ["local", "global"]
+
         return {
+            "method": {
+                "options": get_select_options(method_labels, method_values),
+                "value": "local",
+            },
             "budgets": {"options": get_checklist_options(), "value": []},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
@@ -75,7 +92,7 @@ class LPI(StaticPlugin):
                 "value": budget_value,
             },
         }
-        
+
         update_dict(inputs, new_inputs)
         return inputs
 
@@ -83,9 +100,15 @@ class LPI(StaticPlugin):
     def process(run: AbstractRun, inputs):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
+        method = inputs["method"]["value"]
 
-        # Intiatize the evaluator
-        evaluator = Evaluator(run)
+        if method == "local":
+            # Intiatize the evaluator
+            evaluator = LocalEvaluator(run)
+        elif method == "global":
+            evaluator = GlobalEvaluator(run)
+        else:
+            raise RuntimeError("Method was not found.")
 
         # Collect data
         data = {}
@@ -149,6 +172,7 @@ class LPI(StaticPlugin):
         fig.update_layout(
             barmode="group",
             yaxis_title="Importance",
+            legend={"title": "Budget"},
         )
 
         return [fig]

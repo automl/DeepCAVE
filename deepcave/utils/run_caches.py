@@ -64,5 +64,5 @@ class RunCaches:
             yield Cache(cache_file, debug=self._debug_mode)
 
     def clear_all_caches(self) -> None:
-        """Removes all caches"""
+        """Removes all caches."""
         shutil.rmtree(self.cache_dir)
