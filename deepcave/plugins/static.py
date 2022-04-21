@@ -84,7 +84,6 @@ class StaticPlugin(Plugin, ABC):
                 n_clicks (int): From button.
                 *inputs_list: Values from user.
             """
-
             self._blocked = True
 
             # Map the list `inputs_list` to a dict s.t.
@@ -239,6 +238,12 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(output, input)
         def plugin_update_status(_):
+            button_text = [html.Span(self.button_caption)]
+            
+            if self._state == PluginState.UNSET:
+                # Disable and reset button
+                return button_text, None, True
+            
             # Important so we don't update the button every time (would result in an ugly spinner)
             if self._previous_state == self._state:
                 raise PreventUpdate
@@ -260,8 +265,6 @@ class StaticPlugin(Plugin, ABC):
                     "The job failed. Check the logs or make sure the worker is still running. "
                     "Most of the times, a simple restart might help."
                 )
-
-            button_text = [html.Span(self.button_caption)]
 
             if self._state == PluginState.READY:
                 disabled = True
@@ -286,7 +289,7 @@ class StaticPlugin(Plugin, ABC):
 
     def __call__(self):
         self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
-        self._previous_state = PluginState.UNSET  # Used for updating status
+        self._previous_state = None  # Used for updating status
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False

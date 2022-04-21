@@ -324,11 +324,12 @@ class Plugin(Layout, ABC):
                             # Also: We want to keep the current run name.
                             update_dict(_inputs, self.load_inputs())
 
-                            # TODO: Reset only inputs which are not available in another ru.
+                            # TODO: Reset only inputs which are not available in another run.
                             # E.g. if options from budget in run_2 and run_3 are the same
-                            # take the budget from run_2 if changed to run_3. Otherwise, reset budgets.
+                            # take the budget from run_2 if changed to run_3. Otherwise,
+                            # reset budgets.
 
-                        selected_run = run_handler.get_run(inputs["run"]["value"])
+                        selected_run = run_handler.get_run(_run_id)
 
                     # How to update only parameters which have a dependency?
                     user_dependencies_inputs = self.load_dependency_inputs(
