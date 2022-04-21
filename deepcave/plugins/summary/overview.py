@@ -223,6 +223,7 @@ class Overview(DynamicPlugin):
             stats_data.append(trace)
 
         stats_layout = go.Layout(
+            legend={"title": "Budget"},
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
@@ -230,7 +231,6 @@ class Overview(DynamicPlugin):
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
 
         config_layout = go.Layout(
-            showlegend=True,
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
         )
