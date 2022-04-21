@@ -599,11 +599,12 @@ style="width: 100%;">
                             <span class="c1"># Also: We want to keep the current run name.</span>
                             <span class="n">update_dict</span><span class="p">(</span><span class="n">_inputs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">())</span>
 
-                            <span class="c1"># TODO: Reset only inputs which are not available in another ru.</span>
+                            <span class="c1"># TODO: Reset only inputs which are not available in another run.</span>
                             <span class="c1"># E.g. if options from budget in run_2 and run_3 are the same</span>
-                            <span class="c1"># take the budget from run_2 if changed to run_3. Otherwise, reset budgets.</span>
+                            <span class="c1"># take the budget from run_2 if changed to run_3. Otherwise,</span>
+                            <span class="c1"># reset budgets.</span>
 
-                        <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
+                        <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">_run_id</span><span class="p">)</span>
 
                     <span class="c1"># How to update only parameters which have a dependency?</span>
                     <span class="n">user_dependencies_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span>
