@@ -30,25 +30,29 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def get_input_layout(register):
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Objective"),
-                    dbc.Select(
-                        id=register("objective", ["options", "value"]),
-                        placeholder="Select objective ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective"),
+                            dbc.Select(
+                                id=register("objective", ["options", "value"]),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Budget"),
+                            dbc.Select(
+                                id=register("budget", ["options", "value"]),
+                                placeholder="Select budget ...",
+                            ),
+                        ],
+                        md=6,
                     ),
                 ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
-                    dbc.Label("Budget"),
-                    dbc.Select(
-                        id=register("budget", ["options", "value"]),
-                        placeholder="Select budget ...",
-                    ),
-                ],
-                className="",
             ),
         ]
 

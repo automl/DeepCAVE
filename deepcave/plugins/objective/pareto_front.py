@@ -36,18 +36,27 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def get_input_layout(register):
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Objective #1"),
-                    dbc.Select(
-                        id=register("objective1", ["options", "value"]),
-                        placeholder="Select objective ...",
-                        className="mb-3",
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective #1"),
+                            dbc.Select(
+                                id=register("objective1", ["options", "value"]),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
                     ),
-                    dbc.Label("Objective #2"),
-                    dbc.Select(
-                        id=register("objective2", ["options", "value"]),
-                        placeholder="Select objective ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective #2"),
+                            dbc.Select(
+                                id=register("objective2", ["options", "value"]),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
                     ),
                 ],
                 className="mb-3",
