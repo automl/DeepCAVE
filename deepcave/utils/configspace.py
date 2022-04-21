@@ -1,10 +1,11 @@
+import random
 from typing import List
 from itertools import product
 from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant, OrdinalHyperparameter
 
 
-def get_border_configs(configspace: ConfigurationSpace) -> List[Configuration]:
+def get_border_configs(configspace: ConfigurationSpace, limit: int = 1000) -> List[Configuration]:
     """Generates border configurations from the configuration space.
 
     Parameters
@@ -36,11 +37,15 @@ def get_border_configs(configspace: ConfigurationSpace) -> List[Configuration]:
     # Generate all combinations of the selected hyperparameter values
     config_values = list(product(*hp_borders))
 
+    # Shuffle the list
+    random.seed(0)
+    random.shuffle(config_values)
+
     # Now we have to check if they are valid
     # because it might be that conditions are not met
     # (e.g. if parent is inactive, then the childs are in active too)
     configs = []
-    for values in config_values:
+    for i, values in enumerate(config_values):
         # We need a dictionary to initialize the configuration
         d = {}
         for hp_name, value in zip(configspace.get_hyperparameter_names(), values):
@@ -52,5 +57,8 @@ def get_border_configs(configspace: ConfigurationSpace) -> List[Configuration]:
             configs.append(config)
         except Exception:
             continue
+
+        if i > limit:
+            break
 
     return configs

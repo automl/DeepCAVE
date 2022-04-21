@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from telnetlib import X3PAD
 from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
 from pathlib import Path
@@ -652,6 +653,14 @@ class AbstractRun(ABC):
             x += [value]
 
         return x
+
+    def encode_configs(self, configs: List[Configuration]) -> np.ndarray:
+        X = []
+        for config in configs:
+            x = self.encode_config(config)
+            X.append(x)
+
+        return np.array(X)
 
     def get_encoded_data(
         self,

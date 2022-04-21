@@ -18,27 +18,38 @@ class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
+    description = """
+        The configuration footprint shows the configuration space in two dimensions.
+        Based on the evaluated configurations, a surface is plotted. 
+        Additional border and support configurations should answer the question whether the search
+        is exhausted or not. For each hyperparameter, ten random support configurations are plotted.
+    """
     activate_run_selection = True
 
     @staticmethod
     def get_input_layout(register):
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Objective"),
-                    dbc.Select(
-                        id=register("objective", ["options", "value"]),
-                        placeholder="Select objective ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective"),
+                            dbc.Select(
+                                id=register("objective", ["options", "value"]),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
                     ),
-                ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
-                    dbc.Label("Budget"),
-                    dbc.Select(
-                        id=register("budget", ["options", "value"]),
-                        placeholder="Select budget ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Budget"),
+                            dbc.Select(
+                                id=register("budget", ["options", "value"]),
+                                placeholder="Select budget ...",
+                            ),
+                        ],
+                        md=6,
                     ),
                 ],
                 className="mb-3",
@@ -49,31 +60,50 @@ class FootPrint(StaticPlugin):
                     dcc.Slider(
                         id=register("details", "value"),
                         min=0.1,
-                        max=1,
-                        step=0.1,
-                        marks={0.1: "High", 0.5: "Medium", 1: "Low"},
+                        max=0.9,
+                        step=0.4,
+                        marks={0.1: "Low", 0.5: "Medium", 0.9: "High"},
                     ),
                 ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
-                    dbc.Label("Include Border Configurations"),
-                    dbc.Select(
-                        id=register("include_borders", ["options", "value"]),
-                        placeholder="Select ...",
-                    ),
-                ],
-                className="",
             ),
         ]
+
+    @staticmethod
+    def get_filter_layout(register):
+        return (
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Border Configurations"),
+                            dbc.Select(
+                                id=register("show_borders", ["options", "value"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Support Configurations"),
+                            dbc.Select(
+                                id=register("show_supports", ["options", "value"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                ],
+            ),
+        )
 
     def load_inputs(self):
         return {
             "objective": {"options": get_select_options(), "value": None},
             "budget": {"options": get_select_options(), "value": None},
             "details": {"value": 0.5},
-            "include_borders": {"options": get_select_options(binary=True), "value": "true"},
+            "show_borders": {"options": get_select_options(binary=True), "value": "true"},
+            "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
@@ -111,22 +141,23 @@ class FootPrint(StaticPlugin):
     def process(run, inputs) -> Dict[str, Any]:
         budget = run.get_budget(inputs["budget"]["value"])
         objective = run.get_objective(inputs["objective"]["value"])
-        include_borders = inputs["include_borders"]["value"] == "true"
-        details = inputs["details"]["value"]
+        details = 1 - inputs["details"]["value"]
 
         # Initialize the evaluator
         evaluator = Evaluator(run)
-        evaluator.calculate(objective, budget, include_borders=include_borders)
+        evaluator.calculate(objective, budget)
 
         data = evaluator.get_surface(details=details)
         config_points = evaluator.get_points("configs")
         border_points = evaluator.get_points("borders")
+        support_points = evaluator.get_points("supports")
         incumbent_points = evaluator.get_points("incumbents")
 
         return {
             "data": data,
             "config_points": config_points,
             "border_points": border_points,
+            "support_points": support_points,
             "incumbent_points": incumbent_points,
         }
 
@@ -137,6 +168,8 @@ class FootPrint(StaticPlugin):
         ]
 
     def load_outputs(self, inputs, outputs, run):
+        show_borders = inputs["show_borders"]["value"] == "true"
+        show_supports = inputs["show_supports"]["value"] == "true"
 
         traces = []
         x_, y_, z_ = outputs["data"]
@@ -152,14 +185,22 @@ class FootPrint(StaticPlugin):
                 len=0.5,
                 title=inputs["objective"]["value"],
             ),
+            colorscale="viridis",
         )
         traces += [data]
 
+        point_names = ["Configuration", "Incumbent"]
+        point_values = ["config_points", "incumbent_points"]
+
+        if show_borders:
+            point_names += ["Border Configuration"]
+            point_values += ["border_points"]
+        if show_supports:
+            point_names += ["Random (unevaluated) Configuration"]
+            point_values += ["support_points"]
+
         # Now add the points
-        for name, points in zip(
-            ["Configuration", "Border Configuration", "Incumbent"],
-            ["config_points", "border_points", "incumbent_points"],
-        ):
+        for name, points in zip(point_names, point_values):
             x, y, config_ids = outputs[points]
             size = 5
             marker_symbol = "x"

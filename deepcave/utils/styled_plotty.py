@@ -333,7 +333,7 @@ def get_hyperparameter_ticks_from_values(
 
 
 def get_hovertext_from_config(run, config_id: int) -> str:
-    if config_id == BORDER_CONFIG_ID:
+    if config_id < 0:
         return ""
 
     string = f"Configuration ID: {int(config_id)}<br>"

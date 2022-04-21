@@ -1,10 +1,12 @@
+from telnetlib import X3PAD
 from typing import Tuple, Union, Optional, List
 from itsdangerous import NoneAlgorithm
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.manifold import MDS
-from deepcave.constants import BORDER_CONFIG_ID
+from deepcave.constants import BORDER_CONFIG_ID, RANDOM_CONFIG_ID
 from deepcave.runs import AbstractRun, Status
+from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.hyperparameters import Hyperparameter, CategoricalHyperparameter
 
 from deepcave.runs.objective import Objective
@@ -27,6 +29,7 @@ class Footprint:
         self,
         objective: Objective,
         budget: Union[int, float],
+        include_supports: bool = True,
         include_borders: bool = True,
     ) -> None:
         """
@@ -38,15 +41,16 @@ class Footprint:
             Objective and colour to show.
         budget : Union[int, float]
             All configurations with this budget are considered.
+        include_supports : bool
+            Whether random points should be taken into account for MDS.
         include_borders : bool
-            Whether border configurations should be taken into account.
+            Whether border configurations should be taken into account for MDS.
 
         Returns
         -------
         Tuple[np.ndarray, np.ndarray, np.ndarray]
             x, y, z for contour plots.
         """
-
         # Get encoded configs
         data = self.run.get_encoded_data(
             objective, budget, statuses=Status.SUCCESS, specific=True, include_config_ids=True
@@ -69,30 +73,32 @@ class Footprint:
                 best_y = y
                 self._incumbent_id = config_id
 
+        # Reshape Y to 2D
         Y = Y.reshape(-1, 1)
-        if include_borders:
-            X_borders, Y_borders_performance = [], []
-            border_configs = get_border_configs(self.cs)
-            for config in border_configs:
-                x = self.run.encode_config(config)
-                X_borders.append(x)
-                Y_borders_performance.append([objective.get_worst_value()])
 
-                # Add negative config_id to indicate border config
-                config_ids.append(BORDER_CONFIG_ID)
+        # Create new arrays for sampled, border and random configs
+        X_all = X.copy()
 
-            X_borders = np.array(X_borders)
-            Y_borders_performance = np.array(Y_borders_performance)
+        border_configs = get_border_configs(self.cs)
+        support_configs = self.cs.sample_configuration(size=len(hp_names) * 10)
 
-            X = np.concatenate((X, X_borders), axis=0)
-            Y = np.concatenate((Y, Y_borders_performance), axis=0)
+        # Add border and support configs to `X_all`
+        for configs, config_id in zip(
+            [border_configs, support_configs], [BORDER_CONFIG_ID, RANDOM_CONFIG_ID]
+        ):
+            X_ = self.run.encode_configs(configs)
+            X_all = np.concatenate((X_all, X_), axis=0)
+            config_ids += [config_id] * len(X_)
 
         # Get distance between configs
-        distances = self._get_distances(X)
+        distances = self._get_distances(X_all)
 
         # Calculate MDS now to get 2D coordinates
         X_scaled = self._get_mds(distances)
-        self._train(X_scaled, Y.ravel())
+
+        # But here's the catch: Get rid of border and random configs because
+        # we don't have the y values for them.
+        self._train(X_scaled[: len(X)], Y.ravel())
 
         # And we set those points so we can reach them later again
         self._X = X_scaled
@@ -117,12 +123,13 @@ class Footprint:
         RuntimeError
             If `calculate` was not called before.
         """
-        if self._X is None:
+        X = self._X
+        if X is None:
             raise RuntimeError("You need to call `calculate` first.")
 
         # Create meshgrid
-        x_min, x_max = self._X[:, 0].min() - 1, self._X[:, 0].max() + 1
-        y_min, y_max = self._X[:, 1].min() - 1, self._X[:, 1].max() + 1
+        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
 
         x = np.arange(x_min, x_max, details)
         y = np.arange(y_min, y_max, details)
@@ -141,8 +148,8 @@ class Footprint:
         Parameters
         ----------
         category : str, optional
-            Points of a specific category. Chose between `configs`, `borders` or `incumbents`.
-            By default "configs".
+            Points of a specific category. Chose between `configs`, `borders`, `supports`
+            or `incumbents`. By default `configs`.
 
         Returns
         -------
@@ -154,7 +161,7 @@ class Footprint:
         RuntimeError
             If category is not supported.
         """
-        if category not in ["configs", "borders", "incumbents"]:
+        if category not in ["configs", "borders", "supports", "incumbents"]:
             raise RuntimeError("Unknown category.")
 
         X = []
@@ -162,9 +169,10 @@ class Footprint:
         config_ids = []
         for x, config_id in zip(self._X, self._config_ids):
             if (
-                (category == "configs" and config_id != BORDER_CONFIG_ID)
+                (category == "configs" and config_id >= 0)
                 or (category == "borders" and config_id == BORDER_CONFIG_ID)
                 or (category == "incumbents" and config_id == self._incumbent_id)
+                or (category == "supports" and config_id == RANDOM_CONFIG_ID)
             ):
                 x = x.tolist()  # type: ignore
                 X += [x[0]]
