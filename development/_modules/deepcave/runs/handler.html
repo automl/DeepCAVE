@@ -463,10 +463,7 @@ style="width: 100%;">
             <span class="n">run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_path</span><span class="p">]</span>
 
             <span class="c1"># Get cache</span>
-            <span class="n">cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update_required</span><span class="p">(</span><span class="n">run</span><span class="p">):</span>
-                <span class="n">cache</span><span class="o">.</span><span class="n">initialize_run</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
-
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">run</span><span class="p">):</span>
                 <span class="c1"># It&#39;s important to delete the run from self.runs here because</span>
                 <span class="c1"># otherwise this object is kept in memory though it has changed</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_path</span><span class="p">]</span>
@@ -532,7 +529,7 @@ style="width: 100%;">
             <span class="n">run</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_path</span><span class="p">]</span>
 
             <span class="c1"># Create cache file and set name/hash. Clear cache if hash got changed.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">run</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">run</span> <span class="o">=</span> <span class="kc">None</span>
@@ -569,7 +566,7 @@ style="width: 100%;">
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_class</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exception</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Add to run cache</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="p">[</span><span class="n">run</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">run</span></div>
 
@@ -605,7 +602,7 @@ style="width: 100%;">
         <span class="c1"># Add groups to rc</span>
         <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">instantiated_groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="c1"># Create cache file and set name/hash. Clear cache if hash got changed</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="p">[</span><span class="n">group</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
 
         <span class="c1"># Save in memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">instantiated_groups</span></div>
