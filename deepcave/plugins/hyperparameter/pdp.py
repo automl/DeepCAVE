@@ -13,7 +13,7 @@ from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
 
 
 GRID_POINTS_PER_AXIS = 20
-SAMPLES_PER_HP = 20
+SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
 MAX_SHOWN_SAMPLES = 50
 
