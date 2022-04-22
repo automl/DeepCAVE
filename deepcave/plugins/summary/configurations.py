@@ -45,7 +45,7 @@ class Configurations(DynamicPlugin):
             "run": dict(value=run.id),
             "config_id": dict(value=config_id),
         }
-        url = Configurations.get_base_url(Configurations.id)
+        url = Configurations.get_base_url()
 
         return create_url(url, inputs)
 

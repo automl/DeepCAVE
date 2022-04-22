@@ -58,8 +58,8 @@ class Plugin(Layout, ABC):
 
         super().__init__()
 
-    @staticmethod
-    def get_base_url(plugin_id) -> str:
+    @classmethod
+    def get_base_url(cls) -> str:
         """
         Generates the url for the plugin.
 
@@ -68,7 +68,7 @@ class Plugin(Layout, ABC):
         str
             Url for the plugin as string.
         """
-        return f"{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{plugin_id}"
+        return f"{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{cls.id}"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:

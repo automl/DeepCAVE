@@ -1,8 +1,9 @@
 from typing import Union, Dict, List
 
-from dash import dcc, html
+from dash import dcc, html, ALL
 from dash_extensions.enrich import Trigger
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
+import dash_bootstrap_components as dbc
 from dash.development.base_component import Component
 
 from deepcave import app, queue
@@ -75,56 +76,66 @@ class SidebarLayout(Layout):
                 ],
             )
 
+        # Callback to cancel jobs
+        @app.callback(
+            # Output('dropdown-container-output', 'children'),
+            Input({"type": "cancel-job", "index": ALL}, "n_clicks"),
+            State({"type": "cancel-job", "index": ALL}, "name"),
+        )
+        def delete_job(n_clicks, job_ids):
+            for n_click, job_id in zip(n_clicks, job_ids):
+                if n_click is not None:
+                    queue.delete_job(job_id)
+
         # Update queue information panel
         output = Output("queue-info", "children")
 
         @app.callback(output, Trigger("global-update", "n_intervals"))
         def update_queue_info():
             try:
-                jobs = {}
+                all_jobs = [
+                    queue.get_finished_jobs(),
+                    queue.get_running_jobs(),
+                    queue.get_pending_jobs(),
+                ]
 
-                for job in queue.get_running_jobs():
-                    display_name = job.meta["display_name"]
-                    run_name = job.meta["run_name"]
+                job_stati = ["[FINISHED]", "[RUNNING]", "[PENDING]"]
 
-                    if display_name not in jobs:
-                        jobs[display_name] = []
+                collect = []
+                for jobs, status in zip(all_jobs, job_stati):
 
-                    jobs[display_name].append((run_name, "[R]"))
+                    for job in jobs:
+                        name = job.meta["display_name"]
+                        job_id = job.id
+                        link = job.meta["link"]
 
-                for job in queue.get_pending_jobs():
-                    display_name = job.meta["display_name"]
-                    run_name = job.meta["run_name"]
-
-                    if display_name not in jobs:
-                        jobs[display_name] = []
-
-                    jobs[display_name].append((run_name, "[P]"))
+                        collect += [(name, job_id, status, link)]
 
                 items = []
-                for display_name, run_names in jobs.items():
+                for name, job_id, status, link in collect:
                     items += [
                         html.Li(
                             className="nav-item",
-                            children=[html.A(f"{display_name}", className="nav-link")],
+                            children=[
+                                html.A(
+                                    [
+                                        html.A(f"{status} {name}", href=link),
+                                        dbc.Button(
+                                            "-",
+                                            id={"type": "cancel-job", "index": name},
+                                            name=job_id,
+                                            color="danger",
+                                            size="sm",
+                                            style={"float": "right", "padding": "0 0.4rem"},
+                                        ),
+                                    ],
+                                    className="nav-link",
+                                ),
+                            ],
                         )
                     ]
 
-                    for run_name, status in run_names:
-                        items += [
-                            html.Li(
-                                className="nav-item",
-                                children=[
-                                    html.A(
-                                        f"{status} {run_name}",
-                                        className="nav-link disabled",
-                                        style={"padding-top": 0, "padding-bottom": 0},
-                                    )
-                                ],
-                            )
-                        ]
-
-                if len(jobs) > 0:
+                if len(collect) > 0:
                     return [
                         html.Hr(),
                         html.H6(
@@ -135,7 +146,7 @@ class SidebarLayout(Layout):
                     ]
 
                 return []
-            except:
+            except Exception:
                 return
 
     def __call__(self) -> Union[List[Component], Component]:
