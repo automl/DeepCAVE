@@ -42,15 +42,14 @@ class DynamicPlugin(Plugin, ABC):
 
             raw_outputs = {}
             for run in runs:
-                run_cache = rc[run]
-                run_outputs = run_cache.get(self.id, inputs_key)
+                run_outputs = rc.get(run, self.id, inputs_key)
                 if run_outputs is None:
                     self.logger.debug(f"Process {run.name}.")
                     run_outputs = self.process(run, inputs)
 
                     # Cache it
                     if self.use_cache:
-                        run_cache.set(self.id, inputs_key, value=run_outputs)
+                        rc.set(run, self.id, inputs_key, value=run_outputs)
                 else:
                     self.logger.debug(f"Found outputs from {run.name} in cache.")
 

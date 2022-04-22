@@ -305,7 +305,7 @@ class GeneralLayout(Layout):
         @app.callback(output, input)
         def callback(n_clicks):
             if n_clicks is not None:
-                rc.clear_all_caches()
+                rc.clear()
 
                 # Also remove last inputs
                 c.set("last_inputs", value={})

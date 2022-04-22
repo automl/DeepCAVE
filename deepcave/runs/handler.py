@@ -188,10 +188,7 @@ class RunHandler:
             run = self.runs[run_path]
 
             # Get cache
-            cache = self.rc[run]
-            if self.rc.update_required(run):
-                cache.initialize_run(run)
-
+            if self.rc.update(run):
                 # It's important to delete the run from self.runs here because
                 # otherwise this object is kept in memory though it has changed
                 del self.runs[run_path]
@@ -257,7 +254,7 @@ class RunHandler:
             run = self.runs[run_path]
 
             # Create cache file and set name/hash. Clear cache if hash got changed.
-            self.rc[run]
+            self.rc.update(run)
             return run
         else:
             run = None
@@ -294,7 +291,7 @@ class RunHandler:
                 self.logger.warning(f"{run_class.prefix}: {exception}.")
         else:
             # Add to run cache
-            self.rc[run]
+            self.rc.update(run)
 
         return run
 
@@ -330,7 +327,7 @@ class RunHandler:
         # Add groups to rc
         for group in instantiated_groups.values():
             # Create cache file and set name/hash. Clear cache if hash got changed
-            self.rc[group]
+            self.rc.update(group)
 
         # Save in memory
         self.groups = instantiated_groups

@@ -13,6 +13,7 @@ import dash_bootstrap_components as dbc
 from deepcave import app, c, queue, rc, run_handler, notification
 from deepcave.plugins import Plugin
 from deepcave.runs import AbstractRun
+from deepcave.utils.url import create_url
 
 
 class PluginState(Enum):
@@ -23,19 +24,10 @@ class PluginState(Enum):
     FAILED = 3
 
 
-def _process(process: Callable[[AbstractRun, Any], None], run_id: str, inputs) -> Any:
-    # run_handler.update_runs()
-    # run_handler.update_groups()
-
-    try:
-        run = run_handler.get_run(run_id)
-    except KeyError:
-        print(f"Could not find run for {run_id}.")
-        raise
-
+def _process(process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs) -> Any:
     try:
         return process(run, inputs)
-    except:
+    except Exception:
         traceback.print_exc()
         raise
 
@@ -79,11 +71,6 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(outputs, inputs)
         def plugin_process(n_clicks, _, *inputs_list):
-            """
-            Parameters:
-                n_clicks (int): From button.
-                *inputs_list: Values from user.
-            """
             self._blocked = True
 
             # Map the list `inputs_list` to a dict s.t.
@@ -92,6 +79,7 @@ class StaticPlugin(Plugin, ABC):
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             last_inputs = c.get("last_inputs", self.id)
 
+            link = create_url(self.get_base_url(), inputs)
             runs = self.get_selected_runs(inputs)
 
             button_pressed = n_clicks is not None
@@ -101,7 +89,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.id] = rc[run].get(self.id, inputs_key)
+                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
 
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False
@@ -141,6 +129,7 @@ class StaticPlugin(Plugin, ABC):
                             "run_name": run.name,
                             "run_id": run.id,
                             "inputs_key": inputs_key,
+                            "link": link,
                         }
 
                         self.logger.debug(f"Enqueued {run.name} ({run.id}).")
@@ -148,7 +137,7 @@ class StaticPlugin(Plugin, ABC):
                         # Start the task in rq
                         queue.enqueue(
                             _process,
-                            args=[self.process, run.id, inputs],
+                            args=[self.process, run, inputs],
                             job_id=job_id,
                             meta=job_meta,
                         )
@@ -170,19 +159,19 @@ class StaticPlugin(Plugin, ABC):
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
-                            rc[run].set(self.id, job_inputs_key, value=job_run_outputs)
-                            self.logger.debug(f"Job {job_id} cached")
+                            rc.set(run, self.id, job_inputs_key, job_run_outputs)
+                            self.logger.debug(f"Job {job_id} cached.")
 
                             queue.delete_job(job_id)
-                            self.logger.debug(f"Job {job_id} deleted")
+                            self.logger.debug(f"Job {job_id} deleted.")
                         except Exception as e:
-                            self.logger.error(f"Job {job_id} failed with exception {e}")
+                            self.logger.error(f"Job {job_id} failed with exception {e}.")
                             queue.delete_job(job_id)
-                            self.logger.debug(f"Job {job_id} deleted")
+                            self.logger.debug(f"Job {job_id} deleted.")
                         except KeyboardInterrupt:
-                            self.logger.error(f"Job {job_id} got interrupted by KeyboardInterrupt")
+                            self.logger.error(f"Job {job_id} got interrupted by KeyboardInterrupt.")
                             queue.delete_job(job_id)
-                            self.logger.debug(f"Job {job_id} deleted")
+                            self.logger.debug(f"Job {job_id} deleted.")
                             raise
 
                     # Check if queue is still running
@@ -239,11 +228,11 @@ class StaticPlugin(Plugin, ABC):
         @app.callback(output, input)
         def plugin_update_status(_):
             button_text = [html.Span(self.button_caption)]
-            
+
             if self._state == PluginState.UNSET:
                 # Disable and reset button
                 return button_text, None, True
-            
+
             # Important so we don't update the button every time (would result in an ugly spinner)
             if self._previous_state == self._state:
                 raise PreventUpdate

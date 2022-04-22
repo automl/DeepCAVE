@@ -12,7 +12,7 @@ from deepcave.utils.util import short_string
 
 class Cache:
     def __init__(
-        self, filename: Optional[Path] = None, defaults: Dict = None, *, debug: bool = False
+        self, filename: Optional[Path] = None, defaults: Dict = None, debug: bool = False, write_file: bool = True
     ) -> None:
         """
         Cache handles a json file. Decided not to use flask_caching
@@ -118,18 +118,6 @@ class Cache:
             d = d[key]
 
         return True
-
-    def initialize_run(self, run: AbstractRun) -> None:
-        """
-        Initializes the cache for the given run. The cache is cleared before.
-        """
-        self.clear(write_file=False)
-        self.set("name", value=run.name, write_file=False)
-        self.set("hash", value=run.hash, write_file=False)
-        if run.path is not None:
-            self.set("path", value=str(run.path), write_file=False)
-
-        self.write()
 
     def clear(self, write_file: bool = True) -> None:
         """Clear all cache and reset to defaults"""

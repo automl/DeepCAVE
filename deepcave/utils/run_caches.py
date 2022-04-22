@@ -1,4 +1,4 @@
-from typing import Iterator, Optional, Union
+from typing import Iterator, Optional, Union, Any, Dict
 
 import shutil
 
@@ -12,57 +12,128 @@ class RunCaches:
     """
     Holds the caches for the selected runs. The caches are used for the plugins to store the
     raw outputs so that raw outputs must not be calculated again.
+
+    Each input has its own cache. This change was necessary because it ensures that not all data
+    are loaded if they are not needed.
     """
 
     def __init__(self, config: "Config"):
         self.cache_dir = config.CACHE_DIR / "run_cache"
         self.logger = get_logger("RunCache")
-        self._debug_mode = config.DEBUG
+        self._debug = config.DEBUG
 
-    def __getitem__(self, run: AbstractRun) -> Cache:
-        if not isinstance(run, AbstractRun):
-            raise TypeError(f"Expect Run but got type {type(run)} ({run}).")
+    def update(self, run: AbstractRun) -> bool:
+        """
+        Updates the cache for the given run. If the cache does not exists it will be created.
+        If the run hash is different from the saved variant the cache will be reset.
 
-        # Create cache
-        filename = self.cache_dir / f"{run.id}.json"
-        cache = Cache(filename, debug=self._debug_mode)
+        Parameters
+        ----------
+        run : AbstractRun
+            The run which should be updated.
+
+        Returns
+        -------
+        bool
+            True if the run cache was updated.
+        """
+        filename = self.cache_dir / run.id / "index.json"
+
+        # Reads the cache.
+        cache = Cache(filename, debug=self._debug, write_file=False)
 
         if not filename.exists():
-            self.logger.info(
-                f"Creating new cache file for {run.name} at {filename.absolute().resolve()}"
-            )
-            cache.initialize_run(run)
+            self._reset(run, cache)
+            self.logger.info(f"Cache for {run.name} has been created.")
+            return True
 
-        return cache
-
-    def update_required(self, run: AbstractRun) -> bool:
-        cache = self[run]
-
-        # Check whether hash is up-to-date
         current_hash = cache.get("hash")
         if current_hash != run.hash:
-            self.logger.info(f"Hash for {run.name} has changed!")
+            # Delete all caches related to the run.
+            self.clear_run(run)
+
+            # And also reset the "main" cache.
+            cache = Cache(filename, debug=self._debug, write_file=False)
+            self._reset(run, cache)
+            self.logger.info(f"Hash for {run.name} has changed.")
             return True
 
         return False
 
-    def __contains__(self, run: Union[AbstractRun, str]) -> bool:
-        if isinstance(run, AbstractRun):
-            run_path = run.path
-        else:
-            run_path = run
+    def _reset(self, run: AbstractRun, cache: Cache) -> None:
+        """
+        Initializes/resets the cache for the given run.
 
-        # Check directory for
-        for path in self.cache_dir.iterdir():
-            if path == run_path:
-                return True
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to reset the cache for.
+        cache : Cache
+            Instance of the cache.
+        """
+        # Initialize run here.
+        cache.clear(write_file=False)
+        cache.set("name", value=run.name, write_file=False)
+        cache.set("hash", value=run.hash, write_file=False)
+        if run.path is not None:
+            cache.set("path", value=str(run.path), write_file=False)
 
-        return False
+        cache.write()
 
-    def __iter__(self) -> Iterator[Cache]:
-        for cache_file in self.cache_dir.iterdir():
-            yield Cache(cache_file, debug=self._debug_mode)
+    def get(self, run: AbstractRun, plugin_id: str, inputs_key: str) -> Dict[str, Any]:
+        """
+        Returns the raw outputs for the given run, plugin and inputs key.
 
-    def clear_all_caches(self) -> None:
-        """Removes all caches."""
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to get the results for.
+        plugin_id : str
+            The plugin id to get the results for.
+        inputs_key : str
+            The input key to get the results for. Should be the output from `Plugin._dict_as_key`.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Raw outputs for the given run, plugin and inputs key.
+        """
+        filename = self.cache_dir / run.id / plugin_id / f"{inputs_key}.json"
+
+        if not filename.exists():
+            return None
+
+        cache = Cache(filename, debug=self._debug, write_file=False)
+        return cache.get("outputs")
+
+    def set(self, run: AbstractRun, plugin_id: str, inputs_key: str, value: Any) -> None:
+        """
+        Sets the value for the given run, plugin and inputs key.
+        Since each input key has it's own cache, only necessary data are loaded.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to set the cache for.
+        plugin_id : str
+            The plugin id to set the cache for.
+        inputs_key : str
+            The inputs key to set the cache for. Should be the output from `Plugin._dict_as_key`.
+        value : Any
+            The value to set.
+        """
+        filename = self.cache_dir / run.id / plugin_id / f"{inputs_key}.json"
+        cache = Cache(filename, debug=self._debug, write_file=False)
+        cache.set("outputs", value=value)
+
+    def clear_run(self, run: AbstractRun) -> None:
+        """
+        Removes all caches for the given run.
+        """
+        shutil.rmtree(self.cache_dir / run.id)
+
+    def clear(self) -> None:
+        """
+        Removes all caches.
+        """
         shutil.rmtree(self.cache_dir)
