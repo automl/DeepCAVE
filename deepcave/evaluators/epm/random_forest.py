@@ -36,7 +36,7 @@ class RandomForest:
 
     Note
     ----
-    This wrapper supports also instances.
+    This wrapper also supports instances.
     """
 
     def __init__(
@@ -463,6 +463,6 @@ class RandomForest:
             var = var.reshape((-1, 1))
 
         return mean_, var
-    
+
     def get_leaf_values(self, x: np.ndarray):
         return self._model.all_leaf_values(x)

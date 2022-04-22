@@ -39,6 +39,7 @@ class LPI:
         self,
         budget: Union[int, float],
         continous_neighbors: int = 500,
+        n_trees: int = 10,
         seed: Optional[int] = None,
     ) -> None:
         """
@@ -70,7 +71,7 @@ class LPI:
 
         # Get model and train it
         # Use same forest as for fanova
-        self._model = FanovaForest(self.cs, seed=seed)
+        self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
         self._model.train(X, Y)
 
         # Get neighborhood sampled on an unit-hypercube.

@@ -29,7 +29,9 @@ class Importances(StaticPlugin):
                         id=register("method", ["options", "value"]), placeholder="Select ..."
                     ),
                 ],
+                className="mb-3",
             ),
+            html.Div([dbc.Label("Trees"), dbc.Input(id=register("n_trees", "value"))]),
         ]
 
     @staticmethod
@@ -61,6 +63,7 @@ class Importances(StaticPlugin):
                 "options": get_select_options(method_labels, method_values),
                 "value": "local",
             },
+            "n_trees": {"value": 10},
             "budgets": {"options": get_checklist_options(), "value": []},
             "hyperparameters": {"options": get_checklist_options(), "value": []},
         }
@@ -101,6 +104,7 @@ class Importances(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
         method = inputs["method"]["value"]
+        n_trees = int(inputs["n_trees"]["value"])
 
         if method == "local":
             # Intiatize the evaluator
@@ -113,7 +117,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
-            evaluator.calculate(budget, seed=0)
+            evaluator.calculate(budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances
