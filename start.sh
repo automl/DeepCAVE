@@ -4,6 +4,12 @@
 trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
+# We remove dump.rdb to avoid issues from previous runs
+file="dump.rdb"
+if [ -f "$file" ] ; then
+    rm "$file"
+fi
+
 # Save config value
 CONFIG=$1
 if ! [ $CONFIG ]; then
