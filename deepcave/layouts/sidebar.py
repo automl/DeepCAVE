@@ -126,6 +126,7 @@ class SidebarLayout(Layout):
                                             name=job_id,
                                             color="danger",
                                             size="sm",
+                                            disabled=True if status == job_stati[0] else False,
                                             style={"float": "right", "padding": "0 0.4rem"},
                                         ),
                                     ],

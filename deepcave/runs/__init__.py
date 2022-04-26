@@ -217,6 +217,9 @@ class AbstractRun(ABC):
 
         raise RuntimeError("Objective was not found.")
 
+    def get_objective_ids(self) -> List[int]:
+        return list(range(len(self.get_objectives())))
+
     def get_objective_name(self, objectives: Optional[List[Objective]] = None) -> str:
         """
         Get the cost name of given objective names.
@@ -286,6 +289,9 @@ class AbstractRun(ABC):
             id = int(id)
 
         return self.meta["budgets"][id]
+
+    def get_budget_ids(self) -> List[int]:
+        return list(range(len(self.get_budgets())))
 
     def get_budgets(self, human: bool = False) -> List[Union[int, float]]:
         """

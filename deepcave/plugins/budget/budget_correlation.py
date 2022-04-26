@@ -43,41 +43,32 @@ class BudgetCorrelation(DynamicPlugin):
                 [
                     dbc.Label("Objective"),
                     dbc.Select(
-                        id=register("objective", ["options", "value"]),
+                        id=register("objective_id", ["value", "options"], type=int),
                         placeholder="Select objective ...",
                     ),
                 ],
             ),
         ]
 
-    def load_inputs(self):
-        return {
-            "objective": {"options": get_select_options(), "value": None},
-        }
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run):
-        objective_names = selected_run.get_objective_names()
-        objective_ids = list(range(len(objective_names)))
-
-        value = inputs["objective"]["value"]
+        value = inputs["objective_id"]["value"]
         if value is None:
             value = objective_ids[0]
 
-        new_inputs = {
-            "objective": {
-                "options": get_select_options(objective_names, objective_ids),
+        return {
+            "objective_id": {
+                "options": objective_options,
                 "value": value,
             },
         }
 
-        # We merge the new inputs with the previous inputs
-        update_dict(inputs, new_inputs)
-
-        return inputs
-
     @staticmethod
     def process(run, inputs):
-        objective_id = int(inputs["objective"]["value"])
+        objective_id = inputs["objective_id"]
 
         correlations: Dict[str, Dict[str, float]] = defaultdict(dict)
         for budget1 in run.get_budgets():
@@ -106,7 +97,8 @@ class BudgetCorrelation(DynamicPlugin):
     def get_output_layout(register):
         return [dcc.Graph(id=register("graph", "figure"))]
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         traces = []
 
         correlations = outputs["correlations"]

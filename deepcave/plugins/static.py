@@ -1,5 +1,6 @@
 from abc import ABC
-from typing import Any, Callable
+from typing import Any, Callable, List, Dict
+from dash.development.base_component import Component
 
 import traceback
 from enum import Enum
@@ -9,8 +10,7 @@ from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
-
-from deepcave import app, c, queue, rc, run_handler, notification
+from deepcave import interactive
 from deepcave.plugins import Plugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.url import create_url
@@ -24,7 +24,9 @@ class PluginState(Enum):
     FAILED = 3
 
 
-def _process(process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs) -> Any:
+def _process(
+    process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs: Dict[str, Any]
+) -> Any:
     try:
         return process(run, inputs)
     except Exception:
@@ -47,13 +49,17 @@ class StaticPlugin(Plugin, ABC):
 
         super().__init__()
 
+    @interactive
     def register_callbacks(self) -> None:
         super().register_callbacks()
         self._callback_inputs_changed()
         self._callback_loop_update_status_label()
         self._callback_loop_trigger_main_loop()
 
+    @interactive
     def _callback_inputs_changed(self) -> None:
+        from deepcave import app, c, run_handler, queue, rc
+
         # Plugin specific outputs
         outputs = []
         for id, attribute, _ in self.outputs:
@@ -65,18 +71,19 @@ class StaticPlugin(Plugin, ABC):
         ]
 
         # Get other plugin specific inputs that might change
-        for id, attribute, _ in self.inputs:
+        for id, attribute, _, _ in self.inputs:
             inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def plugin_process(n_clicks, _, *inputs_list):
+        def plugin_process(n_clicks, _, *inputs_list):  # type: ignore
             self._blocked = True
 
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
+            cleaned_inputs = self._clean_inputs(inputs)
             last_inputs = c.get("last_inputs", self.id)
 
             link = create_url(self.get_base_url(), inputs)
@@ -137,7 +144,7 @@ class StaticPlugin(Plugin, ABC):
                         # Start the task in rq
                         queue.enqueue(
                             _process,
-                            args=[self.process, run, inputs],
+                            args=[self.process, run, cleaned_inputs],
                             job_id=job_id,
                             meta=job_meta,
                         )
@@ -197,7 +204,10 @@ class StaticPlugin(Plugin, ABC):
             self._blocked = False
             raise PreventUpdate
 
+    @interactive
     def _callback_loop_trigger_main_loop(self) -> None:
+        from deepcave import app
+
         output = Output(self.get_internal_id("update-interval-output"), "data")
         inputs = [
             Input(self.get_internal_id("update-interval"), "n_intervals"),
@@ -208,14 +218,17 @@ class StaticPlugin(Plugin, ABC):
         # Especially not if it's blocked because PreventUpdate
         # prevent output updates from previous callback calls.
         @app.callback(output, inputs)
-        def plugin_check_blocked(_, data):
+        def plugin_check_blocked(_, data):  # type: ignore
             if self._blocked:
                 raise PreventUpdate
 
             # This will trigger the main loop
             return data + 1
 
+    @interactive
     def _callback_loop_update_status_label(self) -> None:
+        from deepcave import app, notification
+
         output = [
             Output(self.get_internal_id("update-button"), "children"),
             Output(self.get_internal_id("update-button"), "n_clicks"),
@@ -226,7 +239,7 @@ class StaticPlugin(Plugin, ABC):
         # Update status label
         # Register updates from inputs
         @app.callback(output, input)
-        def plugin_update_status(_):
+        def plugin_update_status(_):  # type: ignore
             button_text = [html.Span(self.button_caption)]
 
             if self._state == PluginState.UNSET:
@@ -273,10 +286,11 @@ class StaticPlugin(Plugin, ABC):
 
             return button_text, button, disabled
 
-    def _get_job_id(self, run_name, inputs_key) -> str:
+    def _get_job_id(self, run_name: str, inputs_key: str) -> str:
         return f"{run_name}-{inputs_key}"
 
-    def __call__(self):
+    @interactive
+    def __call__(self) -> List[Component]:  # type: ignore
         self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
         self._previous_state = None  # Used for updating status
         self._refresh_required = True

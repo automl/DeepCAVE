@@ -1,43 +1,43 @@
 from abc import ABC
+from typing import List, Any
 
+from dash.development.base_component import Component
+from deepcave import interactive
 from dash.dependencies import Input, Output
-
-from deepcave import app, c, rc
 from deepcave.plugins import Plugin
 
 
 class DynamicPlugin(Plugin, ABC):
     use_cache = True
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
-    def register_callbacks(self):
+    @interactive
+    def register_callbacks(self) -> None:
         super().register_callbacks()
-        self._callback_inputs_changed()
+        from deepcave import app, c, rc
 
-    def _callback_inputs_changed(self):
         outputs = []
         for id, attribute, _ in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
         inputs = [Input(self.get_internal_id("update-button"), "n_clicks")]
-        for id, attribute, _ in self.inputs:
+        for id, attribute, _, _ in self.inputs:
             inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
         @app.callback(outputs, inputs)
-        def plugin_output_update(_, *inputs_list):
+        def plugin_output_update(_, *inputs_list):  # type: ignore
             """
             Parameters:
                 *inputs_list: Values from user.
             """
-
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(inputs_list, input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
-
+            cleaned_inputs = self._clean_inputs(inputs)
             runs = self.get_selected_runs(inputs)
 
             raw_outputs = {}
@@ -45,7 +45,7 @@ class DynamicPlugin(Plugin, ABC):
                 run_outputs = rc.get(run, self.id, inputs_key)
                 if run_outputs is None:
                     self.logger.debug(f"Process {run.name}.")
-                    run_outputs = self.process(run, inputs)
+                    run_outputs = self.process(run, cleaned_inputs)
 
                     # Cache it
                     if self.use_cache:
@@ -63,5 +63,6 @@ class DynamicPlugin(Plugin, ABC):
 
             return self._process_raw_outputs(inputs, raw_outputs)
 
-    def __call__(self):
+    @interactive
+    def __call__(self) -> List[Component]:  # type: ignore
         return super().__call__(False)

@@ -1,6 +1,8 @@
 import datetime
 import sys
 import os
+from typing import Callable, Optional, Any, TypeVar, Union, cast
+from functools import wraps
 
 name = "DeepCAVE"
 package_name = "deepcave"
@@ -20,21 +22,21 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 
 
 if any(file in _exec_file for file in _exec_files):
-    from deepcave.config import configs, parse_config
-    from deepcave.queue import Queue  # noqa
-    from deepcave.runs.handler import RunHandler  # noqa
+    from deepcave.config import parse_config
+    from deepcave.queue import Queue
+    from deepcave.runs.handler import RunHandler
     from deepcave.runs.objective import Objective  # noqa
     from deepcave.runs.recorder import Recorder  # noqa
-    from deepcave.server import get_app  # noqa
-    from deepcave.utils.cache import Cache  # noqa
-    from deepcave.utils.run_caches import RunCaches  # noqa
+    from deepcave.server import get_app
+    from deepcave.utils.cache import Cache
+    from deepcave.utils.run_caches import RunCaches
     from deepcave.utils.notification import Notification
 
     # Get config
-    config = None  # Use default config if none provided
+    _config = None  # Use default config if none provided
     if "--config" in sys.argv:
-        config = sys.argv[sys.argv.index("--config") + 1]
-    config = parse_config(config)
+        _config = sys.argv[sys.argv.index("--config") + 1]
+    config = parse_config(_config)
 
     # Create app
     app = get_app(config)
@@ -73,11 +75,28 @@ if any(file in _exec_file for file in _exec_files):
         "Objective",
     ]
 else:
-
     try:
-        from deepcave.runs.objective import Objective
-        from deepcave.runs.recorder import Recorder
+        from deepcave.runs.objective import Objective  # noqa
+        from deepcave.runs.recorder import Recorder  # noqa
 
         __all__ = ["version", "Recorder", "Objective"]
     except ModuleNotFoundError:
         __all__ = ["version"]
+
+
+_api_mode = False if "app" in globals() else True
+
+
+# This TypeVar is necessary to ensure that the decorator works with arbitrary signatures.
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def interactive(func: F) -> F:
+    @wraps(func)
+    def inner(*args: Any, **kwargs: Any) -> Any:
+        if _api_mode:
+            return
+
+        return func(*args, **kwargs)
+
+    return cast(F, inner)

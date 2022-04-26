@@ -7,7 +7,6 @@ from pyPDP.algorithms.pdp import PDP
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun, Status
-from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
 
@@ -33,7 +32,7 @@ class PartialDependencies(StaticPlugin):
                         [
                             dbc.Label("Objective"),
                             dbc.Select(
-                                id=register("objective", ["options", "value"]),
+                                id=register("objective_id", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -43,7 +42,7 @@ class PartialDependencies(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             dbc.Select(
-                                id=register("budget", ["options", "value"]),
+                                id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
                             ),
                         ],
@@ -58,7 +57,7 @@ class PartialDependencies(StaticPlugin):
                         [
                             dbc.Label("Hyperparameter #1"),
                             dbc.Select(
-                                id=register("hyperparameter1", ["options", "value"]),
+                                id=register("hyperparameter_name_1", ["value", "options"]),
                                 placeholder="Select hyperparameter ...",
                             ),
                         ],
@@ -68,7 +67,7 @@ class PartialDependencies(StaticPlugin):
                         [
                             dbc.Label("Hyperparameter #2"),
                             dbc.Select(
-                                id=register("hyperparameter2", ["options", "value"]),
+                                id=register("hyperparameter_name_2", ["value", "options"]),
                                 placeholder="Select hyperparameter ...",
                             ),
                         ],
@@ -89,7 +88,7 @@ class PartialDependencies(StaticPlugin):
                                 [
                                     dbc.Label("Show confidence"),
                                     dbc.Select(
-                                        id=register("show_confidence", ["options", "value"])
+                                        id=register("show_confidence", ["value", "options"])
                                     ),
                                 ]
                             )
@@ -101,7 +100,7 @@ class PartialDependencies(StaticPlugin):
                             html.Div(
                                 [
                                     dbc.Label("Show ICE curves"),
-                                    dbc.Select(id=register("show_ice", ["options", "value"])),
+                                    dbc.Select(id=register("show_ice", ["value", "options"])),
                                 ]
                             )
                         ],
@@ -113,55 +112,51 @@ class PartialDependencies(StaticPlugin):
 
     def load_inputs(self):
         return {
-            "objective": {"value": None},
-            "budget": {"value": None},
-            "hyperparameter1": {"value": None},
-            "hyperparameter2": {"value": None},
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
-        objective_names = selected_run.get_objective_names()
-        objective_options = get_select_options(objective_names)
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
 
-        budgets = selected_run.get_budgets(human=True)
-        budget_options = get_select_options(budgets, range(len(budgets)))
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = selected_run.configspace.get_hyperparameter_names()
+        hp_names = run.configspace.get_hyperparameter_names()
 
         # Get selected values
-        objective_value = inputs["objective"]["value"]
-        budget_value = inputs["budget"]["value"]
-        hp1_value = inputs["hyperparameter1"]["value"]
+        objective_value = inputs["objective_id"]["value"]
+        budget_value = inputs["budget_id"]["value"]
+        hp1_value = inputs["hyperparameter_name_1"]["value"]
 
         if objective_value is None:
-            objective_value = objective_names[0]
-            budget_value = budget_options[-1]["value"]
+            objective_value = objective_ids[0]
+            budget_value = budget_ids[-1]
             hp1_value = hp_names[0]
 
-        new_inputs = {
-            "objective": {"options": objective_options, "value": objective_value},
-            "budget": {"options": budget_options, "value": budget_value},
-            "hyperparameter1": {"options": get_checklist_options(hp_names), "value": hp1_value},
-            "hyperparameter2": {
+        return {
+            "objective_id": {"options": objective_options, "value": objective_value},
+            "budget_id": {"options": budget_options, "value": budget_value},
+            "hyperparameter_name_1": {
+                "options": get_checklist_options(hp_names),
+                "value": hp1_value,
+            },
+            "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
             },
         }
-
-        update_dict(inputs, new_inputs)
-        return inputs
 
     @staticmethod
     def process(run: AbstractRun, inputs):
         # Surrogate
         hp_names = run.configspace.get_hyperparameter_names()
-        objective_name = inputs["objective"]["value"]
-        objective = run.get_objective(objective_name)
-        budget_id = int(inputs["budget"]["value"])
-        budget = run.get_budget(budget_id)
-        hp1 = inputs["hyperparameter1"]["value"]
-        hp2 = inputs["hyperparameter2"]["value"]
+        objective = run.get_objective(inputs["objective_id"])
+        budget = run.get_budget(inputs["budget_id"])
+        hp1 = inputs["hyperparameter_name_1"]
+        hp2 = inputs["hyperparameter_name_2"]
 
         if objective is None:
             raise RuntimeError("Objective not found.")
@@ -174,7 +169,7 @@ class PartialDependencies(StaticPlugin):
         )
 
         X = df[hp_names].to_numpy()
-        Y = df[objective_name].to_numpy()
+        Y = df[objective["name"]].to_numpy()
 
         # Let's initialize the surrogate
         surrogate_model = RandomForestSurrogate(run.configspace)
@@ -220,24 +215,27 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [dcc.Graph(register("graph", "figure"))]
+        return dcc.Graph(register("graph", "figure"))
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         # Parse inputs
-        hp1_name = inputs["hyperparameter1"]["value"]
+        hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
         hp1 = run.configspace.get_hyperparameter(hp1_name)
 
-        hp2_name = inputs["hyperparameter2"]["value"]
+        hp2_name = inputs["hyperparameter_name_2"]
         hp2_idx = None
         hp2 = None
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
 
-        show_confidence = inputs["show_confidence"]["value"] == "true"
-        show_ice = inputs["show_ice"]["value"] == "true"
-        objective_name = inputs["objective"]["value"]
+        show_confidence = inputs["show_confidence"] == "true"
+        show_ice = inputs["show_ice"] == "true"
+
+        objective = run.get_objective(inputs["objective_id"])
+        objective_name = objective["name"]
 
         # Parse outputs
         x = np.asarray(outputs["x"])

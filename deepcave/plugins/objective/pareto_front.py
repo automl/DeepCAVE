@@ -27,11 +27,13 @@ class ParetoFront(DynamicPlugin):
         # Set some attributes here
         run = runs[0]
 
-        budgets = run.get_budgets(human=True)
-        self.budget_options = get_select_options(budgets, range(len(budgets)))
-
         objective_names = run.get_objective_names()
-        self.objective_options = get_select_options(objective_names)
+        objective_ids = run.get_objective_ids()
+        self.objective_options = get_select_options(objective_names, objective_ids)
+
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
     def get_input_layout(register):
@@ -42,7 +44,7 @@ class ParetoFront(DynamicPlugin):
                         [
                             dbc.Label("Objective #1"),
                             dbc.Select(
-                                id=register("objective1", ["options", "value"]),
+                                id=register("objective_id_1", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -52,7 +54,7 @@ class ParetoFront(DynamicPlugin):
                         [
                             dbc.Label("Objective #2"),
                             dbc.Select(
-                                id=register("objective2", ["options", "value"]),
+                                id=register("objective_id_2", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -65,7 +67,7 @@ class ParetoFront(DynamicPlugin):
                 [
                     dbc.Label("Budget"),
                     dbc.Select(
-                        id=register("budget", ["options", "value"]),
+                        id=register("budget_id", ["value", "options"], type=int),
                         placeholder="Select budget ...",
                     ),
                 ],
@@ -79,26 +81,26 @@ class ParetoFront(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Show all configurations"),
-                    dbc.RadioItems(id=register("all_configs", ["options", "value"])),
+                    dbc.RadioItems(id=register("show_all", ["value", "options"])),
                 ],
             ),
         ]
 
     def load_inputs(self):
         return {
-            "objective1": {
+            "objective_id_1": {
                 "options": self.objective_options,
                 "value": self.objective_options[0]["value"],
             },
-            "objective2": {
+            "objective_id_2": {
                 "options": self.objective_options,
                 "value": self.objective_options[-1]["value"],
             },
-            "budget": {
+            "budget_id": {
                 "options": self.budget_options,
                 "value": self.budget_options[0]["value"],
             },
-            "all_configs": {
+            "show_all": {
                 "options": get_select_options(binary=True),
                 "value": False,
             },
@@ -107,19 +109,18 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
         # Get budget
-        budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(int(budget_id))
+        budget = run.get_budget(inputs["budget_id"])
 
         # Get objectives
-        objective1 = run.get_objective(inputs["objective1"]["value"])
-        objective2 = run.get_objective(inputs["objective2"]["value"])
-        objective1_id = run.get_objective_id(objective1)
-        objective2_id = run.get_objective_id(objective2)
+        objective_id_1 = inputs["objective_id_1"]
+        objective_1 = run.get_objective(objective_id_1)
+        objective_id_2 = inputs["objective_id_2"]
+        objective_2 = run.get_objective(objective_id_2)
 
         points: Union[List, np.ndarray] = []
         config_ids: Union[List, np.ndarray] = []
         for config_id, costs in run.get_costs(budget, statuses=[Status.SUCCESS]).items():
-            points += [[costs[objective1_id], costs[objective2_id]]]
+            points += [[costs[objective_id_1], costs[objective_id_2]]]
             config_ids += [config_id]
 
         points = np.array(points)
@@ -139,7 +140,7 @@ class ParetoFront(DynamicPlugin):
                 # because objectives can be optimized in different directions.
                 # We therefore have to check for each objective separately.
                 select = None
-                for idx, (objective, cost) in enumerate(zip([objective1, objective2], costs)):
+                for idx, (objective, cost) in enumerate(zip([objective_1, objective_2], costs)):
                     if objective["optimize"] == "upper":
                         select2 = np.any(points[is_front][:, idx, np.newaxis] > [cost], axis=1)
                     else:
@@ -163,9 +164,10 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [dcc.Graph(register("graph", "figure"))]
+        return dcc.Graph(register("graph", "figure"))
 
-    def load_outputs(self, inputs, outputs, runs):
+    @staticmethod
+    def load_outputs(runs, inputs, outputs):
 
         traces = []
         for idx, run in enumerate(runs):
@@ -187,7 +189,7 @@ class ParetoFront(DynamicPlugin):
             color = get_color(idx, alpha=0.1)
             color_pareto = get_color(idx)
 
-            if inputs["all_configs"]["value"]:
+            if inputs["show_all"]:
                 traces.append(
                     go.Scatter(
                         x=x,
@@ -201,8 +203,10 @@ class ParetoFront(DynamicPlugin):
                 )
 
             # Check if we need hv or vh
-            optimize1 = run.get_objective(inputs["objective1"]["value"])["optimize"]
-            optimize2 = run.get_objective(inputs["objective2"]["value"])["optimize"]
+            objective_1 = run.get_objective(inputs["objective_id_1"])
+            objective_2 = run.get_objective(inputs["objective_id_2"])
+            optimize1 = objective_1["optimize"]
+            optimize2 = objective_2["optimize"]
 
             if optimize1 == optimize2:
                 line_shape = "vh"
@@ -225,8 +229,8 @@ class ParetoFront(DynamicPlugin):
             )
 
         layout = go.Layout(
-            xaxis=dict(title=inputs["objective1"]["value"]),
-            yaxis=dict(title=inputs["objective2"]["value"]),
+            xaxis=dict(title=objective_1["name"]),
+            yaxis=dict(title=objective_2["name"]),
         )
 
         return [go.Figure(data=traces, layout=layout)]

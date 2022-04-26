@@ -22,10 +22,13 @@ class CostOverTime(DynamicPlugin):
         # Set some attributes here
         run = runs[0]
 
-        budgets = run.get_budgets(human=True)
-        self.budget_options = get_select_options(budgets, range(len(budgets)))
         objective_names = run.get_objective_names()
-        self.objective_options = get_select_options(objective_names)
+        objective_ids = run.get_objective_ids()
+        self.objective_options = get_select_options(objective_names, objective_ids)
+
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
     def get_input_layout(register):
@@ -36,7 +39,7 @@ class CostOverTime(DynamicPlugin):
                         [
                             dbc.Label("Objective"),
                             dbc.Select(
-                                id=register("objective", ["options", "value"]),
+                                id=register("objective_id", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -46,7 +49,7 @@ class CostOverTime(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             dbc.Select(
-                                id=register("budget", ["options", "value"]),
+                                id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
                             ),
                         ],
@@ -62,28 +65,30 @@ class CostOverTime(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("X-Axis"),
-                    dbc.RadioItems(id=register("xaxis", ["options", "value"])),
+                    dbc.RadioItems(id=register("xaxis", ["value", "options"])),
                 ],
                 className="mb-3",
             ),
             html.Div(
                 [
                     dbc.Label("Display ..."),
-                    dbc.RadioItems(id=register("display", ["options", "value"])),
+                    dbc.RadioItems(id=register("display", ["value", "options"])),
                 ],
                 className="",
             ),
         ]
 
     def load_inputs(self):
-        display_options = ["Runs", "Groups"]
+        display_labels = ["Runs", "Groups"]
+        display_values = ["runs", "groups"]
+        display_options = get_radio_options(display_labels, display_values)
 
         return {
-            "objective": {
+            "objective_id": {
                 "options": self.objective_options,
                 "value": self.objective_options[0]["value"],
             },
-            "budget": {
+            "budget_id": {
                 "options": self.budget_options,
                 "value": self.budget_options[0]["value"],
             },
@@ -96,16 +101,15 @@ class CostOverTime(DynamicPlugin):
                 "value": "times",
             },
             "display": {
-                "options": get_radio_options(display_options),
-                "value": display_options[0],
+                "options": display_options,
+                "value": display_values[0],
             },
         }
 
     @staticmethod
     def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
-        budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(int(budget_id))
-        objective = run.get_objective(inputs["objective"]["value"])
+        budget = run.get_budget(inputs["budget_id"])
+        objective = run.get_objective(inputs["objective_id"])
 
         times, costs_mean, costs_std, ids, config_ids = run.get_trajectory(
             objective=objective, budget=budget
@@ -121,27 +125,27 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure")),
-        ]
+        return (dcc.Graph(register("graph", "figure")),)
 
-    def load_outputs(self, inputs, outputs, runs):
+    @staticmethod
+    def load_outputs(runs, inputs, outputs):
         traces = []
         for idx, run in enumerate(runs):
+            objective = run.get_objective(inputs["objective_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
-            if inputs["xaxis"]["value"] == "configs":
+            if inputs["xaxis"] == "configs":
                 x = outputs[run.id]["ids"]
 
-            if inputs["display"]["value"] == "Runs":
+            if inputs["display"] == "runs":
                 if run.prefix == "group":
                     continue
-            elif inputs["display"]["value"] == "Groups":
+            elif inputs["display"] == "groups":
                 # Prefix could be not only run but also the name of the converter
                 if run.prefix != "group":
                     continue
             else:
-                raise RuntimeError("Unknown display option")
+                raise RuntimeError("Unknown display option.")
 
             y = np.array(outputs[run.id]["costs_mean"])
             y_err = np.array(outputs[run.id]["costs_std"])
@@ -188,16 +192,16 @@ class CostOverTime(DynamicPlugin):
             )
 
         type = None
-        if inputs["xaxis"]["value"] == "times_log":
+        if inputs["xaxis"] == "times_log":
             type = "log"
 
         xaxis_label = "Wallclock time [s]"
-        if inputs["xaxis"]["value"] == "configs":
+        if inputs["xaxis"] == "configs":
             xaxis_label = "Number of evaluated configurations"
 
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
-            yaxis=dict(title=inputs["objective"]["value"]),
+            yaxis=dict(title=objective["name"]),
         )
 
-        return [go.Figure(data=traces, layout=layout)]
+        return go.Figure(data=traces, layout=layout)

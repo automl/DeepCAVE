@@ -55,7 +55,7 @@ class Configurations(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Configuration ID"),
-                    dcc.Slider(id=register("config_id", ["min", "max", "marks", "value"])),
+                    dcc.Slider(id=register("config_id", ["value", "min", "max", "marks"])),
                 ],
             ),
         ]
@@ -65,14 +65,14 @@ class Configurations(DynamicPlugin):
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
         # Get selected values
         config_id_value = inputs["config_id"]["value"]
-        configs = selected_run.get_configs()
+        configs = run.get_configs()
         if config_id_value > len(configs) - 1:
             config_id_value = len(configs) - 1
 
-        new_inputs = {
+        return {
             "config_id": {
                 "min": 0,
                 "max": len(configs) - 1,
@@ -81,15 +81,9 @@ class Configurations(DynamicPlugin):
             },
         }
 
-        # We merge the new inputs with the previous inputs
-        # It's important because `inputs` keeps the selected run
-        update_dict(inputs, new_inputs)
-
-        return inputs
-
     @staticmethod
     def process(run, inputs):
-        selected_config_id = inputs["config_id"]["value"]
+        selected_config_id = inputs["config_id"]
 
         performances = {}
         for objective_id, objective in enumerate(run.get_objectives()):
@@ -150,14 +144,16 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         return [
-            self._get_objective_figure(inputs, outputs, run),
-            self._get_configspace_figure(inputs, outputs, run),
+            Configurations._get_objective_figure(inputs, outputs, run),
+            Configurations._get_configspace_figure(inputs, outputs, run),
             create_table(outputs["cs_table_data"]),
         ]
 
-    def _get_objective_figure(self, inputs, outputs, run):
+    @staticmethod
+    def _get_objective_figure(inputs, outputs, run):
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
             trace_kwargs = {
@@ -206,7 +202,8 @@ class Configurations(DynamicPlugin):
 
         return objective_figure
 
-    def _get_configspace_figure(self, inputs, outputs, run):
+    @staticmethod
+    def _get_configspace_figure(inputs, outputs, run):
         df = outputs["cs_df"]
         df = deserialize(df, dtype=pd.DataFrame)
 

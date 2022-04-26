@@ -156,7 +156,6 @@ class Overview(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-
         return [
             dbc.Card(
                 [
@@ -216,7 +215,8 @@ class Overview(DynamicPlugin):
             html.Div(id=register("configspace", "children")),
         ]
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         stats_data = []
         for budget, stats in outputs["status_statistics"].items():
             trace = go.Bar(x=list(stats.keys()), y=list(stats.values()), name=budget)

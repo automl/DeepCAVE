@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -9,7 +9,7 @@ from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
-from deepcave.utils.data_structures import update_dict
+from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options
 
 
@@ -26,12 +26,13 @@ class Importances(StaticPlugin):
                 [
                     dbc.Label("Method"),
                     dbc.Select(
-                        id=register("method", ["options", "value"]), placeholder="Select ..."
+                        id=register("method", ["value", "options"]),
+                        placeholder="Select ...",
                     ),
                 ],
                 className="mb-3",
             ),
-            html.Div([dbc.Label("Trees"), dbc.Input(id=register("n_trees", "value"))]),
+            html.Div([dbc.Label("Trees"), dbc.Input(id=register("n_trees", type=optional_int))]),
         ]
 
     @staticmethod
@@ -41,7 +42,7 @@ class Importances(StaticPlugin):
                 [
                     dbc.Label("Hyperparameters"),
                     dbc.Checklist(
-                        id=register("hyperparameters", ["options", "value"]), inline=True
+                        id=register("hyperparameter_names", ["value", "options"]), inline=True
                     ),
                 ],
                 className="mb-3",
@@ -49,7 +50,7 @@ class Importances(StaticPlugin):
             html.Div(
                 [
                     dbc.Label("Budgets"),
-                    dbc.Checklist(id=register("budgets", ["options", "value"]), inline=True),
+                    dbc.Checklist(id=register("budget_ids", ["value", "options"]), inline=True),
                 ]
             ),
         ]
@@ -64,47 +65,49 @@ class Importances(StaticPlugin):
                 "value": "local",
             },
             "n_trees": {"value": 10},
-            "budgets": {"options": get_checklist_options(), "value": []},
-            "hyperparameters": {"options": get_checklist_options(), "value": []},
+            "hyperparameter_names": {"options": get_checklist_options(), "value": []},
+            "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
-        budgets = selected_run.get_budgets(human=True)
-        budget_ids = list(range(len(budgets)))
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
-        budget_value = inputs["budgets"]["value"]
+        budget_value = inputs["budget_ids"]["value"]
 
-        hp_names = selected_run.configspace.get_hyperparameter_names()
+        hp_names = run.configspace.get_hyperparameter_names()
         hp_options = get_checklist_options(hp_names)
-        hp_value = inputs["hyperparameters"]["value"]
+        hp_value = inputs["hyperparameter_names"]["value"]
 
         # Pre-selection of the hyperparameters
-        if selected_run is not None:
+        if run is not None:
             if len(hp_value) == 0:
                 hp_value = hp_names
             if len(budget_value) == 0:
                 budget_value = [budget_ids[-1]]
 
-        new_inputs = {
-            "hyperparameters": {
+        return {
+            "hyperparameter_names": {
                 "options": hp_options,
                 "value": hp_value,
             },
-            "budgets": {
+            "budget_ids": {
                 "options": budget_options,
                 "value": budget_value,
             },
+            "n_trees": {"value": inputs["n_trees"]["value"]},
         }
-
-        update_dict(inputs, new_inputs)
-        return inputs
 
     @staticmethod
     def process(run: AbstractRun, inputs):
+        method = inputs["method"]
+        n_trees = inputs["n_trees"]
+
+        if n_trees is None:
+            raise RuntimeError("Please specify the number of trees.")
+
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets()
-        method = inputs["method"]["value"]
-        n_trees = int(inputs["n_trees"]["value"])
 
         if method == "local":
             # Intiatize the evaluator
@@ -126,19 +129,21 @@ class Importances(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [dcc.Graph(register("graph", "figure"))]
+        return dcc.Graph(register("graph", "figure"))
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         # First selected, should always be shown first
-        selected_hyperparameters = inputs["hyperparameters"]["value"]
-        selected_budget_ids = inputs["budgets"]["value"]
+        selected_hp_names = inputs["hyperparameter_names"]
+        selected_budget_ids = inputs["budget_ids"]
 
-        if len(selected_hyperparameters) == 0 or len(selected_budget_ids) == 0:
+        if len(selected_hp_names) == 0 or len(selected_budget_ids) == 0:
             raise PreventUpdate()
 
         # Collect data
         data = {}
         for budget_id, importances in outputs.items():
+            # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
             if budget_id not in selected_budget_ids:
                 continue
@@ -147,7 +152,7 @@ class Importances(StaticPlugin):
             y = []
             error_y = []
             for hp_name, results in importances.items():
-                if hp_name not in inputs["hyperparameters"]["value"]:
+                if hp_name not in selected_hp_names:
                     continue
 
                 x += [hp_name]
@@ -179,4 +184,4 @@ class Importances(StaticPlugin):
             legend={"title": "Budget"},
         )
 
-        return [fig]
+        return fig

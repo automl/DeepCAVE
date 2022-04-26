@@ -36,7 +36,7 @@ class CCube(DynamicPlugin):
                         [
                             dbc.Label("Objective"),
                             dbc.Select(
-                                id=register("objective", ["options", "value"]),
+                                id=register("objective_id", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -46,7 +46,7 @@ class CCube(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             dbc.Select(
-                                id=register("budget", ["options", "value"]),
+                                id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
                             ),
                         ],
@@ -63,7 +63,7 @@ class CCube(DynamicPlugin):
                 [
                     dbc.Label("Number of Configurations"),
                     dcc.Slider(
-                        id=register("n_configs", ["min", "max", "marks", "value"]), step=None
+                        id=register("n_configs", ["value", "min", "max", "marks"]), step=None
                     ),
                 ],
                 className="mb-3",
@@ -72,7 +72,7 @@ class CCube(DynamicPlugin):
                 [
                     dbc.Label("Hyperparameters"),
                     dbc.Checklist(
-                        id=register("hyperparameters", ["options", "value"]), inline=True
+                        id=register("hyperparameter_names", ["value", "options"]), inline=True
                     ),
                 ]
             ),
@@ -80,49 +80,56 @@ class CCube(DynamicPlugin):
 
     def load_inputs(self):
         return {
-            "objective": {"options": get_select_options(), "value": None},
-            "budget": {"options": get_select_options(), "value": None},
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
-            "hyperparameters": {"options": get_checklist_options(), "value": []},
+            "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
         # Prepare objetives
-        objective_names = selected_run.get_objective_names()
-        objective_options = get_select_options(objective_names)
-        objective_value = inputs["objective"]["value"]
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
+        objective_value = inputs["objective_id"]["value"]
 
         # Prepare budgets
-        budgets = selected_run.get_budgets(human=True)
-        budget_options = get_select_options(budgets, range(len(budgets)))
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        budget_options = get_select_options(budgets, budget_ids)
+        budget_value = inputs["budget_id"]["value"]
 
         # Prepare others
-        hp_names = selected_run.configspace.get_hyperparameter_names()
+        hp_names = run.configspace.get_hyperparameter_names()
 
         # Get selected values
         n_configs_value = inputs["n_configs"]["value"]
 
         # Pre-set values
         if objective_value is None:
-            objective_value = objective_names[0]
-            budget_value = budget_options[-1]["value"]
+            objective_value = objective_ids[0]
+            budget_value = budget_ids[-1]
         else:
-            budget_value = inputs["budget"]["value"]
+            budget_value = inputs["budget_id"]["value"]
 
-        budget = selected_run.get_budget(int(budget_value))
-        configs = selected_run.get_configs(budget=budget)
+        budget = run.get_budget(budget_value)
+        configs = run.get_configs(budget=budget)
         if n_configs_value == 0:
             n_configs_value = len(configs) - 1
         else:
             if n_configs_value > len(configs) - 1:
                 n_configs_value = len(configs) - 1
 
-        new_inputs = {
-            "objective": {
+        # Restrict to three hyperparameters
+        selected_hps = inputs["hyperparameter_names"]["value"]
+        n_selected = len(selected_hps)
+        if n_selected > 3:
+            del selected_hps[0]
+
+        return {
+            "objective_id": {
                 "options": objective_options,
                 "value": objective_value,
             },
-            "budget": {
+            "budget_id": {
                 "options": budget_options,
                 "value": budget_value,
             },
@@ -132,29 +139,16 @@ class CCube(DynamicPlugin):
                 "marks": get_slider_marks(list(range(len(configs)))),
                 "value": n_configs_value,
             },
-            "hyperparameters": {
+            "hyperparameter_names": {
                 "options": get_select_options(hp_names),
+                "value": selected_hps,
             },
         }
 
-        # We merge the new inputs with the previous inputs
-        update_dict(inputs, new_inputs)
-
-        # Restrict to three hyperparameters
-        selected = inputs["hyperparameters"]["value"]
-        n_selected = len(selected)
-        if n_selected > 3:
-            del selected[0]
-
-        inputs["hyperparameters"]["value"] = selected
-
-        return inputs
-
     @staticmethod
     def process(run, inputs):
-        budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(int(budget_id))
-        objective = run.get_objective(inputs["objective"]["value"])
+        budget = run.get_budget(inputs["budget_id"])
+        objective = run.get_objective(inputs["objective_id"])
 
         df = run.get_encoded_data(
             objectives=objective, budget=budget, statuses=Status.SUCCESS, include_config_ids=True
@@ -163,21 +157,21 @@ class CCube(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),
-        ]
+        return (dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),)
 
-    def load_outputs(self, inputs, outputs, run):
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
         df = deserialize(outputs["df"], dtype=pd.DataFrame)
-        hp_names = inputs["hyperparameters"]["value"]
-        n_configs = inputs["n_configs"]["value"]
-        objective_name = inputs["objective"]["value"]
+        hp_names = inputs["hyperparameter_names"]
+        n_configs = inputs["n_configs"]
+        objective_id = inputs["objective_id"]
+        objective = run.get_objective(objective_id)
 
         # Limit to n_configs
         idx = [str(i) for i in range(n_configs, len(df))]
         df = df.drop(idx)
 
-        costs = df[objective_name].values.tolist()
+        costs = df[objective["name"]].values.tolist()
         config_ids = df["config_id"].values.tolist()
         data = []
 
@@ -202,7 +196,7 @@ class CCube(DynamicPlugin):
             "marker": {
                 "size": 5,
                 "color": costs,
-                "colorbar": {"thickness": 30, "title": objective_name},
+                "colorbar": {"thickness": 30, "title": objective["name"]},
             },
             "hovertext": [get_hovertext_from_config(run, config_id) for config_id in config_ids],
             "meta": {"colorbar": costs},

@@ -35,7 +35,7 @@ class FootPrint(StaticPlugin):
                         [
                             dbc.Label("Objective"),
                             dbc.Select(
-                                id=register("objective", ["options", "value"]),
+                                id=register("objective_id", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -45,7 +45,7 @@ class FootPrint(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             dbc.Select(
-                                id=register("budget", ["options", "value"]),
+                                id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
                             ),
                         ],
@@ -58,7 +58,7 @@ class FootPrint(StaticPlugin):
                 [
                     dbc.Label("Details"),
                     dcc.Slider(
-                        id=register("details", "value"),
+                        id=register("details", "value", type=float),
                         min=0.1,
                         max=0.9,
                         step=0.4,
@@ -77,7 +77,7 @@ class FootPrint(StaticPlugin):
                         [
                             dbc.Label("Show Border Configurations"),
                             dbc.Select(
-                                id=register("show_borders", ["options", "value"]),
+                                id=register("show_borders", ["value", "options"]),
                                 placeholder="Select ...",
                             ),
                         ],
@@ -87,7 +87,7 @@ class FootPrint(StaticPlugin):
                         [
                             dbc.Label("Show Support Configurations"),
                             dbc.Select(
-                                id=register("show_supports", ["options", "value"]),
+                                id=register("show_supports", ["value", "options"]),
                                 placeholder="Select ...",
                             ),
                         ],
@@ -99,49 +99,47 @@ class FootPrint(StaticPlugin):
 
     def load_inputs(self):
         return {
-            "objective": {"options": get_select_options(), "value": None},
-            "budget": {"options": get_select_options(), "value": None},
             "details": {"value": 0.5},
             "show_borders": {"options": get_select_options(binary=True), "value": "true"},
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run=None):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
         # Prepare objetives
-        objective_names = selected_run.get_objective_names()
-        objective_options = get_select_options(objective_names)
-        objective_value = inputs["objective"]["value"]
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
+        objective_value = inputs["objective_id"]["value"]
 
         # Prepare budgets
-        budgets = selected_run.get_budgets(human=True)
-        budget_options = get_select_options(budgets, range(len(budgets)))
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        budget_options = get_select_options(budgets, budget_ids)
+        budget_value = inputs["budget_id"]["value"]
 
         # Pre-set values
         if objective_value is None:
-            objective_value = objective_names[0]
-            budget_value = budget_options[-1]["value"]
+            objective_value = objective_ids[0]
+            budget_value = budget_ids[-1]
         else:
-            budget_value = inputs["budget"]["value"]
+            budget_value = inputs["budget_id"]["value"]
 
-        new_inputs = {
-            "objective": {
+        return {
+            "objective_id": {
                 "options": objective_options,
                 "value": objective_value,
             },
-            "budget": {
+            "budget_id": {
                 "options": budget_options,
                 "value": budget_value,
             },
         }
 
-        update_dict(inputs, new_inputs)
-        return inputs
-
     @staticmethod
     def process(run, inputs) -> Dict[str, Any]:
-        budget = run.get_budget(inputs["budget"]["value"])
-        objective = run.get_objective(inputs["objective"]["value"])
-        details = 1 - inputs["details"]["value"]
+        budget = run.get_budget(inputs["budget_id"])
+        objective = run.get_objective(inputs["objective_id"])
+        details = 1 - inputs["details"]
 
         # Initialize the evaluator
         evaluator = Evaluator(run)
@@ -163,13 +161,13 @@ class FootPrint(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure"), style={"height": "50vh"}),
-        ]
+        return dcc.Graph(register("graph", "figure"), style={"height": "50vh"})
 
-    def load_outputs(self, inputs, outputs, run):
-        show_borders = inputs["show_borders"]["value"] == "true"
-        show_supports = inputs["show_supports"]["value"] == "true"
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
+        objective = run.get_objective(inputs["objective_id"])
+        show_borders = inputs["show_borders"] == "true"
+        show_supports = inputs["show_supports"] == "true"
 
         traces = []
         x_, y_, z_ = outputs["data"]
@@ -183,7 +181,7 @@ class FootPrint(StaticPlugin):
             hoverinfo="skip",
             colorbar=dict(
                 len=0.5,
-                title=inputs["objective"]["value"],
+                title=objective["name"],
             ),
             colorscale="viridis",
         )
@@ -227,4 +225,4 @@ class FootPrint(StaticPlugin):
             yaxis=dict(title="MDS Y-Axis", tickvals=[]),
         )
 
-        return [go.Figure(data=traces, layout=layout)]
+        return go.Figure(data=traces, layout=layout)

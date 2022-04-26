@@ -40,7 +40,7 @@ class ParallelCoordinates(DynamicPlugin):
                         [
                             dbc.Label("Objective"),
                             dbc.Select(
-                                id=register("objective", ["options", "value"]),
+                                id=register("objective_id", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
                             ),
                         ],
@@ -50,7 +50,7 @@ class ParallelCoordinates(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             dbc.Select(
-                                id=register("budget", ["options", "value"]),
+                                id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
                             ),
                         ],
@@ -66,75 +66,69 @@ class ParallelCoordinates(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Hyperparameters"),
-                    dbc.Checklist(id=register("hyperparameters", ["options", "value"])),
+                    dbc.Checklist(id=register("hyperparameter_names", ["value", "options"])),
                 ]
             ),
         ]
 
     def load_inputs(self):
         return {
-            "objective": {"options": get_select_options(), "value": None},
-            "budget": {"options": get_select_options(), "value": None},
-            "hyperparameters": {"options": get_checklist_options(), "value": []},
+            "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, previous_inputs, inputs, selected_run):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
         # Prepare objetives
-        objective_names = selected_run.get_objective_names()
-        objective_options = get_select_options(objective_names)
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
+        objective_value = inputs["objective_id"]["value"]
 
         # Prepare budgets
-        budgets = selected_run.get_budgets(human=True)
-        budget_options = get_select_options(budgets, range(len(budgets)))
+        budgets = run.get_budgets(human=True)
+        budget_ids = run.get_budget_ids()
+        budget_options = get_checklist_options(budgets, budget_ids)
+        budget_value = inputs["budget_id"]["value"]
 
         # Prepare others
-        hp_names = selected_run.configspace.get_hyperparameter_names()
-
-        # Get selected values
-        objective_value = inputs["objective"]["value"]
-        budget_value = inputs["budget"]["value"]
-        hp_value = inputs["hyperparameters"]["value"]
+        hp_names = run.configspace.get_hyperparameter_names()
+        hp_options = get_select_options(hp_names)
+        hp_value = inputs["hyperparameter_names"]["value"]
 
         if objective_value is None:
-            objective_value = objective_names[0]
-            budget_value = budget_options[-1]["value"]
+            objective_value = objective_ids[0]
+            budget_value = budget_ids[-1]
             hp_value = hp_names
 
-        new_inputs = {
-            "objective": {
+        return {
+            "objective_id": {
                 "options": objective_options,
                 "value": objective_value,
             },
-            "budget": {
+            "budget_id": {
                 "options": budget_options,
                 "value": budget_value,
             },
-            "hyperparameters": {
-                "options": get_select_options(hp_names),
+            "hyperparameter_names": {
+                "options": hp_options,
                 "value": hp_value,
             },
         }
-        update_dict(inputs, new_inputs)
-
-        return inputs
 
     @staticmethod
     def process(run, inputs):
-        budget_id = inputs["budget"]["value"]
-        budget = run.get_budget(budget_id)
-        objective = run.get_objective(inputs["objective"]["value"])
+        budget = run.get_budget(inputs["budget_id"])
+        objective = run.get_objective(inputs["objective_id"])
 
         df = run.get_encoded_data(objective, budget)
         return {"df": serialize(df)}
 
     @staticmethod
     def get_output_layout(register):
-        return [
-            dcc.Graph(register("graph", "figure")),
-        ]
+        return dcc.Graph(register("graph", "figure"))
 
-    def load_outputs(self, inputs, outputs, run):
-        hp_names = inputs["hyperparameters"]["value"]
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
+        hp_names = inputs["hyperparameter_names"]
 
         df = outputs["df"]
         df = deserialize(df, dtype=pd.DataFrame)
@@ -151,18 +145,19 @@ class ParallelCoordinates(DynamicPlugin):
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext
 
-        objective = inputs["objective"]["value"]
-        data[objective]["values"] = df[objective].values
-        data[objective]["label"] = objective
+        objective = run.get_objective(inputs["objective_id"])
+        objective_name = objective["name"]
+        data[objective_name]["values"] = df[objective_name].values
+        data[objective_name]["label"] = objective_name
 
         fig = go.Figure(
             data=go.Parcoords(
                 line=dict(
-                    color=data[objective]["values"],
+                    color=data[objective_name]["values"],
                     showscale=True,
                 ),
                 dimensions=list([d for d in data.values()]),
             )
         )
 
-        return [fig]
+        return fig
