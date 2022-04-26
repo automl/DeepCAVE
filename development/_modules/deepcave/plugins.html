@@ -135,6 +135,11 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../examples/api/plugin.html">
+     Example Call
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../examples/record/minimal_run.html">
      Record Minimal Run
     </a>
@@ -274,7 +279,8 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.plugins</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">copy</span>
 
@@ -285,7 +291,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">run_handler</span><span class="p">,</span> <span class="n">notification</span><span class="p">,</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
 <span class="kn">from</span> <span class="nn">deepcave.layouts</span> <span class="kn">import</span> <span class="n">Layout</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.grouped_run</span> <span class="kn">import</span> <span class="n">GroupedRun</span><span class="p">,</span> <span class="n">NotMergeableError</span>
@@ -328,12 +334,30 @@ style="width: 100%;">
     <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Registered inputs and outputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># For runtime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_outputs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># We have to call the output layout one time to register</span>
+        <span class="c1"># the values</span>
+        <span class="c1"># Problem: Inputs/Outputs can&#39;t be changed afterwards anymore.</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_run_input_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_input_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_filter_layout</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_output_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_mpl_output_layout</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Plugin.get_base_url"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_base_url">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">get_base_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates the url for the plugin.</span>
@@ -343,6 +367,8 @@ style="width: 100%;">
 <span class="sd">        str</span>
 <span class="sd">            Url for the plugin as string.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
+
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_ADDRESS</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_PORT</span><span class="si">}</span><span class="s2">/plugins/</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 <div class="viewcode-block" id="Plugin.check_run_compatibility"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -365,7 +391,6 @@ style="width: 100%;">
 <span class="sd">        bool</span>
 <span class="sd">            Returns True if the run is compatible.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="Plugin.check_runs_compatibility"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_runs_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -384,11 +409,14 @@ style="width: 100%;">
 <span class="sd">        NotMergeableError</span>
 <span class="sd">            If runs are not compatible, an error is thrown.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span> <span class="kc">True</span></div>
+        <span class="k">return</span></div>
 
 <div class="viewcode-block" id="Plugin.register_input"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">[docs]</a>    <span class="k">def</span> <span class="nf">register_input</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,),</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span>
+        <span class="nb">filter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers an input variable for the plugin. It is important to register the inputs</span>
@@ -399,22 +427,28 @@ style="width: 100%;">
 <span class="sd">        ----------</span>
 <span class="sd">        id : str</span>
 <span class="sd">            Specifies the id of the input.</span>
-<span class="sd">        attributes : Union[str, Iterable[str]], optional</span>
+<span class="sd">        attributes : Union[str, List[str]], optional</span>
 <span class="sd">            Attributes which should be passed to the (dash) component, by default (&quot;value&quot;,)</span>
 <span class="sd">        filter : bool, optional</span>
-<span class="sd">            Specifies if the input is a filter, by default False</span>
+<span class="sd">            Specifies if the input is a filter. By default False.</span>
+<span class="sd">        type : Any, optional</span>
+<span class="sd">            Type to which the *first* attribute should be casted to. By default str.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        str</span>
+<span class="sd">        id : str</span>
 <span class="sd">            Unique id for the input and plugin. This is necessary because ids are defined globally.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">attributes</span><span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">attributes</span><span class="p">):</span>
+            <span class="c1"># Only cast the first attribute</span>
+            <span class="n">type_</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">type_</span> <span class="o">=</span> <span class="nb">type</span>
+
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
@@ -425,7 +459,9 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Plugin.register_output"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">[docs]</a>    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Plugin.register_output"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">[docs]</a>    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">mpl</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers an output variable for the plugin.</span>
 
@@ -433,25 +469,26 @@ style="width: 100%;">
 <span class="sd">        ----------</span>
 <span class="sd">        id : str</span>
 <span class="sd">            Specifies the id of the output.</span>
-<span class="sd">        attribute : str, optional</span>
+<span class="sd">        attributes : Union[str, List[str]], optional</span>
 <span class="sd">            Attribute, by default &quot;value&quot;</span>
 <span class="sd">        mpl : bool, optional</span>
 <span class="sd">            Specifies if the registration is for matplotlib or default, by default False</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        str</span>
+<span class="sd">        id : str</span>
 <span class="sd">            Unique id for the output and plugin. This is necessary because ids are defined globally.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attributes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">attributes</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">mpl</span><span class="p">:</span>
             <span class="nb">id</span> <span class="o">+=</span> <span class="s2">&quot;-mpl&quot;</span>
 
-        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">mpl</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">mpl</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
@@ -464,41 +501,36 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">get_internal_output_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">-output&quot;</span>
 
-<div class="viewcode-block" id="Plugin.register_callbacks"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Plugin.register_callbacks"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">[docs]</a>    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers basic callbacks for the plugin. Following callbacks are registered:</span>
 <span class="sd">        - If inputs changes, the changes are pasted back. This is in particular</span>
 <span class="sd">        interest if input dependencies are used.</span>
-<span class="sd">        - Raw data dialog.</span>
+<span class="sd">        - Raw data dialog to display raw data.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            _description_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># We have to call the output layout one time to register</span>
-        <span class="c1"># the values</span>
-        <span class="c1"># Problem: Inputs/Outputs can&#39;t be changed afterwards anymore.</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_run_input_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_input_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_filter_layout</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_output_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_mpl_output_layout</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">run_handler</span>
 
         <span class="c1"># Handles the initial and the cashed input values</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="s2">&quot;on-page-load&quot;</span><span class="p">,</span> <span class="s2">&quot;href&quot;</span><span class="p">)]</span>
 
         <span class="c1"># Define also inputs if they are declared as interactive</span>
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
             <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
             <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
 
-            <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-            <span class="k">def</span> <span class="nf">plugin_input_update</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>
+            <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="k">def</span> <span class="nf">plugin_input_update</span><span class="p">(</span><span class="n">pathname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
                 <span class="c1"># Simple check if page was loaded for the first time</span>
                 <span class="n">init</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="nb">input</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="nb">input</span> <span class="ow">in</span> <span class="n">inputs_list</span><span class="p">)</span>
 
@@ -537,7 +569,10 @@ style="width: 100%;">
                             <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
                         <span class="c1"># And lastly update with the dependencies here</span>
-                        <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">selected_run</span><span class="p">)</span>
+                        <span class="n">user_dependencies_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span>
+                            <span class="n">selected_run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">inputs</span>
+                        <span class="p">)</span>
+                        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">user_dependencies_inputs</span><span class="p">)</span>
 
                     <span class="k">elif</span> <span class="n">inputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">()</span>
@@ -552,7 +587,7 @@ style="width: 100%;">
                             <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">new_inputs</span><span class="p">)</span>
 
                         <span class="c1"># Set not used inputs</span>
-                        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
                             <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
                                 <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -574,7 +609,7 @@ style="width: 100%;">
                             <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">run_value</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># Map the list `inputs` to a dict.</span>
-                    <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">)</span>
+                    <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -584,7 +619,7 @@ style="width: 100%;">
                     <span class="n">_previous_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
                     <span class="n">_inputs</span> <span class="o">=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-                    <span class="n">selected_run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">selected_run</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
                         <span class="k">if</span> <span class="s2">&quot;run&quot;</span> <span class="ow">in</span> <span class="n">_previous_inputs</span><span class="p">:</span>
                             <span class="n">_previous_run_id</span> <span class="o">=</span> <span class="n">_previous_inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
@@ -608,21 +643,24 @@ style="width: 100%;">
 
                     <span class="c1"># How to update only parameters which have a dependency?</span>
                     <span class="n">user_dependencies_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span>
-                        <span class="n">_previous_inputs</span><span class="p">,</span> <span class="n">_inputs</span><span class="p">,</span> <span class="n">selected_run</span>
+                        <span class="n">selected_run</span><span class="p">,</span> <span class="n">_previous_inputs</span><span class="p">,</span> <span class="n">_inputs</span>
                     <span class="p">)</span>
 
                     <span class="c1"># Update dict</span>
-                    <span class="c1"># dict.update() remove keys, so it&#39;s done manually</span>
-                    <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">user_dependencies_inputs</span><span class="p">)</span>  <span class="c1"># inplace</span>
+                    <span class="c1"># dict.update() remove keys, so we use our own method to do so</span>
+                    <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">user_dependencies_inputs</span><span class="p">)</span>  <span class="c1"># inplace operation</span>
+
+                <span class="c1"># Let&#39;s cast the inputs</span>
+                <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 
                 <span class="c1"># From dict to list</span>
-                <span class="n">inputs_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict_to_list</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">inputs_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict_to_list</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span> <span class="o">=</span> <span class="n">inputs</span>
 
-                <span class="k">return</span> <span class="n">inputs_list</span>
+                <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">)</span>
 
         <span class="c1"># Register modal here</span>
-        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
             <span class="p">[</span>
                 <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;raw_data&quot;</span><span class="p">),</span> <span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
                 <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;raw_data_content&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
@@ -630,7 +668,7 @@ style="width: 100%;">
             <span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;show_raw_data&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
             <span class="n">State</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;raw_data&quot;</span><span class="p">),</span> <span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="k">def</span> <span class="nf">toggle_modal</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">is_open</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">toggle_modal</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">is_open</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
             <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
                 <span class="k">if</span> <span class="p">(</span><span class="n">out</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_outputs</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -641,7 +679,25 @@ style="width: 100%;">
 
             <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span></div>
 
-    <span class="k">def</span> <span class="nf">_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">last_inputs</span><span class="p">):</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">_inputs_changed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">last_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the inputs have changed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Dict[str, Dict[str, str]]</span>
+<span class="sd">            Current inputs.</span>
+<span class="sd">        last_inputs : Dict[str, Dict[str, str]]</span>
+<span class="sd">            Last inputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[bool, bool]</span>
+<span class="sd">            Whether input and filter inputs have changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Check if last_inputs are the same as the given inputs.</span>
         <span class="n">inputs_changed</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">filters_changed</span> <span class="o">=</span> <span class="kc">False</span>
@@ -649,7 +705,7 @@ style="width: 100%;">
         <span class="c1"># If only filters changed, then we don&#39;t need to</span>
         <span class="c1"># calculate the results again.</span>
         <span class="k">if</span> <span class="n">last_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="s2">&quot;run&quot;</span><span class="p">:</span>
@@ -663,22 +719,31 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">inputs_changed</span><span class="p">,</span> <span class="n">filters_changed</span>
 
-    <span class="k">def</span> <span class="nf">_process_raw_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">raw_outputs</span><span class="p">):</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">_process_raw_outputs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="n">raw_outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">run_handler</span>
+
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Process raw outputs.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Use raw outputs to update our layout</span>
         <span class="n">mpl_active</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;matplotlib-mode&quot;</span><span class="p">)</span>
 
-        <span class="n">passed_runs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span>
-        <span class="n">passed_outputs</span> <span class="o">=</span> <span class="n">raw_outputs</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_run_selection</span><span class="p">:</span>
             <span class="n">passed_runs</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;run&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">])</span>
             <span class="n">passed_outputs</span> <span class="o">=</span> <span class="n">raw_outputs</span><span class="p">[</span><span class="n">passed_runs</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">passed_runs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span>  <span class="c1"># type: ignore</span>
+            <span class="n">passed_outputs</span> <span class="o">=</span> <span class="n">raw_outputs</span>
+
+        <span class="c1"># Clean inputs</span>
+        <span class="n">cleaned_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">mpl_active</span><span class="p">:</span>
-            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_mpl_outputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">passed_outputs</span><span class="p">,</span> <span class="n">passed_runs</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load_mpl_outputs</span><span class="p">(</span><span class="n">passed_runs</span><span class="p">,</span> <span class="n">cleaned_inputs</span><span class="p">,</span> <span class="n">passed_outputs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_outputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">passed_outputs</span><span class="p">,</span> <span class="n">passed_runs</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">load_outputs</span><span class="p">(</span><span class="n">passed_runs</span><span class="p">,</span> <span class="n">cleaned_inputs</span><span class="p">,</span> <span class="n">passed_outputs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">outputs</span> <span class="o">==</span> <span class="n">PreventUpdate</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PreventUpdate</span><span class="p">()</span>
@@ -710,21 +775,30 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">outputs</span>
 
-    <span class="k">def</span> <span class="nf">_list_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">_list_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Maps the given values to a dict, regarding the sorting from</span>
 <span class="sd">        either self.inputs or self.outputs.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            dict</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        values : Iterable[str]</span>
+<span class="sd">            Values to map.</span>
+<span class="sd">        input : bool, optional</span>
+<span class="sd">            Whether the data should be linked to the input or outputs. By default True.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, str]]</span>
+<span class="sd">            _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">input</span><span class="p">:</span>
             <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span>
 
-        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
                 <span class="n">mapping</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -733,73 +807,167 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">mapping</span>
 
-    <span class="k">def</span> <span class="nf">_dict_to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="nb">input</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">_dict_to_list</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span> <span class="nb">input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Maps the given dict to a list, regarding the sorting from either</span>
+<span class="sd">        Maps the given dict to a list, respecting the sorting from either</span>
 <span class="sd">        self.inputs or self.outputs.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            list.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        d : Dict[str, Dict[str, str]]</span>
+<span class="sd">            Dictionary to transform.</span>
+<span class="sd">        input : bool, optional</span>
+<span class="sd">            Whether the data should be linked to the input or outputs. By default False.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Optional[str]]</span>
+<span class="sd">            Sorted list from the given dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">c</span>
 
         <span class="k">if</span> <span class="nb">input</span><span class="p">:</span>
             <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span>
 
-        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
-
+        <span class="n">result</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">input</span><span class="p">:</span>
                 <span class="c1"># Instance is mlp_mode in case of outputs</span>
                 <span class="c1"># Simply ignore other outputs.</span>
                 <span class="k">if</span> <span class="n">instance</span> <span class="o">!=</span> <span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;matplotlib-mode&quot;</span><span class="p">):</span>
                     <span class="k">continue</span>
+
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">+=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">result</span>
 
-    <span class="k">def</span> <span class="nf">_dict_as_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">remove_filters</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">_dict_as_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">remove_filters</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a dictionary to a key. Only ids from self.inputs are considered.</span>
 
-<span class="sd">        Parameters:</span>
-<span class="sd">            d (dict): Dictionary to get the key from.</span>
-<span class="sd">            remove_filters (bool): Option wheather the filters should be included or not.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        d : Dict[str, Any]</span>
+<span class="sd">            Dictionary to get the key from.</span>
+<span class="sd">        remove_filters : bool, optional</span>
+<span class="sd">            Option wheather the filters should be included or not. By default False.</span>
 
-<span class="sd">        Returns:</span>
-<span class="sd">            key (str): Key as string from the given dictionary.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[str]</span>
+<span class="sd">            Key as string from the given dictionary. Returns none if `d` is not a dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="n">new_d</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">remove_filters</span><span class="p">:</span>
-            <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">filter</span><span class="p">:</span>
                     <span class="k">if</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">new_d</span><span class="p">:</span>
                         <span class="k">del</span> <span class="n">new_d</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">new_d</span><span class="p">))</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">runs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_cast_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Casts the inputs based on `self.inputs`. Background is that dash always casts integers/</span>
+<span class="sd">        booleans to strings. This method ensured that the correct types are returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs : Dict[str, Dict[str, str]]</span>
+<span class="sd">            Inputs, which should be casted.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, str]]</span>
+<span class="sd">            Casted inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">casted_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attributes</span> <span class="ow">in</span> <span class="n">inputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
+
+                <span class="c1"># Find corresponding input</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">id_</span><span class="p">,</span> <span class="n">attribute_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">type_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">id</span> <span class="o">==</span> <span class="n">id_</span> <span class="ow">and</span> <span class="n">attribute</span> <span class="o">==</span> <span class="n">attribute_</span><span class="p">:</span>
+                        <span class="nb">type</span> <span class="o">=</span> <span class="n">type_</span>
+                        <span class="k">break</span>
+
+                <span class="n">value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+                <span class="n">casted_inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">casted_inputs</span>
+
+    <span class="k">def</span> <span class="nf">_clean_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleans the given inputs s.t. only the first value is used.</span>
+
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        You register the following input:</span>
+<span class="sd">        ```</span>
+<span class="sd">        dbc.Select(id=register(&quot;objective_name&quot;, [&quot;value&quot;, &quot;options&quot;]))</span>
+<span class="sd">        ```</span>
+<span class="sd">        However, in the `process` or `load_outputs` method you don&#39;t need `options`.</span>
+<span class="sd">        Instead of writing `inputs[&quot;objective_name&quot;][&quot;value&quot;]` you can simply write</span>
+<span class="sd">        `inputs[&quot;objective_name&quot;]`.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        inputs (dict): Inputs to clean.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Cleaned inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">used_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">cleaned_inputs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+            <span class="c1"># Since self.inputs is ordered, we use the first occuring attribute and add</span>
+            <span class="c1"># the id so it is not used again.</span>
+            <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_ids</span><span class="p">:</span>
+                <span class="n">cleaned_inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
+                <span class="n">used_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">cleaned_inputs</span>
+
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
+
         <span class="k">return</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_runs</span><span class="p">()</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">grouped_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">grouped_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupedRun</span><span class="p">]:</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
+
         <span class="k">return</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_grouped_runs</span><span class="p">()</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">all_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
+    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">all_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
+
         <span class="k">return</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_runs</span><span class="p">(</span><span class="n">include_groups</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Plugin.__call__"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_button</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+<div class="viewcode-block" id="Plugin.__call__"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_button</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the components for the plugin. Basically, all blocks and elements of the plugin</span>
 <span class="sd">        are stacked-up here</span>
@@ -809,7 +977,9 @@ style="width: 100%;">
 <span class="sd">        List[Component]</span>
 <span class="sd">            Layout as list of components.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">notification</span><span class="p">,</span> <span class="n">c</span>
 
+        <span class="c1"># Reset runtime variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_outputs</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -861,7 +1031,7 @@ style="width: 100%;">
             <span class="p">)</span>
         <span class="p">]</span>
 
-        <span class="k">def</span> <span class="nf">register_in</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">register_in</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_input</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">filter_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_filter_layout</span><span class="p">(</span><span class="n">register_in</span><span class="p">)</span>
@@ -875,7 +1045,7 @@ style="width: 100%;">
             <span class="p">]</span>
 
         <span class="n">output_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_output_layout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">output_layout</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">output_layout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                     <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-output&quot;</span><span class="p">,</span>
@@ -885,11 +1055,11 @@ style="width: 100%;">
                 <span class="p">)</span>
             <span class="p">]</span>
 
-        <span class="k">def</span> <span class="nf">register_out</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">register_out</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">mpl</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">output_layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">get_mpl_output_layout</span><span class="p">(</span><span class="n">register_out</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">output_layout</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">output_layout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                     <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-mpl-output&quot;</span><span class="p">,</span>
@@ -945,6 +1115,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">components</span></div>
 
 <div class="viewcode-block" id="Plugin.get_run_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_run_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">get_run_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Component</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates the run selection input.</span>
@@ -963,13 +1134,14 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
-                    <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+                    <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
                     <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select run ...&quot;</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">]</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Plugin.load_run_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">load_run_inputs</span><span class="p">(</span>
         <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">],</span>
         <span class="n">grouped_runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GroupedRun</span><span class="p">],</span>
@@ -1003,7 +1175,7 @@ style="width: 100%;">
                 <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                 <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                 <span class="n">disabled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="k">pass</span>
 
         <span class="n">added_group_label</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1026,7 +1198,8 @@ style="width: 100%;">
             <span class="p">}</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="Plugin.get_selected_runs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">[docs]</a>    <span class="k">def</span> <span class="nf">get_selected_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
+<div class="viewcode-block" id="Plugin.get_selected_runs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">[docs]</a>    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">get_selected_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parses selected runs from inputs.</span>
 <span class="sd">        If self.activate_run_selection is set, return only selected run. Otherwise, return all</span>
@@ -1047,6 +1220,7 @@ style="width: 100%;">
 <span class="sd">        PreventUpdate</span>
 <span class="sd">            If `activate_run_selection` is set but `run` is not available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">run_handler</span>
 
         <span class="c1"># Special case: If run selection is active</span>
         <span class="c1"># Don&#39;t update anything if the inputs haven&#39;t changed</span>
@@ -1083,29 +1257,33 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="Plugin.load_dependency_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]]],</span>
         <span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-        <span class="n">selected_run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Same as `load_inputs` but called after inputs have changed. Provides a lot of flexibility.</span>
 
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Only the changes have to be returned. The returned dictionary will be merged with the</span>
+<span class="sd">        inputs.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        selected_run : Optional[Union[AbstractRun, List[AbstractRun]]], optional</span>
+<span class="sd">            The selected run from the user. In case of `activate_run_selection`, only one run</span>
+<span class="sd">            is passed. Defaults to None.</span>
 <span class="sd">        previous_inputs : Dict[str, Any]</span>
 <span class="sd">            Previous content of the inputs.</span>
 <span class="sd">        inputs : Dict[str, Any]</span>
 <span class="sd">            Current content of the inputs.</span>
-<span class="sd">        selected_run : Optional[Union[AbstractRun, List[AbstractRun]]], optional</span>
-<span class="sd">            The selected run from the user. In case of `activate_run_selection`, a list of runs</span>
-<span class="sd">            are passed. Defaults to None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Dict[str, Any]</span>
-<span class="sd">            Content to be filled.</span>
+<span class="sd">            Dictionary with the changes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="n">inputs</span></div>
 
 <div class="viewcode-block" id="Plugin.get_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -1123,11 +1301,10 @@ style="width: 100%;">
 <span class="sd">        List[Component]</span>
 <span class="sd">            Layouts for the input block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Plugin.get_filter_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Layout for the filter block.</span>
 
@@ -1141,11 +1318,12 @@ style="width: 100%;">
 <span class="sd">        List[Component]</span>
 <span class="sd">            Layouts for the filter block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Plugin.get_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span>
+        <span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Layout for the output block.</span>
 
@@ -1156,14 +1334,15 @@ style="width: 100%;">
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Component]</span>
+<span class="sd">        Union[Component, List[Component]]</span>
 <span class="sd">            Layouts for the output block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span> <span class="p">[]</span></div>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Plugin.get_mpl_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_mpl_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span>
+        <span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Layout for the matplotlib output block.</span>
 
@@ -1174,77 +1353,89 @@ style="width: 100%;">
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Component]</span>
+<span class="sd">        Union[Component, List[Component]]</span>
 <span class="sd">            Layout for the matplotlib output block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
-        <span class="k">return</span> <span class="p">[]</span></div>
-
-<div class="viewcode-block" id="Plugin.load_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Plugin.load_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span>
+        <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
         <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]],</span>
-        <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads in the raw data and prepares them for the layout.</span>
 
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or</span>
+<span class="sd">        `load_dependency_inputs`. Please see `_clean_inputs` for more information.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        runs : Union[AbstractRun, Dict[str, AbstractRun]]</span>
+<span class="sd">            All selected runs. If `activate_run_selection` is set, only the selected run is</span>
+<span class="sd">            returned.</span>
 <span class="sd">        inputs : Dict[str, Dict[str, str]]</span>
 <span class="sd">            Input and filter values from the user.</span>
 <span class="sd">        outputs : Dict[str, Union[str, Dict[str, str]]]</span>
 <span class="sd">            Raw outputs from the runs. If `activate_run_selection` is set,</span>
 <span class="sd">            a Dict[str, str] is returned.</span>
-<span class="sd">        runs : Union[AbstractRun, Dict[str, AbstractRun]]</span>
-<span class="sd">            All selected runs. If `activate_run_selection` is set, only the selected run is</span>
-<span class="sd">            returned.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Component]</span>
+<span class="sd">        Union[Component, List[Component]]</span>
 <span class="sd">            The components must be in the same position as defined in `get_output_layout`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Plugin.load_mpl_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_mpl_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="Plugin.load_mpl_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_mpl_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span>
+        <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
         <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]],</span>
-        <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads in the raw data and prepares them for the layout.</span>
 
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or</span>
+<span class="sd">        `load_dependency_inputs`. Please see `_clean_inputs` for more information.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        runs : Union[AbstractRun, Dict[str, AbstractRun]]</span>
+<span class="sd">            All selected runs. If `activate_run_selection` is set, only the selected run is</span>
+<span class="sd">            returned.</span>
 <span class="sd">        inputs : Dict[str, Dict[str, str]]</span>
 <span class="sd">            Input and filter values from the user.</span>
 <span class="sd">        outputs : Dict[str, Union[str, Dict[str, str]]]</span>
 <span class="sd">            Raw outputs from the runs. If `activate_run_selection` is set,</span>
 <span class="sd">            a Dict[str, str] is returned.</span>
-<span class="sd">        runs : Union[AbstractRun, Dict[str, AbstractRun]]</span>
-<span class="sd">            All selected runs. If `activate_run_selection` is set, only the selected run is</span>
-<span class="sd">            returned.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Component]</span>
+<span class="sd">        Union[Component, List[Component]]</span>
 <span class="sd">            The components must be in the same position as defined in `get_output_layout`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Plugin.process"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns raw data based on a run and input data.</span>
 
 <span class="sd">        Warning</span>
 <span class="sd">        -------</span>
 <span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or</span>
+<span class="sd">        `load_dependency_inputs`. Please see `_clean_inputs` for more information.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1253,8 +1444,55 @@ style="width: 100%;">
 <span class="sd">        inputs : Dict[str, Any]</span>
 <span class="sd">            Input data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
 
-        <span class="k">pass</span></div></div>
+<div class="viewcode-block" id="Plugin.generate_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">generate_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates inputs for the `process` and `load_outputs` required for api mode.</span>
+<span class="sd">        The arguments are validated against the input schema.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Arguments are only available at runtime. Therefore, no api can be shown beforehand.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwargs : Any</span>
+<span class="sd">            Additional keyword arguments.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The inputs for the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+            <span class="c1"># Since `self.inputs` is ordered, we use the first occuring attribute and add</span>
+            <span class="c1"># the id so it is not used again.</span>
+            <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+                <span class="n">mapping</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">attribute</span>
+
+        <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+                    <span class="n">inputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+                <span class="n">inputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Unknown input: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">. Valid inputs are: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="si">}</span><span class="s2">.&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown input: </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">. No input needs to be passed.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">!=</span> <span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Missing inputs: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">inputs</span></div></div>
 </pre></div>
 
               </div>

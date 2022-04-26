@@ -135,6 +135,11 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/api/plugin.html">
+     Example Call
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/record/minimal_run.html">
      Record Minimal Run
     </a>
@@ -274,45 +279,45 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.plugins.dynamic</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 
+<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
 <span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span>
-
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">rc</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins</span> <span class="kn">import</span> <span class="n">Plugin</span>
 
 
 <div class="viewcode-block" id="DynamicPlugin"><a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin">[docs]</a><span class="k">class</span> <span class="nc">DynamicPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
     <span class="n">use_cache</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DynamicPlugin.register_callbacks"><a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.register_callbacks">[docs]</a>    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicPlugin.register_callbacks"><a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.register_callbacks">[docs]</a>    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_callbacks</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_inputs_changed</span><span class="p">()</span></div>
+        <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">rc</span>
 
-    <span class="k">def</span> <span class="nf">_callback_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">)]</span>
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
             <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
         <span class="c1"># Register updates from inputs</span>
         <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">plugin_output_update</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">plugin_output_update</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            Parameters:</span>
 <span class="sd">                *inputs_list: Values from user.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-
             <span class="c1"># Map the list `inputs_list` to a dict s.t.</span>
             <span class="c1"># it&#39;s easier to access them.</span>
             <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">inputs_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict_as_key</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">remove_filters</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
+            <span class="n">cleaned_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
             <span class="n">runs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_selected_runs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 
             <span class="n">raw_outputs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -320,7 +325,7 @@ style="width: 100%;">
                 <span class="n">run_outputs</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">run_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Process </span><span class="si">{</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                    <span class="n">run_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+                    <span class="n">run_outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">cleaned_inputs</span><span class="p">)</span>
 
                     <span class="c1"># Cache it</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_cache</span><span class="p">:</span>
@@ -336,9 +341,10 @@ style="width: 100%;">
             <span class="c1"># Cache last inputs</span>
             <span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;last_inputs&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_raw_outputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">raw_outputs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_raw_outputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">raw_outputs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DynamicPlugin.__call__"><a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DynamicPlugin.__call__"><a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.__call__">[docs]</a>    <span class="nd">@interactive</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div></div>
 </pre></div>
 

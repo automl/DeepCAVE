@@ -14,6 +14,42 @@ Examples
 
 
 
+.. _sphx_glr_examples_api:
+
+API
+^^^
+
+If you want to interact with the API directly, you can make use of the API mode.
+Have a look into the examples, to get an overview how to use DeepCAVE in this way.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="...">
+
+.. only:: html
+
+ .. figure:: /examples/api/images/thumb/sphx_glr_plugin_thumb.png
+     :alt: Example Call
+
+     :ref:`sphx_glr_examples_api_plugin.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/api/plugin
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
 .. _sphx_glr_examples_record:
 
 Record
@@ -99,7 +135,7 @@ Plugin Templates
 ^^^^^^^^^^^^^^^^
 
 If you want to build your own plugin, you can start with one of the provided plugins.
-Please make sure that you included the plugin in `deepcave/config.py`.
+Please make sure that you include the plugin in `deepcave/config.py`.
 
 
 .. raw:: html

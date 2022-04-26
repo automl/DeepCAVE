@@ -137,6 +137,11 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="../examples/api/plugin.html">
+     Example Call
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../examples/record/minimal_run.html">
      Record Minimal Run
     </a>
@@ -430,8 +435,30 @@ it can be also used to set common values for the plugin.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.plugins.Plugin.generate_inputs">
+<span class="sig-name descname"><span class="pre">generate_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.generate_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.generate_inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates inputs for the <cite>process</cite> and <cite>load_outputs</cite> required for api mode.
+The arguments are validated against the input schema.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Arguments are only available at runtime. Therefore, no api can be shown beforehand.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>Any</em>) – Additional keyword arguments.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The inputs for the run.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.get_base_url">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_base_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.get_base_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.get_base_url" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_base_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.get_base_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.get_base_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates the url for the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -489,7 +516,7 @@ it can be also used to set common values for the plugin.</p>
 <dd class="field-even"><p>Layout for the matplotlib output block.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>Union[Component, List[Component]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -506,7 +533,7 @@ it can be also used to set common values for the plugin.</p>
 <dd class="field-even"><p>Layouts for the output block.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>Union[Component, List[Component]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -553,19 +580,24 @@ possible runs.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_dependency_inputs">
-<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as <cite>load_inputs</cite> but called after inputs have changed. Provides a lot of flexibility.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the changes have to be returned. The returned dictionary will be merged with the
+inputs.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>selected_run</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The selected run from the user. In case of <cite>activate_run_selection</cite>, only one run
+is passed. Defaults to None.</p></li>
 <li><p><strong>previous_inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Previous content of the inputs.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Current content of the inputs.</p></li>
-<li><p><strong>selected_run</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The selected run from the user. In case of <cite>activate_run_selection</cite>, a list of runs
-are passed. Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Content to be filled.</p>
+<dd class="field-even"><p>Dictionary with the changes.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[str, Any]</p>
@@ -592,46 +624,56 @@ content from this method.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_mpl_outputs">
-<span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_mpl_outputs" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_mpl_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in the raw data and prepares them for the layout.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
+<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
+returned.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
 <li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
 a Dict[str, str] is returned.</p></li>
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>Union[Component, List[Component]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_outputs">
-<span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_outputs" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in the raw data and prepares them for the layout.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
+<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
+returned.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
 <li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
 a Dict[str, str] is returned.</p></li>
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>Union[Component, List[Component]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -666,12 +708,20 @@ Both runs and groups are displayed.</p>
 <p class="admonition-title">Warning</p>
 <p>The returned data must be JSON serializable.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
+<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -682,17 +732,20 @@ Both runs and groups are displayed.</p>
 <dd><p>Registers basic callbacks for the plugin. Following callbacks are registered:
 - If inputs changes, the changes are pasted back. This is in particular
 interest if input dependencies are used.
-- Raw data dialog.</p>
+- Raw data dialog to display raw data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – _description_</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.register_input">
-<span class="sig-name descname"><span class="pre">register_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('value',)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.register_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.register_input" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">register_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.register_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.register_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers an input variable for the plugin. It is important to register the inputs
 because callbacks have to be defined before the server is started.
 After registering all inputs, an internal mapping is created.</p>
@@ -700,12 +753,13 @@ After registering all inputs, an internal mapping is created.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Specifies the id of the input.</p></li>
-<li><p><strong>attributes</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Iterable</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Attributes which should be passed to the (dash) component, by default (“value”,)</p></li>
-<li><p><strong>filter</strong> (<em>bool</em><em>, </em><em>optional</em>) – Specifies if the input is a filter, by default False</p></li>
+<li><p><strong>attributes</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Attributes which should be passed to the (dash) component, by default (“value”,)</p></li>
+<li><p><strong>filter</strong> (<em>bool</em><em>, </em><em>optional</em>) – Specifies if the input is a filter. By default False.</p></li>
+<li><p><strong>type</strong> (<em>Any</em><em>, </em><em>optional</em>) – Type to which the <em>first</em> attribute should be casted to. By default str.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Unique id for the input and plugin. This is necessary because ids are defined globally.</p>
+<dd class="field-even"><p><strong>id</strong> – Unique id for the input and plugin. This is necessary because ids are defined globally.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
@@ -715,18 +769,18 @@ After registering all inputs, an internal mapping is created.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.register_output">
-<span class="sig-name descname"><span class="pre">register_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.register_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.register_output" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">register_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.register_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.register_output" title="Permalink to this definition">¶</a></dt>
 <dd><p>Registers an output variable for the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>id</strong> (<em>str</em>) – Specifies the id of the output.</p></li>
-<li><p><strong>attribute</strong> (<em>str</em><em>, </em><em>optional</em>) – Attribute, by default “value”</p></li>
+<li><p><strong>attributes</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Attribute, by default “value”</p></li>
 <li><p><strong>mpl</strong> (<em>bool</em><em>, </em><em>optional</em>) – Specifies if the registration is for matplotlib or default, by default False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Unique id for the output and plugin. This is necessary because ids are defined globally.</p>
+<dd class="field-even"><p><strong>id</strong> – Unique id for the output and plugin. This is necessary because ids are defined globally.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
