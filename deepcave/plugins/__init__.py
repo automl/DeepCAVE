@@ -1166,6 +1166,51 @@ class Plugin(Layout, ABC):
         """
         pass
 
+    # @staticmethod
+    @classmethod
+    def generate_outputs(
+        cls, runs: Union[AbstractRun, List[AbstractRun]], inputs: Dict[str, Any]
+    ) -> Union[Dict[str, Any], Dict[str, Dict[str, Any]]]:
+        """
+        Checks whether run selection is active and accepts either one or multiple runs at once.
+        Calls `process` internally.
+
+        Parameters
+        ----------
+        runs : Union[AbstractRun, List[AbstractRun]]
+            Run or runs to process.
+        inputs : Dict[str, Any]
+            Input data. Only "real" inputs (not "filter" inputs) are necessary.
+
+        Returns
+        -------
+        Union[Dict[str, Any], Dict[str, Dict[str, Any]]]
+            Returns a data dictionary with the same outputs as `process`.
+            If `activate_run_selection` is set, a Dict[str, Dict[str, Any]] is returned. The first
+            dictionary is keyed by the `run.id`.
+        """
+        if cls.activate_run_selection:
+            if isinstance(runs, AbstractRun):
+                return cls.process(runs, inputs)
+            else:
+                raise RuntimeError(
+                    "The method `generate_outputs` accepts only one run because `activate_run_selection` is set."
+                )
+        else:
+            if not isinstance(runs, list):
+                if not isinstance(runs, AbstractRun):
+                    raise RuntimeError(
+                        "The method `generate_outputs` accepts either one or multiple runs."
+                    )
+
+                runs = [runs]
+
+            outputs = {}
+            for run in runs:
+                outputs[run.id] = cls.process(run, inputs)
+
+            return outputs
+
     def generate_inputs(self, **kwargs: Any) -> Dict[str, Any]:
         """
         Generates inputs for the `process` and `load_outputs` required for api mode.

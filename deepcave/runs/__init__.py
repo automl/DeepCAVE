@@ -56,7 +56,7 @@ class Trial:
     status: Status
     additional: Dict[str, Any]
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if isinstance(self.status, int):
             self.status = Status(self.status)
 
@@ -90,7 +90,7 @@ class AbstractRun(ABC):
 
     def reset(self) -> None:
         self.meta: Dict[str, Any] = {}
-        self.configspace: Optional[ConfigSpace.ConfigurationSpace] = None
+        self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Configuration] = {}
         self.origins: Dict[int, str] = {}
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}
