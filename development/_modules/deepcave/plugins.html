@@ -508,6 +508,7 @@ style="width: 100%;">
 <span class="sd">        - If inputs changes, the changes are pasted back. This is in particular</span>
 <span class="sd">        interest if input dependencies are used.</span>
 <span class="sd">        - Raw data dialog to display raw data.</span>
+<span class="sd">        - Callback to be redirected to the config if clicked on it.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -677,7 +678,31 @@ style="width: 100%;">
 
                 <span class="k">return</span> <span class="ow">not</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span>
 
-            <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span></div>
+            <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span>
+
+        <span class="c1"># Register callback to click on configurations</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="n">internal_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+            <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>
+                <span class="n">Output</span><span class="p">(</span><span class="n">internal_id</span><span class="p">,</span> <span class="s2">&quot;clickData&quot;</span><span class="p">),</span>
+                <span class="n">Input</span><span class="p">(</span><span class="n">internal_id</span><span class="p">,</span> <span class="s2">&quot;clickData&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">def</span> <span class="nf">go_to_configuration</span><span class="p">(</span><span class="n">click_data</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="n">click_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># Get hovertext</span>
+                    <span class="n">hovertext</span> <span class="o">=</span> <span class="n">click_data</span><span class="p">[</span><span class="s2">&quot;points&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;hovertext&quot;</span><span class="p">]</span>
+
+                    <span class="c1"># Now extract the link from href</span>
+                    <span class="kn">import</span> <span class="nn">re</span>
+                    <span class="kn">import</span> <span class="nn">webbrowser</span>
+
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;&lt;a href=&#39;(.+?)&#39;&quot;</span><span class="p">,</span> <span class="n">hovertext</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">link</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">new</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">_inputs_changed</span><span class="p">(</span>
