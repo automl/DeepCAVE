@@ -319,7 +319,7 @@ to download the full example code</p>
         <span class="n">budget_id</span><span class="o">=</span><span class="n">budget_id</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># Note: Filter variables are not considered.</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+    <span class="n">outputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">generate_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
 
     <span class="c1"># Finally, you can load the figure. Here, the filter variables play a role.</span>
     <span class="c1"># Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.</span>

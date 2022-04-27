@@ -23,7 +23,7 @@ if __name__ == "__main__":
         budget_id=budget_id,
     )
     # Note: Filter variables are not considered.
-    outputs = plugin.process(run, inputs)
+    outputs = plugin.generate_outputs(run, inputs)
 
     # Finally, you can load the figure. Here, the filter variables play a role.
     # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
