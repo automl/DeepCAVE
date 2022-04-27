@@ -1,8 +1,10 @@
 import datetime
 import sys
 import os
-from typing import Callable, Optional, Any, TypeVar, Union, cast
+from typing import Callable, Any, TypeVar, cast
 from functools import wraps
+import webbrowser
+from threading import Timer
 
 name = "DeepCAVE"
 package_name = "deepcave"
@@ -42,25 +44,33 @@ if any(file in _exec_file for file in _exec_files):
     app = get_app(config)
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
 
-    # Meta cache
-    c = Cache(
-        filename=config.CACHE_DIR / "meta.json",
-        defaults=config.META_DEFAULT,
-        debug=config.DEBUG,
-    )
+    if "server.py" in _exec_file:
+        # Meta cache
+        c = Cache(
+            filename=config.CACHE_DIR / "meta.json",
+            defaults=config.META_DEFAULT,
+            debug=config.DEBUG,
+        )
 
-    # Set working directory to current directory
-    if c.get("working_dir") is None:
-        c.set("working_dir", value=os.getcwd())
+        # Set working directory to current directory
+        if c.get("working_dir") is None:
+            c.set("working_dir", value=os.getcwd())
 
-    # Run caches
-    rc = RunCaches(config)
+        # Run caches
+        rc = RunCaches(config)
 
-    # Run Handler
-    run_handler = RunHandler(config, c, rc)
+        # Run Handler
+        run_handler = RunHandler(config, c, rc)
 
-    # Notifications
-    notification = Notification()
+        # Notifications
+        notification = Notification()
+
+        if "server.py" == _exec_file:
+            # Open the link in browser
+            def open_browser() -> None:
+                webbrowser.open_new(f"{config.DASH_ADDRESS}:{config.DASH_PORT}")
+
+            Timer(1, open_browser).start()
 
     __all__ = [
         "version",

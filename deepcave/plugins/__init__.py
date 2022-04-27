@@ -445,8 +445,6 @@ class Plugin(Layout, ABC):
     ) -> Union[Any, List[Any]]:
         from deepcave import c, run_handler
 
-        logger.debug("Process raw outputs.")
-
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
 
@@ -464,6 +462,8 @@ class Plugin(Layout, ABC):
             outputs = self.__class__.load_mpl_outputs(passed_runs, cleaned_inputs, passed_outputs)
         else:
             outputs = self.__class__.load_outputs(passed_runs, cleaned_inputs, passed_outputs)
+
+        logger.debug("Raw outputs processed successfully.")
 
         if outputs == PreventUpdate:
             raise PreventUpdate()
