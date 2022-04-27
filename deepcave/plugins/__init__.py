@@ -228,6 +228,7 @@ class Plugin(Layout, ABC):
         - If inputs changes, the changes are pasted back. This is in particular
         interest if input dependencies are used.
         - Raw data dialog to display raw data.
+        - Callback to be redirected to the config if clicked on it.
 
         Raises
         ------
@@ -398,6 +399,30 @@ class Plugin(Layout, ABC):
                 return not is_open, code
 
             return is_open, code
+
+        # Register callback to click on configurations
+        for (id, *_) in self.outputs:
+            internal_id = self.get_internal_output_id(id)
+
+            @app.callback(
+                Output(internal_id, "clickData"),
+                Input(internal_id, "clickData"),
+            )
+            def go_to_configuration(click_data):  # type: ignore
+                if click_data is not None:
+                    # Get hovertext
+                    hovertext = click_data["points"][0]["hovertext"]
+
+                    # Now extract the link from href
+                    import re
+                    import webbrowser
+
+                    match = re.search("<a href='(.+?)'", hovertext)
+                    if match:
+                        link = match.group(1)
+                        webbrowser.open(link, new=0)
+
+                return None
 
     @interactive
     def _inputs_changed(

@@ -125,7 +125,7 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return (dcc.Graph(register("graph", "figure")),)
+        return dcc.Graph(register("graph", "figure"))
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):

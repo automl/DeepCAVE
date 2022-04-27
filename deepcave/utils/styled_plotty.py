@@ -1,8 +1,11 @@
-from typing import List, Optional, Tuple, Any, Union
-from deepcave.constants import BORDER_CONFIG_ID, NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
+from typing import List, Optional, Tuple, Any, Union, Dict, Callable
+from deepcave.constants import NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
 import numpy as np
 import plotly.express as px
 import itertools
+import re
+from dash import html
+from dash.development.base_component import Component
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
     Hyperparameter,
@@ -336,7 +339,12 @@ def get_hovertext_from_config(run, config_id: int) -> str:
     if config_id < 0:
         return ""
 
-    string = f"Configuration ID: {int(config_id)}<br>"
+    # Retrieve the link for the config id
+    from deepcave.plugins.summary.configurations import Configurations
+
+    link = Configurations.get_link(run, config_id)
+
+    string = f"Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a><br>"
     string += "-----------------------------<br>"
 
     config = run.get_config(config_id)
@@ -344,3 +352,66 @@ def get_hovertext_from_config(run, config_id: int) -> str:
         string += f"{k}: {v}<br>"
 
     return string
+
+
+def generate_config_code(register: Callable, variables: List[str]) -> List[Component]:
+    code = """
+    from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
+    from ConfigSpace.read_and_write import cs_json
+
+    # Create configspace
+    with open({{path}}, 'r') as f:
+        cs = cs_json.read(f.read())
+
+    # Create config
+    values = {{config_dict}}
+    config = Configuration(cs, values=values)
+    """
+
+    components = []
+    for line in code.splitlines():
+        if len(line) == 0:
+            components += [html.Br()]
+            continue
+
+        count_trailing_spaces = 0
+        for char in line:
+            if char == " ":
+                count_trailing_spaces += 1
+            else:
+                break
+
+        count_trailing_tabs = (count_trailing_spaces - 4) / 4
+        trailing_style = {"margin-left": f"{count_trailing_tabs*2}em"}
+        skip = False
+
+        # Check if variable inside
+        for variable in variables:
+            match = re.search("{{(.+?)}}", line)
+            if match:
+                link = match.group(1)
+                if link == variable:
+                    components += [
+                        # Add beginning
+                        html.Code(line[: match.start()], style=trailing_style),
+                        # Add variable
+                        html.Code(id=register(variable, "children")),
+                        # Add ending
+                        html.Code(line[match.end() :]),
+                        html.Br(),
+                    ]
+
+                    skip = True
+                    break
+
+        if skip:
+            continue
+
+        components += [
+            html.Code(line, style=trailing_style),
+            html.Br(),
+        ]
+
+    components = components[1 : len(components) - 1]
+
+    return components

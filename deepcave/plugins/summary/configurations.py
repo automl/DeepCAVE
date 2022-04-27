@@ -10,7 +10,7 @@ from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import create_table, get_slider_marks
-from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
+from deepcave.utils.styled_plotty import generate_config_code, get_color, get_hyperparameter_ticks
 from deepcave.utils.url import create_url
 
 
@@ -133,6 +133,13 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
+            html.Div(
+                [
+                    html.Span("Selected configuration: "),
+                    html.Span(id=register("config_id", "children")),
+                ],
+                className="mb-3",
+            ),
             html.H3("Objectives"),
             dcc.Graph(id=register("performances", "figure")),
             html.H3("Configuration"),
@@ -142,14 +149,29 @@ class Configurations(DynamicPlugin):
                     dbc.Tab(html.Div(id=register("configspace_table", "children")), label="Table"),
                 ]
             ),
+            dbc.Accordion(
+                [
+                    dbc.AccordionItem(
+                        generate_config_code(register, variables=["path", "config_dict"]),
+                        title="See code",
+                    ),
+                ],
+                start_collapsed=True,
+            ),
         ]
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
+        config_id = inputs["config_id"]
+        config = run.get_config(config_id)
+
         return [
+            inputs["config_id"],
             Configurations._get_objective_figure(inputs, outputs, run),
             Configurations._get_configspace_figure(inputs, outputs, run),
             create_table(outputs["cs_table_data"]),
+            str(run.path / "configspace.json"),
+            str(config.get_dictionary()),
         ]
 
     @staticmethod
