@@ -344,8 +344,9 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     link = Configurations.get_link(run, config_id)
 
-    string = f"Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a><br>"
-    string += "-----------------------------<br>"
+    string = (
+        f"<b>Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a></b><br>"
+    )
 
     config = run.get_config(config_id)
     for k, v in config.items():
@@ -363,8 +364,7 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
         string += "No costs on highest budget available.<br>"
         return string
 
-    string += f"Objective values (Budget {budget})<br>"
-    string += "-----------------------------<br>"
+    string += f"<b>Objectives (Budget {budget})</b><br>"
     for objective, cost in zip(objectives, costs):
         string += f"{objective['name']}: {cost}<br>"
 
