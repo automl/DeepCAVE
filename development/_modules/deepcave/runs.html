@@ -614,14 +614,14 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">budgets</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">_process_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_process_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the</span>
 <span class="sd">        objective.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        costs : Iterable[float]</span>
+<span class="sd">        costs : List[float]</span>
 <span class="sd">            Costs, which should be processed. Must be the same length as the number of objectives.</span>
 
 <span class="sd">        Returns</span>
@@ -638,23 +638,51 @@ style="width: 100%;">
 
         <span class="k">return</span> <span class="n">new_costs</span>
 
-<div class="viewcode-block" id="AbstractRun.get_cost"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_cost">[docs]</a>    <span class="k">def</span> <span class="nf">get_cost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="AbstractRun.get_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>    <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If no budget is given, the highest budget is chosen.</span>
+<span class="sd">        Returns the costs of a configuration. In case of multi-objective, multiple costs are</span>
+<span class="sd">        returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            Configuration id to get the costs for.</span>
+<span class="sd">        budget : Optional[Union[int, float]], optional</span>
+<span class="sd">            Budget to get the costs from the configuration id for. By default None. If budget is</span>
+<span class="sd">            None, the highest budget is chosen.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the configuration id is not found.</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the budget was not evaluated for the passed config id.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[float]</span>
+<span class="sd">            List of costs from the associated configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Configuration id was not found.&quot;</span><span class="p">)</span>
+
+        <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2"> was not evaluated for config id </span><span class="si">{</span><span class="n">config_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">costs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="AbstractRun.get_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>    <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span>
+<div class="viewcode-block" id="AbstractRun.get_all_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_all_costs">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_costs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get costs with their config ids.</span>
+<span class="sd">        Get all costs in the history with their config ids. Only configs from the given budget</span>
+<span class="sd">        and statuses are returned.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -686,7 +714,7 @@ style="width: 100%;">
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">statuses</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-            <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_costs</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">costs</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>  <span class="c1"># self._process_costs(trial.costs)</span>
 
         <span class="k">return</span> <span class="n">results</span></div>
 
@@ -721,7 +749,7 @@ style="width: 100%;">
         <span class="n">min_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">best_config_id</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)</span>
 
@@ -739,16 +767,16 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">config</span><span class="p">,</span> <span class="n">normalized_cost</span></div>
 
 <div class="viewcode-block" id="AbstractRun.merge_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.merge_costs">[docs]</a>    <span class="k">def</span> <span class="nf">merge_costs</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates one cost value from multiple costs.</span>
-<span class="sd">        Normalizes the cost first and weight every cost the same.</span>
+<span class="sd">        Normalizes the costs first and weight every cost the same.</span>
 <span class="sd">        The lower the normalized cost, the better.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        costs : Iterable[float]</span>
+<span class="sd">        costs : List[float]</span>
 <span class="sd">            The costs, which should be merged. Must be the same length as the original number of objectives.</span>
 <span class="sd">        objectives : Optional[List[Objective]], optional</span>
 <span class="sd">            The considered objectives to the costs. By default None.</span>
@@ -1005,7 +1033,7 @@ style="width: 100%;">
         <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="n">config_ids</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="n">specific</span><span class="p">)</span>
