@@ -11,7 +11,7 @@
         {
             "name": "time",
             "lower": 0,
-            "upper": 1010.3352398872375,
+            "upper": 4.13462,
             "lock_lower": true,
             "lock_upper": false,
             "optimize": "lower"
