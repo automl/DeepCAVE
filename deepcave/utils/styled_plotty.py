@@ -335,7 +335,7 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run, config_id: int) -> str:
+def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
     if config_id < 0:
         return ""
 
@@ -350,6 +350,23 @@ def get_hovertext_from_config(run, config_id: int) -> str:
     config = run.get_config(config_id)
     for k, v in config.items():
         string += f"{k}: {v}<br>"
+
+    string += "<br>"
+
+    # It's also nice to see the metrics
+    objectives = run.get_objectives()
+    budget = run.get_highest_budget()
+
+    try:
+        costs = run.get_costs(config_id, budget)
+    except Exception:
+        string += "No costs on highest budget available.<br>"
+        return string
+
+    string += f"Objective values (Budget {budget})<br>"
+    string += "-----------------------------<br>"
+    for objective, cost in zip(objectives, costs):
+        string += f"{objective['name']}: {cost}<br>"
 
     return string
 
