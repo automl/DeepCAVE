@@ -84,19 +84,29 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def process(run, inputs):
         selected_config_id = inputs["config_id"]
+        objectives = run.get_objectives()
 
         performances = {}
-        for objective_id, objective in enumerate(run.get_objectives()):
+        performances_table_data = {"Budget": []}
+        for objective_id, objective in enumerate(objectives):
             if objective["name"] not in performances:
                 performances[objective["name"]] = {}
+                performances_table_data[objective["name"]] = []
 
             for budget in run.get_budgets():
-                costs = run.get_cost(selected_config_id, budget)
+                # Budget might not be evaluated
+                try:
+                    costs = run.get_costs(selected_config_id, budget)
+                except Exception:
+                    costs = [None for _ in range(len(objectives))]
 
-                if costs is None:
-                    performances[objective["name"]][budget] = None  # objective.get_worst_value()
-                else:
-                    performances[objective["name"]][budget] = costs[objective_id]
+                performances[objective["name"]][budget] = costs[objective_id]
+
+                # And add table data
+                if budget not in performances_table_data["Budget"]:
+                    performances_table_data["Budget"] += [budget]
+
+                performances_table_data[objective["name"]] += [costs[objective_id]]
 
         # Let's start with the configspace
         X = []
@@ -126,6 +136,7 @@ class Configurations(DynamicPlugin):
 
         return {
             "performances": performances,
+            "performances_table_data": performances_table_data,
             "cs_df": serialize(cs_df),
             "cs_table_data": cs_table_data,
         }
@@ -140,8 +151,15 @@ class Configurations(DynamicPlugin):
                 ],
                 className="mb-3",
             ),
+            html.Hr(),
             html.H3("Objectives"),
-            dcc.Graph(id=register("performances", "figure")),
+            dbc.Tabs(
+                [
+                    dbc.Tab(dcc.Graph(id=register("performance_graph", "figure")), label="Graph"),
+                    dbc.Tab(html.Div(id=register("performance_table", "children")), label="Table"),
+                ]
+            ),
+            html.Hr(),
             html.H3("Configuration"),
             dbc.Tabs(
                 [
@@ -149,6 +167,7 @@ class Configurations(DynamicPlugin):
                     dbc.Tab(html.Div(id=register("configspace_table", "children")), label="Table"),
                 ]
             ),
+            html.Hr(),
             dbc.Accordion(
                 [
                     dbc.AccordionItem(
@@ -168,6 +187,7 @@ class Configurations(DynamicPlugin):
         return [
             inputs["config_id"],
             Configurations._get_objective_figure(inputs, outputs, run),
+            create_table(outputs["performances_table_data"]),
             Configurations._get_configspace_figure(inputs, outputs, run),
             create_table(outputs["cs_table_data"]),
             str(run.path / "configspace.json"),
