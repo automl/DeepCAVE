@@ -97,8 +97,8 @@ class Plugin(Layout, ABC):
         Checks if a run is compatible with this plugin. If a plugin is not compatible,
         you can not select the run.
 
-        Notes
-        -----
+        Note
+        ----
         This function is only called if `activate_run_selection` is True.
 
         Parameters

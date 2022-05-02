@@ -77,8 +77,8 @@ class BudgetCorrelation(DynamicPlugin):
                 if budget2 > budget1:
                     continue
 
-                costs1 = run.get_costs(budget1, statuses=[Status.SUCCESS])
-                costs2 = run.get_costs(budget2, statuses=[Status.SUCCESS])
+                costs1 = run.get_all_costs(budget1, statuses=[Status.SUCCESS])
+                costs2 = run.get_all_costs(budget2, statuses=[Status.SUCCESS])
 
                 # Combine config ids
                 # So we make sure we have the same number of configs for each budget
@@ -95,7 +95,7 @@ class BudgetCorrelation(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return [dcc.Graph(id=register("graph", "figure"))]
+        return dcc.Graph(id=register("graph", "figure"))
 
     @staticmethod
     def load_outputs(run, inputs, outputs):

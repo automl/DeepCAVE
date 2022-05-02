@@ -119,7 +119,7 @@ class ParetoFront(DynamicPlugin):
 
         points: Union[List, np.ndarray] = []
         config_ids: Union[List, np.ndarray] = []
-        for config_id, costs in run.get_costs(budget, statuses=[Status.SUCCESS]).items():
+        for config_id, costs in run.get_all_costs(budget, statuses=[Status.SUCCESS]).items():
             points += [[costs[objective_id_1], costs[objective_id_2]]]
             config_ids += [config_id]
 

@@ -4,6 +4,7 @@ from dash import dcc, html
 import plotly.graph_objs as go
 
 from deepcave.plugins.dynamic import DynamicPlugin
+from deepcave.plugins.summary.configurations import Configurations
 from deepcave.runs import Status
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -31,16 +32,24 @@ class Overview(DynamicPlugin):
         # Get best cost across all objectives, highest budget
         config, _ = run.get_incumbent()
         config_id = run.get_config_id(config)
+        objective_names = run.get_objective_names()
 
         best_performance = {}
-        for idx, cost in enumerate(run.get_cost(config_id)):
-            best_performance[run.get_objective_names()[idx]] = cost
+        # Budget might not be evaluated
+        try:
+            costs = run.get_costs(config_id)
+        except Exception:
+            costs = [None for _ in range(len(objective_names))]
+
+        for idx, cost in enumerate(costs):
+            best_performance[objective_names[idx]] = cost
 
         # Card information
         card_information = {
             "optimizer": run.prefix,
             "latest_change": run.latest_change,
             "best_performance": best_performance,
+            "link": Configurations.get_link(run, config_id),
             "num_configs": run.get_num_configs(),
         }
 
@@ -179,8 +188,14 @@ class Overview(DynamicPlugin):
                             ),
                             html.Div(
                                 [
-                                    html.Span("Best performance: "),
+                                    html.Span("Best average performance: "),
                                     html.Span(id=register("best_performance", "children")),
+                                    html.Span(" "),
+                                    html.A(
+                                        "(Details)",
+                                        id=register("link", "href"),
+                                        style={"color": "white"},
+                                    ),
                                 ],
                                 className="card-text",
                             ),
@@ -198,8 +213,10 @@ class Overview(DynamicPlugin):
                 inverse=True,
                 className="mb-3",
             ),
+            html.Hr(),
             html.H3("Meta"),
             html.Div(id=register("meta", "children")),
+            html.Hr(),
             html.H3("Objectives"),
             html.Div(id=register("objectives", "children")),
             html.Hr(),
@@ -252,6 +269,7 @@ class Overview(DynamicPlugin):
             outputs["card_information"]["optimizer"],
             get_latest_change(outputs["card_information"]["latest_change"]),
             ", ".join(best_performances),
+            outputs["card_information"]["link"],
             outputs["card_information"]["num_configs"],
             create_table(outputs["meta"]),
             create_table(outputs["objectives"]),

@@ -334,14 +334,14 @@ class AbstractRun(ABC):
 
         return budgets[-1]
 
-    def _process_costs(self, costs: Iterable[float]) -> List[float]:
+    def _process_costs(self, costs: List[float]) -> List[float]:
         """
         Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the
         objective.
 
         Parameters
         ----------
-        costs : Iterable[float]
+        costs : List[float]
             Costs, which should be processed. Must be the same length as the number of objectives.
 
         Returns
@@ -358,23 +358,51 @@ class AbstractRun(ABC):
 
         return new_costs
 
-    def get_cost(self, config_id: int, budget: Union[int, float] = None) -> Optional[List[float]]:
+    def get_costs(self, config_id: int, budget: Optional[Union[int, float]] = None) -> List[float]:
         """
-        If no budget is given, the highest budget is chosen.
+        Returns the costs of a configuration. In case of multi-objective, multiple costs are
+        returned.
+
+        Parameters
+        ----------
+        config_id : int
+            Configuration id to get the costs for.
+        budget : Optional[Union[int, float]], optional
+            Budget to get the costs from the configuration id for. By default None. If budget is
+            None, the highest budget is chosen.
+
+        Raises
+        ------
+        ValueError
+            If the configuration id is not found.
+        RuntimeError
+            If the budget was not evaluated for the passed config id.
+
+        Returns
+        -------
+        List[float]
+            List of costs from the associated configuration.
         """
-        costs = self.get_costs(budget)
+        if budget is None:
+            budget = self.get_highest_budget()
+
+        if config_id not in self.configs:
+            raise ValueError("Configuration id was not found.")
+
+        costs = self.get_all_costs(budget)
         if config_id not in costs:
-            return None
+            raise RuntimeError(f"Budget {budget} was not evaluated for config id {config_id}.")
 
         return costs[config_id]
 
-    def get_costs(
+    def get_all_costs(
         self,
         budget: Optional[Union[int, float]] = None,
         statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Dict[int, List[float]]:
         """
-        Get costs with their config ids.
+        Get all costs in the history with their config ids. Only configs from the given budget
+        and statuses are returned.
 
         Parameters
         ----------
@@ -406,7 +434,7 @@ class AbstractRun(ABC):
                 if trial.status not in statuses:
                     continue
 
-            results[trial.config_id] = self._process_costs(trial.costs)
+            results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
 
         return results
 
@@ -441,7 +469,7 @@ class AbstractRun(ABC):
         min_cost = np.inf
         best_config_id = None
 
-        results = self.get_costs(budget, statuses)
+        results = self.get_all_costs(budget, statuses)
         for config_id, costs in results.items():
             cost = self.merge_costs(costs, objectives)
 
@@ -459,16 +487,16 @@ class AbstractRun(ABC):
         return config, normalized_cost
 
     def merge_costs(
-        self, costs: Iterable[float], objectives: Optional[Union[Objective, List[Objective]]] = None
+        self, costs: List[float], objectives: Optional[Union[Objective, List[Objective]]] = None
     ) -> float:
         """
         Calculates one cost value from multiple costs.
-        Normalizes the cost first and weight every cost the same.
+        Normalizes the costs first and weight every cost the same.
         The lower the normalized cost, the better.
 
         Parameters
         ----------
-        costs : Iterable[float]
+        costs : List[float]
             The costs, which should be merged. Must be the same length as the original number of objectives.
         objectives : Optional[List[Objective]], optional
             The considered objectives to the costs. By default None.
@@ -725,7 +753,7 @@ class AbstractRun(ABC):
         X, Y = [], []
         config_ids = []
 
-        results = self.get_costs(budget, statuses)
+        results = self.get_all_costs(budget, statuses)
         for config_id, costs in results.items():
             config = self.configs[config_id]
             x = self.encode_config(config, specific=specific)
