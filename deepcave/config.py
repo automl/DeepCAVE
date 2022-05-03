@@ -6,22 +6,18 @@ from pathlib import Path
 class Config:
     # General config
     TITLE: str = "DeepCAVE"
-    DEBUG: bool = False
+    DEBUG: bool = True
 
     # Cache dir
     root: Path = Path.cwd()
-    DEFAULT_WORKING_DIRECTORY: Path = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
-
-    CACHE_DIR: Path = root / "cache"
 
     # Redis settings
     REDIS_PORT: int = 6379
     REDIS_ADDRESS: str = "redis://localhost"
 
-    # Dash settings (not used right now)
+    # Dash settings
     DASH_PORT: int = 8050
     DASH_ADDRESS: str = "http://127.0.0.1"
-    SERVER_NAME = f"{DASH_ADDRESS}:{DASH_PORT}"  # Automatically used in Flask app
 
     # Default Meta information which are used across the platform
     META_DEFAULT: Dict[str, Any] = {
@@ -31,7 +27,18 @@ class Config:
         "groups": {},  # {group_name: [run_path, ...]}
     }
 
-    # Plugins
+    @property
+    def DEFAULT_WORKING_DIRECTORY(self) -> Path:
+        return self.root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
+
+    @property
+    def CACHE_DIR(self) -> Path:
+        return self.root / "cache"
+
+    @property
+    def SERVER_NAME(self) -> str:
+        return f"{self.DASH_ADDRESS}:{self.DASH_PORT}"
+
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
         """
@@ -74,29 +81,10 @@ class Config:
         }
         return plugins
 
-    # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> List[Type["Run"]]:
+    def CONVERTERS(self) -> List[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun
 
         return [DeepCAVERun, BOHBRun, SMACRun]
-
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-
-
-configs: Dict[str, Config] = {"production": Config(), "dev": DevelopmentConfig()}
-configs["default"] = configs["dev"]
-
-
-def parse_config(config: Union[None, Config, str] = None) -> Config:
-    if config is None:
-        config = "default"
-    if isinstance(config, str):
-        config = configs[config]
-
-    assert isinstance(config, Config)
-    return config

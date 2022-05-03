@@ -24,7 +24,6 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 
 
 if any(file in _exec_file for file in _exec_files):
-    from deepcave.config import parse_config
     from deepcave.queue import Queue
     from deepcave.runs.handler import RunHandler
     from deepcave.runs.objective import Objective  # noqa
@@ -33,12 +32,13 @@ if any(file in _exec_file for file in _exec_files):
     from deepcave.utils.cache import Cache
     from deepcave.utils.run_caches import RunCaches
     from deepcave.utils.notification import Notification
+    from deepcave.utils.configs import parse_config
 
     # Get config
-    _config = None  # Use default config if none provided
+    config_name = None
     if "--config" in sys.argv:
-        _config = sys.argv[sys.argv.index("--config") + 1]
-    config = parse_config(_config)
+        config_name = sys.argv[sys.argv.index("--config") + 1]
+    config = parse_config(config_name)
 
     # Create app
     app = get_app(config)

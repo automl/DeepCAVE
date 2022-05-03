@@ -168,3 +168,4 @@ examples/others
 examples/record/_*
 datasets
 lightning_logs
+vendors

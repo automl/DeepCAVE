@@ -7,6 +7,6 @@ if __name__ == "__main__":
     app.layout = MainLayout(config.PLUGINS)()
     app.run_server(
         debug=config.DEBUG,
-        # port=config.DASH_PORT,
-        # host=config.DASH_ADDRESS
+        port=config.DASH_PORT,
+        host=config.DASH_ADDRESS
     )

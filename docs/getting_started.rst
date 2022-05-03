@@ -8,8 +8,20 @@ After you have followed the installation steps, you can start DeepCAVE via follo
     $ deepcave --start
 
 
-If you did not change the address or ports, you can access the interactive dashboard
-via `http://127.0.0.1:8050`. In the dashboard, you will be directed to the main page, in which you
+You can start DeepCAVE with a specific configuration, which is in particular interest if you
+need to change the ips and ports:
+
+.. code:: bash
+    $ deepcave --start --config=X
+
+
+.. note::
+    The configuration file is located in ``configs/X.py``. The file ``X.py`` must specify a
+    `Config` class.
+
+
+After hitting enter, you are automatically redirected to the interactive dashboard.
+In the dashboard, you will see the main page, in which you
 can select the runs you want to analyze. Please have a look at the following image
 to see the dashboard in action:
 
