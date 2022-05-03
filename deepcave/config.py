@@ -17,7 +17,7 @@ class Config:
 
     # Dash settings
     DASH_PORT: int = 8050
-    DASH_ADDRESS: str = "http://127.0.0.1"
+    DASH_ADDRESS: str = "127.0.0.1"
 
     # Default Meta information which are used across the platform
     META_DEFAULT: Dict[str, Any] = {
@@ -37,7 +37,7 @@ class Config:
 
     @property
     def SERVER_NAME(self) -> str:
-        return f"{self.DASH_ADDRESS}:{self.DASH_PORT}"
+        return f"http://{self.DASH_ADDRESS}:{self.DASH_PORT}"
 
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
