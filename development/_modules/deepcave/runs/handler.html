@@ -304,7 +304,7 @@ style="width: 100%;">
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="s2">&quot;RunHandler&quot;</span><span class="p">)</span>
 
         <span class="c1"># Available converters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">available_run_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Run</span><span class="p">]]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">AVAILABLE_CONVERTERS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">available_run_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Run</span><span class="p">]]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">CONVERTERS</span>
 
         <span class="c1"># Internal state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># run_name -&gt; Run</span>

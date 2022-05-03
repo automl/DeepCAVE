@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Getting Started &#8212; DeepCAVE Documentation 0.4 documentation</title>
+    <title>Install Redis Server &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -37,8 +37,6 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Examples" href="examples/index.html" />
-    <link rel="prev" title="Installation" href="installation.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -115,14 +113,14 @@ style="width: 100%;">
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
 <div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <ul class="current nav bd-sidenav">
+    <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="installation.html">
    Installation
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="getting_started.html">
    Getting Started
   </a>
  </li>
@@ -293,27 +291,47 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>After you have followed the installation steps, you can start DeepCAVE via following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ deepcave --start
+  <div class="section" id="install-redis-server">
+<h1>Install Redis Server<a class="headerlink" href="#install-redis-server" title="Permalink to this headline">¶</a></h1>
+<p><cite>redis-server</cite> is required to make DeepCAVE run in interactive mode. This page gives information
+how to get <cite>redis-server</cite> installed.</p>
+<ol class="arabic simple">
+<li><p>First check if <cite>redis-server</cite> is available:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>redis-server
 </pre></div>
 </div>
-<p>You can start DeepCAVE with a specific configuration, which is in particular interest if you
-need to change the ips and ports:</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The configuration file is located in <code class="docutils literal notranslate"><span class="pre">configs/X.py</span></code>. The file <code class="docutils literal notranslate"><span class="pre">X.py</span></code> must specify a
-<cite>Config</cite> class.</p>
+<ol class="arabic simple" start="2">
+<li><p>If you see something like <cite>/usr/sbin/redis-server</cite>, then you simply have to expand your path:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/sbin
+</pre></div>
 </div>
-<p>After hitting enter, you are automatically redirected to the interactive dashboard.
-In the dashboard, you will see the main page, in which you
-can select the runs you want to analyze. Please have a look at the following image
-to see the dashboard in action:</p>
-<img alt="_images/interface.png" src="_images/interface.png" />
-<p>DeepCAVE uses runs to interprete data. A run is a collection of trials (a configuration with associated costs).
-Once valid runs (see <a class="reference internal" href="converters.html#converters"><span class="std std-ref">converter</span></a>) are found, you can select them to analyze them further.
-After selecting runs, you can also add them to groups to analyze combined runs easily.</p>
+<p>Consider adding this to your <cite>~/.bashrc</cite> file.
+Check if <cite>redis-server</cite> works now.</p>
+<ol class="arabic simple" start="3">
+<li><p>If no <cite>redis-server</cite> was found, try to install it:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install redis-server  <span class="c1"># linux</span>
+brew install redis  <span class="c1"># mac</span>
+</pre></div>
+</div>
+<p>4. If there was no <cite>redis-server</cite> found and you do not have admin access,
+do the following inside the DeepCAVE root folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">file</span><span class="o">=</span><span class="s2">&quot;redis-6.2.6&quot;</span>
+<span class="nv">filename</span><span class="o">=</span><span class="nv">$file</span><span class="s2">&quot;.tar.gz&quot;</span>
+
+mkdir -p vendors
+<span class="nb">cd</span> vendors
+wget https://download.redis.io/releases/<span class="nv">$filename</span>
+tar -xzvf <span class="nv">$filename</span>
+rm <span class="nv">$filename</span>
+<span class="nb">cd</span> <span class="nv">$file</span>
+make
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+<span class="nb">cd</span> ../../
+</pre></div>
+</div>
 </div>
 
 
@@ -321,21 +339,7 @@ After selecting runs, you can also add them to groups to analyze combined runs e
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="installation.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Installation</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="examples/index.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Examples</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+<div class='prev-next-area'>
 </div>
               
           </main>
