@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepcave.utils.styled_plotty &#8212; DeepCAVE Documentation 0.4 documentation</title>
+    
+  <link href="../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../../../index.html">
+    <img src="../../../_static/logo.png" class="logo" alt="logo">
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../../search.html" method="get"
+style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
+<div class="mb-3">v0.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/api/plugin.html">
+     Example Call
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/minimal_run.html">
+     Record Minimal Run
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/mlp.html">
+     Multi-Layer Perceptron
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/record/mlp_pytorch.html">
+     Multi-Layer Perceptron via PyTorch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/templates/multiple_runs.html">
+     Multiple Runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../examples/templates/single_run.html">
+     Single Run
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/fanova.html">
+     fANOVA
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for deepcave.utils.styled_plotty</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">NAN_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">CONSTANT_VALUE</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Hyperparameter</span><span class="p">,</span>
+    <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
+    <span class="n">Constant</span><span class="p">,</span>
+    <span class="n">IntegerHyperparameter</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="hex_to_rgb"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.hex_to_rgb">[docs]</a><span class="k">def</span> <span class="nf">hex_to_rgb</span><span class="p">(</span><span class="n">hex_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a hex_string to a tuple of rgb values.</span>
+<span class="sd">    Requires format including #, e.g.:</span>
+<span class="sd">    #000000</span>
+<span class="sd">    #ff00ff</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hex_string</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid length for #</span><span class="si">{</span><span class="n">hex_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s2">&quot;0123456789ABCDEF&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">hex_string</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid character in #</span><span class="si">{</span><span class="n">hex_string</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">r_hex</span> <span class="o">=</span> <span class="n">hex_string</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">g_hex</span> <span class="o">=</span> <span class="n">hex_string</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">b_hex</span> <span class="o">=</span> <span class="n">hex_string</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">g_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">b_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_color"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">[docs]</a><span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Currently (Plotly version 5.3.1) there are 10 possible colors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">qualitative</span><span class="o">.</span><span class="n">Plotly</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span>
+
+    <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hex_to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rgba(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
+
+<div class="viewcode-block" id="get_discrete_heatmap"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_discrete_heatmap">[docs]</a><span class="k">def</span> <span class="nf">get_discrete_heatmap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a discrete colorscale from a (nested) list or numpy array of values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    values : _type_</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">flattened_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">values</span><span class="p">))</span>
+    <span class="n">flattened_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">labels</span><span class="p">))</span>
+
+    <span class="n">unique_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">unique_labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flattened_values</span><span class="p">,</span> <span class="n">flattened_labels</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_values</span><span class="p">:</span>
+            <span class="n">unique_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+            <span class="n">unique_labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+
+    <span class="n">sorted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unique_values</span><span class="p">))</span>
+    <span class="n">unique_sorted_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">unique_sorted_labels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sorted_indices</span><span class="p">:</span>
+        <span class="n">unique_sorted_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">unique_values</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span>
+        <span class="n">unique_sorted_labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">unique_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span>
+
+    <span class="c1"># Now we give them new ids and we want to create new z values</span>
+    <span class="c1"># For that we need a mapping from old to new</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">new</span><span class="p">,</span> <span class="n">old</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_sorted_values</span><span class="p">):</span>
+        <span class="n">mapping</span><span class="p">[</span><span class="n">old</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
+        <span class="n">v</span> <span class="o">+=</span> <span class="p">[</span><span class="n">new</span><span class="p">]</span>
+
+    <span class="n">z</span> <span class="o">=</span> <span class="n">values</span>
+    <span class="k">for</span> <span class="n">i1</span><span class="p">,</span> <span class="n">v1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i2</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v1</span><span class="p">):</span>
+            <span class="n">z</span><span class="p">[</span><span class="n">i1</span><span class="p">][</span><span class="n">i2</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapping</span><span class="p">[</span><span class="n">v2</span><span class="p">]</span>
+
+    <span class="n">n_intervals</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span>
+    <span class="n">n_intervals</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span> <span class="o">-</span> <span class="n">n_intervals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_intervals</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">n_intervals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">n_intervals</span><span class="p">]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_color</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">))]</span>
+
+    <span class="n">discrete_colorscale</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+        <span class="n">discrete_colorscale</span><span class="o">.</span><span class="n">extend</span><span class="p">([[</span><span class="n">n_intervals</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span> <span class="p">[</span><span class="n">n_intervals</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="n">k</span><span class="p">]]])</span>
+
+    <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">[</span><span class="n">k</span> <span class="p">:</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">ticktext</span> <span class="o">=</span> <span class="n">unique_sorted_labels</span>
+
+    <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+        <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+        <span class="n">showscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="n">discrete_colorscale</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">tickvals</span><span class="p">,</span> <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">ticktext</span><span class="p">,</span> <span class="s2">&quot;tickmode&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">},</span>
+        <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">zmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="prettify_label"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.prettify_label">[docs]</a><span class="k">def</span> <span class="nf">prettify_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a label and prettifies it. E.g. floats are shortened.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    label : Union[str, float, int]</span>
+<span class="sd">        Label, which should be prettified.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Prettified label.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;0.00&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">&quot;e-&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">format_float_scientific</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Replace 1.00e-03 to 1e-03</span>
+            <span class="k">if</span> <span class="s2">&quot;.00&quot;</span> <span class="ow">in</span> <span class="n">label</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.00&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Replace 1e-03 to 1e-3</span>
+            <span class="k">if</span> <span class="s2">&quot;e-0&quot;</span> <span class="ow">in</span> <span class="n">label</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;e-0&quot;</span><span class="p">,</span> <span class="s2">&quot;e-&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Round to 2 decimals</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_hyperparameter_ticks"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hyperparameter_ticks">[docs]</a><span class="k">def</span> <span class="nf">get_hyperparameter_ticks</span><span class="p">(</span>
+    <span class="n">hp</span><span class="p">:</span> <span class="n">Hyperparameter</span><span class="p">,</span>
+    <span class="n">additional_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ticks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">include_nan</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates tick data for both tickvals and ticktext. The background is that</span>
+<span class="sd">    you might have encoded data but you don&#39;t want to show all of them.</span>
+<span class="sd">    With this function, only 6 (default) values are shown. This behaviour is</span>
+<span class="sd">    ignored if `hp` is categorical.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hp : Hyperparameter</span>
+<span class="sd">        Hyperparameter to generate ticks from.</span>
+<span class="sd">    additional_values : Optional[List], optional</span>
+<span class="sd">        Additional values, which are forced in addition. By default None.</span>
+<span class="sd">    ticks : int, optional</span>
+<span class="sd">        Number of ticks, by default 6</span>
+<span class="sd">    include_nan : bool, optional</span>
+<span class="sd">        Whether &quot;nan&quot; as tick should be included. By default True.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[List, List]</span>
+<span class="sd">        tickvals and ticktext.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># This is basically the inverse of `encode_config`.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
+        <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">]</span>
+        <span class="n">ticktext</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
+        <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">CONSTANT_VALUE</span><span class="p">]</span>
+        <span class="n">ticktext</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">min_v</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">max_v</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">min_v</span><span class="p">]</span>
+
+        <span class="c1"># Get values for each tick</span>
+        <span class="n">factors</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">ticks</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">:</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_v</span> <span class="o">-</span> <span class="n">min_v</span><span class="p">))</span> <span class="o">+</span> <span class="n">min_v</span>
+            <span class="n">values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">new_v</span><span class="p">]</span>
+
+        <span class="n">values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">max_v</span><span class="p">]</span>
+
+        <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ticktext</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">inverse_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">inverse_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
+
+        <span class="c1"># Integers are rounded, so we map then back</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">IntegerHyperparameter</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">inverse_values</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
+                    <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                    <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">additional_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Now we add additional values</span>
+                <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">additional_values</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="n">NAN_VALUE</span><span class="p">):</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
+                            <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                            <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">inverse_values</span><span class="p">):</span>
+                <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">label</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">additional_values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Now we add additional values</span>
+                <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">additional_values</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="n">NAN_VALUE</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span>
+                    <span class="p">):</span>
+                        <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                        <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
+
+    <span class="n">ticktext</span> <span class="o">=</span> <span class="p">[</span><span class="n">prettify_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">ticktext</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">include_nan</span><span class="p">:</span>
+        <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">NAN_VALUE</span><span class="p">]</span>
+        <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">NAN_LABEL</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span></div>
+
+
+<div class="viewcode-block" id="get_hyperparameter_ticks_from_values"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values">[docs]</a><span class="k">def</span> <span class="nf">get_hyperparameter_ticks_from_values</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">forced</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ticks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates tick data for both values and labels. The background is that</span>
+<span class="sd">    you might have encoded data but you don&#39;t want to show all of them.</span>
+<span class="sd">    With this function, only 6 (default) values are shown. This behaviour is</span>
+<span class="sd">    ignored if `values` is a list of strings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    values : List</span>
+<span class="sd">        List of values.</span>
+<span class="sd">    labels : List</span>
+<span class="sd">        List of labels. Must be the same size as `values`.</span>
+<span class="sd">    forced : List[bool], optional</span>
+<span class="sd">        List of booleans. If True, displaying the particular tick is enforced.</span>
+<span class="sd">        Independent from `ticks`.</span>
+<span class="sd">    ticks : int, optional</span>
+<span class="sd">        Number of ticks and labels to show. By default 6.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[List, List]</span>
+<span class="sd">        Returns tickvals and ticktext as list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+    <span class="n">unique_values</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># df[hp_name].unique()</span>
+    <span class="n">unique_labels</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># df_labels[hp_name].unique()</span>
+    <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_values</span> <span class="ow">and</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_labels</span><span class="p">:</span>
+            <span class="n">unique_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">unique_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="n">return_all</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_values</span><span class="p">,</span> <span class="n">unique_values</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">v2</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Values have strings and non-strings.&quot;</span><span class="p">)</span>
+
+            <span class="n">return_all</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">ticktext</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># If we have less than x values, we also show them</span>
+    <span class="k">if</span> <span class="n">return_all</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_values</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">ticks</span><span class="p">:</span>
+        <span class="c1"># Make sure we don&#39;t have multiple (same) labels for the same value</span>
+        <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">unique_values</span><span class="p">,</span> <span class="n">unique_labels</span><span class="p">):</span>
+            <span class="n">tickvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">ticktext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Add min+max values</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">values</span><span class="p">)]:</span>
+            <span class="n">tickvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="n">ticktext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+        <span class="c1"># After we added min and max values, we want to add</span>
+        <span class="c1"># intermediate values too</span>
+        <span class="n">min_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">max_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># Get values for each tick</span>
+        <span class="n">factors</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">ticks</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">factor</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">:</span>
+            <span class="n">new_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_v</span> <span class="o">-</span> <span class="n">min_v</span><span class="p">))</span> <span class="o">+</span> <span class="n">min_v</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">unique_values</span> <span class="o">-</span> <span class="n">new_v</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">value</span> <span class="o">=</span> <span class="n">unique_values</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="n">unique_labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+            <span class="c1"># Ignore if they are already in the list</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
+                <span class="n">tickvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">ticktext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="c1"># Show forced ones</span>
+    <span class="k">if</span> <span class="n">forced</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">force</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">forced</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">force</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
+                <span class="n">tickvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">ticktext</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span></div>
+
+
+<span class="k">def</span> <span class="nf">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="s2">&quot;AbstractRun&quot;</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">config_id</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Retrieve the link for the config id</span>
+    <span class="kn">from</span> <span class="nn">deepcave.plugins.summary.configurations</span> <span class="kn">import</span> <span class="n">Configurations</span>
+
+    <span class="n">link</span> <span class="o">=</span> <span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
+
+    <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Configuration ID: &lt;a href=&#39;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&#39; style=&#39;color: #ffffff&#39;&gt;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/b&gt;&lt;br&gt;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+
+    <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
+
+    <span class="c1"># It&#39;s also nice to see the metrics</span>
+    <span class="n">objectives</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;No costs on highest budget available.&lt;br&gt;&quot;</span>
+        <span class="k">return</span> <span class="n">string</span>
+
+    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives (Budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">)&lt;/b&gt;&lt;br&gt;&quot;</span>
+    <span class="k">for</span> <span class="n">objective</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">costs</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+
+    <span class="k">return</span> <span class="n">string</span>
+
+
+<span class="k">def</span> <span class="nf">generate_config_code</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    from ConfigSpace.configuration_space import ConfigurationSpace, Configuration</span>
+<span class="s2">    from ConfigSpace.read_and_write import cs_json</span>
+
+<span class="s2">    # Create configspace</span>
+<span class="s2">    with open({{path}}, &#39;r&#39;) as f:</span>
+<span class="s2">        cs = cs_json.read(f.read())</span>
+
+<span class="s2">    # Create config</span>
+<span class="s2">    values = {{config_dict}}</span>
+<span class="s2">    config = Configuration(cs, values=values)</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">code</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Br</span><span class="p">()]</span>
+            <span class="k">continue</span>
+
+        <span class="n">count_trailing_spaces</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
+                <span class="n">count_trailing_spaces</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="n">count_trailing_tabs</span> <span class="o">=</span> <span class="p">(</span><span class="n">count_trailing_spaces</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="n">trailing_style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;margin-left&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">count_trailing_tabs</span><span class="o">*</span><span class="mi">2</span><span class="si">}</span><span class="s2">em&quot;</span><span class="p">}</span>
+        <span class="n">skip</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Check if variable inside</span>
+        <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;{{(.+?)}}&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                <span class="n">link</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">link</span> <span class="o">==</span> <span class="n">variable</span><span class="p">:</span>
+                    <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span>
+                        <span class="c1"># Add beginning</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Code</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()],</span> <span class="n">style</span><span class="o">=</span><span class="n">trailing_style</span><span class="p">),</span>
+                        <span class="c1"># Add variable</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Code</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span>
+                        <span class="c1"># Add ending</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Code</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="p">:]),</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Br</span><span class="p">(),</span>
+                    <span class="p">]</span>
+
+                    <span class="n">skip</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">skip</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Code</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">trailing_style</span><span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Br</span><span class="p">(),</span>
+        <span class="p">]</span>
+
+    <span class="n">components</span> <span class="o">=</span> <span class="n">components</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">components</span>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+4.5.0. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

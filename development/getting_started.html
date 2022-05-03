@@ -245,6 +245,21 @@ style="width: 100%;">
      deepcave.plugins
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -301,17 +316,21 @@ style="width: 100%;">
 </div>
 <p>You can start DeepCAVE with a specific configuration, which is in particular interest if you
 need to change the ips and ports:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ deepcave --start --config<span class="o">=</span>X
+</pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The configuration file is located in <code class="docutils literal notranslate"><span class="pre">configs/X.py</span></code>. The file <code class="docutils literal notranslate"><span class="pre">X.py</span></code> must specify a
-<cite>Config</cite> class.</p>
+<p>The configuration file is located in <code class="docutils literal notranslate"><span class="pre">configs/X.py</span></code>. The file <code class="docutils literal notranslate"><span class="pre">X.py</span></code> must implement a
+<span class="xref std std-ref">Config</span> class.</p>
 </div>
 <p>After hitting enter, you are automatically redirected to the interactive dashboard.
 In the dashboard, you will see the main page, in which you
 can select the runs you want to analyze. Please have a look at the following image
 to see the dashboard in action:</p>
 <img alt="_images/interface.png" src="_images/interface.png" />
-<p>DeepCAVE uses runs to interprete data. A run is a collection of trials (a configuration with associated costs).
+<p>&lt;br&gt;
+DeepCAVE uses runs to interprete data. A run is a collection of trials (a configuration with associated costs).
 Once valid runs (see <a class="reference internal" href="converters.html#converters"><span class="std std-ref">converter</span></a>) are found, you can select them to analyze them further.
 After selecting runs, you can also add them to groups to analyze combined runs easily.</p>
 </div>

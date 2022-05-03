@@ -1,0 +1,29 @@
+deepcave.evaluators.epm.random\_forest\_surrogate
+=================================================
+
+.. automodule:: deepcave.evaluators.epm.random_forest_surrogate
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      RandomForestSurrogate
+   
+   
+
+   
+   
+   
+
+
+
