@@ -48,7 +48,6 @@ If you have problems installing `redis-server` try the following steps:
 
     redis-server
 
-
 2. If you see something like `/usr/sbin/redis-server`, then you simply have to expand your path:
 
 .. code:: bash
@@ -58,14 +57,12 @@ If you have problems installing `redis-server` try the following steps:
 Consider adding this to your `~/.bashrc` file.
 Check if `redis-server` works now.
 
-
 3. If no `redis-server` was found, try to install it:
 
 .. code:: bash
 
-    sudo apt-get install redis-server  # linux
-    brew install redis  # mac
-
+    sudo apt-get install redis-server  # Linux
+    brew install redis  # Mac
 
 4. If there was no `redis-server` found and you do not have admin access,
 do the following inside the DeepCAVE root folder:

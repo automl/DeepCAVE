@@ -12,12 +12,13 @@ You can start DeepCAVE with a specific configuration, which is in particular int
 need to change the ips and ports:
 
 .. code:: bash
+
     $ deepcave --start --config=X
 
 
 .. note::
-    The configuration file is located in ``configs/X.py``. The file ``X.py`` must specify a
-    `Config` class.
+    The configuration file is located in ``configs/X.py``. The file ``X.py`` must implement a
+    :ref:`Config<Config>` class.
 
 
 After hitting enter, you are automatically redirected to the interactive dashboard.
@@ -27,7 +28,7 @@ to see the dashboard in action:
 
 .. image:: images/plugins/interface.png
 
-
+<br>
 DeepCAVE uses runs to interprete data. A run is a collection of trials (a configuration with associated costs).
 Once valid runs (see :ref:`converter<Converters>`) are found, you can select them to analyze them further.
 After selecting runs, you can also add them to groups to analyze combined runs easily.
