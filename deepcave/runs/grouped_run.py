@@ -125,7 +125,7 @@ class GroupedRun(AbstractRun):
         all_times = []
 
         for run in self.runs:
-            times, costs_mean, _, _ = run.get_trajectory(*args, **kwargs)
+            times, costs_mean, _, _, _ = run.get_trajectory(*args, **kwargs)
 
             # Cache st we don't calculate it multiple times
             run_costs.append(costs_mean)
@@ -159,4 +159,4 @@ class GroupedRun(AbstractRun):
         costs_mean = np.mean(all_costs, axis=1)
         costs_std = np.std(all_costs, axis=1)
 
-        return times, list(costs_mean), list(costs_std), []
+        return times, list(costs_mean), list(costs_std), [], []
