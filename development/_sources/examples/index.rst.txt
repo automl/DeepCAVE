@@ -67,10 +67,10 @@ AutoML runs.
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_minimal_run_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_minimal_thumb.png
      :alt: Record Minimal Run
 
-     :ref:`sphx_glr_examples_record_minimal_run.py`
+     :ref:`sphx_glr_examples_record_minimal.py`
 
 .. raw:: html
 
@@ -80,7 +80,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/minimal_run
+   /examples/record/minimal
 
 .. raw:: html
 
@@ -88,10 +88,10 @@ AutoML runs.
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_mlp_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_sklearn_thumb.png
      :alt: Multi-Layer Perceptron
 
-     :ref:`sphx_glr_examples_record_mlp.py`
+     :ref:`sphx_glr_examples_record_sklearn.py`
 
 .. raw:: html
 
@@ -101,7 +101,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/mlp
+   /examples/record/sklearn
 
 .. raw:: html
 
@@ -109,10 +109,10 @@ AutoML runs.
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_mlp_pytorch_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_pytorch_thumb.png
      :alt: Multi-Layer Perceptron via PyTorch
 
-     :ref:`sphx_glr_examples_record_mlp_pytorch.py`
+     :ref:`sphx_glr_examples_record_pytorch.py`
 
 .. raw:: html
 
@@ -122,7 +122,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/mlp_pytorch
+   /examples/record/pytorch
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
