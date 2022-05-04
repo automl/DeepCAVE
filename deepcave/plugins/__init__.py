@@ -3,6 +3,8 @@ from collections import defaultdict
 from typing import Any, Callable, Dict, List, Optional, Union, Tuple
 
 import copy
+import re
+import webbrowser
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
@@ -89,7 +91,7 @@ class Plugin(Layout, ABC):
         """
         from deepcave import config
 
-        return f"{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{cls.id}"
+        return f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{cls.id}"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
@@ -411,16 +413,16 @@ class Plugin(Layout, ABC):
             def go_to_configuration(click_data):  # type: ignore
                 if click_data is not None:
                     # Get hovertext
-                    hovertext = click_data["points"][0]["hovertext"]
+                    try:
+                        hovertext = click_data["points"][0]["hovertext"]
 
-                    # Now extract the link from href
-                    import re
-                    import webbrowser
-
-                    match = re.search("<a href='(.+?)'", hovertext)
-                    if match:
-                        link = match.group(1)
-                        webbrowser.open(link, new=0)
+                        # Now extract the link from href
+                        match = re.search("<a href='(.+?)'", hovertext)
+                        if match:
+                            link = match.group(1)
+                            webbrowser.open(link, new=0)
+                    except Exception:
+                        pass
 
                 return None
 
