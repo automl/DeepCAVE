@@ -543,7 +543,7 @@ class Plugin(Layout, ABC):
         if input:
             order = self.inputs
         else:
-            order = self.outputs
+            order = self.outputs  # type: ignore
 
         mapping: Dict[str, Any] = {}
         for value, (id, attribute, *_) in zip(values, order):
@@ -579,7 +579,7 @@ class Plugin(Layout, ABC):
         if input:
             order = self.inputs
         else:
-            order = self.outputs
+            order = self.outputs  # type: ignore
 
         result: List[Optional[str]] = []
         for (id, attribute, instance, *_) in order:
@@ -1193,7 +1193,6 @@ class Plugin(Layout, ABC):
         """
         pass
 
-    # @staticmethod
     @classmethod
     def generate_outputs(
         cls, runs: Union[AbstractRun, List[AbstractRun]], inputs: Dict[str, Any]
@@ -1221,7 +1220,8 @@ class Plugin(Layout, ABC):
                 return cls.process(runs, inputs)
             else:
                 raise RuntimeError(
-                    "The method `generate_outputs` accepts only one run because `activate_run_selection` is set."
+                    "The method `generate_outputs` accepts only one run because"
+                    "`activate_run_selection` is set."
                 )
         else:
             if not isinstance(runs, list):
