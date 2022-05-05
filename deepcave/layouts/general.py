@@ -285,8 +285,16 @@ class GeneralLayout(Layout):
 
                 if run_names is None or len(run_names) == 0:
                     continue
+                
+                valid_run_names = []
+                for run_name in run_names:
+                    if run_name in run_handler.get_selected_run_names():
+                        valid_run_names.append(run_name)
+                        
+                if len(valid_run_names) == 0:
+                    continue
 
-                groups[group_name] = run_names
+                groups[group_name] = valid_run_names
 
             try:
                 # Now save it
