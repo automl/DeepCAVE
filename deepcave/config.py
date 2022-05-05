@@ -29,7 +29,7 @@ class Config:
 
     @property
     def DEFAULT_WORKING_DIRECTORY(self) -> Path:
-        return self.root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
+        return self.root / "logs"
 
     @property
     def CACHE_DIR(self) -> Path:
