@@ -88,10 +88,10 @@ AutoML runs.
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_sklearn_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_digits_sklearn_thumb.png
      :alt: Multi-Layer Perceptron
 
-     :ref:`sphx_glr_examples_record_sklearn.py`
+     :ref:`sphx_glr_examples_record_digits_sklearn.py`
 
 .. raw:: html
 
@@ -101,7 +101,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/sklearn
+   /examples/record/digits_sklearn
 
 .. raw:: html
 
@@ -109,10 +109,10 @@ AutoML runs.
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_pytorch_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_mnist_pytorch_thumb.png
      :alt: Multi-Layer Perceptron via PyTorch
 
-     :ref:`sphx_glr_examples_record_pytorch.py`
+     :ref:`sphx_glr_examples_record_mnist_pytorch.py`
 
 .. raw:: html
 
@@ -122,7 +122,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/pytorch
+   /examples/record/mnist_pytorch
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

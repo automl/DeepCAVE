@@ -37,7 +37,7 @@
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Multi-Layer Perceptron" href="sklearn.html" />
+    <link rel="next" title="Multi-Layer Perceptron" href="digits_sklearn.html" />
     <link rel="prev" title="Example Call" href="../api/plugin.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -147,12 +147,12 @@ style="width: 100%;">
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="sklearn.html">
+    <a class="reference internal" href="digits_sklearn.html">
      Multi-Layer Perceptron
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="pytorch.html">
+    <a class="reference internal" href="mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
     </a>
    </li>
@@ -329,7 +329,7 @@ to download the full example code</p>
 
 <span class="n">accuracy</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="s2">&quot;upper&quot;</span><span class="p">)</span>
 <span class="n">time</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;logs/DeepCAVE&quot;</span>
+<span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;logs/DeepCAVE/minimal&quot;</span>
 
 <span class="k">with</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configspace</span><span class="o">.</span><span class="n">sample_configuration</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
@@ -367,7 +367,7 @@ to download the full example code</p>
             <p class="prev-next-title">Example Call</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="sklearn.html" title="next page">
+    <a class='right-next' id="next-link" href="digits_sklearn.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Multi-Layer Perceptron</p>

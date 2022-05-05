@@ -67,7 +67,7 @@ if __name__ == "__main__":
     # Others
     num_configs = 200
     num_runs = 5
-    save_path = "examples/record/logs/DeepCAVE/mlp"
+    save_path = "logs/DeepCAVE/digits_sklearn"
 
     for run_id in range(num_runs):
         configspace = get_configspace(run_id)

@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Multiple Runs" href="../templates/multiple_runs.html" />
-    <link rel="prev" title="Multi-Layer Perceptron" href="sklearn.html" />
+    <link rel="prev" title="Multi-Layer Perceptron" href="digits_sklearn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -147,7 +147,7 @@ style="width: 100%;">
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="sklearn.html">
+    <a class="reference internal" href="digits_sklearn.html">
      Multi-Layer Perceptron
     </a>
    </li>
@@ -310,13 +310,16 @@ style="width: 100%;">
                 
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-record-pytorch-py"><span class="std std-ref">here</span></a>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-record-mnist-pytorch-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
 <div class="sphx-glr-example-title section" id="multi-layer-perceptron-via-pytorch">
-<span id="sphx-glr-examples-record-pytorch-py"></span><h1>Multi-Layer Perceptron via PyTorch<a class="headerlink" href="#multi-layer-perceptron-via-pytorch" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-record-mnist-pytorch-py"></span><h1>Multi-Layer Perceptron via PyTorch<a class="headerlink" href="#multi-layer-perceptron-via-pytorch" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">BoundArguments</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">re</span> <span class="kn">import</span> <span class="n">T</span>
+<span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">t</span>
+<span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">ConfigSpace</span> <span class="k">as</span> <span class="nn">CS</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
@@ -325,6 +328,7 @@ to download the full example code</p>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
@@ -334,6 +338,9 @@ to download the full example code</p>
 <span class="kn">from</span> <span class="nn">torchmetrics</span> <span class="kn">import</span> <span class="n">Accuracy</span>
 <span class="kn">from</span> <span class="nn">torchvision.datasets</span> <span class="kn">import</span> <span class="n">MNIST</span>
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
+
+
+<span class="n">NUM_WORKERS</span> <span class="o">=</span> <span class="mi">16</span>
 
 
 <span class="k">class</span> <span class="nc">MNISTModel</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
@@ -383,13 +390,13 @@ to download the full example code</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">mnist_test</span> <span class="o">=</span> <span class="n">MNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_val</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_val</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">test_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mnist_test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="n">NUM_WORKERS</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
@@ -520,9 +527,10 @@ to download the full example code</p>
     <span class="c1"># Others</span>
     <span class="n">num_configs</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="n">num_runs</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;examples/record/logs/DeepCAVE/pytorch&quot;</span>
+    <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;logs/DeepCAVE/mnist_pytorch&quot;</span>
 
     <span class="k">for</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_runs</span><span class="p">):</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
         <span class="n">configspace</span> <span class="o">=</span> <span class="n">get_configspace</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
 
         <span class="k">with</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
@@ -546,6 +554,7 @@ to download the full example code</p>
                 <span class="k">elif</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cnn&quot;</span><span class="p">:</span>
                     <span class="n">model</span> <span class="o">=</span> <span class="n">CNN</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
+                <span class="n">start_time</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">):</span>
                     <span class="n">budget</span> <span class="o">=</span> <span class="n">budgets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                     <span class="c1"># How many epochs has to be run in this round</span>
@@ -556,9 +565,10 @@ to download the full example code</p>
 
                     <span class="c1"># The model weights are trained</span>
                     <span class="n">trainer</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
+                        <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span><span class="p">,</span>
+                        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                         <span class="n">num_sanity_val_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># No validation sanity</span>
                         <span class="n">auto_scale_batch_size</span><span class="o">=</span><span class="s2">&quot;power&quot;</span><span class="p">,</span>
-                        <span class="n">gpus</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                         <span class="n">deterministic</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                         <span class="n">min_epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
                         <span class="n">max_epochs</span><span class="o">=</span><span class="n">epochs</span><span class="p">,</span>
@@ -568,16 +578,30 @@ to download the full example code</p>
                     <span class="n">accuracy_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;val_acc&quot;</span><span class="p">]</span>
                     <span class="n">loss_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;val_loss&quot;</span><span class="p">]</span>
 
-                    <span class="n">r</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy_</span><span class="p">,</span> <span class="n">loss_</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+                    <span class="c1"># We just add some random stati to show the potential later in DeepCAVE</span>
+                    <span class="k">if</span> <span class="n">accuracy_</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
+                        <span class="n">accuracy_</span><span class="p">,</span> <span class="n">loss_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                    <span class="k">elif</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">:</span>  <span class="c1"># 5% chance</span>
+                        <span class="n">statusses</span> <span class="o">=</span> <span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">MEMORYOUT</span><span class="p">,</span> <span class="n">Status</span><span class="o">.</span><span class="n">TIMEOUT</span><span class="p">]</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">statusses</span><span class="p">)</span>
+                        <span class="n">accuracy_</span><span class="p">,</span> <span class="n">loss_</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span>
+
+                    <span class="n">end_time</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+                    <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+
+                    <span class="n">r</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy_</span><span class="p">,</span> <span class="n">loss_</span><span class="p">,</span> <span class="n">elapsed_time</span><span class="p">],</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-record-pytorch-py">
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-record-mnist-pytorch-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/2bbbd0bde344b791f61dfcbdca74fd37/pytorch.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">pytorch.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/2769ed1bb81a7c36ce249476914fbf92/mnist_pytorch.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">mnist_pytorch.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/eef931d4d5f460fc32197e4715b0f9c1/pytorch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">pytorch.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/bdc2709d62468d73e63248ef71ebc760/mnist_pytorch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">mnist_pytorch.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -589,7 +613,7 @@ to download the full example code</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="sklearn.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="digits_sklearn.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>

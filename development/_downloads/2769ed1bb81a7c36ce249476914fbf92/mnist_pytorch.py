@@ -7,6 +7,9 @@ Multi-Layer Perceptron via PyTorch
 
 from inspect import BoundArguments
 import os
+from re import T
+import time as t
+import random
 import ConfigSpace as CS
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
@@ -15,6 +18,7 @@ from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
 )
 from deepcave import Recorder, Objective
+from deepcave.runs import Status
 import numpy as np
 import torch
 import torch.nn as nn
@@ -24,6 +28,9 @@ import torchvision.transforms as transforms
 from torchmetrics import Accuracy
 from torchvision.datasets import MNIST
 import pytorch_lightning as pl
+
+
+NUM_WORKERS = 16
 
 
 class MNISTModel(pl.LightningModule):
@@ -73,13 +80,13 @@ class MNISTModel(pl.LightningModule):
             self.mnist_test = MNIST(self.data_dir, train=False, transform=self.transform)
 
     def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=self.batch_size)
+        return DataLoader(self.mnist_train, batch_size=self.batch_size, num_workers=NUM_WORKERS)
 
     def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=self.batch_size)
+        return DataLoader(self.mnist_val, batch_size=self.batch_size, num_workers=NUM_WORKERS)
 
     def test_dataloader(self):
-        return DataLoader(self.mnist_test, batch_size=self.batch_size)
+        return DataLoader(self.mnist_test, batch_size=self.batch_size, num_workers=NUM_WORKERS)
 
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -210,9 +217,10 @@ if __name__ == "__main__":
     # Others
     num_configs = 1000
     num_runs = 3
-    save_path = "examples/record/logs/DeepCAVE/pytorch"
+    save_path = "logs/DeepCAVE/mnist_pytorch"
 
     for run_id in range(num_runs):
+        random.seed(run_id)
         configspace = get_configspace(run_id)
 
         with Recorder(configspace, objectives=[accuracy, loss, time], save_path=save_path) as r:
@@ -236,6 +244,7 @@ if __name__ == "__main__":
                 elif config["model"] == "cnn":
                     model = CNN(**kwargs)  # type: ignore
 
+                start_time = t.time()
                 for i in range(1, n_epochs):
                     budget = budgets[i]
                     # How many epochs has to be run in this round
@@ -246,9 +255,10 @@ if __name__ == "__main__":
 
                     # The model weights are trained
                     trainer = pl.Trainer(
+                        accelerator="gpu",
+                        devices=1,
                         num_sanity_val_steps=0,  # No validation sanity
                         auto_scale_batch_size="power",
-                        gpus=0,
                         deterministic=True,
                         min_epochs=epochs,
                         max_epochs=epochs,
@@ -258,4 +268,18 @@ if __name__ == "__main__":
                     accuracy_ = result[0]["val_acc"]
                     loss_ = result[0]["val_loss"]
 
-                    r.end(costs=[accuracy_, loss_, None])
+                    # We just add some random stati to show the potential later in DeepCAVE
+                    if accuracy_ < 0.5:
+                        status = Status.CRASHED
+                        accuracy_, loss_ = None, None
+                    elif random.uniform(0, 1) < 0.05:  # 5% chance
+                        statusses = [Status.MEMORYOUT, Status.TIMEOUT]
+                        status = random.choice(statusses)
+                        accuracy_, loss_ = None, None
+                    else:
+                        status = Status.SUCCESS
+
+                    end_time = t.time()
+                    elapsed_time = end_time - start_time
+
+                    r.end(costs=[accuracy_, loss_, elapsed_time], status=status)

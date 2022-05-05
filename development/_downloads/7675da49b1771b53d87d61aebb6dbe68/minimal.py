@@ -19,7 +19,7 @@ configspace.add_hyperparameters([alpha, beta])
 
 accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
 time = Objective("time")
-save_path = "logs/DeepCAVE"
+save_path = "logs/DeepCAVE/minimal"
 
 with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as r:
     for config in configspace.sample_configuration(100):
