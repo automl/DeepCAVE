@@ -9,19 +9,25 @@
             "optimize": "upper"
         },
         {
+            "name": "loss",
+            "lower": 0,
+            "upper": 45.03530502319336,
+            "lock_lower": true,
+            "lock_upper": false,
+            "optimize": "lower"
+        },
+        {
             "name": "time",
             "lower": 0,
-            "upper": 6.1966540813446045,
+            "upper": 104.99276733398438,
             "lock_lower": true,
             "lock_upper": false,
             "optimize": "lower"
         }
     ],
     "budgets": [
-        1,
-        2,
-        3,
-        4,
-        5
+        2.6666666666666665,
+        5.333333333333333,
+        8.0
     ]
 }
