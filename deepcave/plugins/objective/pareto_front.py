@@ -126,6 +126,7 @@ class ParetoFront(DynamicPlugin):
         points = np.array(points)
         config_ids = np.array(config_ids)
 
+        # Sort the points s.t. x axis is monotonically increasing
         sorted_idx = np.argsort(points[:, 0])
         points = points[sorted_idx]
         config_ids = config_ids[sorted_idx]
@@ -168,11 +169,11 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
-
         traces = []
         for idx, run in enumerate(runs):
             points = np.array(outputs[run.id]["points"])
             config_ids = outputs[run.id]["config_ids"]
+            pareto_config_ids = []
 
             x, y = [], []
             x_pareto, y_pareto = [], []
@@ -182,6 +183,7 @@ class ParetoFront(DynamicPlugin):
                 if pareto:
                     x_pareto += [points[point_idx][0]]
                     y_pareto += [points[point_idx][1]]
+                    pareto_config_ids += [config_ids[point_idx]]
                 else:
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
@@ -213,7 +215,7 @@ class ParetoFront(DynamicPlugin):
             else:
                 line_shape = "hv"
 
-            hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+            hovertext = [get_hovertext_from_config(run, config_id) for config_id in pareto_config_ids]
 
             traces.append(
                 go.Scatter(
