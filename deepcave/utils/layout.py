@@ -14,7 +14,6 @@ def render_table(df):
 
 
 def render_mpl_figure(fig):
-    # TODO(dwoiwode): Duplicate code (see below + ./util.py)?
     # create a virtual file which matplotlib can use to save the figure
     buffer = io.BytesIO()
     # save the image to memory to display in the web
@@ -23,18 +22,7 @@ def render_mpl_figure(fig):
     # display any kind of image taken from
     # https://github.com/plotly/dash/issues/71
     encoded_image = base64.b64encode(buffer.read())
-    return html.Img(
-        src="data:image/png;base64,{}".format(encoded_image.decode()),
-        className="img-fluid",
-    )
-
-
-def display_figure(fig):
-    # TODO(dwoiwode): Duplicate code (see above + ./util.py)?
-    buf = io.BytesIO()  # in-memory files
-    fig.savefig(buf, format="png")  # save to the above file object
-    data = base64.b64encode(buf.getbuffer()).decode("utf8")  # encode to html elements
-    return html.Img(src="data:image/png;base64,{}".format(data))
+    return "data:image/png;base64,{}".format(encoded_image.decode())
 
 
 def get_slider_marks(

@@ -68,7 +68,7 @@ if any(file in _exec_file for file in _exec_files):
         if "server.py" == _exec_file:
             # Open the link in browser
             def open_browser() -> None:
-                webbrowser.open_new(f"{config.DASH_ADDRESS}:{config.DASH_PORT}")
+                webbrowser.open_new(f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}")
 
             Timer(1, open_browser).start()
 

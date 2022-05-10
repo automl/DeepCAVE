@@ -169,3 +169,5 @@ examples/record/_*
 datasets
 lightning_logs
 vendors
+
+file_system_store

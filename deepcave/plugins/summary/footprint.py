@@ -1,17 +1,17 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict
 
 import dash_bootstrap_components as dbc
-import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
 from deepcave.plugins.static import StaticPlugin
-from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun, check_equality
-from deepcave.utils.data_structures import update_dict
-from deepcave.utils.layout import get_radio_options, get_select_options, get_slider_marks
+from deepcave.utils.layout import (
+    get_select_options,
+    render_mpl_figure,
+)
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 from deepcave.evaluators.footprint import Footprint as Evaluator
+from deepcave.utils.styled_plot import plt
 
 
 class FootPrint(StaticPlugin):
@@ -139,20 +139,22 @@ class FootPrint(StaticPlugin):
     def process(run, inputs) -> Dict[str, Any]:
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
-        details = 1 - inputs["details"]
+        details = inputs["details"]
 
         # Initialize the evaluator
         evaluator = Evaluator(run)
         evaluator.calculate(objective, budget)
 
-        data = evaluator.get_surface(details=details)
+        performance_data = evaluator.get_surface(details=details, performance=True)
+        area_data = evaluator.get_surface(details=details, performance=False)
         config_points = evaluator.get_points("configs")
         border_points = evaluator.get_points("borders")
         support_points = evaluator.get_points("supports")
         incumbent_points = evaluator.get_points("incumbents")
 
         return {
-            "data": data,
+            "performance_data": performance_data,
+            "area_data": area_data,
             "config_points": config_points,
             "border_points": border_points,
             "support_points": support_points,
@@ -161,7 +163,34 @@ class FootPrint(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": "50vh"})
+        return dbc.Tabs(
+            [
+                dbc.Tab(
+                    dcc.Graph(id=register("performance", "figure"), style={"height": "50vh"}),
+                    label="Performance",
+                ),
+                dbc.Tab(
+                    dcc.Graph(id=register("area", "figure"), style={"height": "50vh"}),
+                    label="Coverage",
+                    style={"height": "50vh"},
+                ),
+            ]
+        )
+
+    @staticmethod
+    def get_mpl_output_layout(register):
+        return html.Div(
+            [
+                html.Img(
+                    id=register("performance", "src"),
+                    className="img-fluid",
+                ),
+                html.Img(
+                    id=register("area", "src"),
+                    className="img-fluid",
+                ),
+            ]
+        )
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -170,13 +199,12 @@ class FootPrint(StaticPlugin):
         show_supports = inputs["show_supports"] == "true"
 
         traces = []
-        x_, y_, z_ = outputs["data"]
 
         # First add the Heatmap
-        data = go.Heatmap(
-            x=x_,
-            y=y_,
-            z=z_,
+        performance_data = go.Heatmap(
+            x=outputs["performance_data"][0],
+            y=outputs["performance_data"][1],
+            z=outputs["performance_data"][2],
             zsmooth="best",
             hoverinfo="skip",
             colorbar=dict(
@@ -185,20 +213,35 @@ class FootPrint(StaticPlugin):
             ),
             colorscale="viridis",
         )
-        traces += [data]
+
+        area_data = go.Heatmap(
+            x=outputs["area_data"][0],
+            y=outputs["area_data"][1],
+            z=outputs["area_data"][2],
+            zsmooth="best",
+            hoverinfo="skip",
+            colorbar=dict(
+                len=0.5,
+                title="Valid Configspace Area",
+            ),
+            colorscale="viridis",
+        )
 
         point_names = ["Configuration", "Incumbent"]
         point_values = ["config_points", "incumbent_points"]
+        point_color_ids = [0, 1]
 
         if show_borders:
             point_names += ["Border Configuration"]
             point_values += ["border_points"]
+            point_color_ids += [2]
         if show_supports:
             point_names += ["Random (unevaluated) Configuration"]
             point_values += ["support_points"]
+            point_color_ids += [3]
 
         # Now add the points
-        for name, points in zip(point_names, point_values):
+        for name, points, color_id in zip(point_names, point_values, point_color_ids):
             x, y, config_ids = outputs[points]
             size = 5
             marker_symbol = "x"
@@ -212,7 +255,7 @@ class FootPrint(StaticPlugin):
                     y=y,
                     mode="markers",
                     marker_symbol=marker_symbol,
-                    marker={"size": size},
+                    marker={"size": size, "color": get_color(color_id)},
                     hovertext=[
                         get_hovertext_from_config(run, config_id) for config_id in config_ids
                     ],
@@ -225,4 +268,58 @@ class FootPrint(StaticPlugin):
             yaxis=dict(title="MDS Y-Axis", tickvals=[]),
         )
 
-        return go.Figure(data=traces, layout=layout)
+        return [
+            go.Figure(data=[performance_data] + traces, layout=layout),
+            go.Figure(data=[area_data] + traces, layout=layout),
+        ]
+
+    @staticmethod
+    def load_mpl_outputs(run, inputs, outputs):
+        objective = run.get_objective(inputs["objective_id"])
+        show_borders = inputs["show_borders"] == "true"
+        show_supports = inputs["show_supports"] == "true"
+
+        images = []
+        for data in ["performance", "area"]:
+            x_, y_, z_ = outputs[data + "_data"]
+
+            plt.figure(1, 1, 200)
+            plt.grid(False)
+            plt.contourf(x_, y_, z_, cmap="viridis")
+            cb = plt.colorbar()
+
+            if data == "performance":
+                cb.ax.set_title(objective["name"])
+            else:
+                cb.ax.set_title("Valid Area")
+
+            point_names = ["Configuration", "Incumbent"]
+            point_values = ["config_points", "incumbent_points"]
+
+            if show_borders:
+                point_names += ["Border Configuration"]
+                point_values += ["border_points"]
+            if show_supports:
+                point_names += ["Random Configuration"]
+                point_values += ["support_points"]
+
+            # Now add the points
+            for id, (name, points) in enumerate(zip(point_names, point_values)):
+                x, y, config_ids = outputs[points]
+                size = 5
+                marker_symbol = "X"
+                if points == "incumbent_points":
+                    size = 10
+                    marker_symbol = "^"
+
+                color = get_color(id, mpl=True)
+                plt.scatter(x, y, marker=marker_symbol, s=size, label=name, c=color)
+
+            plt.axis("off")
+            plt.xlabel("MDS X-Axis")
+            plt.ylabel("MDS Y-Axis")
+            plt.legend()
+
+            images += [render_mpl_figure(plt)]
+
+        return images

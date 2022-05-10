@@ -440,7 +440,7 @@ class AbstractRun(ABC):
 
     def get_incumbent(
         self,
-        objectives: Optional[List[Objective]] = None,
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
         budget: Optional[Union[int, float]] = None,
         statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Tuple[Configuration, float]:
@@ -449,7 +449,7 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        objectives : Optional[List[Objective]], optional
+        objectives : Optional[Union[Objective, List[Objective]]], optional
             Considerd objectives. By default None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.

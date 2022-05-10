@@ -34,13 +34,18 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     return int(r_hex, 16), int(g_hex, 16), int(b_hex, 16)
 
 
-def get_color(id_: int, alpha: float = 1) -> str:
+def get_color(
+    id_: int, alpha: float = 1, mpl: bool = False
+) -> Union[str, Tuple[float, float, float, float]]:
     """
     Currently (Plotly version 5.3.1) there are 10 possible colors.
     """
     color = px.colors.qualitative.Plotly[id_]
 
     r, g, b = hex_to_rgb(color)
+
+    if mpl:
+        return (r / 255, g / 255, b / 255, alpha)
 
     return f"rgba({r}, {g}, {b}, {alpha})"
 
