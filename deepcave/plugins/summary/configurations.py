@@ -23,6 +23,14 @@ class Configurations(DynamicPlugin):
     use_cache = False
 
     @staticmethod
+    def check_run_compatibility(run: AbstractRun) -> bool:
+        # We don't support groups here
+        if run.prefix == "group":
+            return False
+        
+        return True
+
+    @staticmethod
     def get_link(run: AbstractRun, config_id: int) -> str:
         """
         Creates a link to a specific configuration.

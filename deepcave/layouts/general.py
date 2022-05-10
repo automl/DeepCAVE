@@ -272,29 +272,29 @@ class GeneralLayout(Layout):
         ]
 
         @app.callback(outputs, inputs)
-        def callback(group_names, all_run_names):
+        def callback(group_names, all_run_paths):
             # Abort on page load
             if self._refresh_groups:
                 self._refresh_groups = False
                 raise PreventUpdate()
 
             groups = {}
-            for group_name, run_names in zip(group_names, all_run_names):
+            for group_name, run_paths in zip(group_names, all_run_paths):
                 if group_name is None or group_name == "":
                     continue
 
-                if run_names is None or len(run_names) == 0:
+                if run_paths is None or len(run_paths) == 0:
                     continue
                 
-                valid_run_names = []
-                for run_name in run_names:
-                    if run_name in run_handler.get_selected_run_names():
-                        valid_run_names.append(run_name)
-                        
-                if len(valid_run_names) == 0:
+                valid_run_paths = []
+                for run_path in run_paths:
+                    if run_path in run_handler.get_selected_run_paths():
+                        valid_run_paths.append(run_path)
+
+                if len(valid_run_paths) == 0:
                     continue
 
-                groups[group_name] = valid_run_names
+                groups[group_name] = valid_run_paths
 
             try:
                 # Now save it
