@@ -293,14 +293,21 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.utils.configspace</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterator</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">Configuration</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">CategoricalHyperparameter</span><span class="p">,</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">OrdinalHyperparameter</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
+    <span class="n">Constant</span><span class="p">,</span>
+    <span class="n">OrdinalHyperparameter</span><span class="p">,</span>
+    <span class="n">IntegerHyperparameter</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.util</span> <span class="kn">import</span> <span class="n">deactivate_inactive_hyperparameters</span>
 
 
-<div class="viewcode-block" id="get_border_configs"><a class="viewcode-back" href="../../../api/deepcave.utils.configspace.html#deepcave.utils.configspace.get_border_configs">[docs]</a><span class="k">def</span> <span class="nf">get_border_configs</span><span class="p">(</span><span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Configuration</span><span class="p">]:</span>
+<div class="viewcode-block" id="sample_border_config"><a class="viewcode-back" href="../../../api/deepcave.utils.configspace.html#deepcave.utils.configspace.sample_border_config">[docs]</a><span class="k">def</span> <span class="nf">sample_border_config</span><span class="p">(</span><span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Configuration</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Generates border configurations from the configuration space.</span>
 
 <span class="sd">    Parameters</span>
@@ -313,7 +320,6 @@ style="width: 100%;">
 <span class="sd">    configs : List[Config]</span>
 <span class="sd">        List with the border configurations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">hp_borders</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># [[0, 1], [0], [0, 1, 2], ...]</span>
 
     <span class="c1"># Iterates over the hyperparameters to get considered values</span>
@@ -339,7 +345,6 @@ style="width: 100%;">
     <span class="c1"># Now we have to check if they are valid</span>
     <span class="c1"># because it might be that conditions are not met</span>
     <span class="c1"># (e.g. if parent is inactive, then the childs are in active too)</span>
-    <span class="n">configs</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">config_values</span><span class="p">):</span>
         <span class="c1"># We need a dictionary to initialize the configuration</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -347,16 +352,79 @@ style="width: 100%;">
             <span class="n">d</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+            <span class="c1"># config = Configuration(configspace, d)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">deactivate_inactive_hyperparameters</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">configspace</span><span class="p">)</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">is_valid_configuration</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">yield</span> <span class="n">config</span></div>
+
+    <span class="c1"># return configs</span>
+
+
+<span class="k">def</span> <span class="nf">sample_random_config</span><span class="p">(</span>
+    <span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">d</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Configuration</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configspace</span><span class="o">.</span><span class="n">sample_configuration</span><span class="p">(</span><span class="mi">99999</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">config</span>
+
+        <span class="k">return</span>
+
+    <span class="n">hp_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Iterates over the hyperparameters to get considered values</span>
+    <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
+            <span class="n">borders</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
+            <span class="n">borders</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">OrdinalHyperparameter</span><span class="p">):</span>
+            <span class="n">borders</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">sequence</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">border_value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">lower</span>
+                <span class="k">while</span> <span class="n">border_value</span> <span class="o">&lt;</span> <span class="n">hp</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>
+                    <span class="n">borders</span> <span class="o">+=</span> <span class="p">[</span><span class="n">border_value</span><span class="p">]</span>
+                    <span class="n">border_value</span> <span class="o">=</span> <span class="n">border_value</span> <span class="o">*</span> <span class="mi">10</span>
+
+                <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">upper</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">borders</span><span class="p">:</span>
+                    <span class="n">borders</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">upper</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">IntegerHyperparameter</span><span class="p">):</span>
+                <span class="n">borders</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">borders</span><span class="p">]</span>
+
+        <span class="n">hp_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">borders</span><span class="p">)</span>
+
+    <span class="c1"># Generate all combinations of the selected hyperparameter values</span>
+    <span class="n">config_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">hp_values</span><span class="p">))</span>
+
+    <span class="c1"># Shuffle the list</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">config_values</span><span class="p">)</span>
+
+    <span class="c1"># Now we have to check if they are valid</span>
+    <span class="c1"># because it might be that conditions are not met</span>
+    <span class="c1"># (e.g. if parent is inactive, then the childs are in active too)</span>
+    <span class="n">configs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">config_values</span><span class="p">):</span>
+        <span class="c1"># We need a dictionary to initialize the configuration</span>
+        <span class="n">config_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">(),</span> <span class="n">values</span><span class="p">):</span>
+            <span class="n">config_dict</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">deactivate_inactive_hyperparameters</span><span class="p">(</span><span class="n">config_dict</span><span class="p">,</span> <span class="n">configspace</span><span class="p">)</span>
             <span class="n">config</span><span class="o">.</span><span class="n">is_valid_configuration</span><span class="p">()</span>
             <span class="n">configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">limit</span><span class="p">:</span>
-            <span class="k">break</span>
-
-    <span class="k">return</span> <span class="n">configs</span></div>
+        <span class="k">yield</span> <span class="n">config</span>
 </pre></div>
 
               </div>

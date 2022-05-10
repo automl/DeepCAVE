@@ -13,7 +13,8 @@ deepcave.utils.configspace
 
    .. autosummary::
    
-      get_border_configs
+      sample_border_config
+      sample_random_config
    
    
 

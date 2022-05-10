@@ -294,13 +294,19 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.utils.styled_plot</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">distutils.spawn</span> <span class="kn">import</span> <span class="n">find_executable</span>
 
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Agg&quot;</span><span class="p">)</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
+<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
 <span class="c1"># IEEETrans double column standard</span>
 <span class="n">FIG_WIDTH</span> <span class="o">=</span> <span class="mf">252.0</span> <span class="o">/</span> <span class="mf">72.27</span>  <span class="c1"># 1pt is 1/72.27 inches</span>
 <span class="n">FIG_HEIGHT</span> <span class="o">=</span> <span class="n">FIG_WIDTH</span> <span class="o">/</span> <span class="mf">1.618</span>  <span class="c1"># golden ratio</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="StyledPlot"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot">[docs]</a><span class="k">class</span> <span class="nc">StyledPlot</span><span class="p">:</span>
@@ -313,13 +319,16 @@ style="width: 100%;">
         <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;seaborn&quot;</span><span class="p">)</span>
 
         <span class="c1"># Set MatPlotLib defaults</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;text.usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;font.serif&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Computer Modern&quot;</span><span class="p">],</span>
-            <span class="p">}</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">find_executable</span><span class="p">(</span><span class="s2">&quot;latex&quot;</span><span class="p">):</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;text.usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;font.serif&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Computer Modern&quot;</span><span class="p">],</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;LaTeX not found. Using default font.&quot;</span><span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;xtick&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;ytick&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
@@ -329,8 +338,8 @@ style="width: 100%;">
 
         <span class="bp">self</span><span class="o">.</span><span class="n">plt</span> <span class="o">=</span> <span class="n">plt</span>
 
-    <span class="k">def</span> <span class="nf">figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">FIG_WIDTH</span> <span class="o">*</span> <span class="n">cols</span><span class="p">,</span> <span class="n">FIG_HEIGHT</span> <span class="o">*</span> <span class="n">rows</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="n">FIG_WIDTH</span> <span class="o">*</span> <span class="n">cols</span><span class="p">,</span> <span class="n">FIG_HEIGHT</span> <span class="o">*</span> <span class="n">rows</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">save_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
@@ -380,7 +389,7 @@ style="width: 100%;">
                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
             <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outside</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;ncol&quot;</span><span class="p">:</span> <span class="n">cols</span><span class="p">,</span>
             <span class="s2">&quot;columnspacing&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span>
@@ -393,6 +402,9 @@ style="width: 100%;">
             <span class="s2">&quot;facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
             <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
         <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">loc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">loc</span>
 
         <span class="k">if</span> <span class="n">outside</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="s2">&quot;upper left&quot;</span><span class="p">,</span> <span class="s2">&quot;bbox_to_anchor&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)})</span>

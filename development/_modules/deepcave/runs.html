@@ -735,7 +735,7 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="AbstractRun.get_incumbent"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_incumbent">[docs]</a>    <span class="k">def</span> <span class="nf">get_incumbent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
@@ -744,7 +744,7 @@ style="width: 100%;">
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        objectives : Optional[List[Objective]], optional</span>
+<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]], optional</span>
 <span class="sd">            Considerd objectives. By default None. If None, all objectives are considered.</span>
 <span class="sd">        budget : Optional[Union[int, float]], optional</span>
 <span class="sd">            Considered budget. By default None. If None, the highest budget is chosen.</span>
