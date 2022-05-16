@@ -13,24 +13,26 @@ First, make sure you have
 computer.
 
 If you are on an Non-Intel Mac you have to add
-```
+```bash
 export DISABLE_SPRING=true
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 ```
 to your ```~/.bash_profile``` to enable multi-processing.
 
 Afterwards, follow the instructions:
-```
+```bash
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
+
 conda env create -f environment.yml
 conda activate DeepCAVE
+
 make install
 ```
 to your ```~/.bash_profile``` to enable multi-processing.
 
 If you want to contribute to DeepCAVE also install the dev packages:
-```
+```bash
 make install-dev
 ```
 
@@ -39,7 +41,7 @@ make install-dev
 
 In the following, a minimal example is given to show the simplicity yet powerful API to record runs.
 
-```
+```python
 import ConfigSpace as CS
 from deep_cave import Recorder, Objective
 
@@ -64,7 +66,7 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 ## Visualizing and Evaluating
 
 The webserver as well as the queue/workers can be started by running
-```
+```bash
 deepcave --start
 ```
 
