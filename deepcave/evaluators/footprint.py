@@ -166,9 +166,13 @@ class Footprint:
             if tries >= retries:
                 break
 
-            # Or if we reach more than 5000 (otherwise it takes too long)
+            # Or if we reach more than 4000 (otherwise it takes too long)
             assert self._distances is not None
-            if self._distances.shape[0] > 5000:
+            
+            if self._distances.shape[0] % 100:
+                logger.info(f"{self._distances.shape[0]} configurations already added...")
+            
+            if self._distances.shape[0] > 4000:
                 break
 
         assert self._distances is not None

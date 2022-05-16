@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from typing import Generator, List, Optional, Iterator
-from itertools import product
+from itertools import islice, product
 from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -25,47 +25,35 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
     configs : List[Config]
         List with the border configurations.
     """
-    hp_borders = []  # [[0, 1], [0], [0, 1, 2], ...]
 
-    # Iterates over the hyperparameters to get considered values
-    for hp in configspace.get_hyperparameters():
-        if isinstance(hp, CategoricalHyperparameter):
-            borders = hp.choices
-        elif isinstance(hp, Constant):
-            borders = [hp.value]
-        elif isinstance(hp, OrdinalHyperparameter):
-            borders = [hp.sequence[0], hp.sequence[-1]]
-        else:
-            borders = [hp.lower, hp.upper]
+    rng = np.random.RandomState(0)
 
-        hp_borders.append(borders)
+    while True:
+        config = {}
+        # Iterates over the hyperparameters to get considered values
+        for hp_name, hp in zip(
+            configspace.get_hyperparameter_names(), configspace.get_hyperparameters()
+        ):
+            if isinstance(hp, CategoricalHyperparameter):
+                borders = list(hp.choices)
+            elif isinstance(hp, Constant):
+                borders = [hp.value]
+            elif isinstance(hp, OrdinalHyperparameter):
+                borders = [hp.sequence[0], hp.sequence[-1]]
+            else:
+                borders = [hp.lower, hp.upper]
 
-    # Generate all combinations of the selected hyperparameter values
-    config_values = list(product(*hp_borders))
-
-    # Shuffle the list
-    random.seed(0)
-    random.shuffle(config_values)
-
-    # Now we have to check if they are valid
-    # because it might be that conditions are not met
-    # (e.g. if parent is inactive, then the childs are in active too)
-    for i, values in enumerate(config_values):
-        # We need a dictionary to initialize the configuration
-        d = {}
-        for hp_name, value in zip(configspace.get_hyperparameter_names(), values):
-            d[hp_name] = value
+            # Get a random choice
+            value = rng.choice(borders)
+            config[hp_name] = value
 
         try:
-            # config = Configuration(configspace, d)
-            config = deactivate_inactive_hyperparameters(d, configspace)
+            config = deactivate_inactive_hyperparameters(config, configspace)
             config.is_valid_configuration()
         except Exception:
             continue
 
         yield config
-
-    # return configs
 
 
 def sample_random_config(
@@ -77,55 +65,44 @@ def sample_random_config(
 
         return
 
-    hp_values = []
+    rng = np.random.RandomState(0)
 
-    # Iterates over the hyperparameters to get considered values
-    for hp in configspace.get_hyperparameters():
-        if isinstance(hp, CategoricalHyperparameter):
-            borders = hp.choices
-        elif isinstance(hp, Constant):
-            borders = [hp.value]
-        elif isinstance(hp, OrdinalHyperparameter):
-            borders = hp.sequence
-        else:
-            if hp.log:
-                borders = []
-                border_value = hp.lower
-                while border_value < hp.upper:
-                    borders += [border_value]
-                    border_value = border_value * 10
+    while True:
+        config = {}
 
-                if hp.upper not in borders:
-                    borders += [hp.upper]
+        # Iterates over the hyperparameters to get considered values
+        for hp_name, hp in zip(
+            configspace.get_hyperparameter_names(), configspace.get_hyperparameters()
+        ):
+            if isinstance(hp, CategoricalHyperparameter):
+                values = list(hp.choices)
+            elif isinstance(hp, Constant):
+                values = [hp.value]
+            elif isinstance(hp, OrdinalHyperparameter):
+                values = list(hp.sequence)
             else:
-                borders = list(np.linspace(hp.lower, hp.upper, d))
+                if hp.log:
+                    values = []
+                    value = hp.lower
+                    while value < hp.upper:
+                        values += [value]
+                        value = value * 10
 
-            if isinstance(hp, IntegerHyperparameter):
-                borders = [int(i) for i in borders]
+                    if hp.upper not in values:
+                        values += [hp.upper]
+                else:
+                    values = list(np.linspace(hp.lower, hp.upper, d))
 
-        hp_values.append(borders)
+                if isinstance(hp, IntegerHyperparameter):
+                    values = [int(i) for i in values]
 
-    # Generate all combinations of the selected hyperparameter values
-    config_values = list(product(*hp_values))
-
-    # Shuffle the list
-    random.seed(0)
-    random.shuffle(config_values)
-
-    # Now we have to check if they are valid
-    # because it might be that conditions are not met
-    # (e.g. if parent is inactive, then the childs are in active too)
-    configs = []
-    for i, values in enumerate(config_values):
-        # We need a dictionary to initialize the configuration
-        config_dict = {}
-        for hp_name, value in zip(configspace.get_hyperparameter_names(), values):
-            config_dict[hp_name] = value
+            # Get a random choice
+            value = rng.choice(values)
+            config[hp_name] = value
 
         try:
-            config = deactivate_inactive_hyperparameters(config_dict, configspace)
+            config = deactivate_inactive_hyperparameters(config, configspace)
             config.is_valid_configuration()
-            configs.append(config)
         except Exception:
             continue
 

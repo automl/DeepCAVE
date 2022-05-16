@@ -211,7 +211,7 @@ class FootPrint(StaticPlugin):
                 len=0.5,
                 title=objective["name"],
             ),
-            colorscale="viridis",
+            colorscale="blues",
         )
 
         area_data = go.Heatmap(
@@ -224,12 +224,12 @@ class FootPrint(StaticPlugin):
                 len=0.5,
                 title="Valid Configspace Area",
             ),
-            colorscale="viridis",
+            colorscale="blues",
         )
 
-        point_names = ["Configuration", "Incumbent"]
-        point_values = ["config_points", "incumbent_points"]
-        point_color_ids = [0, 1]
+        point_names = []
+        point_values = []
+        point_color_ids = []
 
         if show_borders:
             point_names += ["Border Configuration"]
@@ -239,6 +239,10 @@ class FootPrint(StaticPlugin):
             point_names += ["Random (unevaluated) Configuration"]
             point_values += ["support_points"]
             point_color_ids += [3]
+
+        point_names += ["Configuration", "Incumbent"]
+        point_values += ["config_points", "incumbent_points"]
+        point_color_ids += [4, 1]
 
         # Now add the points
         for name, points, color_id in zip(point_names, point_values, point_color_ids):
