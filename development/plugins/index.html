@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Plugins &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
@@ -328,7 +329,7 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="plugins">
+  <section id="plugins">
 <h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
@@ -338,7 +339,7 @@ provide a way to look into specific aspects more detailtly.</p>
 <p>The goal of the plugins are to provide a way to visualize the data in a way that is easy to
 understand. It should give you more insight both data and model-wise and can serve as an additional
 sanity check.</p>
-<div class="section" id="structure">
+<section id="structure">
 <h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
 <p>The plugins in DeepCAVE are structured in a specific way. Basically, three blocks are used:</p>
 <ul class="simple">
@@ -356,8 +357,8 @@ the the calculation, which is referred to “raw data”.</p>
 are low-cost changes, the output will be updated immediately after changing the filter output.
 The following figure shows the described blocks for the cost over time plugin.</p>
 <img alt="../_images/blocks.png" src="../_images/blocks.png" />
-</div>
-<div class="section" id="types">
+</section>
+<section id="types">
 <h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
 <p>DeepCAVE differs between “static” and “dynamic” plugin. While dynamic plugins update the results
 immediately (used for low-cost plugins), static plugins are triggered by a “calculate” button. This
@@ -367,16 +368,16 @@ space, in contrast to train a tree, the calculation is done pretty fast.</p>
 <p>Internally, static plugins use a working queue to finish-up the calculations. The status of the
 progress is displayed on the left in the sidebar. The plugin automatically update itself
 (one check every second) if the result is available and renders the output thereafter.</p>
-</div>
-<div class="section" id="custom-plugin">
+</section>
+<section id="custom-plugin">
 <h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this headline">¶</a></h2>
 <p>DeepCAVE was designed so that the plugins require a minimal design. We recommend using our
 basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.
 Take inspirations from the other plugins if needed.</p>
 <p>After you have created your plugin, you need to register it in the config file. Simply add the
 location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
               </div>

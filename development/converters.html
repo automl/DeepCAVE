@@ -4,7 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Converters &#8212; DeepCAVE Documentation 0.4 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
@@ -318,7 +319,7 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="converters">
+  <section id="converters">
 <h1>Converters<a class="headerlink" href="#converters" title="Permalink to this headline">¶</a></h1>
 <p>DeepCAVE uses <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> objects to interpret the input data. Converters make sure that folders
 are put into the right format so that the files can be interpreted correctly.</p>
@@ -328,7 +329,7 @@ are put into the right format so that the files can be interpreted correctly.</p
 <li><p>SMAC (v1.1.1)</p></li>
 <li><p>BOHB</p></li>
 </ul>
-<div class="section" id="custom-converter">
+<section id="custom-converter">
 <h2>Custom Converter<a class="headerlink" href="#custom-converter" title="Permalink to this headline">¶</a></h2>
 <p>To support a new converter, you need to create a new class that inherits from <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a>.
 Two methods are needed:</p>
@@ -340,8 +341,8 @@ Two methods are needed:</p>
 <p>After you have created a new converter, you need to add it to <code class="docutils literal notranslate"><span class="pre">AVAILABLE_CONVERTERS</span></code> in
 <span class="xref std std-ref">deepcave/config.py</span>. The next time you select a run, DeepCAVE will automatically use this converter as long
 as the <code class="docutils literal notranslate"><span class="pre">from_path</span></code> method did not fail.</p>
-</div>
-</div>
+</section>
+</section>
 
 
               </div>
