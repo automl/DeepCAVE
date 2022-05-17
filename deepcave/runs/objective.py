@@ -50,7 +50,7 @@ class Objective(dict):
         super().__init__(data)
 
     def __eq__(self, other):
-        attributes = ["name", "lower", "upper", "lock_lower", "lock_upper", "optimize"]
+        attributes = ["name", "lock_lower", "lock_upper", "optimize"]  # , "lower", "upper"]
         for a in attributes:
             if self[a] != other[a]:
                 return False

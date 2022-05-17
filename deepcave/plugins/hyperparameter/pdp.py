@@ -165,6 +165,7 @@ class PartialDependencies(StaticPlugin):
         df = run.get_encoded_data(
             objective,
             budget,
+            specific=True,
             statuses=Status.SUCCESS,
         )
 
@@ -172,7 +173,7 @@ class PartialDependencies(StaticPlugin):
         Y = df[objective["name"]].to_numpy()
 
         # Let's initialize the surrogate
-        surrogate_model = RandomForestSurrogate(run.configspace)
+        surrogate_model = RandomForestSurrogate(run.configspace, seed=0)
         surrogate_model.fit(X, Y)
 
         # Prepare the hyperparameters

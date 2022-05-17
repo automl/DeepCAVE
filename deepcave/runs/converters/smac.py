@@ -52,18 +52,16 @@ class SMACRun(Run):
         # Read objectives
         # We have to define it ourselves, because we don't know the type of the objective
         # Only lock lower
-        objective = Objective("Cost", lower=0)
+        objective1 = Objective("Cost", lower=0)
+        objective2 = Objective("Time", lower=0)
 
         # Read meta
         # Everything else is ignored
-        mapping = {
-            "deterministic": "deterministic",
-            "run_obj": "Run Objective",
-            "cutoff": "Algorithm Time Limit",
-            "memory_limit": "Memory Limit",
-            "wallclock_limit": "Wallclock Limit",
-            "initial_incumbent": "Initial Incumbent",
-        }
+        ignore = [
+            "train_inst_fn",
+            "pcs_fn",
+            "execdir"
+        ]
 
         meta = {}
         with (path / "scenario.txt").open() as f:
@@ -75,10 +73,12 @@ class SMACRun(Run):
                 # Remove \n
                 value = value.replace("\n", "")
 
-                if arg in mapping:
-                    meta[mapping[arg]] = value
+                if arg not in ignore:
+                    meta[arg] = value
 
-        run = SMACRun(path.stem, configspace=configspace, objectives=objective, meta=meta)
+        run = SMACRun(
+            path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
+        )
         run._path = path
 
         # Iterate over the runhistory
@@ -108,8 +108,8 @@ class SMACRun(Run):
             if len(seeds) > 1:
                 raise RuntimeError("Multiple seeds are not supported.")
 
-            if instance_id is not None:
-                raise RuntimeError("Instances are not supported.")
+            # if instance_id is not None:
+            #    raise RuntimeError("Instances are not supported.")
 
             if first_starttime is None:
                 first_starttime = starttime
@@ -135,12 +135,15 @@ class SMACRun(Run):
             if status != Status.SUCCESS:
                 # We don't want cost included which are failed
                 cost = None
+                time = None
+            else:
+                time = endtime - starttime
 
             # Round budget
             budget = np.round(budget, 2)
 
             run.add(
-                costs=[cost],  # Having only single objective here
+                costs=[cost, time],  # Having only single objective here
                 config=config,
                 budget=budget,
                 start_time=starttime,

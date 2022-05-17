@@ -202,6 +202,9 @@ class GeneralLayout(Layout):
             # Reset clicks
             add_n_clicks = [None for _ in add_n_clicks]
             remove_n_clicks = [None for _ in remove_n_clicks]
+            
+            # Remove last inputs
+            c.set("last_inputs", value={})
 
             return add_n_clicks, remove_n_clicks, run_handler.get_selected_run_paths()
 
@@ -213,12 +216,13 @@ class GeneralLayout(Layout):
         inputs = [
             Input("general-add-group", "n_clicks"),
             Input("general-selected-runs-container", "children"),
+            Input("general-group-trigger", "data"),
             State("general-group-container", "children"),
         ]
 
         # Let's take care of the groups here
         @app.callback(outputs, inputs)
-        def callback(n_clicks: int, _, children):
+        def callback(n_clicks: int, _trigger1, _trigger2, children):
             def get_layout(
                 index: int, options: Dict[str, str], input_value: str = "", dropdown_value=None
             ):
@@ -269,10 +273,11 @@ class GeneralLayout(Layout):
         inputs = [
             Input({"type": "group-name", "index": ALL}, "value"),
             Input({"type": "group-dropdown", "index": ALL}, "value"),
+            State("general-group-trigger", "data"),
         ]
 
         @app.callback(outputs, inputs)
-        def callback(group_names, all_run_paths):
+        def callback(group_names, all_run_paths, i):
             # Abort on page load
             if self._refresh_groups:
                 self._refresh_groups = False
@@ -285,7 +290,7 @@ class GeneralLayout(Layout):
 
                 if run_paths is None or len(run_paths) == 0:
                     continue
-                
+
                 valid_run_paths = []
                 for run_path in run_paths:
                     if run_path in run_handler.get_selected_run_paths():
@@ -300,7 +305,10 @@ class GeneralLayout(Layout):
                 # Now save it
                 run_handler.update_groups(groups)
             except NotMergeableError:
-                return True
+                notification.update("The selected runs are not mergeable.")
+                
+                # This will automatically trigger the group display s.t. the selection is redo.
+                return i + 1
 
             self.logger.debug(f"Groups: {groups}")
 
@@ -359,7 +367,7 @@ class GeneralLayout(Layout):
             html.H2("Groups"),
             html.Div(id="general-group-container", children=[]),
             dbc.Button("Add Group", id="general-add-group"),
-            dcc.Store(id="general-group-trigger"),
+            dcc.Store(id="general-group-trigger", data=0),
             html.Hr(),
             # Cache
             html.H2("Caches"),

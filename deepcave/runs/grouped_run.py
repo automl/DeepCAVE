@@ -75,7 +75,7 @@ class GroupedRun(AbstractRun):
 
                     # Get model mapping done
                     self.model_mapping[new_config_id] = (run_id, config_id)
-        except:
+        except Exception:
             raise NotMergeableError("Runs can not be merged.")
 
     def __iter__(self):

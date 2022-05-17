@@ -309,8 +309,6 @@ class RunHandler:
         instantiated_groups = {}
         if groups is None:
             groups = self.c.get("groups")
-        else:
-            self.c.set("groups", value=groups)
 
         # Add grouped runs
         for group_name, run_paths in groups.items():
@@ -322,12 +320,16 @@ class RunHandler:
             if len(runs) == 0:
                 continue
 
+            # Throws NotMergeableError
             instantiated_groups[group_name] = GroupedRun(group_name, runs)
 
         # Add groups to rc
         for group in instantiated_groups.values():
             # Create cache file and set name/hash. Clear cache if hash got changed
             self.rc.update(group)
+
+        # Save in cache
+        self.c.set("groups", value=groups)
 
         # Save in memory
         self.groups = instantiated_groups

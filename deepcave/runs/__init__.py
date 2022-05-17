@@ -868,13 +868,15 @@ def check_equality(
 
     # Check meta
     if meta:
+        ignore = ["objectives", "budgets", "wallclock_limit"]
+
         m1 = runs[0].get_meta()
         for run in runs:
             m2 = run.get_meta()
 
             for k, v in m1.items():
                 # Don't check on objectives or budgets
-                if k == "objectives" or k == "budgets":
+                if k in ignore:
                     continue
 
                 if k not in m2 or m2[k] != v:

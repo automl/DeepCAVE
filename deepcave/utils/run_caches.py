@@ -48,7 +48,13 @@ class RunCaches:
             return True
 
         current_hash = cache.get("hash")
-        if current_hash != run.hash:
+
+        try:
+            hash = run.hash
+        except FileNotFoundError:
+            return True
+
+        if current_hash != hash:
             # Delete all caches related to the run.
             self.clear_run(run)
 
