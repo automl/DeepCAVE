@@ -370,7 +370,7 @@ style="width: 100%;">
 
                     <span class="c1"># Get model mapping done</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">model_mapping</span><span class="p">[</span><span class="n">new_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Runs can not be merged.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

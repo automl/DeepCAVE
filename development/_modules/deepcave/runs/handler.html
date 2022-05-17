@@ -604,8 +604,6 @@ style="width: 100%;">
         <span class="n">instantiated_groups</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">groups</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">groups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;groups&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;groups&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">groups</span><span class="p">)</span>
 
         <span class="c1"># Add grouped runs</span>
         <span class="k">for</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">run_paths</span> <span class="ow">in</span> <span class="n">groups</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -617,12 +615,16 @@ style="width: 100%;">
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">continue</span>
 
+            <span class="c1"># Throws NotMergeableError</span>
             <span class="n">instantiated_groups</span><span class="p">[</span><span class="n">group_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">GroupedRun</span><span class="p">(</span><span class="n">group_name</span><span class="p">,</span> <span class="n">runs</span><span class="p">)</span>
 
         <span class="c1"># Add groups to rc</span>
         <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">instantiated_groups</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="c1"># Create cache file and set name/hash. Clear cache if hash got changed</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rc</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+        <span class="c1"># Save in cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;groups&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">groups</span><span class="p">)</span>
 
         <span class="c1"># Save in memory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">groups</span> <span class="o">=</span> <span class="n">instantiated_groups</span></div>

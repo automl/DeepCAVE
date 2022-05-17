@@ -1163,13 +1163,15 @@ style="width: 100%;">
 
     <span class="c1"># Check meta</span>
     <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">,</span> <span class="s2">&quot;wallclock_limit&quot;</span><span class="p">]</span>
+
         <span class="n">m1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
             <span class="n">m2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">m1</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="c1"># Don&#39;t check on objectives or budgets</span>
-                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;objectives&quot;</span> <span class="ow">or</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;budgets&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
                     <span class="k">continue</span>
 
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">m2</span> <span class="ow">or</span> <span class="n">m2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="n">v</span><span class="p">:</span>

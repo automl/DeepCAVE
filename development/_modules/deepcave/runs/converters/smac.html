@@ -347,18 +347,16 @@ style="width: 100%;">
         <span class="c1"># Read objectives</span>
         <span class="c1"># We have to define it ourselves, because we don&#39;t know the type of the objective</span>
         <span class="c1"># Only lock lower</span>
-        <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Cost&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">objective1</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Cost&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">objective2</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># Read meta</span>
         <span class="c1"># Everything else is ignored</span>
-        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;deterministic&quot;</span><span class="p">:</span> <span class="s2">&quot;deterministic&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;run_obj&quot;</span><span class="p">:</span> <span class="s2">&quot;Run Objective&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;cutoff&quot;</span><span class="p">:</span> <span class="s2">&quot;Algorithm Time Limit&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;memory_limit&quot;</span><span class="p">:</span> <span class="s2">&quot;Memory Limit&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;wallclock_limit&quot;</span><span class="p">:</span> <span class="s2">&quot;Wallclock Limit&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;initial_incumbent&quot;</span><span class="p">:</span> <span class="s2">&quot;Initial Incumbent&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;train_inst_fn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pcs_fn&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;execdir&quot;</span>
+        <span class="p">]</span>
 
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scenario.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -370,10 +368,12 @@ style="width: 100%;">
                 <span class="c1"># Remove \n</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">mapping</span><span class="p">:</span>
-                    <span class="n">meta</span><span class="p">[</span><span class="n">mapping</span><span class="p">[</span><span class="n">arg</span><span class="p">]]</span> <span class="o">=</span> <span class="n">value</span>
+                <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
+                    <span class="n">meta</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">run</span> <span class="o">=</span> <span class="n">SMACRun</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">SMACRun</span><span class="p">(</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective1</span><span class="p">,</span> <span class="n">objective2</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span>
+        <span class="p">)</span>
         <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
 
         <span class="c1"># Iterate over the runhistory</span>
@@ -403,8 +403,8 @@ style="width: 100%;">
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Multiple seeds are not supported.&quot;</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">instance_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Instances are not supported.&quot;</span><span class="p">)</span>
+            <span class="c1"># if instance_id is not None:</span>
+            <span class="c1">#    raise RuntimeError(&quot;Instances are not supported.&quot;)</span>
 
             <span class="k">if</span> <span class="n">first_starttime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">first_starttime</span> <span class="o">=</span> <span class="n">starttime</span>
@@ -430,12 +430,15 @@ style="width: 100%;">
             <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
                 <span class="c1"># We don&#39;t want cost included which are failed</span>
                 <span class="n">cost</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">starttime</span>
 
             <span class="c1"># Round budget</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
             <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-                <span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">cost</span><span class="p">],</span>  <span class="c1"># Having only single objective here</span>
+                <span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>  <span class="c1"># Having only single objective here</span>
                 <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
                 <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
                 <span class="n">start_time</span><span class="o">=</span><span class="n">starttime</span><span class="p">,</span>
