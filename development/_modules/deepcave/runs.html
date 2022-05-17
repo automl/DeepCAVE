@@ -338,7 +338,10 @@ style="width: 100%;">
     <span class="n">CRASHED</span> <span class="o">=</span> <span class="mi">4</span>
     <span class="n">ABORTED</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">RUNNING</span> <span class="o">=</span> <span class="mi">6</span>
-    <span class="n">NOT_EVALUATED</span> <span class="o">=</span> <span class="mi">7</span></div>
+    <span class="n">NOT_EVALUATED</span> <span class="o">=</span> <span class="mi">7</span>
+    
+    <span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Trial"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.Trial">[docs]</a><span class="nd">@dataclass</span>
@@ -439,6 +442,9 @@ style="width: 100%;">
 
     <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]:</span>
         <span class="n">objectives</span> <span class="o">=</span> <span class="p">[]</span>
@@ -732,6 +738,45 @@ style="width: 100%;">
             <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>  <span class="c1"># self._process_costs(trial.costs)</span>
 
         <span class="k">return</span> <span class="n">results</span></div>
+
+<div class="viewcode-block" id="AbstractRun.get_status"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the status of a configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            Configuration id to get the status for.</span>
+<span class="sd">        budget : Optional[Union[int, float]], optional</span>
+<span class="sd">            Budget to get the status from the configuration id for. By default None. If budget is</span>
+<span class="sd">            None, the highest budget is chosen.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the configuration id is not found.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Status</span>
+<span class="sd">            Status of the configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Configuration id was not found.&quot;</span><span class="p">)</span>
+
+        <span class="n">trial_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+
+        <span class="c1"># Unfortunately, we have to iterate through the history to find the status</span>
+        <span class="c1"># TODO: Cache the stati</span>
+        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">trial_key</span> <span class="o">==</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span>
+
+        <span class="k">return</span> <span class="n">Status</span><span class="o">.</span><span class="n">NOT_EVALUATED</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_incumbent"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_incumbent">[docs]</a>    <span class="k">def</span> <span class="nf">get_incumbent</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

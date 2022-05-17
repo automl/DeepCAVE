@@ -335,6 +335,8 @@ style="width: 100%;">
 <span class="sd">        Description of the plugin. Displayed below the title.</span>
 <span class="sd">    icon : str, optional</span>
 <span class="sd">        FontAwesome icon. Shown in the navigation.</span>
+<span class="sd">    help : str, optional</span>
+<span class="sd">        Path to the help file.</span>
 <span class="sd">    button_caption : str, optional</span>
 <span class="sd">        Caption of the button. Shown only, if `StaticPlugin` is used.</span>
 <span class="sd">    activate_run_selection : bool, optional</span>
@@ -347,6 +349,7 @@ style="width: 100%;">
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">icon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;far fa-file&quot;</span>
+    <span class="n">help</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">button_caption</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Process&quot;</span>
     <span class="n">activate_run_selection</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -697,6 +700,20 @@ style="width: 100%;">
 
             <span class="k">return</span> <span class="n">is_open</span><span class="p">,</span> <span class="n">code</span>
 
+        <span class="c1"># Register modal for help here</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="p">[</span>
+                <span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;help&quot;</span><span class="p">),</span> <span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;show_help&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
+            <span class="n">State</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;help&quot;</span><span class="p">),</span> <span class="s2">&quot;is_open&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">toggle_modal</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">is_open</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
+                <span class="k">return</span> <span class="ow">not</span> <span class="n">is_open</span>
+
+            <span class="k">return</span> <span class="n">is_open</span>
+
         <span class="c1"># Register callback to click on configurations</span>
         <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="n">internal_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
@@ -1025,9 +1042,44 @@ style="width: 100%;">
         <span class="bp">self</span><span class="o">.</span><span class="n">previous_inputs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_outputs</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Load rst file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">help</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+            <span class="n">modal</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Modal</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">ModalBody</span><span class="p">([</span><span class="n">dcc</span><span class="o">.</span><span class="n">Markdown</span><span class="p">(</span><span class="n">data</span><span class="p">)]),</span>
+                        <span class="p">],</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;help&quot;</span><span class="p">),</span>
+                        <span class="n">size</span><span class="o">=</span><span class="s2">&quot;xl&quot;</span><span class="p">,</span>
+                        <span class="n">scrollable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">is_open</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                        <span class="n">dbc</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
+                            <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">I</span><span class="p">(</span><span class="n">className</span><span class="o">=</span><span class="s2">&quot;far fa-question-circle&quot;</span><span class="p">)],</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;show_help&quot;</span><span class="p">),</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">},</span>
+                            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;primary&quot;</span><span class="p">,</span>
+                            <span class="n">outline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">n_clicks</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="p">),</span>
+                    <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="n">modal</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">+=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">H1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span><span class="p">)</span>

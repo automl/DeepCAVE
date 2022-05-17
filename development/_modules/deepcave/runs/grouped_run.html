@@ -325,7 +325,7 @@ style="width: 100%;">
             <span class="n">current_config_id</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="c1"># Key: new_config_id; Value: (run_id, config_id)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">model_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
             <span class="c1"># Combine runs here</span>
             <span class="k">for</span> <span class="n">run_id</span><span class="p">,</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">):</span>
@@ -369,7 +369,7 @@ style="width: 100%;">
                         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">trial</span>
 
                     <span class="c1"># Get model mapping done</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">model_mapping</span><span class="p">[</span><span class="n">new_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">original_mapping</span><span class="p">[</span><span class="n">new_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Runs can not be merged.&quot;</span><span class="p">)</span>
 
@@ -406,9 +406,16 @@ style="width: 100%;">
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">run_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">get_original_config_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">get_original_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">):</span>
+        <span class="n">run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">):</span>
-        <span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+        <span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GroupedRun.get_trajectory"><a class="viewcode-back" href="../../../api/deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun.get_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

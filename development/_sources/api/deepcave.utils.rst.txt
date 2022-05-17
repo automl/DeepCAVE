@@ -34,6 +34,7 @@
    deepcave.utils.configspace
    deepcave.utils.dash
    deepcave.utils.data_structures
+   deepcave.utils.docs
    deepcave.utils.files
    deepcave.utils.hash
    deepcave.utils.layout
