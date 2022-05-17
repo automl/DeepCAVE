@@ -69,20 +69,33 @@ class CostOverTime(DynamicPlugin):
                 ],
                 className="mb-3",
             ),
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Display ..."),
-                    dbc.RadioItems(id=register("display", ["value", "options"])),
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Runs"),
+                            dbc.Select(
+                                id=register("show_runs", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Groups"),
+                            dbc.Select(
+                                id=register("show_groups", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
                 ],
-                className="",
             ),
         ]
 
     def load_inputs(self):
-        display_labels = ["Runs", "Groups"]
-        display_values = ["runs", "groups"]
-        display_options = get_radio_options(display_labels, display_values)
-
         return {
             "objective_id": {
                 "options": self.objective_options,
@@ -95,15 +108,13 @@ class CostOverTime(DynamicPlugin):
             "xaxis": {
                 "options": [
                     {"label": "Time", "value": "times"},
-                    {"label": "Time (logarithmic)", "value": "times_log"},
-                    {"label": "Number of evaluated configurations", "value": "configs"},
+                    {"label": "Logarithmic Time", "value": "times_log"},
+                    {"label": "Evaluated configurations", "value": "configs"},
                 ],
                 "value": "times",
             },
-            "display": {
-                "options": display_options,
-                "value": display_values[0],
-            },
+            "show_runs": {"options": get_select_options(binary=True), "value": "true"},
+            "show_groups": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     @staticmethod
@@ -131,21 +142,20 @@ class CostOverTime(DynamicPlugin):
     def load_outputs(runs, inputs, outputs):
         traces = []
         for idx, run in enumerate(runs):
+            show_runs = inputs["show_runs"] == "true"
+            show_groups = inputs["show_groups"] == "true"
+
+            if run.prefix == "group" and not show_groups:
+                continue
+
+            if run.prefix != "group" and not show_runs:
+                continue
+            
             objective = run.get_objective(inputs["objective_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "configs":
                 x = outputs[run.id]["ids"]
-
-            if inputs["display"] == "runs":
-                if run.prefix == "group":
-                    continue
-            elif inputs["display"] == "groups":
-                # Prefix could be not only run but also the name of the converter
-                if run.prefix != "group":
-                    continue
-            else:
-                raise RuntimeError("Unknown display option.")
 
             y = np.array(outputs[run.id]["costs_mean"])
             y_err = np.array(outputs[run.id]["costs_std"])

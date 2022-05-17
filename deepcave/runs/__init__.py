@@ -44,6 +44,9 @@ class Status(IntEnum):
     ABORTED = 5
     RUNNING = 6
     NOT_EVALUATED = 7
+    
+    def to_text(self) -> str:
+        return self.name.lower().replace("_", " ")
 
 
 @dataclass
@@ -144,6 +147,9 @@ class AbstractRun(ABC):
 
     def empty(self) -> None:
         return len(self.history) == 0
+
+    def get_origin(self, config_id: int) -> str:
+        return self.origins[config_id]
 
     def get_objectives(self) -> List[Objective]:
         objectives = []
@@ -437,6 +443,45 @@ class AbstractRun(ABC):
             results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
 
         return results
+
+    def get_status(self, config_id: int, budget: Optional[Union[int, float]] = None) -> Status:
+        """
+        Returns the status of a configuration.
+
+        Parameters
+        ----------
+        config_id : int
+            Configuration id to get the status for.
+        budget : Optional[Union[int, float]], optional
+            Budget to get the status from the configuration id for. By default None. If budget is
+            None, the highest budget is chosen.
+
+        Raises
+        ------
+        ValueError
+            If the configuration id is not found.
+
+        Returns
+        -------
+        Status
+            Status of the configuration.
+        """
+        if budget is None:
+            budget = self.get_highest_budget()
+
+        if config_id not in self.configs:
+            raise ValueError("Configuration id was not found.")
+
+        trial_key = self.get_trial_key(config_id, budget)
+
+        # Unfortunately, we have to iterate through the history to find the status
+        # TODO: Cache the stati
+        for trial in self.history:
+
+            if trial_key == trial.get_key():
+                return trial.status
+
+        return Status.NOT_EVALUATED
 
     def get_incumbent(
         self,

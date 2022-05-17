@@ -10,7 +10,7 @@ from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
-from deepcave.utils.layout import get_checklist_options, get_select_options
+from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 
 
 class Importances(StaticPlugin):
@@ -25,6 +25,12 @@ class Importances(StaticPlugin):
             html.Div(
                 [
                     dbc.Label("Method"),
+                    help_button(
+                        "Local Parameter Importance: Quantify importance by changing the "
+                        "neighborhood of a configuration. Uses default and incumbent configuration "
+                        "as reference. \n\n"
+                        "fANOVA: Quantify importance globally."
+                    ),
                     dbc.Select(
                         id=register("method", ["value", "options"]),
                         placeholder="Select ...",
@@ -32,7 +38,18 @@ class Importances(StaticPlugin):
                 ],
                 className="mb-3",
             ),
-            html.Div([dbc.Label("Trees"), dbc.Input(id=register("n_trees", type=optional_int))]),
+            html.Div(
+                [
+                    dbc.Label("Trees"),
+                    help_button(
+                        "The number of trees of the internal random forest to estimate the "
+                        "hyperparameter importance. "
+                        "The more trees are used the more accurate the results. "
+                        "However, also it takes longer to compute."
+                    ),
+                    dbc.Input(id=register("n_trees", type=optional_int)),
+                ]
+            ),
         ]
 
     @staticmethod

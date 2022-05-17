@@ -6,7 +6,7 @@ from dash import html, dcc
 import plotly.graph_objs as go
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import create_table, get_slider_marks
@@ -21,14 +21,6 @@ class Configurations(DynamicPlugin):
 
     activate_run_selection = True
     use_cache = False
-
-    @staticmethod
-    def check_run_compatibility(run: AbstractRun) -> bool:
-        # We don't support groups here
-        if run.prefix == "group":
-            return False
-        
-        return True
 
     @staticmethod
     def get_link(run: AbstractRun, config_id: int) -> str:
@@ -91,8 +83,22 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     def process(run, inputs):
-        selected_config_id = inputs["config_id"]
+        selected_config_id = int(inputs["config_id"])
+        origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
+
+        overview_table_data = {
+            "Key": ["Selected Configuration", "Origin"],
+            "Value": [selected_config_id, origin],
+        }
+
+        if run.prefix == "group":
+            original_run = run.get_original_run(selected_config_id)
+            original_config_id = run.get_original_config_id(selected_config_id)
+            overview_table_data["Key"] += ["Derived from"]
+            overview_table_data["Value"] += [
+                str(original_run.path) + f" (ID: {original_config_id})"
+            ]
 
         performances = {}
         performances_table_data = {"Budget": []}
@@ -114,7 +120,11 @@ class Configurations(DynamicPlugin):
                 if budget not in performances_table_data["Budget"]:
                     performances_table_data["Budget"] += [budget]
 
-                performances_table_data[objective["name"]] += [costs[objective_id]]
+                status = run.get_status(selected_config_id, budget)
+                if status == Status.SUCCESS:
+                    performances_table_data[objective["name"]] += [costs[objective_id]]
+                else:
+                    performances_table_data[objective["name"]] += [status.to_text()]
 
         # Let's start with the configspace
         X = []
@@ -143,6 +153,7 @@ class Configurations(DynamicPlugin):
         cs_df = pd.DataFrame(data=X, columns=columns)
 
         return {
+            "overview_table_data": overview_table_data,
             "performances": performances,
             "performances_table_data": performances_table_data,
             "cs_df": serialize(cs_df),
@@ -152,13 +163,7 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_output_layout(register):
         return [
-            html.Div(
-                [
-                    html.Span("Selected configuration: "),
-                    html.Span(id=register("config_id", "children")),
-                ],
-                className="mb-3",
-            ),
+            html.Div(id=register("overview_table", "children"), className="mb-3"),
             html.Hr(),
             html.H3("Objectives"),
             dbc.Tabs(
@@ -171,7 +176,12 @@ class Configurations(DynamicPlugin):
             html.H3("Configuration"),
             dbc.Tabs(
                 [
-                    dbc.Tab(dcc.Graph(id=register("configspace_graph", "figure")), label="Graph"),
+                    dbc.Tab(
+                        dcc.Graph(
+                            id=register("configspace_graph", "figure"),
+                        ),
+                        label="Graph",
+                    ),
                     dbc.Tab(html.Div(id=register("configspace_table", "children")), label="Table"),
                 ]
             ),
@@ -192,13 +202,20 @@ class Configurations(DynamicPlugin):
         config_id = inputs["config_id"]
         config = run.get_config(config_id)
 
+        if run.path is not None:
+            path = run.path / "configspace.json"
+        else:
+            assert run.prefix == "group"
+            original_run = run.get_original_run(config_id)
+            path = original_run.path
+
         return [
-            inputs["config_id"],
+            create_table(outputs["overview_table_data"]),
             Configurations._get_objective_figure(inputs, outputs, run),
             create_table(outputs["performances_table_data"]),
             Configurations._get_configspace_figure(inputs, outputs, run),
             create_table(outputs["cs_table_data"]),
-            str(run.path / "configspace.json"),
+            str(path),
             str(config.get_dictionary()),
         ]
 
@@ -277,6 +294,23 @@ class Configurations(DynamicPlugin):
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext
 
+        layout = dict(
+            title="Slider / Scrollbar",
+            xaxis=dict(
+                rangeselector=dict(
+                    buttons=list(
+                        [
+                            dict(count=1, label="1m", step="month", stepmode="backward"),
+                            dict(count=6, label="6m", step="month", stepmode="backward"),
+                            dict(step="all"),
+                        ]
+                    )
+                ),
+                rangeslider=dict(visible=True),
+                type="date",
+            ),
+        )
+
         fig = go.Figure(
             data=go.Parcoords(
                 line=dict(
@@ -285,7 +319,8 @@ class Configurations(DynamicPlugin):
                     colorscale=["rgba(255,255,255,0.1)", "red"],
                 ),
                 dimensions=list([d for d in data.values()]),
-            )
+            ),
+            layout=layout,
         )
 
         return fig

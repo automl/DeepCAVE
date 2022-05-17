@@ -6,7 +6,24 @@ import dash_bootstrap_components as dbc
 import base64
 import io
 
-from dash import html
+from dash import html, dcc
+from deepcave.utils.hash import string_to_hash
+
+
+def help_button(text: str):
+    id = "help-button-" + string_to_hash(text)
+
+    return html.Span(
+        [
+            html.I(id=id, className="ms-1 far fa-question-circle"),
+            dbc.Popover(
+                dcc.Markdown(text, className="p-3 pb-1"),
+                target=id,
+                trigger="hover",
+                placement="top",
+            ),
+        ]
+    )
 
 
 def render_table(df):
@@ -92,5 +109,6 @@ def get_radio_options(labels=None, values=None, binary=False):
 
 def create_table(output: Dict[str, str], mb=True) -> dbc.Table:
     mb = "mb-0" if not mb else ""
+    df = pd.DataFrame(output)
 
-    return dbc.Table.from_dataframe(pd.DataFrame(output), striped=True, bordered=True, className=mb)
+    return dbc.Table.from_dataframe(df, striped=True, bordered=True, className=mb)

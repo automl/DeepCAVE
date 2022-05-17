@@ -40,6 +40,8 @@ class Plugin(Layout, ABC):
         Description of the plugin. Displayed below the title.
     icon : str, optional
         FontAwesome icon. Shown in the navigation.
+    help : str, optional
+        Path to the help file.
     button_caption : str, optional
         Caption of the button. Shown only, if `StaticPlugin` is used.
     activate_run_selection : bool, optional
@@ -52,6 +54,7 @@ class Plugin(Layout, ABC):
     name: str
     description: Optional[str] = None
     icon: str = "far fa-file"
+    help: Optional[str] = None
     button_caption: str = "Process"
     activate_run_selection: bool = False
 
@@ -402,6 +405,20 @@ class Plugin(Layout, ABC):
 
             return is_open, code
 
+        # Register modal for help here
+        @app.callback(  # type: ignore
+            [
+                Output(self.get_internal_id("help"), "is_open"),
+            ],
+            Input(self.get_internal_id("show_help"), "n_clicks"),
+            State(self.get_internal_id("help"), "is_open"),
+        )
+        def toggle_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+            if n:
+                return not is_open
+
+            return is_open
+
         # Register callback to click on configurations
         for (id, *_) in self.outputs:
             internal_id = self.get_internal_output_id(id)
@@ -730,9 +747,44 @@ class Plugin(Layout, ABC):
         self.previous_inputs = {}
         self.raw_outputs = None
 
-        components = [html.H1(self.name)]
-        if self.description is not None:
-            components += [html.P(self.description)]
+        components = []
+        if self.help is not None:
+            # Load rst file
+            with open(self.help, "r") as file:
+                data = file.read()
+
+            modal = html.Div(
+                [
+                    dbc.Modal(
+                        [
+                            dbc.ModalBody([dcc.Markdown(data)]),
+                        ],
+                        id=self.get_internal_id("help"),
+                        size="xl",
+                        scrollable=True,
+                        is_open=False,
+                    ),
+                ]
+            )
+
+            components += [
+                html.H1(
+                    [
+                        html.Span(self.name),
+                        dbc.Button(
+                            [html.I(className="far fa-question-circle")],
+                            id=self.get_internal_id("show_help"),
+                            style={"float": "right"},
+                            color="primary",
+                            outline=True,
+                            n_clicks=0,
+                        ),
+                    ]
+                ),
+                modal,
+            ]
+        else:
+            components += [html.H1(self.name)]
 
         try:
             self.check_runs_compatibility(self.all_runs)

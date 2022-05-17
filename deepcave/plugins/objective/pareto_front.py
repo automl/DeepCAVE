@@ -7,7 +7,7 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
-from deepcave.utils.layout import get_select_options, get_slider_marks
+from deepcave.utils.layout import get_select_options, get_slider_marks, help_button
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
 
@@ -81,7 +81,40 @@ class ParetoFront(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Show all configurations"),
-                    dbc.RadioItems(id=register("show_all", ["value", "options"])),
+                    help_button(
+                        "Additionally to the pareto front, also the other configurations "
+                        "are displayed. This makes it easier to see the performance "
+                        "differences."
+                    ),
+                    dbc.Select(
+                        id=register("show_all", ["value", "options"]),
+                        placeholder="Select ...",
+                    ),
+                ],
+                className="mb-3",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Runs"),
+                            dbc.Select(
+                                id=register("show_runs", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Show Groups"),
+                            dbc.Select(
+                                id=register("show_groups", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
                 ],
             ),
         ]
@@ -100,10 +133,9 @@ class ParetoFront(DynamicPlugin):
                 "options": self.budget_options,
                 "value": self.budget_options[0]["value"],
             },
-            "show_all": {
-                "options": get_select_options(binary=True),
-                "value": False,
-            },
+            "show_all": {"options": get_select_options(binary=True), "value": "false"},
+            "show_runs": {"options": get_select_options(binary=True), "value": "true"},
+            "show_groups": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     @staticmethod
@@ -169,8 +201,19 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
+        show_all = inputs["show_all"] == "true"
+
         traces = []
         for idx, run in enumerate(runs):
+            show_runs = inputs["show_runs"] == "true"
+            show_groups = inputs["show_groups"] == "true"
+
+            if run.prefix == "group" and not show_groups:
+                continue
+
+            if run.prefix != "group" and not show_runs:
+                continue
+
             points = np.array(outputs[run.id]["points"])
             config_ids = outputs[run.id]["config_ids"]
             pareto_config_ids = []
@@ -191,7 +234,7 @@ class ParetoFront(DynamicPlugin):
             color = get_color(idx, alpha=0.1)
             color_pareto = get_color(idx)
 
-            if inputs["show_all"]:
+            if show_all:
                 traces.append(
                     go.Scatter(
                         x=x,
@@ -211,11 +254,16 @@ class ParetoFront(DynamicPlugin):
             optimize2 = objective_2["optimize"]
 
             if optimize1 == optimize2:
-                line_shape = "vh"
+                if objective_1["optimize"] == "lower":
+                    line_shape = "hv"
+                else:
+                    line_shape = "vh"
             else:
                 line_shape = "hv"
 
-            hovertext = [get_hovertext_from_config(run, config_id) for config_id in pareto_config_ids]
+            hovertext = [
+                get_hovertext_from_config(run, config_id) for config_id in pareto_config_ids
+            ]
 
             traces.append(
                 go.Scatter(
@@ -230,9 +278,12 @@ class ParetoFront(DynamicPlugin):
                 )
             )
 
-        layout = go.Layout(
-            xaxis=dict(title=objective_1["name"]),
-            yaxis=dict(title=objective_2["name"]),
-        )
+        if len(traces) > 0:
+            layout = go.Layout(
+                xaxis=dict(title=objective_1["name"]),
+                yaxis=dict(title=objective_2["name"]),
+            )
+        else:
+            layout = None
 
         return [go.Figure(data=traces, layout=layout)]

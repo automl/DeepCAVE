@@ -12,12 +12,14 @@ from deepcave.utils.layout import (
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.utils.styled_plot import plt
+from deepcave.utils.layout import help_button
 
 
 class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
+    help = "docs/plugins/budget_correlation.rst"
     description = """
         The configuration footprint shows the configuration space in two dimensions.
         Based on the evaluated configurations, a surface is plotted. 
@@ -57,6 +59,9 @@ class FootPrint(StaticPlugin):
             html.Div(
                 [
                     dbc.Label("Details"),
+                    help_button(
+                        "The details parameter controls the resolution of the surface plot."
+                    ),
                     dcc.Slider(
                         id=register("details", "value", type=float),
                         min=0.1,
