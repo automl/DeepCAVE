@@ -169,8 +169,8 @@ class Footprint:
             # Or if we reach more than 4000 (otherwise it takes too long)
             assert self._distances is not None
             
-            if self._distances.shape[0] % 100:
-                logger.info(f"{self._distances.shape[0]} configurations already added...")
+            if self._distances.shape[0] % 100 == 0:
+                logger.info(f"Found {self._distances.shape[0]} configurations...")
             
             if self._distances.shape[0] > 4000:
                 break
