@@ -5,6 +5,7 @@ import numpy as np
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.constants import COMBINED_COST_NAME
 from deepcave.runs import AbstractRun
+from deepcave.runs.objective import Objective
 
 
 class fANOVA:
@@ -24,7 +25,8 @@ class fANOVA:
 
     def calculate(
         self,
-        budget: Union[int, float],
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
+        budget: Optional[Union[int, float]] = None,
         n_trees: int = 16,
         seed: Optional[int] = None,
     ) -> None:
@@ -37,18 +39,27 @@ class fANOVA:
 
         Parameters
         ----------
-        budget : Union[int, float]
-            Only data points with this budget are selected.
+        objectives : Optional[Union[Objective, List[Objective]]], optional
+            Considerd objectives. By default None. If None, all objectives are considered.
+        budget : Optional[Union[int, float]], optional
+            Considered budget. By default None. If None, the highest budget is chosen.
         n_trees : int, optional
             How many trees should be used. By default 16.
         seed : Optional[int], optional
             Random seed. By default None.
         """
+        if objectives is None:
+            objectives = self.run.get_objectives()
+            
+        if budget is None:
+            budget = self.get_highest_budget()
+        
         self.n_trees = n_trees
 
         # Get data
-        df = self.run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
+        df = self.run.get_encoded_data(objectives, budget, specific=True, include_combined_cost=True)
         X = df[self.hp_names].to_numpy()
+        # Combined cost name includes the cost of all selected objectives
         Y = df[COMBINED_COST_NAME].to_numpy()
 
         # Get model and train it
@@ -56,7 +67,7 @@ class fANOVA:
         self._model.train(X, Y)
 
     def get_importances(
-        self, hp_names: List[str], depth: int = 1, sort: bool = True
+        self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
     ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
         Returns the importance scores from the passed hyperparameter names.
@@ -67,8 +78,9 @@ class fANOVA:
 
         Parameters
         ----------
-        hp_names : List[str]
-            Selected hyperparameter names to get the importance scores from.
+        hp_names : Optional[List[str]]
+            Selected hyperparameter names to get the importance scores from. If None, all
+            hyperparameters of the configspace are used.
         depth : int, optional
             How often dimensions should be combined. By default 1.
         sort : bool, optional
@@ -86,6 +98,9 @@ class fANOVA:
         RuntimeError
             If there is zero total variance in all trees.
         """
+        if hp_names is None:
+            hp_names = self.cs.get_hyperparameter_names()
+        
         hp_ids = []
         for hp_name in hp_names:
             hp_ids.append(self.cs.get_idx_by_hyperparameter_name(hp_name))

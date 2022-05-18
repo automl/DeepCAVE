@@ -3,27 +3,17 @@ from typing import Union, Optional, Dict, Tuple, List
 from collections import OrderedDict
 import numpy as np
 
-from ConfigSpace import ConfigurationSpace, Configuration
+from ConfigSpace import Configuration
 from ConfigSpace.exceptions import ForbiddenValueError
-from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
-    FloatHyperparameter,
-    IntegerHyperparameter,
-    UniformFloatHyperparameter,
-    UniformIntegerHyperparameter,
-    Constant,
-    OrdinalHyperparameter,
-    NumericalHyperparameter,
-)
+from ConfigSpace.hyperparameters import CategoricalHyperparameter
 from ConfigSpace.util import (
     impute_inactive_values,
-    get_random_neighbor,
-    get_one_exchange_neighbourhood,
 )
 from ConfigSpace.c_util import change_hp_value, check_forbidden
 from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
+from deepcave.runs.objective import Objective
 
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
@@ -37,7 +27,8 @@ class LPI:
 
     def calculate(
         self,
-        budget: Union[int, float],
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
+        budget: Optional[Union[int, float]] = None,
         continous_neighbors: int = 500,
         n_trees: int = 10,
         seed: Optional[int] = None,
@@ -47,11 +38,19 @@ class LPI:
 
         Parameters
         ----------
-        budget : Union[int, float]
-            Only trials of this budget are considered.
+        objectives : Optional[Union[Objective, List[Objective]]], optional
+            Considerd objectives. By default None. If None, all objectives are considered.
+        budget : Optional[Union[int, float]], optional
+            Considered budget. By default None. If None, the highest budget is chosen.
         continous_neighbors : int, optional
             How many neighbors should be chosen for continous hyperparameters. By default 500.
         """
+        if objectives is None:
+            objectives = self.run.get_objectives()
+
+        if budget is None:
+            budget = self.get_highest_budget()
+
         # Set variables
         self.continous_neighbors = continous_neighbors
         self.incumbent, _ = self.run.get_incumbent(budget=budget)
@@ -215,6 +214,12 @@ class LPI:
 
             # Use this to quantify importance via variance
             # mean = np.mean(overall_var_per_tree[hp_name])
+            
+            # Sometimes there is an ugly effect if default is better than
+            # incumbent.
+            if mean < 0:
+                mean = 0
+                std = 0
 
             importances[hp_name] = (mean, std)
 
