@@ -1,6 +1,7 @@
 from os import access
 from typing import Any, Dict, List, Optional
 
+import uuid
 import pandas as pd
 import dash_bootstrap_components as dbc
 import base64
@@ -10,8 +11,9 @@ from dash import html, dcc
 from deepcave.utils.hash import string_to_hash
 
 
-def help_button(text: str):
+def help_button(text: str, placement="top"):
     id = "help-button-" + string_to_hash(text)
+    id += str(uuid.uuid1())
 
     return html.Span(
         [
@@ -20,7 +22,7 @@ def help_button(text: str):
                 dcc.Markdown(text, className="p-3 pb-1"),
                 target=id,
                 trigger="hover",
-                placement="top",
+                placement=placement,
             ),
         ]
     )
@@ -107,8 +109,15 @@ def get_radio_options(labels=None, values=None, binary=False):
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
-def create_table(output: Dict[str, str], mb=True) -> dbc.Table:
-    mb = "mb-0" if not mb else ""
+def create_table(
+    output: Dict[str, str], fixed=False, head=True, striped=True, mb=True
+) -> dbc.Table:
+    className = ""
+    if not head:
+        className += "exclude-head "
+    if fixed:
+        className += "fixed "
+    className += "mb-0" if not mb else ""
     df = pd.DataFrame(output)
 
-    return dbc.Table.from_dataframe(df, striped=True, bordered=True, className=mb)
+    return dbc.Table.from_dataframe(df, striped=striped, bordered=True, className=className)
