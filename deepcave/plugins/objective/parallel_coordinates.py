@@ -238,6 +238,7 @@ class ParallelCoordinates(StaticPlugin):
             line = dict(
                 color=data[objective_name]["values"],
                 showscale=True,
+                colorscale="aggrnyl",
             )
 
         fig = go.Figure(
