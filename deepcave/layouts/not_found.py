@@ -13,5 +13,5 @@ class NotFoundLayout(Layout):
     def __call__(self) -> List[Component]:
         return [
             html.H2("This page does not exists."),
-            html.Div(f"Tried to reach {self.url}"),
+            html.Div(f"Tried to reach {self.url}."),
         ]

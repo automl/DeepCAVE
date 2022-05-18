@@ -19,7 +19,7 @@ class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
-    help = "docs/plugins/budget_correlation.rst"
+    help = "docs/plugins/budget_correlation.md"
     description = """
         The configuration footprint shows the configuration space in two dimensions.
         Based on the evaluated configurations, a surface is plotted. 

@@ -23,7 +23,7 @@ extras_require = {
         "pre-commit",
         "flake8",
         # Docs
-        "automl-sphinx-theme>=0.1.8",
+        "automl-sphinx-theme>=0.1.10",
     ],
     "examples": [
         "torch",
