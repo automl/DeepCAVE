@@ -331,7 +331,7 @@ style="width: 100%;">
 split values in order to get the marginals.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.evaluators.fanova.fANOVA.calculate">
-<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/fanova.html#fANOVA.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.fanova.fANOVA.calculate" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/fanova.html#fANOVA.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.fanova.fANOVA.calculate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the data wrt budget and trains the forest on the encoded data.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -340,7 +340,8 @@ split values in order to get the marginals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>budget</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – Only data points with this budget are selected.</p></li>
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considerd objectives. By default None. If None, all objectives are considered.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default None. If None, the highest budget is chosen.</p></li>
 <li><p><strong>n_trees</strong> (<em>int</em><em>, </em><em>optional</em>) – How many trees should be used. By default 16.</p></li>
 <li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Random seed. By default None.</p></li>
 </ul>
@@ -353,7 +354,7 @@ split values in order to get the marginals.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.evaluators.fanova.fANOVA.get_importances">
-<span class="sig-name descname"><span class="pre">get_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/fanova.html#fANOVA.get_importances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.fanova.fANOVA.get_importances" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/fanova.html#fANOVA.get_importances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.fanova.fANOVA.get_importances" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the importance scores from the passed hyperparameter names.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -362,7 +363,8 @@ split values in order to get the marginals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>hp_names</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Selected hyperparameter names to get the importance scores from.</p></li>
+<li><p><strong>hp_names</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Selected hyperparameter names to get the importance scores from. If None, all
+hyperparameters of the configspace are used.</p></li>
 <li><p><strong>depth</strong> (<em>int</em><em>, </em><em>optional</em>) – How often dimensions should be combined. By default 1.</p></li>
 <li><p><strong>sort</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the hyperparameters should be sorted by importance. By default True.</p></li>
 </ul>

@@ -1517,7 +1517,6 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Plugin.process"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns raw data based on a run and input data.</span>
@@ -1538,7 +1537,7 @@ style="width: 100%;">
 <span class="sd">        inputs : Dict[str, Any]</span>
 <span class="sd">            Input data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">pass</span></div>
+        <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="Plugin.generate_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_outputs">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">generate_outputs</span><span class="p">(</span>
