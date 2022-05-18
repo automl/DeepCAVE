@@ -15,7 +15,7 @@ from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
-from deepcave.utils.layout import create_table
+from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap
 from deepcave.utils.util import get_latest_change
 
@@ -25,10 +25,38 @@ class Overview(DynamicPlugin):
     name = "Overview"
     icon = "fas fa-search"
 
+    use_cache = False
     activate_run_selection = True
 
     @staticmethod
-    def process(run, inputs):
+    def get_output_layout(register):
+        return [
+            html.Div(
+                id=register("card", "children"),
+                className="mb-3",
+            ),
+            html.Hr(),
+            html.H3("Meta"),
+            html.Div(id=register("meta", "children")),
+            html.Hr(),
+            html.H3("Objectives"),
+            html.Div(id=register("objectives", "children")),
+            html.Hr(),
+            html.H3("Statuses"),
+            dbc.Tabs(
+                [
+                    dbc.Tab(dcc.Graph(id=register("status_statistics", "figure")), label="Barplot"),
+                    dbc.Tab(dcc.Graph(id=register("config_statistics", "figure")), label="Heatmap"),
+                    dbc.Tab(html.Div(id=register("status_details", "children")), label="Details"),
+                ]
+            ),
+            html.Hr(),
+            html.H3("Configuration Space"),
+            html.Div(id=register("configspace", "children")),
+        ]
+
+    @staticmethod
+    def load_outputs(run, *_):
         # Get best cost across all objectives, highest budget
         config, _ = run.get_incumbent()
         config_id = run.get_config_id(config)
@@ -44,14 +72,49 @@ class Overview(DynamicPlugin):
         for idx, cost in enumerate(costs):
             best_performance[objective_names[idx]] = cost
 
-        # Card information
-        card_information = {
-            "optimizer": run.prefix,
-            "latest_change": run.latest_change,
-            "best_performance": best_performance,
-            "link": Configurations.get_link(run, config_id),
-            "num_configs": run.get_num_configs(),
-        }
+        best_performances = []
+        for name, value in best_performance.items():
+            best_performances += [f"{round(value, 2)} ({name})"]
+
+        # Design card for quick information here
+        card = dbc.Card(
+            [
+                dbc.CardHeader(html.H3("Quick Information", className="mb-0")),
+                dbc.CardBody(
+                    [
+                        html.Div(
+                            f"Optimizer: {run.prefix}",
+                            className="card-text",
+                        ),
+                        html.Div(
+                            f"Latest change: {get_latest_change(run.latest_change)}",
+                            className="card-text",
+                        ),
+                        html.Div(
+                            [
+                                html.Span(
+                                    f"Best average performance: {', '.join(best_performances)} "
+                                ),
+                                html.A(
+                                    "(Details)",
+                                    href=Configurations.get_link(run, config_id),
+                                    style={"color": "white"},
+                                ),
+                            ],
+                            className="card-text",
+                        ),
+                        html.Div(
+                            [
+                                html.Span(f"Total configurations: {run.get_num_configs()}"),
+                            ],
+                            className="card-text",
+                        ),
+                    ]
+                ),
+            ],
+            color="secondary",
+            inverse=True,
+        )
 
         # Meta
         meta = {"Attribute": [], "Value": []}
@@ -75,6 +138,7 @@ class Overview(DynamicPlugin):
         budgets = run.get_budgets()
 
         status_statistics = {}
+        status_details = {"Configuration ID": [], "Budget": [], "Status": [], "Error": []}
         # Statistics
         for budget in budgets:
             if budget not in status_statistics:
@@ -85,6 +149,18 @@ class Overview(DynamicPlugin):
 
         for trial in run.get_trials():
             status_statistics[trial.budget][trial.status.name] += 1
+
+            # Add to table data
+            if trial.status != Status.SUCCESS:
+                status_details["Configuration ID"] += [trial.config_id]
+                status_details["Budget"] += [trial.budget]
+                status_details["Status"] += [trial.status.to_text()]
+
+                if "traceback" in trial.additional:
+                    traceback = trial.additional["traceback"]
+                    status_details["Error"] += [help_button(traceback)]
+                else:
+                    status_details["Error"] += [""]
 
         # Now remove status that are not used
         for budget in list(status_statistics.keys()):
@@ -120,6 +196,7 @@ class Overview(DynamicPlugin):
         config_statistics["Z_values"] = z_values
         config_statistics["Z_labels"] = z_labels
 
+        # Prepare configspace table
         configspace = {
             "Hyperparameter": [],
             "Possible Values": [],
@@ -154,88 +231,8 @@ class Overview(DynamicPlugin):
             configspace["Default"].append(default)
             configspace["Log"].append(log)
 
-        return {
-            "card_information": card_information,
-            "meta": meta,
-            "objectives": objectives,
-            "status_statistics": status_statistics,
-            "config_statistics": config_statistics,
-            "configspace": configspace,
-        }
-
-    @staticmethod
-    def get_output_layout(register):
-        return [
-            dbc.Card(
-                [
-                    dbc.CardHeader(html.H3("Quick Information", className="mb-0")),
-                    dbc.CardBody(
-                        [
-                            # html.H5("Run Card", className="card-title"),
-                            html.Div(
-                                [
-                                    html.Span("Optimizer: "),
-                                    html.Span(id=register("optimizer", "children")),
-                                ],
-                                className="card-text",
-                            ),
-                            html.Div(
-                                [
-                                    html.Span("Latest change: "),
-                                    html.Span(id=register("latest_change", "children")),
-                                ],
-                                className="card-text",
-                            ),
-                            html.Div(
-                                [
-                                    html.Span("Best average performance: "),
-                                    html.Span(id=register("best_performance", "children")),
-                                    html.Span(" "),
-                                    html.A(
-                                        "(Details)",
-                                        id=register("link", "href"),
-                                        style={"color": "white"},
-                                    ),
-                                ],
-                                className="card-text",
-                            ),
-                            html.Div(
-                                [
-                                    html.Span("Total configurations: "),
-                                    html.Span(id=register("num_configs", "children")),
-                                ],
-                                className="card-text",
-                            ),
-                        ]
-                    ),
-                ],
-                color="secondary",
-                inverse=True,
-                className="mb-3",
-            ),
-            html.Hr(),
-            html.H3("Meta"),
-            html.Div(id=register("meta", "children")),
-            html.Hr(),
-            html.H3("Objectives"),
-            html.Div(id=register("objectives", "children")),
-            html.Hr(),
-            html.H3("Statuses"),
-            dbc.Tabs(
-                [
-                    dbc.Tab(dcc.Graph(id=register("status_statistics", "figure")), label="Barplot"),
-                    dbc.Tab(dcc.Graph(id=register("config_statistics", "figure")), label="Heatmap"),
-                ]
-            ),
-            html.Hr(),
-            html.H3("Configuration Space"),
-            html.Div(id=register("configspace", "children")),
-        ]
-
-    @staticmethod
-    def load_outputs(run, inputs, outputs):
         stats_data = []
-        for budget, stats in outputs["status_statistics"].items():
+        for budget, stats in status_statistics.items():
             trace = go.Bar(x=list(stats.keys()), y=list(stats.values()), name=budget)
             stats_data.append(trace)
 
@@ -253,27 +250,20 @@ class Overview(DynamicPlugin):
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(
-                outputs["config_statistics"]["X"],
-                outputs["config_statistics"]["Y"],
-                outputs["config_statistics"]["Z_values"],
-                outputs["config_statistics"]["Z_labels"],
+                config_statistics["X"],
+                config_statistics["Y"],
+                config_statistics["Z_values"],
+                config_statistics["Z_labels"],
             ),
             layout=config_layout,
         )
 
-        best_performances = []
-        for name, value in outputs["card_information"]["best_performance"].items():
-            best_performances += [f"{round(value, 2)} ({name})"]
-
         return [
-            outputs["card_information"]["optimizer"],
-            get_latest_change(outputs["card_information"]["latest_change"]),
-            ", ".join(best_performances),
-            outputs["card_information"]["link"],
-            outputs["card_information"]["num_configs"],
-            create_table(outputs["meta"]),
-            create_table(outputs["objectives"]),
+            card,
+            create_table(meta, fixed=True),
+            create_table(objectives, fixed=True),
             stats_figure,
             config_figure,
-            create_table(outputs["configspace"], mb=False),
+            create_table(status_details),
+            create_table(configspace, mb=False),
         ]
