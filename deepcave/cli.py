@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, List
 
 import subprocess
@@ -18,6 +19,8 @@ def execute(args: List[Any]) -> None:
         print(getattr(config, config_key))
         return
 
+    HERE = Path(__file__).parent.parent
+
     if FLAGS.start:
         if FLAGS.docker:
             # TODO: Implement docker execution
@@ -25,11 +28,11 @@ def execute(args: List[Any]) -> None:
 
             # subprocess.call('./start_docker.sh')
         else:
-
+            start = HERE / "start.sh"
             if FLAGS.config is not None:
-                subprocess.call(["./start.sh", FLAGS.config])
+                subprocess.call([start, FLAGS.config])
             else:
-                subprocess.call(["./start.sh"])
+                subprocess.call([start])
 
 
 def main() -> None:

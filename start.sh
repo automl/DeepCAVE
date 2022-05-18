@@ -4,6 +4,21 @@
 trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
+INSTALLED="$(which deepcave)"
+
+if ! [ $INSTALLED ]; then
+    echo "Error: deepcave is not installed." >&2
+    exit 1
+fi
+
+ROOT_PATH=`
+python << END
+import deepcave
+from pathlib import Path
+print(str(Path(deepcave.__file__).parent.parent))
+END
+`
+
 # We remove dump.rdb to avoid issues from previous runs
 file="dump.rdb"
 if [ -f "$file" ] ; then
@@ -13,7 +28,7 @@ fi
 # Save config value
 CONFIG=$1
 if ! [ $CONFIG ]; then
-  CONFIG="default"
+    CONFIG="default"
 fi
 echo "Using config '$CONFIG'"
 
@@ -41,5 +56,5 @@ else
 fi
 
 # Start worker in background
-python worker.py --config $CONFIG &
-python server.py --config $CONFIG
+python "$ROOT_PATH/worker.py" --config $CONFIG &
+python "$ROOT_PATH/server.py" --config $CONFIG
