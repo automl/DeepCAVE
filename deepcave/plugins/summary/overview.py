@@ -43,6 +43,7 @@ class Overview(DynamicPlugin):
             html.Div(id=register("objectives", "children")),
             html.Hr(),
             html.H3("Statuses"),
+            html.Div(id=register("status_text", "children"), className="mb-3"),
             dbc.Tabs(
                 [
                     dbc.Tab(dcc.Graph(id=register("status_statistics", "figure")), label="Barplot"),
@@ -137,9 +138,9 @@ class Overview(DynamicPlugin):
         # Budgets
         budgets = run.get_budgets()
 
+        # Statistics
         status_statistics = {}
         status_details = {"Configuration ID": [], "Budget": [], "Status": [], "Error": []}
-        # Statistics
         for budget in budgets:
             if budget not in status_statistics:
                 status_statistics[budget] = {}
@@ -147,8 +148,24 @@ class Overview(DynamicPlugin):
                 for s in Status:
                     status_statistics[budget][s.name] = 0
 
+        status_statistics_total = {}
+        status_budget = {}
+        len_trials = 0
         for trial in run.get_trials():
+            len_trials += 1
             status_statistics[trial.budget][trial.status.name] += 1
+
+            # For text information
+            if trial.status not in status_statistics_total:
+                status_statistics_total[trial.status] = 0
+            else:
+                status_statistics_total[trial.status] += 1
+
+            # For text information
+            if trial.budget not in status_budget:
+                status_budget[trial.budget] = 0
+            else:
+                status_budget[trial.budget] += 1
 
             # Add to table data
             if trial.status != Status.SUCCESS:
@@ -161,6 +178,43 @@ class Overview(DynamicPlugin):
                     status_details["Error"] += [help_button(traceback)]
                 else:
                     status_details["Error"] += [""]
+
+        successful_trials_rate = round(
+            status_statistics_total[Status.SUCCESS] / len_trials * 100, 2
+        )
+        trials_rates = []
+        for status, count in status_statistics_total.items():
+            if status == Status.SUCCESS:
+                continue
+
+            rate = round(count / len_trials * 100, 2)
+            trials_rates += [status.to_text() + f" ({rate}%)"]
+
+        # Add an "or" to the last rate
+        if successful_trials_rate != 100:
+            unsuccessful_trials_text = "The other trials have been "
+            if len(trials_rates) == 1:
+                unsuccessful_trials_text += trials_rates[0]
+            elif len(trials_rates) == 2:
+                unsuccessful_trials_text += trials_rates[0] + " or " + trials_rates[1]
+            else:
+                trials_rates[-1] = " or " + trials_rates[-1]
+                unsuccessful_trials_text += ", ".join(trials_rates)
+            unsuccessful_trials_text += "."
+
+        status_budget_values = [
+            str(round(count / len_trials * 100, 2)) + "%" for count in status_budget.values()
+        ]
+        status_budget_values_text = "/".join(status_budget_values)
+        status_budget_keys_text = [str(key) for key in status_budget.keys()]
+        status_budget_keys_text = "/".join(status_budget_keys_text)
+
+        status_text = f"""
+        Taking all evaluated trials into account, {successful_trials_rate}% have been successful.
+        {unsuccessful_trials_text}
+        Moreover, {status_budget_values_text} of the configurations were evaluated on budget
+        {status_budget_keys_text}, respectively.
+        """
 
         # Now remove status that are not used
         for budget in list(status_statistics.keys()):
@@ -262,6 +316,7 @@ class Overview(DynamicPlugin):
             card,
             create_table(meta, fixed=True),
             create_table(objectives, fixed=True),
+            status_text,
             stats_figure,
             config_figure,
             create_table(status_details),
