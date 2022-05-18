@@ -24,31 +24,46 @@ class Importances(StaticPlugin):
         return [
             html.Div(
                 [
-                    dbc.Label("Method"),
-                    help_button(
-                        "Local Parameter Importance: Quantify importance by changing the "
-                        "neighborhood of a configuration. Uses default and incumbent configuration "
-                        "as reference. \n\n"
-                        "fANOVA: Quantify importance globally."
-                    ),
+                    dbc.Label("Objective"),
                     dbc.Select(
-                        id=register("method", ["value", "options"]),
-                        placeholder="Select ...",
+                        id=register("objective_id", ["value", "options"], type=int),
+                        placeholder="Select objective ...",
                     ),
                 ],
                 className="mb-3",
             ),
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Trees"),
-                    help_button(
-                        "The number of trees of the internal random forest to estimate the "
-                        "hyperparameter importance. "
-                        "The more trees are used the more accurate the results. "
-                        "However, also it takes longer to compute."
+                    dbc.Col(
+                        [
+                            dbc.Label("Method"),
+                            help_button(
+                                "Local Parameter Importance: Quantify importance by changing the "
+                                "neighborhood of a configuration. Uses default and incumbent configuration "
+                                "as reference. \n\n"
+                                "fANOVA: Quantify importance globally."
+                            ),
+                            dbc.Select(
+                                id=register("method", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
                     ),
-                    dbc.Input(id=register("n_trees", type=optional_int)),
-                ]
+                    dbc.Col(
+                        [
+                            dbc.Label("Trees"),
+                            help_button(
+                                "The number of trees of the internal random forest to estimate the "
+                                "hyperparameter importance. "
+                                "The more trees are used the more accurate the results. "
+                                "However, also it takes longer to compute."
+                            ),
+                            dbc.Input(id=register("n_trees", type=optional_int)),
+                        ],
+                        md=6,
+                    ),
+                ],
             ),
         ]
 
@@ -87,6 +102,13 @@ class Importances(StaticPlugin):
         }
 
     def load_dependency_inputs(self, run, previous_inputs, inputs):
+        # Prepare objetives
+        objective_names = run.get_objective_names()
+        objective_ids = run.get_objective_ids()
+        objective_options = get_select_options(objective_names, objective_ids)
+        objective_value = inputs["objective_id"]["value"]
+
+        # Prepare budgets
         budgets = run.get_budgets(human=True)
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
@@ -96,6 +118,10 @@ class Importances(StaticPlugin):
         hp_options = get_checklist_options(hp_names)
         hp_value = inputs["hyperparameter_names"]["value"]
 
+        # Pre-set values
+        if objective_value is None:
+            objective_value = objective_ids[0]
+
         # Pre-selection of the hyperparameters
         if run is not None:
             if len(hp_value) == 0:
@@ -104,6 +130,10 @@ class Importances(StaticPlugin):
                 budget_value = [budget_ids[-1]]
 
         return {
+            "objective_id": {
+                "options": objective_options,
+                "value": objective_value,
+            },
             "hyperparameter_names": {
                 "options": hp_options,
                 "value": hp_value,
@@ -117,6 +147,7 @@ class Importances(StaticPlugin):
 
     @staticmethod
     def process(run: AbstractRun, inputs):
+        objective = run.get_objective(inputs["objective_id"])
         method = inputs["method"]
         n_trees = inputs["n_trees"]
 
@@ -137,7 +168,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
-            evaluator.calculate(budget, n_trees=n_trees, seed=0)
+            evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances

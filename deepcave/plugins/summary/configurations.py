@@ -8,7 +8,6 @@ from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
-from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import create_table, get_slider_marks
 from deepcave.utils.styled_plotty import generate_config_code, get_color, get_hyperparameter_ticks
 from deepcave.utils.url import create_url
@@ -97,7 +96,7 @@ class Configurations(DynamicPlugin):
             original_config_id = run.get_original_config_id(selected_config_id)
             overview_table_data["Key"] += ["Derived from"]
             overview_table_data["Value"] += [
-                str(original_run.path) + f" (ID: {original_config_id})"
+                str(original_run.path) + f" (Configuration ID: {original_config_id})"
             ]
 
         performances = {}
@@ -178,7 +177,7 @@ class Configurations(DynamicPlugin):
                 [
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("configspace_graph", "figure"),
+                            id=register("configspace_graph", "figure"), style={"height": "50vh"}
                         ),
                         label="Graph",
                     ),
@@ -189,34 +188,14 @@ class Configurations(DynamicPlugin):
             dbc.Accordion(
                 [
                     dbc.AccordionItem(
-                        generate_config_code(register, variables=["path", "config_dict"]),
+                        html.Output(
+                            generate_config_code(register, variables=["path", "config_dict"])
+                        ),
                         title="See code",
                     ),
                 ],
                 start_collapsed=True,
             ),
-        ]
-
-    @staticmethod
-    def load_outputs(run, inputs, outputs):
-        config_id = inputs["config_id"]
-        config = run.get_config(config_id)
-
-        if run.path is not None:
-            path = run.path / "configspace.json"
-        else:
-            assert run.prefix == "group"
-            original_run = run.get_original_run(config_id)
-            path = original_run.path
-
-        return [
-            create_table(outputs["overview_table_data"]),
-            Configurations._get_objective_figure(inputs, outputs, run),
-            create_table(outputs["performances_table_data"]),
-            Configurations._get_configspace_figure(inputs, outputs, run),
-            create_table(outputs["cs_table_data"]),
-            str(path),
-            str(config.get_dictionary()),
         ]
 
     @staticmethod
@@ -294,23 +273,6 @@ class Configurations(DynamicPlugin):
             data[hp_name]["tickvals"] = tickvals
             data[hp_name]["ticktext"] = ticktext
 
-        layout = dict(
-            title="Slider / Scrollbar",
-            xaxis=dict(
-                rangeselector=dict(
-                    buttons=list(
-                        [
-                            dict(count=1, label="1m", step="month", stepmode="backward"),
-                            dict(count=6, label="6m", step="month", stepmode="backward"),
-                            dict(step="all"),
-                        ]
-                    )
-                ),
-                rangeslider=dict(visible=True),
-                type="date",
-            ),
-        )
-
         fig = go.Figure(
             data=go.Parcoords(
                 line=dict(
@@ -319,8 +281,37 @@ class Configurations(DynamicPlugin):
                     colorscale=["rgba(255,255,255,0.1)", "red"],
                 ),
                 dimensions=list([d for d in data.values()]),
+                labelangle=45,
+                labelside="top",
             ),
-            layout=layout,
+            layout=dict(
+                margin=dict(
+                    t=150,
+                    b=50,
+                )
+            ),
         )
 
         return fig
+
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
+        config_id = inputs["config_id"]
+        config = run.get_config(config_id)
+
+        if run.path is not None:
+            path = run.path / "configspace.json"
+        else:
+            assert run.prefix == "group"
+            original_run = run.get_original_run(config_id)
+            path = original_run.path
+
+        return [
+            create_table(outputs["overview_table_data"], head=False, striped=False),
+            Configurations._get_objective_figure(inputs, outputs, run),
+            create_table(outputs["performances_table_data"]),
+            Configurations._get_configspace_figure(inputs, outputs, run),
+            create_table(outputs["cs_table_data"]),
+            str(path),
+            str(config.get_dictionary()),
+        ]

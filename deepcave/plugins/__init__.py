@@ -1222,7 +1222,6 @@ class Plugin(Layout, ABC):
         return []
 
     @staticmethod
-    @abstractmethod
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Returns raw data based on a run and input data.
@@ -1243,7 +1242,7 @@ class Plugin(Layout, ABC):
         inputs : Dict[str, Any]
             Input data.
         """
-        pass
+        return {}
 
     @classmethod
     def generate_outputs(
