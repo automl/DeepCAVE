@@ -1,11 +1,6 @@
 import dash_bootstrap_components as dbc
 import pandas as pd
-from dash import dcc, html
 import plotly.graph_objs as go
-
-from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.plugins.summary.configurations import Configurations
-from deepcave.runs import Status
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
     Constant,
@@ -15,6 +10,11 @@ from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+from dash import dcc, html
+
+from deepcave.plugins.dynamic import DynamicPlugin
+from deepcave.plugins.summary.configurations import Configurations
+from deepcave.runs import Status
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap
 from deepcave.utils.util import get_latest_change
@@ -24,6 +24,7 @@ class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
     icon = "fas fa-search"
+    help = "docs/plugins/overview.md"
 
     use_cache = False
     activate_run_selection = True

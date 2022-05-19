@@ -6,3 +6,5 @@
     * Change `Overview.md` if changing this
     * Need more information about what's actually possible to see here
 
+# Configuration Footprint
+* We should change *Configuration* to **Evaluated Configuration** and *Random (unevaluated) Configuration* to **Unevaluated Configuration**.
