@@ -294,13 +294,13 @@ style="width: 100%;">
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#structure">
-   Structure
+  <a class="reference internal nav-link" href="#plugin-structure">
+   Plugin Structure
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#types">
-   Types
+  <a class="reference internal nav-link" href="#plugin-types">
+   Plugin Types
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -335,45 +335,51 @@ style="width: 100%;">
 </div>
 <p>Plugins are used to display data in a specific way. There are plugins to analyse the performance,
 the hyperparameters and the budgets. Since AutoML runs are multi-dimensional, the plugins
-provide a way to look into specific aspects more detailtly.</p>
+provide a way to look into specific aspects in more detail.</p>
 <p>The goal of the plugins are to provide a way to visualize the data in a way that is easy to
 understand. It should give you more insight both data and model-wise and can serve as an additional
 sanity check.</p>
-<section id="structure">
-<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<p>The plugins in DeepCAVE are structured in a specific way. Basically, three blocks are used:</p>
-<ul class="simple">
-<li><p>Input block</p></li>
-<li><p>Filter block</p></li>
-<li><p>Output block</p></li>
-</ul>
-<p>The input block is used to trigger new calculations. For example, when you change the objective
-in the input block, a new calculation is triggered and cached. The next time you use the same input
+<p>User can also add their own plugins to provide deeper insights that suit their needs!</p>
+<section id="plugin-structure">
+<h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Permalink to this headline">¶</a></h2>
+<p>The plugins in DeepCAVE are structured in a specific way. This is done with three blocks:</p>
+<ol class="arabic">
+<li><p><strong>Input block</strong></p>
+<blockquote>
+<div><p>This is used to trigger new calculations. For example, when you change the objective in the <strong>Input block</strong>,
+a new calculation is triggered and cached. The next time you use the same input
 data, no new calculation is needed as the data is already cached. In the end, the input data is mapped
-the the calculation, which is referred to “raw data”.</p>
-<p>In contrast to the input block, the filter block does not trigger any calculation. It simply changes
-“optional” input data which are used to influence the output.</p>
-<p>Both inputs and filter are used to display the output in the output block. Since the filter inputs
-are low-cost changes, the output will be updated immediately after changing the filter output.
+the calculation, which is referred to as <em>“raw data”</em>.</p>
+</div></blockquote>
+</li>
+<li><p><strong>Filter block</strong></p>
+<blockquote>
+<div><p>In contrast to the <em>Input block</em>, the <em>Filter block</em> does not trigger any calculation. It acts as a filter over the
+input data which can be used to influence the display of the output.</p>
+</div></blockquote>
+</li>
+<li><p><strong>Output block</strong></p>
+<blockquote>
+<div><p>Both the <em>Input block</em> and <em>Filter block</em> are used to generate information to display in the <em>Output block</em>.
+Since the filters are low-cost changes, the output will be updated immediately after any filters are changed.
 The following figure shows the described blocks for the cost over time plugin.</p>
+</div></blockquote>
+</li>
+</ol>
 <img alt="../_images/blocks.png" src="../_images/blocks.png" />
 </section>
-<section id="types">
-<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
-<p>DeepCAVE differs between “static” and “dynamic” plugin. While dynamic plugins update the results
-immediately (used for low-cost plugins), static plugins are triggered by a “calculate” button. This
-has the background that some plugins need a lot longer than others. For example, if you train
-a huge tree with a lot of data, the training might take a while. If you only display the configuration
-space, in contrast to train a tree, the calculation is done pretty fast.</p>
-<p>Internally, static plugins use a working queue to finish-up the calculations. The status of the
-progress is displayed on the left in the sidebar. The plugin automatically update itself
-(one check every second) if the result is available and renders the output thereafter.</p>
+<section id="plugin-types">
+<h2>Plugin Types<a class="headerlink" href="#plugin-types" title="Permalink to this headline">¶</a></h2>
+<p>DeepCAVE has two kinds of plugins, <strong>static</strong> and <strong>dynamic</strong>. While <strong>dynamic</strong> plugins update the results
+immediately, <strong>static</strong> plugins are triggered by a <cite>Process</cite> button before displaying their output.</p>
+<p>Most basic plugins should be possible as a <strong>dynamic</strong> plugin, do some quick analysis and then update the output as soon as it’s ready.</p>
+<p>In contrast, a <strong>static</strong> plugin might might take much longer to generate its output. For example, the _Hyperparameter <a href="#id1"><span class="problematic" id="id2">Importance_</span></a> plugin will train many decision trees to calculate it’s output and so the plugins will queue the calculations, viewable in the side bar, and will be cached and viewable upon completion.</p>
 </section>
 <section id="custom-plugin">
 <h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this headline">¶</a></h2>
-<p>DeepCAVE was designed so that the plugins require a minimal design. We recommend using our
-basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.
-Take inspirations from the other plugins if needed.</p>
+<p>DeepCAVE was designed so that the plugins require minimal design. We recommend using our
+basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.</p>
+<p>It could be helpful to refer to the base set of plugins for reference and inspiration.</p>
 <p>After you have created your plugin, you need to register it in the config file. Simply add the
 location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code>.</p>
 </section>
