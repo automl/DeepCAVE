@@ -33,21 +33,21 @@ The plugins in DeepCAVE are structured in a specific way. This is done with thre
 
 1. **Input block**
 
-   This is used to trigger new calculations. For example, when you change the objective
-in the **Input block**, a new calculation is triggered and cached. The next time you use the same input
-data, no new calculation is needed as the data is already cached. In the end, the input data is mapped
-the calculation, which is referred to as _"raw data"_.
+    This is used to trigger new calculations. For example, when you change the objective in the **Input block**,
+    a new calculation is triggered and cached. The next time you use the same input
+    data, no new calculation is needed as the data is already cached. In the end, the input data is mapped
+    the calculation, which is referred to as *"raw data"*.
 
 2. **Filter block**
 
-   In contrast to the _Input block_, the _Filter block_ does not trigger any calculation. It acts as a filter over the
-   input data which can be used to influence the display of the output.
+    In contrast to the *Input block*, the *Filter block* does not trigger any calculation. It acts as a filter over the
+    input data which can be used to influence the display of the output.
 
 3. **Output block**
 
-   Both the _Input block_ and _Filter block_ are used to generate information to display in the _Output block_.
-   Since the filters are low-cost changes, the output will be updated immediately after any filters are changed.
-   The following figure shows the described blocks for the cost over time plugin.
+    Both the *Input block* and *Filter block* are used to generate information to display in the *Output block*.
+    Since the filters are low-cost changes, the output will be updated immediately after any filters are changed.
+    The following figure shows the described blocks for the cost over time plugin.
 
 .. image:: ../images/plugins/blocks.png
 
