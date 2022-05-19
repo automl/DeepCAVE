@@ -352,11 +352,7 @@ style="width: 100%;">
 
         <span class="c1"># Read meta</span>
         <span class="c1"># Everything else is ignored</span>
-        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s2">&quot;train_inst_fn&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;pcs_fn&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;execdir&quot;</span>
-        <span class="p">]</span>
+        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;train_inst_fn&quot;</span><span class="p">,</span> <span class="s2">&quot;pcs_fn&quot;</span><span class="p">,</span> <span class="s2">&quot;execdir&quot;</span><span class="p">]</span>
 
         <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scenario.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -438,7 +434,7 @@ style="width: 100%;">
             <span class="n">budget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
             <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-                <span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>  <span class="c1"># Having only single objective here</span>
+                <span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>
                 <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
                 <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
                 <span class="n">start_time</span><span class="o">=</span><span class="n">starttime</span><span class="p">,</span>

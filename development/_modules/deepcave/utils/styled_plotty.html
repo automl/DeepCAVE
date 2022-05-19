@@ -382,7 +382,7 @@ style="width: 100%;">
     <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">new</span><span class="p">,</span> <span class="n">old</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unique_sorted_values</span><span class="p">):</span>
-        <span class="n">mapping</span><span class="p">[</span><span class="n">old</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span>
+        <span class="n">mapping</span><span class="p">[</span><span class="n">old</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_sorted_values</span><span class="p">)</span>
         <span class="n">v</span> <span class="o">+=</span> <span class="p">[</span><span class="n">new</span><span class="p">]</span>
 
     <span class="n">z</span> <span class="o">=</span> <span class="n">values</span>
@@ -401,6 +401,9 @@ style="width: 100%;">
     <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">[</span><span class="n">k</span> <span class="p">:</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n_intervals</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
     <span class="n">ticktext</span> <span class="o">=</span> <span class="n">unique_sorted_labels</span>
 
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">(</span>
         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
         <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
@@ -410,7 +413,7 @@ style="width: 100%;">
         <span class="n">colorbar</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">tickvals</span><span class="p">,</span> <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">ticktext</span><span class="p">,</span> <span class="s2">&quot;tickmode&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">},</span>
         <span class="n">zmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">zmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-        <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+        <span class="c1"># hoverinfo=&quot;skip&quot;,</span>
     <span class="p">)</span></div>
 
 
@@ -656,15 +659,10 @@ style="width: 100%;">
 
     <span class="c1"># It&#39;s also nice to see the metrics</span>
     <span class="n">objectives</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
-    <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+    <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+    <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;No costs on highest budget available.&lt;br&gt;&quot;</span>
-        <span class="k">return</span> <span class="n">string</span>
-
-    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives (Budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">)&lt;/b&gt;&lt;br&gt;&quot;</span>
+    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives (on highest found budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">)&lt;/b&gt;&lt;br&gt;&quot;</span>
     <span class="k">for</span> <span class="n">objective</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">costs</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
 

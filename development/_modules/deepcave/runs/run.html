@@ -341,6 +341,7 @@ style="width: 100%;">
 <span class="sd">            meta (dict): Could be `ram`, `cores`, ...</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Run</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -501,12 +502,15 @@ style="width: 100%;">
             <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Overwrite</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">trial</span>
 
         <span class="c1"># Update budgets</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
 
         <span class="c1"># Update models</span>
         <span class="c1"># Problem: We don&#39;t want to have the model in the cache.</span>
@@ -563,6 +567,7 @@ style="width: 100%;">
 
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not load trials because path is None.&quot;</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
@@ -593,7 +598,10 @@ style="width: 100%;">
                 <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
 
                 <span class="c1"># Also create trial_keys</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+                <span class="c1"># Update highest budget</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">)</span></div>
 </pre></div>
 
               </div>

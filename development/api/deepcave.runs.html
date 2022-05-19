@@ -439,6 +439,24 @@ By default None.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_configs">
+<span class="sig-name descname"><span class="pre">get_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_configs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get configurations of the run. Optionally, only configurations which were evaluated
+on the passed budget are considered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>budget</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default None (all configurations are included).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Configuration id and the configuration.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[int, Configuration]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_costs">
 <span class="sig-name descname"><span class="pre">get_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_costs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the costs of a configuration. In case of multi-objective, multiple costs are
@@ -504,8 +522,10 @@ passed objectives only. By default False.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_highest_budget">
-<span class="sig-name descname"><span class="pre">get_highest_budget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_highest_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_highest_budget" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the highest budget. If no budget is available, None is returned.</p>
+<span class="sig-name descname"><span class="pre">get_highest_budget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_highest_budget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_highest_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the highest found budget for a config id. If no config id is specified then
+the highest available budget is returned.
+Moreover, if no budget is available None is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>The highest budget or None if no budget was specified.</p>
