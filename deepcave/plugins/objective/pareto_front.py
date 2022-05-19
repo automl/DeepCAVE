@@ -15,11 +15,7 @@ class ParetoFront(DynamicPlugin):
     id = "pareto_front"
     name = "Pareto Front"
     icon = "fas fa-wind"
-    description = """
-        Pareto efficiency or Pareto optimality is a situation where no individual or preference
-        criterion can be better off without making at least one individual or preference
-        criterion worse off or without any loss thereof.
-    """
+    help = "docs/plugins/pareto_front.md"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         check_equality(runs, objectives=True, budgets=True)

@@ -15,6 +15,7 @@ class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
     icon = "fas fa-chart-line"
+    help = "docs/plugins/cost_over_time.md"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         check_equality(runs, objectives=True, budgets=True)
@@ -150,7 +151,7 @@ class CostOverTime(DynamicPlugin):
 
             if run.prefix != "group" and not show_runs:
                 continue
-            
+
             objective = run.get_objective(inputs["objective_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
