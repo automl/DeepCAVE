@@ -311,7 +311,13 @@ style="width: 100%;">
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">COMBINED_COST_NAME</span><span class="p">,</span> <span class="n">CONSTANT_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">NAN_VALUE</span>
+<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COMBINED_BUDGET</span><span class="p">,</span>
+    <span class="n">COMBINED_COST_NAME</span><span class="p">,</span>
+    <span class="n">CONSTANT_VALUE</span><span class="p">,</span>
+    <span class="n">NAN_LABEL</span><span class="p">,</span>
+    <span class="n">NAN_VALUE</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
@@ -339,7 +345,7 @@ style="width: 100%;">
     <span class="n">ABORTED</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">RUNNING</span> <span class="o">=</span> <span class="mi">6</span>
     <span class="n">NOT_EVALUATED</span> <span class="o">=</span> <span class="mi">7</span>
-    
+
     <span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span></div>
 
@@ -542,6 +548,10 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()]</span>
 
     <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
+        <span class="c1"># Include all configs if we have combined budget</span>
+        <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
+            <span class="n">budget</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -594,7 +604,9 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">get_budget_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">())))</span>
 
-<div class="viewcode-block" id="AbstractRun.get_budgets"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budgets">[docs]</a>    <span class="k">def</span> <span class="nf">get_budgets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="AbstractRun.get_budgets"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budgets">[docs]</a>    <span class="k">def</span> <span class="nf">get_budgets</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">include_combined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the budgets from the meta data.</span>
 
@@ -609,11 +621,15 @@ style="width: 100%;">
 <span class="sd">            List of budgets.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">include_combined</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">COMBINED_BUDGET</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
+            <span class="n">budgets</span> <span class="o">=</span> <span class="p">[</span><span class="n">COMBINED_BUDGET</span><span class="p">]</span> <span class="o">+</span> <span class="n">budgets</span>
 
         <span class="k">if</span> <span class="n">human</span><span class="p">:</span>
             <span class="n">readable_budgets</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
+                    <span class="n">readable_budgets</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Combined&quot;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">b</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">readable_budgets</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mi">2</span><span class="p">))]</span>
 
             <span class="k">return</span> <span class="n">readable_budgets</span>
@@ -722,12 +738,11 @@ style="width: 100%;">
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
 
+        <span class="c1"># In case of COMBINED_BUDGET, we only keep the costs of the highest found budget</span>
+        <span class="n">highest_evaluated_budget</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
-                    <span class="k">continue</span>
-
             <span class="k">if</span> <span class="n">statuses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statuses</span><span class="p">,</span> <span class="n">Status</span><span class="p">):</span>
                     <span class="n">statuses</span> <span class="o">=</span> <span class="p">[</span><span class="n">statuses</span><span class="p">]</span>
@@ -735,7 +750,20 @@ style="width: 100%;">
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">statuses</span><span class="p">:</span>
                     <span class="k">continue</span>
 
-            <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>  <span class="c1"># self._process_costs(trial.costs)</span>
+            <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">highest_evaluated_budget</span><span class="p">:</span>
+                    <span class="n">highest_evaluated_budget</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span>
+
+                <span class="n">latest_budget</span> <span class="o">=</span> <span class="n">highest_evaluated_budget</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span>
+                <span class="c1"># We only keep the highest budget</span>
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">&gt;=</span> <span class="n">latest_budget</span><span class="p">:</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+                <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>  <span class="c1"># self._process_costs(trial.costs)</span>
 
         <span class="k">return</span> <span class="n">results</span></div>
 
@@ -761,6 +789,9 @@ style="width: 100%;">
 <span class="sd">        Status</span>
 <span class="sd">            Status of the configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Status</span><span class="o">.</span><span class="n">NOT_EVALUATED</span>
+
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
 
@@ -956,9 +987,11 @@ style="width: 100%;">
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
             <span class="n">trial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
-            <span class="c1"># Only consider selected/last budget</span>
-            <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
-                <span class="k">continue</span>
+            <span class="c1"># We want to use all budgets</span>
+            <span class="k">if</span> <span class="n">budget</span> <span class="o">!=</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
+                <span class="c1"># Only consider selected/last budget</span>
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
             <span class="n">cost</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
