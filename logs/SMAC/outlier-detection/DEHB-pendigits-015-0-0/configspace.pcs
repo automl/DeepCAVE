@@ -1,0 +1,69 @@
+backbone:activation categorical {relu, swish, swish-1, tanh} [relu]
+backbone:batch_normalization categorical {True, False} [False]
+backbone:dropout categorical {True, False} [True]
+backbone:num_latent_units integer [1, 8] [4]
+backbone:num_layers integer [0, 3] [2]
+backbone:skip_connection categorical {True, False} [False]
+data_loader:batch_size integer [32, 512] [128]
+model:__choice__ categorical {dasvdd, dagmm, ae, vae} [dasvdd]
+optimizer:__choice__ categorical {AdamWOptimizer, SGDOptimizer} [AdamWOptimizer]
+scaler:__choice__ categorical {MinMaxScaler, NoScaler, StandardScaler, RobustScaler, L101Scaler} [MinMaxScaler]
+backbone:dropout_rate real [0.0, 0.8] [0.5]
+backbone:num_units_layer_1 integer [8, 16] [12]
+backbone:num_units_layer_2 integer [4, 12] [8]
+backbone:num_units_layer_3 integer [4, 12] [8]
+model:dagmm:activation categorical {relu, swish, swish-1, tanh} [tanh]
+model:dagmm:gmm_dimensionality integer [1, 5] [2]
+model:dagmm:lambda_1 real [0.01, 0.5] [0.1]
+model:dagmm:lambda_2 real [0.0001, 0.05] [0.005]
+model:dagmm:num_units integer [2, 20] [10]
+model:dasvdd:K real [0.1, 1.0] [0.9]
+model:dasvdd:T integer [3, 100] [10]
+model:dasvdd:center_optimizer:__choice__ categorical {AdamWOptimizer, SGDOptimizer, AdagradOptimizer} [AdagradOptimizer]
+optimizer:AdamWOptimizer:beta1 real [0.85, 0.999] [0.9]
+optimizer:AdamWOptimizer:beta2 real [0.9, 0.9999] [0.999]
+optimizer:AdamWOptimizer:lr real [1e-05, 0.1] [0.001]log
+optimizer:AdamWOptimizer:weight_decay real [0.0, 0.1] [0.01]
+optimizer:SGDOptimizer:lr real [1e-05, 0.1] [0.001]log
+optimizer:SGDOptimizer:momentum real [0.0, 0.99] [0.0]
+optimizer:SGDOptimizer:weight_decay real [0.0, 0.1] [0.0]
+model:dasvdd:center_optimizer:AdagradOptimizer:lr real [1e-05, 2.0] [1.0]
+model:dasvdd:center_optimizer:AdagradOptimizer:lr_decay real [0.0, 0.99] [0.01]
+model:dasvdd:center_optimizer:AdagradOptimizer:weight_decay real [0.0, 0.1] [0.0]
+model:dasvdd:center_optimizer:AdamWOptimizer:beta1 real [0.85, 0.999] [0.9]
+model:dasvdd:center_optimizer:AdamWOptimizer:beta2 real [0.9, 0.9999] [0.999]
+model:dasvdd:center_optimizer:AdamWOptimizer:lr real [1e-05, 0.1] [0.001]log
+model:dasvdd:center_optimizer:AdamWOptimizer:weight_decay real [0.0, 0.1] [0.01]
+model:dasvdd:center_optimizer:SGDOptimizer:lr real [1e-05, 0.1] [0.001]log
+model:dasvdd:center_optimizer:SGDOptimizer:momentum real [0.0, 0.99] [0.0]
+model:dasvdd:center_optimizer:SGDOptimizer:weight_decay real [0.0, 0.1] [0.0]
+
+backbone:dropout_rate | backbone:dropout == True
+backbone:num_units_layer_1 | backbone:num_layers > 0
+backbone:num_units_layer_2 | backbone:num_layers > 1
+backbone:num_units_layer_3 | backbone:num_layers > 2
+model:dagmm:activation | model:__choice__ == dagmm
+model:dagmm:gmm_dimensionality | model:__choice__ == dagmm
+model:dagmm:lambda_1 | model:__choice__ == dagmm
+model:dagmm:lambda_2 | model:__choice__ == dagmm
+model:dagmm:num_units | model:__choice__ == dagmm
+model:dasvdd:K | model:__choice__ == dasvdd
+model:dasvdd:T | model:__choice__ == dasvdd
+model:dasvdd:center_optimizer:__choice__ | model:__choice__ == dasvdd
+optimizer:AdamWOptimizer:beta1 | optimizer:__choice__ == AdamWOptimizer
+optimizer:AdamWOptimizer:beta2 | optimizer:__choice__ == AdamWOptimizer
+optimizer:AdamWOptimizer:lr | optimizer:__choice__ == AdamWOptimizer
+optimizer:AdamWOptimizer:weight_decay | optimizer:__choice__ == AdamWOptimizer
+optimizer:SGDOptimizer:lr | optimizer:__choice__ == SGDOptimizer
+optimizer:SGDOptimizer:momentum | optimizer:__choice__ == SGDOptimizer
+optimizer:SGDOptimizer:weight_decay | optimizer:__choice__ == SGDOptimizer
+model:dasvdd:center_optimizer:AdagradOptimizer:lr | model:dasvdd:center_optimizer:__choice__ == AdagradOptimizer
+model:dasvdd:center_optimizer:AdagradOptimizer:lr_decay | model:dasvdd:center_optimizer:__choice__ == AdagradOptimizer
+model:dasvdd:center_optimizer:AdagradOptimizer:weight_decay | model:dasvdd:center_optimizer:__choice__ == AdagradOptimizer
+model:dasvdd:center_optimizer:AdamWOptimizer:beta1 | model:dasvdd:center_optimizer:__choice__ == AdamWOptimizer
+model:dasvdd:center_optimizer:AdamWOptimizer:beta2 | model:dasvdd:center_optimizer:__choice__ == AdamWOptimizer
+model:dasvdd:center_optimizer:AdamWOptimizer:lr | model:dasvdd:center_optimizer:__choice__ == AdamWOptimizer
+model:dasvdd:center_optimizer:AdamWOptimizer:weight_decay | model:dasvdd:center_optimizer:__choice__ == AdamWOptimizer
+model:dasvdd:center_optimizer:SGDOptimizer:lr | model:dasvdd:center_optimizer:__choice__ == SGDOptimizer
+model:dasvdd:center_optimizer:SGDOptimizer:momentum | model:dasvdd:center_optimizer:__choice__ == SGDOptimizer
+model:dasvdd:center_optimizer:SGDOptimizer:weight_decay | model:dasvdd:center_optimizer:__choice__ == SGDOptimizer
