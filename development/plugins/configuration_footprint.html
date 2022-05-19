@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Overview &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>Configuration Footprint &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -38,8 +38,6 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Configurations" href="configurations.html" />
-    <link rel="prev" title="Plugins" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -116,7 +114,7 @@ style="width: 100%;">
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
 <div class="mb-3">v1.0</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <ul class="current nav bd-sidenav">
+    <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../installation.html">
    Installation
@@ -169,18 +167,18 @@ style="width: 100%;">
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="index.html">
    Plugins
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="overview.html">
      Overview
     </a>
    </li>
@@ -294,28 +292,13 @@ style="width: 100%;">
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#quick-information">
-   Quick Information
+  <a class="reference internal nav-link" href="#performance-plot">
+   Performance plot
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#meta">
-   Meta
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#objectives">
-   Objectives
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#statuses">
-   Statuses
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#configuration-space">
-   Configuration Space
+  <a class="reference internal nav-link" href="#coverage-plot">
+   Coverage plot
   </a>
  </li>
 </ul>
@@ -339,42 +322,26 @@ style="width: 100%;">
               
               <div>
                 
-  <section id="overview">
-<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<p>The plugin overview is a perfect way to see the most important information about
-your selected runs. This plugin serves as sanity check and therefore let’s you know
-about the meta data, objectives and statistics of the selected run.</p>
-<p><img alt="Image of overview" src="../_images/overview.png" /></p>
-<p>The Overview is split into 5 parts</p>
+  <section id="configuration-footprint">
+<h1>Configuration Footprint<a class="headerlink" href="#configuration-footprint" title="Permalink to this headline">¶</a></h1>
+<p>This plugin is useful for exploring how much is know about your configuration space by the optimizer and view it’s preferences during the run. These can be generated and will be cached when hitting the <code class="docutils literal notranslate"><span class="pre">Process</span></code> button. First, let’s briefly mention the various kind of configurations we are concerned with here.</p>
 <ul class="simple">
-<li><p>Quick Information</p></li>
-<li><p>Meta</p></li>
-<li><p>Objectives</p></li>
-<li><p>Statuses</p></li>
-<li><p>Configuration Space</p></li>
+<li><p><strong>Incumbent</strong> - This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown as a red triangle.</p></li>
+<li><p><strong>Evaluated Configuration</strong> - These are configurations evaluated by the optimizer and we know the true objective value, shown with <em>orange x</em>’s.</p></li>
+<li><p><strong>Unevaluated Configuration</strong> - These are configurations sampled by the optimizer but have no been evaluated, shown with <em>purple x</em>’s.</p></li>
+<li><p><strong>Border Configuration</strong> - These are configurations that exist at the edge of the configuration space at the min and max values for scalars.</p></li>
 </ul>
-<section id="quick-information">
-<h2>Quick Information<a class="headerlink" href="#quick-information" title="Permalink to this headline">¶</a></h2>
-<p>In the <strong>Quick Information</strong> box you’ll information regarding summary statistics about your run or group of runs. Notably information on the optimizer used, how many configurations were tried, when the runs were last updated and a handy quick link to the best <strong>Configuration</strong>.</p>
+<p>Using the <strong>Evaluated Configuration</strong> and the <strong>Incumbent</strong> for each objective type and under each budget, we have some knowledge about what kind of score we’ll get around those points, and we can try to infer for all other points in the configuration space.</p>
+<p>The next point to address is how we represent a high dimensional Configuration in something we can plot in 2D. This is done using a dimensionality reduction algorithm <a class="reference external" href="https://en.wikipedia.org/wiki/Multidimensional_scaling">MDS</a> which attempts to preserve distances as well as possible when converting from the high dimensional spaceto the lower dimensional one. Of course this is not perfect but it can still provide a lot of insight.</p>
+<p>Now we can begin to talk about the plots. These two plots share the same axis and and points will be plotted in the same co-ordinates so swapping between them will be most beneficial to get a firm grasp on your configuration footprint.</p>
+<section id="performance-plot">
+<h2>Performance plot<a class="headerlink" href="#performance-plot" title="Permalink to this headline">¶</a></h2>
+<p>Perhaps the most useful plot of the two is to see how much we know about which configuration will achieve which <strong>objective</strong> score. To view this, mousing over the <strong>Incumbent</strong> will tell you the best configuration found for the given <em>objective</em> and <em>budget</em>. The <strong>Evaluated Configuration</strong> points will have a true objective score, all be it possibly noisy if the objective is noisy. Using these two kind of points, we can try to infer what the performance for the rest of the configuration space will be.</p>
+<p>It’s important to note that the background colour, represnting the objective is a best estimate given what we already know and does not indicate the true objective value in regions where there are no configurations evaluated. We can increase the resolution using the <em>Details</em> option, which influences the gridsize when generating the plot, at the cost of increased compute time to generate it.</p>
 </section>
-<section id="meta">
-<h2>Meta<a class="headerlink" href="#meta" title="Permalink to this headline">¶</a></h2>
-<p>Next we show some meta information regarding your runs. Notably, you can see information such as the possible <strong>budget</strong> allocations that were considered during the run.</p>
-</section>
-<section id="objectives">
-<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h2>
-<p>In this section, we see the objectives that were considered during the optimization run. Here we get information about it’s name and the bounds they were in.</p>
-</section>
-<section id="statuses">
-<h2>Statuses<a class="headerlink" href="#statuses" title="Permalink to this headline">¶</a></h2>
-<p>To get a nice overview of the optimization run, we provide a barplot that details how the end status of the many trials that occured. You can also view these as a heatmap or get more information from the <strong>Details</strong> tab.</p>
-<p>The barplot shows which trial recieved which status and under which budget allocation. These are grouped according to the status and coloured based on the status it exited with.</p>
-<p>To see details on how these configurations faired as they progressed in budget, you can refer to the <strong>Heatmap</strong> tab. Here you’ll see the budget allocation along the x-axis with the configuration ID stacked on the y-axis. In an ideal scenario, you would see mostly <strong>Success</strong> bars spanning across the entire plot, with some <strong>NOT_EVALUATED</strong> lines indicating there is further configurations to try. However if you faced many crashes at high budgets for example, you’ll see <strong>CRASHED</strong> bars from the highest budget onwards. In general, you can use this to understand how often your optimizer balances out between low budget evaluations and full budget evaluations.</p>
-<p>In the <strong>Details</strong> tab, you’ll recieve an overview of configurations that were not successful. Here you’ll get some breif information about the config id number, the budget it was evaluated under and the status it recieved. If there is an associated error we can provide, such as when it recieved the <strong>CRASHED</strong> status, we will display it in the error column.</p>
-</section>
-<section id="configuration-space">
-<h2>Configuration Space<a class="headerlink" href="#configuration-space" title="Permalink to this headline">¶</a></h2>
-<p>Lastly you can find information on the configuration space that was being optimized over. Here we provide information on it’s name, the possible values that could be tried as well as the default value and whether it was optimized on a log-scale vs a linear one.</p>
+<section id="coverage-plot">
+<h2>Coverage plot<a class="headerlink" href="#coverage-plot" title="Permalink to this headline">¶</a></h2>
+<p>Here you’ll get a nice overview of how much your configuration space is sampled and under what regions it is most evaluated. This is where the <strong>Border Configurations</strong> can be quite informative to view. Ideally you will see these <strong>Border Configurations</strong> at the borders of the different blobs, indicating the bounds of the 2d representation of your configuration space. There will likely be small clusters of <strong>Evaluated Points</strong> where the optimizer focused on finding good configurations as well as some points scattered through the valid configuration regions, to get a good understanding of the scores for the various objectives.</p>
 </section>
 </section>
 
@@ -383,21 +350,7 @@ about the meta data, objectives and statistics of the selected run.</p>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Plugins</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="configurations.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Configurations</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+<div class='prev-next-area'>
 </div>
               
           </main>
