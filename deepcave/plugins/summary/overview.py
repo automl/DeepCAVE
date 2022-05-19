@@ -1,4 +1,5 @@
 import dash_bootstrap_components as dbc
+import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
@@ -14,10 +15,11 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
-from deepcave.runs import Status
+from deepcave.runs import Status, AbstractRun
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap
 from deepcave.utils.util import get_latest_change
+from deepcave.plugins.summary.configurations import Configurations
 
 
 class Overview(DynamicPlugin):
@@ -58,7 +60,7 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, *_):
+    def load_outputs(run: AbstractRun, *_):
         # Get best cost across all objectives, highest budget
         config, _ = run.get_incumbent()
         config_id = run.get_config_id(config)
@@ -137,12 +139,13 @@ class Overview(DynamicPlugin):
             objectives["Bounds"].append(f"[{objective['lower']}, {objective['upper']}]")
 
         # Budgets
-        budgets = run.get_budgets()
+        budgets = run.get_budgets(include_combined=False)
 
         # Statistics
         status_statistics = {}
         status_details = {"Configuration ID": [], "Budget": [], "Status": [], "Error": []}
         for budget in budgets:
+            budget = round(budget, 2)
             if budget not in status_statistics:
                 status_statistics[budget] = {}
 
@@ -153,8 +156,10 @@ class Overview(DynamicPlugin):
         status_budget = {}
         len_trials = 0
         for trial in run.get_trials():
+            budget = round(trial.budget, 2)
+
             len_trials += 1
-            status_statistics[trial.budget][trial.status.name] += 1
+            status_statistics[budget][trial.status.name] += 1
 
             # For text information
             if trial.status not in status_statistics_total:
@@ -163,22 +168,26 @@ class Overview(DynamicPlugin):
                 status_statistics_total[trial.status] += 1
 
             # For text information
-            if trial.budget not in status_budget:
-                status_budget[trial.budget] = 0
+            if budget not in status_budget:
+                status_budget[budget] = 0
             else:
-                status_budget[trial.budget] += 1
+                status_budget[budget] += 1
 
             # Add to table data
             if trial.status != Status.SUCCESS:
-                status_details["Configuration ID"] += [trial.config_id]
-                status_details["Budget"] += [trial.budget]
+                link = Configurations.get_link(run, trial.config_id)
+
+                status_details["Configuration ID"] += [
+                    html.A(trial.config_id, href=link, target="_blank")
+                ]
+                status_details["Budget"] += [budget]
                 status_details["Status"] += [trial.status.to_text()]
 
                 if "traceback" in trial.additional:
                     traceback = trial.additional["traceback"]
                     status_details["Error"] += [help_button(traceback)]
                 else:
-                    status_details["Error"] += [""]
+                    status_details["Error"] += ["No traceback available."]
 
         successful_trials_rate = round(
             status_statistics_total[Status.SUCCESS] / len_trials * 100, 2
@@ -224,15 +233,15 @@ class Overview(DynamicPlugin):
                     del status_statistics[budget][status]
 
         # It is interesting to see on which budget a configuration was evaluated
-        config_statistics = {"X": budgets}
-        configs = run.get_configs(budget)
-        y = []
-        z_values = []
-        z_labels = []
-        for config_id, config in configs.items():
-            column_values = []
-            column_labels = []
-            for budget in budgets:
+        config_statistics = {}
+        configs = run.get_configs()
+        config_ids = list(configs.keys())
+
+        z_values = np.zeros((len(config_ids), len(budgets))).tolist()
+        z_labels = np.zeros((len(config_ids), len(budgets))).tolist()
+
+        for i, (config_id, config) in enumerate(configs.items()):
+            for j, budget in enumerate(budgets):
                 trial_key = run.get_trial_key(config_id, budget)
                 trial = run.get_trial(trial_key)
 
@@ -240,14 +249,11 @@ class Overview(DynamicPlugin):
                 if trial is not None:
                     status = trial.status
 
-                column_values += [status.value]
-                column_labels += [status.name]
+                z_values[i][j] = status.value
+                z_labels[i][j] = status.name
 
-            y += [config_id]
-            z_values += [column_values]
-            z_labels += [column_labels]
-
-        config_statistics["Y"] = y
+        config_statistics["X"] = budgets
+        config_statistics["Y"] = config_ids
         config_statistics["Z_values"] = z_values
         config_statistics["Z_labels"] = z_labels
 

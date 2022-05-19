@@ -87,7 +87,7 @@ def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]])
     mapping = {}
     v = []
     for new, old in enumerate(unique_sorted_values):
-        mapping[old] = new
+        mapping[old] = new / len(unique_sorted_values)
         v += [new]
 
     z = values
@@ -106,6 +106,9 @@ def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]])
     tickvals = [np.mean(n_intervals[k : k + 2]) for k in range(len(n_intervals) - 1)]
     ticktext = unique_sorted_labels
 
+    x = [str(i) for i in x]
+    y = [str(i) for i in y]
+
     return go.Heatmap(
         x=x,
         y=y,
@@ -115,7 +118,7 @@ def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]])
         colorbar={"tickvals": tickvals, "ticktext": ticktext, "tickmode": "array"},
         zmin=0,
         zmax=1,
-        hoverinfo="skip",
+        # hoverinfo="skip",
     )
 
 
@@ -361,15 +364,10 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     # It's also nice to see the metrics
     objectives = run.get_objectives()
-    budget = run.get_highest_budget()
+    budget = run.get_highest_budget(config_id)
+    costs = run.get_costs(config_id, budget)
 
-    try:
-        costs = run.get_costs(config_id, budget)
-    except Exception:
-        string += "No costs on highest budget available.<br>"
-        return string
-
-    string += f"<b>Objectives (Budget {budget})</b><br>"
+    string += f"<b>Objectives (on highest found budget {budget})</b><br>"
     for objective, cost in zip(objectives, costs):
         string += f"{objective['name']}: {cost}<br>"
 
