@@ -16,7 +16,13 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
-from deepcave.constants import COMBINED_COST_NAME, CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
+from deepcave.constants import (
+    COMBINED_BUDGET,
+    COMBINED_COST_NAME,
+    CONSTANT_VALUE,
+    NAN_LABEL,
+    NAN_VALUE,
+)
 
 from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
@@ -44,7 +50,7 @@ class Status(IntEnum):
     ABORTED = 5
     RUNNING = 6
     NOT_EVALUATED = 7
-    
+
     def to_text(self) -> str:
         return self.name.lower().replace("_", " ")
 
@@ -247,6 +253,10 @@ class AbstractRun(ABC):
         return [obj["name"] for obj in self.get_objectives()]
 
     def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
+        # Include all configs if we have combined budget
+        if budget == COMBINED_BUDGET:
+            budget = None
+
         configs = {}
         for trial in self.history:
             if budget is not None:
@@ -299,7 +309,9 @@ class AbstractRun(ABC):
     def get_budget_ids(self) -> List[int]:
         return list(range(len(self.get_budgets())))
 
-    def get_budgets(self, human: bool = False) -> List[Union[int, float]]:
+    def get_budgets(
+        self, human: bool = False, include_combined: bool = True
+    ) -> List[Union[int, float]]:
         """
         Returns the budgets from the meta data.
 
@@ -314,11 +326,15 @@ class AbstractRun(ABC):
             List of budgets.
         """
         budgets = self.meta["budgets"]
+        if include_combined and len(budgets) > 1 and COMBINED_BUDGET not in budgets:
+            budgets = [COMBINED_BUDGET] + budgets
 
         if human:
             readable_budgets = []
             for b in budgets:
-                if b is not None:
+                if b == COMBINED_BUDGET:
+                    readable_budgets += ["Combined"]
+                elif b is not None:
                     readable_budgets += [float(np.round(float(b), 2))]
 
             return readable_budgets
@@ -427,12 +443,11 @@ class AbstractRun(ABC):
         if budget is None:
             budget = self.get_highest_budget()
 
+        # In case of COMBINED_BUDGET, we only keep the costs of the highest found budget
+        highest_evaluated_budget = {}
+
         results = {}
         for trial in self.history:
-            if trial.budget is not None:
-                if trial.budget != budget:
-                    continue
-
             if statuses is not None:
                 if isinstance(statuses, Status):
                     statuses = [statuses]
@@ -440,7 +455,20 @@ class AbstractRun(ABC):
                 if trial.status not in statuses:
                     continue
 
-            results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
+            if budget == COMBINED_BUDGET:
+                if trial.config_id not in highest_evaluated_budget:
+                    highest_evaluated_budget[trial.config_id] = trial.budget
+
+                latest_budget = highest_evaluated_budget[trial.config_id]
+                # We only keep the highest budget
+                if trial.budget >= latest_budget:
+                    results[trial.config_id] = trial.costs
+            else:
+                if trial.budget is not None:
+                    if trial.budget != budget:
+                        continue
+
+                results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
 
         return results
 
@@ -466,6 +494,9 @@ class AbstractRun(ABC):
         Status
             Status of the configuration.
         """
+        if budget == COMBINED_BUDGET:
+            return Status.NOT_EVALUATED
+
         if budget is None:
             budget = self.get_highest_budget()
 
@@ -661,9 +692,11 @@ class AbstractRun(ABC):
         for id, _ in order:
             trial = self.history[id]
 
-            # Only consider selected/last budget
-            if trial.budget != budget:
-                continue
+            # We want to use all budgets
+            if budget != COMBINED_BUDGET:
+                # Only consider selected/last budget
+                if trial.budget != budget:
+                    continue
 
             cost = trial.costs[objective_id]
             if cost is None:

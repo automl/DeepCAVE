@@ -110,7 +110,7 @@ class CostOverTime(DynamicPlugin):
                 "options": [
                     {"label": "Time", "value": "times"},
                     {"label": "Logarithmic Time", "value": "times_log"},
-                    {"label": "Evaluated configurations", "value": "configs"},
+                    {"label": "Evaluated trials", "value": "trials"},
                 ],
                 "value": "times",
             },
@@ -155,7 +155,7 @@ class CostOverTime(DynamicPlugin):
             objective = run.get_objective(inputs["objective_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
-            if inputs["xaxis"] == "configs":
+            if inputs["xaxis"] == "trials":
                 x = outputs[run.id]["ids"]
 
             y = np.array(outputs[run.id]["costs_mean"])
@@ -207,8 +207,8 @@ class CostOverTime(DynamicPlugin):
             type = "log"
 
         xaxis_label = "Wallclock time [s]"
-        if inputs["xaxis"] == "configs":
-            xaxis_label = "Number of evaluated configurations"
+        if inputs["xaxis"] == "trials":
+            xaxis_label = "Number of evaluated trials"
 
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
