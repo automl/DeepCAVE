@@ -3,6 +3,7 @@ include requirements.txt
 include deepcave/py.typed
 include start.sh
 include deepcave/utils/logging.yml
+include docs/plugins/*
 
 prune tests
 prune examples
