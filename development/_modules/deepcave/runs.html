@@ -599,7 +599,8 @@ style="width: 100%;">
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
             <span class="nb">id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">][</span><span class="nb">id</span><span class="p">]</span></div>
+        <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">budgets</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">get_budget_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">())))</span>
@@ -620,9 +621,9 @@ style="width: 100%;">
 <span class="sd">        List[Union[int, float]]</span>
 <span class="sd">            List of budgets.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span>
+        <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">include_combined</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">COMBINED_BUDGET</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
-            <span class="n">budgets</span> <span class="o">=</span> <span class="p">[</span><span class="n">COMBINED_BUDGET</span><span class="p">]</span> <span class="o">+</span> <span class="n">budgets</span>
+            <span class="n">budgets</span> <span class="o">+=</span> <span class="p">[</span><span class="n">COMBINED_BUDGET</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">human</span><span class="p">:</span>
             <span class="n">readable_budgets</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1271,9 +1272,9 @@ style="width: 100%;">
 
     <span class="c1"># Also check if budgets are the same</span>
     <span class="k">if</span> <span class="n">budgets</span><span class="p">:</span>
-        <span class="n">b1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">()</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="n">b2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">()</span>
+            <span class="n">b2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">b1</span> <span class="o">!=</span> <span class="n">b2</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Budgets of runs are not equal.&quot;</span><span class="p">)</span>
 
