@@ -7,8 +7,8 @@ numpy>=1.22.2
 matplotlib>=3.5.1
 
 # AutoML packages
-ConfigSpace==0.4.21
-smac==1.1.1
+ConfigSpace
+smac
 hpbandster==0.7.4
 
 # Upgrading to 2.1.0 or higher breaks the slider because string keys in marks

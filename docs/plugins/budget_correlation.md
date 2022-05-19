@@ -8,4 +8,4 @@ Especially in Neural Networks, you do not need to train longer if convergence wa
 If the convergence already was reached in budget 1 but the training still continues till budget 2,
 the correlation between budget 1 and budget 2 will be high.
 
-![alt text](http://../images/plugins/budget_correlation.png "Title")
+![alt text](../images/plugins/budget_correlation.png "Title")
