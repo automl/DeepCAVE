@@ -304,7 +304,8 @@ class AbstractRun(ABC):
         if type(id) == str:
             id = int(id)
 
-        return self.meta["budgets"][id]
+        budgets = self.get_budgets()
+        return budgets[id]
 
     def get_budget_ids(self) -> List[int]:
         return list(range(len(self.get_budgets())))
@@ -325,9 +326,9 @@ class AbstractRun(ABC):
         List[Union[int, float]]
             List of budgets.
         """
-        budgets = self.meta["budgets"]
+        budgets = self.meta["budgets"].copy()
         if include_combined and len(budgets) > 1 and COMBINED_BUDGET not in budgets:
-            budgets = [COMBINED_BUDGET] + budgets
+            budgets += [COMBINED_BUDGET]
 
         if human:
             readable_budgets = []
@@ -976,9 +977,9 @@ def check_equality(
 
     # Also check if budgets are the same
     if budgets:
-        b1 = runs[0].get_budgets()
+        b1 = runs[0].get_budgets(include_combined=False)
         for run in runs:
-            b2 = run.get_budgets()
+            b2 = run.get_budgets(include_combined=False)
             if b1 != b2:
                 raise NotMergeableError("Budgets of runs are not equal.")
 

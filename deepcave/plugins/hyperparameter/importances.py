@@ -155,7 +155,7 @@ class Importances(StaticPlugin):
             raise RuntimeError("Please specify the number of trees.")
 
         hp_names = run.configspace.get_hyperparameter_names()
-        budgets = run.get_budgets()
+        budgets = run.get_budgets(include_combined=True)
 
         if method == "local":
             # Intiatize the evaluator
@@ -191,6 +191,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, importances in outputs.items():
+            print(budget_id)
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
             if budget_id not in selected_budget_ids:
@@ -210,7 +211,7 @@ class Importances(StaticPlugin):
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
         # Sort by last fidelity now
-        last_selected_budget_id = selected_budget_ids[-1]
+        last_selected_budget_id = selected_budget_ids[0]
         idx = np.argsort(data[last_selected_budget_id][1], axis=None)[::-1]
 
         bar_data = []

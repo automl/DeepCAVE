@@ -127,7 +127,7 @@ class ParetoFront(DynamicPlugin):
             },
             "budget_id": {
                 "options": self.budget_options,
-                "value": self.budget_options[0]["value"],
+                "value": self.budget_options[-1]["value"],
             },
             "show_all": {"options": get_select_options(binary=True), "value": "false"},
             "show_runs": {"options": get_select_options(binary=True), "value": "true"},

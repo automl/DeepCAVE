@@ -71,8 +71,8 @@ class BudgetCorrelation(DynamicPlugin):
         objective_id = inputs["objective_id"]
 
         correlations: Dict[str, Dict[str, float]] = defaultdict(dict)
-        for budget1 in run.get_budgets():
-            for budget2 in run.get_budgets():
+        for budget1 in run.get_budgets(include_combined=False):
+            for budget2 in run.get_budgets(include_combined=False):
                 # Exclude if budget2 is higher than budget1
                 if budget2 > budget1:
                     continue

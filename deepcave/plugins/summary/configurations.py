@@ -86,6 +86,8 @@ class Configurations(DynamicPlugin):
         selected_config_id = int(inputs["config_id"])
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
+        budgets = run.get_budgets(include_combined=False)
+        print(budgets)
 
         overview_table_data = {
             "Key": ["Selected Configuration", "Origin"],
@@ -107,7 +109,7 @@ class Configurations(DynamicPlugin):
                 performances[objective["name"]] = {}
                 performances_table_data[objective["name"]] = []
 
-            for budget in run.get_budgets():
+            for budget in budgets:
                 # Budget might not be evaluated
                 try:
                     costs = run.get_costs(selected_config_id, budget)

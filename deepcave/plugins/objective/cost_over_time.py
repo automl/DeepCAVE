@@ -104,7 +104,7 @@ class CostOverTime(DynamicPlugin):
             },
             "budget_id": {
                 "options": self.budget_options,
-                "value": self.budget_options[0]["value"],
+                "value": self.budget_options[-1]["value"],
             },
             "xaxis": {
                 "options": [
