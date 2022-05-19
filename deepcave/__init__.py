@@ -65,7 +65,7 @@ if any(file in _exec_file for file in _exec_files):
         # Notifications
         notification = Notification()
 
-        if "server.py" == _exec_file:
+        if "server.py" in _exec_file:
             # Open the link in browser
             def open_browser() -> None:
                 webbrowser.open_new(f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}")
