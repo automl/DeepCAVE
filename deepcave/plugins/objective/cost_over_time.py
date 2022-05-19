@@ -137,15 +137,18 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"))
+        return dcc.Graph(register("graph", "figure"), style={"height": "50vh"})
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
+        show_runs = inputs["show_runs"] == "true"
+        show_groups = inputs["show_groups"] == "true"
+
+        if not show_runs and not show_groups:
+            return go.Figure()
+
         traces = []
         for idx, run in enumerate(runs):
-            show_runs = inputs["show_runs"] == "true"
-            show_groups = inputs["show_groups"] == "true"
-
             if run.prefix == "group" and not show_groups:
                 continue
 

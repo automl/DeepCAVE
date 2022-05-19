@@ -105,7 +105,18 @@ class AbstractRun(ABC):
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}
 
         self.history: List[Trial] = []
-        self.trial_keys: Dict[Tuple[str, int], int] = {}
+        self.trial_keys: Dict[Tuple[str, int], int] = {}  # (config_id, budget) -> trial_id
+
+        # Cached data
+        self._highest_budget: Dict[int, Union[int, float]] = {}  # config_id -> budget
+
+    def _update_highest_budget(self, config_id: int, budget: Union[int, float]) -> None:
+        # Update highest budget
+        if config_id not in self._highest_budget:
+            self._highest_budget[config_id] = budget
+        else:
+            if budget > self._highest_budget[config_id]:
+                self._highest_budget[config_id] = budget
 
     @property
     @abstractmethod
@@ -253,6 +264,20 @@ class AbstractRun(ABC):
         return [obj["name"] for obj in self.get_objectives()]
 
     def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
+        """
+        Get configurations of the run. Optionally, only configurations which were evaluated
+        on the passed budget are considered.
+
+        Parameters
+        ----------
+        budget : Union[int, float], optional
+            Considered budget. By default None (all configurations are included).
+
+        Returns
+        -------
+        Dict[int, Configuration]
+            Configuration id and the configuration.
+        """
         # Include all configs if we have combined budget
         if budget == COMBINED_BUDGET:
             budget = None
@@ -266,6 +291,9 @@ class AbstractRun(ABC):
             if (config_id := trial.config_id) not in configs:
                 config = self.get_config(config_id)
                 configs[config_id] = config
+
+        # Sort dictionary
+        configs = dict(sorted(configs.items()))
 
         return configs
 
@@ -342,20 +370,25 @@ class AbstractRun(ABC):
 
         return budgets
 
-    def get_highest_budget(self) -> Optional[Union[int, float]]:
+    def get_highest_budget(self, config_id: Optional[int] = None) -> Optional[Union[int, float]]:
         """
-        Returns the highest budget. If no budget is available, None is returned.
+        Returns the highest found budget for a config id. If no config id is specified then
+        the highest available budget is returned.
+        Moreover, if no budget is available None is returned.
 
         Returns
         -------
         Optional[Union[int, float]]
             The highest budget or None if no budget was specified.
         """
-        budgets = self.meta["budgets"]
-        if len(budgets) == 0:
-            return None
+        if config_id is None:
+            budgets = self.meta["budgets"]
+            if len(budgets) == 0:
+                return None
 
-        return budgets[-1]
+            return budgets[-1]
+        else:
+            return self._highest_budget[config_id]
 
     def _process_costs(self, costs: List[float]) -> List[float]:
         """

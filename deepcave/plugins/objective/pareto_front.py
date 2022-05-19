@@ -193,7 +193,7 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"))
+        return dcc.Graph(register("graph", "figure"), style={"height": "50vh"})
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):

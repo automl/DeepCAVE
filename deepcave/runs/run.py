@@ -46,6 +46,7 @@ class Run(AbstractRun, ABC):
             meta (dict): Could be `ram`, `cores`, ...
         """
         super(Run, self).__init__(name)
+
         if objectives is None:
             objectives = []
         if meta is None:
@@ -206,12 +207,15 @@ class Run(AbstractRun, ABC):
             self.trial_keys[trial_key] = len(self.history)
             self.history.append(trial)
         else:
+            # Overwrite
             self.history[self.trial_keys[trial_key]] = trial
 
         # Update budgets
         if budget not in self.meta["budgets"]:
             self.meta["budgets"].append(budget)
             self.meta["budgets"].sort()
+
+        self._update_highest_budget(config_id, budget)
 
         # Update models
         # Problem: We don't want to have the model in the cache.
@@ -268,6 +272,7 @@ class Run(AbstractRun, ABC):
 
         if path is None and self.path is None:
             raise RuntimeError("Could not load trials because path is None.")
+
         if path is not None:
             self.path = Path(path)
 
@@ -299,3 +304,6 @@ class Run(AbstractRun, ABC):
 
                 # Also create trial_keys
                 self.trial_keys[trial.get_key()] = len(self.history) - 1
+
+                # Update highest budget
+                self._update_highest_budget(trial.config_id, trial.budget)

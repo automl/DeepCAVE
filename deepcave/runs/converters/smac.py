@@ -57,11 +57,7 @@ class SMACRun(Run):
 
         # Read meta
         # Everything else is ignored
-        ignore = [
-            "train_inst_fn",
-            "pcs_fn",
-            "execdir"
-        ]
+        ignore = ["train_inst_fn", "pcs_fn", "execdir"]
 
         meta = {}
         with (path / "scenario.txt").open() as f:
@@ -143,7 +139,7 @@ class SMACRun(Run):
             budget = np.round(budget, 2)
 
             run.add(
-                costs=[cost, time],  # Having only single objective here
+                costs=[cost, time],
                 config=config,
                 budget=budget,
                 start_time=starttime,

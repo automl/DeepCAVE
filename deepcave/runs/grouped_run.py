@@ -30,7 +30,7 @@ class GroupedRun(AbstractRun):
             current_config_id = 0
 
             # Key: new_config_id; Value: (run_id, config_id)
-            self.original_mapping: Dict[int, Tuple[int, int]] = {}
+            self._original_mapping: Dict[int, Tuple[int, int]] = {}
 
             # Combine runs here
             for run_id, run in enumerate(self.runs):
@@ -74,7 +74,10 @@ class GroupedRun(AbstractRun):
                         self.history[self.trial_keys[trial_key]] = trial
 
                     # Get model mapping done
-                    self.original_mapping[new_config_id] = (run_id, config_id)
+                    self._original_mapping[new_config_id] = (run_id, config_id)
+
+                    # And update highest budget
+                    self._
         except Exception:
             raise NotMergeableError("Runs can not be merged.")
 
@@ -111,16 +114,16 @@ class GroupedRun(AbstractRun):
     @property
     def run_names(self) -> List[str]:
         return [run.name for run in self.runs]
-    
+
     def get_original_config_id(self, config_id):
-        return self.original_mapping[config_id][1]
-    
+        return self._original_mapping[config_id][1]
+
     def get_original_run(self, config_id):
-        run_id = self.original_mapping[config_id][0]
+        run_id = self._original_mapping[config_id][0]
         return self.runs[run_id]
 
     def get_model(self, config_id):
-        run_id, config_id = self.original_mapping[config_id]
+        run_id, config_id = self._original_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
     def get_trajectory(self, *args, **kwargs):
