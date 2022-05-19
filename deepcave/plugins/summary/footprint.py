@@ -4,22 +4,18 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.plugins.static import StaticPlugin
-from deepcave.utils.layout import (
-    get_select_options,
-    render_mpl_figure,
-)
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 from deepcave.evaluators.footprint import Footprint as Evaluator
+from deepcave.plugins.static import StaticPlugin
+from deepcave.utils.layout import get_select_options, help_button, render_mpl_figure
 from deepcave.utils.styled_plot import plt
-from deepcave.utils.layout import help_button
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
 
 class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
-    help = "docs/plugins/budget_correlation.md"
+    help = "docs/plugins/configuration_footprint.md"
     description = """
         The configuration footprint shows the configuration space in two dimensions.
         Based on the evaluated configurations, a surface is plotted. 
