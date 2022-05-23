@@ -24,19 +24,10 @@
    .. autosummary::
    
       AbstractRun
-      Status
-      Trial
    
    
 
    
-   
-   .. rubric:: Exceptions
-
-   .. autosummary::
-   
-      NotMergeableError
-      NotValidRunError
    
    
 
@@ -49,9 +40,12 @@
    :recursive:
 
    deepcave.runs.converters
+   deepcave.runs.exceptions
    deepcave.runs.grouped_run
    deepcave.runs.handler
    deepcave.runs.objective
    deepcave.runs.recorder
    deepcave.runs.run
+   deepcave.runs.status
+   deepcave.runs.trial
 

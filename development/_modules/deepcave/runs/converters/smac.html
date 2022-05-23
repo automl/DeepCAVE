@@ -336,8 +336,6 @@ style="width: 100%;">
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-        <span class="c1"># For SMAC, we create a new run object</span>
-
         <span class="c1"># Read configspace</span>
         <span class="kn">from</span> <span class="nn">ConfigSpace.read_and_write</span> <span class="kn">import</span> <span class="n">json</span> <span class="k">as</span> <span class="n">cs_json</span>
 
@@ -367,9 +365,12 @@ style="width: 100%;">
                 <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
                     <span class="n">meta</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+        <span class="c1"># Let&#39;s create a new run object</span>
         <span class="n">run</span> <span class="o">=</span> <span class="n">SMACRun</span><span class="p">(</span>
-            <span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective1</span><span class="p">,</span> <span class="n">objective2</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective1</span><span class="p">,</span> <span class="n">objective2</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span>
         <span class="p">)</span>
+
+        <span class="c1"># We have to set the path manually</span>
         <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
 
         <span class="c1"># Iterate over the runhistory</span>
@@ -378,6 +379,8 @@ style="width: 100%;">
             <span class="n">data</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
             <span class="n">config_origins</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;config_origins&quot;</span><span class="p">]</span>
             <span class="n">configs</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;configs&quot;</span><span class="p">]</span>
+
+        <span class="n">instance_ids</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">first_starttime</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">seeds</span> <span class="o">=</span> <span class="p">[]</span>
@@ -389,6 +392,11 @@ style="width: 100%;">
             <span class="n">endtime</span><span class="p">,</span>
             <span class="n">additional_info</span><span class="p">,</span>
         <span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">instance_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance_ids</span><span class="p">:</span>
+                <span class="n">instance_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">instance_id</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">instance_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Instances are not supported.&quot;</span><span class="p">)</span>
 
             <span class="n">config_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
@@ -398,9 +406,6 @@ style="width: 100%;">
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Multiple seeds are not supported.&quot;</span><span class="p">)</span>
-
-            <span class="c1"># if instance_id is not None:</span>
-            <span class="c1">#    raise RuntimeError(&quot;Instances are not supported.&quot;)</span>
 
             <span class="k">if</span> <span class="n">first_starttime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">first_starttime</span> <span class="o">=</span> <span class="n">starttime</span>

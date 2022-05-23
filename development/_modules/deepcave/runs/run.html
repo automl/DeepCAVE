@@ -301,6 +301,7 @@ style="width: 100%;">
 
 <span class="kn">import</span> <span class="nn">jsonlines</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ConfigSpace</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">Configuration</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.read_and_write</span> <span class="kn">import</span> <span class="n">json</span> <span class="k">as</span> <span class="n">cs_json</span>
 
@@ -328,7 +329,7 @@ style="width: 100%;">
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">configspace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigSpace</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -361,14 +362,16 @@ style="width: 100%;">
             <span class="p">)</span>
 
         <span class="c1"># Objectives</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">List</span><span class="p">):</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">objectives</span><span class="p">]</span>
 
+        <span class="n">serialized_objectives</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">objective</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">:</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">Objective</span><span class="p">)</span>
+            <span class="n">serialized_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">to_json</span><span class="p">()]</span>
 
         <span class="c1"># Meta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">objectives</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">serialized_objectives</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Run.from_path"><a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.from_path">[docs]</a>    <span class="nd">@classmethod</span>
@@ -407,7 +410,15 @@ style="width: 100%;">
         <span class="bp">self</span><span class="o">.</span><span class="n">history_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">/</span> <span class="s2">&quot;history.jsonl&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">/</span> <span class="s2">&quot;models&quot;</span>
 
-    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="Run.exists"><a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.exists">[docs]</a>    <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if the run exists based on the internal path.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            If run exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
 
@@ -420,7 +431,7 @@ style="width: 100%;">
                 <span class="bp">self</span><span class="o">.</span><span class="n">origins_fn</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">history_fn</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Run.add"><a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -433,16 +444,37 @@ style="width: 100%;">
         <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">additional</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-
+<span class="sd">        Adds a trial to the run.</span>
 <span class="sd">        If combination of config and budget already exists, it will be overwritten.</span>
-<span class="sd">        Not successful runs are added with None costs.</span>
-<span class="sd">        The cost will be calculated on the worst result later on.</span>
+<span class="sd">        Not successful runs are added with `None` costs.</span>
 
-<span class="sd">        Inputs:</span>
-<span class="sd">            additional (dict): What&#39;s supported by DeepCAVE? Like `ram`,</span>
-<span class="sd">            costs (float or list of floats)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        costs : Union[List[float], float]</span>
+<span class="sd">            Costs of the run. In case of multi-objective, a list of costs is expected.</span>
+<span class="sd">        config : Union[Dict, Configuration]</span>
+<span class="sd">            The corresponding configuration.</span>
+<span class="sd">        start_time : float, optional</span>
+<span class="sd">            Start time. By default 0.0</span>
+<span class="sd">        end_time : float, optional</span>
+<span class="sd">            End time. By default 0.0</span>
+<span class="sd">        status : Status, optional</span>
+<span class="sd">            Status of the trial. By default Status.SUCCESS</span>
+<span class="sd">        origin : str, optional</span>
+<span class="sd">            Origin of the trial. By default None</span>
+<span class="sd">        model : Union[str, &amp;quot;torch.nn.Module&amp;quot;], optional</span>
+<span class="sd">            Model of the trial. By default None</span>
+<span class="sd">        additional : Optional[Dict], optional</span>
+<span class="sd">            Additional information of the trial. By default None.</span>
+<span class="sd">            Following information is used by DeepCAVE:</span>
+<span class="sd">            * traceback</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If number of costs does not match number of objectives.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">additional</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">additional</span> <span class="o">=</span> <span class="p">{}</span>
@@ -459,22 +491,22 @@ style="width: 100%;">
             <span class="n">objective</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span>
 
             <span class="c1"># Update time objective here</span>
-            <span class="k">if</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;time&quot;</span> <span class="ow">and</span> <span class="n">cost</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;time&quot;</span> <span class="ow">and</span> <span class="n">cost</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
                 <span class="n">cost</span> <span class="o">=</span> <span class="n">costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
             <span class="c1"># If cost is none, replace it later with the highest cost</span>
             <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Update bounds here</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]:</span>
-                        <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                        <span class="n">objective</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">cost</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]:</span>
-                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
-                        <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cost</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                        <span class="n">objective</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">cost</span>
 
-            <span class="n">updated_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="p">]</span>
+            <span class="n">updated_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">to_json</span><span class="p">()]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_objectives</span>
 
@@ -500,7 +532,7 @@ style="width: 100%;">
         <span class="n">trial_key</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">trial_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">+=</span> <span class="p">[</span><span class="n">trial</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Overwrite</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">trial</span>
@@ -562,7 +594,7 @@ style="width: 100%;">
                 <span class="c1"># Remove from dict</span>
                 <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

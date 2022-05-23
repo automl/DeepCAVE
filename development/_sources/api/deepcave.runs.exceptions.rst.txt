@@ -1,0 +1,30 @@
+deepcave.runs.exceptions
+========================
+
+.. automodule:: deepcave.runs.exceptions
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+   
+      NotMergeableError
+      NotValidRunError
+   
+   
+
+
+

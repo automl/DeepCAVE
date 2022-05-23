@@ -293,96 +293,108 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.runs.objective</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs.exceptions</span> <span class="kn">import</span> <span class="n">NotMergeableError</span>
 
 
-<div class="viewcode-block" id="Objective"><a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective">[docs]</a><span class="k">class</span> <span class="nc">Objective</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">lower</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">upper</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">optimize</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-    <span class="p">):</span>
+<div class="viewcode-block" id="Objective"><a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Objective</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">lower</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">upper</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">optimize</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;lower&quot;</span>
+
+<div class="viewcode-block" id="Objective.__post_init__"><a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__post_init__">[docs]</a>    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-
 <span class="sd">        Lock the lower bound if lower is not None.</span>
 <span class="sd">        Lock the upper bound if upper is not None.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            name (str): Name of the objective.</span>
-<span class="sd">            lower (float): Lower bound of the objective.</span>
-<span class="sd">            upper (float): Upper bound of the objective.</span>
-<span class="sd">            optimize (str): Either `lower` or `upper`.</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If optimize is not `lower` or `upper`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">lower</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lock_lower</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lock_lower</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lock_upper</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">upper</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lock_upper</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">optimize</span> <span class="o">!=</span> <span class="s2">&quot;lower&quot;</span> <span class="ow">and</span> <span class="n">optimize</span> <span class="o">!=</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span> <span class="o">!=</span> <span class="s2">&quot;lower&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span> <span class="o">!=</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;`optimize` must be &#39;lower&#39; or &#39;upper&#39;&quot;</span><span class="p">)</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">lower</span><span class="p">,</span>
-            <span class="s2">&quot;upper&quot;</span><span class="p">:</span> <span class="n">upper</span><span class="p">,</span>
-            <span class="s2">&quot;lock_lower&quot;</span><span class="p">:</span> <span class="n">lock_lower</span><span class="p">,</span>
-            <span class="s2">&quot;lock_upper&quot;</span><span class="p">:</span> <span class="n">lock_upper</span><span class="p">,</span>
-            <span class="s2">&quot;optimize&quot;</span><span class="p">:</span> <span class="n">optimize</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span> <span class="o">=</span> <span class="n">lock_lower</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">=</span> <span class="n">lock_upper</span></div>
+
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
+            <span class="s2">&quot;upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span>
+            <span class="s2">&quot;lock_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">,</span>
+            <span class="s2">&quot;lock_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">,</span>
+            <span class="s2">&quot;optimize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span><span class="p">,</span>
         <span class="p">}</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Objective&quot;</span><span class="p">:</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">lower</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span>
+            <span class="n">upper</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">],</span>
+            <span class="n">optimize</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;optimize&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_lower&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_upper&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]</span>  <span class="c1"># , &quot;lower&quot;, &quot;upper&quot;]</span>
+        <span class="n">objective</span><span class="o">.</span><span class="n">lock_lower</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]</span>
+        <span class="n">objective</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">objective</span>
+
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_lower&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_upper&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">!=</span> <span class="n">other</span><span class="p">[</span><span class="n">a</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
 
         <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="s2">&quot;Objective&quot;</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">deepcave.runs.grouped_run</span> <span class="kn">import</span> <span class="n">NotMergeableError</span>
+    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Objective</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Objective can only be merged with another Objective.&quot;</span><span class="p">)</span>
 
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_lower&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_upper&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="n">attribute</span><span class="p">]</span> <span class="o">!=</span> <span class="n">objective</span><span class="p">[</span><span class="n">attribute</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">attribute</span><span class="si">}</span><span class="s2"> is not mergeable.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">objective</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;s lower bound is not mergeable.&quot;</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s lower bound is not mergeable.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">objective</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39;s upper bound is not mergeable.&quot;</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s upper bound is not mergeable.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">objective</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span>
 
     <span class="k">def</span> <span class="nf">get_worst_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;optimize&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;lower&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;upper&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;lower&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>  <span class="c1"># type: ignore</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">]</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>  <span class="c1"># type: ignore</span></div>
 </pre></div>
 
               </div>

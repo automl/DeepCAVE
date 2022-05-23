@@ -333,27 +333,6 @@ style="width: 100%;">
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractRun</span></code></a>(name)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Status</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.Trial" title="deepcave.runs.Trial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trial</span></code></a>(config_id, budget, costs, start_time, ...)</p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Exceptions</p>
-<table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.NotMergeableError" title="deepcave.runs.NotMergeableError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotMergeableError</span></code></a></p></td>
-<td><p>Raised if two or more runs are not mergeable</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.runs.NotValidRunError" title="deepcave.runs.NotValidRunError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotValidRunError</span></code></a></p></td>
-<td><p>Raised if directory is not a valid run.</p></td>
-</tr>
 </tbody>
 </table>
 <dl class="py class">
@@ -391,7 +370,7 @@ and statuses are returned.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to select the costs. If no budget is given, the highest budget is chosen.
 By default None.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Only selected stati are considered. If no status is given, all stati are considered.
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Only selected stati are considered. If no status is given, all stati are considered.
 By default None.</p></li>
 </ul>
 </dd>
@@ -494,9 +473,9 @@ they can be used in model prediction.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which objectives should be considered. If None, all objectives are
 considered. By default None.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which budget should be considered. By default None. If None, only the highest budget
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which budget should be considered. By default None. If None, only the highest budget
 is considered.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which statuses should be considered. By default None. If None, all statuses are
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Which statuses should be considered. By default None. If None, all statuses are
 considered.</p></li>
 <li><p><strong>encode_y</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether y should be normalized too. By default False.</p></li>
 <li><p><strong>specific</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether a specific encoding should be used. This encoding is compatible with pyrfr.
@@ -545,7 +524,7 @@ Moreover, if no budget is available None is returned.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considerd objectives. By default None. If None, all objectives are considered.</p></li>
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default None. If None, the highest budget is chosen.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered statuses. By default None. If None, all stati are considered.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered statuses. By default None. If None, all stati are considered.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -628,7 +607,7 @@ None, the highest budget is chosen.</p></li>
 <dd class="field-odd"><p>Status of the configuration.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#deepcave.runs.Status" title="deepcave.runs.Status">Status</a></p>
+<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status">Status</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -718,33 +697,6 @@ original number objectives.</p></li>
 
 </dd></dl>
 
-<dl class="py exception">
-<dt class="sig sig-object py" id="deepcave.runs.NotMergeableError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">NotMergeableError</span></span><a class="reference internal" href="../_modules/deepcave/runs.html#NotMergeableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.NotMergeableError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Raised if two or more runs are not mergeable</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="deepcave.runs.NotValidRunError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">NotValidRunError</span></span><a class="reference internal" href="../_modules/deepcave/runs.html#NotValidRunError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.NotValidRunError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Raised if directory is not a valid run.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="deepcave.runs.Status">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#Status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.Status" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></p>
-<p>An enumeration.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="deepcave.runs.Trial">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">Trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#Trial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.Trial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.runs.check_equality">
 <span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">check_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budgets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#check_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.check_equality" title="Permalink to this definition">¶</a></dt>
@@ -779,19 +731,28 @@ attributes.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.converters.html#module-deepcave.runs.converters" title="deepcave.runs.converters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.converters</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.grouped_run.html#module-deepcave.runs.grouped_run" title="deepcave.runs.grouped_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.grouped_run</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.exceptions.html#module-deepcave.runs.exceptions" title="deepcave.runs.exceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.exceptions</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.handler.html#module-deepcave.runs.handler" title="deepcave.runs.handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.handler</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.grouped_run.html#module-deepcave.runs.grouped_run" title="deepcave.runs.grouped_run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.grouped_run</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.objective.html#module-deepcave.runs.objective" title="deepcave.runs.objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.objective</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.handler.html#module-deepcave.runs.handler" title="deepcave.runs.handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.handler</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.recorder.html#module-deepcave.runs.recorder" title="deepcave.runs.recorder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.recorder</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.objective.html#module-deepcave.runs.objective" title="deepcave.runs.objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.objective</span></code></a></p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.run.html#module-deepcave.runs.run" title="deepcave.runs.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.run</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.recorder.html#module-deepcave.runs.recorder" title="deepcave.runs.recorder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.recorder</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.run.html#module-deepcave.runs.run" title="deepcave.runs.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.run</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.status.html#module-deepcave.runs.status" title="deepcave.runs.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.status</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.trial.html#module-deepcave.runs.trial" title="deepcave.runs.trial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.trial</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>

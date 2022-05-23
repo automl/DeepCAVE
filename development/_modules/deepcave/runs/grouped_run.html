@@ -372,7 +372,7 @@ style="width: 100%;">
                     <span class="bp">self</span><span class="o">.</span><span class="n">_original_mapping</span><span class="p">[</span><span class="n">new_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
 
                     <span class="c1"># And update highest budget</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">new_config_id</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Runs can not be merged.&quot;</span><span class="p">)</span>
 

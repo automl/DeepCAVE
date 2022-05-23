@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>deepcave.runs.converters.smac &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>deepcave.runs.exceptions &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -38,8 +38,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.runs.exceptions" href="deepcave.runs.exceptions.html" />
-    <link rel="prev" title="deepcave.runs.converters.deepcave" href="deepcave.runs.converters.deepcave.html" />
+    <link rel="next" title="deepcave.runs.grouped_run" href="deepcave.runs.grouped_run.html" />
+    <link rel="prev" title="deepcave.runs.converters.smac" href="deepcave.runs.converters.smac.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -309,47 +309,35 @@ style="width: 100%;">
               
               <div>
                 
-  <section id="module-deepcave.runs.converters.smac">
-<span id="deepcave-runs-converters-smac"></span><h1>deepcave.runs.converters.smac<a class="headerlink" href="#module-deepcave.runs.converters.smac" title="Permalink to this headline">¶</a></h1>
-<p class="rubric">Classes</p>
+  <section id="module-deepcave.runs.exceptions">
+<span id="deepcave-runs-exceptions"></span><h1>deepcave.runs.exceptions<a class="headerlink" href="#module-deepcave.runs.exceptions" title="Permalink to this headline">¶</a></h1>
+<p class="rubric">Exceptions</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.converters.smac.SMACRun" title="deepcave.runs.converters.smac.SMACRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SMACRun</span></code></a>(name[, configspace, objectives, ...])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotMergeableError</span></code></a></p></td>
+<td><p>Raised if two or more runs are not mergeable</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.runs.exceptions.NotValidRunError" title="deepcave.runs.exceptions.NotValidRunError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotValidRunError</span></code></a></p></td>
+<td><p>Raised if directory is not a valid run.</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py class">
-<dt class="sig sig-object py" id="deepcave.runs.converters.smac.SMACRun">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.converters.smac.</span></span><span class="sig-name descname"><span class="pre">SMACRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/smac.html#SMACRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.smac.SMACRun" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.runs.run.Run</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.converters.smac.SMACRun.from_path">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/smac.html#SMACRun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.smac.SMACRun.from_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Based on working_dir/run_name/<a href="#id1"><span class="problematic" id="id2">*</span></a>, return a new trials object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#deepcave.runs.converters.smac.SMACRun" title="deepcave.runs.converters.smac.SMACRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMACRun</span></code></a></p>
-</dd>
-</dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="deepcave.runs.exceptions.NotMergeableError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotMergeableError</span></span><a class="reference internal" href="../_modules/deepcave/runs/exceptions.html#NotMergeableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.exceptions.NotMergeableError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised if two or more runs are not mergeable</p>
 </dd></dl>
 
-<dl class="py property">
-<dt class="sig sig-object py" id="deepcave.runs.converters.smac.SMACRun.hash">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.smac.SMACRun.hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>The id from the files in the current working_dir/run_name/<a href="#id3"><span class="problematic" id="id4">*</span></a>. For example, history.json could be read and hashed.
-Idea behind: If id changed, then we have to update cached trials.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
+<dl class="py exception">
+<dt class="sig sig-object py" id="deepcave.runs.exceptions.NotValidRunError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotValidRunError</span></span><a class="reference internal" href="../_modules/deepcave/runs/exceptions.html#NotValidRunError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.exceptions.NotValidRunError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Raised if directory is not a valid run.</p>
 </dd></dl>
 
 </section>
@@ -360,17 +348,17 @@ Idea behind: If id changed, then we have to update cached trials.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.runs.converters.deepcave.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.runs.converters.smac.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.runs.converters.deepcave</p>
+            <p class="prev-next-title">deepcave.runs.converters.smac</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.runs.exceptions.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.runs.grouped_run.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.runs.exceptions</p>
+        <p class="prev-next-title">deepcave.runs.grouped_run</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

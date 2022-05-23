@@ -38,7 +38,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.plugins" href="deepcave.plugins.html" />
+    <link rel="next" title="deepcave.runs.status" href="deepcave.runs.status.html" />
     <link rel="prev" title="deepcave.runs.recorder" href="deepcave.runs.recorder.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -338,12 +338,43 @@ Creates
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.run.Run.add">
 <span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Status.SUCCESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>If combination of config and budget already exists, it will be overwritten.
-Not successful runs are added with None costs.
-The cost will be calculated on the worst result later on.</p>
-<dl class="simple">
-<dt>Inputs:</dt><dd><p>additional (dict): What’s supported by DeepCAVE? Like <cite>ram</cite>,
-costs (float or list of floats)</p>
+<dd><p>Adds a trial to the run.
+If combination of config and budget already exists, it will be overwritten.
+Not successful runs are added with <cite>None</cite> costs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>costs</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>float</em><em>]</em>) – Costs of the run. In case of multi-objective, a list of costs is expected.</p></li>
+<li><p><strong>config</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>Configuration</em><em>]</em>) – The corresponding configuration.</p></li>
+<li><p><strong>start_time</strong> (<em>float</em><em>, </em><em>optional</em>) – Start time. By default 0.0</p></li>
+<li><p><strong>end_time</strong> (<em>float</em><em>, </em><em>optional</em>) – End time. By default 0.0</p></li>
+<li><p><strong>status</strong> (<a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>optional</em>) – Status of the trial. By default Status.SUCCESS</p></li>
+<li><p><strong>origin</strong> (<em>str</em><em>, </em><em>optional</em>) – Origin of the trial. By default None</p></li>
+<li><p><strong>model</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>&amp;quot;torch.nn.Module&amp;quot;</em><em>]</em><em>, </em><em>optional</em>) – Model of the trial. By default None</p></li>
+<li><p><strong>additional</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em><em>, </em><em>optional</em>) – Additional information of the trial. By default None.
+Following information is used by DeepCAVE:
+* traceback</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If number of costs does not match number of objectives.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.run.Run.exists">
+<span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the run exists based on the internal path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>If run exists.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -391,10 +422,10 @@ In contrast to <cite>hash</cite>, this hash should not be changed throughout the
             <p class="prev-next-title">deepcave.runs.recorder</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.plugins.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.runs.status.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.plugins</p>
+        <p class="prev-next-title">deepcave.runs.status</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
