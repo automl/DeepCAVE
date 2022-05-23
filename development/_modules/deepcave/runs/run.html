@@ -542,7 +542,7 @@ style="width: 100%;">
             <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
 
         <span class="c1"># Update models</span>
         <span class="c1"># Problem: We don&#39;t want to have the model in the cache.</span>

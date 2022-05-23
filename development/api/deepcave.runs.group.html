@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>deepcave.runs.grouped_run &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>deepcave.runs.group &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -309,8 +309,8 @@ style="width: 100%;">
               
               <div>
                 
-  <section id="module-deepcave.runs.grouped_run">
-<span id="deepcave-runs-grouped-run"></span><h1>deepcave.runs.grouped_run<a class="headerlink" href="#module-deepcave.runs.grouped_run" title="Permalink to this headline">¶</a></h1>
+  <section id="module-deepcave.runs.group">
+<span id="deepcave-runs-group"></span><h1>deepcave.runs.group<a class="headerlink" href="#module-deepcave.runs.group" title="Permalink to this headline">¶</a></h1>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
@@ -318,18 +318,18 @@ style="width: 100%;">
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.grouped_run.GroupedRun" title="deepcave.runs.grouped_run.GroupedRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GroupedRun</span></code></a>(name, runs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.group.Group" title="deepcave.runs.group.Group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Group</span></code></a>(name, runs)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.grouped_run.</span></span><span class="sig-name descname"><span class="pre">GroupedRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/grouped_run.html#GroupedRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.group.Group">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.group.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">deepcave.runs.AbstractRun</span></code></a></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun.get_trajectory">
-<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/grouped_run.html#GroupedRun.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun.get_trajectory" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_trajectory">
+<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_trajectory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the trajectory of the given objective and budget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -354,8 +354,8 @@ grouped runs.</p></li>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun.hash">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun.hash" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.hash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.group.Group.hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
 the cache always holds the latest results of the run.</p>
 <dl class="field-list simple">
@@ -369,8 +369,8 @@ the cache always holds the latest results of the run.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="deepcave.runs.grouped_run.GroupedRun.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.grouped_run.GroupedRun.id" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.group.Group.id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hash of the file. This is used to identify the file.
 In contrast to <cite>hash</cite>, this hash should not be changed throughout the run.</p>
 <dl class="field-list simple">

@@ -41,7 +41,7 @@
 
    deepcave.runs.converters
    deepcave.runs.exceptions
-   deepcave.runs.grouped_run
+   deepcave.runs.group
    deepcave.runs.handler
    deepcave.runs.objective
    deepcave.runs.recorder

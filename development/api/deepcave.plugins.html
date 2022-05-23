@@ -732,14 +732,14 @@ a Dict[str, str] is returned.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.Plugin.load_run_inputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_run_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grouped_runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_run_compatibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_run_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_run_inputs" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_run_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_run_compatibility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins.html#Plugin.load_run_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.Plugin.load_run_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads the options for <cite>get_run_input_layout</cite>.
 Both runs and groups are displayed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>runs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><em>Run</em></a><em>]</em>) – The runs to display.</p></li>
-<li><p><strong>grouped_runs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.grouped_run.html#deepcave.runs.grouped_run.GroupedRun" title="deepcave.runs.grouped_run.GroupedRun"><em>GroupedRun</em></a><em>]</em>) – The groups to display.</p></li>
+<li><p><strong>groups</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.group.html#deepcave.runs.group.Group" title="deepcave.runs.group.Group"><em>Group</em></a><em>]</em>) – The groups to display.</p></li>
 <li><p><strong>check_run_compatibility</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>, </em><em>bool</em><em>]</em>) – If a single run is compatible. If not, the run is not shown.</p></li>
 </ul>
 </dd>

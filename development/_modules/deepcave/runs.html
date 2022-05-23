@@ -346,13 +346,16 @@ style="width: 100%;">
         <span class="c1"># Cached data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># config_id -&gt; budget</span>
 
-    <span class="k">def</span> <span class="nf">_update_highest_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Update highest budget</span>
-        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">budget</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">budget</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_update_highest_budget</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">status</span><span class="p">:</span> <span class="n">Status</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="c1"># Update highest budget</span>
+            <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">budget</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">budget</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">budget</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
