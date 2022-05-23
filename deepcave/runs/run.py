@@ -247,7 +247,7 @@ class Run(AbstractRun, ABC):
             self.meta["budgets"].append(budget)
             self.meta["budgets"].sort()
 
-        self._update_highest_budget(config_id, budget)
+        self._update_highest_budget(config_id, budget, status)
 
         # Update models
         # Problem: We don't want to have the model in the cache.

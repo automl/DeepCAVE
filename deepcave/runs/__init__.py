@@ -51,13 +51,16 @@ class AbstractRun(ABC):
         # Cached data
         self._highest_budget: Dict[int, Union[int, float]] = {}  # config_id -> budget
 
-    def _update_highest_budget(self, config_id: int, budget: Union[int, float]) -> None:
-        # Update highest budget
-        if config_id not in self._highest_budget:
-            self._highest_budget[config_id] = budget
-        else:
-            if budget > self._highest_budget[config_id]:
+    def _update_highest_budget(
+        self, config_id: int, budget: Union[int, float], status: Status
+    ) -> None:
+        if status == Status.SUCCESS:
+            # Update highest budget
+            if config_id not in self._highest_budget:
                 self._highest_budget[config_id] = budget
+            else:
+                if budget > self._highest_budget[config_id]:
+                    self._highest_budget[config_id] = budget
 
     @property
     @abstractmethod

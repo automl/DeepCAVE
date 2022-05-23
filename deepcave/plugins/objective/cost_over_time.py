@@ -7,7 +7,7 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
-from deepcave.utils.layout import get_radio_options, get_select_options
+from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
 
@@ -49,6 +49,9 @@ class CostOverTime(DynamicPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Budget"),
+                            help_button(
+                                "Combined budget means that the trial on the highest evaluated budget is used."
+                            ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
@@ -66,7 +69,10 @@ class CostOverTime(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("X-Axis"),
-                    dbc.RadioItems(id=register("xaxis", ["value", "options"])),
+                    dbc.Select(
+                        id=register("xaxis", ["value", "options"]),
+                        placeholder="Select ...",
+                    ),
                 ],
                 className="mb-3",
             ),
@@ -167,6 +173,16 @@ class CostOverTime(DynamicPlugin):
             y_lower = list(y - y_err)
             y = list(y)
 
+            hovertext = ""
+            hoverinfo = "skip"
+            symbol = None
+            mode = "lines"
+            if len(config_ids) > 0:
+                hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+                hoverinfo = "text"
+                symbol = "circle"
+                mode = "lines+markers"
+
             traces.append(
                 go.Scatter(
                     x=x,
@@ -174,10 +190,10 @@ class CostOverTime(DynamicPlugin):
                     name=run.name,
                     line_shape="hv",
                     line=dict(color=get_color(idx)),
-                    hovertext=[
-                        get_hovertext_from_config(run, config_id) for config_id in config_ids
-                    ],
-                    hoverinfo="text",
+                    hovertext=hovertext,
+                    hoverinfo=hoverinfo,
+                    marker=dict(symbol=symbol),
+                    mode=mode,
                 )
             )
 
@@ -189,6 +205,7 @@ class CostOverTime(DynamicPlugin):
                     line_shape="hv",
                     hoverinfo="skip",
                     showlegend=False,
+                    marker=dict(symbol=None),
                 )
             )
 
@@ -202,6 +219,7 @@ class CostOverTime(DynamicPlugin):
                     line_shape="hv",
                     hoverinfo="skip",
                     showlegend=False,
+                    marker=dict(symbol=None),
                 )
             )
 
@@ -216,6 +234,12 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
+            margin=dict(
+                t=0,
+                b=0,
+                l=0,
+                r=0,
+            ),
         )
 
         return go.Figure(data=traces, layout=layout)
