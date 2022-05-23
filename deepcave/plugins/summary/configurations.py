@@ -87,7 +87,6 @@ class Configurations(DynamicPlugin):
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
         budgets = run.get_budgets(include_combined=False)
-        print(budgets)
 
         overview_table_data = {
             "Key": ["Selected Configuration", "Origin"],
@@ -105,9 +104,9 @@ class Configurations(DynamicPlugin):
         performances = {}
         performances_table_data = {"Budget": []}
         for objective_id, objective in enumerate(objectives):
-            if objective["name"] not in performances:
-                performances[objective["name"]] = {}
-                performances_table_data[objective["name"]] = []
+            if objective.name not in performances:
+                performances[objective.name] = {}
+                performances_table_data[objective.name] = []
 
             for budget in budgets:
                 # Budget might not be evaluated
@@ -116,7 +115,7 @@ class Configurations(DynamicPlugin):
                 except Exception:
                     costs = [None for _ in range(len(objectives))]
 
-                performances[objective["name"]][budget] = costs[objective_id]
+                performances[objective.name][budget] = costs[objective_id]
 
                 # And add table data
                 if budget not in performances_table_data["Budget"]:
@@ -124,9 +123,9 @@ class Configurations(DynamicPlugin):
 
                 status = run.get_status(selected_config_id, budget)
                 if status == Status.SUCCESS:
-                    performances_table_data[objective["name"]] += [costs[objective_id]]
+                    performances_table_data[objective.name] += [costs[objective_id]]
                 else:
-                    performances_table_data[objective["name"]] += [status.to_text()]
+                    performances_table_data[objective.name] += [status.to_text()]
 
         # Let's start with the configspace
         X = []
@@ -230,10 +229,10 @@ class Configurations(DynamicPlugin):
                 yaxis = f"yaxis{id+1}"
 
             layout_kwargs[yaxis] = {
-                # "title": objective["name"],
+                # "title": objective.name,
                 "titlefont": {"color": get_color(id)},
                 "tickfont": {"color": get_color(id)},
-                "range": [objective["lower"], objective["upper"]],
+                "range": [objective.lower, objective.upper],
             }
 
             if id > 0:

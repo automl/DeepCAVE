@@ -369,7 +369,7 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     string += f"<b>Objectives (on highest found budget {budget})</b><br>"
     for objective, cost in zip(objectives, costs):
-        string += f"{objective['name']}: {cost}<br>"
+        string += f"{objective.name}: {cost}<br>"
 
     return string
 

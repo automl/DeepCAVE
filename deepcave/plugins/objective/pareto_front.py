@@ -170,7 +170,7 @@ class ParetoFront(DynamicPlugin):
                 # We therefore have to check for each objective separately.
                 select = None
                 for idx, (objective, cost) in enumerate(zip([objective_1, objective_2], costs)):
-                    if objective["optimize"] == "upper":
+                    if objective.optimize == "upper":
                         select2 = np.any(points[is_front][:, idx, np.newaxis] > [cost], axis=1)
                     else:
                         select2 = np.any(points[is_front][:, idx, np.newaxis] < [cost], axis=1)
@@ -246,11 +246,11 @@ class ParetoFront(DynamicPlugin):
             # Check if we need hv or vh
             objective_1 = run.get_objective(inputs["objective_id_1"])
             objective_2 = run.get_objective(inputs["objective_id_2"])
-            optimize1 = objective_1["optimize"]
-            optimize2 = objective_2["optimize"]
+            optimize1 = objective_1.optimize
+            optimize2 = objective_2.optimize
 
             if optimize1 == optimize2:
-                if objective_1["optimize"] == "lower":
+                if objective_1.optimize == "lower":
                     line_shape = "hv"
                 else:
                     line_shape = "vh"
@@ -276,8 +276,8 @@ class ParetoFront(DynamicPlugin):
 
         if len(traces) > 0:
             layout = go.Layout(
-                xaxis=dict(title=objective_1["name"]),
-                yaxis=dict(title=objective_2["name"]),
+                xaxis=dict(title=objective_1.name),
+                yaxis=dict(title=objective_2.name),
             )
         else:
             layout = None

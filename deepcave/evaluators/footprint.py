@@ -101,7 +101,7 @@ class Footprint:
 
         # Make numpy arrays
         X = data[hp_names].to_numpy()
-        Y = data[objective["name"]].to_numpy()
+        Y = data[objective.name].to_numpy()
         config_ids = data["config_id"].values.tolist()  # type: ignore
 
         # Get the incumbent

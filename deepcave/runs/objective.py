@@ -1,90 +1,102 @@
-from typing import Optional
+from dataclasses import dataclass
+from typing import Dict, Optional, Union, Any
 
 import numpy as np
+from deepcave.runs.exceptions import NotMergeableError
 
 
-class Objective(dict):
-    def __init__(
-        self,
-        name: str,
-        lower: Optional[float] = None,
-        upper: Optional[float] = None,
-        optimize="lower",
-    ):
+@dataclass
+class Objective:
+    name: str
+    lower: Optional[Union[int, float]] = None
+    upper: Optional[Union[int, float]] = None
+    optimize: str = "lower"
+
+    def __post_init__(self) -> None:
         """
-
         Lock the lower bound if lower is not None.
         Lock the upper bound if upper is not None.
 
-        Args:
-            name (str): Name of the objective.
-            lower (float): Lower bound of the objective.
-            upper (float): Upper bound of the objective.
-            optimize (str): Either `lower` or `upper`.
+        Raises
+        ------
+        RuntimeError
+            If optimize is not `lower` or `upper`.
         """
-
-        if lower is None:
+        if self.lower is None:
             lock_lower = False
-            lower = np.inf
+            self.lower = np.inf
         else:
             lock_lower = True
 
-        if upper is None:
+        if self.upper is None:
             lock_upper = False
-            upper = -np.inf
+            self.upper = -np.inf
         else:
             lock_upper = True
 
-        if optimize != "lower" and optimize != "upper":
+        if self.optimize != "lower" and self.optimize != "upper":
             raise RuntimeError("`optimize` must be 'lower' or 'upper'")
 
-        data = {
-            "name": name,
-            "lower": lower,
-            "upper": upper,
-            "lock_lower": lock_lower,
-            "lock_upper": lock_upper,
-            "optimize": optimize,
+        self.lock_lower = lock_lower
+        self.lock_upper = lock_upper
+
+    def to_json(self) -> Dict[str, Any]:
+        return {
+            "name": self.name,
+            "lower": self.lower,
+            "upper": self.upper,
+            "lock_lower": self.lock_lower,
+            "lock_upper": self.lock_upper,
+            "optimize": self.optimize,
         }
 
-        super().__init__(data)
+    @staticmethod
+    def from_json(d: Dict[str, Any]) -> "Objective":
+        objective = Objective(
+            name=d["name"],
+            lower=d["lower"],
+            upper=d["upper"],
+            optimize=d["optimize"],
+        )
 
-    def __eq__(self, other):
-        attributes = ["name", "lock_lower", "lock_upper", "optimize"]  # , "lower", "upper"]
+        objective.lock_lower = d["lock_lower"]
+        objective.lock_upper = d["lock_upper"]
+
+        return objective
+
+    def __eq__(self, other: Any) -> bool:
+        attributes = ["name", "lock_lower", "lock_upper", "optimize"]
         for a in attributes:
-            if self[a] != other[a]:
+            if getattr(self, a) != getattr(other, a):
                 return False
 
         return True
 
-    def merge(self, objective: "Objective"):
-        from deepcave.runs.grouped_run import NotMergeableError
+    def merge(self, other: Any) -> None:
+        if not isinstance(other, Objective):
+            raise NotMergeableError("Objective can only be merged with another Objective.")
 
         attributes = ["name", "lock_lower", "lock_upper", "optimize"]
         for attribute in attributes:
-            if self[attribute] != objective[attribute]:
+            if getattr(self, attribute) != getattr(other, attribute):
                 raise NotMergeableError(f"Objective {attribute} is not mergeable.")
 
-        if self["lock_lower"] and self["lock_lower"] == objective["lock_lower"]:
-            if self["lower"] != objective["lower"]:
-                raise NotMergeableError(
-                    f"Objective {objective['name']}'s lower bound is not mergeable."
-                )
+        if self.lock_lower and self.lock_lower == other.lock_lower:
+            if self.lower != other.lower:
+                raise NotMergeableError(f"Objective {other.name}'s lower bound is not mergeable.")
         else:
-            if self["lower"] > objective["lower"]:
-                self["lower"] = objective["lower"]
+            if self.lower > other.lower:  # type: ignore
+                self.lower = other.lower
 
-        if self["lock_upper"] and self["lock_upper"] == objective["lock_upper"]:
-            if self["upper"] != objective["upper"]:
-                raise NotMergeableError(
-                    f"Objective {objective['name']}'s upper bound is not mergeable."
-                )
+        if self.lock_upper and self.lock_upper == other.lock_upper:
+            if self.upper != other.upper:
+                raise NotMergeableError(f"Objective {other.name}'s upper bound is not mergeable.")
         else:
-            if self["upper"] < objective["upper"]:
-                self["upper"] = objective["upper"]
+            if self.upper < other.upper:  # type: ignore
+                self.upper = other.upper
 
     def get_worst_value(self) -> float:
-        if self["optimize"] == "lower":
-            return self["upper"]
+        if self.optimize == "lower":
+            return self.upper  # type: ignore
         else:
-            return self["lower"]
+            return self.lower  # type: ignore

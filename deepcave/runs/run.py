@@ -6,6 +6,7 @@ from pathlib import Path
 
 import jsonlines
 import numpy as np
+import ConfigSpace
 from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.read_and_write import json as cs_json
 
@@ -33,7 +34,7 @@ class Run(AbstractRun, ABC):
     def __init__(
         self,
         name: str,
-        configspace=None,
+        configspace: ConfigSpace = None,
         objectives: Union[Objective, List[Objective]] = None,
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
@@ -66,14 +67,16 @@ class Run(AbstractRun, ABC):
             )
 
         # Objectives
-        if not isinstance(objectives, list):
+        if not isinstance(objectives, List):
             objectives = [objectives]
 
+        serialized_objectives = []
         for objective in objectives:
             assert isinstance(objective, Objective)
+            serialized_objectives += [objective.to_json()]
 
         # Meta
-        self.meta = {"objectives": objectives, "budgets": []}
+        self.meta = {"objectives": serialized_objectives, "budgets": []}
         self.meta.update(meta)
 
     @classmethod
@@ -113,6 +116,14 @@ class Run(AbstractRun, ABC):
         self.models_dir = self._path / "models"
 
     def exists(self) -> bool:
+        """
+        Checks if the run exists based on the internal path.
+
+        Returns
+        -------
+        bool
+            If run exists.
+        """
         if self._path is None:
             return False
 
@@ -138,16 +149,37 @@ class Run(AbstractRun, ABC):
         origin: str = None,
         model: Union[str, "torch.nn.Module"] = None,
         additional: Optional[Dict] = None,
-    ):
+    ) -> None:
         """
-
+        Adds a trial to the run.
         If combination of config and budget already exists, it will be overwritten.
-        Not successful runs are added with None costs.
-        The cost will be calculated on the worst result later on.
+        Not successful runs are added with `None` costs.
 
-        Inputs:
-            additional (dict): What's supported by DeepCAVE? Like `ram`,
-            costs (float or list of floats)
+        Parameters
+        ----------
+        costs : Union[List[float], float]
+            Costs of the run. In case of multi-objective, a list of costs is expected.
+        config : Union[Dict, Configuration]
+            The corresponding configuration.
+        start_time : float, optional
+            Start time. By default 0.0
+        end_time : float, optional
+            End time. By default 0.0
+        status : Status, optional
+            Status of the trial. By default Status.SUCCESS
+        origin : str, optional
+            Origin of the trial. By default None
+        model : Union[str, &quot;torch.nn.Module&quot;], optional
+            Model of the trial. By default None
+        additional : Optional[Dict], optional
+            Additional information of the trial. By default None.
+            Following information is used by DeepCAVE:
+            * traceback
+
+        Raises
+        ------
+        RuntimeError
+            If number of costs does not match number of objectives.
         """
         if additional is None:
             additional = {}
@@ -164,22 +196,22 @@ class Run(AbstractRun, ABC):
             objective = self.get_objectives()[i]
 
             # Update time objective here
-            if objective["name"] == "time" and cost is None:
+            if objective.name == "time" and cost is None:
                 costs[i] = end_time - start_time
                 cost = costs[i]
 
             # If cost is none, replace it later with the highest cost
             if cost is not None:
                 # Update bounds here
-                if not objective["lock_lower"]:
-                    if cost < objective["lower"]:
-                        objective["lower"] = cost
+                if not objective.lock_lower:
+                    if cost < objective.lower:  # type: ignore
+                        objective.lower = cost
 
-                if not objective["lock_upper"]:
-                    if cost > objective["upper"]:
-                        objective["upper"] = cost
+                if not objective.lock_upper:
+                    if cost > objective.upper:  # type: ignore
+                        objective.upper = cost
 
-            updated_objectives += [objective]
+            updated_objectives += [objective.to_json()]
 
         self.meta["objectives"] = updated_objectives
 
@@ -205,7 +237,7 @@ class Run(AbstractRun, ABC):
         trial_key = trial.get_key()
         if trial_key not in self.trial_keys:
             self.trial_keys[trial_key] = len(self.history)
-            self.history.append(trial)
+            self.history += [trial]
         else:
             # Overwrite
             self.history[self.trial_keys[trial_key]] = trial
@@ -267,7 +299,7 @@ class Run(AbstractRun, ABC):
                 # Remove from dict
                 del self.models[config_id]
 
-    def load(self, path: Optional[Union[str, Path]] = None):
+    def load(self, path: Optional[Union[str, Path]] = None) -> None:
         self.reset()
 
         if path is None and self.path is None:

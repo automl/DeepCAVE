@@ -77,7 +77,7 @@ class GroupedRun(AbstractRun):
                     self._original_mapping[new_config_id] = (run_id, config_id)
 
                     # And update highest budget
-                    self._
+                    self._update_highest_budget(new_config_id, trial.budget)
         except Exception:
             raise NotMergeableError("Runs can not be merged.")
 

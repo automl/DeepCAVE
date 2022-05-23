@@ -10,7 +10,6 @@ from scipy import stats
 from deepcave import notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
-from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color

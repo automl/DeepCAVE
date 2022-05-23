@@ -41,8 +41,6 @@ class SMACRun(Run):
         """
         path = Path(path)
 
-        # For SMAC, we create a new run object
-
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
 
@@ -72,9 +70,12 @@ class SMACRun(Run):
                 if arg not in ignore:
                     meta[arg] = value
 
+        # Let's create a new run object
         run = SMACRun(
-            path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
+            name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
         )
+
+        # We have to set the path manually
         run._path = path
 
         # Iterate over the runhistory
@@ -83,6 +84,8 @@ class SMACRun(Run):
             data = all_data["data"]
             config_origins = all_data["config_origins"]
             configs = all_data["configs"]
+
+        instance_ids = []
 
         first_starttime = None
         seeds = []
@@ -94,6 +97,11 @@ class SMACRun(Run):
             endtime,
             additional_info,
         ) in data:
+            if instance_id not in instance_ids:
+                instance_ids += [instance_id]
+
+            if len(instance_ids) > 1:
+                raise RuntimeError("Instances are not supported.")
 
             config_id = str(config_id)
             config = configs[config_id]
@@ -103,9 +111,6 @@ class SMACRun(Run):
 
             if len(seeds) > 1:
                 raise RuntimeError("Multiple seeds are not supported.")
-
-            # if instance_id is not None:
-            #    raise RuntimeError("Instances are not supported.")
 
             if first_starttime is None:
                 first_starttime = starttime

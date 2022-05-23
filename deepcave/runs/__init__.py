@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
-from telnetlib import X3PAD
-from typing import Any, Dict, Iterable, Iterator, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
 from pathlib import Path
-from dataclasses import dataclass
-from enum import IntEnum
 
 import ConfigSpace
 import numpy as np
@@ -20,70 +17,14 @@ from deepcave.constants import (
     COMBINED_BUDGET,
     COMBINED_COST_NAME,
     CONSTANT_VALUE,
-    NAN_LABEL,
     NAN_VALUE,
 )
+from deepcave.runs.exceptions import NotMergeableError
 
 from deepcave.runs.objective import Objective
-from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import prettify_label
-
-
-class NotValidRunError(Exception):
-    """Raised if directory is not a valid run."""
-
-    pass
-
-
-class NotMergeableError(Exception):
-    """Raised if two or more runs are not mergeable"""
-
-    pass
-
-
-class Status(IntEnum):
-    SUCCESS = 1
-    TIMEOUT = 2
-    MEMORYOUT = 3
-    CRASHED = 4
-    ABORTED = 5
-    RUNNING = 6
-    NOT_EVALUATED = 7
-
-    def to_text(self) -> str:
-        return self.name.lower().replace("_", " ")
-
-
-@dataclass
-class Trial:
-    config_id: int
-    budget: Union[int, float]
-    costs: List[float]
-    start_time: float
-    end_time: float
-    status: Status
-    additional: Dict[str, Any]
-
-    def __post_init__(self) -> None:
-        if isinstance(self.status, int):
-            self.status = Status(self.status)
-
-        assert isinstance(self.status, Status)
-
-    def get_key(self) -> Tuple[int, int]:
-        return AbstractRun.get_trial_key(self.config_id, self.budget)
-
-    def to_json(self) -> List[Any]:
-        return [
-            self.config_id,
-            self.budget,
-            self.costs,
-            self.start_time,
-            self.end_time,
-            self.status,
-            self.additional,
-        ]
+from deepcave.runs.status import Status
+from deepcave.runs.trial import Trial
 
 
 class AbstractRun(ABC):
@@ -146,6 +87,10 @@ class AbstractRun(ABC):
         """
         pass
 
+    @property
+    def latest_change(self) -> float:
+        return 0
+
     @staticmethod
     def get_trial_key(config_id: int, budget: Union[int, float]):
         return (config_id, budget)
@@ -159,10 +104,10 @@ class AbstractRun(ABC):
     def get_trials(self) -> Iterator[Trial]:
         yield from self.history
 
-    def get_meta(self) -> None:
-        return self.meta
+    def get_meta(self) -> Dict[str, Any]:
+        return self.meta.copy()
 
-    def empty(self) -> None:
+    def empty(self) -> bool:
         return len(self.history) == 0
 
     def get_origin(self, config_id: int) -> str:
@@ -170,18 +115,9 @@ class AbstractRun(ABC):
 
     def get_objectives(self) -> List[Objective]:
         objectives = []
-        for d in self.meta["objectives"]:
-            objective = Objective(
-                name=d["name"],
-                lower=d["lower"],
-                upper=d["upper"],
-                optimize=d["optimize"],
-            )
-
-            objective["lock_lower"] = d["lock_lower"]
-            objective["lock_upper"] = d["lock_upper"]
-
-            objectives.append(objective)
+        for d in self.meta["objectives"].copy():
+            objective = Objective.from_json(d)
+            objectives += [objective]
 
         return objectives
 
@@ -205,7 +141,7 @@ class AbstractRun(ABC):
 
         # Otherwise, iterate till the name is found
         for objective in objectives:
-            if objective["name"] == id:
+            if objective.name == id:
                 return objective
 
         return None
@@ -235,7 +171,7 @@ class AbstractRun(ABC):
                 if objective == objective2:
                     return id
             else:
-                if objective == objective2["name"]:
+                if objective == objective2.name:
                     return id
 
         raise RuntimeError("Objective was not found.")
@@ -256,12 +192,12 @@ class AbstractRun(ABC):
                 return available_objective_names[0]
         else:
             if len(objectives) == 1:
-                return objectives[0]["name"]
+                return objectives[0].name
 
         return COMBINED_COST_NAME
 
     def get_objective_names(self) -> List[str]:
-        return [obj["name"] for obj in self.get_objectives()]
+        return [obj.name for obj in self.get_objectives()]
 
     def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
         """
@@ -329,11 +265,8 @@ class AbstractRun(ABC):
         float
             Budget.
         """
-        if type(id) == str:
-            id = int(id)
-
         budgets = self.get_budgets()
-        return budgets[id]
+        return budgets[int(id)]
 
     def get_budget_ids(self) -> List[int]:
         return list(range(len(self.get_budgets())))
@@ -640,15 +573,23 @@ class AbstractRun(ABC):
 
             if objective_id is None:
                 raise RuntimeError("The objective was not found.")
+
             cost = costs[objective_id]
 
-            a = cost - objective["lower"]
-            b = objective["upper"] - objective["lower"]
+            assert objective.lower is not None
+            assert objective.upper is not None
+
+            # TODO: What to do if we deal with infinity here?
+            assert objective.lower != np.inf
+            assert objective.upper != -np.inf
+
+            a = cost - objective.lower
+            b = objective.upper - objective.lower
             normalized_cost = a / b
 
             # We optimize the lower
             # So we need to flip the normalized cost
-            if objective["optimize"] == "upper":
+            if objective.optimize == "upper":
                 normalized_cost = 1 - normalized_cost
 
             normalized_costs.append(normalized_cost)
@@ -718,7 +659,7 @@ class AbstractRun(ABC):
         order.sort(key=lambda tup: tup[1])
 
         # Important: Objective can be minimized or maximized
-        if objective["optimize"] == "lower":
+        if objective.optimize == "lower":
             current_cost = np.inf
         else:
             current_cost = -np.inf
@@ -737,7 +678,7 @@ class AbstractRun(ABC):
                 continue
 
             # Now it's important to check whether the cost was minimized or maximized
-            if objective["optimize"] == "lower":
+            if objective.optimize == "lower":
                 improvement = cost < current_cost
             else:
                 improvement = cost > current_cost
@@ -928,7 +869,7 @@ class AbstractRun(ABC):
             columns = []
 
         columns += [name for name in self.configspace.get_hyperparameter_names()]
-        columns += [objective["name"] for objective in objectives]
+        columns += [objective.name for objective in objectives]
 
         if include_combined_cost:
             columns += [COMBINED_COST_NAME]
@@ -972,7 +913,6 @@ def check_equality(
     Dict[str, Any]
         Dictionary containing the checked attributes.
     """
-
     result = {}
 
     if len(runs) == 0:
@@ -1036,8 +976,9 @@ def check_equality(
             for o1_, o2_ in zip(o1, o2):
                 o1_.merge(o2_)
 
-        result["objectives"] = o1
+        serialized_objectives = [o.to_json() for o in o1]
+        result["objectives"] = serialized_objectives
         if meta:
-            result["meta"]["objectives"] = o1
+            result["meta"]["objectives"] = serialized_objectives
 
     return result

@@ -135,8 +135,8 @@ class Overview(DynamicPlugin):
         # Objectives
         objectives = {"Name": [], "Bounds": []}
         for objective in run.get_objectives():
-            objectives["Name"].append(objective["name"])
-            objectives["Bounds"].append(f"[{objective['lower']}, {objective['upper']}]")
+            objectives["Name"].append(objective.name)
+            objectives["Bounds"].append(f"[{objective.lower}, {objective.upper}]")
 
         # Budgets
         budgets = run.get_budgets(include_combined=False)

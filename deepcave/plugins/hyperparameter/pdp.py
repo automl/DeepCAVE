@@ -170,7 +170,7 @@ class PartialDependencies(StaticPlugin):
         )
 
         X = df[hp_names].to_numpy()
-        Y = df[objective["name"]].to_numpy()
+        Y = df[objective.name].to_numpy()
 
         # Let's initialize the surrogate
         surrogate_model = RandomForestSurrogate(run.configspace, seed=0)
@@ -236,7 +236,7 @@ class PartialDependencies(StaticPlugin):
         show_ice = inputs["show_ice"] == "true"
 
         objective = run.get_objective(inputs["objective_id"])
-        objective_name = objective["name"]
+        objective_name = objective.name
 
         # Parse outputs
         x = np.asarray(outputs["x"])

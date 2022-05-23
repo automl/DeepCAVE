@@ -210,7 +210,7 @@ class FootPrint(StaticPlugin):
             hoverinfo="skip",
             colorbar=dict(
                 len=0.5,
-                title=objective["name"],
+                title=objective.name,
             ),
             colorscale="blues",
         )
@@ -294,7 +294,7 @@ class FootPrint(StaticPlugin):
             cb = plt.colorbar()
 
             if data == "performance":
-                cb.ax.set_title(objective["name"])
+                cb.ax.set_title(objective.name)
             else:
                 cb.ax.set_title("Valid Area")
 

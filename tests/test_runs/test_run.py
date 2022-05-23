@@ -1,24 +1,22 @@
+from typing import List
 import unittest
 import pytest
 import numpy as np
+from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac import SMACRun
 
 
 class TestRun(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run = SMACRun.from_path("examples/record/logs/SMAC/test_run")
+        self.run: AbstractRun = SMACRun.from_path("logs/SMAC/outlier-detection/SMAC-cardio-015-0-0")
 
     def test_configs(self):
         # Get a random config_id
         config_id = 5
-
         config = self.run.get_config(config_id)
-        x = self.run.encode_config(5)
-        decoded_x = self.run.decode_config(x)
-
-        for v1, v2, v3 in zip(config.values(), x, decoded_x):
-            print(v1, v2, v3)
+        normalized_config = self.run.encode_config(config)
+        assert isinstance(normalized_config, List)
 
 
 if __name__ == "__main__":

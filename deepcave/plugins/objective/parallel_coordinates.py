@@ -190,7 +190,7 @@ class ParallelCoordinates(StaticPlugin):
     @staticmethod
     def load_outputs(run, inputs, outputs):
         objective = run.get_objective(inputs["objective_id"])
-        objective_name = objective["name"]
+        objective_name = objective.name
 
         show_important_only = inputs["show_important_only"] == "true"
         show_unsuccessful = inputs["show_unsuccessful"] == "true"

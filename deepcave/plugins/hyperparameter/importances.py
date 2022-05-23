@@ -191,7 +191,6 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, importances in outputs.items():
-            print(budget_id)
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
             if budget_id not in selected_budget_ids:

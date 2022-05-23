@@ -171,7 +171,7 @@ class CCube(DynamicPlugin):
         idx = [str(i) for i in range(n_configs, len(df))]
         df = df.drop(idx)
 
-        costs = df[objective["name"]].values.tolist()
+        costs = df[objective.name].values.tolist()
         config_ids = df["config_id"].values.tolist()
         data = []
 
@@ -196,7 +196,7 @@ class CCube(DynamicPlugin):
             "marker": {
                 "size": 5,
                 "color": costs,
-                "colorbar": {"thickness": 30, "title": objective["name"]},
+                "colorbar": {"thickness": 30, "title": objective.name},
             },
             "hovertext": [get_hovertext_from_config(run, config_id) for config_id in config_ids],
             "meta": {"colorbar": costs},
