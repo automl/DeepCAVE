@@ -202,7 +202,7 @@ class GeneralLayout(Layout):
             # Reset clicks
             add_n_clicks = [None for _ in add_n_clicks]
             remove_n_clicks = [None for _ in remove_n_clicks]
-            
+
             # Remove last inputs
             c.set("last_inputs", value={})
 
@@ -248,7 +248,7 @@ class GeneralLayout(Layout):
                     className="mb-2",
                 )
 
-            groups = run_handler.get_groups()
+            groups = run_handler.get_selected_groups()
             selected_run_paths = run_handler.get_selected_run_paths()
             selected_runs = {p: run_handler.get_run_name(p) for p in selected_run_paths}
             index = 0
@@ -306,7 +306,7 @@ class GeneralLayout(Layout):
                 run_handler.update_groups(groups)
             except NotMergeableError:
                 notification.update("The selected runs are not mergeable.")
-                
+
                 # This will automatically trigger the group display s.t. the selection is redo.
                 return i + 1
 

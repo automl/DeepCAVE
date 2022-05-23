@@ -6,7 +6,7 @@ from pathlib import Path
 
 from deepcave.config import Config
 from deepcave.runs import AbstractRun
-from deepcave.runs.grouped_run import GroupedRun
+from deepcave.runs.group import Group
 from deepcave.runs.run import Run
 from deepcave.utils.logs import get_logger
 
@@ -28,7 +28,7 @@ class RunHandler:
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
-        self.groups: Dict[str, GroupedRun] = {}  # group_name -> GroupedRun
+        self.groups: Dict[str, Group] = {}  # group_name -> GroupedRun
 
         # Read from cache and update
         self.c.read()
@@ -125,7 +125,7 @@ class RunHandler:
         """
         return Path(run_path).stem
 
-    def get_groups(self) -> Dict[str, List[str]]:
+    def get_selected_groups(self) -> Dict[str, List[str]]:
         return self.c.get("groups")
 
     def add_run(self, run_path: str) -> bool:
@@ -321,7 +321,7 @@ class RunHandler:
                 continue
 
             # Throws NotMergeableError
-            instantiated_groups[group_name] = GroupedRun(group_name, runs)
+            instantiated_groups[group_name] = Group(group_name, runs)
 
         # Add groups to rc
         for group in instantiated_groups.values():
@@ -360,7 +360,7 @@ class RunHandler:
 
         raise RuntimeError("Run not found.")
 
-    def get_grouped_runs(self) -> List[GroupedRun]:
+    def get_groups(self) -> List[Group]:
         """
         Returns instantiated grouped runs.
 

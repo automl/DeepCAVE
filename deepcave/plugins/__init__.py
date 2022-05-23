@@ -16,7 +16,7 @@ from dash.exceptions import PreventUpdate
 from deepcave import interactive
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
-from deepcave.runs.grouped_run import GroupedRun, NotMergeableError
+from deepcave.runs.group import Group, NotMergeableError
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
@@ -286,7 +286,7 @@ class Plugin(Layout, ABC):
                             # Update run_selection
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
-                                self.grouped_runs,
+                                self.groups,
                                 self.__class__.check_run_compatibility,
                             )
 
@@ -307,7 +307,7 @@ class Plugin(Layout, ABC):
                         if self.activate_run_selection:
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
-                                self.grouped_runs,
+                                self.groups,
                                 self.__class__.check_run_compatibility,
                             )
                             update_dict(inputs, new_inputs)
@@ -326,7 +326,7 @@ class Plugin(Layout, ABC):
                             run_value = inputs["run"]["value"]
                             new_inputs = self.__class__.load_run_inputs(
                                 self.runs,
-                                self.grouped_runs,
+                                self.groups,
                                 self.__class__.check_run_compatibility,
                             )
                             update_dict(inputs, new_inputs)
@@ -718,10 +718,10 @@ class Plugin(Layout, ABC):
 
     @property  # type: ignore
     @interactive
-    def grouped_runs(self) -> List[GroupedRun]:
+    def groups(self) -> List[Group]:
         from deepcave import run_handler
 
-        return run_handler.get_grouped_runs()
+        return run_handler.get_groups()
 
     @property  # type: ignore
     @interactive
@@ -943,7 +943,7 @@ class Plugin(Layout, ABC):
     @interactive
     def load_run_inputs(
         runs: List[AbstractRun],
-        grouped_runs: List[GroupedRun],
+        groups: List[Group],
         check_run_compatibility: Callable[[AbstractRun], bool],
     ) -> Dict[str, Any]:
         """
@@ -954,7 +954,7 @@ class Plugin(Layout, ABC):
         ----------
         runs : Dict[str, Run]
             The runs to display.
-        grouped_runs : Dict[str, GroupedRun]
+        groups : Dict[str, Group]
             The groups to display.
         check_run_compatibility : Callable[[AbstractRun], bool]
             If a single run is compatible. If not, the run is not shown.
@@ -978,7 +978,7 @@ class Plugin(Layout, ABC):
                 pass
 
         added_group_label = False
-        for run in grouped_runs:
+        for run in groups:
             if check_run_compatibility(run):
                 if not added_group_label:
                     values.append("")
