@@ -154,7 +154,7 @@ class BudgetCorrelation(DynamicPlugin):
                     continue
 
                 if key not in categories[category] and key2 not in categories[category]:
-                    if budget1 < budget2:
+                    if float(budget1) < float(budget2):
                         categories[category] += [key]
                     else:
                         categories[category] += [key2]
