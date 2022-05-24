@@ -172,7 +172,22 @@ class BudgetCorrelation(DynamicPlugin):
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Correlation"),
             margin=dict(t=30, b=0, l=0, r=0),
+            legend=dict(title="Budgets")
         )
+
+        figure = go.Figure(data=traces, layout=layout)
+        
+        # Add vertical lines
+        readable_budgets = run.get_budgets(human=True, include_combined=False)
+        for idx, budget in enumerate(readable_budgets):
+            figure.add_vline(
+                x=budget,
+                line=dict(
+                    color=get_color(idx),
+                    width=1,
+                    dash="dot",
+                ),
+            )
 
         text = "The budget correlation of"
         n_categories = len(categories)
@@ -187,7 +202,7 @@ class BudgetCorrelation(DynamicPlugin):
             formated_pairs = []
             for pair in pairs:
                 formated_pairs += [f"({pair[0]}, {pair[1]})"]
-                
+
             pairs_text = ", ".join(formated_pairs)
             text += f"{pairs_text} is {relation}"
             if i == n_categories - 1:
@@ -195,6 +210,6 @@ class BudgetCorrelation(DynamicPlugin):
 
         return [
             text,
-            go.Figure(data=traces, layout=layout),
+            figure,
             create_table(correlations_symmetric, mb=False),
         ]
