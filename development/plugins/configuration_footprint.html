@@ -324,12 +324,19 @@ style="width: 100%;">
                 
   <section id="configuration-footprint">
 <h1>Configuration Footprint<a class="headerlink" href="#configuration-footprint" title="Permalink to this headline">¶</a></h1>
-<p>This plugin is useful for exploring how much is know about your configuration space by the optimizer and view it’s preferences during the run. These can be generated and will be cached when hitting the <code class="docutils literal notranslate"><span class="pre">Process</span></code> button. First, let’s briefly mention the various kind of configurations we are concerned with here.</p>
+<p>This plugin is useful for exploring how much is known about your configuration space by the optimizer and view its preferences during the run. These can be generated and will be cached when hitting the <code class="docutils literal notranslate"><span class="pre">Process</span></code> button.</p>
+<p>This plugin is capable of answering following questions:</p>
 <ul class="simple">
-<li><p><strong>Incumbent</strong> - This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown as a red triangle.</p></li>
-<li><p><strong>Evaluated Configuration</strong> - These are configurations evaluated by the optimizer and we know the true objective value, shown with <em>orange x</em>’s.</p></li>
-<li><p><strong>Unevaluated Configuration</strong> - These are configurations sampled by the optimizer but have no been evaluated, shown with <em>purple x</em>’s.</p></li>
-<li><p><strong>Border Configuration</strong> - These are configurations that exist at the edge of the configuration space at the min and max values for scalars.</p></li>
+<li><p>Was the configuration space well-covered by the optimizer?</p></li>
+<li><p>Can I stop the optimization process or do I need to invest more computational resources?</p></li>
+<li><p>Which hyperparameter values are favorable?</p></li>
+</ul>
+<p>First, let’s briefly mention the various kind of configurations we are concerned with here.</p>
+<ul class="simple">
+<li><p><strong>Incumbent</strong>: This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown as a red triangle.</p></li>
+<li><p><strong>Evaluated Configuration</strong>: These are configurations evaluated by the optimizer and we know the true objective value, shown with <em>orange x</em>’s.</p></li>
+<li><p><strong>Unevaluated Configuration</strong>: These are configurations sampled by the optimizer but have no been evaluated, shown with <em>purple x</em>’s.</p></li>
+<li><p><strong>Border Configuration</strong>: These are configurations that exist at the edge of the configuration space at the min and max values for scalars.</p></li>
 </ul>
 <p>Using the <strong>Evaluated Configuration</strong> and the <strong>Incumbent</strong> for each objective type and under each budget, we have some knowledge about what kind of score we’ll get around those points, and we can try to infer for all other points in the configuration space.</p>
 <p>The next point to address is how we represent a high dimensional Configuration in something we can plot in 2D. This is done using a dimensionality reduction algorithm <a class="reference external" href="https://en.wikipedia.org/wiki/Multidimensional_scaling">MDS</a> which attempts to preserve distances as well as possible when converting from the high dimensional spaceto the lower dimensional one. Of course this is not perfect but it can still provide a lot of insight.</p>

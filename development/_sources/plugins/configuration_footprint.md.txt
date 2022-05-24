@@ -1,10 +1,16 @@
 # Configuration Footprint
-This plugin is useful for exploring how much is know about your configuration space by the optimizer and view it's preferences during the run. These can be generated and will be cached when hitting the `Process` button. First, let's briefly mention the various kind of configurations we are concerned with here.
+This plugin is useful for exploring how much is known about your configuration space by the optimizer and view its preferences during the run. These can be generated and will be cached when hitting the `Process` button.
 
-* **Incumbent** - This is the best configuration for a given objective, like _cost_ or _time_, shown as a red triangle.
-* **Evaluated Configuration** - These are configurations evaluated by the optimizer and we know the true objective value, shown with _orange x_'s.
-* **Unevaluated Configuration** - These are configurations sampled by the optimizer but have no been evaluated, shown with _purple x_'s.
-* **Border Configuration** - These are configurations that exist at the edge of the configuration space at the min and max values for scalars.
+This plugin is capable of answering following questions:
+- Was the configuration space well-covered by the optimizer?
+- Can I stop the optimization process or do I need to invest more computational resources?
+- Which hyperparameter values are favorable?
+
+First, let's briefly mention the various kind of configurations we are concerned with here.
+* **Incumbent**: This is the best configuration for a given objective, like _cost_ or _time_, shown as a red triangle.
+* **Evaluated Configuration**: These are configurations evaluated by the optimizer and we know the true objective value, shown with _orange x_'s.
+* **Unevaluated Configuration**: These are configurations sampled by the optimizer but have no been evaluated, shown with _purple x_'s.
+* **Border Configuration**: These are configurations that exist at the edge of the configuration space at the min and max values for scalars.
 
 Using the **Evaluated Configuration** and the **Incumbent** for each objective type and under each budget, we have some knowledge about what kind of score we'll get around those points, and we can try to infer for all other points in the configuration space.
 
