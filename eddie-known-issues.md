@@ -6,6 +6,11 @@
     * Change `Overview.md` if changing this
     * Need more information about what's actually possible to see here
 
+# Configuration Cube
+* The budget drop down has an option _Combined_, not intuitevly sure what this means, could add a little help to it.
+* The yellow dots in configuration cube are increidbly hard to see with a large screen in 2D. Could maybe up the size of them, add borders to the dots or remove any alpha if there is.
+* Would you think it makes sense to add slight lines from the point to the axis in 3d to see where each point lines up?
+
 # Configuration Footprint
 * We should change *Configuration* to **Evaluated Configuration** and *Random (unevaluated) Configuration* to **Unevaluated Configuration**.
 

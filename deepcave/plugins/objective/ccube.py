@@ -7,16 +7,20 @@ from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
+from deepcave.runs import Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import (
     get_checklist_options,
     get_select_options,
     get_slider_marks,
+    help_button,
 )
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import get_hovertext_from_config, get_hyperparameter_ticks
-from deepcave.runs import Status
+from deepcave.utils.styled_plotty import (
+    get_hovertext_from_config,
+    get_hyperparameter_ticks,
+)
 
 logger = get_logger(__name__)
 
@@ -26,6 +30,7 @@ class CCube(DynamicPlugin):
     name = "Configuration Cube"
     icon = "fas fa-cube"
     activate_run_selection = True
+    help = "docs/plugins/configuration_cube.md"
 
     @staticmethod
     def get_input_layout(register):
@@ -45,6 +50,14 @@ class CCube(DynamicPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Budget"),
+                            help_button(
+                                "Combined budget means that the trial on the highest"
+                                " evaluated budget is used.\n\n"
+                                "Note: Selecting combined budget might be misleading if"
+                                " a time objective is used. Often, higher budget take "
+                                " longer to evaluate, which might negatively influence "
+                                " the results."
+                            ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
@@ -62,6 +75,10 @@ class CCube(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Number of Configurations"),
+                    help_button(
+                        "The number of configurations to show, these are ordered based on"
+                        " the time at which they were evaluated."
+                    ),
                     dcc.Slider(
                         id=register("n_configs", ["value", "min", "max", "marks"]), step=None
                     ),
@@ -71,6 +88,7 @@ class CCube(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Hyperparameters"),
+                    help_button("Which hyperparameters to show, maxium 3 active"),
                     dbc.Checklist(
                         id=register("hyperparameter_names", ["value", "options"]), inline=True
                     ),
