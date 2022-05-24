@@ -13,6 +13,11 @@ deviation too.
     The configuration spaces of the selected runs have to be equal. Otherwise, a good comparison
     is not possible.
 
+This plugin is capable of answering following questions:
+- Does the optimizer converge?
+- How performs optimizer A in comparison to optimizer B? Is optimizer A better than optimizer B?
+- How long does the optimizer need to reach a certain objective value?
+
 
 #### Inputs and Filters
 
