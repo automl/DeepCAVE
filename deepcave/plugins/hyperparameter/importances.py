@@ -11,6 +11,7 @@ from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
+from deepcave.utils.styled_plotty import get_color
 
 
 class Importances(StaticPlugin):
@@ -59,7 +60,7 @@ class Importances(StaticPlugin):
                                 "The more trees are used the more accurate the results. "
                                 "However, also it takes longer to compute."
                             ),
-                            dbc.Input(id=register("n_trees", type=optional_int)),
+                            dbc.Input(id=register("n_trees", type=optional_int), type="number"),
                         ],
                         md=6,
                     ),
@@ -81,7 +82,15 @@ class Importances(StaticPlugin):
             ),
             html.Div(
                 [
+                    dbc.Label("Limit Number of Hyperparameters"),
+                    dbc.Input(id=register("n_hps", "value"), type="number"),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
                     dbc.Label("Budgets"),
+                    help_button("The hyperparameters are sorted by the highest budget."),
                     dbc.Checklist(id=register("budget_ids", ["value", "options"]), inline=True),
                 ]
             ),
@@ -98,6 +107,7 @@ class Importances(StaticPlugin):
             },
             "n_trees": {"value": 10},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
+            "n_hps": {"value": 0},
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
@@ -117,10 +127,12 @@ class Importances(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         hp_options = get_checklist_options(hp_names)
         hp_value = inputs["hyperparameter_names"]["value"]
+        n_hps = inputs["n_hps"]["value"]
 
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
+            n_hps = len(hp_names)
 
         # Pre-selection of the hyperparameters
         if run is not None:
@@ -142,6 +154,7 @@ class Importances(StaticPlugin):
                 "options": budget_options,
                 "value": budget_value,
             },
+            "n_hps": {"value": n_hps},
             "n_trees": {"value": inputs["n_trees"]["value"]},
         }
 
@@ -184,6 +197,12 @@ class Importances(StaticPlugin):
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]
+        n_hps = inputs["n_hps"]
+
+        if n_hps == "" or n_hps is None:
+            raise PreventUpdate()
+        else:
+            n_hps = int(n_hps)
 
         if len(selected_hp_names) == 0 or len(selected_budget_ids) == 0:
             raise PreventUpdate()
@@ -210,18 +229,20 @@ class Importances(StaticPlugin):
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
         # Sort by last fidelity now
-        last_selected_budget_id = selected_budget_ids[0]
-        idx = np.argsort(data[last_selected_budget_id][1], axis=None)[::-1]
+        selected_budget_id = max(selected_budget_ids)
+        idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
+        idx = idx[:n_hps]
 
         bar_data = []
         for budget_id, values in data.items():
-            budget = run.get_budget(budget_id)
+            budget = run.get_budget(budget_id, human=True)
             bar_data += [
                 go.Bar(
                     name=budget,
                     x=values[0][idx],
                     y=values[1][idx],
                     error_y_array=values[2][idx],
+                    marker_color=get_color(budget_id),
                 )
             ]
 
@@ -230,6 +251,12 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
+            margin=dict(
+                t=0,
+                b=0,
+                l=0,
+                r=0,
+            ),
         )
 
         return fig

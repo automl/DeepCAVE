@@ -216,4 +216,14 @@ class CCube(DynamicPlugin):
             layout = go.Layout(**layout_kwargs)
 
         fig = go.Figure(data=trace, layout=layout)
+        fig.update_layout(
+            dict(
+                margin=dict(
+                    t=30,
+                    b=0,
+                    l=0,
+                    r=0,
+                ),
+            )
+        )
         return fig

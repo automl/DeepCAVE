@@ -202,12 +202,14 @@ class Overview(DynamicPlugin):
 
         # Add an "or" to the last rate
         if successful_trials_rate != 100:
-            unsuccessful_trials_text = "The other trials have been "
+            unsuccessful_trials_text = "The other trials are "
             if len(trials_rates) == 1:
                 unsuccessful_trials_text += trials_rates[0]
             elif len(trials_rates) == 2:
+                unsuccessful_trials_text += "either "
                 unsuccessful_trials_text += trials_rates[0] + " or " + trials_rates[1]
             else:
+                unsuccessful_trials_text += "either "
                 trials_rates[-1] = " or " + trials_rates[-1]
                 unsuccessful_trials_text += ", ".join(trials_rates)
             unsuccessful_trials_text += "."
@@ -302,12 +304,24 @@ class Overview(DynamicPlugin):
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
+            margin=dict(
+                t=30,
+                b=0,
+                l=0,
+                r=0,
+            ),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
 
         config_layout = go.Layout(
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
+            margin=dict(
+                t=30,
+                b=0,
+                l=0,
+                r=0,
+            ),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(

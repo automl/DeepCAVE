@@ -67,7 +67,8 @@ class ParetoFront(DynamicPlugin):
                         "used.\n\n"
                         "Note: Selecting combined budget might be misleading if a time objective "
                         "is used. Often, higher budget take longer to evaluate, which might "
-                        "negatively influence the results."),
+                        "negatively influence the results."
+                    ),
                     dbc.Select(
                         id=register("budget_id", ["value", "options"], type=int),
                         placeholder="Select budget ...",
@@ -284,6 +285,12 @@ class ParetoFront(DynamicPlugin):
             layout = go.Layout(
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
+                margin=dict(
+                    t=30,
+                    b=0,
+                    l=0,
+                    r=0,
+                ),
             )
         else:
             layout = None

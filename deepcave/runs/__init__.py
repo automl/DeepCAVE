@@ -254,7 +254,7 @@ class AbstractRun(ABC):
     def get_num_configs(self, budget: Union[int, float] = None) -> int:
         return len(self.get_configs(budget=budget))
 
-    def get_budget(self, id: Union[int, str]) -> float:
+    def get_budget(self, id: Union[int, str], human=False) -> float:
         """
         Gets the budget given an id.
 
@@ -268,7 +268,7 @@ class AbstractRun(ABC):
         float
             Budget.
         """
-        budgets = self.get_budgets()
+        budgets = self.get_budgets(human=human)
         return budgets[int(id)]
 
     def get_budget_ids(self) -> List[int]:

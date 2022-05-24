@@ -338,6 +338,12 @@ class PartialDependencies(StaticPlugin):
                         "ticktext": y_ticktext,
                         "title": hp2_name,
                     },
+                    "margin": {
+                        "t": 30,
+                        "b": 0,
+                        "l": 0,
+                        "r": 0,
+                    },
                 }
             )
 

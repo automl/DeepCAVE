@@ -218,6 +218,12 @@ class Configurations(DynamicPlugin):
             objective_data.append(trace)
 
         layout_kwargs = {
+            "margin": dict(
+                t=30,
+                b=0,
+                l=0,
+                r=0,
+            ),
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
 

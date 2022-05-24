@@ -235,7 +235,7 @@ class CostOverTime(DynamicPlugin):
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
             margin=dict(
-                t=0,
+                t=30,
                 b=0,
                 l=0,
                 r=0,

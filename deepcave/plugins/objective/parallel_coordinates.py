@@ -251,6 +251,8 @@ class ParallelCoordinates(StaticPlugin):
                 margin=dict(
                     t=150,
                     b=50,
+                    l=100,
+                    r=0,
                 )
             ),
         )

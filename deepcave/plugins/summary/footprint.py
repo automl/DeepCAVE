@@ -271,6 +271,12 @@ class FootPrint(StaticPlugin):
         layout = go.Layout(
             xaxis=dict(title="MDS X-Axis", tickvals=[]),
             yaxis=dict(title="MDS Y-Axis", tickvals=[]),
+            margin=dict(
+                t=30,
+                b=0,
+                l=0,
+                r=0,
+            ),
         )
 
         return [
