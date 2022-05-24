@@ -9,7 +9,8 @@ plotting the values of hyperparameters as points in this _slice_ of the space.
   The score for an objective will be communicated through the color of a point with an associated heatmap.
 
 * **Budget** Here you can specify a filter for which budgets you wish to view.
-  The _Combined_ budget will show all configurations trialed but only show their scores on the highest budget  if it was evaluated under multiple different budgets.
+  The _Combined_ budget will show all configurations trialed but only show their scores on the highest
+  budget if it was evaluated under multiple different budgets.
 
 * **Number of Configurations** This slider will allow you to select the number of configurations to display,
   where the configurations are ordered by they when they were trialed.

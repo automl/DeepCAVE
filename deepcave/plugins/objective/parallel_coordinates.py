@@ -31,6 +31,7 @@ class ParallelCoordinates(StaticPlugin):
     """
     icon = "far fa-map"
     activate_run_selection = True
+    help = "docs/plugins/parallel_coordinates.md"
 
     @staticmethod
     def get_input_layout(register):
@@ -77,9 +78,9 @@ class ParallelCoordinates(StaticPlugin):
                         [
                             dbc.Label("Show Important Hyperparameters"),
                             help_button(
-                                "Only the most important hyperparameters are shown which are calculated by "
-                                "fANOVA using five trees. The more left a hyperparameter stands, the more "
-                                "important it is."
+                                "Only the most important hyperparameters are shown which are "
+                                " calculated by fANOVA using five trees. The more left a "
+                                " hyperparameter stands, the more important it is."
                             ),
                             dbc.Select(
                                 id=register("show_important_only", ["value", "options"]),
@@ -90,7 +91,8 @@ class ParallelCoordinates(StaticPlugin):
                     ),
                     dbc.Col(
                         [
-                            dbc.Label("Show Unsuccessful Configurations"),
+                            dbc.Label("Show Only Unsuccessful Configurations"),
+                            help_button("Whether to show all configurations or only failed ones"),
                             dbc.Select(
                                 id=register("show_unsuccessful", ["value", "options"]),
                                 placeholder="Select ...",
