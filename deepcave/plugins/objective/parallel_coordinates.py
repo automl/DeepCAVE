@@ -50,6 +50,13 @@ class ParallelCoordinates(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Budget"),
+                            help_button(
+                                "Combined budget means that the trial on the highest evaluated"
+                                " budget is used.\n\n"
+                                "Note: Selecting combined budget might be misleading if a time"
+                                " objective is used. Often, higher budget take longer to evaluate,"
+                                " which might negatively influence the results."
+                            ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
