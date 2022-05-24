@@ -5,7 +5,7 @@ Naturally, the space of configurations may be very high dimensional and so this 
 investigate the configurations through 2D or 3D _slices_ of the configuration space,
 plotting the values of hyperparameters as points in this _slice_ of the space.
 
-* **Objectives** Here you can select the objective you wish to analyze for.
+* **Objective** Here you can select the objective you wish to analyze for.
   The score for an objective will be communicated through the color of a point with an associated heatmap.
 
 * **Budget** Here you can specify a filter for which budgets you wish to view.

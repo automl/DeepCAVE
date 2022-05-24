@@ -287,9 +287,19 @@ style="width: 100%;">
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-plot">
+   Using the plot
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -311,13 +321,38 @@ style="width: 100%;">
                 
   <section id="budget-correlation">
 <h1>Budget Correlation<a class="headerlink" href="#budget-correlation" title="Permalink to this headline">¶</a></h1>
-<p>When multiple budgets are used, it is not clear how well lower budgets perform
-in contrast to higher budgets. The budget correlation is one method to find out if a low budget
-is sufficient enough to replace a high budget.</p>
-<p>Especially in Neural Networks, you do not need to train longer if convergence was already reached.
+<p>When multiple budgets are used, it is not clear how representitive lower budgets are of the final
+score if the same configuration was to be evaluated at a higher budget.
+One such way to gain knowledge about this is to use <em>budget correlation</em>, such that if a low budget
+correlates well with a higher budget, then we know that evaluating configurations at a lower budget
+is <em>good enough</em> to infer about how they would perform at higher budgets. Conversly, if a low budget
+does not correlate with higher budgets, we know that we would need to fully evaluate configurations
+on high budgets to really be informed of how well they might perform.</p>
+<p>For example, in Neural Networks, you do not need to train longer if convergence was already reached.
 If the convergence already was reached in budget 1 but the training still continues till budget 2,
 the correlation between budget 1 and budget 2 will be high.</p>
+<p>This simple plot can help you answer some very useful questions:</p>
+<ul class="simple">
+<li><p>Are low budget trials a fair representation of a configurations true performance if evaluated at a higher budget?</p></li>
+<li><p>Should I consider running further optimization with lower budgets, so that I can cover more of the configuratio space?</p></li>
+<li><p><strong>Objective</strong> Here you can select the objective you wish to analyze for.
+The score for an objective will be communicated through the color of a point with an associated heatmap.</p></li>
+</ul>
+<section id="using-the-plot">
+<h2>Using the plot<a class="headerlink" href="#using-the-plot" title="Permalink to this headline">¶</a></h2>
+<p>The first thing to check is how the highest budget correlates with all the lower budgets.
+You can sanity check that it perfectly correlates with itself, a value of 1 and then trace it back
+to the previous budgets and see how it correlates to lower budgets.</p>
+<p>You’ll likely see that the highest budget correlates better with mid-range budgets and slowly drops
+as you consider its correlation with lower and lower budgets.</p>
+<p>There is no great answer to what a certain correlation will mean and this depends on what you would
+like to do with this information and how much extra resources you have.
+If you are trying to determine whether you could perform further runs with less budget, making the
+process to find good configurations faster, you should make sure that the highest budget correlates
+well with the lowest budget, achieving a correlation score of at least <em>0.7</em> or more.
+This is rather an arbitrary number and your own context is important here.</p>
 <p><img alt="alt text" src="../_images/budget_correlation.png" /></p>
+</section>
 </section>
 
 

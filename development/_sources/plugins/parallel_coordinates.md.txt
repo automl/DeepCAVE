@@ -17,7 +17,7 @@ This can help provide insight and answers to various questions:
 
 #### Options
 
-* **Objectives** Here you can select the objective you wish to analyze for.
+* **Objective** Here you can select the objective you wish to analyze for.
   The score will be placed as the last bar along the x-axis along with incoming lines indication which
   configuration achieved what score.
 
