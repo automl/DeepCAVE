@@ -5,12 +5,23 @@ about the meta data, objectives and statistics of the selected run.
 
 ![Image of overview](../images/plugins/overview.png)
 
-The Overview is split into 5 parts
+The Overview is split into 5 parts:
 - Quick Information
 - Meta
 - Objectives
 - Statuses
 - Configuration Space
+
+This plugin is capable of answering following questions:
+- Which optimizer was used?
+- When was the latest change of the optimizer's data?
+- What is the best configuration?
+- Are the meta data as expected?
+- Are the objectives as expected?
+- Is the configuration space as expected?
+- How many trials have been successful/unsuccessful?
+- Why did certain trials crash?
+- On which budgets were the configurations evaluated?
 
 
 #### Quick Information
@@ -34,3 +45,4 @@ In the **Details** tab, you'll recieve an overview of configurations that were n
 
 #### Configuration Space
 Lastly you can find information on the configuration space that was being optimized over. Here we provide information on it's name, the possible values that could be tried as well as the default value and whether it was optimized on a log-scale vs a linear one.
+
