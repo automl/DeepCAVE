@@ -271,8 +271,12 @@ class AbstractRun(ABC):
         budgets = self.get_budgets(human=human)
         return budgets[int(id)]
 
-    def get_budget_ids(self) -> List[int]:
-        return list(range(len(self.get_budgets())))
+    def get_budget_ids(self, include_combined: bool = True) -> List[int]:
+        budget_ids = list(range(len(self.get_budgets())))
+        if not include_combined:
+            budget_ids = budget_ids[:-1]
+        
+        return budget_ids
 
     def get_budgets(
         self, human: bool = False, include_combined: bool = True
