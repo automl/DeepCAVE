@@ -20,6 +20,10 @@
 # Configuration Footprint
 * We should change *Configuration* to **Evaluated Configuration** and *Random (unevaluated) Configuration* to **Unevaluated Configuration**.
 
+# Budget Correlation
+* We should have vertical lines at each budget level to make things clearer where the budgets are.
+* Perhaps a line plot is not the best for this and a bar chart might be more useful?
+
 # plugins Index.rst
 * Image for blocks needs to be updated.
 * TOC tree for plugins.index.toctree was corrupted when writing markdown help
