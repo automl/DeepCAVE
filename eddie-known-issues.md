@@ -6,8 +6,23 @@
     * Change `Overview.md` if changing this
     * Need more information about what's actually possible to see here
 
+# Cost over time
+* Does the budget help message about time objective being skewed with respect to combined budget still matter in the importances?
+
+# Configuration Cube
+* The budget drop down has an option _Combined_, not intuitevly sure what this means, could add a little help to it.
+* The yellow dots in configuration cube are increidbly hard to see with a large screen in 2D. Could maybe up the size of them, add borders to the dots or remove any alpha if there is.
+* Would you think it makes sense to add slight lines from the point to the axis in 3d to see where each point lines up?
+
+# Importances
+* Does the budget help message about time objective being skewed with respect to combined budget still matter in the importances?
+
 # Configuration Footprint
 * We should change *Configuration* to **Evaluated Configuration** and *Random (unevaluated) Configuration* to **Unevaluated Configuration**.
+
+# Budget Correlation
+* We should have vertical lines at each budget level to make things clearer where the budgets are.
+* Perhaps a line plot is not the best for this and a bar chart might be more useful?
 
 # plugins Index.rst
 * Image for blocks needs to be updated.

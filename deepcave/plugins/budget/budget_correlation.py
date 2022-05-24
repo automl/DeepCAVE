@@ -26,6 +26,7 @@ class BudgetCorrelation(DynamicPlugin):
         to each other. The budget shown in the legend is compared to all other (lower) budgets.
     """
     activate_run_selection = True
+    help = "docs/plugins/budget_correlation.md"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
