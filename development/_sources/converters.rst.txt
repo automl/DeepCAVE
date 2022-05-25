@@ -1,18 +1,26 @@
 Converters
 ==========
 
-DeepCAVE uses :ref:`Run<deepcave.runs.run>` objects to interpret the input data. Converters make sure that folders
-are put into the right format so that the files can be interpreted correctly.
+DeepCAVE uses :ref:`Run<deepcave.runs.run>` objects to interpret the input data. Converters make
+sure that folders are put into the right format so that the files can be interpreted correctly.
 
 Currently, DeepCAVE supports the following converters:
 
 - DeepCAVE (native)
 - SMAC (v1.1.1)
 - BOHB
+- Auto-Sklearn
+- Auto-PyTorch
+
+
+.. note::
+    DeepCAVE observes optimizer data on the file system and therefore allows for monitoring of both
+    finished processes and running processes that regularly write new results to disk as long as a
+    converter is available.
 
 
 Custom Converter
-^^^^^^^^^^^^^^^^
+----------------
 
 To support a new converter, you need to create a new class that inherits from :ref:`Run<deepcave.runs.run>`.
 Two methods are needed:

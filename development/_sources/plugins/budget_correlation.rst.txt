@@ -1,4 +1,5 @@
-# Budget Correlation
+Budget Correlation
+==================
 
 When multiple budgets are used, it is not clear how representitive lower budgets are of the final
 score if the same configuration was to be evaluated at a higher budget.
@@ -13,17 +14,21 @@ If the convergence already was reached in budget 1 but the training still contin
 the correlation between budget 1 and budget 2 will be high.
 
 This plugin is capable of answering following questions:
-* Are low budget trials a fair representation of a configurations true performance if evaluated at a higher budget?
-* Should I consider running further optimization with lower budgets, so that I can cover more of the configuration space?
+* Are low budget trials a fair representation of a configurations true performance if evaluated at
+a higher budget?
+* Should I consider running further optimization with lower budgets, so that I can cover more of the
+configuration space?
 
 
-#### Options
+Options
+-------
 
 * **Objective**: Here you can select the objective you wish to analyze for.
   The score for an objective will be communicated through the color of a point with an associated heatmap.
 
 
-#### Correlation Interpretation
+Correlation Interpretation
+--------------------------
 The first thing to check is how the highest budget correlates with all the lower budgets.
 You can sanity check that it perfectly correlates with itself, a value of 1 and then trace it back
 to the previous budgets and see how it correlates to lower budgets.
@@ -46,4 +51,4 @@ a list (which is incorporated in the dynamic generated text) how the correlation
 - 0.01-0.19: No or negligible relationship
 
 
-![alt text](../images/plugins/budget_correlation.png "Title")
+.. image:: ../images/plugins/budget_correlation.png
