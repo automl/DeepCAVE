@@ -22,16 +22,9 @@ logger = get_logger(__name__)
 class ParallelCoordinates(StaticPlugin):
     id = "parallel_coordinates"
     name = "Parallel Coordinates"
-    description = """
-        This type of visualisation is used for plotting multivariate, numerical data. Parallel
-        Coordinates Plots are ideal for comparing many variables together and
-        seeing the relationships between them. For example, if you had to compare an array
-        of products with the same attributes (comparing computer or cars specs across
-        different models).
-    """
     icon = "far fa-map"
     activate_run_selection = True
-    help = "docs/plugins/parallel_coordinates.md"
+    help = "docs/plugins/parallel_coordinates.rst"
 
     @staticmethod
     def get_input_layout(register):

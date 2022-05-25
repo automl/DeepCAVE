@@ -21,12 +21,8 @@ class BudgetCorrelation(DynamicPlugin):
     id = "budget_correlation"
     name = "Budget Correlation"
     icon = "fas fa-coins"
-    description = """
-        The budget correlation tells how much the costs of two budgets are correlated
-        to each other. The budget shown in the legend is compared to all other (lower) budgets.
-    """
+    help = "docs/plugins/budget_correlation.rst"
     activate_run_selection = True
-    help = "docs/plugins/budget_correlation.md"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:

@@ -18,6 +18,7 @@ class Importances(StaticPlugin):
     id = "importances"
     name = "Importances"
     icon = "far fa-star"
+    help = "docs/plugins/importances.rst"
     activate_run_selection = True
 
     @staticmethod

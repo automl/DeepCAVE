@@ -15,7 +15,7 @@ class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
     icon = "fas fa-chart-line"
-    help = "docs/plugins/cost_over_time.md"
+    help = "docs/plugins/cost_over_time.rst"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         check_equality(runs, objectives=True, budgets=True)

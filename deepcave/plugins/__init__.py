@@ -18,6 +18,7 @@ from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group, NotMergeableError
 from deepcave.utils.data_structures import update_dict
+from deepcave.utils.docs import rst_to_md
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
@@ -749,9 +750,13 @@ class Plugin(Layout, ABC):
 
         components = []
         if self.help is not None:
-            # Load rst file
-            with open(self.help, "r") as file:
-                data = file.read()
+            
+            if self.help.endswith(".rst"):
+                data = rst_to_md(self.help)
+            else:
+                # Load rst file
+                with open(self.help, "r") as file:
+                    data = file.read()
 
             modal = html.Div(
                 [

@@ -15,13 +15,7 @@ class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
-    help = "docs/plugins/configuration_footprint.md"
-    description = """
-        The configuration footprint shows the configuration space in two dimensions.
-        Based on the evaluated configurations, a surface is plotted. 
-        Additional border and support configurations should answer the question whether the search
-        is exhausted or not. For each hyperparameter, ten random support configurations are plotted.
-    """
+    help = "docs/plugins/configuration_footprint.rst"
     activate_run_selection = True
 
     @staticmethod

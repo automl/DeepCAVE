@@ -15,7 +15,7 @@ class ParetoFront(DynamicPlugin):
     id = "pareto_front"
     name = "Pareto Front"
     icon = "fas fa-wind"
-    help = "docs/plugins/pareto_front.md"
+    help = "docs/plugins/pareto_front.rst"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         check_equality(runs, objectives=True, budgets=True)

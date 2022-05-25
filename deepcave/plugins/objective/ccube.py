@@ -30,7 +30,7 @@ class CCube(DynamicPlugin):
     name = "Configuration Cube"
     icon = "fas fa-cube"
     activate_run_selection = True
-    help = "docs/plugins/configuration_cube.md"
+    help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
     def get_input_layout(register):
