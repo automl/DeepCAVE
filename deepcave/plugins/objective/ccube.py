@@ -1,9 +1,11 @@
+from typing import Dict, Tuple
 import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
+from dash.exceptions import PreventUpdate
 from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
@@ -208,6 +210,39 @@ class CCube(DynamicPlugin):
                 }
                 data.append(values)
 
+        if len(data) == 0:
+            raise PreventUpdate
+
+        # Transforms data to values
+        values = np.transpose(np.array(data)).tolist()
+
+        # Now we want to filter duplicates
+        filtered_data: Dict[Tuple[int, float], Tuple] = {}
+        for config_id, cost, v in zip(config_ids, costs, values):
+            v = tuple(v)  # Make hashable
+            key = (config_id, cost)
+
+            if v in filtered_data.values():
+                old_key = list(filtered_data.keys())[list(filtered_data.values()).index(v)]
+                old_cost = old_key[1]
+
+                if objective.optimize == "lower":
+                    if old_cost < cost:
+                        continue
+
+                if objective.optimize == "upper":
+                    if old_cost > cost:
+                        continue
+
+                # Otherwise we have to replace
+                del filtered_data[old_key]
+
+            filtered_data[key] = v
+
+        # Replace data
+        config_ids = [k[0] for k in filtered_data.keys()]
+        costs = [k[1] for k in filtered_data.keys()]
+
         # Specify scatter kwargs
         scatter_kwargs = {
             "mode": "markers",
@@ -221,14 +256,22 @@ class CCube(DynamicPlugin):
             "hoverinfo": "text",
         }
 
+        if len(data) >= 1:
+            x = [v[0] for v in filtered_data.values()]
+        if len(data) >= 2:
+            y = [v[1] for v in filtered_data.values()]
+        if len(data) >= 3:
+            z = [v[2] for v in filtered_data.values()]
+
         if len(data) == 3:
-            trace = go.Scatter3d(x=data[0], y=data[1], z=data[2], **scatter_kwargs)
+            trace = go.Scatter3d(x=x, y=y, z=z, **scatter_kwargs)
             layout = go.Layout({"scene": {**layout_kwargs}})
         else:
             if len(data) == 1:
-                trace = go.Scatter(x=data[0], y=[0 for _ in range(len(data[0]))], **scatter_kwargs)
+                y = [0 for _ in x]
+                trace = go.Scatter(x=x, y=y, **scatter_kwargs)
             elif len(data) == 2:
-                trace = go.Scatter(x=data[0], y=data[1], **scatter_kwargs)
+                trace = go.Scatter(x=x, y=y, **scatter_kwargs)
             else:
                 trace = go.Scatter(x=[], y=[])
             layout = go.Layout(**layout_kwargs)
