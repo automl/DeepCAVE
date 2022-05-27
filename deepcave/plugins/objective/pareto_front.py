@@ -9,6 +9,7 @@ from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, get_slider_marks, help_button
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
+from deepcave.utils.styled_plot import plt
 
 
 class ParetoFront(DynamicPlugin):
@@ -286,7 +287,7 @@ class ParetoFront(DynamicPlugin):
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
                 margin=dict(
-                    t=30,
+                    t=0,
                     b=0,
                     l=0,
                     r=0,
@@ -295,4 +296,80 @@ class ParetoFront(DynamicPlugin):
         else:
             layout = None
 
-        return [go.Figure(data=traces, layout=layout)]
+        f = go.Figure(data=traces, layout=layout)
+        f.write_image("pareto.pdf")
+        
+        return f
+
+    @staticmethod
+    def get_mpl_output_layout(register):
+        return html.Img(
+            id=register("graph", "src"),
+            className="img-fluid",
+        )
+
+    @staticmethod
+    def load_mpl_outputs(runs, inputs, outputs):
+        show_all = inputs["show_all"] == "true"
+
+        plt.figure()
+        for idx, run in enumerate(runs):
+            show_runs = inputs["show_runs"] == "true"
+            show_groups = inputs["show_groups"] == "true"
+
+            if run.prefix == "group" and not show_groups:
+                continue
+
+            if run.prefix != "group" and not show_runs:
+                continue
+
+            points = np.array(outputs[run.id]["points"])
+
+            x, y = [], []
+            x_pareto, y_pareto = [], []
+
+            pareto_points = outputs[run.id]["pareto_points"]
+            for point_idx, pareto in enumerate(pareto_points):
+                if pareto:
+                    x_pareto += [points[point_idx][0]]
+                    y_pareto += [points[point_idx][1]]
+                else:
+                    x += [points[point_idx][0]]
+                    y += [points[point_idx][1]]
+
+            color = plt.get_color(idx)  # , alpha=0.1)
+            color_pareto = plt.get_color(idx)
+
+            if show_all:
+                plt.scatter(x, y, color=color, marker="o", alpha=0.1, s=3)
+
+            # Check if we need hv or vh
+            objective_1 = run.get_objective(inputs["objective_id_1"])
+            objective_2 = run.get_objective(inputs["objective_id_2"])
+            optimize1 = objective_1.optimize
+            optimize2 = objective_2.optimize
+
+            if optimize1 == optimize2:
+                if objective_1.optimize == "lower":
+                    line_shape = "post"
+                else:
+                    line_shape = "pre"
+            else:
+                line_shape = "post"
+
+            plt.step(
+                x_pareto,
+                y_pareto,
+                color=color_pareto,
+                marker="o",
+                label=run.name,
+                linewidth=1,
+                markersize=3,
+                where=line_shape,
+            )
+            plt.xlabel(objective_1.name)
+            plt.ylabel(objective_2.name)
+
+        plt.legend()
+
+        return plt.render()

@@ -48,8 +48,18 @@ class Overview(DynamicPlugin):
             html.Div(id=register("status_text", "children"), className="mb-3"),
             dbc.Tabs(
                 [
-                    dbc.Tab(dcc.Graph(id=register("status_statistics", "figure")), label="Barplot"),
-                    dbc.Tab(dcc.Graph(id=register("config_statistics", "figure")), label="Heatmap"),
+                    dbc.Tab(
+                        dcc.Graph(
+                            id=register("status_statistics", "figure"), style={"height": "50vh"}
+                        ),
+                        label="Barplot",
+                    ),
+                    dbc.Tab(
+                        dcc.Graph(
+                            id=register("config_statistics", "figure"), style={"height": "50vh"}
+                        ),
+                        label="Heatmap",
+                    ),
                     dbc.Tab(html.Div(id=register("status_details", "children")), label="Details"),
                 ]
             ),
@@ -149,7 +159,7 @@ class Overview(DynamicPlugin):
                 status_statistics[budget] = {}
 
                 for s in Status:
-                    status_statistics[budget][s.name] = 0
+                    status_statistics[budget][s] = 0
 
         status_statistics_total = {}
         status_budget = {}
@@ -158,7 +168,7 @@ class Overview(DynamicPlugin):
             budget = round(trial.budget, 2)
 
             len_trials += 1
-            status_statistics[budget][trial.status.name] += 1
+            status_statistics[budget][trial.status] += 1
 
             # For text information
             if trial.status not in status_statistics_total:
@@ -251,7 +261,7 @@ class Overview(DynamicPlugin):
                     status = trial.status
 
                 z_values[i][j] = status.value
-                z_labels[i][j] = status.name
+                z_labels[i][j] = status.to_text()
 
         config_statistics["X"] = budgets
         config_statistics["Y"] = config_ids
@@ -295,7 +305,8 @@ class Overview(DynamicPlugin):
 
         stats_data = []
         for budget, stats in status_statistics.items():
-            trace = go.Bar(x=list(stats.keys()), y=list(stats.values()), name=budget)
+            x = [s.to_text() for s in stats.keys()]
+            trace = go.Bar(x=x, y=list(stats.values()), name=budget)
             stats_data.append(trace)
 
         stats_layout = go.Layout(
@@ -304,19 +315,21 @@ class Overview(DynamicPlugin):
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
             margin=dict(
-                t=30,
+                t=0,
                 b=0,
                 l=0,
                 r=0,
             ),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
+        stats_figure.write_image("status_bar.pdf")
 
         config_layout = go.Layout(
+            legend={"title": "Status"},
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
             margin=dict(
-                t=30,
+                t=0,
                 b=0,
                 l=0,
                 r=0,
@@ -331,6 +344,7 @@ class Overview(DynamicPlugin):
             ),
             layout=config_layout,
         )
+        config_figure.write_image("status_heatmap.pdf")
 
         return [
             card,
@@ -342,3 +356,25 @@ class Overview(DynamicPlugin):
             create_table(status_details),
             create_table(configspace, mb=False),
         ]
+
+    @staticmethod
+    def get_mpl_output_layout(register):
+        return [
+            html.H3("Statuses"),
+            dbc.Tabs(
+                [
+                    dbc.Tab(
+                        html.Img(id=register("barplot", "src"), className="img-fluid"),
+                        label="Barplot",
+                    ),
+                    dbc.Tab(
+                        html.Img(id=register("heatmap", "src"), className="img-fluid"),
+                        label="Heatmap",
+                    ),
+                ]
+            ),
+        ]
+
+    @staticmethod
+    def load_mpl_outputs(run, inputs, outputs):
+        return ["", ""]

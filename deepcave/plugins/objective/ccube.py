@@ -1,12 +1,13 @@
 from typing import Dict, Tuple
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
-from dash.exceptions import PreventUpdate
 from dash import dcc, html
+from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status

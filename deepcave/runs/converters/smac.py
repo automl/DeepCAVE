@@ -129,7 +129,7 @@ class SMACRun(Run):
             elif "MEMOUT" in status:
                 status = Status.MEMORYOUT
             elif "RUNNING" in status:
-                status = Status.RUNNING
+                continue
             else:
                 status = Status.CRASHED
 

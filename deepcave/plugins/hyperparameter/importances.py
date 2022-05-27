@@ -1,5 +1,6 @@
 from typing import List, Union
 import dash_bootstrap_components as dbc
+from matplotlib.pyplot import xcorr
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -10,8 +11,13 @@ from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
-from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
+from deepcave.utils.layout import (
+    get_checklist_options,
+    get_select_options,
+    help_button,
+)
 from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.styled_plot import plt
 
 
 class Importances(StaticPlugin):
@@ -147,6 +153,9 @@ class Importances(StaticPlugin):
                 "options": objective_options,
                 "value": objective_value,
             },
+            "method": {
+                "value": inputs["method"]["value"],
+            },
             "hyperparameter_names": {
                 "options": hp_options,
                 "value": hp_value,
@@ -260,4 +269,89 @@ class Importances(StaticPlugin):
             ),
         )
 
+        fig.write_image("importance.pdf")
+
         return fig
+
+    @staticmethod
+    def get_mpl_output_layout(register):
+        return html.Img(
+            id=register("graph", "src"),
+            className="img-fluid",
+        )
+
+    @staticmethod
+    def load_mpl_outputs(run, inputs, outputs):
+        # First selected, should always be shown first
+        selected_hp_names = inputs["hyperparameter_names"]
+        selected_budget_ids = inputs["budget_ids"]
+        n_hps = inputs["n_hps"]
+
+        if n_hps == "" or n_hps is None:
+            raise PreventUpdate()
+        else:
+            n_hps = int(n_hps)
+
+        if len(selected_hp_names) == 0 or len(selected_budget_ids) == 0:
+            raise PreventUpdate()
+
+        # Collect data
+        data = {}
+        for budget_id, importances in outputs.items():
+            # Important to cast budget_id here because of json serialization
+            budget_id = int(budget_id)
+            # if budget_id not in selected_budget_ids:
+            #    continue
+
+            x = []
+            y = []
+            error_y = []
+            for hp_name, results in importances.items():
+                if hp_name not in selected_hp_names:
+                    continue
+
+                x += [hp_name]
+                y += [results[0]]
+                error_y += [results[1]]
+
+            data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
+
+        # Sort by last fidelity now
+        selected_budget_id = max(selected_budget_ids)
+        idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
+        idx = idx[:n_hps]
+
+        x_labels = []
+        for hp_name in data[selected_budget_id][0][idx]:
+            if len(hp_name) > 18:
+                hp_name = "..." + hp_name[-18:]
+
+            x_labels += [hp_name]
+        x = np.arange(len(x_labels))
+
+        plt.figure()
+
+        for budget_id, values in data.items():
+            if budget_id not in selected_budget_ids:
+                continue
+
+            y = values[1][idx]
+            y_err = values[2][idx]
+
+            budget = run.get_budget(budget_id, human=True)
+            plt.bar(
+                x,
+                y,
+                yerr=y_err,
+                color=plt.get_color(budget_id),
+                label=budget,
+                error_kw=dict(lw=1, capsize=2, capthick=1),
+            )
+
+        plt.legend(title="Budgets")
+
+        # Rotate x ticks
+        plt.xticks(x, x_labels, rotation=90)
+        plt.ylabel("Importance")
+
+        return plt.render()

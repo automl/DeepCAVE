@@ -34,19 +34,13 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     return int(r_hex, 16), int(g_hex, 16), int(b_hex, 16)
 
 
-def get_color(
-    id_: int, alpha: float = 1, mpl: bool = False
-) -> Union[str, Tuple[float, float, float, float]]:
+def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
     """
     Currently (Plotly version 5.3.1) there are 10 possible colors.
     """
     color = px.colors.qualitative.Plotly[id_]
 
     r, g, b = hex_to_rgb(color)
-
-    if mpl:
-        return (r / 255, g / 255, b / 255, alpha)
-
     return f"rgba({r}, {g}, {b}, {alpha})"
 
 
@@ -352,24 +346,22 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     link = Configurations.get_link(run, config_id)
 
-    string = (
-        f"<b>Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a></b><br>"
-    )
-
-    config = run.get_config(config_id)
-    for k, v in config.items():
-        string += f"{k}: {v}<br>"
-
-    string += "<br>"
+    string = f"<b>Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a></b><br><br>"
 
     # It's also nice to see the metrics
     objectives = run.get_objectives()
     budget = run.get_highest_budget(config_id)
     costs = run.get_costs(config_id, budget)
 
-    string += f"<b>Objectives (on highest found budget {round(budget, 2)})</b><br>"
+    string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
     for objective, cost in zip(objectives, costs):
         string += f"{objective.name}: {cost}<br>"
+
+    string += "<br><b>Hyperparameters</b>:<br>"
+
+    config = run.get_config(config_id)
+    for k, v in config.items():
+        string += f"{k}: {v}<br>"
 
     return string
 

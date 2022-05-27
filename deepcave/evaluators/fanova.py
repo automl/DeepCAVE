@@ -50,14 +50,16 @@ class fANOVA:
         """
         if objectives is None:
             objectives = self.run.get_objectives()
-            
+
         if budget is None:
             budget = self.get_highest_budget()
-        
+
         self.n_trees = n_trees
 
         # Get data
-        df = self.run.get_encoded_data(objectives, budget, specific=True, include_combined_cost=True)
+        df = self.run.get_encoded_data(
+            objectives, budget, specific=True, include_combined_cost=True
+        )
         X = df[self.hp_names].to_numpy()
         # Combined cost name includes the cost of all selected objectives
         Y = df[COMBINED_COST_NAME].to_numpy()
@@ -90,8 +92,8 @@ class fANOVA:
         -------
         Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]
             Dictionary with hyperparameter names and the corresbonding importance scores.
-            The values are tuples of the form (mean individual, mean total, std individual,
-            std total). Note that individual and total are the same if depth is 1.
+            The values are tuples of the form (mean individual, var individual, mean total,
+            var total). Note that individual and total are the same if depth is 1.
 
         Raises
         ------
@@ -100,7 +102,7 @@ class fANOVA:
         """
         if hp_names is None:
             hp_names = self.cs.get_hyperparameter_names()
-        
+
         hp_ids = []
         for hp_name in hp_names:
             hp_ids.append(self.cs.get_idx_by_hyperparameter_name(hp_name))
@@ -140,15 +142,15 @@ class fANOVA:
 
                 importances[sub_hp_ids] = (
                     np.mean(fractions_individual),
+                    np.var(fractions_individual),
                     np.mean(fractions_total),
-                    np.std(fractions_individual),
-                    np.std(fractions_total),
+                    np.var(fractions_total),
                 )
 
         # Sort by total mean fraction
         if sort:
             importances = {
-                k: v for k, v in sorted(importances.items(), key=lambda item: item[1][1])
+                k: v for k, v in sorted(importances.items(), key=lambda item: item[1][2])
             }
 
         # We want to replace the ids with hyperparameter names again

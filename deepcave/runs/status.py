@@ -7,8 +7,7 @@ class Status(IntEnum):
     MEMORYOUT = 3
     CRASHED = 4
     ABORTED = 5
-    RUNNING = 6
-    NOT_EVALUATED = 7
+    NOT_EVALUATED = 6
 
     def to_text(self) -> str:
         return self.name.lower().replace("_", " ")

@@ -91,11 +91,13 @@ class Group(AbstractRun):
 
     @property
     def hash(self) -> str:
-        total_hash_str = ""
+        hashes = []
         for run in self.runs:
-            total_hash_str += run.hash
+            hashes += [run.hash]
 
-        return string_to_hash(total_hash_str)
+        # We sort hashes now because we don't want to be dependent on the order
+        hashes = sorted(hashes)
+        return string_to_hash("-".join(hashes))
 
     @property
     def id(self) -> str:

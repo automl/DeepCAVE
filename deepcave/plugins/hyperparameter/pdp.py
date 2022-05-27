@@ -340,7 +340,7 @@ class PartialDependencies(StaticPlugin):
                         "title": hp2_name,
                     },
                     "margin": {
-                        "t": 30,
+                        "t": 0,
                         "b": 0,
                         "l": 0,
                         "r": 0,

@@ -210,7 +210,7 @@ class LPI:
 
             if hp_name in self.importances:
                 mean = self.importances[hp_name][0]
-                std = np.std(self.variances[hp_name])
+                std = np.var(self.variances[hp_name])
 
             # Use this to quantify importance via variance
             # mean = np.mean(overall_var_per_tree[hp_name])

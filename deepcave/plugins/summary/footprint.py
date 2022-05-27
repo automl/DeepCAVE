@@ -6,7 +6,7 @@ from dash import dcc, html
 
 from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
-from deepcave.utils.layout import get_select_options, help_button, render_mpl_figure
+from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
 
@@ -173,21 +173,6 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
-    def get_mpl_output_layout(register):
-        return html.Div(
-            [
-                html.Img(
-                    id=register("performance", "src"),
-                    className="img-fluid",
-                ),
-                html.Img(
-                    id=register("area", "src"),
-                    className="img-fluid",
-                ),
-            ]
-        )
-
-    @staticmethod
     def load_outputs(run, inputs, outputs):
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"] == "true"
@@ -231,7 +216,7 @@ class FootPrint(StaticPlugin):
             point_values += ["border_points"]
             point_color_ids += [2]
         if show_supports:
-            point_names += ["Random (unevaluated) Configuration"]
+            point_names += ["Random Configuration"]
             point_values += ["support_points"]
             point_color_ids += [3]
 
@@ -263,19 +248,39 @@ class FootPrint(StaticPlugin):
             ]
 
         layout = go.Layout(
-            xaxis=dict(title="MDS X-Axis", tickvals=[]),
-            yaxis=dict(title="MDS Y-Axis", tickvals=[]),
+            xaxis=dict(title=None, tickvals=[]),
+            yaxis=dict(title=None, tickvals=[]),
             margin=dict(
-                t=30,
+                t=0,
                 b=0,
                 l=0,
                 r=0,
             ),
         )
 
+        performance = go.Figure(data=[performance_data] + traces, layout=layout)
+        area = go.Figure(data=[area_data] + traces, layout=layout)
+
+        performance.write_image("footprint_performance.pdf")
+        area.write_image("footprint_area.pdf")
+
+        return [performance, area]
+
+    @staticmethod
+    def get_mpl_output_layout(register):
         return [
-            go.Figure(data=[performance_data] + traces, layout=layout),
-            go.Figure(data=[area_data] + traces, layout=layout),
+            dbc.Tabs(
+                [
+                    dbc.Tab(
+                        html.Img(id=register("performance", "src"), className="img-fluid"),
+                        label="Performance",
+                    ),
+                    dbc.Tab(
+                        html.Img(id=register("area", "src"), className="img-fluid"),
+                        label="Valid Area",
+                    ),
+                ]
+            ),
         ]
 
     @staticmethod
@@ -284,13 +289,30 @@ class FootPrint(StaticPlugin):
         show_borders = inputs["show_borders"] == "true"
         show_supports = inputs["show_supports"] == "true"
 
+        point_names = []
+        point_values = []
+        point_color_ids = []
+
+        if show_borders:
+            point_names += ["Border Configuration"]
+            point_values += ["border_points"]
+            point_color_ids += [2]
+        if show_supports:
+            point_names += ["Random Configuration"]
+            point_values += ["support_points"]
+            point_color_ids += [3]
+
+        point_names += ["Configuration", "Incumbent"]
+        point_values += ["config_points", "incumbent_points"]
+        point_color_ids += [0, 4]
+
         images = []
         for data in ["performance", "area"]:
             x_, y_, z_ = outputs[data + "_data"]
 
-            plt.figure(1, 1, 200)
+            plt.figure()
             plt.grid(False)
-            plt.contourf(x_, y_, z_, cmap="viridis")
+            plt.contourf(x_, y_, z_, cmap="summer")
             cb = plt.colorbar()
 
             if data == "performance":
@@ -298,33 +320,21 @@ class FootPrint(StaticPlugin):
             else:
                 cb.ax.set_title("Valid Area")
 
-            point_names = ["Configuration", "Incumbent"]
-            point_values = ["config_points", "incumbent_points"]
-
-            if show_borders:
-                point_names += ["Border Configuration"]
-                point_values += ["border_points"]
-            if show_supports:
-                point_names += ["Random Configuration"]
-                point_values += ["support_points"]
-
             # Now add the points
-            for id, (name, points) in enumerate(zip(point_names, point_values)):
-                x, y, config_ids = outputs[points]
-                size = 5
+            for name, points, color_id in zip(point_names, point_values, point_color_ids):
+                x, y, _ = outputs[points]
+                size = 3
                 marker_symbol = "X"
                 if points == "incumbent_points":
                     size = 10
                     marker_symbol = "^"
 
-                color = get_color(id, mpl=True)
+                color = plt.get_color(color_id)
                 plt.scatter(x, y, marker=marker_symbol, s=size, label=name, c=color)
 
             plt.axis("off")
-            plt.xlabel("MDS X-Axis")
-            plt.ylabel("MDS Y-Axis")
-            plt.legend()
+            plt.legend(loc="lower right")
 
-            images += [render_mpl_figure(plt)]
+            images += [plt.render()]
 
         return images

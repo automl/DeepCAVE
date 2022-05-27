@@ -218,7 +218,7 @@ class Configurations(DynamicPlugin):
 
         layout_kwargs = {
             "margin": dict(
-                t=30,
+                t=0,
                 b=0,
                 l=0,
                 r=0,

@@ -4,6 +4,8 @@ from distutils.spawn import find_executable
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+import base64
+import io
 from deepcave.utils.logs import get_logger
 
 # IEEETrans double column standard
@@ -44,11 +46,29 @@ class StyledPlot:
         self.plt = plt
 
     def figure(self, cols=1, rows=1, dpi=200):
-        return self.plt.figure(figsize=(FIG_WIDTH * cols, FIG_HEIGHT * rows), dpi=dpi)
+        # Clean all
+        self.plt.cla()
+        self.plt.clf()
+
+        f = self.plt.figure(figsize=(FIG_WIDTH * cols, FIG_HEIGHT * rows), dpi=dpi)
+        f.tight_layout()
+
+        return f
 
     def save_figure(self, filename):
         self.plt.savefig(filename, dpi=400, bbox_inches="tight")
         self.plt.close()
+
+    def render(self):
+        # Ccreate a virtual file which matplotlib can use to save the figure
+        buffer = io.BytesIO()
+        self.plt.savefig(buffer, dpi=400, bbox_inches="tight")
+        buffer.seek(0)
+
+        # Display any kind of image taken from
+        # https://github.com/plotly/dash/issues/71
+        encoded_image = base64.b64encode(buffer.read())
+        return "data:image/png;base64,{}".format(encoded_image.decode())
 
     def xlim(self, xmin, xmax):
         xmin_with_margin = xmin - 0.05 * (xmax - xmin)
