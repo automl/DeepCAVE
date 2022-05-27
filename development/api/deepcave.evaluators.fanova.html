@@ -381,8 +381,8 @@ hyperparameters of the configspace are used.</p></li>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Dictionary with hyperparameter names and the corresbonding importance scores.
-The values are tuples of the form (mean individual, mean total, std individual,
-std total). Note that individual and total are the same if depth is 1.</p>
+The values are tuples of the form (mean individual, var individual, mean total,
+var total). Note that individual and total are the same if depth is 1.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>Dict[Union[str, Tuple[str, …]], Tuple[float, float, float, float]]</p>

@@ -396,11 +396,13 @@ style="width: 100%;">
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">total_hash_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">hashes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
-            <span class="n">total_hash_str</span> <span class="o">+=</span> <span class="n">run</span><span class="o">.</span><span class="n">hash</span>
+            <span class="n">hashes</span> <span class="o">+=</span> <span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">hash</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="n">total_hash_str</span><span class="p">)</span>
+        <span class="c1"># We sort hashes now because we don&#39;t want to be dependent on the order</span>
+        <span class="n">hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hashes</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

@@ -339,19 +339,13 @@ style="width: 100%;">
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">g_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">b_hex</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_color"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">[docs]</a><span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span>
-    <span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mpl</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<div class="viewcode-block" id="get_color"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">[docs]</a><span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Currently (Plotly version 5.3.1) there are 10 possible colors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">color</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">qualitative</span><span class="o">.</span><span class="n">Plotly</span><span class="p">[</span><span class="n">id_</span><span class="p">]</span>
 
     <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">hex_to_rgb</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">mpl</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="n">g</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="n">b</span> <span class="o">/</span> <span class="mi">255</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
-
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rgba(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 
@@ -657,24 +651,22 @@ style="width: 100%;">
 
     <span class="n">link</span> <span class="o">=</span> <span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
 
-    <span class="n">string</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Configuration ID: &lt;a href=&#39;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&#39; style=&#39;color: #ffffff&#39;&gt;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/b&gt;&lt;br&gt;&quot;</span>
-    <span class="p">)</span>
-
-    <span class="n">config</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
-
-    <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br&gt;&quot;</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Configuration ID: &lt;a href=&#39;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&#39; style=&#39;color: #ffffff&#39;&gt;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&quot;</span>
 
     <span class="c1"># It&#39;s also nice to see the metrics</span>
     <span class="n">objectives</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
     <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
     <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
 
-    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives (on highest found budget </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">)&lt;/b&gt;&lt;br&gt;&quot;</span>
+    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives&lt;/b&gt; (on highest found budget </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">)&lt;br&gt;&quot;</span>
     <span class="k">for</span> <span class="n">objective</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">costs</span><span class="p">):</span>
         <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+
+    <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br&gt;&lt;b&gt;Hyperparameters&lt;/b&gt;:&lt;br&gt;&quot;</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
 
     <span class="k">return</span> <span class="n">string</span>
 

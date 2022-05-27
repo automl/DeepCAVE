@@ -19,7 +19,6 @@ deepcave.utils.layout
       get_select_options
       get_slider_marks
       help_button
-      render_mpl_figure
       render_table
    
    

@@ -355,14 +355,16 @@ style="width: 100%;">
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
-            
+
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">n_trees</span> <span class="o">=</span> <span class="n">n_trees</span>
 
         <span class="c1"># Get data</span>
-        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_combined_cost</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span>
+            <span class="n">objectives</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_combined_cost</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hp_names</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="c1"># Combined cost name includes the cost of all selected objectives</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">COMBINED_COST_NAME</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
@@ -395,8 +397,8 @@ style="width: 100%;">
 <span class="sd">        -------</span>
 <span class="sd">        Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]</span>
 <span class="sd">            Dictionary with hyperparameter names and the corresbonding importance scores.</span>
-<span class="sd">            The values are tuples of the form (mean individual, mean total, std individual,</span>
-<span class="sd">            std total). Note that individual and total are the same if depth is 1.</span>
+<span class="sd">            The values are tuples of the form (mean individual, var individual, mean total,</span>
+<span class="sd">            var total). Note that individual and total are the same if depth is 1.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -405,7 +407,7 @@ style="width: 100%;">
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">hp_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">hp_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
-        
+
         <span class="n">hp_ids</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
             <span class="n">hp_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp_name</span><span class="p">))</span>
@@ -445,15 +447,15 @@ style="width: 100%;">
 
                 <span class="n">importances</span><span class="p">[</span><span class="n">sub_hp_ids</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fractions_individual</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">fractions_individual</span><span class="p">),</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fractions_total</span><span class="p">),</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">fractions_individual</span><span class="p">),</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">fractions_total</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">fractions_total</span><span class="p">),</span>
                 <span class="p">)</span>
 
         <span class="c1"># Sort by total mean fraction</span>
         <span class="k">if</span> <span class="n">sort</span><span class="p">:</span>
             <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
             <span class="p">}</span>
 
         <span class="c1"># We want to replace the ids with hyperparameter names again</span>

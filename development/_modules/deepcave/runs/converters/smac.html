@@ -434,7 +434,7 @@ style="width: 100%;">
             <span class="k">elif</span> <span class="s2">&quot;MEMOUT&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">MEMORYOUT</span>
             <span class="k">elif</span> <span class="s2">&quot;RUNNING&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">RUNNING</span>
+                <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
 
