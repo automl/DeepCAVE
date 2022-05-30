@@ -17,7 +17,7 @@ from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
 from deepcave.runs import Status, AbstractRun
 from deepcave.utils.layout import create_table, help_button
-from deepcave.utils.styled_plotty import get_discrete_heatmap
+from deepcave.utils.styled_plotty import get_discrete_heatmap, save_image
 from deepcave.utils.util import get_latest_change
 from deepcave.plugins.summary.configurations import Configurations
 
@@ -322,18 +322,13 @@ class Overview(DynamicPlugin):
             ),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
-        stats_figure.write_image("status_bar.pdf")
+        save_image(stats_figure, "status_bar.pdf")
 
         config_layout = go.Layout(
             legend={"title": "Status"},
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
-            margin=dict(
-                t=0,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            margin=dict(t=0, b=0, l=0, r=0),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(
@@ -344,7 +339,7 @@ class Overview(DynamicPlugin):
             ),
             layout=config_layout,
         )
-        config_figure.write_image("status_heatmap.pdf")
+        save_image(config_figure, "status_heatmap.pdf")
 
         return [
             card,
@@ -356,25 +351,3 @@ class Overview(DynamicPlugin):
             create_table(status_details),
             create_table(configspace, mb=False),
         ]
-
-    @staticmethod
-    def get_mpl_output_layout(register):
-        return [
-            html.H3("Statuses"),
-            dbc.Tabs(
-                [
-                    dbc.Tab(
-                        html.Img(id=register("barplot", "src"), className="img-fluid"),
-                        label="Barplot",
-                    ),
-                    dbc.Tab(
-                        html.Img(id=register("heatmap", "src"), className="img-fluid"),
-                        label="Heatmap",
-                    ),
-                ]
-            ),
-        ]
-
-    @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):
-        return ["", ""]

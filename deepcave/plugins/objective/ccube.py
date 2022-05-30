@@ -23,6 +23,7 @@ from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import (
     get_hovertext_from_config,
     get_hyperparameter_ticks,
+    save_image,
 )
 
 logger = get_logger(__name__)
@@ -277,8 +278,8 @@ class CCube(DynamicPlugin):
                 trace = go.Scatter(x=[], y=[])
             layout = go.Layout(**layout_kwargs)
 
-        fig = go.Figure(data=trace, layout=layout)
-        fig.update_layout(
+        figure = go.Figure(data=trace, layout=layout)
+        figure.update_layout(
             dict(
                 margin=dict(
                     t=30,
@@ -288,4 +289,6 @@ class CCube(DynamicPlugin):
                 ),
             )
         )
-        return fig
+        save_image(figure, "ccube.pdf")
+
+        return figure

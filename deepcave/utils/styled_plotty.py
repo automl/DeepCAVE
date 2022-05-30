@@ -1,4 +1,5 @@
 from typing import List, Optional, Tuple, Any, Union, Dict, Callable
+from deepcave import interactive
 from deepcave.constants import NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
 import numpy as np
 import plotly.express as px
@@ -13,6 +14,30 @@ from ConfigSpace.hyperparameters import (
     Constant,
     IntegerHyperparameter,
 )
+
+
+@interactive
+def save_image(figure: go.Figure, name: str) -> None:
+    """
+    Saves a plotly figure as an image.
+
+    Parameters
+    ----------
+    fig : go.Figure
+        Plotly figure.
+    filename : str
+        Name of the image with extension. Will be automatically saved to the cache.
+    """
+    from deepcave import config
+
+    if not config.SAVE_IMAGES:
+        return
+
+    ratio = 16 / 9
+    width = 500
+    height = int(width / ratio)
+
+    figure.write_image(config.CACHE_DIR / "figures" / name, width=width, height=height)
 
 
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
@@ -44,7 +69,7 @@ def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, floa
     return f"rgba({r}, {g}, {b}, {alpha})"
 
 
-def get_discrete_heatmap(x, y, values: List[List[Any]], labels: List[List[Any]]):
+def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
     """
     Generate a discrete colorscale from a (nested) list or numpy array of values.
 

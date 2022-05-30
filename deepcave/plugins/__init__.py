@@ -750,7 +750,7 @@ class Plugin(Layout, ABC):
 
         components = []
         if self.help is not None:
-            
+
             if self.help.endswith(".rst"):
                 data = rst_to_md(self.help)
             else:

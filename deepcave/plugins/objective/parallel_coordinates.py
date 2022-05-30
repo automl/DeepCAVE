@@ -14,7 +14,7 @@ from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import get_hyperparameter_ticks
+from deepcave.utils.styled_plotty import get_hyperparameter_ticks, save_image
 
 logger = get_logger(__name__)
 
@@ -243,7 +243,7 @@ class ParallelCoordinates(StaticPlugin):
                 colorscale="aggrnyl",
             )
 
-        fig = go.Figure(
+        figure = go.Figure(
             data=go.Parcoords(
                 line=line,
                 dimensions=list([d for d in data.values()]),
@@ -258,5 +258,7 @@ class ParallelCoordinates(StaticPlugin):
                 )
             ),
         )
+        
+        save_image(figure, "parallel_coordinates.pdf")
 
-        return fig
+        return figure

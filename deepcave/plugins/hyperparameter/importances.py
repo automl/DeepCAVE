@@ -16,7 +16,7 @@ from deepcave.utils.layout import (
     get_select_options,
     help_button,
 )
-from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.styled_plotty import get_color, save_image
 from deepcave.utils.styled_plot import plt
 
 
@@ -246,32 +246,38 @@ class Importances(StaticPlugin):
         bar_data = []
         for budget_id, values in data.items():
             budget = run.get_budget(budget_id, human=True)
+
+            x = values[0][idx]
+            # new_x = []
+            # for string in x:
+            #    string = string.replace("center_optimizer:", "")
+            #    string = string.replace(":__choice__", "")
+            #    string = string.replace("AdamWOptimizer", "AdamW")
+            #    string = string.replace("SGDOptimizer", "SGD")
+            #    new_x += [string]
+            # x = new_x
+
             bar_data += [
                 go.Bar(
                     name=budget,
-                    x=values[0][idx],
+                    x=x,
                     y=values[1][idx],
                     error_y_array=values[2][idx],
                     marker_color=get_color(budget_id),
                 )
             ]
 
-        fig = go.Figure(data=bar_data)
-        fig.update_layout(
+        figure = go.Figure(data=bar_data)
+        figure.update_layout(
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=dict(
-                t=0,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            margin=dict(t=0, b=0, l=0, r=0),
+            xaxis=dict(tickangle=-45),
         )
+        save_image(figure, "importances.pdf")
 
-        fig.write_image("importance.pdf")
-
-        return fig
+        return figure
 
     @staticmethod
     def get_mpl_output_layout(register):
@@ -330,7 +336,6 @@ class Importances(StaticPlugin):
         x = np.arange(len(x_labels))
 
         plt.figure()
-
         for budget_id, values in data.items():
             if budget_id not in selected_budget_ids:
                 continue

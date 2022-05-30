@@ -8,7 +8,7 @@ from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogat
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import get_checklist_options, get_select_options
-from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks
+from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
 
 
 GRID_POINTS_PER_AXIS = 20
@@ -348,4 +348,5 @@ class PartialDependencies(StaticPlugin):
                 }
             )
 
-        return go.Figure(data=traces, layout=layout)
+        figure = go.Figure(data=traces, layout=layout)
+        save_image(figure, "pdp.pdf")

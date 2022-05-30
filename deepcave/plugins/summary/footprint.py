@@ -8,7 +8,7 @@ from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
 
 
 class FootPrint(StaticPlugin):
@@ -260,9 +260,9 @@ class FootPrint(StaticPlugin):
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)
         area = go.Figure(data=[area_data] + traces, layout=layout)
-
-        performance.write_image("footprint_performance.pdf")
-        area.write_image("footprint_area.pdf")
+        
+        save_image(performance, "footprint_performance.pdf")
+        save_image(area, "footprint_area.pdf")
 
         return [performance, area]
 

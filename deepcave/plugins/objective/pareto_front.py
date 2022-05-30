@@ -8,7 +8,7 @@ from dash import dcc, html
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, get_slider_marks, help_button
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
 from deepcave.utils.styled_plot import plt
 
 
@@ -286,20 +286,15 @@ class ParetoFront(DynamicPlugin):
             layout = go.Layout(
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
-                margin=dict(
-                    t=0,
-                    b=0,
-                    l=0,
-                    r=0,
-                ),
+                margin=dict(t=0, b=0, l=0, r=0),
             )
         else:
             layout = None
 
-        f = go.Figure(data=traces, layout=layout)
-        f.write_image("pareto.pdf")
-        
-        return f
+        figure = go.Figure(data=traces, layout=layout)
+        save_image(figure, "pareto_front.pdf")
+
+        return figure
 
     @staticmethod
     def get_mpl_output_layout(register):

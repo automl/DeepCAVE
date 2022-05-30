@@ -12,7 +12,7 @@ from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import create_table, get_select_options
 from deepcave.utils.logs import get_logger
-from deepcave.utils.styled_plotty import get_color
+from deepcave.utils.styled_plotty import get_color, save_image
 
 logger = get_logger(__name__)
 
@@ -172,6 +172,7 @@ class BudgetCorrelation(DynamicPlugin):
         )
 
         figure = go.Figure(data=traces, layout=layout)
+        save_image(figure, "budget_correlation.png")
         
         # Add vertical lines
         readable_budgets = run.get_budgets(human=True, include_combined=False)

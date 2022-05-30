@@ -8,7 +8,7 @@ from dash import dcc, html
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_select_options, help_button
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config
+from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
 
 
 class CostOverTime(DynamicPlugin):
@@ -242,4 +242,5 @@ class CostOverTime(DynamicPlugin):
             ),
         )
 
-        return go.Figure(data=traces, layout=layout)
+        figure = go.Figure(data=traces, layout=layout)
+        save_image(figure, "cost_over_time.pdf")

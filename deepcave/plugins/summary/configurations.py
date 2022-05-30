@@ -9,7 +9,7 @@ from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import create_table, get_slider_marks
-from deepcave.utils.styled_plotty import generate_config_code, get_color, get_hyperparameter_ticks
+from deepcave.utils.styled_plotty import generate_config_code, get_color, get_hyperparameter_ticks, save_image
 from deepcave.utils.url import create_url
 
 
@@ -252,6 +252,7 @@ class Configurations(DynamicPlugin):
 
         objective_layout = go.Layout(**layout_kwargs)
         objective_figure = go.Figure(data=objective_data, layout=objective_layout)
+        save_image(objective_figure, "configure.pdf")
 
         return objective_figure
 

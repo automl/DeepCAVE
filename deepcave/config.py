@@ -7,9 +7,10 @@ class Config:
     # General config
     TITLE: str = "DeepCAVE"
     DEBUG: bool = True
+    SAVE_IMAGES = True  # Saves plotly figures to disk
 
     # Cache dir
-    root: Path = Path.cwd()
+    ROOT: Path = Path.cwd()
 
     # Redis settings
     REDIS_PORT: int = 6379
@@ -29,11 +30,11 @@ class Config:
 
     @property
     def DEFAULT_WORKING_DIRECTORY(self) -> Path:
-        return self.root / "logs"
+        return self.ROOT / "logs"
 
     @property
     def CACHE_DIR(self) -> Path:
-        return self.root / "cache"
+        return self.ROOT / "cache"
 
     @property
     def SERVER_NAME(self) -> str:
