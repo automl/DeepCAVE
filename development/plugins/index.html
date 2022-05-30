@@ -386,8 +386,8 @@ results immediately, <strong>static</strong> plugins are triggered by a <cite>Pr
 output.</p>
 <p>Most basic plugins should be possible as a <strong>dynamic</strong> plugin, do some quick analysis and then
 update the output as soon as it’s ready.</p>
-<p>In contrast, a <strong>static</strong> plugin might might take much longer to generate its output. For example,
-the _Hyperparameter <a href="#id1"><span class="problematic" id="id2">Importance_</span></a> plugin will train many decision trees to calculate it’s output and
+<p>In contrast, a <strong>static</strong> plugin might take much longer to generate its output. For example,
+the <em>Hyperparameter Importance</em> plugin will train many decision trees to calculate it’s output and
 so the plugins will queue the calculations, viewable in the side bar, and will be cached and
 viewable upon completion.</p>
 </section>
@@ -397,7 +397,8 @@ viewable upon completion.</p>
 basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.</p>
 <p>It could be helpful to refer to the base set of plugins for reference and inspiration.</p>
 <p>After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code>.</p>
+location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code> or start DeepCAVE with your own config.
+We are happy to receive pull-requests.</p>
 </section>
 </section>
 

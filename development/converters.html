@@ -353,9 +353,8 @@ converter is available.</p>
 Two methods are needed:</p>
 <ul class="simple">
 <li><p><cite>hash</cite>: This method should return a unique hash for the run (e.g. hashing the trial history).</p></li>
-<li><p><cite>from_path</cite>: This method should return a <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> object from a path. Inside this method, you</p></li>
+<li><p><cite>from_path</cite>: This method should return a <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> object from a path. Inside this method, you have to provide a configspace, meta data, <a class="reference internal" href="glossary.html#term-Objective"><span class="xref std std-term">objectives</span></a>, <a class="reference internal" href="glossary.html#term-Budget"><span class="xref std std-term">budgets</span></a> and add the trials to the new created run object.</p></li>
 </ul>
-<p>have to provide a configspace, meta data, <a class="reference internal" href="glossary.html#term-Objective"><span class="xref std std-term">objectives</span></a>, <a class="reference internal" href="glossary.html#term-Budget"><span class="xref std std-term">budgets</span></a> and add the trials to the new created run object.</p>
 <p>After you have created a new converter, you need to add it to <code class="docutils literal notranslate"><span class="pre">AVAILABLE_CONVERTERS</span></code> in
 <span class="xref std std-ref">deepcave/config.py</span>. The next time you select a run, DeepCAVE will automatically use this converter as long
 as the <code class="docutils literal notranslate"><span class="pre">from_path</span></code> method did not fail.</p>

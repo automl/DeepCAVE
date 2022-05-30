@@ -303,9 +303,9 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.layouts.sidebar</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">ALL</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span><span class="p">,</span> <span class="n">ALL</span>
 <span class="kn">from</span> <span class="nn">dash_extensions.enrich</span> <span class="kn">import</span> <span class="n">Trigger</span>
 <span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span><span class="p">,</span> <span class="n">State</span>
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
@@ -317,11 +317,13 @@ style="width: 100%;">
 
 
 <div class="viewcode-block" id="SidebarLayout"><a class="viewcode-back" href="../../../api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout">[docs]</a><span class="k">class</span> <span class="nc">SidebarLayout</span><span class="p">(</span><span class="n">Layout</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categorized_plugins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Plugin</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categorized_plugins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Plugin</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="n">categorized_plugins</span>
 
-        <span class="n">nav_points</span> <span class="o">=</span> <span class="p">{</span><span class="n">category</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">categorized_plugins</span><span class="p">}</span>
+        <span class="n">nav_points</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">category</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">categorized_plugins</span>
+        <span class="p">}</span>
         <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">plugins</span> <span class="ow">in</span> <span class="n">categorized_plugins</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">for</span> <span class="n">plugin</span> <span class="ow">in</span> <span class="n">plugins</span><span class="p">:</span>
                 <span class="n">nav_points</span><span class="p">[</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">plugin</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">plugin</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">plugin</span><span class="o">.</span><span class="n">icon</span><span class="p">))</span>
@@ -333,13 +335,14 @@ style="width: 100%;">
         <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;navigation-items&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;on-page-load&quot;</span><span class="p">,</span> <span class="s2">&quot;pathname&quot;</span><span class="p">)</span>
 
-        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">update_navigation_items</span><span class="p">(</span><span class="n">pathname</span><span class="p">):</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">def</span> <span class="nf">update_navigation_items</span><span class="p">(</span><span class="n">pathname</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
             <span class="n">layouts</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">points</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav_points</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">layouts</span> <span class="o">+=</span> <span class="p">[</span>
                     <span class="n">html</span><span class="o">.</span><span class="n">H6</span><span class="p">(</span>
-                        <span class="n">className</span><span class="o">=</span><span class="s2">&quot;sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted&quot;</span><span class="p">,</span>
+                        <span class="n">className</span><span class="o">=</span><span class="s2">&quot;sidebar-heading d-flex justify-content-between &quot;</span>
+                        <span class="s2">&quot;align-items-center px-3 mt-4 mb-1 text-muted&quot;</span><span class="p">,</span>
                         <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="n">category</span><span class="p">)],</span>
                     <span class="p">)</span>
                 <span class="p">]</span>
@@ -387,7 +390,7 @@ style="width: 100%;">
             <span class="n">Input</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cancel-job&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">ALL</span><span class="p">},</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">),</span>
             <span class="n">State</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cancel-job&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">ALL</span><span class="p">},</span> <span class="s2">&quot;name&quot;</span><span class="p">),</span>
         <span class="p">)</span>
-        <span class="k">def</span> <span class="nf">delete_job</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">delete_job</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
             <span class="k">for</span> <span class="n">n_click</span><span class="p">,</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">n_click</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
@@ -395,8 +398,8 @@ style="width: 100%;">
         <span class="c1"># Update queue information panel</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;queue-info&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span>
 
-        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">Trigger</span><span class="p">(</span><span class="s2">&quot;global-update&quot;</span><span class="p">,</span> <span class="s2">&quot;n_intervals&quot;</span><span class="p">))</span>
-        <span class="k">def</span> <span class="nf">update_queue_info</span><span class="p">():</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">Trigger</span><span class="p">(</span><span class="s2">&quot;global-update&quot;</span><span class="p">,</span> <span class="s2">&quot;n_intervals&quot;</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
+        <span class="k">def</span> <span class="nf">update_queue_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">all_jobs</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">queue</span><span class="o">.</span><span class="n">get_finished_jobs</span><span class="p">(),</span>
@@ -445,7 +448,8 @@ style="width: 100%;">
                     <span class="k">return</span> <span class="p">[</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Hr</span><span class="p">(),</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">H6</span><span class="p">(</span>
-                            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted&quot;</span><span class="p">,</span>
+                            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;sidebar-heading d-flex justify-content-between &quot;</span>
+                            <span class="s2">&quot;align-items-center px-3 mt-4 mb-1 text-muted&quot;</span><span class="p">,</span>
                             <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="s2">&quot;Queue Information&quot;</span><span class="p">)],</span>
                         <span class="p">),</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Ul</span><span class="p">(</span><span class="n">className</span><span class="o">=</span><span class="s2">&quot;nav flex-column&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="n">items</span><span class="p">),</span>
@@ -453,7 +457,7 @@ style="width: 100%;">
 
                 <span class="k">return</span> <span class="p">[]</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span>
+                <span class="k">return</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="SidebarLayout.__call__"><a class="viewcode-back" href="../../../api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">Component</span><span class="p">]:</span>
         <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Nav</span><span class="p">(</span>

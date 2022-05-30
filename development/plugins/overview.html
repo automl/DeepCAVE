@@ -355,32 +355,36 @@ style="width: 100%;">
 your selected runs. This plugin serves as sanity check and therefore let’s you know
 about the meta data, objectives and statistics of the selected run.</p>
 <p>The Overview is split into 5 parts:
-- Quick Information
-- Meta
-- Objectives
-- Statuses
-- Configuration Space</p>
+* Quick Information
+* Meta
+* Objectives
+* Statuses
+* Configuration Space</p>
 <p>This plugin is capable of answering following questions:
-- Which optimizer was used?
-- When was the latest change of the optimizer’s data?
-- What is the best configuration?
-- Are the meta data as expected?
-- Are the objectives as expected?
-- Is the configuration space as expected?
-- How many trials have been successful/unsuccessful?
-- Why did certain trials crash?
-- On which budgets were the configurations evaluated?</p>
+* Which optimizer was used?
+* When was the latest change of the optimizer’s data?
+* What is the best configuration?
+* Are the meta data as expected?
+* Are the objectives as expected?
+* Is the configuration space as expected?
+* How many trials have been successful/unsuccessful?
+* Why did certain trials crash?
+* On which budgets were the configurations evaluated?</p>
 <section id="quick-information">
 <h2>Quick Information<a class="headerlink" href="#quick-information" title="Permalink to this headline">¶</a></h2>
-<p>In the <strong>Quick Information</strong> box you’ll information regarding summary statistics about your run or group of runs. Notably information on the optimizer used, how many configurations were tried, when the runs were last updated and a handy quick link to the best <strong>Configuration</strong>.</p>
+<p>In the <strong>Quick Information</strong> box you’ll information regarding summary statistics about your run or
+group of runs. Notably information on the optimizer used, how many configurations were tried, when
+the runs were last updated and a handy quick link to the best <strong>Configuration</strong>.</p>
 </section>
 <section id="meta">
 <h2>Meta<a class="headerlink" href="#meta" title="Permalink to this headline">¶</a></h2>
-<p>Next we show some meta information regarding your runs. Notably, you can see information such as the possible <strong>budget</strong> allocations that were considered during the run.</p>
+<p>Next we show some meta information regarding your runs. Notably, you can see information such as the
+possible <strong>budget</strong> allocations that were considered during the run.</p>
 </section>
 <section id="objectives">
 <h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this headline">¶</a></h2>
-<p>In this section, we see the objectives that were considered during the optimization run. Here we get information about it’s name and the bounds they were in.</p>
+<p>In this section, we see the objectives that were considered during the optimization run. Here we get
+information about it’s name and the bounds they were in.</p>
 </section>
 <section id="statuses">
 <h2>Statuses<a class="headerlink" href="#statuses" title="Permalink to this headline">¶</a></h2>
@@ -397,7 +401,9 @@ to try. However if you faced many crashes at high budgets for example, you’ll 
 from the highest budget onwards. In general, you can use this to understand how often your optimizer
 balances out between low budget evaluations and full budget evaluations.</p>
 <p>In the <strong>Details</strong> tab, you’ll recieve an overview of configurations that were not successful.
-Here you’ll get some breif information about the config id number, the budget it was evaluated under and the status it recieved. If there is an associated error we can provide, such as when it recieved the <strong>CRASHED</strong> status, we will display it in the error column.</p>
+Here you’ll get some breif information about the config id number, the budget it was evaluated under
+and the status it recieved. If there is an associated error we can provide, such as when it recieved
+the <strong>CRASHED</strong> status, we will display it in the error column.</p>
 </section>
 <section id="configuration-space">
 <h2>Configuration Space<a class="headerlink" href="#configuration-space" title="Permalink to this headline">¶</a></h2>

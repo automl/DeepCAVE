@@ -65,8 +65,8 @@ output.
 Most basic plugins should be possible as a **dynamic** plugin, do some quick analysis and then
 update the output as soon as it's ready.
 
-In contrast, a **static** plugin might might take much longer to generate its output. For example,
-the _Hyperparameter Importance_ plugin will train many decision trees to calculate it's output and
+In contrast, a **static** plugin might take much longer to generate its output. For example,
+the *Hyperparameter Importance* plugin will train many decision trees to calculate it's output and
 so the plugins will queue the calculations, viewable in the side bar, and will be cached and
 viewable upon completion.
 
@@ -80,4 +80,5 @@ basic templates (in :ref:`examples<Examples>`) as a starting point and change it
 It could be helpful to refer to the base set of plugins for reference and inspiration.
 
 After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in ``deepcave/config.py``.
+location of your plugin in ``deepcave/config.py`` or start DeepCAVE with your own config.
+We are happy to receive pull-requests.
