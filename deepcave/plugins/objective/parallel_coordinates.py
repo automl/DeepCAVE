@@ -4,8 +4,8 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
+from dash.exceptions import PreventUpdate
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
 
@@ -72,7 +72,7 @@ class ParallelCoordinates(StaticPlugin):
                             dbc.Label("Show Important Hyperparameters"),
                             help_button(
                                 "Only the most important hyperparameters are shown which are "
-                                " calculated by fANOVA using five trees. The more left a "
+                                " calculated by fANOVA using 10 trees. The more left a "
                                 " hyperparameter stands, the more important it is."
                             ),
                             dbc.Select(
@@ -84,8 +84,8 @@ class ParallelCoordinates(StaticPlugin):
                     ),
                     dbc.Col(
                         [
-                            dbc.Label("Show Only Unsuccessful Configurations"),
-                            help_button("Whether to show all configurations or only failed ones"),
+                            dbc.Label("Show Unsuccessful Configurations"),
+                            help_button("Whether to show all configurations or only failed ones."),
                             dbc.Select(
                                 id=register("show_unsuccessful", ["value", "options"]),
                                 placeholder="Select ...",
@@ -93,6 +93,17 @@ class ParallelCoordinates(StaticPlugin):
                         ],
                         md=6,
                     ),
+                ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Limit Hyperparameters"),
+                    help_button(
+                        "Shows either the n most important hyperparameters (if show importance "
+                        "hyperparameters is true) or the first n selected hyperparameters."
+                    ),
+                    dbc.Input(id=register("n_hps", "value"), type="number"),
                 ],
             ),
             html.Div(
@@ -111,6 +122,7 @@ class ParallelCoordinates(StaticPlugin):
         return {
             "show_important_only": {"options": get_select_options(binary=True), "value": "true"},
             "show_unsuccessful": {"options": get_select_options(binary=True), "value": "false"},
+            "n_hps": {"value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
@@ -128,6 +140,7 @@ class ParallelCoordinates(StaticPlugin):
         budget_value = inputs["budget_id"]["value"]
 
         # Prepare others
+        n_hps = inputs["n_hps"]["value"]
         hp_names = run.configspace.get_hyperparameter_names()
 
         if inputs["show_important_only"]["value"] == "true":
@@ -148,6 +161,10 @@ class ParallelCoordinates(StaticPlugin):
             objective_value = objective_ids[0]
             budget_value = budget_ids[-1]
             hp_value = hp_names
+            n_hps = len(hp_names)
+
+        if n_hps == 0:
+            n_hps = len(hp_names)
 
         return {
             "objective_id": {
@@ -162,6 +179,7 @@ class ParallelCoordinates(StaticPlugin):
                 "options": hp_options,
                 "value": hp_value,
             },
+            "n_hps": {"value": n_hps},
             "show_hyperparameters": {"hidden": hidden},
         }
 
@@ -172,12 +190,10 @@ class ParallelCoordinates(StaticPlugin):
 
         # Let's run a quick fANOVA here
         evaluator = fANOVA(run)
-        evaluator.calculate(objective, budget, n_trees=5, seed=0)
+        evaluator.calculate(objective, budget, n_trees=10, seed=0)
         importances = evaluator.get_importances()
         importances = {u: v[0] for u, v in importances.items()}
-        important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)[
-            :10
-        ]
+        important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
 
         df = run.get_encoded_data(objective, budget)
         return {
@@ -196,11 +212,19 @@ class ParallelCoordinates(StaticPlugin):
 
         show_important_only = inputs["show_important_only"] == "true"
         show_unsuccessful = inputs["show_unsuccessful"] == "true"
+        n_hps = inputs["n_hps"]
+
+        if n_hps == "" or n_hps is None:
+            raise PreventUpdate
+        else:
+            n_hps = int(n_hps)
 
         if show_important_only:
             hp_names = outputs["important_hp_names"]
         else:
             hp_names = inputs["hyperparameter_names"]
+
+        hp_names = hp_names[:n_hps]
 
         df = outputs["df"]
         df = deserialize(df, dtype=pd.DataFrame)
@@ -258,7 +282,6 @@ class ParallelCoordinates(StaticPlugin):
                 )
             ),
         )
-        
         save_image(figure, "parallel_coordinates.pdf")
 
-        return figure
+        return [figure]

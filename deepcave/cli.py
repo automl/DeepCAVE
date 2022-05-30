@@ -1,10 +1,11 @@
-from pathlib import Path
 from typing import Any, List
 
 import multiprocessing
 import subprocess
+from pathlib import Path
 
 from absl import app, flags
+
 from deepcave.utils.configs import parse_config
 
 FLAGS = flags.FLAGS

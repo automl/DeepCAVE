@@ -4,7 +4,7 @@ from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
-from deepcave import app, queue, run_handler
+from deepcave import app, queue, run_handler, config
 from deepcave.layouts import Layout
 from deepcave.layouts.general import GeneralLayout
 from deepcave.layouts.header import HeaderLayout
@@ -28,12 +28,12 @@ class MainLayout(Layout):
             for plugin in plugins:
                 self.plugins[plugin.id] = plugin
 
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
         output = Output("content", "children")
         input = Input("on-page-load", "pathname")
 
-        @app.callback(output, input)
-        def display_page(pathname: str):
+        @app.callback(output, input)  # type: ignore
+        def display_page(pathname: str):  # type: ignore
             pathname = urlparse(pathname).path
             paths = pathname.split("/")[1:]
 
@@ -55,7 +55,7 @@ class MainLayout(Layout):
     def __call__(self) -> Component:
         return html.Div(
             children=[
-                dcc.Interval(id="global-update", interval=500),
+                dcc.Interval(id="global-update", interval=config.REFRESH_RATE),
                 self.header_layout(),
                 html.Div(
                     id="main-container",

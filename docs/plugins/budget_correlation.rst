@@ -3,9 +3,9 @@ Budget Correlation
 
 When multiple budgets are used, it is not clear how representitive lower budgets are of the final
 score if the same configuration was to be evaluated at a higher budget.
-One such way to gain knowledge about this is to use _budget correlation_, such that if a low budget
+One such way to gain knowledge about this is to use *budget correlation*, such that if a low budget
 correlates well with a higher budget, then we know that evaluating configurations at a lower budget
-is _good enough_ to infer about how they would perform at higher budgets. Conversly, if a low budget
+is *good enough* to infer about how they would perform at higher budgets. Conversly, if a low budget
 does not correlate with higher budgets, we know that we would need to fully evaluate configurations
 on high budgets to really be informed of how well they might perform.
 
@@ -40,7 +40,7 @@ There is no great answer to what a certain correlation will mean and this depend
 like to do with this information and how much extra resources you have.
 If you are trying to determine whether you could perform further runs with less budget, making the
 process to find good configurations faster, you should make sure that the highest budget correlates
-well with the lowest budget, achieving a correlation score of at least _0.7_ or more.
+well with the lowest budget, achieving a correlation score of at least *0.7* or more.
 This is rather an arbitrary number and your own context is important here. However, we provide
 a list (which is incorporated in the dynamic generated text) how the correlations can be interpreted:
 

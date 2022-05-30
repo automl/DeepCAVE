@@ -1,4 +1,4 @@
-from typing import Type, Any, Dict, List
+from typing import Any, Dict, List, Type
 
 from pathlib import Path
 
@@ -47,17 +47,15 @@ class Config:
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
-        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
-        from deepcave.plugins.summary.configurations import Configurations
-        from deepcave.plugins.objective.cost_over_time import CostOverTime
-        from deepcave.plugins.summary.overview import Overview
-        from deepcave.plugins.objective.parallel_coordinates import (
-            ParallelCoordinates,
-        )
-        from deepcave.plugins.summary.footprint import FootPrint
-        from deepcave.plugins.objective.pareto_front import ParetoFront
         from deepcave.plugins.hyperparameter.importances import Importances
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
+        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
+        from deepcave.plugins.objective.cost_over_time import CostOverTime
+        from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
+        from deepcave.plugins.objective.pareto_front import ParetoFront
+        from deepcave.plugins.summary.configurations import Configurations
+        from deepcave.plugins.summary.footprint import FootPrint
+        from deepcave.plugins.summary.overview import Overview
 
         plugins = {
             "Summary": [

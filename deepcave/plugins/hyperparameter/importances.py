@@ -1,6 +1,4 @@
-from typing import List, Union
 import dash_bootstrap_components as dbc
-from matplotlib.pyplot import xcorr
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -89,7 +87,11 @@ class Importances(StaticPlugin):
             ),
             html.Div(
                 [
-                    dbc.Label("Limit Number of Hyperparameters"),
+                    dbc.Label("Limit Hyperparameters"),
+                    help_button(
+                        "Shows only the n most important hyperparameters. If an important "
+                        "hyperparameter was de-selected, it is not shown but skipped."
+                    ),
                     dbc.Input(id=register("n_hps", "value"), type="number"),
                 ],
                 className="mb-3",
@@ -139,6 +141,9 @@ class Importances(StaticPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
+            n_hps = len(hp_names)
+
+        if n_hps == 0:
             n_hps = len(hp_names)
 
         # Pre-selection of the hyperparameters
@@ -210,7 +215,7 @@ class Importances(StaticPlugin):
         n_hps = inputs["n_hps"]
 
         if n_hps == "" or n_hps is None:
-            raise PreventUpdate()
+            raise PreventUpdate
         else:
             n_hps = int(n_hps)
 

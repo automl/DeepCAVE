@@ -20,21 +20,21 @@ This can help provide insight and answers to various questions:
 Options
 -------
 
-* **Objective** Here you can select the objective you wish to analyze for.
+* **Objective**: Here you can select the objective you wish to analyze for.
   The score will be placed as the last bar along the x-axis along with incoming lines indication
   which configuration achieved what score.
 
-* **Budget** Here you can specify a filter for which budgets you wish to view.
-  The _Combined_ budget will show all configurations trialed but only show their scores on the
+* **Budget**: Here you can specify a filter for which budgets you wish to view.
+  The *Combined* budget will show all configurations trialed but only show their scores on the
   highest budget if it was evaluated under multiple different budgets.
 
-* **Show Important hyperparameters** With this, you can limit the number of spines in the plot to
+* **Show Important hyperparameters**: With this, you can limit the number of spines in the plot to
   just the top 10 most important hyperparamters, calculated using fANOVA with 5 trees.
   These will be arranged left to right according to their importance.
   You can select *No* and instead show **all** hyperparamters, selecting those you consider most
   important for you.
 
-* **Show Unsuccessful Configurations** By default, we do not crowd the plot with configurations that
+* **Show Unsuccessful Configurations**: By default, we do not crowd the plot with configurations that
   did not manage to complete but you may enable plotting them by changing this to *Yes*.
   This could be useful to identify hyperparamters or combinations of them that caused them to not
   complete.

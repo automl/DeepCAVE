@@ -6,17 +6,17 @@ the optimizer and view its preferences during the run. These can be generated an
 when hitting the `Process` button.
 
 This plugin is capable of answering following questions:
-- Was the configuration space well-covered by the optimizer?
-- Can I stop the optimization process or do I need to invest more computational resources?
-- Which hyperparameter values are favorable?
+* Was the configuration space well-covered by the optimizer?
+* Can I stop the optimization process or do I need to invest more computational resources?
+* Which hyperparameter values are favorable?
 
 First, let's briefly mention the various kind of configurations we are concerned with here.
-* **Incumbent**: This is the best configuration for a given objective, like _cost_ or _time_, shown
+* **Incumbent**: This is the best configuration for a given objective, like *cost* or *time*, shown
 as a red triangle.
 * **Evaluated Configuration**: These are configurations evaluated by the optimizer and we know the
-true objective value, shown with _orange x_'s.
+true objective value, shown with *orange x*'s.
 * **Unevaluated Configuration**: These are configurations sampled by the optimizer but have no been
-evaluated, shown with _purple x_'s.
+evaluated, shown with *purple x*'s.
 * **Border Configuration**: These are configurations that exist at the edge of the configuration
 space at the min and max values for scalars.
 
@@ -46,7 +46,7 @@ configuration space will be.
 
 It's important to note that the background colour, represnting the objective is a best estimate
 given what we already know and does not indicate the true objective value in regions where there
-are no configurations evaluated. We can increase the resolution using the _Details_ option, which
+are no configurations evaluated. We can increase the resolution using the *Details* option, which
 influences the gridsize when generating the plot, at the cost of increased compute time to generate
 it.
 

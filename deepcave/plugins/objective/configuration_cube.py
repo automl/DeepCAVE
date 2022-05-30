@@ -3,16 +3,13 @@ from typing import Dict, Tuple
 import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
-import plotly.express as px
 import plotly.graph_objs as go
-from ConfigSpace.hyperparameters import CategoricalHyperparameter, Constant
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status
 from deepcave.utils.compression import deserialize, serialize
-from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import (
     get_checklist_options,
     get_select_options,
@@ -29,7 +26,7 @@ from deepcave.utils.styled_plotty import (
 logger = get_logger(__name__)
 
 
-class CCube(DynamicPlugin):
+class ConfigurationCube(DynamicPlugin):
     id = "ccube"
     name = "Configuration Cube"
     icon = "fas fa-cube"
@@ -289,6 +286,6 @@ class CCube(DynamicPlugin):
                 ),
             )
         )
-        save_image(figure, "ccube.pdf")
+        save_image(figure, "configuration_cube.pdf")
 
         return figure

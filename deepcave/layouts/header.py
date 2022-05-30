@@ -7,7 +7,7 @@ from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
-    def register_callbacks(self):
+    def register_callbacks(self) -> None:
         super().register_callbacks()
 
         outputs = [

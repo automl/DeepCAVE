@@ -7,14 +7,14 @@ from pyPDP.algorithms.pdp import PDP
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun, Status
-from deepcave.utils.layout import get_checklist_options, get_select_options
+from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
 
 
 GRID_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
-MAX_SHOWN_SAMPLES = 50
+MAX_SHOWN_SAMPLES = 100
 
 
 class PartialDependencies(StaticPlugin):
@@ -88,6 +88,7 @@ class PartialDependencies(StaticPlugin):
                             html.Div(
                                 [
                                     dbc.Label("Show confidence"),
+                                    help_button("Displays the confidence bands."),
                                     dbc.Select(
                                         id=register("show_confidence", ["value", "options"])
                                     ),
@@ -101,6 +102,10 @@ class PartialDependencies(StaticPlugin):
                             html.Div(
                                 [
                                     dbc.Label("Show ICE curves"),
+                                    help_button(
+                                        "Displays the ICE curves from which the PDP curve is "
+                                        "derivied."
+                                    ),
                                     dbc.Select(id=register("show_ice", ["value", "options"])),
                                 ]
                             )

@@ -1,6 +1,6 @@
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Tuple
 
-from dash import dcc, html, ALL
+from dash import html, ALL
 from dash_extensions.enrich import Trigger
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
@@ -12,11 +12,13 @@ from deepcave.plugins import Plugin
 
 
 class SidebarLayout(Layout):
-    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:
         super().__init__()
         self.plugins = categorized_plugins
 
-        nav_points = {category: [] for category in categorized_plugins}
+        nav_points: Dict[str, List[Tuple[str, str, str]]] = {
+            category: [] for category in categorized_plugins
+        }
         for category, plugins in categorized_plugins.items():
             for plugin in plugins:
                 nav_points[category].append((plugin.id, plugin.name, plugin.icon))
@@ -28,13 +30,14 @@ class SidebarLayout(Layout):
         output = Output("navigation-items", "children")
         input = Input("on-page-load", "pathname")
 
-        @app.callback(output, input)
-        def update_navigation_items(pathname):
+        @app.callback(output, input)  # type: ignore
+        def update_navigation_items(pathname):  # type: ignore
             layouts = []
             for category, points in self.nav_points.items():
                 layouts += [
                     html.H6(
-                        className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted",
+                        className="sidebar-heading d-flex justify-content-between "
+                        "align-items-center px-3 mt-4 mb-1 text-muted",
                         children=[html.Span(category)],
                     )
                 ]
@@ -82,7 +85,7 @@ class SidebarLayout(Layout):
             Input({"type": "cancel-job", "index": ALL}, "n_clicks"),
             State({"type": "cancel-job", "index": ALL}, "name"),
         )
-        def delete_job(n_clicks, job_ids):
+        def delete_job(n_clicks, job_ids):  # type: ignore
             for n_click, job_id in zip(n_clicks, job_ids):
                 if n_click is not None:
                     queue.delete_job(job_id)
@@ -90,8 +93,8 @@ class SidebarLayout(Layout):
         # Update queue information panel
         output = Output("queue-info", "children")
 
-        @app.callback(output, Trigger("global-update", "n_intervals"))
-        def update_queue_info():
+        @app.callback(output, Trigger("global-update", "n_intervals"))  # type: ignore
+        def update_queue_info() -> List[Component]:
             try:
                 all_jobs = [
                     queue.get_finished_jobs(),
@@ -140,7 +143,8 @@ class SidebarLayout(Layout):
                     return [
                         html.Hr(),
                         html.H6(
-                            className="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted",
+                            className="sidebar-heading d-flex justify-content-between "
+                            "align-items-center px-3 mt-4 mb-1 text-muted",
                             children=[html.Span("Queue Information")],
                         ),
                         html.Ul(className="nav flex-column", children=items),
@@ -148,7 +152,7 @@ class SidebarLayout(Layout):
 
                 return []
             except Exception:
-                return
+                return []
 
     def __call__(self) -> Union[List[Component], Component]:
         return html.Nav(

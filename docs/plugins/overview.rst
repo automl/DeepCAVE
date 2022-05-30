@@ -6,37 +6,41 @@ your selected runs. This plugin serves as sanity check and therefore let's you k
 about the meta data, objectives and statistics of the selected run.
 
 The Overview is split into 5 parts:
-- Quick Information
-- Meta
-- Objectives
-- Statuses
-- Configuration Space
+* Quick Information
+* Meta
+* Objectives
+* Statuses
+* Configuration Space
 
 This plugin is capable of answering following questions:
-- Which optimizer was used?
-- When was the latest change of the optimizer's data?
-- What is the best configuration?
-- Are the meta data as expected?
-- Are the objectives as expected?
-- Is the configuration space as expected?
-- How many trials have been successful/unsuccessful?
-- Why did certain trials crash?
-- On which budgets were the configurations evaluated?
+* Which optimizer was used?
+* When was the latest change of the optimizer's data?
+* What is the best configuration?
+* Are the meta data as expected?
+* Are the objectives as expected?
+* Is the configuration space as expected?
+* How many trials have been successful/unsuccessful?
+* Why did certain trials crash?
+* On which budgets were the configurations evaluated?
 
 
 Quick Information
 -----------------
 
-In the **Quick Information** box you'll information regarding summary statistics about your run or group of runs. Notably information on the optimizer used, how many configurations were tried, when the runs were last updated and a handy quick link to the best **Configuration**.
+In the **Quick Information** box you'll information regarding summary statistics about your run or
+group of runs. Notably information on the optimizer used, how many configurations were tried, when
+the runs were last updated and a handy quick link to the best **Configuration**.
 
 Meta
 ----
-Next we show some meta information regarding your runs. Notably, you can see information such as the possible **budget** allocations that were considered during the run.
+Next we show some meta information regarding your runs. Notably, you can see information such as the
+possible **budget** allocations that were considered during the run.
 
 
 Objectives
 ----------
-In this section, we see the objectives that were considered during the optimization run. Here we get information about it's name and the bounds they were in.
+In this section, we see the objectives that were considered during the optimization run. Here we get
+information about it's name and the bounds they were in.
 
 
 Statuses
@@ -57,7 +61,9 @@ from the highest budget onwards. In general, you can use this to understand how 
 balances out between low budget evaluations and full budget evaluations.
 
 In the **Details** tab, you'll recieve an overview of configurations that were not successful.
-Here you'll get some breif information about the config id number, the budget it was evaluated under and the status it recieved. If there is an associated error we can provide, such as when it recieved the **CRASHED** status, we will display it in the error column.
+Here you'll get some breif information about the config id number, the budget it was evaluated under
+and the status it recieved. If there is an associated error we can provide, such as when it recieved
+the **CRASHED** status, we will display it in the error column.
 
 
 Configuration Space

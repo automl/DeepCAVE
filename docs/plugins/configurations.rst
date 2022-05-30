@@ -3,20 +3,20 @@ Configurations
 
 This plugin let's you analyze single configurations. After you select a run and a configuration id
 you see the information listed in four parts:
-- Overview
-- Objectives
-- Configuration
-- Code
+* Overview
+* Objectives
+* Configuration
+* Code
 
 Since configurations are used throughout the application, you might find links associated to this
 plugin.
 
 This plugin is capable of answering following questions:
-- Where is the configuration coming from?
-- How are the objective values wrt the budgets?
-- How is the status of a trial associated with the selected configuration?
-- Which values have been used for a certain configuration?
-- How can I access the configuration in python?
+* Where is the configuration coming from?
+* How are the objective values wrt the budgets?
+* How is the status of a trial associated with the selected configuration?
+* Which values have been used for a certain configuration?
+* How can I access the configuration in python?
 
 
 Overview

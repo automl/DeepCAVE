@@ -44,8 +44,8 @@ class GeneralLayout(Layout):
         ]
 
         # Register updates from inputs
-        @app.callback(outputs, inputs)
-        def callback(
+        @app.callback(outputs, inputs)  # type: ignore
+        def callback(  # type: ignore
             _,
             working_dir: str,
             dynamic_n_clicks: List[Optional[int]],
@@ -75,8 +75,8 @@ class GeneralLayout(Layout):
         output = Output("general-available-runs-container", "children")
         input = Input("general-available-runs", "data")
 
-        @app.callback(output, input)
-        def callback(run_paths: List[str]):
+        @app.callback(output, input)  # type: ignore
+        def callback(run_paths: List[str]):  # type: ignore
             children = []
 
             # Add text to go to parent directory
@@ -127,8 +127,8 @@ class GeneralLayout(Layout):
         output = Output("general-selected-runs-container", "children")
         input = Input("general-selected-runs", "data")
 
-        @app.callback(output, input)
-        def callback(run_paths: List[str]):
+        @app.callback(output, input)  # type: ignore
+        def callback(run_paths: List[str]):  # type: ignore
             children = []
 
             for i, run_path in enumerate(run_paths):
@@ -185,8 +185,10 @@ class GeneralLayout(Layout):
             State({"type": "general-dynamic-selected-run-path", "index": ALL}, "data"),
         ]
 
-        @app.callback(outputs, inputs, states)
-        def callback(add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths):
+        @app.callback(outputs, inputs, states)  # type: ignore
+        def callback(  # type: ignore
+            add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths
+        ):
             # Add run path
             for n_click, run_path in zip(add_n_clicks, available_run_paths):
                 if n_click is not None:
@@ -221,11 +223,14 @@ class GeneralLayout(Layout):
         ]
 
         # Let's take care of the groups here
-        @app.callback(outputs, inputs)
-        def callback(n_clicks: int, _trigger1, _trigger2, children):
+        @app.callback(outputs, inputs)  # type: ignore
+        def callback(n_clicks: int, _trigger1, _trigger2, children):  # type: ignore
             def get_layout(
-                index: int, options: Dict[str, str], input_value: str = "", dropdown_value=None
-            ):
+                index: int,
+                options: Dict[str, str],
+                input_value: str = "",
+                dropdown_value: Optional[List[str]] = None,
+            ) -> Component:
                 if dropdown_value is None:
                     dropdown_value = []
 
@@ -276,8 +281,8 @@ class GeneralLayout(Layout):
             State("general-group-trigger", "data"),
         ]
 
-        @app.callback(outputs, inputs)
-        def callback(group_names, all_run_paths, i):
+        @app.callback(outputs, inputs)  # type: ignore
+        def callback(group_names, all_run_paths, i):  # type: ignore
             # Abort on page load
             if self._refresh_groups:
                 self._refresh_groups = False
@@ -318,8 +323,8 @@ class GeneralLayout(Layout):
         output = Output("general-clear-cache-button", "n_clicks")
         input = Input("general-clear-cache-button", "n_clicks")
 
-        @app.callback(output, input)
-        def callback(n_clicks):
+        @app.callback(output, input)  # type: ignore
+        def callback(n_clicks):  # type: ignore
             if n_clicks is not None:
                 rc.clear()
 

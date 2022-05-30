@@ -40,14 +40,15 @@ class StaticPlugin(Plugin, ABC):
     """
 
     def __init__(self) -> None:
-        # self._state: PluginState = PluginState.UNSET
-        # self._refresh_required = True
-        # self._reset_button = False
-
-        # Processing right now?
-        # self._blocked = False
-
         super().__init__()
+        self._setup()
+
+    def _setup(self) -> None:
+        self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
+        self._previous_state = None  # Used for updating status
+        self._refresh_required = True
+        self._reset_button = False
+        self._blocked = False
 
     @interactive
     def register_callbacks(self) -> None:
@@ -291,14 +292,12 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def __call__(self) -> List[Component]:  # type: ignore
-        self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
-        self._previous_state = None  # Used for updating status
-        self._refresh_required = True
-        self._reset_button = False
-        self._blocked = False
+        from deepcave import config
+
+        self._setup()
 
         components = [
-            dcc.Interval(id=self.get_internal_id("update-interval"), interval=200),
+            dcc.Interval(id=self.get_internal_id("update-interval"), interval=config.REFRESH_RATE),
             dcc.Store(id=self.get_internal_id("update-interval-output"), data=0),
         ]
         components += super().__call__(True)
