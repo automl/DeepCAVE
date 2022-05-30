@@ -362,6 +362,9 @@ style="width: 100%;">
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.prettify_label" title="deepcave.utils.styled_plotty.prettify_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prettify_label</span></code></a>(label)</p></td>
 <td><p>Takes a label and prettifies it.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.save_image" title="deepcave.utils.styled_plotty.save_image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_image</span></code></a>(figure, name)</p></td>
+<td><p>Saves a plotly figure as an image.</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py function">
@@ -470,6 +473,23 @@ Requires format including #, e.g.:
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plotty.save_image">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">save_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#save_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.save_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a plotly figure as an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fig</strong> (<em>go.Figure</em>) – Plotly figure.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – Name of the image with extension. Will be automatically saved to the cache.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
 </dd>
 </dl>
 </dd></dl>

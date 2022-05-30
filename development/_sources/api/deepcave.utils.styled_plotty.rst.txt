@@ -21,6 +21,7 @@ deepcave.utils.styled\_plotty
       get_hyperparameter_ticks_from_values
       hex_to_rgb
       prettify_label
+      save_image
    
    
 

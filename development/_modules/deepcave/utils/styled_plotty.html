@@ -304,6 +304,7 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.utils.styled_plotty</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">NAN_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">CONSTANT_VALUE</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
@@ -318,6 +319,30 @@ style="width: 100%;">
     <span class="n">Constant</span><span class="p">,</span>
     <span class="n">IntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
+
+
+<div class="viewcode-block" id="save_image"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.save_image">[docs]</a><span class="nd">@interactive</span>
+<span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">:</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Saves a plotly figure as an image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fig : go.Figure</span>
+<span class="sd">        Plotly figure.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Name of the image with extension. Will be automatically saved to the cache.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">SAVE_IMAGES</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">ratio</span> <span class="o">=</span> <span class="mi">16</span> <span class="o">/</span> <span class="mi">9</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="n">ratio</span><span class="p">)</span>
+
+    <span class="n">figure</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">CACHE_DIR</span> <span class="o">/</span> <span class="s2">&quot;figures&quot;</span> <span class="o">/</span> <span class="n">name</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="hex_to_rgb"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.hex_to_rgb">[docs]</a><span class="k">def</span> <span class="nf">hex_to_rgb</span><span class="p">(</span><span class="n">hex_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
@@ -349,7 +374,7 @@ style="width: 100%;">
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rgba(</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">alpha</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 
-<div class="viewcode-block" id="get_discrete_heatmap"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_discrete_heatmap">[docs]</a><span class="k">def</span> <span class="nf">get_discrete_heatmap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]],</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]):</span>
+<div class="viewcode-block" id="get_discrete_heatmap"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_discrete_heatmap">[docs]</a><span class="k">def</span> <span class="nf">get_discrete_heatmap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a discrete colorscale from a (nested) list or numpy array of values.</span>
 
