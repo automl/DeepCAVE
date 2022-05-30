@@ -1,7 +1,7 @@
-import deepcave
+from deepcave.config import Config as C
 
 
-class Config(deepcave.config.Config):
+class Config(C):
     DEBUG = False
 
     REDIS_PORT = 6379

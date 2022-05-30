@@ -1,4 +1,4 @@
-from typing import Type, Any, Union, Dict, List
+from typing import Type, Any, Dict, List
 
 from pathlib import Path
 
@@ -7,7 +7,11 @@ class Config:
     # General config
     TITLE: str = "DeepCAVE"
     DEBUG: bool = True
-    SAVE_IMAGES = True  # Saves plotly figures to disk
+    # How often to refresh background activities (such as update the sidebar or process button for
+    # static plugins). Value in milliseconds.
+    REFRESH_RATE: int = 500
+    # Saves plotly figures to disk
+    SAVE_IMAGES = False
 
     # Cache dir
     ROOT: Path = Path.cwd()
@@ -42,13 +46,8 @@ class Config:
 
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
-        """
-        Returns:
-        dictionary {category -> List[Plugins]}
-        Plugins are ordered
-        """
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
-        from deepcave.plugins.objective.ccube import CCube
+        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
         from deepcave.plugins.summary.configurations import Configurations
         from deepcave.plugins.objective.cost_over_time import CostOverTime
         from deepcave.plugins.summary.overview import Overview
@@ -68,7 +67,7 @@ class Config:
             ],
             "Objective Analysis": [
                 CostOverTime(),
-                CCube(),
+                ConfigurationCube(),
                 ParetoFront(),
                 ParallelCoordinates(),
             ],

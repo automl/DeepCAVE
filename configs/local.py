@@ -1,5 +1,6 @@
-from deepcave.config import Config
+from deepcave.config import Config as C
 
 
-class ServerConfig(Config):
+class Config(C):
     DEBUG = True
+    REFRESH_RATE: int = 2000
