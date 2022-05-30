@@ -40,6 +40,10 @@ if any(file in _exec_file for file in _exec_files):
         config_name = sys.argv[sys.argv.index("--config") + 1]
     config = parse_config(config_name)
 
+    open = False
+    if "--open" in sys.argv:
+        open = True
+
     # Create app
     app = get_app(config)
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
@@ -65,7 +69,7 @@ if any(file in _exec_file for file in _exec_files):
         # Notifications
         notification = Notification()
 
-        if "server.py" in _exec_file:
+        if open:
             # Open the link in browser
             def open_browser() -> None:
                 webbrowser.open_new(f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}")

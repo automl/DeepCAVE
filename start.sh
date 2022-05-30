@@ -25,8 +25,10 @@ if [ -f "$file" ] ; then
     rm "$file"
 fi
 
+OPEN=$1
+
 # Save config value
-CONFIG=$1
+CONFIG=$2
 if ! [ $CONFIG ]; then
     CONFIG="default"
 fi
@@ -57,4 +59,10 @@ fi
 
 # Start worker in background
 python "$ROOT_PATH/worker.py" --config $CONFIG &
-python "$ROOT_PATH/server.py" --config $CONFIG
+
+# Start the webserver
+if [ $OPEN == "true" ]; then
+    python "$ROOT_PATH/server.py" --config $CONFIG --open
+else
+    python "$ROOT_PATH/server.py" --config $CONFIG
+fi
