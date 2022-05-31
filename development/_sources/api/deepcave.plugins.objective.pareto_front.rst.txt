@@ -1,0 +1,29 @@
+deepcave.plugins.objective.pareto\_front
+========================================
+
+.. automodule:: deepcave.plugins.objective.pareto_front
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParetoFront
+   
+   
+
+   
+   
+   
+
+
+

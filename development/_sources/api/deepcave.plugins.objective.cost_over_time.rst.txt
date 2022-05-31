@@ -1,0 +1,29 @@
+deepcave.plugins.objective.cost\_over\_time
+===========================================
+
+.. automodule:: deepcave.plugins.objective.cost_over_time
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      CostOverTime
+   
+   
+
+   
+   
+   
+
+
+

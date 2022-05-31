@@ -33,6 +33,10 @@
    :toctree:
    :recursive:
 
+   deepcave.plugins.budget
    deepcave.plugins.dynamic
+   deepcave.plugins.hyperparameter
+   deepcave.plugins.objective
    deepcave.plugins.static
+   deepcave.plugins.summary
 

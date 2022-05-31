@@ -15,17 +15,15 @@ the correlation between budget 1 and budget 2 will be high.
 
 This plugin is capable of answering following questions:
 
-* Are low budget trials a fair representation of a configurations true performance if evaluated at
-a higher budget?
-* Should I consider running further optimization with lower budgets, so that I can cover more of the
-configuration space?
+* Are low budget trials a fair representation of a configurations true performance if evaluated at a higher budget?
+* Should I consider running further optimization with lower budgets, so that I can cover more of the configuration space?
 
 
 Options
 -------
 
-* **Objective**: Here you can select the objective you wish to analyze for.
-  The score for an objective will be communicated through the color of a point with an associated heatmap.
+**Objective**: Here you can select the objective you wish to analyze for.
+The score for an objective will be communicated through the color of a point with an associated heatmap.
 
 
 Correlation Interpretation

@@ -14,13 +14,13 @@ This plugin is capable of answering following questions:
 First, let's briefly mention the various kind of configurations we are concerned with here.
 
 * **Incumbent**: This is the best configuration for a given objective, like *cost* or *time*,
-    shown as a red triangle.
+  shown as a red triangle.
 * **Evaluated Configuration**: These are configurations evaluated by the optimizer and we know the
-    true objective value, shown with *orange x*'s.
+  true objective value, shown with *orange x*'s.
 * **Unevaluated Configuration**: These are configurations sampled by the optimizer but have no been
-    evaluated, shown with *purple x*'s.
+  evaluated, shown with *purple x*'s.
 * **Border Configuration**: These are configurations that exist at the edge of the configuration
-    space at the min and max values for scalars.
+  space at the min and max values for scalars.
 
 Using the **Evaluated Configuration** and the **Incumbent** for each objective type and under each
 budget, we have some knowledge about what kind of score we'll get around those points, and we can
