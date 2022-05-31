@@ -339,13 +339,17 @@ style="width: 100%;">
 <p>Configuration footprint is useful for exploring how much is known about your configuration space by
 the optimizer and view its preferences during the run. These can be generated and will be cached
 when hitting the <cite>Process</cite> button.</p>
-<p>This plugin is capable of answering following questions:
-* Was the configuration space well-covered by the optimizer?
-* Can I stop the optimization process or do I need to invest more computational resources?
-* Which hyperparameter values are favorable?</p>
-<p>First, let’s briefly mention the various kind of configurations we are concerned with here.
-* <strong>Incumbent</strong>: This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown
-as a red triangle.
+<p>This plugin is capable of answering following questions:</p>
+<ul class="simple">
+<li><p>Was the configuration space well-covered by the optimizer?</p></li>
+<li><p>Can I stop the optimization process or do I need to invest more computational resources?</p></li>
+<li><p>Which hyperparameter values are favorable?</p></li>
+</ul>
+<p>First, let’s briefly mention the various kind of configurations we are concerned with here.</p>
+<ul class="simple">
+<li><p><strong>Incumbent</strong>: This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown</p></li>
+</ul>
+<p>as a red triangle.
 * <strong>Evaluated Configuration</strong>: These are configurations evaluated by the optimizer and we know the
 true objective value, shown with <em>orange x</em>’s.
 * <strong>Unevaluated Configuration</strong>: These are configurations sampled by the optimizer but have no been

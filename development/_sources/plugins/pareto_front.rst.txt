@@ -13,6 +13,7 @@ configurations for two given objectives.
     the configuration in detail.
 
 This plugin is capable of answering following questions:
+
 * Which configuration should I choose if I prefer objective A slightly over objective B?
 * How performs optimizer A in comparison to optimizer B? Is optimizer A better than optimizer B?
 

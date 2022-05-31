@@ -6,11 +6,13 @@ the optimizer and view its preferences during the run. These can be generated an
 when hitting the `Process` button.
 
 This plugin is capable of answering following questions:
+
 * Was the configuration space well-covered by the optimizer?
 * Can I stop the optimization process or do I need to invest more computational resources?
 * Which hyperparameter values are favorable?
 
 First, let's briefly mention the various kind of configurations we are concerned with here.
+
 * **Incumbent**: This is the best configuration for a given objective, like *cost* or *time*, shown
 as a red triangle.
 * **Evaluated Configuration**: These are configurations evaluated by the optimizer and we know the
