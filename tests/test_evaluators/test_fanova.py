@@ -10,18 +10,19 @@ from deepcave.evaluators.fanova import fANOVA as Evaluator
 class TestFanova(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run: AbstractRun = SMACRun.from_path("examples/record/logs/SMAC/test_run")
+        self.run: AbstractRun = SMACRun.from_path("logs/SMAC/mlp/run_1")
         self.hp_names = self.run.configspace.get_hyperparameter_names()
         self.evaluator = Evaluator(self.run)
 
     def test(self):
         budget = self.run.get_budget(0)
+        objective = self.run.get_objective(0)
 
         # Calculate
-        self.evaluator.calculate(budget)
+        self.evaluator.calculate(objective, budget)
         importances = self.evaluator.get_importances(self.hp_names)
 
-        self.evaluator.calculate(budget)
+        self.evaluator.calculate(objective, budget)
         importances2 = self.evaluator.get_importances(self.hp_names)
 
         # No seed: Different results
@@ -29,12 +30,13 @@ class TestFanova(unittest.TestCase):
 
     def test_seed(self):
         budget = self.run.get_budget(0)
+        objective = self.run.get_objective(0)
 
         # Calculate
-        self.evaluator.calculate(budget, seed=0)
+        self.evaluator.calculate(objective, budget, seed=0)
         importances = self.evaluator.get_importances(self.hp_names)
 
-        self.evaluator.calculate(budget, seed=0)
+        self.evaluator.calculate(objective, budget, seed=0)
         importances2 = self.evaluator.get_importances(self.hp_names)
 
         # No seed: Different results
