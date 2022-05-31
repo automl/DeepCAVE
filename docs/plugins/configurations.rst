@@ -3,6 +3,7 @@ Configurations
 
 This plugin let's you analyze single configurations. After you select a run and a configuration id
 you see the information listed in four parts:
+
 * Overview
 * Objectives
 * Configuration
@@ -12,6 +13,7 @@ Since configurations are used throughout the application, you might find links a
 plugin.
 
 This plugin is capable of answering following questions:
+
 * Where is the configuration coming from?
 * How are the objective values wrt the budgets?
 * How is the status of a trial associated with the selected configuration?

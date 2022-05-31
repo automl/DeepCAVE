@@ -28,6 +28,7 @@ plotting the values of hyperparameters as points in this *slice* of the space.
 
 
 The Configuration Cube is helpful to visually inspect and answer the following questions:
+
 * Does a certain hyperparameter have high influence over the final objectives score when compared to another?
 * Does the optimizer tend to prefer one value of a hyperparameter over time?
 * How do hyperparamters correlate with respect to the given objective

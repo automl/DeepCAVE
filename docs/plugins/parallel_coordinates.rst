@@ -12,6 +12,7 @@ Lastly, you can place visual filters along these spines to really home-in on hyp
 important for your analysis.
 
 This can help provide insight and answers to various questions:
+
 * What hyperparamter values, or combinations of them, lead to a range of final scores?
 * Which hyperparamter values does the optimizer tend to prefer?
 * What hyperparamter configurations lead to crash configurations?

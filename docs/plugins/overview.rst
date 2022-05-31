@@ -6,6 +6,7 @@ your selected runs. This plugin serves as sanity check and therefore let's you k
 about the meta data, objectives and statistics of the selected run.
 
 The Overview is split into 5 parts:
+
 * Quick Information
 * Meta
 * Objectives
@@ -13,6 +14,7 @@ The Overview is split into 5 parts:
 * Configuration Space
 
 This plugin is capable of answering following questions:
+
 * Which optimizer was used?
 * When was the latest change of the optimizer's data?
 * What is the best configuration?
