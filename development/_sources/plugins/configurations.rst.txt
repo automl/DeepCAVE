@@ -10,9 +10,7 @@ you see the information listed in four parts:
 * Code
 
 Since configurations are used throughout the application, you might find links associated to this
-plugin.
-
-This plugin is capable of answering following questions:
+plugin. This plugin is capable of answering following questions:
 
 * Where is the configuration coming from?
 * How are the objective values wrt the budgets?

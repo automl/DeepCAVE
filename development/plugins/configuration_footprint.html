@@ -347,15 +347,27 @@ when hitting the <cite>Process</cite> button.</p>
 </ul>
 <p>First, let’s briefly mention the various kind of configurations we are concerned with here.</p>
 <ul class="simple">
-<li><p><strong>Incumbent</strong>: This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>, shown</p></li>
+<li><dl class="simple">
+<dt><strong>Incumbent</strong>: This is the best configuration for a given objective, like <em>cost</em> or <em>time</em>,</dt><dd><p>shown as a red triangle.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Evaluated Configuration</strong>: These are configurations evaluated by the optimizer and we know the</dt><dd><p>true objective value, shown with <em>orange x</em>’s.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Unevaluated Configuration</strong>: These are configurations sampled by the optimizer but have no been</dt><dd><p>evaluated, shown with <em>purple x</em>’s.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Border Configuration</strong>: These are configurations that exist at the edge of the configuration</dt><dd><p>space at the min and max values for scalars.</p>
+</dd>
+</dl>
+</li>
 </ul>
-<p>as a red triangle.
-* <strong>Evaluated Configuration</strong>: These are configurations evaluated by the optimizer and we know the
-true objective value, shown with <em>orange x</em>’s.
-* <strong>Unevaluated Configuration</strong>: These are configurations sampled by the optimizer but have no been
-evaluated, shown with <em>purple x</em>’s.
-* <strong>Border Configuration</strong>: These are configurations that exist at the edge of the configuration
-space at the min and max values for scalars.</p>
 <p>Using the <strong>Evaluated Configuration</strong> and the <strong>Incumbent</strong> for each objective type and under each
 budget, we have some knowledge about what kind of score we’ll get around those points, and we can
 try to infer for all other points in the configuration space.</p>
