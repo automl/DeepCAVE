@@ -364,6 +364,22 @@ style="width: 100%;">
                         <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show Important Hyperparameters&quot;</span><span class="p">),</span>
+                    <span class="n">help_button</span><span class="p">(</span>
+                        <span class="s2">&quot;Only the most important hyperparameters are shown which are &quot;</span>
+                        <span class="s2">&quot;calculated by fANOVA using 10 trees. The more left a &quot;</span>
+                        <span class="s2">&quot;hyperparameter stands, the more important it is. However, activating &quot;</span>
+                        <span class="s2">&quot;this option might take longer.&quot;</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
+                        <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select ...&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
             <span class="p">),</span>
         <span class="p">]</span></div>
 
@@ -374,16 +390,13 @@ style="width: 100%;">
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
                         <span class="p">[</span>
-                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show Important Hyperparameters&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Limit Hyperparameters&quot;</span><span class="p">),</span>
                             <span class="n">help_button</span><span class="p">(</span>
-                                <span class="s2">&quot;Only the most important hyperparameters are shown which are &quot;</span>
-                                <span class="s2">&quot; calculated by fANOVA using 10 trees. The more left a &quot;</span>
-                                <span class="s2">&quot; hyperparameter stands, the more important it is.&quot;</span>
+                                <span class="s2">&quot;Shows either the n most important hyperparameters (if show &quot;</span>
+                                <span class="s2">&quot;importance hyperparameters is true) or the first n selected &quot;</span>
+                                <span class="s2">&quot;hyperparameters.&quot;</span>
                             <span class="p">),</span>
-                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
-                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
-                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select ...&quot;</span><span class="p">,</span>
-                            <span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;n_hps&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">),</span>
                         <span class="p">],</span>
                         <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
@@ -399,17 +412,6 @@ style="width: 100%;">
                         <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
                 <span class="p">],</span>
-                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Limit Hyperparameters&quot;</span><span class="p">),</span>
-                    <span class="n">help_button</span><span class="p">(</span>
-                        <span class="s2">&quot;Shows either the n most important hyperparameters (if show importance &quot;</span>
-                        <span class="s2">&quot;hyperparameters is true) or the first n selected hyperparameters.&quot;</span>
-                    <span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;n_hps&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">),</span>
-                <span class="p">],</span>
             <span class="p">),</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -419,7 +421,7 @@ style="width: 100%;">
                     <span class="p">),</span>
                 <span class="p">],</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mt-3&quot;</span><span class="p">,</span>
-                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_hyperparameters&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">]),</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hide_hps&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">]),</span>
             <span class="p">),</span>
         <span class="p">]</span></div>
 
@@ -429,6 +431,7 @@ style="width: 100%;">
             <span class="s2">&quot;show_unsuccessful&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">},</span>
             <span class="s2">&quot;n_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
             <span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
+            <span class="s2">&quot;hide_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
@@ -485,26 +488,26 @@ style="width: 100%;">
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp_value</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;n_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">n_hps</span><span class="p">},</span>
-            <span class="s2">&quot;show_hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="n">hidden</span><span class="p">},</span>
+            <span class="s2">&quot;hide_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="n">hidden</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.process">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">serialize</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">}</span>
 
-        <span class="c1"># Let&#39;s run a quick fANOVA here</span>
-        <span class="n">evaluator</span> <span class="o">=</span> <span class="n">fANOVA</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
-        <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">importances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
-        <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-        <span class="n">important_hp_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">importances</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">]:</span>
+            <span class="c1"># Let&#39;s run a quick fANOVA here</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">fANOVA</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+            <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">importances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
+            <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">important_hp_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">importances</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;important_hp_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">important_hp_names</span>
 
-        <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">serialize</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
-            <span class="s2">&quot;important_hp_names&quot;</span><span class="p">:</span> <span class="n">important_hp_names</span><span class="p">,</span>
-        <span class="p">}</span></div>
+        <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="ParallelCoordinates.get_output_layout"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
@@ -515,8 +518,8 @@ style="width: 100%;">
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span>
 
-        <span class="n">show_important_only</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
-        <span class="n">show_unsuccessful</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_unsuccessful&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">show_important_only</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">]</span>
+        <span class="n">show_unsuccessful</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_unsuccessful&quot;</span><span class="p">]</span>
         <span class="n">n_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_hps&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">n_hps</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">n_hps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

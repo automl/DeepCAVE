@@ -986,6 +986,7 @@ style="width: 100%;">
     <span class="k">def</span> <span class="nf">_clean_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cleans the given inputs s.t. only the first value is used.</span>
+<span class="sd">        Also, boolean values are casted to booleans.</span>
 
 <span class="sd">        Example</span>
 <span class="sd">        -------</span>
@@ -1010,7 +1011,15 @@ style="width: 100%;">
             <span class="c1"># Since self.inputs is ordered, we use the first occuring attribute and add</span>
             <span class="c1"># the id so it is not used again.</span>
             <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_ids</span><span class="p">:</span>
-                <span class="n">cleaned_inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">][</span><span class="n">attribute</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="s2">&quot;false&quot;</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="n">cleaned_inputs</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
                 <span class="n">used_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">cleaned_inputs</span>
@@ -1280,12 +1289,13 @@ style="width: 100%;">
         <span class="n">disabled</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
-                <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-                <span class="n">disabled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">check_run_compatibility</span><span class="p">(</span><span class="n">run</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+                    <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">disabled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
 
         <span class="n">added_group_label</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>

@@ -510,12 +510,12 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="ParetoFront.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.pareto_front.html#deepcave.plugins.objective.pareto_front.ParetoFront.load_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-        <span class="n">show_all</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_all&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">show_all</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_all&quot;</span><span class="p">]</span>
 
         <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
-            <span class="n">show_runs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_runs&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
-            <span class="n">show_groups</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_groups&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+            <span class="n">show_runs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_runs&quot;</span><span class="p">]</span>
+            <span class="n">show_groups</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_groups&quot;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot;group&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">show_groups</span><span class="p">:</span>
                 <span class="k">continue</span>

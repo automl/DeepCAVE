@@ -543,8 +543,8 @@ style="width: 100%;">
             <span class="n">hp2_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
             <span class="n">hp2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
 
-        <span class="n">show_confidence</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
-        <span class="n">show_ice</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_ice&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">show_confidence</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">]</span>
+        <span class="n">show_ice</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_ice&quot;</span><span class="p">]</span>
 
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span>

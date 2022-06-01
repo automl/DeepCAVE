@@ -308,6 +308,7 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
@@ -355,7 +356,8 @@ style="width: 100%;">
                         <span class="p">[</span>
                             <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
                             <span class="n">help_button</span><span class="p">(</span>
-                                <span class="s2">&quot;Combined budget means that the trial on the highest evaluated budget is used.&quot;</span>
+                                <span class="s2">&quot;Combined budget means that the trial on the highest evaluated &quot;</span>
+                                <span class="s2">&quot;budget is used.&quot;</span>
                             <span class="p">),</span>
                             <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
                                 <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
@@ -425,8 +427,8 @@ style="width: 100%;">
                 <span class="p">],</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;times&quot;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s2">&quot;show_runs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
-            <span class="s2">&quot;show_groups&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;show_runs&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s2">&quot;show_groups&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="CostOverTime.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.process">[docs]</a>    <span class="nd">@staticmethod</span>
@@ -452,8 +454,9 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="CostOverTime.load_outputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.load_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
-        <span class="n">show_runs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_runs&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
-        <span class="n">show_groups</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_groups&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">show_runs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_runs&quot;</span><span class="p">]</span>
+        <span class="n">show_groups</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_groups&quot;</span><span class="p">]</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">show_runs</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">show_groups</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
@@ -528,6 +531,9 @@ style="width: 100%;">
                 <span class="p">)</span>
             <span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">objective</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PreventUpdate</span>
+
         <span class="nb">type</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;xaxis&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;times_log&quot;</span><span class="p">:</span>
             <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;log&quot;</span>
@@ -548,7 +554,9 @@ style="width: 100%;">
         <span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
-        <span class="n">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;cost_over_time.pdf&quot;</span><span class="p">)</span></div></div>
+        <span class="n">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;cost_over_time.pdf&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">figure</span></div></div>
 </pre></div>
 
               </div>
