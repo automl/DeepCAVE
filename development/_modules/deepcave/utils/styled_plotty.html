@@ -135,8 +135,8 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../examples/api/plugin.html">
-     Example Call
+    <a class="reference internal" href="../../../examples/api/parallel_coordinates.html">
+     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -146,22 +146,12 @@ style="width: 100%;">
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../examples/record/mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../examples/templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../examples/templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -685,7 +675,8 @@ style="width: 100%;">
 
     <span class="n">link</span> <span class="o">=</span> <span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
 
-    <span class="n">string</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Configuration ID: &lt;a href=&#39;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&#39; style=&#39;color: #ffffff&#39;&gt;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&quot;</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&lt;b&gt;Configuration ID: &quot;</span>
+    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;a href=&#39;</span><span class="si">{</span><span class="n">link</span><span class="si">}</span><span class="s2">&#39; style=&#39;color: #ffffff&#39;&gt;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&quot;</span>
 
     <span class="c1"># It&#39;s also nice to see the metrics</span>
     <span class="n">objectives</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
@@ -764,7 +755,6 @@ style="width: 100%;">
         <span class="p">]</span>
 
     <span class="n">components</span> <span class="o">=</span> <span class="n">components</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">components</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
-
     <span class="k">return</span> <span class="n">components</span>
 </pre></div>
 

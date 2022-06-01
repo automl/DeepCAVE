@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Multi-Layer Perceptron &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>Multi-Layer Perceptron via Sklearn &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -138,8 +138,8 @@ style="width: 100%;">
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../api/plugin.html">
-     Example Call
+    <a class="reference internal" href="../api/parallel_coordinates.html">
+     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -149,22 +149,12 @@ style="width: 100%;">
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Multi-Layer Perceptron
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -324,12 +314,12 @@ style="width: 100%;">
 <p>Click <a class="reference internal" href="#sphx-glr-download-examples-record-digits-sklearn-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<section class="sphx-glr-example-title" id="multi-layer-perceptron">
-<span id="sphx-glr-examples-record-digits-sklearn-py"></span><h1>Multi-Layer Perceptron<a class="headerlink" href="#multi-layer-perceptron" title="Permalink to this headline">¶</a></h1>
+<section class="sphx-glr-example-title" id="multi-layer-perceptron-via-sklearn">
+<span id="sphx-glr-examples-record-digits-sklearn-py"></span><h1>Multi-Layer Perceptron via Sklearn<a class="headerlink" href="#multi-layer-perceptron-via-sklearn" title="Permalink to this headline">¶</a></h1>
+<p>This more advanced example shows how sklearn can be used to record an optimization
+process in DeepCAVE format.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>

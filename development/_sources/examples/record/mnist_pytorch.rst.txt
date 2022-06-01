@@ -21,7 +21,10 @@
 Multi-Layer Perceptron via PyTorch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 6-286
+This more advanced example incorporates multiple objectives, budgets and statusses to
+show the strenghts of DeepCAVE's recorder.
+
+.. GENERATED FROM PYTHON SOURCE LINES 8-288
 
 .. code-block:: default
 

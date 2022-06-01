@@ -18,19 +18,19 @@
 .. _sphx_glr_examples_record_digits_sklearn.py:
 
 
-Multi-Layer Perceptron
+Multi-Layer Perceptron via Sklearn
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 6-95
+This more advanced example shows how sklearn can be used to record an optimization
+process in DeepCAVE format.
+
+.. GENERATED FROM PYTHON SOURCE LINES 8-94
 
 .. code-block:: default
 
 
-
     from sklearn.neural_network import MLPClassifier
-    from sklearn.datasets import make_classification
     from sklearn.model_selection import train_test_split
-    import numpy as np
     from ConfigSpace import ConfigurationSpace
     from ConfigSpace.hyperparameters import (
         UniformFloatHyperparameter,

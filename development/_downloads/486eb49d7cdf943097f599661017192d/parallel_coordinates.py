@@ -1,8 +1,9 @@
 """
-Example Call
-^^^^^^^^^^^^
+Parallel Coordinates
+^^^^^^^^^^^^^^^^^^^^
 
-...
+This example shows how to use the plugin parallel coordinates.
+Note that other plugins use the same interfaces and can be used in the same fashion.
 """
 
 from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates

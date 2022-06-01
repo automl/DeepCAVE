@@ -21,7 +21,7 @@
 Record Minimal Run
 ^^^^^^^^^^^^^^^^^^
 
-...
+This example shows how DeepCAVE can be used to record a minimal run.
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-33
 

@@ -2,7 +2,7 @@
 Record Minimal Run
 ^^^^^^^^^^^^^^^^^^
 
-...
+This example shows how DeepCAVE can be used to record a minimal run.
 """
 
 

@@ -2,6 +2,8 @@
 Multi-Layer Perceptron via PyTorch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+This more advanced example incorporates multiple objectives, budgets and statusses to
+show the strenghts of DeepCAVE's recorder.
 """
 
 

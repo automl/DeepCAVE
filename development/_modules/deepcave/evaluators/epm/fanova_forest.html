@@ -135,8 +135,8 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../../../../examples/api/plugin.html">
-     Example Call
+    <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
+     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -146,22 +146,12 @@ style="width: 100%;">
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../../examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../../../../examples/record/mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../../examples/templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../../../../examples/templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -377,7 +367,6 @@ style="width: 100%;">
 <span class="sd">        Y : np.ndarray</span>
 <span class="sd">            Target values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
 
@@ -398,8 +387,8 @@ style="width: 100%;">
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">split_vals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">midpoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">split_vals</span><span class="p">)</span>
                         <span class="n">sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">split_vals</span><span class="p">)))</span>
-                    <span class="c1"># if not, simply append 0 as the value with the number of categories as the size, that way this</span>
-                    <span class="c1"># parameter will get 0 importance from this tree.</span>
+                    <span class="c1"># if not, simply append 0 as the value with the number of categories as the</span>
+                    <span class="c1"># size, that way this parameter will get 0 importance from this tree.</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">midpoints</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="mi">0</span><span class="p">,))</span>
                         <span class="n">sizes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">],))</span>

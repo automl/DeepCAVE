@@ -138,8 +138,8 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/api/plugin.html">
-     Example Call
+    <a class="reference internal" href="../examples/api/parallel_coordinates.html">
+     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -149,22 +149,12 @@ style="width: 100%;">
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../examples/record/mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -340,22 +330,17 @@ style="width: 100%;">
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.converters.bohb.BOHBRun.from_path">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/bohb.html#BOHBRun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.bohb.BOHBRun.from_path" title="Permalink to this definition">¶</a></dt>
-<dd><p>Based on path, return a new run object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#deepcave.runs.converters.bohb.BOHBRun" title="deepcave.runs.converters.bohb.BOHBRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">BOHBRun</span></code></a></p>
-</dd>
-</dl>
+<dd><p>Based on a path, return a new Run object.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.converters.bohb.BOHBRun.hash">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.bohb.BOHBRun.hash" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><a class="headerlink" href="#deepcave.runs.converters.bohb.BOHBRun.hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
 the cache always holds the latest results of the run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Hash of the run.</p>
+<dd class="field-odd"><p><strong>hash</strong> – Hash of the run.</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>str</p>
