@@ -681,6 +681,7 @@ class Plugin(Layout, ABC):
     def _clean_inputs(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Cleans the given inputs s.t. only the first value is used.
+        Also, boolean values are casted to booleans.
 
         Example
         -------
@@ -705,7 +706,15 @@ class Plugin(Layout, ABC):
             # Since self.inputs is ordered, we use the first occuring attribute and add
             # the id so it is not used again.
             if id not in used_ids:
-                cleaned_inputs[id] = inputs[id][attribute]
+                i = inputs[id][attribute]
+
+                if i == "true":
+                    i = True
+
+                if i == "false":
+                    i = False
+
+                cleaned_inputs[id] = i
                 used_ids += [id]
 
         return cleaned_inputs
@@ -975,12 +984,13 @@ class Plugin(Layout, ABC):
         disabled = []
 
         for run in runs:
-            try:
-                values.append(run.id)
-                labels.append(run.name)
-                disabled.append(False)
-            except Exception:
-                pass
+            if check_run_compatibility(run):
+                try:
+                    values.append(run.id)
+                    labels.append(run.name)
+                    disabled.append(False)
+                except Exception:
+                    pass
 
         added_group_label = False
         for run in groups:

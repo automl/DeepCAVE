@@ -59,6 +59,22 @@ class ParallelCoordinates(StaticPlugin):
                         md=6,
                     ),
                 ],
+                className="mb-3",
+            ),
+            html.Div(
+                [
+                    dbc.Label("Show Important Hyperparameters"),
+                    help_button(
+                        "Only the most important hyperparameters are shown which are "
+                        "calculated by fANOVA using 10 trees. The more left a "
+                        "hyperparameter stands, the more important it is. However, activating "
+                        "this option might take longer."
+                    ),
+                    dbc.Select(
+                        id=register("show_important_only", ["value", "options"]),
+                        placeholder="Select ...",
+                    ),
+                ]
             ),
         ]
 
@@ -69,16 +85,13 @@ class ParallelCoordinates(StaticPlugin):
                 [
                     dbc.Col(
                         [
-                            dbc.Label("Show Important Hyperparameters"),
+                            dbc.Label("Limit Hyperparameters"),
                             help_button(
-                                "Only the most important hyperparameters are shown which are "
-                                " calculated by fANOVA using 10 trees. The more left a "
-                                " hyperparameter stands, the more important it is."
+                                "Shows either the n most important hyperparameters (if show "
+                                "importance hyperparameters is true) or the first n selected "
+                                "hyperparameters."
                             ),
-                            dbc.Select(
-                                id=register("show_important_only", ["value", "options"]),
-                                placeholder="Select ...",
-                            ),
+                            dbc.Input(id=register("n_hps", "value"), type="number"),
                         ],
                         md=6,
                     ),
@@ -94,17 +107,6 @@ class ParallelCoordinates(StaticPlugin):
                         md=6,
                     ),
                 ],
-                className="mb-3",
-            ),
-            html.Div(
-                [
-                    dbc.Label("Limit Hyperparameters"),
-                    help_button(
-                        "Shows either the n most important hyperparameters (if show importance "
-                        "hyperparameters is true) or the first n selected hyperparameters."
-                    ),
-                    dbc.Input(id=register("n_hps", "value"), type="number"),
-                ],
             ),
             html.Div(
                 [
@@ -114,7 +116,7 @@ class ParallelCoordinates(StaticPlugin):
                     ),
                 ],
                 className="mt-3",
-                id=register("show_hyperparameters", ["hidden"]),
+                id=register("hide_hps", ["hidden"]),
             ),
         ]
 
@@ -124,6 +126,7 @@ class ParallelCoordinates(StaticPlugin):
             "show_unsuccessful": {"options": get_select_options(binary=True), "value": "false"},
             "n_hps": {"value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
+            "hide_hps": {"hidden": True},
         }
 
     def load_dependency_inputs(self, run, previous_inputs, inputs):
@@ -180,26 +183,26 @@ class ParallelCoordinates(StaticPlugin):
                 "value": hp_value,
             },
             "n_hps": {"value": n_hps},
-            "show_hyperparameters": {"hidden": hidden},
+            "hide_hps": {"hidden": hidden},
         }
 
     @staticmethod
     def process(run, inputs):
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
+        df = serialize(run.get_encoded_data(objective, budget))
+        result = {"df": df}
 
-        # Let's run a quick fANOVA here
-        evaluator = fANOVA(run)
-        evaluator.calculate(objective, budget, n_trees=10, seed=0)
-        importances = evaluator.get_importances()
-        importances = {u: v[0] for u, v in importances.items()}
-        important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
+        if inputs["show_important_only"]:
+            # Let's run a quick fANOVA here
+            evaluator = fANOVA(run)
+            evaluator.calculate(objective, budget, n_trees=10, seed=0)
+            importances = evaluator.get_importances()
+            importances = {u: v[0] for u, v in importances.items()}
+            important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
+            result["important_hp_names"] = important_hp_names
 
-        df = run.get_encoded_data(objective, budget)
-        return {
-            "df": serialize(df),
-            "important_hp_names": important_hp_names,
-        }
+        return result
 
     @staticmethod
     def get_output_layout(register):
@@ -210,8 +213,8 @@ class ParallelCoordinates(StaticPlugin):
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
-        show_important_only = inputs["show_important_only"] == "true"
-        show_unsuccessful = inputs["show_unsuccessful"] == "true"
+        show_important_only = inputs["show_important_only"]
+        show_unsuccessful = inputs["show_unsuccessful"]
         n_hps = inputs["n_hps"]
 
         if n_hps == "" or n_hps is None:

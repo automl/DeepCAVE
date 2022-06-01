@@ -3,6 +3,7 @@ from typing import Dict, List, Union
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
+from dash.exceptions import PreventUpdate
 from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
@@ -50,7 +51,8 @@ class CostOverTime(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
-                                "Combined budget means that the trial on the highest evaluated budget is used."
+                                "Combined budget means that the trial on the highest evaluated "
+                                "budget is used."
                             ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
@@ -120,8 +122,8 @@ class CostOverTime(DynamicPlugin):
                 ],
                 "value": "times",
             },
-            "show_runs": {"options": get_select_options(binary=True), "value": "true"},
-            "show_groups": {"options": get_select_options(binary=True), "value": "true"},
+            "show_runs": {"options": get_select_options(binary=True), "value": True},
+            "show_groups": {"options": get_select_options(binary=True), "value": True},
         }
 
     @staticmethod
@@ -147,8 +149,9 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
-        show_runs = inputs["show_runs"] == "true"
-        show_groups = inputs["show_groups"] == "true"
+        show_runs = inputs["show_runs"]
+        show_groups = inputs["show_groups"]
+        objective = None
 
         if not show_runs and not show_groups:
             return go.Figure()
@@ -223,6 +226,9 @@ class CostOverTime(DynamicPlugin):
                 )
             )
 
+        if objective is None:
+            raise PreventUpdate
+
         type = None
         if inputs["xaxis"] == "times_log":
             type = "log"
@@ -244,3 +250,5 @@ class CostOverTime(DynamicPlugin):
 
         figure = go.Figure(data=traces, layout=layout)
         save_image(figure, "cost_over_time.pdf")
+
+        return figure

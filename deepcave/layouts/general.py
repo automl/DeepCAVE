@@ -11,6 +11,7 @@ from deepcave import app, c, rc, run_handler, notification, queue
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run
+from deepcave.utils.layout import help_button
 from deepcave.utils.util import short_string
 
 
@@ -358,6 +359,7 @@ class GeneralLayout(Layout):
             html.H1("General"),
             # Working dir
             dbc.Label("Working Directory"),
+            help_button("Relative and absolute paths are supported."),
             dbc.Input(id="general-working-directory-input", placeholder="", type="text"),
             dbc.FormText(id="general-converter-label"),
             dcc.Store(id="general-available-runs", data={}),

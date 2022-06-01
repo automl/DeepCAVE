@@ -175,8 +175,8 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def load_outputs(run, inputs, outputs):
         objective = run.get_objective(inputs["objective_id"])
-        show_borders = inputs["show_borders"] == "true"
-        show_supports = inputs["show_supports"] == "true"
+        show_borders = inputs["show_borders"]
+        show_supports = inputs["show_supports"]
 
         traces = []
 
@@ -286,8 +286,8 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def load_mpl_outputs(run, inputs, outputs):
         objective = run.get_objective(inputs["objective_id"])
-        show_borders = inputs["show_borders"] == "true"
-        show_supports = inputs["show_supports"] == "true"
+        show_borders = inputs["show_borders"]
+        show_supports = inputs["show_supports"]
 
         point_names = []
         point_values = []

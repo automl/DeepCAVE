@@ -238,8 +238,8 @@ class PartialDependencies(StaticPlugin):
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
 
-        show_confidence = inputs["show_confidence"] == "true"
-        show_ice = inputs["show_ice"] == "true"
+        show_confidence = inputs["show_confidence"]
+        show_ice = inputs["show_ice"]
 
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name

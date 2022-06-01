@@ -205,12 +205,12 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
-        show_all = inputs["show_all"] == "true"
+        show_all = inputs["show_all"]
 
         traces = []
         for idx, run in enumerate(runs):
-            show_runs = inputs["show_runs"] == "true"
-            show_groups = inputs["show_groups"] == "true"
+            show_runs = inputs["show_runs"]
+            show_groups = inputs["show_groups"]
 
             if run.prefix == "group" and not show_groups:
                 continue

@@ -338,4 +338,4 @@ class Run(AbstractRun, ABC):
                 self.trial_keys[trial.get_key()] = len(self.history) - 1
 
                 # Update highest budget
-                self._update_highest_budget(trial.config_id, trial.budget)
+                self._update_highest_budget(trial.config_id, trial.budget, trial.status)

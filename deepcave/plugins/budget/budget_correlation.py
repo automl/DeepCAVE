@@ -168,12 +168,12 @@ class BudgetCorrelation(DynamicPlugin):
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Correlation"),
             margin=dict(t=0, b=0, l=0, r=0),
-            legend=dict(title="Budgets")
+            legend=dict(title="Budgets"),
         )
 
         figure = go.Figure(data=traces, layout=layout)
         save_image(figure, "budget_correlation.png")
-        
+
         # Add vertical lines
         readable_budgets = run.get_budgets(human=True, include_combined=False)
         for idx, budget in enumerate(readable_budgets):

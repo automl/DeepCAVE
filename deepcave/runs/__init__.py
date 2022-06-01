@@ -275,7 +275,7 @@ class AbstractRun(ABC):
         budget_ids = list(range(len(self.get_budgets())))
         if not include_combined:
             budget_ids = budget_ids[:-1]
-        
+
         return budget_ids
 
     def get_budgets(
