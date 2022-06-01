@@ -309,18 +309,14 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.evaluators.lpi</span> <span class="kn">import</span> <span class="n">LPI</span> <span class="k">as</span> <span class="n">LocalEvaluator</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span> <span class="k">as</span> <span class="n">GlobalEvaluator</span>
+<span class="kn">from</span> <span class="nn">deepcave.evaluators.lpi</span> <span class="kn">import</span> <span class="n">LPI</span> <span class="k">as</span> <span class="n">LocalEvaluator</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.cast</span> <span class="kn">import</span> <span class="n">optional_int</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">get_checklist_options</span><span class="p">,</span>
-    <span class="n">get_select_options</span><span class="p">,</span>
-    <span class="n">help_button</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plot</span> <span class="kn">import</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">save_image</span>
 
 
 <div class="viewcode-block" id="Importances"><a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances">[docs]</a><span class="k">class</span> <span class="nc">Importances</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
@@ -425,7 +421,7 @@ style="width: 100%;">
             <span class="s2">&quot;budget_ids&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="Importances.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<div class="viewcode-block" id="Importances.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Prepare objetives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
@@ -479,7 +475,7 @@ style="width: 100%;">
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="Importances.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
         <span class="n">n_trees</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_trees&quot;</span><span class="p">]</span>

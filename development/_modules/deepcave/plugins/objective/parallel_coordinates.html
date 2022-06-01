@@ -311,12 +311,11 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span>
-
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.data_structures</span> <span class="kn">import</span> <span class="n">update_dict</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_hyperparameter_ticks</span><span class="p">,</span> <span class="n">save_image</span>
@@ -434,7 +433,7 @@ style="width: 100%;">
             <span class="s2">&quot;hide_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="ParallelCoordinates.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<div class="viewcode-block" id="ParallelCoordinates.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Prepare objetives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
@@ -581,18 +580,11 @@ style="width: 100%;">
                 <span class="n">dimensions</span><span class="o">=</span><span class="nb">list</span><span class="p">([</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()]),</span>
                 <span class="n">labelangle</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
             <span class="p">),</span>
-            <span class="n">layout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">t</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
-                    <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                    <span class="n">l</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                    <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">),</span>
+            <span class="n">layout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">)),</span>
         <span class="p">)</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;parallel_coordinates.pdf&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="n">figure</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="n">figure</span></div></div>
 </pre></div>
 
               </div>

@@ -303,9 +303,7 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.plugins.summary.footprint</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
-
-<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
@@ -313,7 +311,11 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plot</span> <span class="kn">import</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hovertext_from_config</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_color</span><span class="p">,</span>
+    <span class="n">get_hovertext_from_config</span><span class="p">,</span>
+    <span class="n">save_image</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="FootPrint"><a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint">[docs]</a><span class="k">class</span> <span class="nc">FootPrint</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
@@ -436,7 +438,7 @@ style="width: 100%;">
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="FootPrint.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">details</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;details&quot;</span><span class="p">]</span>
@@ -556,7 +558,7 @@ style="width: 100%;">
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tickvals</span><span class="o">=</span><span class="p">[]),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tickvals</span><span class="o">=</span><span class="p">[]),</span>
             <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
                 <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -565,7 +567,7 @@ style="width: 100%;">
 
         <span class="n">performance</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">performance_data</span><span class="p">]</span> <span class="o">+</span> <span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
         <span class="n">area</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">area_data</span><span class="p">]</span> <span class="o">+</span> <span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
-        
+
         <span class="n">save_image</span><span class="p">(</span><span class="n">performance</span><span class="p">,</span> <span class="s2">&quot;footprint_performance.pdf&quot;</span><span class="p">)</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="s2">&quot;footprint_area.pdf&quot;</span><span class="p">)</span>
 

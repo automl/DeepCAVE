@@ -312,9 +312,13 @@ style="width: 100%;">
 
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">check_equality</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">get_slider_marks</span><span class="p">,</span> <span class="n">help_button</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hovertext_from_config</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plot</span> <span class="kn">import</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_color</span><span class="p">,</span>
+    <span class="n">get_hovertext_from_config</span><span class="p">,</span>
+    <span class="n">save_image</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="ParetoFront"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.pareto_front.html#deepcave.plugins.objective.pareto_front.ParetoFront">[docs]</a><span class="k">class</span> <span class="nc">ParetoFront</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
@@ -323,7 +327,7 @@ style="width: 100%;">
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-wind&quot;</span>
     <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;docs/plugins/pareto_front.rst&quot;</span>
 
-<div class="viewcode-block" id="ParetoFront.check_runs_compatibility"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.pareto_front.html#deepcave.plugins.objective.pareto_front.ParetoFront.check_runs_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ParetoFront.check_runs_compatibility"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.pareto_front.html#deepcave.plugins.objective.pareto_front.ParetoFront.check_runs_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">):</span>
         <span class="n">check_equality</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">budgets</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Set some attributes here</span>
@@ -448,7 +452,7 @@ style="width: 100%;">
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="ParetoFront.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.pareto_front.html#deepcave.plugins.objective.pareto_front.ParetoFront.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Get budget</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
 
@@ -591,7 +595,7 @@ style="width: 100%;">
             <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
                 <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">objective_1</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
                 <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">objective_2</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
-                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">layout</span> <span class="o">=</span> <span class="kc">None</span>

@@ -315,7 +315,6 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span><span class="p">,</span> <span class="n">save_image</span>
 
-
 <span class="n">GRID_POINTS_PER_AXIS</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="n">SAMPLES_PER_HP</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">MAX_SAMPLES</span> <span class="o">=</span> <span class="mi">10000</span>
@@ -461,7 +460,7 @@ style="width: 100%;">
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="PartialDependencies.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Surrogate</span>
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
@@ -638,24 +637,11 @@ style="width: 100%;">
             <span class="n">y_tickvals</span><span class="p">,</span> <span class="n">y_ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp2</span><span class="p">)</span>
 
             <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
-                <span class="p">{</span>
-                    <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">x_tickvals</span><span class="p">,</span>
-                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">x_ticktext</span><span class="p">,</span>
-                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp1_name</span><span class="p">,</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;yaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">y_tickvals</span><span class="p">,</span>
-                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">y_ticktext</span><span class="p">,</span>
-                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp2_name</span><span class="p">,</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                        <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                        <span class="s2">&quot;l&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                        <span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                    <span class="p">},</span>
-                <span class="p">}</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickvals</span><span class="o">=</span><span class="n">x_tickvals</span><span class="p">,</span> <span class="n">ticktext</span><span class="o">=</span><span class="n">x_ticktext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">hp1_name</span><span class="p">),</span>
+                    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickvals</span><span class="o">=</span><span class="n">y_tickvals</span><span class="p">,</span> <span class="n">ticktext</span><span class="o">=</span><span class="n">y_ticktext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">hp2_name</span><span class="p">),</span>
+                    <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="p">)</span>
             <span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>

@@ -308,13 +308,17 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">check_equality</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hovertext_from_config</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_color</span><span class="p">,</span>
+    <span class="n">get_hovertext_from_config</span><span class="p">,</span>
+    <span class="n">save_image</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="CostOverTime"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime">[docs]</a><span class="k">class</span> <span class="nc">CostOverTime</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
@@ -432,7 +436,7 @@ style="width: 100%;">
         <span class="p">}</span></div>
 
 <div class="viewcode-block" id="CostOverTime.process"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.process">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
 
@@ -545,12 +549,7 @@ style="width: 100%;">
         <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">xaxis_label</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
-            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="p">),</span>
+            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>

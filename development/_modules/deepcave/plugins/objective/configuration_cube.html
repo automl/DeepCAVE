@@ -394,7 +394,7 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameters&quot;</span><span class="p">),</span>
-                    <span class="n">help_button</span><span class="p">(</span><span class="s2">&quot;Which hyperparameters to show, maxium 3 active&quot;</span><span class="p">),</span>
+                    <span class="n">help_button</span><span class="p">(</span><span class="s2">&quot;Which hyperparameters to show. Maxium 3 active.&quot;</span><span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Checklist</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span>
                     <span class="p">),</span>
@@ -408,7 +408,7 @@ style="width: 100%;">
             <span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">[]},</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="ConfigurationCube.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurationCube.load_dependency_inputs"><a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
         <span class="c1"># Prepare objetives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
@@ -581,16 +581,7 @@ style="width: 100%;">
             <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="o">**</span><span class="n">layout_kwargs</span><span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">trace</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
-        <span class="n">figure</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
-            <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                    <span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-                    <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                    <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
+        <span class="n">figure</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;configuration_cube.pdf&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">figure</span></div></div>

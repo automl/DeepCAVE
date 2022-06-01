@@ -303,8 +303,9 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.runs.converters.deepcave</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs.run</span> <span class="kn">import</span> <span class="n">Run</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">file_to_hash</span>
@@ -338,9 +339,7 @@ style="width: 100%;">
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Based on working_dir/run_name/*, return a new trials object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">DeepCAVERun</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">DeepCAVERun</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div></div>
 </pre></div>
 
               </div>

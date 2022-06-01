@@ -303,22 +303,25 @@ style="width: 100%;">
               <div>
                 
   <h1>Source code for deepcave.utils.styled_plotty</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
-<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">NAN_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">CONSTANT_VALUE</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span>
-<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Hyperparameter</span><span class="p">,</span>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
     <span class="n">Constant</span><span class="p">,</span>
+    <span class="n">Hyperparameter</span><span class="p">,</span>
     <span class="n">IntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
+<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">CONSTANT_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">NAN_VALUE</span>
 
 
 <div class="viewcode-block" id="save_image"><a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.save_image">[docs]</a><span class="nd">@interactive</span>

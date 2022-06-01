@@ -311,7 +311,7 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="n">JSON_DENSE_SEPARATORS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
-<span class="n">JSON_DEFAULT_SEPARATORS</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;: &#39;</span><span class="p">)</span>
+<span class="n">JSON_DEFAULT_SEPARATORS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;: &quot;</span><span class="p">)</span>
 <span class="n">TYPE</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;TYPE&quot;</span><span class="p">)</span>
 
 
@@ -337,9 +337,7 @@ style="width: 100%;">
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deserialize a dataframe from a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-        <span class="c1"># TODO(dwoiwode): Why not pd.read_json()?</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div>

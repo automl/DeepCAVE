@@ -390,7 +390,7 @@ style="width: 100%;">
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">
-<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Same as <cite>load_inputs</cite> but called after inputs have changed. Provides a lot of flexibility.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -479,6 +479,12 @@ a Dict[str, str] is returned.</p></li>
 <li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Serialized dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
 </dd>
 </dl>
 </dd></dl>

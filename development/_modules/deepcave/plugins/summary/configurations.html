@@ -304,17 +304,23 @@ style="width: 100%;">
                 
   <h1>Source code for deepcave.plugins.summary.configurations</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span><span class="p">,</span> <span class="n">dcc</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">generate_config_code</span><span class="p">,</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">generate_config_code</span><span class="p">,</span>
+    <span class="n">get_color</span><span class="p">,</span>
+    <span class="n">get_hyperparameter_ticks</span><span class="p">,</span>
+    <span class="n">save_image</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">create_url</span>
 
 
