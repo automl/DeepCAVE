@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import List
 
 import dash_bootstrap_components as dbc
 import numpy as np

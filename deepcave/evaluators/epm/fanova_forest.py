@@ -72,7 +72,6 @@ class FanovaForest(RandomForest):
         Y : np.ndarray
             Target values.
         """
-
         super()._train(X, Y)
         self.percentiles = np.percentile(Y, range(0, 100))
 
@@ -93,8 +92,8 @@ class FanovaForest(RandomForest):
                     if len(split_vals) > 0:
                         midpoints.append(split_vals)
                         sizes.append(np.ones(len(split_vals)))
-                    # if not, simply append 0 as the value with the number of categories as the size, that way this
-                    # parameter will get 0 importance from this tree.
+                    # if not, simply append 0 as the value with the number of categories as the
+                    # size, that way this parameter will get 0 importance from this tree.
                     else:
                         midpoints.append((0,))
                         sizes.append((self.bounds[i][0],))

@@ -386,7 +386,7 @@ class Plugin(Layout, ABC):
 
                 return list(inputs_list)
 
-        # Register modal here
+        # Register modal for raw data here
         @app.callback(  # type: ignore
             [
                 Output(self.get_internal_id("raw_data"), "is_open"),
@@ -395,7 +395,7 @@ class Plugin(Layout, ABC):
             Input(self.get_internal_id("show_raw_data"), "n_clicks"),
             State(self.get_internal_id("raw_data"), "is_open"),
         )
-        def toggle_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+        def toggle_raw_data_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
             code = ""
             if n:
                 if (out := self.raw_outputs) is not None:
@@ -414,7 +414,7 @@ class Plugin(Layout, ABC):
             Input(self.get_internal_id("show_help"), "n_clicks"),
             State(self.get_internal_id("help"), "is_open"),
         )
-        def toggle_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+        def toggle_help_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
             if n:
                 return not is_open
 

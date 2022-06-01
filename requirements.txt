@@ -1,6 +1,6 @@
-wheel>=0.37.1
-setuptools>=60.9.3
-absl-py==1.0.0
+wheel
+setuptools
+absl-py>=1.0.0
 jsonlines>=3.0.0
 pandas>=1.3.4
 numpy>=1.22.2
@@ -18,6 +18,8 @@ dash-extensions==0.0.71
 dash-bootstrap-components==1.0.3
 redis>=4.1.4
 rq>=1.10.1
-werkzeug==2.0.3  # Pinned due to https://github.com/plotly/dash/issues/1992 . Pinning might be removed for dash>2.3.0
+# Pinned due to https://github.com/plotly/dash/issues/1992
+# Pinning might be removed for dash>2.3.0
+werkzeug==2.0.3
 
 pyPDPPartitioner

@@ -1,12 +1,9 @@
 from typing import Any, Callable, Dict, List
 
-import time
-
 import redis
-from requests import delete
 from rq import Queue as _Queue
 from rq import Worker
-from rq.command import send_kill_horse_command, send_stop_job_command
+from rq.command import send_kill_horse_command
 from rq.job import Job
 from rq.registry import BaseRegistry
 

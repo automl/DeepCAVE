@@ -72,7 +72,7 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 
 ## Visualizing and Evaluating
 
-The webserver as well as the queue/workers can be started by simply running
+The webserver as well as the queue/workers can be started by simply running:
 ```
 deepcave --open
 ```

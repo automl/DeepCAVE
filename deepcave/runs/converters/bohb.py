@@ -1,6 +1,3 @@
-from typing import Union
-
-import os
 from pathlib import Path
 
 from deepcave.runs import Status
@@ -14,7 +11,7 @@ class BOHBRun(Run):
     _initial_order = 2
 
     @property
-    def hash(self) -> str:
+    def hash(self):
         if self.path is None:
             return ""
 
@@ -22,17 +19,14 @@ class BOHBRun(Run):
         return file_to_hash(self.path / "results.json")
 
     @property
-    def latest_change(self) -> float:
+    def latest_change(self):
         if self.path is None:
             return 0
 
         return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path: Union[str, Path]) -> "BOHBRun":
-        """
-        Based on path, return a new run object.
-        """
+    def from_path(cls, path):
         path = Path(path)
 
         # Read configspace

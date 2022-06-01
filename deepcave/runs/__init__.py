@@ -71,7 +71,7 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        str
+        hash : str
             Hash of the run.
         """
         pass

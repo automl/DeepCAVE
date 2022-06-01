@@ -1,14 +1,13 @@
 """
-Multi-Layer Perceptron
+Multi-Layer Perceptron via Sklearn
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+This more advanced example shows how sklearn can be used to record an optimization
+process in DeepCAVE format.
 """
 
-
 from sklearn.neural_network import MLPClassifier
-from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
-import numpy as np
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     UniformFloatHyperparameter,

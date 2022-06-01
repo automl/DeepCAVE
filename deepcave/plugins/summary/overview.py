@@ -107,7 +107,7 @@ class Overview(DynamicPlugin):
                                     f"Best average performance: {', '.join(best_performances)} "
                                 ),
                                 html.A(
-                                    "(Details)",
+                                    "(See Configuration)",
                                     href=Configurations.get_link(run, config_id),
                                     style={"color": "white"},
                                 ),

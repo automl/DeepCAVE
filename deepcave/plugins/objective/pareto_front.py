@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun, Status, check_equality
+from deepcave.runs import Status, check_equality
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import (

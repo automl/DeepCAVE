@@ -1,7 +1,10 @@
 include LICENSE
+include start.sh
+include worker.py
+include server.py
+include open.py
 include requirements.txt
 include deepcave/py.typed
-include start.sh
 include deepcave/utils/logging.yml
 include docs/plugins/*
 

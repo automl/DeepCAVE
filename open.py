@@ -2,6 +2,8 @@ import sys
 import webbrowser
 from threading import Timer
 
+DELAY = 4
+
 
 if __name__ == "__main__":
     if "--address" in sys.argv:
@@ -14,4 +16,4 @@ if __name__ == "__main__":
     def open_browser() -> None:
         webbrowser.open_new(f"http://{address}:{port}")
 
-    Timer(4, open_browser).start()
+    Timer(DELAY, open_browser).start()

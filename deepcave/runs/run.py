@@ -18,14 +18,26 @@ from deepcave.utils.hash import string_to_hash
 
 class Run(AbstractRun, ABC):
     """
-    TODO(dwoiwode): Docstring is outdated?
-    Creates
-    - meta.json
-    - configspace.json
-    - configs.json
-    - history.jsonl
-    - origins.json
-    - models/1.blub
+    Creates a new run.
+    If path is given, runs are loaded from the path.
+
+    Parameters
+    ----------
+    name : str
+        Name of the run.
+    configspace : ConfigSpace, optional
+        Configuration space of the run. Should be None if `path` is used. By default None.
+    objectives : Union[Objective, List[Objective]], optional
+        Objectives of the run. Should be None if `path` is used. By default None
+    meta : Dict[str, Any], optional
+        Meta data of the run. Should be None if `path` is used. By default None.
+    path : Optional[Union[str, Path]], optional
+        If a path is specified, the run is loaded from there. By default None.
+
+    Raises
+    ------
+    RuntimeError
+        If no configuration space is provided or found.
     """
 
     prefix = "run"
@@ -39,13 +51,6 @@ class Run(AbstractRun, ABC):
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
     ) -> None:
-        """
-        If path is given, runs are loaded from the path.
-
-        Inputs:
-            objectives (Objective or list of Objective): ...
-            meta (dict): Could be `ram`, `cores`, ...
-        """
         super(Run, self).__init__(name)
 
         if objectives is None:
@@ -141,13 +146,13 @@ class Run(AbstractRun, ABC):
     def add(
         self,
         costs: Union[List[float], float],
-        config: Union[Dict, Configuration],  # either dict or Configuration
+        config: Union[Dict, Configuration],
         budget: float = np.inf,
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
         origin: str = None,
-        model: Union[str, "torch.nn.Module"] = None,
+        model: Union[str, "torch.nn.Module"] = None,  # type: ignore
         additional: Optional[Dict] = None,
     ) -> None:
         """

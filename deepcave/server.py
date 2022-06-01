@@ -17,12 +17,18 @@ def get_app(config: Config):
         external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
         suppress_callback_exceptions=True,
         transforms=[
-            TriggerTransform(),  # enable use of Trigger objects
-            MultiplexerTransform(),  # makes it possible to target an output multiple times in callbacks
-            # ServersideOutputTransform(),  # enable use of ServersideOutput objects
-            NoOutputTransform(),  # enable callbacks without output
-            # BlockingCallbackTransform(),  # makes it possible to skip callback invocations while a callback is running
-            # LogTransform(),  # makes it possible to write log messages to a Dash component
+            # enable use of Trigger objects
+            TriggerTransform(),
+            # makes it possible to target an output multiple times in callbacks
+            MultiplexerTransform(),
+            # enable use of ServersideOutput objects
+            # ServersideOutputTransform(),
+            # enable callbacks without output
+            NoOutputTransform(),
+            # makes it possible to skip callback invocations while a callback is running
+            # BlockingCallbackTransform(),
+            # makes it possible to write log messages to a Dash component
+            # LogTransform(),
         ],
     )
     return app

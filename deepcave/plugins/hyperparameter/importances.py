@@ -7,7 +7,6 @@ from dash.exceptions import PreventUpdate
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
-from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plot import plt
@@ -41,8 +40,8 @@ class Importances(StaticPlugin):
                             dbc.Label("Method"),
                             help_button(
                                 "Local Parameter Importance: Quantify importance by changing the "
-                                "neighborhood of a configuration. Uses default and incumbent configuration "
-                                "as reference. \n\n"
+                                "neighborhood of a configuration. Uses default and incumbent "
+                                "configuration as reference. \n\n"
                                 "fANOVA: Quantify importance globally."
                             ),
                             dbc.Select(

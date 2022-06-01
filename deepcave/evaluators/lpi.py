@@ -1,6 +1,5 @@
 from typing import Dict, List, Optional, Tuple, Union
 
-from collections import OrderedDict
 from random import random
 
 import numpy as np
@@ -85,8 +84,9 @@ class LPI:
         # That means performances holds the mean, variances the variance of the forest.
         performances = {}
         variances = {}
-        # This are used for importance and hold the corresponding importance/variance over neighbors.
-        # Only import if NOT quantifying importance via performance-variance across neighbours.
+        # This are used for importance and hold the corresponding importance/variance over
+        # neighbors. Only import if NOT quantifying importance via performance-variance across
+        # neighbours.
         importances = {}
         # Nested list of values per tree in random forest.
         predictions = {}
@@ -309,14 +309,16 @@ class LPI:
         Parameter
         ---------
         config:Configuration
-            The self.incumbent of wich the performance across the whole instance set is to be estimated
+            The self.incumbent of wich the performance across the whole instance set is to be
+            estimated.
 
         Returns
         -------
         mean
-            the mean performance over the instance set
+            The mean performance over the instance set.
         var
-            the variance over the instance set. If logged values are used, the variance might not be able to be used
+            The variance over the instance set. If logged values are used, the variance might not
+            be able to be used.
         """
 
         config = impute_inactive_values(config)

@@ -6,7 +6,7 @@ from pyPDP.algorithms.pdp import PDP
 
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
-from deepcave.runs import AbstractRun, Status
+from deepcave.runs import Status
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
 

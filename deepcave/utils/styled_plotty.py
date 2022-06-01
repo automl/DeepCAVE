@@ -380,7 +380,8 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     link = Configurations.get_link(run, config_id)
 
-    string = f"<b>Configuration ID: <a href='{link}' style='color: #ffffff'>{int(config_id)}</a></b><br><br>"
+    string = "<b>Configuration ID: "
+    string += f"<a href='{link}' style='color: #ffffff'>{int(config_id)}</a></b><br><br>"
 
     # It's also nice to see the metrics
     objectives = run.get_objectives()
@@ -459,5 +460,4 @@ def generate_config_code(register: Callable, variables: List[str]) -> List[Compo
         ]
 
     components = components[1 : len(components) - 1]
-
     return components
