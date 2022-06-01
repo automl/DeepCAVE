@@ -65,9 +65,12 @@ do
 	python "$ROOT_PATH/worker.py" --config "$CONFIG" &
 done
 
-# Start the webserver
-if [ $OPEN == "true" ]; then
-    python "$ROOT_PATH/server.py" --config "$CONFIG" --open
-else
-    python "$ROOT_PATH/server.py" --config "$CONFIG"
+ADDRESS=$(deepcave --get_config_value DASH_ADDRESS)
+PORT=$(deepcave --get_config_value DASH_PORT)
+# Open the webserver delayed
+if [ "$OPEN" == "true" ]; then
+    python "$ROOT_PATH/open.py" --address "$ADDRESS"  --port "$PORT" &
 fi
+
+# Start the webserver
+python "$ROOT_PATH/server.py" --config "$CONFIG"
