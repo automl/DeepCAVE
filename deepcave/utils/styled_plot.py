@@ -1,11 +1,13 @@
-import matplotlib
 from distutils.spawn import find_executable
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+import matplotlib
 
+matplotlib.use("Agg")
 import base64
 import io
+
+import matplotlib.pyplot as plt
+
 from deepcave.utils.logs import get_logger
 
 # IEEETrans double column standard

@@ -1,13 +1,14 @@
-from typing import Type, Dict, Optional, List
+from typing import Dict, List, Optional, Type
+
 from pathlib import Path
 
 import dash_bootstrap_components as dbc
-from dash import dcc, html, MATCH
+from dash import dcc, html
 from dash.dependencies import ALL, Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import app, c, rc, run_handler, notification, queue
+from deepcave import app, c, notification, queue, rc, run_handler
 from deepcave.layouts import Layout
 from deepcave.runs import NotMergeableError
 from deepcave.runs.run import Run

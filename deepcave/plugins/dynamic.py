@@ -1,9 +1,10 @@
 from abc import ABC
-from typing import List, Any
+from typing import List
 
-from dash.development.base_component import Component
-from deepcave import interactive
 from dash.dependencies import Input, Output
+from dash.development.base_component import Component
+
+from deepcave import interactive
 from deepcave.plugins import Plugin
 
 

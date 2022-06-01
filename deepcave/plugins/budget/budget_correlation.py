@@ -9,7 +9,7 @@ from scipy import stats
 
 from deepcave import notification
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun, Status
+from deepcave.runs import Status
 from deepcave.utils.layout import create_table, get_select_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
@@ -25,7 +25,7 @@ class BudgetCorrelation(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def check_run_compatibility(run: AbstractRun) -> bool:
+    def check_run_compatibility(run) -> bool:
         if len(run.get_budgets()) == 1:
             notification.update(f"{run.name} can not be selected because it has only one budget.")
             return False
@@ -46,7 +46,7 @@ class BudgetCorrelation(DynamicPlugin):
             ),
         ]
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, _, inputs):
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -69,7 +69,6 @@ class BudgetCorrelation(DynamicPlugin):
 
         # Add symmetric correlations; table ready
         correlations_symmetric: Dict[str, Dict[str, float]] = defaultdict(dict)
-        # correlations_symmetric["/"] = budget_ids
 
         correlations: Dict[str, Dict[str, float]] = defaultdict(dict)
         for budget1_id in budget_ids:
@@ -120,7 +119,7 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run: AbstractRun, inputs, outputs):
+    def load_outputs(run, _, outputs):
         traces = []
         categories = defaultdict(list)
         correlations = outputs["correlations"]
@@ -167,7 +166,7 @@ class BudgetCorrelation(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Correlation"),
-            margin=dict(t=0, b=0, l=0, r=0),
+            margin=dict(t=30, b=0, l=0, r=0),
             legend=dict(title="Budgets"),
         )
 

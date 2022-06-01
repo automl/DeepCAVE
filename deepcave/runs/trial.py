@@ -1,5 +1,7 @@
-from typing import Union, List, Dict, Tuple, Any
+from typing import Any, Dict, List, Tuple, Union
+
 from dataclasses import dataclass
+
 from deepcave.runs.status import Status
 
 
@@ -21,6 +23,7 @@ class Trial:
 
     def get_key(self) -> Tuple[int, int]:
         from deepcave.runs import AbstractRun
+
         return AbstractRun.get_trial_key(self.config_id, self.budget)
 
     def to_json(self) -> List[Any]:

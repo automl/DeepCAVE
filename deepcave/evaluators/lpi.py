@@ -1,15 +1,15 @@
-from random import random
-from typing import Union, Optional, Dict, Tuple, List
-from collections import OrderedDict
-import numpy as np
+from typing import Dict, List, Optional, Tuple, Union
 
+from collections import OrderedDict
+from random import random
+
+import numpy as np
 from ConfigSpace import Configuration
+from ConfigSpace.c_util import change_hp_value, check_forbidden
 from ConfigSpace.exceptions import ForbiddenValueError
 from ConfigSpace.hyperparameters import CategoricalHyperparameter
-from ConfigSpace.util import (
-    impute_inactive_values,
-)
-from ConfigSpace.c_util import change_hp_value, check_forbidden
+from ConfigSpace.util import impute_inactive_values
+
 from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
@@ -214,7 +214,7 @@ class LPI:
 
             # Use this to quantify importance via variance
             # mean = np.mean(overall_var_per_tree[hp_name])
-            
+
             # Sometimes there is an ugly effect if default is better than
             # incumbent.
             if mean < 0:

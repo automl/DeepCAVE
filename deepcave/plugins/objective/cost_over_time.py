@@ -3,13 +3,17 @@ from typing import Dict, List, Union
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
-from dash.exceptions import PreventUpdate
 from dash import dcc, html
+from dash.exceptions import PreventUpdate
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_select_options, help_button
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
+from deepcave.utils.styled_plotty import (
+    get_color,
+    get_hovertext_from_config,
+    save_image,
+)
 
 
 class CostOverTime(DynamicPlugin):
@@ -127,7 +131,7 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
+    def process(run, inputs):
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
 
@@ -240,12 +244,7 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=dict(
-                t=30,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            margin=dict(t=30, b=0, l=0, r=0),
         )
 
         figure = go.Figure(data=traces, layout=layout)

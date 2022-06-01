@@ -1,7 +1,8 @@
+from typing import Any, Callable, TypeVar, cast
+
 import datetime
-import sys
 import os
-from typing import Callable, Any, TypeVar, cast
+import sys
 from functools import wraps
 
 name = "DeepCAVE"
@@ -28,9 +29,9 @@ if any(file in _exec_file for file in _exec_files):
     from deepcave.runs.recorder import Recorder  # noqa
     from deepcave.server import get_app
     from deepcave.utils.cache import Cache
-    from deepcave.utils.run_caches import RunCaches
-    from deepcave.utils.notification import Notification
     from deepcave.utils.configs import parse_config
+    from deepcave.utils.notification import Notification
+    from deepcave.utils.run_caches import RunCaches
 
     # Get config
     config_name = None

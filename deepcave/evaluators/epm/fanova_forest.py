@@ -1,10 +1,13 @@
-import numpy as np
+from typing import List, Optional, Tuple
+
 import itertools as it
-from typing import Optional, Tuple, List
+
+import numpy as np
 import pyrfr
 import pyrfr.regression as regression
 import pyrfr.util
 from ConfigSpace import ConfigurationSpace
+
 from deepcave.evaluators.epm.random_forest import RandomForest
 
 
@@ -12,6 +15,7 @@ class FanovaForest(RandomForest):
     """
     A fanova forest wrapper for pyrfr.
     """
+
     def __init__(
         self,
         configspace: ConfigurationSpace,

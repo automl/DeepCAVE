@@ -1,9 +1,9 @@
-from typing import Union, List, Tuple
+from typing import List, Tuple, Union
 
 import dash_bootstrap_components as dbc
-from dash.exceptions import PreventUpdate
 from dash.dependencies import Output
 from dash.development.base_component import Component
+from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Trigger
 
 from deepcave import app, notification

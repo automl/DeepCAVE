@@ -7,9 +7,13 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
-from deepcave.utils.layout import get_select_options, get_slider_marks, help_button
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
+from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
+from deepcave.utils.styled_plotty import (
+    get_color,
+    get_hovertext_from_config,
+    save_image,
+)
 
 
 class ParetoFront(DynamicPlugin):
@@ -18,7 +22,7 @@ class ParetoFront(DynamicPlugin):
     icon = "fas fa-wind"
     help = "docs/plugins/pareto_front.rst"
 
-    def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
+    def check_runs_compatibility(self, runs):
         check_equality(runs, objectives=True, budgets=True)
 
         # Set some attributes here
@@ -143,7 +147,7 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs) -> Dict[str, List[Union[float, str]]]:
+    def process(run, inputs):
         # Get budget
         budget = run.get_budget(inputs["budget_id"])
 
@@ -286,7 +290,7 @@ class ParetoFront(DynamicPlugin):
             layout = go.Layout(
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
-                margin=dict(t=0, b=0, l=0, r=0),
+                margin=dict(t=30, b=0, l=0, r=0),
             )
         else:
             layout = None

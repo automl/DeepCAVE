@@ -1,15 +1,16 @@
 from abc import ABC
-from typing import Any, Callable, List, Dict
-from dash.development.base_component import Component
+from typing import Any, Callable, Dict, List
 
 import traceback
 from enum import Enum
 
+import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dash import no_update
 from dash.dependencies import Input, Output, State
+from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
-import dash_bootstrap_components as dbc
+
 from deepcave import interactive
 from deepcave.plugins import Plugin
 from deepcave.runs import AbstractRun
@@ -59,7 +60,7 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def _callback_inputs_changed(self) -> None:
-        from deepcave import app, c, run_handler, queue, rc
+        from deepcave import app, c, queue, rc, run_handler
 
         # Plugin specific outputs
         outputs = []

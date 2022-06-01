@@ -1,13 +1,15 @@
-import numpy as np
+from typing import Generator, Iterator, List, Optional
+
 import random
-from typing import Generator, List, Optional, Iterator
 from itertools import islice, product
-from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
+
+import numpy as np
+from ConfigSpace.configuration_space import Configuration, ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
     Constant,
-    OrdinalHyperparameter,
     IntegerHyperparameter,
+    OrdinalHyperparameter,
 )
 from ConfigSpace.util import deactivate_inactive_hyperparameters
 

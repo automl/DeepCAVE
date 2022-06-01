@@ -1,9 +1,11 @@
-from typing import Optional, Union, Dict, Tuple, List
+from typing import Dict, List, Optional, Tuple, Union
 
 import itertools as it
+
 import numpy as np
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
+
 from deepcave.constants import COMBINED_COST_NAME
+from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
 

@@ -6,12 +6,11 @@ import pandas as pd
 import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
+
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
-
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.compression import deserialize, serialize
-from deepcave.utils.data_structures import update_dict
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_hyperparameter_ticks, save_image
@@ -129,7 +128,7 @@ class ParallelCoordinates(StaticPlugin):
             "hide_hps": {"hidden": True},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, _, inputs):
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -276,15 +275,8 @@ class ParallelCoordinates(StaticPlugin):
                 dimensions=list([d for d in data.values()]),
                 labelangle=45,
             ),
-            layout=dict(
-                margin=dict(
-                    t=150,
-                    b=50,
-                    l=100,
-                    r=0,
-                )
-            ),
+            layout=dict(margin=dict(t=150, b=50, l=100, r=0)),
         )
         save_image(figure, "parallel_coordinates.pdf")
 
-        return [figure]
+        return figure

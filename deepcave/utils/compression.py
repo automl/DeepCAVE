@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 JSON_DENSE_SEPARATORS = (",", ":")
-JSON_DEFAULT_SEPARATORS = (',', ': ')
+JSON_DEFAULT_SEPARATORS = (",", ": ")
 TYPE = TypeVar("TYPE")
 
 
@@ -32,9 +32,7 @@ def deserialize(string: str, dtype: TYPE = pd.DataFrame) -> TYPE:
     """
     Deserialize a dataframe from a string.
     """
-
     if dtype == pd.DataFrame:
-        # TODO(dwoiwode): Why not pd.read_json()?
         return pd.DataFrame.from_dict(json.loads(string))
 
     return json.loads(string)

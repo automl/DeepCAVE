@@ -10,7 +10,6 @@ from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
 
-
 GRID_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
@@ -156,7 +155,7 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def process(run: AbstractRun, inputs):
+    def process(run, inputs):
         # Surrogate
         hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
@@ -333,24 +332,11 @@ class PartialDependencies(StaticPlugin):
             y_tickvals, y_ticktext = get_hyperparameter_ticks(hp2)
 
             layout = go.Layout(
-                {
-                    "xaxis": {
-                        "tickvals": x_tickvals,
-                        "ticktext": x_ticktext,
-                        "title": hp1_name,
-                    },
-                    "yaxis": {
-                        "tickvals": y_tickvals,
-                        "ticktext": y_ticktext,
-                        "title": hp2_name,
-                    },
-                    "margin": {
-                        "t": 0,
-                        "b": 0,
-                        "l": 0,
-                        "r": 0,
-                    },
-                }
+                dict(
+                    xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
+                    yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
+                    margin=dict(t=30, b=0, l=0, r=0),
+                )
             )
 
         figure = go.Figure(data=traces, layout=layout)

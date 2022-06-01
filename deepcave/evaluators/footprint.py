@@ -1,19 +1,20 @@
-from tqdm import tqdm
-from typing import Tuple, Union, Optional, List
+from typing import List, Optional, Tuple, Union
+
 import numpy as np
+from ConfigSpace.hyperparameters import (
+    CategoricalHyperparameter,
+    Constant,
+    Hyperparameter,
+)
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.manifold import MDS
+from tqdm import tqdm
+
 from deepcave.constants import BORDER_CONFIG_ID, RANDOM_CONFIG_ID
 from deepcave.runs import AbstractRun, Status
-from ConfigSpace.hyperparameters import Hyperparameter, CategoricalHyperparameter, Constant
-
 from deepcave.runs.objective import Objective
-from deepcave.utils.configspace import (
-    sample_border_config,
-    sample_random_config,
-)
+from deepcave.utils.configspace import sample_border_config, sample_random_config
 from deepcave.utils.logs import get_logger
-
 
 logger = get_logger(__name__)
 
@@ -168,10 +169,10 @@ class Footprint:
 
             # Or if we reach more than 4000 (otherwise it takes too long)
             assert self._distances is not None
-            
+
             if self._distances.shape[0] % 100 == 0:
                 logger.info(f"Found {self._distances.shape[0]} configurations...")
-            
+
             if self._distances.shape[0] > 4000:
                 break
 

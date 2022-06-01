@@ -1,11 +1,11 @@
+from typing import Union
+
 import json
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 
 from deepcave.runs import Status
-from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash

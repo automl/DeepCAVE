@@ -1,13 +1,11 @@
-from os import access
 from typing import Any, Dict, List, Optional
 
 import uuid
-import pandas as pd
-import dash_bootstrap_components as dbc
-import base64
-import io
 
-from dash import html, dcc
+import dash_bootstrap_components as dbc
+import pandas as pd
+from dash import dcc, html
+
 from deepcave.utils.hash import string_to_hash
 
 

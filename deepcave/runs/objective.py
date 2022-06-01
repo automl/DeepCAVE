@@ -1,7 +1,9 @@
+from typing import Any, Dict, Optional, Union
+
 from dataclasses import dataclass
-from typing import Dict, Optional, Union, Any
 
 import numpy as np
+
 from deepcave.runs.exceptions import NotMergeableError
 
 

@@ -21,10 +21,7 @@ from deepcave.utils.layout import (
 )
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, hex_to_rgb
-from deepcave.utils.util import (
-    get_random_string,
-    matplotlib_to_html_image,
-)
+from deepcave.utils.util import get_random_string, matplotlib_to_html_image
 
 
 class TestCache(unittest.TestCase):

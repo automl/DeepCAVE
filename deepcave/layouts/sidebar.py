@@ -1,10 +1,10 @@
-from typing import Union, Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
-from dash import html, ALL
-from dash_extensions.enrich import Trigger
-from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
+from dash import ALL, html
+from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
+from dash_extensions.enrich import Trigger
 
 from deepcave import app, queue
 from deepcave.layouts import Layout

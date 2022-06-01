@@ -1,15 +1,21 @@
 from collections import defaultdict
+
 import dash_bootstrap_components as dbc
-import numpy as np
 import pandas as pd
-from dash import html, dcc
 import plotly.graph_objs as go
+from dash import dcc, html
+
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import create_table, get_slider_marks
-from deepcave.utils.styled_plotty import generate_config_code, get_color, get_hyperparameter_ticks, save_image
+from deepcave.utils.styled_plotty import (
+    generate_config_code,
+    get_color,
+    get_hyperparameter_ticks,
+    save_image,
+)
 from deepcave.utils.url import create_url
 
 

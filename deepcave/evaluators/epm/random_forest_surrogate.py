@@ -1,10 +1,9 @@
-import random
 from typing import Tuple
 
-import numpy as np
 import ConfigSpace as CS
-
+import numpy as np
 from pyPDP.surrogate_models import SurrogateModel
+
 from deepcave.evaluators.epm.random_forest import RandomForest
 
 

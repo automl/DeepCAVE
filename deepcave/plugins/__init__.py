@@ -1,10 +1,10 @@
-from abc import ABC, abstractmethod
-from collections import defaultdict
-from typing import Any, Callable, Dict, List, Optional, Union, Tuple
+from abc import ABC
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import copy
 import re
 import webbrowser
+from collections import defaultdict
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
@@ -751,7 +751,7 @@ class Plugin(Layout, ABC):
         List[Component]
             Layout as list of components.
         """
-        from deepcave import notification, c
+        from deepcave import c, notification
 
         # Reset runtime variables
         self.previous_inputs = {}
@@ -1256,6 +1256,11 @@ class Plugin(Layout, ABC):
             The run to process.
         inputs : Dict[str, Any]
             Input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Serialized dictionary.
         """
         return {}
 

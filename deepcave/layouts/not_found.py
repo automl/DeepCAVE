@@ -1,4 +1,5 @@
 from typing import List
+
 from dash import html
 from dash.development.base_component import Component
 

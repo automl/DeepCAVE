@@ -1,9 +1,9 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import (
     DashProxy,
-    TriggerTransform,
     MultiplexerTransform,
     NoOutputTransform,
+    TriggerTransform,
 )
 
 from deepcave.config import Config

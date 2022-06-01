@@ -13,6 +13,7 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+
 from deepcave.constants import (
     COMBINED_BUDGET,
     COMBINED_COST_NAME,
@@ -20,11 +21,10 @@ from deepcave.constants import (
     NAN_VALUE,
 )
 from deepcave.runs.exceptions import NotMergeableError
-
 from deepcave.runs.objective import Objective
-from deepcave.utils.logs import get_logger
 from deepcave.runs.status import Status
 from deepcave.runs.trial import Trial
+from deepcave.utils.logs import get_logger
 
 
 class AbstractRun(ABC):

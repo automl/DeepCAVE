@@ -1,5 +1,6 @@
-import unittest
 import json
+import unittest
+
 from deepcave.runs.exceptions import NotMergeableError
 from deepcave.runs.objective import Objective
 

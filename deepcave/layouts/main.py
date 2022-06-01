@@ -1,16 +1,18 @@
 from typing import Dict, List
+
 from urllib.parse import urlparse
+
 from dash import dcc, html
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
 
-from deepcave import app, queue, run_handler, config
+from deepcave import app, config, queue, run_handler
 from deepcave.layouts import Layout
 from deepcave.layouts.general import GeneralLayout
 from deepcave.layouts.header import HeaderLayout
 from deepcave.layouts.not_found import NotFoundLayout
-from deepcave.layouts.sidebar import SidebarLayout
 from deepcave.layouts.notification import NotificationLayout
+from deepcave.layouts.sidebar import SidebarLayout
 from deepcave.plugins import Plugin
 from deepcave.utils.dash import alert
 

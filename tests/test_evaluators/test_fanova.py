@@ -1,10 +1,12 @@
 import unittest
-import pytest
+
 import numpy as np
+import pytest
+
 from deepcave.constants import COMBINED_COST_NAME
+from deepcave.evaluators.fanova import fANOVA as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac import SMACRun
-from deepcave.evaluators.fanova import fANOVA as Evaluator
 
 
 class TestFanova(unittest.TestCase):

@@ -4,9 +4,9 @@ from typing import Any, Dict, List, Optional, Union
 import json
 from pathlib import Path
 
+import ConfigSpace
 import jsonlines
 import numpy as np
-import ConfigSpace
 from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.read_and_write import json as cs_json
 

@@ -1,6 +1,6 @@
-import logging
 from typing import Dict, List, Optional, Type, Union
 
+import logging
 import time
 from pathlib import Path
 

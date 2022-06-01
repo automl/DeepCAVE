@@ -1,14 +1,15 @@
 from typing import Any, Callable, Dict, List
 
 import time
+
 import redis
 from requests import delete
 from rq import Queue as _Queue
 from rq import Worker
-from rq.registry import BaseRegistry
+from rq.command import send_kill_horse_command, send_stop_job_command
 from rq.job import Job
-from rq.command import send_stop_job_command
-from rq.command import send_kill_horse_command
+from rq.registry import BaseRegistry
+
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -188,5 +189,5 @@ class Queue:
 
         try:
             return self.__getattribute__(name)
-        except:
+        except Exception:
             return self._queue.__getattribute__(name)

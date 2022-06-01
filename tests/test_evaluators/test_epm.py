@@ -1,11 +1,13 @@
 import unittest
-import pytest
+
 import numpy as np
+import pytest
+
 from deepcave.constants import COMBINED_COST_NAME
+from deepcave.evaluators.epm.fanova_forest import FanovaForest
+from deepcave.evaluators.epm.random_forest import RandomForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac import SMACRun
-from deepcave.evaluators.epm.random_forest import RandomForest
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs.status import Status
 
 

@@ -4,18 +4,14 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
+from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
-from deepcave.utils.layout import (
-    get_checklist_options,
-    get_select_options,
-    help_button,
-)
-from deepcave.utils.styled_plotty import get_color, save_image
+from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plot import plt
+from deepcave.utils.styled_plotty import get_color, save_image
 
 
 class Importances(StaticPlugin):
@@ -120,7 +116,7 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, _, inputs):
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -174,7 +170,7 @@ class Importances(StaticPlugin):
         }
 
     @staticmethod
-    def process(run: AbstractRun, inputs):
+    def process(run, inputs):
         objective = run.get_objective(inputs["objective_id"])
         method = inputs["method"]
         n_trees = inputs["n_trees"]

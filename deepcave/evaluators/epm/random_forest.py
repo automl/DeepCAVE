@@ -1,20 +1,22 @@
-import warnings
-import numpy as np
+from typing import Dict, Optional, Tuple
+
 import functools
+import warnings
 from random import random
-from smac.epm.util_funcs import get_types
-from typing import Optional, Dict, Tuple
+
+import numpy as np
 import pyrfr.regression as regression
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.exceptions import NotFittedError
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
+    Constant,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
-    Constant,
 )
+from sklearn.decomposition import PCA
+from sklearn.exceptions import NotFittedError
+from sklearn.preprocessing import MinMaxScaler
+from smac.epm.util_funcs import get_types
 
 VERY_SMALL_NUMBER = 1e-10
 PYRFR_MAPPING = {

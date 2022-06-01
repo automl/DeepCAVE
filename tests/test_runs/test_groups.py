@@ -1,12 +1,14 @@
 from typing import List
+
 import unittest
-import pytest
+
 import numpy as np
+import pytest
 from requests import check_compatibility
-from deepcave.runs import AbstractRun
+
+from deepcave.runs import AbstractRun, check_equality
 from deepcave.runs.converters.smac import SMACRun
 from deepcave.runs.group import Group
-from deepcave.runs import check_equality
 
 
 class TestRun(unittest.TestCase):

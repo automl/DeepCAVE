@@ -1,5 +1,6 @@
-from pathlib import Path
 from typing import Union
+
+from pathlib import Path
 
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
@@ -33,6 +34,4 @@ class DeepCAVERun(Run):
         """
         Based on working_dir/run_name/*, return a new trials object.
         """
-        path = Path(path)
-
-        return DeepCAVERun(path.stem, path=path)
+        return DeepCAVERun(path.stem, path=Path(path))

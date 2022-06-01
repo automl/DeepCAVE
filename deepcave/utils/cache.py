@@ -4,7 +4,6 @@ import json
 import logging
 from copy import deepcopy
 from pathlib import Path
-from deepcave.runs import AbstractRun
 
 from deepcave.utils.compression import JSON_DENSE_SEPARATORS
 from deepcave.utils.util import short_string
@@ -12,7 +11,11 @@ from deepcave.utils.util import short_string
 
 class Cache:
     def __init__(
-        self, filename: Optional[Path] = None, defaults: Dict = None, debug: bool = False, write_file: bool = True
+        self,
+        filename: Optional[Path] = None,
+        defaults: Dict = None,
+        debug: bool = False,
+        write_file: bool = True,
     ) -> None:
         """
         Cache handles a json file. Decided not to use flask_caching
@@ -67,7 +70,6 @@ class Cache:
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """
-
         name = "(empty)"
         if self._filename is not None:
             name = self._filename.name
@@ -91,7 +93,6 @@ class Cache:
 
     def set_dict(self, d: Dict, write_file: bool = True) -> None:
         """Updates cache to a specific value"""
-
         self._data.update(d)
 
         if write_file:
@@ -99,7 +100,6 @@ class Cache:
 
     def get(self, *keys) -> Optional[Any]:
         """Retrieve value for a specific key"""
-
         d = deepcopy(self._data)
         for key in keys:
             if key not in d:

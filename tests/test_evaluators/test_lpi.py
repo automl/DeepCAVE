@@ -1,10 +1,12 @@
 import unittest
-import pytest
+
 import numpy as np
+import pytest
+
 from deepcave.constants import COMBINED_COST_NAME
+from deepcave.evaluators.lpi import LPI as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac import SMACRun
-from deepcave.evaluators.lpi import LPI as Evaluator
 
 
 class TestLPI(unittest.TestCase):

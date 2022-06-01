@@ -1,6 +1,7 @@
+from typing import Union
+
 import os
 from pathlib import Path
-from typing import Union
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -17,10 +18,6 @@ class BOHBRun(Run):
         if self.path is None:
             return ""
 
-        """
-        The id from the files in the current working_dir/run_name/*. For example, results.json could be read and hashed.
-        Idea behind: If id changed, then we have to update cached run.
-        """
         # Use hash of results.json as id
         return file_to_hash(self.path / "results.json")
 

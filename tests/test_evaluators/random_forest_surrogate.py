@@ -1,6 +1,8 @@
 import unittest
+
 from pyPDP.blackbox_functions.synthetic_functions import StyblinskiTang
 from pyPDP.sampler.random_sampler import RandomSampler
+
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 
 

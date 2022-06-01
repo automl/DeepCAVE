@@ -1,19 +1,22 @@
-from typing import List, Optional, Tuple, Any, Union, Dict, Callable
-from deepcave import interactive
-from deepcave.constants import NAN_VALUE, NAN_LABEL, CONSTANT_VALUE
-import numpy as np
-import plotly.express as px
+from typing import Any, Callable, List, Optional, Tuple, Union
+
 import itertools
 import re
-from dash import html
-from dash.development.base_component import Component
+
+import numpy as np
+import plotly.express as px
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
-    Hyperparameter,
     CategoricalHyperparameter,
     Constant,
+    Hyperparameter,
     IntegerHyperparameter,
 )
+from dash import html
+from dash.development.base_component import Component
+
+from deepcave import interactive
+from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
 
 
 @interactive

@@ -1,8 +1,10 @@
-import os
-import importlib
-from pathlib import Path
-import sys
 from typing import Optional
+
+import importlib
+import os
+import sys
+from pathlib import Path
+
 from deepcave.config import Config
 
 

@@ -1,5 +1,3 @@
-from typing import Any, Dict
-
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -8,7 +6,11 @@ from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
-from deepcave.utils.styled_plotty import get_color, get_hovertext_from_config, save_image
+from deepcave.utils.styled_plotty import (
+    get_color,
+    get_hovertext_from_config,
+    save_image,
+)
 
 
 class FootPrint(StaticPlugin):
@@ -131,7 +133,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs):
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         details = inputs["details"]
@@ -251,7 +253,7 @@ class FootPrint(StaticPlugin):
             xaxis=dict(title=None, tickvals=[]),
             yaxis=dict(title=None, tickvals=[]),
             margin=dict(
-                t=0,
+                t=30,
                 b=0,
                 l=0,
                 r=0,
@@ -260,7 +262,7 @@ class FootPrint(StaticPlugin):
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)
         area = go.Figure(data=[area_data] + traces, layout=layout)
-        
+
         save_image(performance, "footprint_performance.pdf")
         save_image(area, "footprint_area.pdf")
 

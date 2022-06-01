@@ -1,7 +1,10 @@
 from typing import List
+
 import unittest
-import pytest
+
 import numpy as np
+import pytest
+
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac import SMACRun
 

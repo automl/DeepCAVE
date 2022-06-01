@@ -1,6 +1,7 @@
-import urllib
+from typing import Any, Dict, Optional
+
 import json
-from typing import Dict, Any, Optional
+import urllib
 
 
 def create_url(pathname: str, inputs: Dict[str, Any]) -> str:

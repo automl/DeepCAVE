@@ -1,6 +1,5 @@
 import dash_bootstrap_components as dbc
 import numpy as np
-import pandas as pd
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -15,11 +14,10 @@ from dash import dcc, html
 
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
-from deepcave.runs import Status, AbstractRun
+from deepcave.runs.status import Status
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap, save_image
 from deepcave.utils.util import get_latest_change
-from deepcave.plugins.summary.configurations import Configurations
 
 
 class Overview(DynamicPlugin):
@@ -69,7 +67,7 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run: AbstractRun, *_):
+    def load_outputs(run, *_):
         # Get best cost across all objectives, highest budget
         config, _ = run.get_incumbent()
         config_id = run.get_config_id(config)
@@ -314,12 +312,7 @@ class Overview(DynamicPlugin):
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
-            margin=dict(
-                t=0,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            margin=dict(t=30, b=0, l=0, r=0),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
         save_image(stats_figure, "status_bar.pdf")
@@ -328,7 +321,7 @@ class Overview(DynamicPlugin):
             legend={"title": "Status"},
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
-            margin=dict(t=0, b=0, l=0, r=0),
+            margin=dict(t=30, b=0, l=0, r=0),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(

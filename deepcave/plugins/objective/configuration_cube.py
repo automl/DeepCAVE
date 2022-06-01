@@ -89,7 +89,7 @@ class ConfigurationCube(DynamicPlugin):
             html.Div(
                 [
                     dbc.Label("Hyperparameters"),
-                    help_button("Which hyperparameters to show, maxium 3 active"),
+                    help_button("Which hyperparameters to show. Maxium 3 active."),
                     dbc.Checklist(
                         id=register("hyperparameter_names", ["value", "options"]), inline=True
                     ),
@@ -103,7 +103,7 @@ class ConfigurationCube(DynamicPlugin):
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, _, inputs):
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -276,16 +276,7 @@ class ConfigurationCube(DynamicPlugin):
             layout = go.Layout(**layout_kwargs)
 
         figure = go.Figure(data=trace, layout=layout)
-        figure.update_layout(
-            dict(
-                margin=dict(
-                    t=30,
-                    b=0,
-                    l=0,
-                    r=0,
-                ),
-            )
-        )
+        figure.update_layout(dict(margin=dict(t=30, b=0, l=0, r=0)))
         save_image(figure, "configuration_cube.pdf")
 
         return figure
