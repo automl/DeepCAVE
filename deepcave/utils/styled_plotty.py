@@ -204,8 +204,14 @@ def get_hyperparameter_ticks(
 
     # This is basically the inverse of `encode_config`.
     if isinstance(hp, CategoricalHyperparameter):
-        tickvals = [hp._inverse_transform(choice) / (len(hp.choices) - 1) for choice in hp.choices]
         ticktext = hp.choices
+        if len(ticktext) == 1:
+            tickvals = [0]
+        else:
+            tickvals = [
+                hp._inverse_transform(choice) / (len(hp.choices) - 1) for choice in hp.choices
+            ]
+
     elif isinstance(hp, Constant):
         tickvals = [CONSTANT_VALUE]
         ticktext = [hp.value]
