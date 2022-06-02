@@ -16,9 +16,6 @@ class Config:
     FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
     FIGURE_HEIGHT = "40vh"
 
-    # Cache dir
-    ROOT: Path = Path.cwd()
-
     # Redis settings
     REDIS_PORT: int = 6379
     REDIS_ADDRESS: str = "redis://localhost"
@@ -37,11 +34,11 @@ class Config:
 
     @property
     def DEFAULT_WORKING_DIRECTORY(self) -> Path:
-        return self.ROOT / "logs"
+        return Path.cwd() / "logs"
 
     @property
     def CACHE_DIR(self) -> Path:
-        return self.ROOT / "cache"
+        return Path(__file__).parent / "cache"
 
     @property
     def SERVER_NAME(self) -> str:

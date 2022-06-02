@@ -234,6 +234,8 @@ class Overview(DynamicPlugin):
                 trials_rates[-1] = " or " + trials_rates[-1]
                 unsuccessful_trials_text += ", ".join(trials_rates)
             unsuccessful_trials_text += "."
+        else:
+            unsuccessful_trials_text = ""
 
         status_budget_values = [
             str(round(count / len_trials * 100, 2)) + "%" for count in status_budget.values()

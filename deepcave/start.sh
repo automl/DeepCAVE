@@ -4,6 +4,7 @@
 trap "exit" INT TERM ERR
 trap "kill 0" EXIT
 
+HERE="$(pwd)"
 INSTALLED="$(which deepcave)"
 
 if ! [[ $INSTALLED ]]; then
@@ -18,12 +19,6 @@ from pathlib import Path
 print(str(Path(deepcave.__file__).parent))
 END
 `
-
-# We remove dump.rdb to avoid issues from previous runs
-file="dump.rdb"
-if [[ -f "$file" ]] ; then
-    rm "$file"
-fi
 
 OPEN=$1
 N_WORKERS=$2
@@ -51,9 +46,17 @@ redis-cli -p $REDIS_PORT PING || RUNNING=false
 # Check if redis-server is already running
 if [ "$RUNNING" == false ]; then
     echo "Redis server is not running. Starting..."
+    cd "$ROOT_PATH"
+
+    # We remove dump.rdb to avoid issues from previous runs
+    file="dump.rdb"
+    if [[ -f "$file" ]] ; then
+        rm "$file"
+    fi
 
     # We don't want to show the redis-server output
     redis-server --port $REDIS_PORT > /dev/null 2>&1 &
+    cd "$HERE"
     echo "Redis server successfully started."
 else
     echo "Redis server already running. Skipping..."
