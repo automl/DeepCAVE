@@ -222,7 +222,7 @@ class Overview(DynamicPlugin):
             trials_rates += [status.to_text() + f" ({rate}%)"]
 
         # Add an "or" to the last rate
-        if successful_trials_rate != 100:
+        if successful_trials_rate != 100 and len(trials_rates) > 0:
             unsuccessful_trials_text = "The other trials are "
             if len(trials_rates) == 1:
                 unsuccessful_trials_text += trials_rates[0]
