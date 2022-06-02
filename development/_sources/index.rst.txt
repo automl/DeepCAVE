@@ -22,7 +22,7 @@ and bring the human back in the loop. Moreover, the powerful run interface and t
 plugin structure allow extending the tool at any time effortlessly.
 
 
-.. image:: ../images/plugins/configuration_footprint.png
+.. image:: .images/plugins/configuration_footprint.png
 
 
 Features
@@ -31,7 +31,7 @@ Features
 - Interactive Dashboard (completely written in Python) to self-analyze optimization runs/processes.
 - Analyzing while optimizing (run changes are automatically detected).
 - A large collection of plugins to explore multiple areas like performance, hyperparameter and
-budget analysis.
+  budget analysis.
 - Save your runs using DeepCAVE's native recorder.
 - Support for many optimizers using converter (e.g., DeepCAVE, SMAC and BOHB).
 - Select runs directly from a working directory in the interface.
