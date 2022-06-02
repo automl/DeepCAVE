@@ -12,6 +12,7 @@ from ConfigSpace.hyperparameters import (
 )
 from dash import dcc, html
 
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
 from deepcave.runs.status import Status
@@ -48,13 +49,15 @@ class Overview(DynamicPlugin):
                 [
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("status_statistics", "figure"), style={"height": "50vh"}
+                            id=register("status_statistics", "figure"),
+                            style={"height": config.FIGURE_HEIGHT},
                         ),
                         label="Barplot",
                     ),
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("config_statistics", "figure"), style={"height": "50vh"}
+                            id=register("config_statistics", "figure"),
+                            style={"height": config.FIGURE_HEIGHT},
                         ),
                         label="Heatmap",
                     ),
@@ -69,8 +72,8 @@ class Overview(DynamicPlugin):
     @staticmethod
     def load_outputs(run, *_):
         # Get best cost across all objectives, highest budget
-        config, _ = run.get_incumbent()
-        config_id = run.get_config_id(config)
+        incumbent, _ = run.get_incumbent()
+        config_id = run.get_config_id(incumbent)
         objective_names = run.get_objective_names()
 
         best_performance = {}
@@ -117,6 +120,12 @@ class Overview(DynamicPlugin):
                         html.Div(
                             [
                                 html.Span(f"Total configurations: {run.get_num_configs()}"),
+                            ],
+                            className="card-text",
+                        ),
+                        html.Div(
+                            [
+                                html.Span(f"Total trials: {len(run.history)}"),
                             ],
                             className="card-text",
                         ),
@@ -249,7 +258,7 @@ class Overview(DynamicPlugin):
         z_values = np.zeros((len(config_ids), len(budgets))).tolist()
         z_labels = np.zeros((len(config_ids), len(budgets))).tolist()
 
-        for i, (config_id, config) in enumerate(configs.items()):
+        for i, config_id in enumerate(configs.keys()):
             for j, budget in enumerate(budgets):
                 trial_key = run.get_trial_key(config_id, budget)
                 trial = run.get_trial(trial_key)
@@ -312,7 +321,7 @@ class Overview(DynamicPlugin):
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
-            margin=dict(t=30, b=0, l=0, r=0),
+            margin=config.FIGURE_MARGIN,
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
         save_image(stats_figure, "status_bar.pdf")
@@ -321,7 +330,7 @@ class Overview(DynamicPlugin):
             legend={"title": "Status"},
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Configuration ID"),
-            margin=dict(t=30, b=0, l=0, r=0),
+            margin=config.FIGURE_MARGIN,
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(

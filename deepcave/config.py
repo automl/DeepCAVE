@@ -10,8 +10,11 @@ class Config:
     # How often to refresh background activities (such as update the sidebar or process button for
     # static plugins). Value in milliseconds.
     REFRESH_RATE: int = 500
-    # Saves plotly figures to disk
+
+    # Figure related
     SAVE_IMAGES = False
+    FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
+    FIGURE_HEIGHT = "25vh"
 
     # Cache dir
     ROOT: Path = Path.cwd()

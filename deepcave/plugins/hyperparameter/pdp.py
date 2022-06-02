@@ -4,6 +4,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
 
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
@@ -41,6 +42,14 @@ class PartialDependencies(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Budget"),
+                            help_button(
+                                "Combined budget means that the trial on the highest"
+                                " evaluated budget is used.\n\n"
+                                "Note: Selecting combined budget might be misleading if"
+                                " a time objective is used. Often, higher budget take "
+                                " longer to evaluate, which might negatively influence "
+                                " the results."
+                            ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
@@ -221,7 +230,7 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"))
+        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -335,9 +344,11 @@ class PartialDependencies(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=dict(t=30, b=0, l=0, r=0),
+                    margin=config.FIGURE_MARGIN,
                 )
             )
 
         figure = go.Figure(data=traces, layout=layout)
         save_image(figure, "pdp.pdf")
+        
+        return figure

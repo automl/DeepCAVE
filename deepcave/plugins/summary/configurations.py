@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from dash import dcc, html
 
+from deepcave import config
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
@@ -174,7 +175,7 @@ class Configurations(DynamicPlugin):
             html.H3("Objectives"),
             dbc.Tabs(
                 [
-                    dbc.Tab(dcc.Graph(id=register("performance_graph", "figure")), label="Graph"),
+                    dbc.Tab(dcc.Graph(id=register("performance_graph", "figure"), style={"height": config.FIGURE_HEIGHT}), label="Graph"),
                     dbc.Tab(html.Div(id=register("performance_table", "children")), label="Table"),
                 ]
             ),
@@ -184,7 +185,7 @@ class Configurations(DynamicPlugin):
                 [
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("configspace_graph", "figure"), style={"height": "50vh"}
+                            id=register("configspace_graph", "figure"), style={"height": config.FIGURE_HEIGHT}
                         ),
                         label="Graph",
                     ),
@@ -206,7 +207,7 @@ class Configurations(DynamicPlugin):
         ]
 
     @staticmethod
-    def _get_objective_figure(inputs, outputs, run):
+    def _get_objective_figure(_, outputs, run):
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
             trace_kwargs = {
@@ -223,12 +224,7 @@ class Configurations(DynamicPlugin):
             objective_data.append(trace)
 
         layout_kwargs = {
-            "margin": dict(
-                t=0,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            "margin": config.FIGURE_MARGIN,
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
 

@@ -6,6 +6,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.utils.layout import get_select_options, help_button
@@ -149,7 +150,7 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": "50vh"})
+        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(runs, inputs, outputs):
@@ -244,7 +245,7 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=dict(t=30, b=0, l=0, r=0),
+            margin=config.FIGURE_MARGIN,
         )
 
         figure = go.Figure(data=traces, layout=layout)

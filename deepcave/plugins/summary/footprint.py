@@ -2,6 +2,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
 
+from deepcave import config
 from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.layout import get_select_options, help_button
@@ -38,6 +39,14 @@ class FootPrint(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Budget"),
+                            help_button(
+                                "Combined budget means that the trial on the highest"
+                                " evaluated budget is used.\n\n"
+                                "Note: Selecting combined budget might be misleading if"
+                                " a time objective is used. Often, higher budget take "
+                                " longer to evaluate, which might negatively influence "
+                                " the results."
+                            ),
                             dbc.Select(
                                 id=register("budget_id", ["value", "options"], type=int),
                                 placeholder="Select budget ...",
@@ -163,13 +172,16 @@ class FootPrint(StaticPlugin):
         return dbc.Tabs(
             [
                 dbc.Tab(
-                    dcc.Graph(id=register("performance", "figure"), style={"height": "50vh"}),
+                    dcc.Graph(
+                        id=register("performance", "figure"), style={"height": config.FIGURE_HEIGHT}
+                    ),
                     label="Performance",
                 ),
                 dbc.Tab(
-                    dcc.Graph(id=register("area", "figure"), style={"height": "50vh"}),
+                    dcc.Graph(
+                        id=register("area", "figure"), style={"height": config.FIGURE_HEIGHT}
+                    ),
                     label="Coverage",
-                    style={"height": "50vh"},
                 ),
             ]
         )
@@ -252,12 +264,7 @@ class FootPrint(StaticPlugin):
         layout = go.Layout(
             xaxis=dict(title=None, tickvals=[]),
             yaxis=dict(title=None, tickvals=[]),
-            margin=dict(
-                t=30,
-                b=0,
-                l=0,
-                r=0,
-            ),
+            margin=config.FIGURE_MARGIN,
         )
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)

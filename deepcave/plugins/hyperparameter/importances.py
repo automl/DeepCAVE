@@ -4,6 +4,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
+from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -200,7 +201,7 @@ class Importances(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"))
+        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -272,7 +273,7 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=dict(t=0, b=0, l=0, r=0),
+            margin=config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
         )
         save_image(figure, "importances.pdf")
