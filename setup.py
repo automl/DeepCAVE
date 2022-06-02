@@ -50,6 +50,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
     package_data={"deepcave": ["utils/logging.yml"]},
+    include_package_data=True,
     python_requires=">=3.9, <3.10",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
