@@ -1,7 +1,14 @@
+from __future__ import annotations
+
 import re
 
+from pathlib import Path
 
-def rst_to_md(filename: str) -> str:
+
+def rst_to_md(filename: str | Path) -> str:
+    if isinstance(filename, Path):
+        filename = str(filename)
+
     with open(filename, "r") as file:
         data = file.read()
 

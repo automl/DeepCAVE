@@ -4,6 +4,7 @@ import datetime
 import os
 import sys
 from functools import wraps
+from pathlib import Path
 
 name = "DeepCAVE"
 package_name = "deepcave"
@@ -20,6 +21,8 @@ version = "1.0"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
+
+ROOT_DIR = Path(__file__).parent
 
 
 if any(file in _exec_file for file in _exec_files):

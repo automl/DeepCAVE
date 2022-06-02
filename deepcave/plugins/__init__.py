@@ -5,6 +5,7 @@ import copy
 import re
 import webbrowser
 from collections import defaultdict
+from pathlib import Path
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
@@ -13,7 +14,7 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import interactive
+from deepcave import ROOT_DIR, interactive
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group, NotMergeableError
@@ -758,13 +759,18 @@ class Plugin(Layout, ABC):
         self.raw_outputs = None
 
         components = []
+
         if self.help is not None:
 
-            if self.help.endswith(".rst"):
-                data = rst_to_md(self.help)
+            doc_path = ROOT_DIR.parent / self.help
+            if not doc_path.exists():
+                raise FileNotFoundError(doc_path)
+
+            if doc_path.name.endswith(".rst"):
+                data = rst_to_md(doc_path)
             else:
-                # Load rst file
-                with open(self.help, "r") as file:
+
+                with doc_path.open("r") as file:
                     data = file.read()
 
             modal = html.Div(
