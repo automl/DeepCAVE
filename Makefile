@@ -30,7 +30,7 @@ help:
 
 PYTHON ?= python
 PYTEST ?= python -m pytest
-PIP ?= python -m pip
+PIP ?= pip
 MAKE ?= make
 BLACK ?= black
 ISORT ?= isort

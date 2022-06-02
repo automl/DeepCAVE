@@ -32,7 +32,7 @@ def execute(args: List[Any]) -> None:
         print(getattr(config, config_key))
         return
 
-    HERE = Path(__file__).parent.parent
+    HERE = Path(__file__).parent
 
     if FLAGS.docker:
         exit("The command is not supported yet.")

@@ -15,7 +15,7 @@ ROOT_PATH=`
 python << END
 import deepcave
 from pathlib import Path
-print(str(Path(deepcave.__file__).parent.parent))
+print(str(Path(deepcave.__file__).parent))
 END
 `
 

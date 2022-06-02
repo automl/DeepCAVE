@@ -25,12 +25,44 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 ROOT_DIR = Path(__file__).parent
 
 
+def get_app(title: str):
+    import dash_bootstrap_components as dbc
+    from dash_extensions.enrich import (
+        DashProxy,
+        MultiplexerTransform,
+        NoOutputTransform,
+        TriggerTransform,
+    )
+
+    app = DashProxy(
+        __name__,
+        title=title,
+        update_title="",
+        external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
+        suppress_callback_exceptions=True,
+        transforms=[
+            # enable use of Trigger objects
+            TriggerTransform(),
+            # makes it possible to target an output multiple times in callbacks
+            MultiplexerTransform(),
+            # enable use of ServersideOutput objects
+            # ServersideOutputTransform(),
+            # enable callbacks without output
+            NoOutputTransform(),
+            # makes it possible to skip callback invocations while a callback is running
+            # BlockingCallbackTransform(),
+            # makes it possible to write log messages to a Dash component
+            # LogTransform(),
+        ],
+    )
+    return app
+
+
 if any(file in _exec_file for file in _exec_files):
-    from deepcave.queue import Queue
+    from deepcave.custom_queue import Queue
     from deepcave.runs.handler import RunHandler
     from deepcave.runs.objective import Objective  # noqa
     from deepcave.runs.recorder import Recorder  # noqa
-    from deepcave.server import get_app
     from deepcave.utils.cache import Cache
     from deepcave.utils.configs import parse_config
     from deepcave.utils.notification import Notification
@@ -43,7 +75,7 @@ if any(file in _exec_file for file in _exec_files):
     config = parse_config(config_name)
 
     # Create app
-    app = get_app(config)
+    app = get_app(config.TITLE)
     queue = Queue(config.REDIS_ADDRESS, config.REDIS_PORT)
 
     if "server.py" in _exec_file:
