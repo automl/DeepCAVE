@@ -118,24 +118,39 @@ class SidebarLayout(Layout):
                 for name, job_id, status, link in collect:
                     items += [
                         html.Li(
-                            className="nav-item",
+                            # className="nav-item",
                             children=[
                                 html.A(
-                                    [
-                                        html.A(f"{status} {name}", href=link),
-                                        dbc.Button(
-                                            "-",
-                                            id={"type": "cancel-job", "index": name},
-                                            name=job_id,
-                                            color="danger",
-                                            size="sm",
-                                            disabled=True if status == job_stati[0] else False,
-                                            style={"float": "right", "padding": "0 0.4rem"},
-                                        ),
-                                    ],
-                                    className="nav-link",
+                                    f"{status} {name}",
+                                    href=link,
+                                    style={
+                                        "width": "100%",
+                                        "display": "inline-block",
+                                        "vertical-align": "middle",
+                                    },
+                                ),
+                                html.Span(
+                                    dbc.Button(
+                                        "-",
+                                        id={"type": "cancel-job", "index": name},
+                                        name=job_id,
+                                        color="danger",
+                                        size="sm",
+                                        disabled=True if status == job_stati[0] else False,
+                                        style={
+                                            "display": "inline-block",
+                                            "padding": "0 0.4rem",
+                                        },
+                                        className="ms-1",
+                                    ),
+                                    style={
+                                        "display": "table-cell",
+                                        "vertical-align": "middle",
+                                    },
                                 ),
                             ],
+                            className="nav-link",
+                            style={"display": "flex", "flex-direction": "row"},
                         )
                     ]
 

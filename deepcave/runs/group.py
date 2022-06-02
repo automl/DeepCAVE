@@ -121,6 +121,9 @@ class Group(AbstractRun):
     def run_names(self) -> List[str]:
         return [run.name for run in self.runs]
 
+    def get_runs(self) -> List[AbstractRun]:
+        return self.runs
+
     def get_new_config_id(self, run_id: int, original_config_id: int) -> int:
         return self._new_config_mapping[(run_id, original_config_id)]
 

@@ -1,20 +1,28 @@
 # DeepCAVE
 
-DeepCAVE has two main contributions:
-- Recording runs and
-- Visualizing and evaluating runs to get better insights into the AutoML process.
+DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem
+hyperparameter optimization) runs. The framework is programmed on top of Dash and therefore
+entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights
+and bring the human back in the loop. Moreover, the powerful run interface and the modularized
+plugin structure allow extending the tool at any time effortlessly.
 
+![Configuration Footprint](docs/images/plugins/configuration_footprint.png)
 
-Experimental design can be automated by various black-box optimization methods.
-However, the process is often hard to understand and monitor and therefore, users tend to mistrust
-them for important applications. We are introducing DeepCAVE, an interactive framework to analyze
-and monitor black-box optimizers. In particular, with DeepCAVE we focus on AutoML as a well
-established application area where hyperparameters and architectures of neural networks can be
-optimized. By aiming for full and accessible transparency, DeepCAVE builds a bridge between users
-and AutoML. The modular and easy to extend nature of our framework provides users with automatically
-generated text, tables and graph visualizations wrt objectives, budgets and hyperparameters.
-We show the value of DeepCAVE on an exemplary use-case of outlier detection, in which DeepCAVE makes
-it easy to identify bugs, compare multiple runs and interpret optimization processes.
+Following features are provided:
+- Interactive Dashboard (completely written in Python) to self-analyze optimization runs/processes.
+- Analyzing while optimizing (run changes are automatically detected).
+- A large collection of plugins to explore multiple areas like performance, hyperparameter and
+budget analysis.
+- Save your runs using DeepCAVE's native recorder.
+- Support for many optimizers using converter (e.g., DeepCAVE, SMAC and BOHB).
+- Select runs directly from a working directory in the interface.
+- Select groups of runs for combined analysis.
+- Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
+- Asynchronous execution of expensive plugins and caching of their results.
+- Help buttons and integrated documentation in the interface helps you to understand the plugins.
+- Use the matplotlib mode to customize and save the plots for your publication.
+- The API mode gives you full access to the code, while you do not have to interact with the 
+interface. Otherwise, you can also make use of the raw data, provided by every plugin.
 
 
 ## Installation
@@ -80,9 +88,6 @@ deepcave --open
 If you specify `--open` your webbrowser automatically opens at `http://127.0.0.1:8050/`.
 You can find more arguments and information (like using custom configurations) in the
 [documentation](https://automl.github.io/DeepCAVE/main/getting_started.html).
-The following figure gives you a first impression of DeepCAVE. 
-
-![interface](docs/images/plugins/footprint.png)
 
 
 ## Citation

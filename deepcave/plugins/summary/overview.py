@@ -15,6 +15,7 @@ from dash import dcc, html
 from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
+from deepcave.runs.group import Group
 from deepcave.runs.status import Status
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap, save_image
@@ -90,6 +91,10 @@ class Overview(DynamicPlugin):
         for name, value in best_performance.items():
             best_performances += [f"{round(value, 2)} ({name})"]
 
+        optimizer = run.prefix
+        if isinstance(run, Group):
+            optimizer = run.get_runs()[0].prefix
+
         # Design card for quick information here
         card = dbc.Card(
             [
@@ -97,7 +102,7 @@ class Overview(DynamicPlugin):
                 dbc.CardBody(
                     [
                         html.Div(
-                            f"Optimizer: {run.prefix}",
+                            f"Optimizer: {optimizer}",
                             className="card-text",
                         ),
                         html.Div(

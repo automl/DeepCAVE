@@ -14,7 +14,7 @@ class Config:
     # Figure related
     SAVE_IMAGES = False
     FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
-    FIGURE_HEIGHT = "25vh"
+    FIGURE_HEIGHT = "40vh"
 
     # Cache dir
     ROOT: Path = Path.cwd()
