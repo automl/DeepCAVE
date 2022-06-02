@@ -34,7 +34,7 @@ In the dashboard, you will see the main page, in which you
 can select the runs you want to analyze. Please have a look at the following image
 to see the dashboard in action:
 
-.. image:: images/plugins/interface.png
+.. image:: images/plugins/general.png
 
 
 DeepCAVE uses runs to interprete data. A run is a collection of trials
