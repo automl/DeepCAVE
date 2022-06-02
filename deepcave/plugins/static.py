@@ -137,6 +137,7 @@ class StaticPlugin(Plugin, ABC):
                             "display_name": self.name,
                             "run_name": run.name,
                             "run_id": run.id,
+                            "plugin_id": self.id,
                             "inputs_key": inputs_key,
                             "link": link,
                         }
@@ -163,12 +164,13 @@ class StaticPlugin(Plugin, ABC):
                             job_meta = job.meta
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
+                            job_plugin_id = job_meta["plugin_id"]
 
                             self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}")
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
-                            rc.set(run, self.id, job_inputs_key, job_run_outputs)
+                            rc.set(run, job_plugin_id, job_inputs_key, job_run_outputs)
                             self.logger.debug(f"Job {job_id} cached.")
 
                             queue.delete_job(job_id)
