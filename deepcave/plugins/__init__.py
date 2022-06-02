@@ -761,15 +761,13 @@ class Plugin(Layout, ABC):
         components = []
 
         if self.help is not None:
-
-            doc_path = ROOT_DIR.parent / self.help
+            doc_path = ROOT_DIR / self.help
             if not doc_path.exists():
                 raise FileNotFoundError(doc_path)
 
             if doc_path.name.endswith(".rst"):
                 data = rst_to_md(doc_path)
             else:
-
                 with doc_path.open("r") as file:
                     data = file.read()
 

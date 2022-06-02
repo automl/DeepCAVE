@@ -1,5 +1,6 @@
 include LICENSE
 include requirements.txt
+include deepcave/assets/custom.css
 include deepcave/py.typed
 include deepcave/utils/logging.yml
 include deepcave/worker.py
