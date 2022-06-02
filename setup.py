@@ -50,7 +50,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
     include_package_data=True,
-    python_requires=">=3.8, <3.10",
+    python_requires=">=3.9, <3.10",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
@@ -59,7 +59,6 @@ setuptools.setup(
     test_suite="pytest",
     platforms=["Linux"],
     classifiers=[
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
