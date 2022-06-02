@@ -24,7 +24,7 @@ and absolute paths are working now). DeepCAVE starts now using only `deepcave`.
 - Jobs in sidebar are clickable and removeable now.
 
 ## Documentation
-- Updated texts.
+- Updated texts and images.
 - Documentation of plugins are shown in the dashboard now (converted from rst to md).
 - Added research questions.
 
@@ -51,6 +51,7 @@ and absolute paths are working now). DeepCAVE starts now using only `deepcave`.
 - Files are no longer shown in run selection.
 - Runs are reloaded from disk in worker now.
 - Internal runs are updated now if they changed.
+- Results from static plugins are saved under the right path now.
 
 
 # Version 0.3

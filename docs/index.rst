@@ -22,7 +22,7 @@ and bring the human back in the loop. Moreover, the powerful run interface and t
 plugin structure allow extending the tool at any time effortlessly.
 
 
-.. image:: .images/plugins/configuration_footprint.png
+.. image:: images/plugins/configuration_footprint.png
 
 
 Features
