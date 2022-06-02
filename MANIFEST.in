@@ -6,7 +6,10 @@ include open.py
 include requirements.txt
 include deepcave/py.typed
 include deepcave/utils/logging.yml
+include deepcave/start.sh
 include docs/plugins/*
+
+recursive-include deepcave/docs *.rst
 
 prune tests
 prune examples
