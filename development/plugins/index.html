@@ -343,30 +343,31 @@ sanity check.</p>
 <section id="plugin-structure">
 <h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Permalink to this headline">¶</a></h2>
 <p>The plugins in DeepCAVE are structured in a specific way. This is done with three blocks:</p>
-<ol class="arabic">
-<li><p><strong>Input block</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Input block</strong>:</p></li>
+</ol>
 <blockquote>
 <div><p>This is used to trigger new calculations. For example, when you change the objective in the
 <strong>Input block</strong>, a new calculation is triggered and cached. The next time you use the same input
 data, no new calculation is needed as the data is already cached. In the end, the input data is
 mapped the calculation, which is referred to as <em>“raw data”</em>.</p>
 </div></blockquote>
-</li>
-<li><p><strong>Filter block</strong></p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Filter block</strong>:</p></li>
+</ol>
 <blockquote>
 <div><p>In contrast to the <em>Input block</em>, the <em>Filter block</em> does not trigger any calculation. It acts
 as a filter over the input data which can be used to influence the display of the output.</p>
 </div></blockquote>
-</li>
-<li><p><strong>Output block</strong></p>
+<ol class="arabic simple" start="3">
+<li><p><strong>Output block</strong>:</p></li>
+</ol>
 <blockquote>
 <div><p>Both the <em>Input block</em> and <em>Filter block</em> are used to generate information to display in the
 <em>Output block</em>. Since the filters are low-cost changes, the output will be updated immediately
 after any filters are changed. The following figure shows the described blocks for the cost
 over time plugin.</p>
 </div></blockquote>
-</li>
-</ol>
 <img alt="../_images/blocks.png" src="../_images/blocks.png" />
 </section>
 <section id="plugin-types">
@@ -383,12 +384,11 @@ viewable upon completion.</p>
 </section>
 <section id="custom-plugin">
 <h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this headline">¶</a></h2>
-<p>DeepCAVE was designed so that the plugins require minimal design. We recommend using our
-basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.</p>
-<p>It could be helpful to refer to the base set of plugins for reference and inspiration.</p>
-<p>After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code> or start DeepCAVE with your own config.
-We are happy to receive pull-requests.</p>
+<p>DeepCAVE was designed so that the plugins require minimal design. We recommend using any of our
+provided plugins as a starting point and change it to your needs.</p>
+<p>After you have created your plugin, you need to register it in your config file. If you work
+on the branch directly, you can adapt <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code> to your needs.
+We would be very happy to receive pull-requests!</p>
 </section>
 </section>
 

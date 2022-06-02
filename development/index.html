@@ -322,22 +322,30 @@ style="width: 100%;">
 <h1>Home<a class="headerlink" href="#home" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>DeepCAVE is a visualization and evaluation tool for AutoML runs. It is an interactive dashboard,
-including many diverse plugins for performance, budget and hyperparameter analysis.</p>
+<p>DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem
+hyperparameter optimization) runs. The framework is programmed on top of Dash and therefore
+entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights
+and bring the human back in the loop. Moreover, the powerful run interface and the modularized
+plugin structure allow extending the tool at any time effortlessly.</p>
+<img alt="../images/plugins/pareto_front.png" src="../images/plugins/pareto_front.png" />
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Interactive dashboard via Dash</p></li>
-<li><p>Plugins for performance, budget and hyperparameter analysis (see plugins for more information)</p></li>
-<li><p>Easy to write new plugins with a lot of customization freedom</p></li>
-<li><p>Converters (DeepCAVE, SMAC, BOHB)</p></li>
-<li><p>Easy to write new converters</p></li>
-<li><p>Run Selection from a working directory</p></li>
-<li><p>Group Selection from selected runs for combined analysis</p></li>
-<li><p>Matplotlib support (outputs can be generated in matplotlib format and therefore customized)</p></li>
-<li><p>Raw data output</p></li>
-<li><p>Detection of run changes and real-time updates</p></li>
+<li><p>Interactive Dashboard (completely written in Python) to self-analyze optimization runs/processes.</p></li>
+<li><p>Analyzing while optimizing (run changes are automatically detected).</p></li>
+<li><p>A large collection of plugins to explore multiple areas like performance, hyperparameter and</p></li>
 </ul>
+<p>budget analysis.
+- Save your runs using DeepCAVE’s native recorder.
+- Support for many optimizers using converter (e.g., DeepCAVE, SMAC and BOHB).
+- Select runs directly from a working directory in the interface.
+- Select groups of runs for combined analysis.
+- Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
+- Asynchronous execution of expensive plugins and caching of their results.
+- Help buttons and integrated documentation in the interface helps you to understand the plugins.
+- Use the matplotlib mode to customize and save the plots for your publication.
+- The API mode gives you full access to the code, while you do not have to interact with the
+interface. Otherwise, you can also make use of the raw data, provided by every plugin.</p>
 </section>
 </section>
 

@@ -15,11 +15,11 @@ Additionally, you have several other options:
 
 
 * **\-\-open**: Automatically opens the DeepCAVE GUI in the browser after the DeepCAVE server has been
-    started.
+  started.
 * **\-\-n_workers**: Number of workers to use for the queue.
 * **\-\-config**: Path to a configuration file if you want to use a custom configuration (like 
-    changing ips, ports or refresh rate). The argument accepts both relative and absolute paths.
-    However, make sure the path is enclosed in quotes.
+  changing ips, ports or refresh rate). The argument accepts both relative and absolute paths.
+  However, make sure the path is enclosed in quotes.
 
 
 .. warning::

@@ -432,6 +432,7 @@ style="width: 100%;">
                             <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                             <span class="s2">&quot;run_name&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                             <span class="s2">&quot;run_id&quot;</span><span class="p">:</span> <span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                            <span class="s2">&quot;plugin_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
                             <span class="s2">&quot;inputs_key&quot;</span><span class="p">:</span> <span class="n">inputs_key</span><span class="p">,</span>
                             <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="n">link</span><span class="p">,</span>
                         <span class="p">}</span>
@@ -458,12 +459,13 @@ style="width: 100%;">
                             <span class="n">job_meta</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">meta</span>
                             <span class="n">job_inputs_key</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;inputs_key&quot;</span><span class="p">]</span>
                             <span class="n">job_run_id</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;run_id&quot;</span><span class="p">]</span>
+                            <span class="n">job_plugin_id</span> <span class="o">=</span> <span class="n">job_meta</span><span class="p">[</span><span class="s2">&quot;plugin_id&quot;</span><span class="p">]</span>
 
                             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> for run_id </span><span class="si">{</span><span class="n">job_meta</span><span class="p">[</span><span class="s1">&#39;run_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                             <span class="n">run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">job_run_id</span><span class="p">)</span>
 
                             <span class="c1"># Save results in cache</span>
-                            <span class="n">rc</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">job_inputs_key</span><span class="p">,</span> <span class="n">job_run_outputs</span><span class="p">)</span>
+                            <span class="n">rc</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">job_plugin_id</span><span class="p">,</span> <span class="n">job_inputs_key</span><span class="p">,</span> <span class="n">job_run_outputs</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Job </span><span class="si">{</span><span class="n">job_id</span><span class="si">}</span><span class="s2"> cached.&quot;</span><span class="p">)</span>
 
                             <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>

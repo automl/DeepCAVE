@@ -339,15 +339,19 @@ converter is available.</p>
 </div>
 <section id="custom-converter">
 <h2>Custom Converter<a class="headerlink" href="#custom-converter" title="Permalink to this headline">¶</a></h2>
-<p>To support a new converter, you need to create a new class that inherits from <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a>.
-Two methods are needed:</p>
+<p>To support a new converter, you need to create a new class that inherits from
+<a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a>. Three methods are needed:</p>
 <ul class="simple">
-<li><p><strong>hash</strong>: This method should return a unique hash for the run (e.g. hashing the trial history).</p></li>
-<li><p><strong>from_path</strong>: This method should return a <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> object from a path. Inside this method, you have to provide a configspace, meta data, <a class="reference internal" href="glossary.html#term-Objective"><span class="xref std std-term">objectives</span></a>, <a class="reference internal" href="glossary.html#term-Budget"><span class="xref std std-term">budgets</span></a> and add the trials to the new created run object.</p></li>
+<li><p><strong>hash</strong>: Returns a unique hash for the run (e.g. hashing the trial history).</p></li>
+<li><p><strong>latest_change</strong>: Returns when the latest change was.</p></li>
+<li><p><strong>from_path</strong>: Returns a <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> object from a path. Inside this method,
+you have to provide a configspace, meta data, <a class="reference internal" href="glossary.html#term-Objective"><span class="xref std std-term">objectives</span></a>,
+<a class="reference internal" href="glossary.html#term-Budget"><span class="xref std std-term">budgets</span></a> and add the trials to the new created run object.</p></li>
 </ul>
-<p>After you have created a new converter, you need to add it to <code class="docutils literal notranslate"><span class="pre">AVAILABLE_CONVERTERS</span></code> in
-<span class="xref std std-ref">deepcave/config.py</span>. The next time you select a run, DeepCAVE will automatically use this converter as long
-as the <code class="docutils literal notranslate"><span class="pre">from_path</span></code> method did not fail.</p>
+<p>After you have created a new converter, you need to add it to <code class="docutils literal notranslate"><span class="pre">AVAILABLE_CONVERTERS</span></code> in your
+config (or if you work directly on the branch change <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code> to your needs).
+The next time you select a run, DeepCAVE will automatically use this converter as long as the
+<code class="docutils literal notranslate"><span class="pre">from_path</span></code> method did not fail.</p>
 </section>
 </section>
 

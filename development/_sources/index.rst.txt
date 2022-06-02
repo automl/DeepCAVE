@@ -15,20 +15,30 @@ Home
    faq
 
 
-DeepCAVE is a visualization and evaluation tool for AutoML runs. It is an interactive dashboard,
-including many diverse plugins for performance, budget and hyperparameter analysis.
+DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem
+hyperparameter optimization) runs. The framework is programmed on top of Dash and therefore
+entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights
+and bring the human back in the loop. Moreover, the powerful run interface and the modularized
+plugin structure allow extending the tool at any time effortlessly.
+
+
+.. image:: ../images/plugins/pareto_front.png
 
 
 Features
 ^^^^^^^^
 
-- Interactive dashboard via Dash
-- Plugins for performance, budget and hyperparameter analysis (see plugins for more information)
-- Easy to write new plugins with a lot of customization freedom
-- Converters (DeepCAVE, SMAC, BOHB)
-- Easy to write new converters
-- Run Selection from a working directory
-- Group Selection from selected runs for combined analysis
-- Matplotlib support (outputs can be generated in matplotlib format and therefore customized)
-- Raw data output
-- Detection of run changes and real-time updates
+- Interactive Dashboard (completely written in Python) to self-analyze optimization runs/processes.
+- Analyzing while optimizing (run changes are automatically detected).
+- A large collection of plugins to explore multiple areas like performance, hyperparameter and
+budget analysis.
+- Save your runs using DeepCAVE's native recorder.
+- Support for many optimizers using converter (e.g., DeepCAVE, SMAC and BOHB).
+- Select runs directly from a working directory in the interface.
+- Select groups of runs for combined analysis.
+- Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
+- Asynchronous execution of expensive plugins and caching of their results.
+- Help buttons and integrated documentation in the interface helps you to understand the plugins.
+- Use the matplotlib mode to customize and save the plots for your publication.
+- The API mode gives you full access to the code, while you do not have to interact with the 
+interface. Otherwise, you can also make use of the raw data, provided by every plugin.

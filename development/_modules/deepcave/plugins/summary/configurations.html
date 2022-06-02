@@ -300,6 +300,7 @@ style="width: 100%;">
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span>
@@ -469,7 +470,7 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Objectives&quot;</span><span class="p">),</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">}),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_table&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">),</span>
                 <span class="p">]</span>
             <span class="p">),</span>
@@ -479,7 +480,7 @@ style="width: 100%;">
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
                         <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
-                            <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="s2">&quot;50vh&quot;</span><span class="p">}</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">}</span>
                         <span class="p">),</span>
                         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
@@ -501,7 +502,7 @@ style="width: 100%;">
         <span class="p">]</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_objective_figure</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_objective_figure</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">run</span><span class="p">):</span>
         <span class="n">objective_data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;performances&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">trace_kwargs</span> <span class="o">=</span> <span class="p">{</span>
@@ -518,12 +519,7 @@ style="width: 100%;">
             <span class="n">objective_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
 
         <span class="n">layout_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="p">),</span>
+            <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
             <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()),</span> <span class="mi">1</span><span class="p">]},</span>
         <span class="p">}</span>
 
