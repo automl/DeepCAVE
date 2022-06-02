@@ -5,7 +5,6 @@ import copy
 import re
 import webbrowser
 from collections import defaultdict
-from pathlib import Path
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html

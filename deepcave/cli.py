@@ -23,7 +23,7 @@ flags.DEFINE_string(
 )
 
 
-def execute(args: List[Any]) -> None:
+def execute(_) -> None:
     if (config_key := FLAGS.get_config_value) is not None:
         config = FLAGS.config
         if config is not None:
