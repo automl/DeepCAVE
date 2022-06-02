@@ -413,24 +413,39 @@ style="width: 100%;">
                 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">collect</span><span class="p">:</span>
                     <span class="n">items</span> <span class="o">+=</span> <span class="p">[</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Li</span><span class="p">(</span>
-                            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;nav-item&quot;</span><span class="p">,</span>
+                            <span class="c1"># className=&quot;nav-item&quot;,</span>
                             <span class="n">children</span><span class="o">=</span><span class="p">[</span>
                                 <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span>
-                                    <span class="p">[</span>
-                                        <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="n">link</span><span class="p">),</span>
-                                        <span class="n">dbc</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
-                                            <span class="s2">&quot;-&quot;</span><span class="p">,</span>
-                                            <span class="nb">id</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cancel-job&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">},</span>
-                                            <span class="n">name</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
-                                            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;danger&quot;</span><span class="p">,</span>
-                                            <span class="n">size</span><span class="o">=</span><span class="s2">&quot;sm&quot;</span><span class="p">,</span>
-                                            <span class="n">disabled</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">job_stati</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
-                                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="s2">&quot;padding&quot;</span><span class="p">:</span> <span class="s2">&quot;0 0.4rem&quot;</span><span class="p">},</span>
-                                        <span class="p">),</span>
-                                    <span class="p">],</span>
-                                    <span class="n">className</span><span class="o">=</span><span class="s2">&quot;nav-link&quot;</span><span class="p">,</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                    <span class="n">href</span><span class="o">=</span><span class="n">link</span><span class="p">,</span>
+                                    <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                                        <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="s2">&quot;100%&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="s2">&quot;inline-block&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;vertical-align&quot;</span><span class="p">:</span> <span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+                                    <span class="p">},</span>
+                                <span class="p">),</span>
+                                <span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span>
+                                        <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cancel-job&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">},</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="n">job_id</span><span class="p">,</span>
+                                        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;danger&quot;</span><span class="p">,</span>
+                                        <span class="n">size</span><span class="o">=</span><span class="s2">&quot;sm&quot;</span><span class="p">,</span>
+                                        <span class="n">disabled</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">job_stati</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
+                                        <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                                            <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="s2">&quot;inline-block&quot;</span><span class="p">,</span>
+                                            <span class="s2">&quot;padding&quot;</span><span class="p">:</span> <span class="s2">&quot;0 0.4rem&quot;</span><span class="p">,</span>
+                                        <span class="p">},</span>
+                                        <span class="n">className</span><span class="o">=</span><span class="s2">&quot;ms-1&quot;</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                    <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                                        <span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="s2">&quot;table-cell&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;vertical-align&quot;</span><span class="p">:</span> <span class="s2">&quot;middle&quot;</span><span class="p">,</span>
+                                    <span class="p">},</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
+                            <span class="n">className</span><span class="o">=</span><span class="s2">&quot;nav-link&quot;</span><span class="p">,</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;display&quot;</span><span class="p">:</span> <span class="s2">&quot;flex&quot;</span><span class="p">,</span> <span class="s2">&quot;flex-direction&quot;</span><span class="p">:</span> <span class="s2">&quot;row&quot;</span><span class="p">},</span>
                         <span class="p">)</span>
                     <span class="p">]</span>
 

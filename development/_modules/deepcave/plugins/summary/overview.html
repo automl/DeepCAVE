@@ -310,6 +310,7 @@ style="width: 100%;">
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.summary.configurations</span> <span class="kn">import</span> <span class="n">Configurations</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs.group</span> <span class="kn">import</span> <span class="n">Group</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_discrete_heatmap</span><span class="p">,</span> <span class="n">save_image</span>
@@ -385,6 +386,10 @@ style="width: 100%;">
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">best_performance</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">best_performances</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">]</span>
 
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">prefix</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">Group</span><span class="p">):</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_runs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+
         <span class="c1"># Design card for quick information here</span>
         <span class="n">card</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span>
             <span class="p">[</span>
@@ -392,7 +397,7 @@ style="width: 100%;">
                 <span class="n">dbc</span><span class="o">.</span><span class="n">CardBody</span><span class="p">(</span>
                     <span class="p">[</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;Optimizer: </span><span class="si">{</span><span class="n">run</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="sa">f</span><span class="s2">&quot;Optimizer: </span><span class="si">{</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                             <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-text&quot;</span><span class="p">,</span>
                         <span class="p">),</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>

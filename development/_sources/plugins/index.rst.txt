@@ -25,7 +25,7 @@ The goal of the plugins are to provide a way to visualize the data in a way that
 understand. It should give you more insight both data and model-wise and can serve as an additional
 sanity check.
 
-User can also add their own plugins to provide deeper insights that suit their needs!
+User can also add their own plugins to provide deeper insights that suit their needs.
 
 
 Plugin Structure
