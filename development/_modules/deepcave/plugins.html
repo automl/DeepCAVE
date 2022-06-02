@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>deepcave.plugins &#8212; DeepCAVE Documentation 1.0.6 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -111,7 +111,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v1.0</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.0.6</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -1056,15 +1056,13 @@ style="width: 100%;">
         <span class="n">components</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
-            <span class="n">doc_path</span> <span class="o">=</span> <span class="n">ROOT_DIR</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span>
+            <span class="n">doc_path</span> <span class="o">=</span> <span class="n">ROOT_DIR</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">help</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">doc_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
                 <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">doc_path</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">doc_path</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.rst&quot;</span><span class="p">):</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">rst_to_md</span><span class="p">(</span><span class="n">doc_path</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-
                 <span class="k">with</span> <span class="n">doc_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                     <span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
