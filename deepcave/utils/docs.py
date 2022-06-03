@@ -38,7 +38,7 @@ def rst_to_md(filename: str | Path) -> str:
         a = match.group(0)
         data = data.replace(a, "")
 
-    # Remove notes/warnings
+    # Remove notes/warnings (not the best implementation but sufficient for now)
     data = data.replace(".. note::", "#### Note\n-----")
     data = data.replace(".. note ::", "#### Note\n-----")
     data = data.replace(".. warning::", "#### Warning\n-----")

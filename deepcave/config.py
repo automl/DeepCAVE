@@ -12,7 +12,7 @@ class Config:
     REFRESH_RATE: int = 500
 
     # Figure related
-    SAVE_IMAGES = False
+    SAVE_IMAGES = False  # The figure will be saved to the cache directory.
     FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
     FIGURE_HEIGHT = "40vh"
 

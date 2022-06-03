@@ -1,11 +1,17 @@
 from typing import Dict
 
 
-def update_dict(a: Dict[str, Dict], b: Dict[str, Dict]):
+def update_dict(a: Dict[str, Dict], b: Dict[str, Dict]) -> None:
     """
-    Updates a from b inplace.
-    """
+    Updates dictionary a with dictionary b inplace.
 
+    Parameters
+    ----------
+    a : Dict[str, Dict]
+        Dictionary to be updated.
+    b : Dict[str, Dict]
+        Dictionary to be added.
+    """
     for k1, v1 in b.items():
         if k1 not in a:
             a[k1] = {}

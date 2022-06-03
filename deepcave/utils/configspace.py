@@ -15,19 +15,19 @@ from ConfigSpace.util import deactivate_inactive_hyperparameters
 
 
 def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configuration]:
-    """Generates border configurations from the configuration space.
+    """
+    Generates border configurations from the configuration space.
 
     Parameters
     ----------
     configspace : ConfigurationSpace
         The configspace from which the hyperparameters are drawn from.
 
-    Returns
-    -------
-    configs : List[Config]
-        List with the border configurations.
+    Yields
+    ------
+    Iterator[Configuration]
+        Border configurations.
     """
-
     rng = np.random.RandomState(0)
 
     while True:
@@ -61,6 +61,23 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
 def sample_random_config(
     configspace: ConfigurationSpace, d: Optional[int] = None
 ) -> Iterator[Configuration]:
+    """
+    Generates random configurations from the configuration space.
+
+    Parameters
+    ----------
+    configspace : ConfigurationSpace
+        The configspace from which the hyperparameters are drawn from.
+    d : Optional[int], optional
+        The possible hyperparameter values can be reduced by this argument as the range gets
+        discretized. For example, an integer or float hyperparameter has only four possible values
+        if d=4. By default None (no discretization is done).
+
+    Yields
+    ------
+    Iterator[Configuration]
+        Random configurations.
+    """
     if d is None:
         for config in configspace.sample_configuration(99999):
             yield config

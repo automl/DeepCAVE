@@ -58,7 +58,7 @@ However, existing optimizers like BOHB, SMAC, Auto-Sklearn, Auto-PyTorch are sup
 
 ```
 import ConfigSpace as CS
-from deep_cave import Recorder, Objective
+from deepcave import Recorder, Objective
 
 
 configspace = CS.ConfigurationSpace(seed=0)

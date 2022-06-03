@@ -17,6 +17,10 @@ from dash.development.base_component import Component
 
 from deepcave import interactive
 from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
+from deepcave.utils.logs import get_logger
+
+
+logger = get_logger(__name__)
 
 
 @interactive
@@ -39,8 +43,10 @@ def save_image(figure: go.Figure, name: str) -> None:
     ratio = 16 / 9
     width = 500
     height = int(width / ratio)
+    path = config.CACHE_DIR / "figures" / name
 
-    figure.write_image(config.CACHE_DIR / "figures" / name, width=width, height=height)
+    figure.write_image(path, width=width, height=height)
+    logger.info(f"Saved figure {name} to {path}.")
 
 
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:

@@ -184,13 +184,13 @@ class Overview(DynamicPlugin):
 
             # For text information
             if trial.status not in status_statistics_total:
-                status_statistics_total[trial.status] = 0
+                status_statistics_total[trial.status] = 1
             else:
                 status_statistics_total[trial.status] += 1
 
             # For text information
             if budget not in status_budget:
-                status_budget[budget] = 0
+                status_budget[budget] = 1
             else:
                 status_budget[budget] += 1
 
@@ -210,9 +210,9 @@ class Overview(DynamicPlugin):
                 else:
                     status_details["Error"] += ["No traceback available."]
 
-        successful_trials_rate = round(
-            status_statistics_total[Status.SUCCESS] / len_trials * 100, 2
-        )
+        successful_trials_rate = status_statistics_total[Status.SUCCESS] / len_trials * 100
+        successful_trials_rate = round(successful_trials_rate, 2)
+
         trials_rates = []
         for status, count in status_statistics_total.items():
             if status == Status.SUCCESS:

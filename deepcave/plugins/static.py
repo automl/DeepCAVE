@@ -166,7 +166,7 @@ class StaticPlugin(Plugin, ABC):
                             job_run_id = job_meta["run_id"]
                             job_plugin_id = job_meta["plugin_id"]
 
-                            self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}")
+                            self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}.")
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache

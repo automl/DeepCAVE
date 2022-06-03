@@ -142,4 +142,7 @@ class RunCaches:
         """
         Removes all caches.
         """
-        shutil.rmtree(self.cache_dir)
+        try:
+            shutil.rmtree(self.cache_dir)
+        except Exception:
+            pass

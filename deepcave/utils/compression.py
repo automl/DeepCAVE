@@ -14,7 +14,6 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """
     Serialize a dataframe to a string.
     """
-
     class Encoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, np.ndarray):

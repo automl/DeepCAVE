@@ -17,6 +17,7 @@
 - Updated CLI immensively. Added --open, --n_workers and improved --config (both relative
 and absolute paths are working now). DeepCAVE starts now using only `deepcave`.
 - Improved run cache performance. Each input uses a single file for the output.
+- Improved performance overall.
 - Improved the API mode drastically. 
 - Improved mapping of original and encoded data.
 - Configurations are clickable now.

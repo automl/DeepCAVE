@@ -6,7 +6,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from dash import html
 
 from deepcave.utils.cache import Cache
 from deepcave.utils.compression import deserialize, serialize
@@ -21,7 +20,7 @@ from deepcave.utils.layout import (
 )
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, hex_to_rgb
-from deepcave.utils.util import get_random_string, matplotlib_to_html_image
+from deepcave.utils.util import get_random_string
 
 
 class TestCache(unittest.TestCase):
@@ -366,16 +365,6 @@ class TestUtil(unittest.TestCase):
 
         # Test Exception
         self.assertRaises(ValueError, lambda: get_random_string(-1))
-
-    def test_matplotlib_to_html(self):
-        fig = plt.Figure()
-        ax = fig.gca()
-        x = [1, 2, 3, 4, 5]
-        y = [xx**2 for xx in x]
-        ax.plot(x, y)
-
-        html_img = matplotlib_to_html_image(fig)
-        self.assertIsInstance(html_img, html.Img)
 
     @unittest.SkipTest
     def test_encode_data(self):

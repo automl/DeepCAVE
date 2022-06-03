@@ -8,14 +8,38 @@ from pathlib import Path
 from deepcave.config import Config
 
 
-def parse_config(config_name: Optional[str] = None) -> Config:
+def parse_config(filename: Optional[str] = None) -> Config:
+    """
+    Parses the config given the filename. Both relative and absolute paths are possible.
+
+    Parameters
+    ----------
+    filename : Optional[str], optional
+        Location of the config. Must be a python file.
+        By default None (default configuration will be used).
+
+    Note
+    ----
+    The python file must contain a class named ``Config`` and inherit ``deepcave.config.Config``.
+
+    Returns
+    -------
+    Config
+        Either the default config (if no filename is given) or the config parsed from the given
+        filename.
+
+    Raises
+    ------
+    RuntimeError
+        If config class could not be loaded.
+    """
     config = Config()
-    if config_name is not None and config_name != "default":
+    if filename is not None and filename != "default":
         try:
-            p = Path(config_name)
+            p = Path(filename)
 
             # Absolute path
-            if config_name.startswith("/") or config_name.startswith("~"):
+            if filename.startswith("/") or filename.startswith("~"):
                 path = p.parent
                 script_dir = path.stem
                 module_name = p.stem
