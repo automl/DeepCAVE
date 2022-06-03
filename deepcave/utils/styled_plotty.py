@@ -31,7 +31,7 @@ def save_image(figure: go.Figure, name: str) -> None:
     ----------
     fig : go.Figure
         Plotly figure.
-    filename : str
+    name : str
         Name of the image with extension. Will be automatically saved to the cache.
     """
     from deepcave import config
