@@ -470,7 +470,13 @@ style="width: 100%;">
             <span class="n">html</span><span class="o">.</span><span class="n">H3</span><span class="p">(</span><span class="s2">&quot;Objectives&quot;</span><span class="p">),</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">}),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
+                        <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+                        <span class="p">),</span>
+                        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_table&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Table&quot;</span><span class="p">),</span>
                 <span class="p">]</span>
             <span class="p">),</span>
@@ -480,7 +486,8 @@ style="width: 100%;">
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
                         <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
-                            <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">}</span>
+                            <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
                         <span class="p">),</span>
                         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">,</span>
                     <span class="p">),</span>
