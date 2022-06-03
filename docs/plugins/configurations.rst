@@ -31,7 +31,7 @@ Objectives
 The objective section, on the other hand, visualizes the objective values over the budgets. In here,
 you can determine how your metrics change with increasing budget. Using the table view,
 not only the objective values are listed but also why a specific combination of budget and objective
-might not be available (e.g. because it crashed or it simply was not evaluated).
+might not be available (e.g., because it crashed or it simply was not evaluated).
 
 
 Configuration

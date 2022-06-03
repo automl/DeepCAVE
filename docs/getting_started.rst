@@ -1,7 +1,8 @@
 Getting Started
 ===============
 
-After you have followed the installation steps, you can start DeepCAVE via following command:
+After you have followed the installation steps, you can start DeepCAVE via following command
+(in any directory):
 
 .. code:: bash
 
@@ -33,6 +34,7 @@ added `--open`).
 In the dashboard, you will see the main page, in which you
 can select the runs you want to analyze. Please have a look at the following image
 to see the dashboard in action:
+
 
 .. image:: images/plugins/general.png
 

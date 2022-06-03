@@ -15,7 +15,15 @@ mode.
     If you have problems see next section for extened instructions.
 
 
-Follow the instructions to simply install DeepCAVE:
+.. warning:: 
+
+    DeepCAVE is tested on Linux and Mac only. Since a bash script is used to start the services
+    (redis, workers and webserver), it is not possible to run DeepCAVE on Windows.
+
+
+The following commands install DeepCAVE. We recommend using anaconda as `swig` can be installed
+directly. If you use a different environment, make sure
+`swig <https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/>`_ is installed.
 
 .. code:: bash
 
@@ -25,7 +33,7 @@ Follow the instructions to simply install DeepCAVE:
     pip install DeepCAVE
 
 
-If you want to contribute to DeepCAVE install it from the source and install the dev package:
+If you want to contribute to DeepCAVE get it from GitHub directly and install the dev package:
 
 .. code:: bash
 

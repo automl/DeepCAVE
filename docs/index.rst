@@ -41,4 +41,4 @@ Features
 - Help buttons and integrated documentation in the interface helps you to understand the plugins.
 - Use the matplotlib mode to customize and save the plots for your publication.
 - The API mode gives you full access to the code, while you do not have to interact with the 
-interface. Otherwise, you can also make use of the raw data, provided by every plugin.
+  interface. Otherwise, you can also make use of the raw data, provided by every plugin.
