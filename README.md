@@ -31,7 +31,7 @@ First, make sure you have [redis-server](https://flaviocopes.com/redis-installat
 your computer.
 
 Afterwards, follow the instructions to install DeepCAVE:
-```
+```bash
 conda create -n DeepCAVE python=3.9
 conda activate DeepCAVE
 conda install -c anaconda swig
@@ -39,7 +39,7 @@ pip install DeepCAVE
 ```
 
 If you want to contribute to DeepCAVE use the following steps instead:
-```
+```bash
 git clone https://github.com/automl/DeepCAVE.git
 conda create -n DeepCAVE python=3.9
 conda activate DeepCAVE
@@ -56,7 +56,7 @@ further help (e.g. if you can not install redis server or you are on a mac).
 A minimal example is given to show the simplicity yet powerful API to record runs.
 However, existing optimizers like BOHB, SMAC, Auto-Sklearn, Auto-PyTorch are supported natively.
 
-```
+```python
 import ConfigSpace as CS
 from deepcave import Recorder, Objective
 
@@ -81,7 +81,7 @@ with Recorder(configspace, objectives=[accuracy, mse]) as r:
 ## Visualizing and Evaluating
 
 The webserver as well as the queue/workers can be started by simply running:
-```
+```bash
 deepcave --open
 ```
 
