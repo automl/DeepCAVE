@@ -1,0 +1,29 @@
+deepcave.utils.data\_structures
+===============================
+
+.. automodule:: deepcave.utils.data_structures
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      update_dict
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,29 @@
+deepcave.plugins.summary.configurations
+=======================================
+
+.. automodule:: deepcave.plugins.summary.configurations
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Configurations
+   
+   
+
+   
+   
+   
+
+
+

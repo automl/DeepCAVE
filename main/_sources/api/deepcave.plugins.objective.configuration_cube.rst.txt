@@ -1,0 +1,29 @@
+deepcave.plugins.objective.configuration\_cube
+==============================================
+
+.. automodule:: deepcave.plugins.objective.configuration_cube
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ConfigurationCube
+   
+   
+
+   
+   
+   
+
+
+

@@ -4,8 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Installation &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Installation &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -113,7 +114,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.0</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
@@ -137,28 +138,23 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/minimal_run.html">
+    <a class="reference internal" href="examples/api/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="examples/record/minimal.html">
      Record Minimal Run
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/mlp.html">
-     Multi-Layer Perceptron
+    <a class="reference internal" href="examples/record/digits_sklearn.html">
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/mlp_pytorch.html">
+    <a class="reference internal" href="examples/record/mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="examples/templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="examples/templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -181,6 +177,11 @@ style="width: 100%;">
    <li class="toctree-l2">
     <a class="reference internal" href="plugins/configurations.html">
      Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/configuration_footprint.html">
+     Configuration Footprint
     </a>
    </li>
    <li class="toctree-l2">
@@ -209,8 +210,13 @@ style="width: 100%;">
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plugins/fanova.html">
-     fANOVA
+    <a class="reference internal" href="plugins/importances.html">
+     Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/partial_dependencies.html">
+     Partial Dependencies
     </a>
    </li>
   </ul>
@@ -240,6 +246,21 @@ style="width: 100%;">
      deepcave.plugins
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -266,9 +287,24 @@ style="width: 100%;">
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   Redis Server
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#mac-related">
+   Mac Related
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -288,30 +324,91 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="installation">
+  <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>First, make sure you have <a class="reference external" href="https://flaviocopes.com/redis-installation/">redis-server</a>
-installed on your computer. You also need <a class="reference external" href="https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/">swig</a>
-which will be installed automatically if you install via conda.</p>
-<p>If you are on an Non-Intel Mac you have to add</p>
+<p>DeepCAVE needs <a class="reference external" href="https://flaviocopes.com/redis-installation/">redis-server</a> for the interactive
+mode.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install redis  <span class="c1"># Mac</span>
+sudo apt-get install redis-server  <span class="c1"># Linux</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you have problems see next section for extened instructions.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DeepCAVE is tested on Linux and Mac only. Since a bash script is used to start the services
+(redis, workers and webserver), it is not possible to run DeepCAVE on Windows.</p>
+</div>
+<p>The following commands install DeepCAVE. We recommend using anaconda as <cite>swig</cite> can be installed
+directly. If you use a different environment, make sure
+<a class="reference external" href="https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/">swig</a> is installed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n DeepCAVE <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+conda activate DeepCAVE
+conda install -c anaconda swig
+pip install DeepCAVE
+</pre></div>
+</div>
+<p>If you want to contribute to DeepCAVE get it from GitHub directly and install the dev package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/automl/DeepCAVE.git
+conda create -n DeepCAVE <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+conda activate DeepCAVE
+conda install -c anaconda swig
+make install-dev
+</pre></div>
+</div>
+<section id="id1">
+<h2>Redis Server<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>If you have problems installing <cite>redis-server</cite> try the following steps:</p>
+<ol class="arabic simple">
+<li><p>First check if <cite>redis-server</cite> is available:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>redis-server
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>If you see something like <cite>/usr/sbin/redis-server</cite>, then you simply have to expand your path:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/sbin
+</pre></div>
+</div>
+<p>Consider adding this to your <cite>~/.bashrc</cite> file.
+Check if <cite>redis-server</cite> works now.</p>
+<ol class="arabic simple" start="3">
+<li><p>If no <cite>redis-server</cite> was found, try to install it:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get install redis-server  <span class="c1"># Linux</span>
+brew install redis  <span class="c1"># Mac</span>
+</pre></div>
+</div>
+<p>4. If there was no <cite>redis-server</cite> found and you do not have admin access,
+do the following inside the DeepCAVE root folder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">file</span><span class="o">=</span><span class="s2">&quot;redis-6.2.6&quot;</span>
+<span class="nv">filename</span><span class="o">=</span><span class="nv">$file</span><span class="s2">&quot;.tar.gz&quot;</span>
+
+mkdir -p vendors
+<span class="nb">cd</span> vendors
+wget https://download.redis.io/releases/<span class="nv">$filename</span>
+tar -xzvf <span class="nv">$filename</span>
+rm <span class="nv">$filename</span>
+<span class="nb">cd</span> <span class="nv">$file</span>
+make
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+<span class="nb">cd</span> ../../
+</pre></div>
+</div>
+</section>
+<section id="mac-related">
+<h2>Mac Related<a class="headerlink" href="#mac-related" title="Permalink to this headline">¶</a></h2>
+<p>If you are on a M1 Mac you have to add</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">DISABLE_SPRING</span><span class="o">=</span><span class="nb">true</span>
 <span class="nb">export</span> <span class="nv">OBJC_DISABLE_INITIALIZE_FORK_SAFETY</span><span class="o">=</span>YES
 </pre></div>
 </div>
 <p>to your <code class="docutils literal notranslate"><span class="pre">`~/.bash_profile`</span></code> to enable multi-processing.</p>
-<p>Afterwards, follow the instructions:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/automl/DeepCAVE.git
-<span class="nb">cd</span> DeepCAVE
-conda env create -f environment.yml
-conda activate DeepCAVE
-make install
-</pre></div>
-</div>
-<p>If you want to contribute to DeepCAVE also install the dev packages:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make install-dev
-</pre></div>
-</div>
-</div>
+</section>
+</section>
 
 
               </div>
@@ -347,14 +444,14 @@ make install
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

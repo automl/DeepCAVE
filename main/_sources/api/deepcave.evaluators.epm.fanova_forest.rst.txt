@@ -1,0 +1,29 @@
+deepcave.evaluators.epm.fanova\_forest
+======================================
+
+.. automodule:: deepcave.evaluators.epm.fanova_forest
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FanovaForest
+   
+   
+
+   
+   
+   
+
+
+

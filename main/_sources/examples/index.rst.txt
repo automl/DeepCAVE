@@ -14,6 +14,42 @@ Examples
 
 
 
+.. _sphx_glr_examples_api:
+
+API
+^^^
+
+If you want to interact with the API directly, you can make use of the API mode.
+Have a look into the examples, to get an overview how to use DeepCAVE in this way.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin parallel coordinates. Note that other plugins use the ...">
+
+.. only:: html
+
+ .. figure:: /examples/api/images/thumb/sphx_glr_parallel_coordinates_thumb.png
+     :alt: Parallel Coordinates
+
+     :ref:`sphx_glr_examples_api_parallel_coordinates.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/api/parallel_coordinates
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
 .. _sphx_glr_examples_record:
 
 Record
@@ -27,14 +63,14 @@ AutoML runs.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how DeepCAVE can be used to record a minimal run.">
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_minimal_run_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_minimal_thumb.png
      :alt: Record Minimal Run
 
-     :ref:`sphx_glr_examples_record_minimal_run.py`
+     :ref:`sphx_glr_examples_record_minimal.py`
 
 .. raw:: html
 
@@ -44,18 +80,18 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/minimal_run
+   /examples/record/minimal
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Multi-Layer Perceptron">
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in D...">
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_mlp_thumb.png
-     :alt: Multi-Layer Perceptron
+ .. figure:: /examples/record/images/thumb/sphx_glr_digits_sklearn_thumb.png
+     :alt: Multi-Layer Perceptron via Sklearn
 
-     :ref:`sphx_glr_examples_record_mlp.py`
+     :ref:`sphx_glr_examples_record_digits_sklearn.py`
 
 .. raw:: html
 
@@ -65,18 +101,18 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/mlp
+   /examples/record/digits_sklearn
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Multi-Layer Perceptron via PyTorch">
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the ...">
 
 .. only:: html
 
- .. figure:: /examples/record/images/thumb/sphx_glr_mlp_pytorch_thumb.png
+ .. figure:: /examples/record/images/thumb/sphx_glr_mnist_pytorch_thumb.png
      :alt: Multi-Layer Perceptron via PyTorch
 
-     :ref:`sphx_glr_examples_record_mlp_pytorch.py`
+     :ref:`sphx_glr_examples_record_mnist_pytorch.py`
 
 .. raw:: html
 
@@ -86,63 +122,7 @@ AutoML runs.
 .. toctree::
    :hidden:
 
-   /examples/record/mlp_pytorch
-.. raw:: html
-
-    <div class="sphx-glr-clear"></div>
-
-
-
-.. _sphx_glr_examples_templates:
-
-Plugin Templates
-^^^^^^^^^^^^^^^^
-
-If you want to build your own plugin, you can start with one of the provided plugins.
-Please make sure that you included the plugin in `deepcave/config.py`.
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Multiple Runs">
-
-.. only:: html
-
- .. figure:: /examples/templates/images/thumb/sphx_glr_multiple_runs_thumb.png
-     :alt: Multiple Runs
-
-     :ref:`sphx_glr_examples_templates_multiple_runs.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/templates/multiple_runs
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Single Run">
-
-.. only:: html
-
- .. figure:: /examples/templates/images/thumb/sphx_glr_single_run_thumb.png
-     :alt: Single Run
-
-     :ref:`sphx_glr_examples_templates_single_run.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/templates/single_run
+   /examples/record/mnist_pytorch
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

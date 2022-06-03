@@ -4,8 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plugins &#8212; DeepCAVE Documentation 0.3 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Plugins &#8212; DeepCAVE Documentation 1.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -38,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Overview" href="overview.html" />
-    <link rel="prev" title="Single Run" href="../examples/templates/single_run.html" />
+    <link rel="prev" title="Multi-Layer Perceptron via PyTorch" href="../examples/record/mnist_pytorch.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -113,7 +114,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0">DeepCAVE Documentation</h4>
-<div class="mb-3">v0.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.0</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -137,28 +138,23 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/minimal_run.html">
+    <a class="reference internal" href="../examples/api/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../examples/record/minimal.html">
      Record Minimal Run
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/mlp.html">
-     Multi-Layer Perceptron
+    <a class="reference internal" href="../examples/record/digits_sklearn.html">
+     Multi-Layer Perceptron via Sklearn
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/mlp_pytorch.html">
+    <a class="reference internal" href="../examples/record/mnist_pytorch.html">
      Multi-Layer Perceptron via PyTorch
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/templates/multiple_runs.html">
-     Multiple Runs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/templates/single_run.html">
-     Single Run
     </a>
    </li>
   </ul>
@@ -181,6 +177,11 @@ style="width: 100%;">
    <li class="toctree-l2">
     <a class="reference internal" href="configurations.html">
      Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configuration_footprint.html">
+     Configuration Footprint
     </a>
    </li>
    <li class="toctree-l2">
@@ -209,8 +210,13 @@ style="width: 100%;">
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="fanova.html">
-     fANOVA
+    <a class="reference internal" href="importances.html">
+     Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="partial_dependencies.html">
+     Partial Dependencies
     </a>
    </li>
   </ul>
@@ -238,6 +244,21 @@ style="width: 100%;">
    <li class="toctree-l2">
     <a class="reference internal" href="../api/deepcave.plugins.html">
      deepcave.plugins
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../api/deepcave.utils.html">
+     deepcave.utils
     </a>
    </li>
   </ul>
@@ -273,13 +294,13 @@ style="width: 100%;">
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#structure">
-   Structure
+  <a class="reference internal nav-link" href="#plugin-structure">
+   Plugin Structure
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#types">
-   Types
+  <a class="reference internal nav-link" href="#plugin-types">
+   Plugin Types
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -308,55 +329,71 @@ style="width: 100%;">
               
               <div>
                 
-  <div class="section" id="plugins">
+  <section id="plugins">
 <h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>Plugins are used to display data in a specific way. There are plugins to analyse the performance,
 the hyperparameters and the budgets. Since AutoML runs are multi-dimensional, the plugins
-provide a way to look into specific aspects more detailtly.</p>
+provide a way to look into specific aspects in more detail.</p>
 <p>The goal of the plugins are to provide a way to visualize the data in a way that is easy to
 understand. It should give you more insight both data and model-wise and can serve as an additional
 sanity check.</p>
-<div class="section" id="structure">
-<h2>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h2>
-<p>The plugins in DeepCAVE are structured in a specific way. Basically, three blocks are used:</p>
-<ul class="simple">
-<li><p>Input block</p></li>
-<li><p>Filter block</p></li>
-<li><p>Output block</p></li>
-</ul>
-<p>The input block is used to trigger new calculations. For example, when you change the objective
-in the input block, a new calculation is triggered and cached. The next time you use the same input
-data, no new calculation is needed as the data is already cached. In the end, the input data is mapped
-the the calculation, which is referred to “raw data”.</p>
-<p>In contrast to the input block, the filter block does not trigger any calculation. It simply changes
-“optional” input data which are used to influence the output.</p>
-<p>Both inputs and filter are used to display the output in the output block. Since the filter inputs
-are low-cost changes, the output will be updated immediately after changing the filter output.
-The following figure shows the described blocks for the cost over time plugin.</p>
+<p>User can also add their own plugins to provide deeper insights that suit their needs.</p>
+<section id="plugin-structure">
+<h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Permalink to this headline">¶</a></h2>
+<p>The plugins in DeepCAVE are structured in a specific way. This is done with three blocks:</p>
+<ol class="arabic simple">
+<li><p><strong>Input block</strong>: This is used to trigger new calculations. For example, when you change the</p></li>
+</ol>
+<blockquote>
+<div><p>objective in the <strong>Input block</strong>, a new calculation is triggered and cached. The next time you use
+the same input data, no new calculation is needed as the data is already cached. In the end, the
+input data is mapped the calculation, which is referred to as <em>“raw data”</em>.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p><strong>Filter block</strong>: In contrast to the <em>Input block</em>, the <em>Filter block</em> does not trigger any</p></li>
+</ol>
+<blockquote>
+<div><p>calculation. It acts as a filter over the input data which can be used to influence the display of
+the output.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><p><strong>Output block</strong>: Both the <em>Input block</em> and <em>Filter block</em> are used to generate information to</p></li>
+</ol>
+<blockquote>
+<div><p>display in the <em>Output block</em>. Since the filters are low-cost changes, the output will be updated
+immediately after any filters are changed. The following figure shows the described blocks for the
+cost over time plugin.</p>
+</div></blockquote>
 <img alt="../_images/blocks.png" src="../_images/blocks.png" />
+</section>
+<section id="plugin-types">
+<h2>Plugin Types<a class="headerlink" href="#plugin-types" title="Permalink to this headline">¶</a></h2>
+<p>DeepCAVE has two kinds of plugins, <strong>static</strong> and <strong>dynamic</strong>. While <strong>dynamic</strong> plugins update the
+results immediately, <strong>static</strong> plugins are triggered by a <cite>Process</cite> button before displaying their
+output.</p>
+<p>Most basic plugins should be possible as a <strong>dynamic</strong> plugin, do some quick analysis and then
+update the output as soon as it’s ready.</p>
+<p>In contrast, a <strong>static</strong> plugin might take much longer to generate its output. For example,
+the <em>Hyperparameter Importance</em> plugin will train many decision trees to calculate it’s output and
+so the plugins will queue the calculations, viewable in the side bar, and will be cached and
+viewable upon completion.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the current implementation, the cached results are saved to the source directory. You can
+clean the cache directly in the interface.</p>
 </div>
-<div class="section" id="types">
-<h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
-<p>DeepCAVE differs between “static” and “dynamic” plugin. While dynamic plugins update the results
-immediately (used for low-cost plugins), static plugins are triggered by a “calculate” button. This
-has the background that some plugins need a lot longer than others. For example, if you train
-a huge tree with a lot of data, the training might take a while. If you only display the configuration
-space, in contrast to train a tree, the calculation is done pretty fast.</p>
-<p>Internally, static plugins use a working queue to finish-up the calculations. The status of the
-progress is displayed on the left in the sidebar. The plugin automatically update itself
-(one check every second) if the result is available and renders the output thereafter.</p>
-</div>
-<div class="section" id="custom-plugin">
+</section>
+<section id="custom-plugin">
 <h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this headline">¶</a></h2>
-<p>DeepCAVE was designed so that the plugins require a minimal design. We recommend using our
-basic templates (in <a class="reference internal" href="../examples/index.html#examples"><span class="std std-ref">examples</span></a>) as a starting point and change it to your needs.
-Take inspirations from the other plugins if needed.</p>
-<p>After you have created your plugin, you need to register it in the config file. Simply add the
-location of your plugin in <code class="docutils literal notranslate"><span class="pre">deepcave/conf.py</span></code>.</p>
-</div>
-</div>
+<p>DeepCAVE was designed so that the plugins require minimal design. We recommend using any of our
+provided plugins as a starting point and change it to your needs.</p>
+<p>After you have created your plugin, you need to register it in your config file. If you work
+on the branch directly, you can adapt <code class="docutils literal notranslate"><span class="pre">deepcave/config.py</span></code> to your needs.
+We would be very happy to receive pull-requests!</p>
+</section>
+</section>
 
 
               </div>
@@ -364,11 +401,11 @@ location of your plugin in <code class="docutils literal notranslate"><span clas
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../examples/templates/single_run.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../examples/record/mnist_pytorch.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Single Run</p>
+            <p class="prev-next-title">Multi-Layer Perceptron via PyTorch</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="overview.html" title="next page">
@@ -392,14 +429,14 @@ location of your plugin in <code class="docutils literal notranslate"><span clas
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, René Sass and Marius Lindauer, &lt;&lt;author_email&gt;&gt;.<br>
+    &copy; Copyright Copyright 2022, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.4.0. Template is modified version of <a
+4.5.0. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -1,0 +1,37 @@
+deepcave.utils.styled\_plotty
+=============================
+
+.. automodule:: deepcave.utils.styled_plotty
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      generate_config_code
+      get_color
+      get_discrete_heatmap
+      get_hovertext_from_config
+      get_hyperparameter_ticks
+      get_hyperparameter_ticks_from_values
+      hex_to_rgb
+      prettify_label
+      save_image
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

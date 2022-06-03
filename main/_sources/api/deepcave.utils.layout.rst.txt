@@ -1,0 +1,35 @@
+deepcave.utils.layout
+=====================
+
+.. automodule:: deepcave.utils.layout
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      create_table
+      get_checklist_options
+      get_radio_options
+      get_select_options
+      get_slider_marks
+      help_button
+      render_table
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
