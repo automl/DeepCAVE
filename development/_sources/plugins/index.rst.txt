@@ -66,6 +66,10 @@ the *Hyperparameter Importance* plugin will train many decision trees to calcula
 so the plugins will queue the calculations, viewable in the side bar, and will be cached and
 viewable upon completion.
 
+.. note::
+    In the current implementation, the cached results are saved to the source directory. You can
+    clean the cache directly in the interface.
+
 
 Custom Plugin
 -------------

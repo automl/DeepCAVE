@@ -318,16 +318,39 @@ style="width: 100%;">
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_config</span></code>([config_name])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.configs.parse_config" title="deepcave.utils.configs.parse_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_config</span></code></a>([filename])</p></td>
+<td><p>Parses the config given the filename.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.configs.parse_config">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.configs.</span></span><span class="sig-name descname"><span class="pre">parse_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/configs.html#parse_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.configs.parse_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the config given the filename. Both relative and absolute paths are possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Location of the config. Must be a python file.
+By default None (default configuration will be used).</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The python file must contain a class named <code class="docutils literal notranslate"><span class="pre">Config</span></code> and inherit <code class="docutils literal notranslate"><span class="pre">deepcave.config.Config</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Either the default config (if no filename is given) or the config parsed from the given
+filename.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Config</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If config class could not be loaded.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

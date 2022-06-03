@@ -336,14 +336,21 @@ sudo apt-get install redis-server  <span class="c1"># Linux</span>
 <p class="admonition-title">Note</p>
 <p>If you have problems see next section for extened instructions.</p>
 </div>
-<p>Follow the instructions to simply install DeepCAVE:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>DeepCAVE is tested on Linux and Mac only. Since a bash script is used to start the services
+(redis, workers and webserver), it is not possible to run DeepCAVE on Windows.</p>
+</div>
+<p>The following commands install DeepCAVE. We recommend using anaconda as <cite>swig</cite> can be installed
+directly. If you use a different environment, make sure
+<a class="reference external" href="https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/">swig</a> is installed.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n DeepCAVE <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
 conda activate DeepCAVE
 conda install -c anaconda swig
 pip install DeepCAVE
 </pre></div>
 </div>
-<p>If you want to contribute to DeepCAVE install it from the source and install the dev package:</p>
+<p>If you want to contribute to DeepCAVE get it from GitHub directly and install the dev package:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/automl/DeepCAVE.git
 conda create -n DeepCAVE <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
 conda activate DeepCAVE

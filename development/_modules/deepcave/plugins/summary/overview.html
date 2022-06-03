@@ -479,13 +479,13 @@ style="width: 100%;">
 
             <span class="c1"># For text information</span>
             <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_statistics_total</span><span class="p">:</span>
-                <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># For text information</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="p">:</span>
-                <span class="n">status_budget</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">status_budget</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">status_budget</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
@@ -505,9 +505,9 @@ style="width: 100%;">
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">status_details</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;No traceback available.&quot;</span><span class="p">]</span>
 
-        <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
-            <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">]</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span>
-        <span class="p">)</span>
+        <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">]</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">successful_trials_rate</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
         <span class="n">trials_rates</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">status</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">status_statistics_total</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>

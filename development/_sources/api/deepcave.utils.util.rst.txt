@@ -13,10 +13,8 @@ deepcave.utils.util
 
    .. autosummary::
    
-      encode_data
       get_latest_change
       get_random_string
-      matplotlib_to_html_image
       short_string
    
    
