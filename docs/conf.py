@@ -1,6 +1,6 @@
 import automl_sphinx_theme
-from deepcave import copyright, author, version, name
 
+from deepcave import author, copyright, name, version
 
 options = {
     "copyright": copyright,

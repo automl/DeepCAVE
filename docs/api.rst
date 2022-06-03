@@ -8,3 +8,6 @@ API References
 
    deepcave.runs
    deepcave.plugins
+   deepcave.layouts
+   deepcave.evaluators
+   deepcave.utils

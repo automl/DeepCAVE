@@ -6,7 +6,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from dash import html
 
 from deepcave.utils.cache import Cache
 from deepcave.utils.compression import deserialize, serialize
@@ -21,12 +20,7 @@ from deepcave.utils.layout import (
 )
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, hex_to_rgb
-from deepcave.utils.util import (
-    add_prefix_to_dict,
-    add_prefix_to_list,
-    get_random_string,
-    matplotlib_to_html_image,
-)
+from deepcave.utils.util import get_random_string
 
 
 class TestCache(unittest.TestCase):
@@ -123,7 +117,7 @@ class TestCache(unittest.TestCase):
         # Cleanup
         cache_file.unlink()
 
-    def test_cache_file_None(self):
+    def test_cache_file_none(self):
         """Cache should still work, even when file is None"""
         cache = Cache(None)
 
@@ -372,16 +366,6 @@ class TestUtil(unittest.TestCase):
         # Test Exception
         self.assertRaises(ValueError, lambda: get_random_string(-1))
 
-    def test_matplotlib_to_html(self):
-        fig = plt.Figure()
-        ax = fig.gca()
-        x = [1, 2, 3, 4, 5]
-        y = [xx**2 for xx in x]
-        ax.plot(x, y)
-
-        html_img = matplotlib_to_html_image(fig)
-        self.assertIsInstance(html_img, html.Img)
-
     @unittest.SkipTest
     def test_encode_data(self):
         # TODO(dwoiwode): Test with more knowledge about data structure
@@ -391,40 +375,3 @@ class TestUtil(unittest.TestCase):
     def test_encode_data_with_cs(self):
         # TODO(dwoiwode): Test with more knowledge about data structure
         pass
-
-    def test_add_prefix_to_dict(self):
-        a = {"a": 4, "b": 1, "c": 9}
-        a_prefixed = add_prefix_to_dict(a, "run:")
-        self.assertIn("run:a", a_prefixed)
-        self.assertIn("run:b", a_prefixed)
-        self.assertIn("run:c", a_prefixed)
-        self.assertNotIn("a", a_prefixed)
-        self.assertNotIn("b", a_prefixed)
-        self.assertNotIn("c", a_prefixed)
-        self.assertEqual(a_prefixed["run:a"], 4)
-        self.assertEqual(a_prefixed["run:b"], 1)
-        self.assertEqual(a_prefixed["run:c"], 9)
-
-        # Other prefix, same dict
-        a_prefixed = add_prefix_to_dict(a, "group:")
-        self.assertIn("group:a", a_prefixed)
-        self.assertIn("group:b", a_prefixed)
-        self.assertIn("group:c", a_prefixed)
-        self.assertNotIn("a", a_prefixed)
-        self.assertNotIn("b", a_prefixed)
-        self.assertNotIn("c", a_prefixed)
-        self.assertEqual(a_prefixed["group:a"], 4)
-        self.assertEqual(a_prefixed["group:b"], 1)
-        self.assertEqual(a_prefixed["group:c"], 9)
-
-    def test_add_prefix_to_list(self):
-        a = ["a", "b", "Hello", "World"]
-        a_prefixed = add_prefix_to_list(a, "run:")
-        self.assertIsInstance(a_prefixed, list)
-        self.assertEqual(4, len(a_prefixed))
-        self.assertEqual("run:a", a_prefixed[0])
-        self.assertEqual("run:b", a_prefixed[1])
-        self.assertEqual("run:Hello", a_prefixed[2])
-
-        a_prefixed = add_prefix_to_list(a, "job:")
-        self.assertEqual("job:World", a_prefixed[3])

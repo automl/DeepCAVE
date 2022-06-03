@@ -1,60 +1,71 @@
-from typing import Dict, List
+from typing import Any, Dict, List, Type
+
 from pathlib import Path
 
 
 class Config:
     # General config
     TITLE: str = "DeepCAVE"
+    DEBUG: bool = True
+    # How often to refresh background activities (such as update the sidebar or process button for
+    # static plugins). Value in milliseconds.
+    REFRESH_RATE: int = 500
 
-    # Cache dir
-    root = Path.cwd()
-    DEFAULT_WORKING_DIRECTORY = root / "examples" / "record" / "logs" / "DeepCAVE" / "mlp"
-
-    CACHE_DIR = root / "cache"
+    # Figure related
+    SAVE_IMAGES = False  # The figure will be saved to the cache directory.
+    FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
+    FIGURE_HEIGHT = "40vh"
 
     # Redis settings
-    REDIS_PORT = 6379
-    REDIS_ADDRESS = "redis://localhost"
+    REDIS_PORT: int = 6379
+    REDIS_ADDRESS: str = "redis://localhost"
 
-    # Dash settings (not used right now)
-    DASH_PORT = 8050
-    DASH_ADDRESS = "http://127.0.0.1"
+    # Dash settings
+    DASH_PORT: int = 8050
+    DASH_ADDRESS: str = "127.0.0.1"
 
     # Default Meta information which are used across the platform
-    META_DEFAULT = {
+    META_DEFAULT: Dict[str, Any] = {
         "matplotlib-mode": False,
-        "working_dir": str(DEFAULT_WORKING_DIRECTORY),
-        "selected_runs": [],  # [run_name, ...]
-        "groups": {},  # {group_name: [run_name, ...]}
+        "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
+        "selected_run_paths": [],
+        "groups": {},  # {group_name: [run_path, ...]}
     }
 
-    # Plugins
+    @property
+    def DEFAULT_WORKING_DIRECTORY(self) -> Path:
+        return Path.cwd() / "logs"
+
+    @property
+    def CACHE_DIR(self) -> Path:
+        return Path(__file__).parent / "cache"
+
+    @property
+    def SERVER_NAME(self) -> str:
+        return f"http://{self.DASH_ADDRESS}:{self.DASH_PORT}"
+
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
-        """
-        Returns:
-        dictionary [category -> List[Plugins]]
-        Plugins are ordered
-        """
-        from deepcave.plugins.dynamic_plugin.ccube import CCube
-        from deepcave.plugins.dynamic_plugin.configurations import Configurations
-        from deepcave.plugins.dynamic_plugin.cost_over_time import CostOverTime
-        from deepcave.plugins.dynamic_plugin.overview import Overview
-        from deepcave.plugins.dynamic_plugin.parallel_coordinates import (
-            ParallelCoordinates,
-        )
-        from deepcave.plugins.static_plugin.fanova import fANOVA
-        from deepcave.plugins.dynamic_plugin.pareto_front import ParetoFront
-        from deepcave.plugins.dynamic_plugin.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.hyperparameter.importances import Importances
+        from deepcave.plugins.hyperparameter.pdp import PartialDependencies
+        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
+        from deepcave.plugins.objective.cost_over_time import CostOverTime
+        from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
+        from deepcave.plugins.objective.pareto_front import ParetoFront
+        from deepcave.plugins.summary.configurations import Configurations
+        from deepcave.plugins.summary.footprint import FootPrint
+        from deepcave.plugins.summary.overview import Overview
 
         plugins = {
             "Summary": [
                 Overview(),
                 Configurations(),
+                FootPrint(),
             ],
-            "Performance Analysis": [
+            "Objective Analysis": [
                 CostOverTime(),
-                CCube(),
+                ConfigurationCube(),
                 ParetoFront(),
                 ParallelCoordinates(),
             ],
@@ -62,19 +73,16 @@ class Config:
                 BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
-                fANOVA(),
+                Importances(),
+                PartialDependencies(),
             ],
         }
         return plugins
 
-    # Run Converter
     @property
-    def AVAILABLE_CONVERTERS(self) -> List["Run"]:
+    def CONVERTERS(self) -> List[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac import SMACRun
 
         return [DeepCAVERun, BOHBRun, SMACRun]
-
-
-config = Config()

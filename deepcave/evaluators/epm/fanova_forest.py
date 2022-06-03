@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional, Tuple
 
 import itertools as it
 
@@ -6,58 +6,72 @@ import numpy as np
 import pyrfr
 import pyrfr.regression as regression
 import pyrfr.util
-from smac.configspace import ConfigurationSpace
+from ConfigSpace import ConfigurationSpace
 
-from deepcave.evaluators.epm.forest import Forest
+from deepcave.evaluators.epm.random_forest import RandomForest
 
 
-class fANOVAForest(Forest):
+class FanovaForest(RandomForest):
+    """
+    A fanova forest wrapper for pyrfr.
+    """
+
     def __init__(
         self,
         configspace: ConfigurationSpace,
-        seed: int,
-        num_trees: int = 16,
-        bootstrapping=True,
-        points_per_tree=-1,
-        ratio_features: float = 7.0 / 10.0,
-        min_samples_split=0,
-        min_samples_leaf=0,
-        max_depth=64,
-        cutoffs=(-np.inf, np.inf),
+        n_trees: int = 10,
+        ratio_features: float = 1.0,
+        min_samples_split: int = 0,
+        min_samples_leaf: int = 0,
+        max_depth: int = 64,
+        max_nodes: int = 2**20,
+        eps_purity: float = 1e-8,
+        bootstrapping: bool = True,
         instance_features: Optional[np.ndarray] = None,
-        pca_components: Optional[int] = None,
+        pca_components: Optional[int] = 2,
+        cutoffs: Tuple[float, float] = (-np.inf, np.inf),
+        seed: Optional[int] = None,
     ):
-
-        super().__init__(configspace, seed, instance_features, pca_components)
-
-        max_features = 0
-        if ratio_features <= 1.0:
-            max_features = max(1, int(len(self.types) * ratio_features))
-
-        self._set_model_options(
-            {
-                "num_trees": num_trees,
-                "do_bootstrapping": bootstrapping,
-                "tree_opts.max_features": max_features,
-                "tree_opts.min_samples_to_split": min_samples_split,
-                "tree_opts.min_samples_in_leaf": min_samples_leaf,
-                "tree_opts.max_depth": max_depth,
-            }
+        super().__init__(
+            configspace=configspace,
+            n_trees=n_trees,
+            ratio_features=ratio_features,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            max_depth=max_depth,
+            max_nodes=max_nodes,
+            eps_purity=eps_purity,
+            bootstrapping=bootstrapping,
+            instance_features=instance_features,
+            pca_components=pca_components,
+            log_y=False,
+            seed=seed,
         )
 
         self.cutoffs = cutoffs
-        self.points_per_tree = points_per_tree
-        self.n_dims = len(configspace.get_hyperparameters())
 
-    def _get_model(self):
+    def _get_model(self) -> regression.base_tree:
+        """
+        Returns the internal model.
+
+        Returns
+        -------
+        model : regression.base_tree
+            Model which is used internally.
+        """
         return regression.fanova_forest()
 
-    def _train(self, X, Y):
+    def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Inputs:
-            `X`: Must be numerical encoded.
-        """
+        Trains the random forest on X and Y.
 
+        Parameters
+        ----------
+        X : np.ndarray
+            Input data points.
+        Y : np.ndarray
+            Target values.
+        """
         super()._train(X, Y)
         self.percentiles = np.percentile(Y, range(0, 100))
 
@@ -66,7 +80,7 @@ class fANOVAForest(Forest):
         self.all_sizes = []
 
         # getting split values
-        forest_split_values = self.model.all_split_values()
+        forest_split_values = self._model.all_split_values()
 
         # compute midpoints and interval sizes for variables in each tree
         for tree_split_values in forest_split_values:
@@ -78,16 +92,14 @@ class fANOVAForest(Forest):
                     if len(split_vals) > 0:
                         midpoints.append(split_vals)
                         sizes.append(np.ones(len(split_vals)))
-                    # if not, simply append 0 as the value with the number of categories as the size, that way this
-                    # parameter will get 0 importance from this tree.
+                    # if not, simply append 0 as the value with the number of categories as the
+                    # size, that way this parameter will get 0 importance from this tree.
                     else:
                         midpoints.append((0,))
                         sizes.append((self.bounds[i][0],))
                 else:
                     # add bounds to split values
-                    sv = np.array(
-                        [self.bounds[i][0]] + list(split_vals) + [self.bounds[i][1]]
-                    )
+                    sv = np.array([self.bounds[i][0]] + list(split_vals) + [self.bounds[i][1]])
                     # compute midpoints and sizes
                     midpoints.append((1 / 2) * (sv[1:] + sv[:-1]))
                     sizes.append(sv[1:] - sv[:-1])
@@ -105,80 +117,60 @@ class fANOVAForest(Forest):
         self.V_U_total = {}
         self.V_U_individual = {}
 
-        self._set_cutoffs(self.cutoffs)
+        # Set cut-off
+        self._model.set_cutoffs(self.cutoffs[0], self.cutoffs[1])
 
         # recompute the trees' total variance
-        self.trees_total_variance = self.model.get_trees_total_variances()
+        self.trees_total_variance = self._model.get_trees_total_variances()
 
-    def _set_cutoffs(self, cutoffs=(-np.inf, np.inf), quantile=None):
+    def compute_marginals(self, hp_ids: List[int], depth=1):
         """
-        Setting the cutoffs to constrain the input space
-
-        To properly do things like 'improvement over default' the
-        fANOVA now supports cutoffs on the y values. These will exclude
-        parts of the parameters space where the prediction is not within
-        the provided cutoffs. This is is specialization of
-        "Generalized Functional ANOVA Diagnostics for High Dimensional
-        Functions of Dependent Variables" by Hooker.
-        """
-        if not (quantile is None):
-            percentile1 = self.percentiles[quantile[0]]
-            percentile2 = self.percentiles[quantile[1]]
-            self.model.set_cutoffs(percentile1, percentile2)
-        else:
-            self.cutoffs = cutoffs
-            self.model.set_cutoffs(cutoffs[0], cutoffs[1])
-
-    def compute_marginals(self, dimensions, depth=1):
-        """
-        Returns the marginal of selected parameters
+        Returns the marginal of selected parameters.
 
         Parameters
         ----------
-        dimensions: tuple
-            Contains the indices of ConfigSpace for the selected parameters (starts with 0)
+        hp_ids: List[int]
+            Contains the indices of the configspace for the selected parameters (starts with 0).
         """
-        dimensions = tuple(dimensions)
+        hp_ids = tuple(hp_ids)
 
         # check if values has been previously computed
-        if dimensions in self.V_U_individual:
+        if hp_ids in self.V_U_individual:
             return self.V_U_individual, self.V_U_total
 
         # otherwise make sure all lower order marginals have been
         # computed, if not compute them
-        for k in range(1, len(dimensions)):
+        for k in range(1, len(hp_ids)):
             if k > depth:
                 break
 
-            for sub_dims in it.combinations(dimensions, k):
-                if sub_dims not in self.V_U_total:
-                    self.compute_marginals(sub_dims)
+            for sub_hp_ids in it.combinations(hp_ids, k):
+                if sub_hp_ids not in self.V_U_total:
+                    self.compute_marginals(sub_hp_ids)
 
         # now all lower order terms have been computed
-        self.V_U_individual[dimensions] = []
-        self.V_U_total[dimensions] = []
+        self.V_U_individual[hp_ids] = []
+        self.V_U_total[hp_ids] = []
 
-        if len(dimensions) > depth + 1:
+        if len(hp_ids) > depth + 1:
             return self.V_U_individual, self.V_U_total
 
         for tree_idx in range(len(self.all_midpoints)):
             # collect all the midpoints and corresponding sizes for that tree
-            midpoints = [self.all_midpoints[tree_idx][dim] for dim in dimensions]
-            sizes = [self.all_sizes[tree_idx][dim] for dim in dimensions]
+            midpoints = [self.all_midpoints[tree_idx][hp_id] for hp_id in hp_ids]
+            sizes = [self.all_sizes[tree_idx][hp_id] for hp_id in hp_ids]
             stat = pyrfr.util.weighted_running_stats()
 
             prod_midpoints = it.product(*midpoints)
             prod_sizes = it.product(*sizes)
 
-            sample = np.full(self.n_dims, np.nan, dtype=np.float)
+            sample = np.full(self.n_params, np.nan, dtype=float)
 
             # make prediction for all midpoints and weigh them by the corresponding size
             for i, (m, s) in enumerate(zip(prod_midpoints, prod_sizes)):
-                sample[list(dimensions)] = list(m)
+                sample[list(hp_ids)] = list(m)
 
-                ls = self.model.marginal_prediction_stat_of_tree(
-                    tree_idx, sample.tolist()
-                )
+                ls = self._model.marginal_prediction_stat_of_tree(tree_idx, sample.tolist())
                 # self.logger.debug("%s, %s", (sample, ls.mean()))
                 if not np.isnan(ls.mean()):
                     stat.push(ls.mean(), np.prod(np.array(s)) * ls.sum_of_weights())
@@ -193,15 +185,15 @@ class fANOVAForest(Forest):
             if stat.sum_of_weights() > 0:
                 V_U_total = stat.variance_population()
                 V_U_individual = stat.variance_population()
-                for k in range(1, len(dimensions)):
+                for k in range(1, len(hp_ids)):
                     if k > depth:
                         break
 
-                    for sub_dims in it.combinations(dimensions, k):
+                    for sub_dims in it.combinations(hp_ids, k):
                         V_U_individual -= self.V_U_individual[sub_dims][tree_idx]
                 V_U_individual = np.clip(V_U_individual, 0, np.inf)
 
-            self.V_U_individual[dimensions].append(V_U_individual)
-            self.V_U_total[dimensions].append(V_U_total)
+            self.V_U_individual[hp_ids].append(V_U_individual)
+            self.V_U_total[hp_ids].append(V_U_total)
 
         return self.V_U_individual, self.V_U_total

@@ -11,19 +11,23 @@ class BOHBRun(Run):
     _initial_order = 2
 
     @property
-    def hash(self) -> str:
-        """
-        The id from the files in the current working_dir/run_name/*. For example, results.json could be read and hashed.
-        Idea behind: If id changed, then we have to update cached run.
-        """
+    def hash(self):
+        if self.path is None:
+            return ""
+
         # Use hash of results.json as id
         return file_to_hash(self.path / "results.json")
 
+    @property
+    def latest_change(self):
+        if self.path is None:
+            return 0
+
+        return Path(self.path / "results.json").stat().st_mtime
+
     @classmethod
-    def from_path(cls, path: Path) -> "BOHBRun":
-        """
-        Based on path, return a new run object.
-        """
+    def from_path(cls, path):
+        path = Path(path)
 
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
@@ -36,8 +40,6 @@ class BOHBRun(Run):
         objective = Objective("Cost", lower=0)
 
         run = BOHBRun(path.stem, configspace=configspace, objectives=objective, meta={})
-
-        # TODO: Make it better
         run._path = path
 
         from hpbandster.core.result import logged_results_to_HBS_result

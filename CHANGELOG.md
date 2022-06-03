@@ -1,3 +1,60 @@
+# Version 1.0
+
+## General
+- Runs are sorted now and only "visible" directories are shown.
+- Mechanics to select runs changed.
+    - Runs can be selected across different working directories now.
+    - Another section to display selected runs.
+    - Press on directory name changes the working directory directly. Makes it easier to navigate.
+    There's also a button to go to parent directory.
+    - Internally, a run has two hashes now
+        - `id`: Based on prefix and path/name. This hash is used to select runs now. No need to
+        distinguish between run and grouped run anymore.
+        - `hash`: Changes based on content.
+- If DeepCAVE was not started before, the path of execution is used as working directory.
+- Shows the errors now if a run could not be converted.
+- Increased stability for static plugins.
+- Updated CLI immensively. Added --open, --n_workers and improved --config (both relative
+and absolute paths are working now). DeepCAVE starts now using only `deepcave`.
+- Improved run cache performance. Each input uses a single file for the output.
+- Improved performance overall.
+- Improved the API mode drastically. 
+- Improved mapping of original and encoded data.
+- Configurations are clickable now.
+- API changes in `AbstractRun`.
+- Jobs in sidebar are clickable and removeable now.
+
+## Documentation
+- Updated texts and images.
+- Documentation of plugins are shown in the dashboard now (converted from rst to md).
+- Added research questions.
+
+## Plugins
+- Overview: Redesigned with barplot and heatmap for statuses. Also includes configspace now.
+- Added PDP again.
+- Merged LPI and fANOVA.
+- Added dynamic texts to overview and budget correlation.
+- Added help buttons.
+- Added configuration footprint.
+- Configurations display code now.
+
+## Code related
+- Added dash-extensions so that multiple outputs, no outputs and trigger can be used.
+- Added global notification.
+- Cleaned-up run handler immensely.
+- Logs are better readable.
+- Improved config loading and add development config.
+- Renamed and moved things (Groups, Status, Objectives, ...).
+- Objective is a dataclass now.
+- Added REFRESH_RATE and SAVE_IMAGES to profile.
+
+## Bugfixes
+- Files are no longer shown in run selection.
+- Runs are reloaded from disk in worker now.
+- Internal runs are updated now if they changed.
+- Results from static plugins are saved under the right path now.
+
+
 # Version 0.3
 
 ## General

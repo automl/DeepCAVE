@@ -1,17 +1,7 @@
-import dash
-import dash_bootstrap_components as dbc
+from deepcave import app, config
+from deepcave.layouts.main import MainLayout
 
-from deepcave.config import Config
-
-
-def get_app(config: Config = None):
-    if config is None:
-        config = Config()
-    app = dash.Dash(
-        __name__,
-        title=config.TITLE,
-        update_title="",
-        external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
-        suppress_callback_exceptions=True,
-    )
-    return app
+if __name__ == "__main__":
+    print("\n-------------STARTING SERVER-------------")
+    app.layout = MainLayout(config.PLUGINS)()
+    app.run_server(debug=config.DEBUG, port=config.DASH_PORT, host=config.DASH_ADDRESS)

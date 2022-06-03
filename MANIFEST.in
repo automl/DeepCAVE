@@ -1,8 +1,15 @@
 include LICENSE
 include requirements.txt
+include deepcave/assets/custom.css
 include deepcave/py.typed
-include start.sh
 include deepcave/utils/logging.yml
+include deepcave/worker.py
+include deepcave/server.py
+include deepcave/open.py
+include deepcave/start.sh
+include docs/plugins/*
+
+recursive-include deepcave/docs *.rst
 
 prune tests
 prune examples

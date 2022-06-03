@@ -9,19 +9,20 @@ class DeepCAVERun(Run):
     _initial_order = 1
 
     @property
-    def hash(self) -> str:
-        """
-        The id from the files in the current working_dir/run_name/*. For example, history.jsonl could be read and hashed.
-        Idea behind: If id changed, then we have to update cached trials.
-        """
+    def hash(self):
+        if self.path is None:
+            return ""
 
         # Use hash of history.json as id
         return file_to_hash(self.path / "history.jsonl")
 
-    @classmethod
-    def from_path(cls, path: Path) -> "DeepCAVERun":
-        """
-        Based on working_dir/run_name/*, return a new trials object.
-        """
+    @property
+    def latest_change(self):
+        if self.path is None:
+            return 0
 
-        return DeepCAVERun(path.stem, path=path)
+        return Path(self.path / "history.jsonl").stat().st_mtime
+
+    @classmethod
+    def from_path(cls, path):
+        return DeepCAVERun(path.stem, path=Path(path))

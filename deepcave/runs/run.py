@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Union, Dict, List
+from typing import Any, Dict, List, Optional, Union
 
 import json
 from pathlib import Path
@@ -13,18 +13,31 @@ from ConfigSpace.read_and_write import json as cs_json
 from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
+from deepcave.utils.hash import string_to_hash
 
 
 class Run(AbstractRun, ABC):
     """
-    TODO(dwoiwode): Docstring is outdated?
-    Creates
-    - meta.json
-    - configspace.json
-    - configs.json
-    - history.jsonl
-    - origins.json
-    - models/1.blub
+    Creates a new run.
+    If path is given, runs are loaded from the path.
+
+    Parameters
+    ----------
+    name : str
+        Name of the run.
+    configspace : ConfigSpace, optional
+        Configuration space of the run. Should be None if `path` is used. By default None.
+    objectives : Union[Objective, List[Objective]], optional
+        Objectives of the run. Should be None if `path` is used. By default None
+    meta : Dict[str, Any], optional
+        Meta data of the run. Should be None if `path` is used. By default None.
+    path : Optional[Union[str, Path]], optional
+        If a path is specified, the run is loaded from there. By default None.
+
+    Raises
+    ------
+    RuntimeError
+        If no configuration space is provided or found.
     """
 
     prefix = "run"
@@ -33,19 +46,13 @@ class Run(AbstractRun, ABC):
     def __init__(
         self,
         name: str,
-        configspace=None,
+        configspace: ConfigSpace = None,
         objectives: Union[Objective, List[Objective]] = None,
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
-    ):
-        """
-        If path is given, runs are loaded from the path.
-
-        Inputs:
-            objectives (Objective or list of Objective): ...
-            meta (dict): Could be `ram`, `cores`, ...
-        """
+    ) -> None:
         super(Run, self).__init__(name)
+
         if objectives is None:
             objectives = []
         if meta is None:
@@ -65,14 +72,16 @@ class Run(AbstractRun, ABC):
             )
 
         # Objectives
-        if not isinstance(objectives, list):
+        if not isinstance(objectives, List):
             objectives = [objectives]
 
+        serialized_objectives = []
         for objective in objectives:
             assert isinstance(objective, Objective)
+            serialized_objectives += [objective.to_json()]
 
         # Meta
-        self.meta = {"objectives": objectives, "budgets": []}
+        self.meta = {"objectives": serialized_objectives, "budgets": []}
         self.meta.update(meta)
 
     @classmethod
@@ -82,6 +91,10 @@ class Run(AbstractRun, ABC):
         Based on a path, return a new Run object.
         """
         pass
+
+    @property
+    def id(self) -> str:
+        return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
     def path(self) -> Optional[Path]:
@@ -108,6 +121,14 @@ class Run(AbstractRun, ABC):
         self.models_dir = self._path / "models"
 
     def exists(self) -> bool:
+        """
+        Checks if the run exists based on the internal path.
+
+        Returns
+        -------
+        bool
+            If run exists.
+        """
         if self._path is None:
             return False
 
@@ -125,24 +146,45 @@ class Run(AbstractRun, ABC):
     def add(
         self,
         costs: Union[List[float], float],
-        config: Union[Dict, Configuration],  # either dict or Configuration
+        config: Union[Dict, Configuration],
         budget: float = np.inf,
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
         origin: str = None,
-        model: Union[str, "torch.nn.Module"] = None,
+        model: Union[str, "torch.nn.Module"] = None,  # type: ignore
         additional: Optional[Dict] = None,
-    ):
+    ) -> None:
         """
-
+        Adds a trial to the run.
         If combination of config and budget already exists, it will be overwritten.
-        Not successful runs are added with None costs.
-        The cost will be calculated on the worst result later on.
+        Not successful runs are added with `None` costs.
 
-        Inputs:
-            additional (dict): What's supported by DeepCAVE? Like `ram`,
-            costs (float or list of floats)
+        Parameters
+        ----------
+        costs : Union[List[float], float]
+            Costs of the run. In case of multi-objective, a list of costs is expected.
+        config : Union[Dict, Configuration]
+            The corresponding configuration.
+        start_time : float, optional
+            Start time. By default 0.0
+        end_time : float, optional
+            End time. By default 0.0
+        status : Status, optional
+            Status of the trial. By default Status.SUCCESS
+        origin : str, optional
+            Origin of the trial. By default None
+        model : Union[str, &quot;torch.nn.Module&quot;], optional
+            Model of the trial. By default None
+        additional : Optional[Dict], optional
+            Additional information of the trial. By default None.
+            Following information is used by DeepCAVE:
+            * traceback
+
+        Raises
+        ------
+        RuntimeError
+            If number of costs does not match number of objectives.
         """
         if additional is None:
             additional = {}
@@ -150,29 +192,33 @@ class Run(AbstractRun, ABC):
         if not isinstance(costs, list):
             costs = [costs]
 
-        assert len(costs) == len(self.get_objectives())
+        if len(costs) != len(self.get_objectives()):
+            raise RuntimeError("Number of costs does not match number of objectives.")
 
+        updated_objectives = []
         for i in range(len(costs)):
             cost = costs[i]
             objective = self.get_objectives()[i]
 
             # Update time objective here
-            if objective["name"] == "time" and cost is None:
+            if objective.name == "time" and cost is None:
                 costs[i] = end_time - start_time
                 cost = costs[i]
 
             # If cost is none, replace it later with the highest cost
-            if cost is None:
-                continue
+            if cost is not None:
+                # Update bounds here
+                if not objective.lock_lower:
+                    if cost < objective.lower:  # type: ignore
+                        objective.lower = cost
 
-            # Update bounds here
-            if not objective["lock_lower"]:
-                if cost < objective["lower"]:
-                    self.get_objectives()[i]["lower"] = cost
+                if not objective.lock_upper:
+                    if cost > objective.upper:  # type: ignore
+                        objective.upper = cost
 
-            if not objective["lock_upper"]:
-                if cost > objective["upper"]:
-                    self.get_objectives()[i]["upper"] = cost
+            updated_objectives += [objective.to_json()]
+
+        self.meta["objectives"] = updated_objectives
 
         if isinstance(config, Configuration):
             config = config.get_dictionary()
@@ -196,14 +242,17 @@ class Run(AbstractRun, ABC):
         trial_key = trial.get_key()
         if trial_key not in self.trial_keys:
             self.trial_keys[trial_key] = len(self.history)
-            self.history.append(trial)
+            self.history += [trial]
         else:
+            # Overwrite
             self.history[self.trial_keys[trial_key]] = trial
 
         # Update budgets
         if budget not in self.meta["budgets"]:
             self.meta["budgets"].append(budget)
             self.meta["budgets"].sort()
+
+        self._update_highest_budget(config_id, budget, status)
 
         # Update models
         # Problem: We don't want to have the model in the cache.
@@ -255,11 +304,12 @@ class Run(AbstractRun, ABC):
                 # Remove from dict
                 del self.models[config_id]
 
-    def load(self, path: Optional[Union[str, Path]] = None):
+    def load(self, path: Optional[Union[str, Path]] = None) -> None:
         self.reset()
 
         if path is None and self.path is None:
             raise RuntimeError("Could not load trials because path is None.")
+
         if path is not None:
             self.path = Path(path)
 
@@ -291,3 +341,6 @@ class Run(AbstractRun, ABC):
 
                 # Also create trial_keys
                 self.trial_keys[trial.get_key()] = len(self.history) - 1
+
+                # Update highest budget
+                self._update_highest_budget(trial.config_id, trial.budget, trial.status)

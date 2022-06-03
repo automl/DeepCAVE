@@ -1,40 +1,38 @@
-from typing import Any, Optional, List, Dict
+from typing import Any, Dict, List, Optional
 
-import base64
-import io
+import uuid
 
-from dash import html
+import dash_bootstrap_components as dbc
+import pandas as pd
+from dash import dcc, html
+
+from deepcave.utils.hash import string_to_hash
+
+
+def help_button(text: str, placement="top"):
+    id = "help-button-" + string_to_hash(text)
+    id += str(uuid.uuid1())
+
+    return html.Span(
+        [
+            html.I(id=id, className="ms-1 far fa-question-circle"),
+            dbc.Popover(
+                dcc.Markdown(text, className="p-3 pb-1"),
+                target=id,
+                trigger="hover",
+                placement=placement,
+            ),
+        ]
+    )
 
 
 def render_table(df):
     pass
 
 
-def render_mpl_figure(fig):
-    # TODO(dwoiwode): Duplicate code (see below + ./util.py)?
-    # create a virtual file which matplotlib can use to save the figure
-    buffer = io.BytesIO()
-    # save the image to memory to display in the web
-    fig.savefig(buffer, format="png", transparent=True)
-    buffer.seek(0)
-    # display any kind of image taken from
-    # https://github.com/plotly/dash/issues/71
-    encoded_image = base64.b64encode(buffer.read())
-    return html.Img(
-        src="data:image/png;base64,{}".format(encoded_image.decode()),
-        className="img-fluid",
-    )
-
-
-def display_figure(fig):
-    # TODO(dwoiwode): Duplicate code (see above + ./util.py)?
-    buf = io.BytesIO()  # in-memory files
-    fig.savefig(buf, format="png")  # save to the above file object
-    data = base64.b64encode(buf.getbuffer()).decode("utf8")  # encode to html elements
-    return html.Img(src="data:image/png;base64,{}".format(data))
-
-
-def get_slider_marks(strings: Optional[List[Dict[str, Any]]] = None, steps=10) -> Dict[int, str]:
+def get_slider_marks(
+    strings: Optional[List[Dict[str, Any]]] = None, steps=10, access_all=False
+) -> Dict[int, str]:
     marks = {}
     if strings is None:
         marks[0] = {"label": str("None")}
@@ -46,6 +44,9 @@ def get_slider_marks(strings: Optional[List[Dict[str, Any]]] = None, steps=10) -
     for i, string in enumerate(strings):
         if i % (len(strings) / steps) == 0:
             marks[i] = {"label": str(string)}
+        else:
+            if access_all:
+                marks[i] = {"label": ""}
 
     # Also include the last mark
     marks[len(strings) - 1] = {"label": str(strings[-1])}
@@ -92,3 +93,17 @@ def get_checklist_options(labels=None, values=None, binary=False):
 
 def get_radio_options(labels=None, values=None, binary=False):
     return get_select_options(labels=labels, values=values, binary=binary)
+
+
+def create_table(
+    output: Dict[str, str], fixed=False, head=True, striped=True, mb=True
+) -> dbc.Table:
+    className = ""
+    if not head:
+        className += "exclude-head "
+    if fixed:
+        className += "fixed "
+    className += "mb-0" if not mb else ""
+    df = pd.DataFrame(output)
+
+    return dbc.Table.from_dataframe(df, striped=striped, bordered=True, className=className)

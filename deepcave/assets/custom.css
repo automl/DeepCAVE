@@ -1,13 +1,14 @@
-html, body,
+html,
+body,
 #react-entry-point,
 #_dash-global-error-container,
-#_dash-global-error-container > div,
-#_dash-global-error-container > div > div:not(.dash-debug-alert-label, .dash-debug-menu__outer, .dash-debug-menu),
-#_dash-global-error-container > div > div > div,
+#_dash-global-error-container>div,
+#_dash-global-error-container>div>div:not(.dash-debug-alert-label, .dash-debug-menu__outer, .dash-debug-menu),
+#_dash-global-error-container>div>div>div,
 #_dash-app-content,
-#_dash-app-content > div,
+#_dash-app-content>div,
 #main-container,
-#main-container > .row {
+#main-container>.row {
     height: 100%;
 }
 
@@ -46,10 +47,27 @@ thead {
     border-bottom: 2px solid lightgray;
 }
 
-.nav-link .far, .nav-link .fas {
+.nav-link .far,
+.nav-link .fas {
     margin-right: 0.5rem;
 }
 
+#navigation-items .nav-link.active {
+    background-color: rgb(232, 232, 232) !important;
+    border-right: 3px solid #0d6efd;
+}
+
+table.table.fixed {
+    table-layout: fixed;
+}
+
+table.table.exclude-head thead {
+    display: none;
+}
+
+table.table.exclude-head tbody {
+    border-top: 0px solid #d4d4d4;
+}
 
 /*
 .loading-container > *[data-dash-is-loading="true"] {
