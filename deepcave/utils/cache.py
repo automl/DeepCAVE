@@ -6,10 +6,19 @@ from copy import deepcopy
 from pathlib import Path
 
 from deepcave.utils.compression import JSON_DENSE_SEPARATORS
+from deepcave.utils.logs import get_logger
 from deepcave.utils.util import short_string
 
 
+logger = get_logger(__name__)
+
+
 class Cache:
+    """
+    Cache handles a json file. Decided not to use flask_caching
+    since code is easier to change to our needs.
+    """
+
     def __init__(
         self,
         filename: Optional[Path] = None,
@@ -17,11 +26,6 @@ class Cache:
         debug: bool = False,
         write_file: bool = True,
     ) -> None:
-        """
-        Cache handles a json file. Decided not to use flask_caching
-        since code is easier to change to our needs.
-        """
-        self._logger = logging.getLogger("deepcave.cache")
         self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
@@ -30,7 +34,7 @@ class Cache:
         self._debug = debug
 
         # Initial setup
-        self._setup(filename)
+        self._setup(filename, write_file)
 
     def _setup(self, filename: Optional[Path], write_file: bool = True) -> None:
         self._data = {}
@@ -42,7 +46,7 @@ class Cache:
             self.read()
 
     def read(self) -> None:
-        """Reads content from a file and load into cache as dictionary"""
+        """Reads content from a file and load into cache as dictionary."""
         if self._filename is None or not self._filename.exists():
             return
 
@@ -51,13 +55,11 @@ class Cache:
             self._data.update(json.load(f))
 
     def write(self) -> None:
-        """Write content of cache into file"""
+        """Write content of cache into file."""
         if self._filename is None:
             return
 
         self._filename.parent.mkdir(exist_ok=True, parents=True)
-
-        # self._logger.debug(f"{self._filename.name}: Write to file. Debug: {self._debug}")
         with self._filename.open("w") as f:
             if self._debug:
                 json.dump(self._data, f, indent=4)
@@ -74,7 +76,7 @@ class Cache:
         if self._filename is not None:
             name = self._filename.name
 
-        self._logger.debug(
+        logger.debug(
             f"{name}: Set \"{','.join(keys)}\" to \"{short_string(value, 60, mode='suffix')}\"."
         )
         d = self._data
@@ -123,7 +125,7 @@ class Cache:
         """Clear all cache and reset to defaults"""
         filename = self._filename
 
-        if self._filename is not None:
+        if filename is not None and filename.exists():
             self._filename.unlink()
 
         self._setup(filename, write_file=write_file)
