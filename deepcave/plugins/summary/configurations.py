@@ -175,7 +175,13 @@ class Configurations(DynamicPlugin):
             html.H3("Objectives"),
             dbc.Tabs(
                 [
-                    dbc.Tab(dcc.Graph(id=register("performance_graph", "figure"), style={"height": config.FIGURE_HEIGHT}), label="Graph"),
+                    dbc.Tab(
+                        dcc.Graph(
+                            id=register("performance_graph", "figure"),
+                            style={"height": config.FIGURE_HEIGHT},
+                        ),
+                        label="Graph",
+                    ),
                     dbc.Tab(html.Div(id=register("performance_table", "children")), label="Table"),
                 ]
             ),
@@ -185,7 +191,8 @@ class Configurations(DynamicPlugin):
                 [
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("configspace_graph", "figure"), style={"height": config.FIGURE_HEIGHT}
+                            id=register("configspace_graph", "figure"),
+                            style={"height": config.FIGURE_HEIGHT},
                         ),
                         label="Graph",
                     ),

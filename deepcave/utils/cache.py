@@ -9,7 +9,6 @@ from deepcave.utils.compression import JSON_DENSE_SEPARATORS
 from deepcave.utils.logs import get_logger
 from deepcave.utils.util import short_string
 
-
 logger = get_logger(__name__)
 
 

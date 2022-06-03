@@ -1,6 +1,6 @@
-from deepcave import queue
 from rq import Connection, Worker
 
+from deepcave import queue
 
 # https://github.com/tcbegley/dash-rq-demo
 if __name__ == "__main__":

@@ -19,7 +19,6 @@ from deepcave import interactive
 from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
 from deepcave.utils.logs import get_logger
 
-
 logger = get_logger(__name__)
 
 

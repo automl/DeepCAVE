@@ -7,7 +7,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from scipy import stats
 
-from deepcave import notification, config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status
 from deepcave.utils.layout import create_table, get_select_options
