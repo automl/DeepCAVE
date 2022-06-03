@@ -15,13 +15,13 @@ class TestRun(unittest.TestCase):
     def setUp(self) -> None:
         # Initiate run here
         self.run1: AbstractRun = SMACRun.from_path(
-            "logs/SMAC/outlier-detection/SMAC-cardio-015-0-0"
+            "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-0"
         )
         self.run2: AbstractRun = SMACRun.from_path(
-            "logs/SMAC/outlier-detection/DEHB-cardio-015-0-25"
+            "logs/SMAC/outlier-detection/DEHB-pendigits-015-0-25"
         )
         self.run3: AbstractRun = SMACRun.from_path(
-            "logs/SMAC/outlier-detection/SMAC-cardio-015-0-50"
+            "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-50"
         )
 
     def test(self) -> None:

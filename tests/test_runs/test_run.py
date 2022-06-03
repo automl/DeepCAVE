@@ -9,7 +9,9 @@ from deepcave.runs.converters.smac import SMACRun
 class TestRun(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run: AbstractRun = SMACRun.from_path("logs/SMAC/outlier-detection/SMAC-cardio-015-0-0")
+        self.run: AbstractRun = SMACRun.from_path(
+            "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-0"
+        )
 
     def test_configs(self):
         # Get a random config_id
