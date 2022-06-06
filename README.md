@@ -89,6 +89,13 @@ If you specify `--open` your webbrowser automatically opens at `http://127.0.0.1
 You can find more arguments and information (like using custom configurations) in the
 [documentation](https://automl.github.io/DeepCAVE/main/getting_started.html).
 
+## Example runs
+DeepCAVE comes with some pre-evaluated runs to get a feel for what DeepCAVE can do.
+
+If you install from github via `git clone git@github.com:automl/DeepCave.git; pip install -e DeepCAVE`,
+you can try out some example configurations by navigating in DeepCAVE to `DeepCave/logs/DeepCAVE/mnist_pytorch`
+or any of the other folders, and hitting the `+` on the runs provided.
+
 
 ## Citation
 
