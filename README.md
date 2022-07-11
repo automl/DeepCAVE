@@ -89,14 +89,30 @@ If you specify `--open` your webbrowser automatically opens at `http://127.0.0.1
 You can find more arguments and information (like using custom configurations) in the
 [documentation](https://automl.github.io/DeepCAVE/main/getting_started.html).
 
+
 ## Example runs
+
 DeepCAVE comes with some pre-evaluated runs to get a feel for what DeepCAVE can do.
 
-If you install from github via `git clone git@github.com:automl/DeepCave.git; pip install -e DeepCAVE`,
-you can try out some example configurations by navigating in DeepCAVE to `DeepCave/logs/DeepCAVE/mnist_pytorch`
-or any of the other folders, and hitting the `+` on the runs provided.
+When you installed the package from GitHub via `git clone git@github.com:automl/DeepCAVE.git; pip install -e DeepCAVE`,
+you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
+For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
+the `+` button.
 
 
 ## Citation
 
-Currently, DeepCAVE is under review.
+If you use DeepCAVE in one of your research projects, please cite our [ReALML@ICML'22 workshop paper](https://arxiv.org/abs/2206.03493):
+```
+@misc{sass-realml2022,
+    title = {DeepCAVE: An Interactive Analysis Tool for Automated Machine Learning},
+    author = {Sass, René and Bergman, Eddie and Biedenkapp, André and Hutter, Frank and Lindauer, Marius},
+    doi = {10.48550/ARXIV.2206.03493},
+    url = {https://arxiv.org/abs/2206.03493},
+    publisher = {arXiv},
+    year = {2022},
+    copyright = {arXiv.org perpetual, non-exclusive license}
+}
+```
+
+Copyright (C) 2016-2022  [AutoML Group](http://www.automl.org/).
