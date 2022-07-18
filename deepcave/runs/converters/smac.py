@@ -137,6 +137,10 @@ class SMACRun(Run):
             # Round budget
             budget = np.round(budget, 2)
 
+            origin = None
+            if config_id in config_origins:
+                origin = config_origins[config_id]
+
             run.add(
                 costs=[cost, time],
                 config=config,
@@ -144,7 +148,7 @@ class SMACRun(Run):
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
-                origin=config_origins[config_id],
+                origin=origin,
                 additional=additional_info,
             )
 
