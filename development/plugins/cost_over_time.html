@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -35,13 +35,14 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Configuration Cube" href="configuration_cube.html" />
     <link rel="prev" title="Configuration Footprint" href="configuration_footprint.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -138,23 +139,13 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/api/parallel_coordinates.html">
-     Parallel Coordinates
+    <a class="reference internal" href="../examples/api/index.html">
+     API
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/minimal.html">
-     Record Minimal Run
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron via Sklearn
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/mnist_pytorch.html">
-     Multi-Layer Perceptron via PyTorch
+    <a class="reference internal" href="../examples/record/index.html">
+     Record
     </a>
    </li>
   </ul>
@@ -325,7 +316,7 @@ style="width: 100%;">
               <div>
                 
   <section id="cost-over-time">
-<h1>Cost Over Time<a class="headerlink" href="#cost-over-time" title="Permalink to this headline">¶</a></h1>
+<h1>Cost Over Time<a class="headerlink" href="#cost-over-time" title="Permalink to this heading">¶</a></h1>
 <p>One goal of using AutoML is to gain high-peak performance. However, you also want to see
 how the objectives change over time. To see the change based on the time or number of
 configurations, this plugin visualize it for you.</p>
@@ -344,7 +335,7 @@ is not possible.</p>
 <li><p>How long does the optimizer need to reach a certain objective value?</p></li>
 </ul>
 <section id="inputs-and-filters">
-<h2>Inputs and Filters<a class="headerlink" href="#inputs-and-filters" title="Permalink to this headline">¶</a></h2>
+<h2>Inputs and Filters<a class="headerlink" href="#inputs-and-filters" title="Permalink to this heading">¶</a></h2>
 <p>The objective is used to compare the runs on the y-axis. The option “x-axis” is a
 convenient way to influence the x-axis to your needs. If you are viewing a run which takes long,
 then the logarithmic option would be best for you. If you want to know how many configurations the
@@ -353,7 +344,7 @@ for you.</p>
 <p>Aditionally, you can specify whether you would like to see runs and/or groups or not.</p>
 </section>
 <section id="interpretation">
-<h2>Interpretation<a class="headerlink" href="#interpretation" title="Permalink to this headline">¶</a></h2>
+<h2>Interpretation<a class="headerlink" href="#interpretation" title="Permalink to this heading">¶</a></h2>
 <p>As mentioned above, the resulting graph shows the objective values on the y-axis and the
 time on the x-axis. Based on the lines, you can see when a run/group is performing better/worse
 to the others and to which time. This graph is perfect to determine which optimizer converges
@@ -405,7 +396,7 @@ the group. Use this feature to see how much spread between multiple runs exists.
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.5.0. Template is modified version of <a
+5.1.1. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

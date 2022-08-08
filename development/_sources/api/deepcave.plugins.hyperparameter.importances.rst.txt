@@ -1,0 +1,29 @@
+deepcave.plugins.hyperparameter.importances
+===========================================
+
+.. automodule:: deepcave.plugins.hyperparameter.importances
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Importances
+   
+   
+
+   
+   
+   
+
+
+

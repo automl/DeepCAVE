@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -35,13 +35,14 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Overview" href="overview.html" />
     <link rel="prev" title="Multi-Layer Perceptron via PyTorch" href="../examples/record/mnist_pytorch.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -138,23 +139,13 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/api/parallel_coordinates.html">
-     Parallel Coordinates
+    <a class="reference internal" href="../examples/api/index.html">
+     API
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/minimal.html">
-     Record Minimal Run
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron via Sklearn
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../examples/record/mnist_pytorch.html">
-     Multi-Layer Perceptron via PyTorch
+    <a class="reference internal" href="../examples/record/index.html">
+     Record
     </a>
    </li>
   </ul>
@@ -330,7 +321,7 @@ style="width: 100%;">
               <div>
                 
   <section id="plugins">
-<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h1>
+<h1>Plugins<a class="headerlink" href="#plugins" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>Plugins are used to display data in a specific way. There are plugins to analyse the performance,
@@ -341,7 +332,7 @@ understand. It should give you more insight both data and model-wise and can ser
 sanity check.</p>
 <p>User can also add their own plugins to provide deeper insights that suit their needs.</p>
 <section id="plugin-structure">
-<h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Permalink to this headline">¶</a></h2>
+<h2>Plugin Structure<a class="headerlink" href="#plugin-structure" title="Permalink to this heading">¶</a></h2>
 <p>The plugins in DeepCAVE are structured in a specific way. This is done with three blocks:</p>
 <ol class="arabic simple">
 <li><p><strong>Input block</strong>: This is used to trigger new calculations. For example, when you change the</p></li>
@@ -369,7 +360,7 @@ cost over time plugin.</p>
 <img alt="../_images/blocks.png" src="../_images/blocks.png" />
 </section>
 <section id="plugin-types">
-<h2>Plugin Types<a class="headerlink" href="#plugin-types" title="Permalink to this headline">¶</a></h2>
+<h2>Plugin Types<a class="headerlink" href="#plugin-types" title="Permalink to this heading">¶</a></h2>
 <p>DeepCAVE has two kinds of plugins, <strong>static</strong> and <strong>dynamic</strong>. While <strong>dynamic</strong> plugins update the
 results immediately, <strong>static</strong> plugins are triggered by a <cite>Process</cite> button before displaying their
 output.</p>
@@ -386,7 +377,7 @@ clean the cache directly in the interface.</p>
 </div>
 </section>
 <section id="custom-plugin">
-<h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Plugin<a class="headerlink" href="#custom-plugin" title="Permalink to this heading">¶</a></h2>
 <p>DeepCAVE was designed so that the plugins require minimal design. We recommend using any of our
 provided plugins as a starting point and change it to your needs.</p>
 <p>After you have created your plugin, you need to register it in your config file. If you work
@@ -436,7 +427,7 @@ We would be very happy to receive pull-requests!</p>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.5.0. Template is modified version of <a
+5.1.1. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

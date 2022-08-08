@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -35,13 +35,14 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="API References" href="api.html" />
     <link rel="prev" title="Partial Dependencies" href="plugins/partial_dependencies.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -138,23 +139,13 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="examples/api/parallel_coordinates.html">
-     Parallel Coordinates
+    <a class="reference internal" href="examples/api/index.html">
+     API
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/minimal.html">
-     Record Minimal Run
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/digits_sklearn.html">
-     Multi-Layer Perceptron via Sklearn
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="examples/record/mnist_pytorch.html">
-     Multi-Layer Perceptron via PyTorch
+    <a class="reference internal" href="examples/record/index.html">
+     Record
     </a>
    </li>
   </ul>
@@ -320,7 +311,7 @@ style="width: 100%;">
               <div>
                 
   <section id="converters">
-<h1>Converters<a class="headerlink" href="#converters" title="Permalink to this headline">¶</a></h1>
+<h1>Converters<a class="headerlink" href="#converters" title="Permalink to this heading">¶</a></h1>
 <p>DeepCAVE uses <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a> objects to interpret the input data. Converters make
 sure that folders are put into the right format so that the files can be interpreted correctly.</p>
 <p>Currently, DeepCAVE supports the following converters:</p>
@@ -338,7 +329,7 @@ finished processes and running processes that regularly write new results to dis
 converter is available.</p>
 </div>
 <section id="custom-converter">
-<h2>Custom Converter<a class="headerlink" href="#custom-converter" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Converter<a class="headerlink" href="#custom-converter" title="Permalink to this heading">¶</a></h2>
 <p>To support a new converter, you need to create a new class that inherits from
 <a class="reference internal" href="api/deepcave.runs.run.html#module-deepcave.runs.run"><span class="std std-ref">Run</span></a>. Three methods are needed:</p>
 <ul class="simple">
@@ -396,7 +387,7 @@ The next time you select a run, DeepCAVE will automatically use this converter a
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.5.0. Template is modified version of <a
+5.1.1. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
