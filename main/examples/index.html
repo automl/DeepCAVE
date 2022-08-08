@@ -1,12 +1,12 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Examples &#8212; DeepCAVE Documentation 1.0 documentation</title>
+    <title>Examples &#8212; DeepCAVE Documentation 1.0.1 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -35,13 +35,14 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Parallel Coordinates" href="api/parallel_coordinates.html" />
+    <link rel="next" title="API" href="api/index.html" />
     <link rel="prev" title="Getting Started" href="../getting_started.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -114,7 +115,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.0</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.0.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -138,23 +139,13 @@ style="width: 100%;">
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="api/parallel_coordinates.html">
-     Parallel Coordinates
+    <a class="reference internal" href="api/index.html">
+     API
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="record/minimal.html">
-     Record Minimal Run
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="record/digits_sklearn.html">
-     Multi-Layer Perceptron via Sklearn
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="record/mnist_pytorch.html">
-     Multi-Layer Perceptron via PyTorch
+    <a class="reference internal" href="record/index.html">
+     Record
     </a>
    </li>
   </ul>
@@ -302,8 +293,6 @@ style="width: 100%;">
   <a class="reference internal nav-link" href="#record">
    Record
   </a>
-  <ul class="nav section-nav flex-column">
-  </ul>
  </li>
 </ul>
 
@@ -327,50 +316,32 @@ style="width: 100%;">
               <div>
                 
   <section id="examples">
-<span id="sphx-glr-examples"></span><h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<div class="sphx-glr-clear"></div><section id="api">
-<span id="sphx-glr-examples-api"></span><h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h1>
+<div class="sphx-glr-thumbnails"></div><section id="api">
+<h2>API<a class="headerlink" href="#api" title="Permalink to this heading">¶</a></h2>
 <p>If you want to interact with the API directly, you can make use of the API mode.
 Have a look into the examples, to get an overview how to use DeepCAVE in this way.</p>
-<div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin parallel coordinates. Note that other plugins use the ..."><figure class="align-default" id="id1">
-<img alt="Parallel Coordinates" src="../_images/sphx_glr_parallel_coordinates_thumb.png" />
-<figcaption>
-<p><span class="caption-text"><a class="reference internal" href="api/parallel_coordinates.html#sphx-glr-examples-api-parallel-coordinates-py"><span class="std std-ref">Parallel Coordinates</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-</div><div class="toctree-wrapper compound">
-</div>
-<div class="sphx-glr-clear"></div></section>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin parallel coordinates. Note that other plugins use the ..."><img alt="Parallel Coordinates" src="../_images/sphx_glr_parallel_coordinates_thumb.png" />
+<p><a class="reference internal" href="api/parallel_coordinates.html#sphx-glr-examples-api-parallel-coordinates-py"><span class="std std-ref">Parallel Coordinates</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Parallel Coordinates</div>
+</div></div></section>
 <section id="record">
-<span id="sphx-glr-examples-record"></span><h2>Record<a class="headerlink" href="#record" title="Permalink to this headline">¶</a></h2>
+<h2>Record<a class="headerlink" href="#record" title="Permalink to this heading">¶</a></h2>
 <p>You can incorporate DeepCAVE directly to save your results in DeepCAVE format. To do so,
 you have to use the <cite>Record</cite> class. See the following examples to get an idea how to log your
 AutoML runs.</p>
-<div class="sphx-glr-thumbcontainer" tooltip="This example shows how DeepCAVE can be used to record a minimal run."><figure class="align-default" id="id2">
-<img alt="Record Minimal Run" src="../_images/sphx_glr_minimal_thumb.png" />
-<figcaption>
-<p><span class="caption-text"><a class="reference internal" href="record/minimal.html#sphx-glr-examples-record-minimal-py"><span class="std std-ref">Record Minimal Run</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-</div><div class="toctree-wrapper compound">
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how DeepCAVE can be used to record a minimal run."><img alt="Record Minimal Run" src="../_images/sphx_glr_minimal_thumb.png" />
+<p><a class="reference internal" href="record/minimal.html#sphx-glr-examples-record-minimal-py"><span class="std std-ref">Record Minimal Run</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Record Minimal Run</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in D..."><img alt="Multi-Layer Perceptron via Sklearn" src="../_images/sphx_glr_digits_sklearn_thumb.png" />
+<p><a class="reference internal" href="record/digits_sklearn.html#sphx-glr-examples-record-digits-sklearn-py"><span class="std std-ref">Multi-Layer Perceptron via Sklearn</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via Sklearn</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the ..."><img alt="Multi-Layer Perceptron via PyTorch" src="../_images/sphx_glr_mnist_pytorch_thumb.png" />
+<p><a class="reference internal" href="record/mnist_pytorch.html#sphx-glr-examples-record-mnist-pytorch-py"><span class="std std-ref">Multi-Layer Perceptron via PyTorch</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via PyTorch</div>
+</div></div><div class="toctree-wrapper compound">
 </div>
-<div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in D..."><figure class="align-default" id="id3">
-<img alt="Multi-Layer Perceptron via Sklearn" src="../_images/sphx_glr_digits_sklearn_thumb.png" />
-<figcaption>
-<p><span class="caption-text"><a class="reference internal" href="record/digits_sklearn.html#sphx-glr-examples-record-digits-sklearn-py"><span class="std std-ref">Multi-Layer Perceptron via Sklearn</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-</div><div class="toctree-wrapper compound">
-</div>
-<div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the ..."><figure class="align-default" id="id4">
-<img alt="Multi-Layer Perceptron via PyTorch" src="../_images/sphx_glr_mnist_pytorch_thumb.png" />
-<figcaption>
-<p><span class="caption-text"><a class="reference internal" href="record/mnist_pytorch.html#sphx-glr-examples-record-mnist-pytorch-py"><span class="std std-ref">Multi-Layer Perceptron via PyTorch</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-</div><div class="toctree-wrapper compound">
-</div>
-<div class="sphx-glr-clear"></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-footer sphx-glr-footer-gallery docutils container">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/bc82bea3a5dd7bdba60b65220891d9e5/examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">examples_python.zip</span></code></a></p>
 </div>
@@ -394,10 +365,10 @@ AutoML runs.</p>
             <p class="prev-next-title">Getting Started</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="api/parallel_coordinates.html" title="next page">
+    <a class='right-next' id="next-link" href="api/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Parallel Coordinates</p>
+        <p class="prev-next-title">API</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -422,7 +393,7 @@ AutoML runs.</p>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-4.5.0. Template is modified version of <a
+5.1.1. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

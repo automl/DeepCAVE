@@ -1,0 +1,81 @@
+
+
+.. _sphx_glr_examples_record:
+
+Record
+^^^^^^
+
+You can incorporate DeepCAVE directly to save your results in DeepCAVE format. To do so,
+you have to use the `Record` class. See the following examples to get an idea how to log your
+AutoML runs.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how DeepCAVE can be used to record a minimal run.">
+
+.. only:: html
+
+  .. image:: /examples/record/images/thumb/sphx_glr_minimal_thumb.png
+    :alt: Record Minimal Run
+
+  :ref:`sphx_glr_examples_record_minimal.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Record Minimal Run</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in D...">
+
+.. only:: html
+
+  .. image:: /examples/record/images/thumb/sphx_glr_digits_sklearn_thumb.png
+    :alt: Multi-Layer Perceptron via Sklearn
+
+  :ref:`sphx_glr_examples_record_digits_sklearn.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via Sklearn</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the ...">
+
+.. only:: html
+
+  .. image:: /examples/record/images/thumb/sphx_glr_mnist_pytorch_thumb.png
+    :alt: Multi-Layer Perceptron via PyTorch
+
+  :ref:`sphx_glr_examples_record_mnist_pytorch.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via PyTorch</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/record/minimal
+   /examples/record/digits_sklearn
+   /examples/record/mnist_pytorch
+
