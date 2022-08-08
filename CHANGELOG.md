@@ -2,6 +2,7 @@
 
 ## Bug-Fixes
 - SMAC Converter: If config origin is not found then `None` is used.
+- Restricting SMAC<1.4.0 as SMAC had some API changes.
 
 
 # Version 1.0
