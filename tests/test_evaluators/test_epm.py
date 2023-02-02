@@ -7,14 +7,14 @@ from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.epm.random_forest import RandomForest
 from deepcave.runs import AbstractRun
-from deepcave.runs.converters.smac import SMACRun
+from deepcave.runs.converters.smac_v1 import SMAC1Run
 from deepcave.runs.status import Status
 
 
 class TestEPM(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run: AbstractRun = SMACRun.from_path("logs/SMAC/mlp/run_1")
+        self.run: AbstractRun = SMAC1Run.from_path("logs/SMAC/mlp/run_1")
         self.cs = self.run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
 

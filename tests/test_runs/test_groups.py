@@ -7,20 +7,20 @@ import pytest
 from requests import check_compatibility
 
 from deepcave.runs import AbstractRun, check_equality
-from deepcave.runs.converters.smac import SMACRun
+from deepcave.runs.converters.smac_v1 import SMAC1Run
 from deepcave.runs.group import Group
 
 
 class TestRun(unittest.TestCase):
     def setUp(self) -> None:
         # Initiate run here
-        self.run1: AbstractRun = SMACRun.from_path(
+        self.run1: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-0"
         )
-        self.run2: AbstractRun = SMACRun.from_path(
+        self.run2: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/DEHB-pendigits-015-0-25"
         )
-        self.run3: AbstractRun = SMACRun.from_path(
+        self.run3: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-50"
         )
 

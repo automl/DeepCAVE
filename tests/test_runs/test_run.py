@@ -3,13 +3,13 @@ from typing import List
 import unittest
 
 from deepcave.runs import AbstractRun
-from deepcave.runs.converters.smac import SMACRun
+from deepcave.runs.converters.smac_v1 import SMAC1Run
 
 
 class TestRun(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run: AbstractRun = SMACRun.from_path(
+        self.run: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-0"
         )
 

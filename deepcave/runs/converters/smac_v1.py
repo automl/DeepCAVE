@@ -9,8 +9,8 @@ from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class SMACRun(Run):
-    prefix = "SMAC"
+class SMAC1Run(Run):
+    prefix = "SMAC_v1"
     _initial_order = 2
 
     @property
@@ -65,7 +65,7 @@ class SMACRun(Run):
                     meta[arg] = value
 
         # Let's create a new run object
-        run = SMACRun(
+        run = SMAC1Run(
             name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
         )
 

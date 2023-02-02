@@ -3,7 +3,7 @@
 # If things break on update, raise an issue
 repos:
   - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
+    rev: 5.12.0
     hooks:
       - id: isort
         name: isort imports deepcave
@@ -14,7 +14,7 @@ repos:
         files: tests
 
   - repo: https://github.com/ambv/black
-    rev: 22.1.0
+    rev: 23.1.0
     hooks:
       - id: black
         name: black formatter deepcave
@@ -29,7 +29,7 @@ repos:
         files: examples
 
   - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.1.1
+    rev: 6.3.0
     hooks:
       - id: pydocstyle
         files: deepcave
@@ -42,8 +42,8 @@ repos:
         name: mypy deepcave
         files: deepcave
 
-  - repo: https://gitlab.com/pycqa/flake8
-    rev: 4.0.1
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
     hooks:
       - id: flake8
         name: flake8 deepcave
