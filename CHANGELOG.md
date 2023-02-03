@@ -3,9 +3,6 @@
 ## Converters
 - SMAC 2.0
 
-## Bug-Fixes
-- SMAC Converter: If config origin is not found then `None` is used.
-
 # Version 1.0.1
 
 ## Bug-Fixes
