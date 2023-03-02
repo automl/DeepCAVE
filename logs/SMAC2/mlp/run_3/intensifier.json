@@ -1,0 +1,307 @@
+{
+  "incumbent_ids": [
+    227
+  ],
+  "rejected_config_ids": [
+    13,
+    6,
+    44,
+    121,
+    175,
+    180
+  ],
+  "incumbents_changed": 7,
+  "trajectory": [
+    {
+      "config_ids": [
+        13
+      ],
+      "costs": [
+        0.05008975549365524
+      ],
+      "trial": 62,
+      "walltime": 5.255525350570679
+    },
+    {
+      "config_ids": [
+        6
+      ],
+      "costs": [
+        0.030055710306406747
+      ],
+      "trial": 67,
+      "walltime": 6.700023412704468
+    },
+    {
+      "config_ids": [
+        44
+      ],
+      "costs": [
+        0.02337666357164958
+      ],
+      "trial": 82,
+      "walltime": 9.438430547714233
+    },
+    {
+      "config_ids": [
+        121
+      ],
+      "costs": [
+        0.02226555246053863
+      ],
+      "trial": 214,
+      "walltime": 26.403433799743652
+    },
+    {
+      "config_ids": [
+        175
+      ],
+      "costs": [
+        0.02170380687093787
+      ],
+      "trial": 289,
+      "walltime": 36.22705912590027
+    },
+    {
+      "config_ids": [
+        180
+      ],
+      "costs": [
+        0.020592695759826696
+      ],
+      "trial": 302,
+      "walltime": 37.73793816566467
+    },
+    {
+      "config_ids": [
+        227
+      ],
+      "costs": [
+        0.017251624883936834
+      ],
+      "trial": 372,
+      "walltime": 52.0482816696167
+    }
+  ],
+  "state": {
+    "tracker": {
+      "0,0": [
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 162,
+              "solver": "adam",
+              "batch_size": 88,
+              "learning_rate_init": 0.002895338597838571
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 150,
+              "solver": "adam",
+              "batch_size": 297,
+              "learning_rate_init": 0.004548059515825623
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 214,
+              "solver": "adam",
+              "batch_size": 300,
+              "learning_rate_init": 0.004548059515825623
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 198,
+              "solver": "adam",
+              "batch_size": 278,
+              "learning_rate_init": 0.0032244482976838663
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 19,
+              "solver": "sgd",
+              "batch_size": 30,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0008053137452251421
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 212,
+              "solver": "adam",
+              "batch_size": 279,
+              "learning_rate_init": 0.004416837572641077
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 203,
+              "solver": "adam",
+              "batch_size": 267,
+              "learning_rate_init": 0.0027841535698378416
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 195,
+              "solver": "adam",
+              "batch_size": 294,
+              "learning_rate_init": 0.0027875435601531404
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 194,
+              "solver": "adam",
+              "batch_size": 281,
+              "learning_rate_init": 0.002879997908808825
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 182,
+              "solver": "adam",
+              "batch_size": 259,
+              "learning_rate_init": 0.0033812664061904137
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 212,
+              "solver": "adam",
+              "batch_size": 275,
+              "learning_rate_init": 0.002789975201515774
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 200,
+              "solver": "adam",
+              "batch_size": 271,
+              "learning_rate_init": 0.013765789413448868
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 218,
+              "solver": "adam",
+              "batch_size": 272,
+              "learning_rate_init": 0.004248194964862829
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 183,
+              "solver": "adam",
+              "batch_size": 266,
+              "learning_rate_init": 0.009933123817990447
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 192,
+              "solver": "adam",
+              "batch_size": 288,
+              "learning_rate_init": 0.010798829500744178
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 253,
+              "solver": "adam",
+              "batch_size": 267,
+              "learning_rate_init": 0.06877845265339191
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 217,
+              "solver": "adam",
+              "batch_size": 287,
+              "learning_rate_init": 0.010314743135639676
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 250,
+              "solver": "adam",
+              "batch_size": 276,
+              "learning_rate_init": 0.06845616265729727
+            }
+          ]
+        ]
+      ],
+      "0,1": [
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 165,
+              "solver": "adam",
+              "batch_size": 76,
+              "learning_rate_init": 0.0028924200684490994
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 140,
+              "solver": "adam",
+              "batch_size": 86,
+              "learning_rate_init": 0.002895338597838571
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 211,
+              "solver": "adam",
+              "batch_size": 299,
+              "learning_rate_init": 0.003993325553820291
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 156,
+              "solver": "adam",
+              "batch_size": 76,
+              "learning_rate_init": 0.002895338597838571
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 148,
+              "solver": "adam",
+              "batch_size": 89,
+              "learning_rate_init": 0.002895338597838571
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 139,
+              "solver": "adam",
+              "batch_size": 275,
+              "learning_rate_init": 0.0038173920809012082
+            }
+          ]
+        ]
+      ]
+    }
+  }
+}
