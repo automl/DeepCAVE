@@ -6,13 +6,13 @@ import pytest
 from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.lpi import LPI as Evaluator
 from deepcave.runs import AbstractRun
-from deepcave.runs.converters.smac import SMACRun
+from deepcave.runs.converters.smac3v1 import SMAC3v1Run
 
 
 class TestLPI(unittest.TestCase):
     def setUp(self):
         # Initiate run here
-        self.run: AbstractRun = SMACRun.from_path("logs/SMAC/mlp/run_1")
+        self.run: AbstractRun = SMAC3v1Run.from_path("logs/SMAC3v1/mlp/run_1")
         self.hp_names = self.run.configspace.get_hyperparameter_names()
         self.evaluator = Evaluator(self.run)
 

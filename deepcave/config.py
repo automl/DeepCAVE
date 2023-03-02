@@ -83,6 +83,7 @@ class Config:
     def CONVERTERS(self) -> List[Type["Run"]]:
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
-        from deepcave.runs.converters.smac import SMACRun
+        from deepcave.runs.converters.smac3v1 import SMAC3v1Run
+        from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
-        return [DeepCAVERun, BOHBRun, SMACRun]
+        return [DeepCAVERun, BOHBRun, SMAC3v1Run, SMAC3v2Run]

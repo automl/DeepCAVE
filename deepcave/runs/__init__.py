@@ -482,7 +482,6 @@ class AbstractRun(ABC):
         # Unfortunately, we have to iterate through the history to find the status
         # TODO: Cache the stati
         for trial in self.history:
-
             if trial_key == trial.get_key():
                 return trial.status
 
@@ -893,7 +892,7 @@ class AbstractRun(ABC):
 
 def check_equality(
     runs: List[AbstractRun],
-    meta: bool = True,
+    meta: bool = False,
     configspace: bool = True,
     objectives: bool = True,
     budgets: bool = True,

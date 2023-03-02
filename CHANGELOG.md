@@ -1,3 +1,11 @@
+# Version 1.1
+
+## Converters
+- SMAC 2.0
+
+## Dependencies
+- Remove SMAC dependency by adding required function directly
+
 # Version 1.0.1
 
 ## Bug-Fixes
