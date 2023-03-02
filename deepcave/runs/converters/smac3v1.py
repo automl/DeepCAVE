@@ -9,8 +9,8 @@ from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class SMAC2Run(Run):
-    prefix = "SMAC2"
+class SMAC3v1Run(Run):
+    prefix = "SMAC3v1"
     _initial_order = 2
 
     @property
@@ -48,12 +48,24 @@ class SMAC2Run(Run):
         objective2 = Objective("Time", lower=0)
 
         # Read meta
-        with (path / "scenario.json").open() as json_file:
-            meta = json.load(json_file)
-            meta["run_objectives"] = meta.pop("objectives")
+        # Everything else is ignored
+        ignore = ["train_inst_fn", "pcs_fn", "execdir"]
+
+        meta = {}
+        with (path / "scenario.txt").open() as f:
+            for line in f.readlines():
+                items = line.split(" = ")
+                arg = items[0]
+                value = items[1]
+
+                # Remove \n
+                value = value.replace("\n", "")
+
+                if arg not in ignore:
+                    meta[arg] = value
 
         # Let's create a new run object
-        run = SMAC2Run(
+        run = SMAC3v1Run(
             name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
         )
 
@@ -71,11 +83,7 @@ class SMAC2Run(Run):
 
         first_starttime = None
         seeds = []
-        for (
-            config_id,
-            instance_id,
-            seed,
-            budget,
+        for (config_id, instance_id, seed, budget), (
             cost,
             time,
             status,
@@ -104,15 +112,18 @@ class SMAC2Run(Run):
             starttime = starttime - first_starttime
             endtime = endtime - first_starttime
 
-            if status == 0:
-                # still running
-                continue
-            elif status == 1:
+            status = status["__enum__"]
+
+            if "SUCCESS" in status:
                 status = Status.SUCCESS
-            elif status == 3:
+            elif "TIMEOUT" in status:
                 status = Status.TIMEOUT
-            elif status == 4:
+            elif "ABORT" in status:
+                status = Status.ABORTED
+            elif "MEMOUT" in status:
                 status = Status.MEMORYOUT
+            elif "RUNNING" in status:
+                continue
             else:
                 status = Status.CRASHED
 
@@ -124,10 +135,7 @@ class SMAC2Run(Run):
                 time = endtime - starttime
 
             # Round budget
-            if budget:
-                budget = np.round(budget, 2)
-            else:
-                budget = 0.0
+            budget = np.round(budget, 2)
 
             origin = None
             if config_id in config_origins:

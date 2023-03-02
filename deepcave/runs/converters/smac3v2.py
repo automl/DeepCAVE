@@ -9,8 +9,8 @@ from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
 
-class SMAC1Run(Run):
-    prefix = "SMAC_v1"
+class SMAC3v2Run(Run):
+    prefix = "SMAC3v2"
     _initial_order = 2
 
     @property
@@ -48,24 +48,12 @@ class SMAC1Run(Run):
         objective2 = Objective("Time", lower=0)
 
         # Read meta
-        # Everything else is ignored
-        ignore = ["train_inst_fn", "pcs_fn", "execdir"]
-
-        meta = {}
-        with (path / "scenario.txt").open() as f:
-            for line in f.readlines():
-                items = line.split(" = ")
-                arg = items[0]
-                value = items[1]
-
-                # Remove \n
-                value = value.replace("\n", "")
-
-                if arg not in ignore:
-                    meta[arg] = value
+        with (path / "scenario.json").open() as json_file:
+            meta = json.load(json_file)
+            meta["run_objectives"] = meta.pop("objectives")
 
         # Let's create a new run object
-        run = SMAC1Run(
+        run = SMAC3v2Run(
             name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
         )
 
@@ -83,7 +71,11 @@ class SMAC1Run(Run):
 
         first_starttime = None
         seeds = []
-        for (config_id, instance_id, seed, budget), (
+        for (
+            config_id,
+            instance_id,
+            seed,
+            budget,
             cost,
             time,
             status,
@@ -112,18 +104,15 @@ class SMAC1Run(Run):
             starttime = starttime - first_starttime
             endtime = endtime - first_starttime
 
-            status = status["__enum__"]
-
-            if "SUCCESS" in status:
-                status = Status.SUCCESS
-            elif "TIMEOUT" in status:
-                status = Status.TIMEOUT
-            elif "ABORT" in status:
-                status = Status.ABORTED
-            elif "MEMOUT" in status:
-                status = Status.MEMORYOUT
-            elif "RUNNING" in status:
+            if status == 0:
+                # still running
                 continue
+            elif status == 1:
+                status = Status.SUCCESS
+            elif status == 3:
+                status = Status.TIMEOUT
+            elif status == 4:
+                status = Status.MEMORYOUT
             else:
                 status = Status.CRASHED
 
@@ -135,7 +124,10 @@ class SMAC1Run(Run):
                 time = endtime - starttime
 
             # Round budget
-            budget = np.round(budget, 2)
+            if budget:
+                budget = np.round(budget, 2)
+            else:
+                budget = 0.0
 
             origin = None
             if config_id in config_origins:
