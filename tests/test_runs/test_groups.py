@@ -24,15 +24,9 @@ class TestRun(unittest.TestCase):
         self.run3: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-50"
         )
-        self.run1_v2: AbstractRun = SMAC2Run.from_path(
-            "logs/SMAC2/mlp/run_1"
-        )
-        self.run2_v2: AbstractRun = SMAC2Run.from_path(
-            "logs/SMAC2/mlp/run_2"
-        )
-        self.run3_v2: AbstractRun = SMAC2Run.from_path(
-            "logs/SMAC2/mlp/run_3"
-        )
+        self.run1_v2: AbstractRun = SMAC2Run.from_path("logs/SMAC2/mlp/run_1")
+        self.run2_v2: AbstractRun = SMAC2Run.from_path("logs/SMAC2/mlp/run_2")
+        self.run3_v2: AbstractRun = SMAC2Run.from_path("logs/SMAC2/mlp/run_3")
 
     def test_group_v1(self) -> None:
         group1 = Group("blub", runs=[self.run1, self.run2])

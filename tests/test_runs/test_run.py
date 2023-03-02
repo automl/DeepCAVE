@@ -13,9 +13,7 @@ class TestRun(unittest.TestCase):
         self.run: AbstractRun = SMAC1Run.from_path(
             "logs/SMAC/outlier-detection/SMAC-pendigits-015-0-0"
         )
-        self.run_v2: AbstractRun = SMAC2Run.from_path(
-            "logs/SMAC2/mlp/run_1"
-        )
+        self.run_v2: AbstractRun = SMAC2Run.from_path("logs/SMAC2/mlp/run_1")
 
     def test_configs_v1(self):
         # Get a random config_id
