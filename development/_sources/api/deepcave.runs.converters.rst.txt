@@ -29,5 +29,6 @@ deepcave.runs.converters
 
    deepcave.runs.converters.bohb
    deepcave.runs.converters.deepcave
-   deepcave.runs.converters.smac
+   deepcave.runs.converters.smac3v1
+   deepcave.runs.converters.smac3v2
 
