@@ -70,22 +70,30 @@ def get_types(
                 bounds[i] = (0, 1.0)
         elif isinstance(param, NormalFloatHyperparameter):
             if can_be_inactive:
-                raise ValueError("Inactive parameters not supported for Beta and Normal Hyperparameters")
+                raise ValueError(
+                    "Inactive parameters not supported for Beta and Normal Hyperparameters"
+                )
 
             bounds[i] = (param._lower, param._upper)
         elif isinstance(param, NormalIntegerHyperparameter):
             if can_be_inactive:
-                raise ValueError("Inactive parameters not supported for Beta and Normal Hyperparameters")
+                raise ValueError(
+                    "Inactive parameters not supported for Beta and Normal Hyperparameters"
+                )
 
             bounds[i] = (param.nfhp._lower, param.nfhp._upper)
         elif isinstance(param, BetaFloatHyperparameter):
             if can_be_inactive:
-                raise ValueError("Inactive parameters not supported for Beta and Normal Hyperparameters")
+                raise ValueError(
+                    "Inactive parameters not supported for Beta and Normal Hyperparameters"
+                )
 
             bounds[i] = (param._lower, param._upper)
         elif isinstance(param, BetaIntegerHyperparameter):
             if can_be_inactive:
-                raise ValueError("Inactive parameters not supported for Beta and Normal Hyperparameters")
+                raise ValueError(
+                    "Inactive parameters not supported for Beta and Normal Hyperparameters"
+                )
 
             bounds[i] = (param.bfhp._lower, param.bfhp._upper)
         elif not isinstance(

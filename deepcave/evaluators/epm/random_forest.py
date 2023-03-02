@@ -16,6 +16,7 @@ from ConfigSpace.hyperparameters import (
 from sklearn.decomposition import PCA
 from sklearn.exceptions import NotFittedError
 from sklearn.preprocessing import MinMaxScaler
+
 from deepcave.evaluators.epm.utils import get_types
 
 VERY_SMALL_NUMBER = 1e-10
