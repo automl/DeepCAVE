@@ -21,7 +21,8 @@ class Group(AbstractRun):
 
         try:
             attributes = check_equality(self.runs)
-            self.meta = attributes["meta"]
+            # abstract run requires meta to contain budgets / objectives
+            self.meta = {"budgets": attributes["budgets"], "objectives": attributes["objectives"]}
             self.configspace = attributes["configspace"]
             self.objectives = attributes["objectives"]
             self.budgets = attributes["budgets"]
@@ -82,8 +83,8 @@ class Group(AbstractRun):
 
                     # And update highest budget
                     self._update_highest_budget(new_config_id, trial.budget, trial.status)
-        except Exception:
-            raise NotMergeableError("Runs can not be merged.")
+        except Exception as e:
+            raise NotMergeableError(f"Runs can not be merged: {e}")
 
     def __iter__(self):
         for run in self.runs:

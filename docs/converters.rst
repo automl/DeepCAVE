@@ -7,7 +7,8 @@ sure that folders are put into the right format so that the files can be interpr
 Currently, DeepCAVE supports the following converters:
 
 - DeepCAVE (native)
-- SMAC (v1.1.1)
+- SMAC (v1.4)
+- SMAC (v2.0.0)
 - BOHB
 - Auto-Sklearn
 - Auto-PyTorch
