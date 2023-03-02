@@ -1,0 +1,834 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepcave.evaluators.epm.utils &#8212; DeepCAVE Documentation 1.1 documentation</title>
+    
+  <link href="../../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../../../../index.html">
+  <!-- <p class="title">DeepCAVE Documentation</p> -->
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown mt-1">
+    <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
+        data-toggle="dropdown">
+        v1.1
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action" href="#">v1.1</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../../../search.html" method="get" style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control btn btn-md" name="q" id="search-input"
+    placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off">
+</form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../../index.html">DeepCAVE Documentation</a></h4>
+<div class="mb-3">v1.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../examples/api/index.html">
+     API
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../examples/record/index.html">
+     Record
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/minimal.html">
+       Record Minimal Run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/digits_sklearn.html">
+       Multi-Layer Perceptron via Sklearn
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/mnist_pytorch.html">
+       Multi-Layer Perceptron via PyTorch
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../plugins/index.html">
+   Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configuration_footprint.html">
+     Configuration Footprint
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/importances.html">
+     Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/partial_dependencies.html">
+     Partial Dependencies
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.runs.converters.html">
+       deepcave.runs.converters
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+      <label for="toctree-checkbox-7">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.bohb.html">
+         deepcave.runs.converters.bohb
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.deepcave.html">
+         deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.smac3v1.html">
+         deepcave.runs.converters.smac3v1
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.smac3v2.html">
+         deepcave.runs.converters.smac3v2
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.exceptions.html">
+       deepcave.runs.exceptions
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.group.html">
+       deepcave.runs.group
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.handler.html">
+       deepcave.runs.handler
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.objective.html">
+       deepcave.runs.objective
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.recorder.html">
+       deepcave.runs.recorder
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.run.html">
+       deepcave.runs.run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.status.html">
+       deepcave.runs.status
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.trial.html">
+       deepcave.runs.trial
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.budget.html">
+       deepcave.plugins.budget
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.dynamic.html">
+       deepcave.plugins.dynamic
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.html">
+       deepcave.plugins.hyperparameter
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <label for="toctree-checkbox-9">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.importances.html">
+         deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.pdp.html">
+         deepcave.plugins.hyperparameter.pdp
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.objective.html">
+       deepcave.plugins.objective
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.configuration_cube.html">
+         deepcave.plugins.objective.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.cost_over_time.html">
+         deepcave.plugins.objective.cost_over_time
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html">
+         deepcave.plugins.objective.parallel_coordinates
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.pareto_front.html">
+         deepcave.plugins.objective.pareto_front
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.static.html">
+       deepcave.plugins.static
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.summary.html">
+       deepcave.plugins.summary
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+      <label for="toctree-checkbox-11">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.configurations.html">
+         deepcave.plugins.summary.configurations
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.footprint.html">
+         deepcave.plugins.summary.footprint
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.overview.html">
+         deepcave.plugins.summary.overview
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.layouts.not_found.html">
+       deepcave.layouts.not_found
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.layouts.sidebar.html">
+       deepcave.layouts.sidebar
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.html">
+       deepcave.evaluators.epm
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+      <label for="toctree-checkbox-14">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.fanova_forest.html">
+         deepcave.evaluators.epm.fanova_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.random_forest.html">
+         deepcave.evaluators.epm.random_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.random_forest_surrogate.html">
+         deepcave.evaluators.epm.random_forest_surrogate
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.utils.html">
+         deepcave.evaluators.epm.utils
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.fanova.html">
+       deepcave.evaluators.fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.footprint.html">
+       deepcave.evaluators.footprint
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.lpi.html">
+       deepcave.evaluators.lpi
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.cache.html">
+       deepcave.utils.cache
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.cast.html">
+       deepcave.utils.cast
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.compression.html">
+       deepcave.utils.compression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.configs.html">
+       deepcave.utils.configs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.configspace.html">
+       deepcave.utils.configspace
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.dash.html">
+       deepcave.utils.dash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.data_structures.html">
+       deepcave.utils.data_structures
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.docs.html">
+       deepcave.utils.docs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.files.html">
+       deepcave.utils.files
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.hash.html">
+       deepcave.utils.hash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.layout.html">
+       deepcave.utils.layout
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.logs.html">
+       deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.notification.html">
+       deepcave.utils.notification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.run_caches.html">
+       deepcave.utils.run_caches
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.styled_plot.html">
+       deepcave.utils.styled_plot
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.styled_plotty.html">
+       deepcave.utils.styled_plotty
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.url.html">
+       deepcave.utils.url
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.util.html">
+       deepcave.utils.util
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for deepcave.evaluators.epm.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BetaFloatHyperparameter</span><span class="p">,</span>
+    <span class="n">BetaIntegerHyperparameter</span><span class="p">,</span>
+    <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
+    <span class="n">Constant</span><span class="p">,</span>
+    <span class="n">NormalFloatHyperparameter</span><span class="p">,</span>
+    <span class="n">NormalIntegerHyperparameter</span><span class="p">,</span>
+    <span class="n">OrdinalHyperparameter</span><span class="p">,</span>
+    <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
+    <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_types"><a class="viewcode-back" href="../../../../api/deepcave.evaluators.epm.utils.html#deepcave.evaluators.epm.utils.get_types">[docs]</a><span class="k">def</span> <span class="nf">get_types</span><span class="p">(</span>
+    <span class="n">config_space</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">,</span>
+    <span class="n">instance_features</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the types of the hyperparameters and the bounds of the</span>
+<span class="sd">    hyperparameters and instance features.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Extract types vector for rf from config space and the bounds</span>
+    <span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">config_space</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">())</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">config_space</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">()):</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="n">config_space</span><span class="o">.</span><span class="n">get_parents_of</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">can_be_inactive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">can_be_inactive</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="p">(</span><span class="n">CategoricalHyperparameter</span><span class="p">)):</span>
+            <span class="n">n_cats</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="n">n_cats</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_cats</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">n_cats</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="p">(</span><span class="n">OrdinalHyperparameter</span><span class="p">)):</span>
+            <span class="n">n_cats</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+            <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_cats</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_cats</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
+            <span class="c1"># for constants we simply set types to 0 which makes it a numerical</span>
+            <span class="c1"># parameter</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+                <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># and we leave the bounds to be 0 for now</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">UniformFloatHyperparameter</span><span class="p">):</span>
+            <span class="c1"># Are sampled on the unit hypercube thus the bounds</span>
+            <span class="c1"># are always 0.0, 1.0</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">NormalFloatHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">NormalIntegerHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">nfhp</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">nfhp</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">BetaFloatHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">BetaIntegerHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">bfhp</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">bfhp</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">param</span><span class="p">,</span>
+            <span class="p">(</span>
+                <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
+                <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
+                <span class="n">OrdinalHyperparameter</span><span class="p">,</span>
+                <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
+                <span class="n">NormalFloatHyperparameter</span><span class="p">,</span>
+                <span class="n">NormalIntegerHyperparameter</span><span class="p">,</span>
+                <span class="n">BetaFloatHyperparameter</span><span class="p">,</span>
+                <span class="n">BetaIntegerHyperparameter</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unknown hyperparameter type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">type</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">instance_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="n">types</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">instance_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">types</span><span class="p">,</span> <span class="n">bounds</span></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+6.1.3. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

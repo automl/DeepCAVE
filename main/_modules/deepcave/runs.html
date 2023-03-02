@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.runs &#8212; DeepCAVE Documentation 1.0.1 documentation</title>
+    <title>deepcave.runs &#8212; DeepCAVE Documentation 1.1 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -32,10 +32,8 @@
   <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,7 +54,7 @@
     
     
   <a class="navbar-brand" href="../../index.html">
-    <img src="../../_static/logo.png" class="logo" alt="logo">
+  <!-- <p class="title">DeepCAVE Documentation</p> -->
   </a>
 
     
@@ -92,12 +90,24 @@
       </div>
       
       <div class="navbar-end-item">
-        <form class="bd-search align-items-center" action="../../search.html" method="get"
-style="width: 100%;">
+        <div class="dropdown mt-1">
+    <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
+        data-toggle="dropdown">
+        v1.1
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action" href="#">v1.1</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../search.html" method="get" style="width: 100%;">
   <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+  <input type="search" class="form-control btn btn-md" name="q" id="search-input"
+    placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off">
 </form>
-
       </div>
       
     </div>
@@ -112,7 +122,7 @@ style="width: 100%;">
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.0.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -135,15 +145,49 @@ style="width: 100%;">
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../examples/api/index.html">
      API
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+    </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../examples/record/index.html">
      Record
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../examples/record/minimal.html">
+       Record Minimal Run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../examples/record/digits_sklearn.html">
+       Multi-Layer Perceptron via Sklearn
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../examples/record/mnist_pytorch.html">
+       Multi-Layer Perceptron via PyTorch
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -151,8 +195,8 @@ style="width: 100%;">
   <a class="reference internal" href="../../plugins/index.html">
    Plugins
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -218,36 +262,386 @@ style="width: 100%;">
   <a class="reference internal" href="../../api.html">
    API References
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../api/deepcave.runs.html">
      deepcave.runs
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../api/deepcave.runs.converters.html">
+       deepcave.runs.converters
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+      <label for="toctree-checkbox-7">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.bohb.html">
+         deepcave.runs.converters.bohb
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.deepcave.html">
+         deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.smac3v1.html">
+         deepcave.runs.converters.smac3v1
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.smac3v2.html">
+         deepcave.runs.converters.smac3v2
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.exceptions.html">
+       deepcave.runs.exceptions
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.group.html">
+       deepcave.runs.group
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.handler.html">
+       deepcave.runs.handler
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.objective.html">
+       deepcave.runs.objective
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.recorder.html">
+       deepcave.runs.recorder
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.run.html">
+       deepcave.runs.run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.status.html">
+       deepcave.runs.status
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.runs.trial.html">
+       deepcave.runs.trial
+      </a>
+     </li>
+    </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../api/deepcave.plugins.html">
      deepcave.plugins
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.plugins.budget.html">
+       deepcave.plugins.budget
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.plugins.dynamic.html">
+       deepcave.plugins.dynamic
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.html">
+       deepcave.plugins.hyperparameter
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <label for="toctree-checkbox-9">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.importances.html">
+         deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.pdp.html">
+         deepcave.plugins.hyperparameter.pdp
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../api/deepcave.plugins.objective.html">
+       deepcave.plugins.objective
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.configuration_cube.html">
+         deepcave.plugins.objective.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.cost_over_time.html">
+         deepcave.plugins.objective.cost_over_time
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.parallel_coordinates.html">
+         deepcave.plugins.objective.parallel_coordinates
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.pareto_front.html">
+         deepcave.plugins.objective.pareto_front
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.plugins.static.html">
+       deepcave.plugins.static
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../api/deepcave.plugins.summary.html">
+       deepcave.plugins.summary
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+      <label for="toctree-checkbox-11">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.configurations.html">
+         deepcave.plugins.summary.configurations
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.footprint.html">
+         deepcave.plugins.summary.footprint
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.overview.html">
+         deepcave.plugins.summary.overview
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../api/deepcave.layouts.html">
      deepcave.layouts
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.layouts.not_found.html">
+       deepcave.layouts.not_found
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.layouts.sidebar.html">
+       deepcave.layouts.sidebar
+      </a>
+     </li>
+    </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../api/deepcave.evaluators.html">
      deepcave.evaluators
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../api/deepcave.evaluators.epm.html">
+       deepcave.evaluators.epm
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+      <label for="toctree-checkbox-14">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.fanova_forest.html">
+         deepcave.evaluators.epm.fanova_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.random_forest.html">
+         deepcave.evaluators.epm.random_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.random_forest_surrogate.html">
+         deepcave.evaluators.epm.random_forest_surrogate
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.utils.html">
+         deepcave.evaluators.epm.utils
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.fanova.html">
+       deepcave.evaluators.fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.footprint.html">
+       deepcave.evaluators.footprint
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.lpi.html">
+       deepcave.evaluators.lpi
+      </a>
+     </li>
+    </ul>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="../../api/deepcave.utils.html">
      deepcave.utils
     </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.cache.html">
+       deepcave.utils.cache
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.cast.html">
+       deepcave.utils.cast
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.compression.html">
+       deepcave.utils.compression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.configs.html">
+       deepcave.utils.configs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.configspace.html">
+       deepcave.utils.configspace
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.dash.html">
+       deepcave.utils.dash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.data_structures.html">
+       deepcave.utils.data_structures
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.docs.html">
+       deepcave.utils.docs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.files.html">
+       deepcave.utils.files
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.hash.html">
+       deepcave.utils.hash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.layout.html">
+       deepcave.utils.layout
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.logs.html">
+       deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.notification.html">
+       deepcave.utils.notification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.run_caches.html">
+       deepcave.utils.run_caches
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.styled_plot.html">
+       deepcave.utils.styled_plot
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.styled_plotty.html">
+       deepcave.utils.styled_plotty
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.url.html">
+       deepcave.utils.url
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.util.html">
+       deepcave.utils.util
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -351,7 +745,7 @@ style="width: 100%;">
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Hash of the current run. If hash changes, cache has to be cleared. This ensures that</span>
 <span class="sd">        the cache always holds the latest results of the run.</span>
 
@@ -365,7 +759,7 @@ style="width: 100%;">
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Hash of the file. This is used to identify the file.</span>
 <span class="sd">        In contrast to `hash`, this hash should not be changed throughout the run.</span>
 
@@ -411,7 +805,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">objectives</span>
 
 <div class="viewcode-block" id="AbstractRun.get_objective"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective">[docs]</a>    <span class="k">def</span> <span class="nf">get_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Objective</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the objective based on the id or the name.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the objective based on the id or the name.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -436,7 +830,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_objective_id"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_objective_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the id of the objective if it is found.</span>
 
 <span class="sd">        Parameters</span>
@@ -469,7 +863,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">())))</span>
 
 <div class="viewcode-block" id="AbstractRun.get_objective_name"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_objective_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the cost name of given objective names.</span>
 <span class="sd">        Returns &quot;Combined Cost&quot; if multiple objective names were involved.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -489,7 +883,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()]</span>
 
 <div class="viewcode-block" id="AbstractRun.get_configs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_configs">[docs]</a>    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get configurations of the run. Optionally, only configurations which were evaluated</span>
 <span class="sd">        on the passed budget are considered.</span>
 
@@ -541,7 +935,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">))</span>
 
 <div class="viewcode-block" id="AbstractRun.get_budget"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budget">[docs]</a>    <span class="k">def</span> <span class="nf">get_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">human</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the budget given an id.</span>
 
 <span class="sd">        Parameters</span>
@@ -567,7 +961,7 @@ style="width: 100%;">
 <div class="viewcode-block" id="AbstractRun.get_budgets"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budgets">[docs]</a>    <span class="k">def</span> <span class="nf">get_budgets</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">include_combined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the budgets from the meta data.</span>
 
 <span class="sd">        Parameters</span>
@@ -597,7 +991,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">budgets</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_highest_budget"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_highest_budget">[docs]</a>    <span class="k">def</span> <span class="nf">get_highest_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the highest found budget for a config id. If no config id is specified then</span>
 <span class="sd">        the highest available budget is returned.</span>
 <span class="sd">        Moreover, if no budget is available None is returned.</span>
@@ -617,7 +1011,7 @@ style="width: 100%;">
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">_process_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the</span>
 <span class="sd">        objective.</span>
 
@@ -641,7 +1035,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">new_costs</span>
 
 <div class="viewcode-block" id="AbstractRun.get_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>    <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the costs of a configuration. In case of multi-objective, multiple costs are</span>
 <span class="sd">        returned.</span>
 
@@ -682,7 +1076,7 @@ style="width: 100%;">
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get all costs in the history with their config ids. Only configs from the given budget</span>
 <span class="sd">        and statuses are returned.</span>
 
@@ -733,7 +1127,7 @@ style="width: 100%;">
         <span class="k">return</span> <span class="n">results</span></div>
 
 <div class="viewcode-block" id="AbstractRun.get_status"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the status of a configuration.</span>
 
 <span class="sd">        Parameters</span>
@@ -768,7 +1162,6 @@ style="width: 100%;">
         <span class="c1"># Unfortunately, we have to iterate through the history to find the status</span>
         <span class="c1"># TODO: Cache the stati</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
-
             <span class="k">if</span> <span class="n">trial_key</span> <span class="o">==</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">():</span>
                 <span class="k">return</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span>
 
@@ -780,7 +1173,7 @@ style="width: 100%;">
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the incumbent with its normalized cost.</span>
 
 <span class="sd">        Parameters</span>
@@ -825,7 +1218,7 @@ style="width: 100%;">
 <div class="viewcode-block" id="AbstractRun.merge_costs"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.merge_costs">[docs]</a>    <span class="k">def</span> <span class="nf">merge_costs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates one cost value from multiple costs.</span>
 <span class="sd">        Normalizes the costs first and weight every cost the same.</span>
 <span class="sd">        The lower the normalized cost, the better.</span>
@@ -908,7 +1301,7 @@ style="width: 100%;">
 <div class="viewcode-block" id="AbstractRun.get_trajectory"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trajectory">[docs]</a>    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the trajectory of the given objective and budget.</span>
 
 <span class="sd">        Parameters</span>
@@ -990,7 +1383,7 @@ style="width: 100%;">
 <div class="viewcode-block" id="AbstractRun.encode_config"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.encode_config">[docs]</a>    <span class="k">def</span> <span class="nf">encode_config</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Configuration</span><span class="p">],</span> <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes a given config (id) to a normalized list.</span>
 <span class="sd">        If a config is passed, no look-up has to be done.</span>
 
@@ -1051,7 +1444,7 @@ style="width: 100%;">
         <span class="n">include_config_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">include_combined_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes configurations to process them further. After the configurations are encoded,</span>
 <span class="sd">        they can be used in model prediction.</span>
 
@@ -1179,12 +1572,12 @@ style="width: 100%;">
 
 <div class="viewcode-block" id="check_equality"><a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.check_equality">[docs]</a><span class="k">def</span> <span class="nf">check_equality</span><span class="p">(</span>
     <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">],</span>
-    <span class="n">meta</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">configspace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">objectives</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">budgets</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks the passed runs on equality based on the selected runs and returns the requested</span>
 <span class="sd">    attributes.</span>
 
@@ -1296,14 +1689,14 @@ style="width: 100%;">
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2022, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-5.1.1. Template is modified version of <a
+6.1.3. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
