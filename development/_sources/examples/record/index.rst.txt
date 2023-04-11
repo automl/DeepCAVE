@@ -23,7 +23,7 @@ AutoML runs.
 .. only:: html
 
   .. image:: /examples/record/images/thumb/sphx_glr_minimal_thumb.png
-    :alt: Record Minimal Run
+    :alt:
 
   :ref:`sphx_glr_examples_record_minimal.py`
 
@@ -40,7 +40,7 @@ AutoML runs.
 .. only:: html
 
   .. image:: /examples/record/images/thumb/sphx_glr_digits_sklearn_thumb.png
-    :alt: Multi-Layer Perceptron via Sklearn
+    :alt:
 
   :ref:`sphx_glr_examples_record_digits_sklearn.py`
 
@@ -57,7 +57,7 @@ AutoML runs.
 .. only:: html
 
   .. image:: /examples/record/images/thumb/sphx_glr_mnist_pytorch_thumb.png
-    :alt: Multi-Layer Perceptron via PyTorch
+    :alt:
 
   :ref:`sphx_glr_examples_record_mnist_pytorch.py`
 
