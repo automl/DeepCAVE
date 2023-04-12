@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Optional
 
 
-def optional_int(value: Any):
+def optional_int(value: Any) -> Optional[int]:
     if value is None:
         return None
 

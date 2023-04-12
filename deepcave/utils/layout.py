@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import uuid
 
@@ -9,7 +9,7 @@ from dash import dcc, html
 from deepcave.utils.hash import string_to_hash
 
 
-def help_button(text: str, placement="top"):
+def help_button(text: str, placement: str = "top") -> html.Span:
     id = "help-button-" + string_to_hash(text)
     id += str(uuid.uuid1())
 
@@ -26,13 +26,13 @@ def help_button(text: str, placement="top"):
     )
 
 
-def render_table(df):
+def render_table(df: pd.DataFrame) -> None:
     pass
 
 
 def get_slider_marks(
-    strings: Optional[List[Dict[str, Any]]] = None, steps=10, access_all=False
-) -> Dict[int, str]:
+    strings: Optional[List[Dict[str, Any]]] = None, steps: int = 10, access_all: bool = False
+) -> Dict[int, Dict[str, str]]:
     marks = {}
     if strings is None:
         marks[0] = {"label": str("None")}
@@ -55,7 +55,10 @@ def get_slider_marks(
 
 
 def get_select_options(
-    labels=None, values=None, disabled=None, binary=False
+    labels: Any = None,
+    values: Any = None,
+    disabled: Union[List[bool], None] = None,
+    binary: bool = False,
 ) -> List[Dict[str, Any]]:
     """
     If values are none use labels as values.
@@ -87,16 +90,24 @@ def get_select_options(
     return options
 
 
-def get_checklist_options(labels=None, values=None, binary=False):
+def get_checklist_options(
+    labels: Any = None, values: Any = None, binary: bool = False
+) -> List[Dict[str, Any]]:
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
-def get_radio_options(labels=None, values=None, binary=False):
+def get_radio_options(
+    labels: Any = None, values: Any = None, binary: Any = False
+) -> List[Dict[str, Any]]:
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
 def create_table(
-    output: Dict[str, str], fixed=False, head=True, striped=True, mb=True
+    output: Dict[str, str],
+    fixed: bool = False,
+    head: bool = True,
+    striped: bool = True,
+    mb: bool = True,
 ) -> dbc.Table:
     className = ""
     if not head:

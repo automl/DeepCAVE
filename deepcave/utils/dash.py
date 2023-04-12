@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 
 
-def flash(message: str, category: str = "info"):
+def flash(message: str, category: str = "info") -> dbc.Alert:
     """
     Flask style flash-message with Alerts.
     """
@@ -16,5 +16,5 @@ def flash(message: str, category: str = "info"):
     )
 
 
-def alert(message: str):
+def alert(message: str) -> dbc.Alert:
     return flash(message, "danger")

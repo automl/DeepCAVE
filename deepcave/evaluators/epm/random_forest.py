@@ -434,11 +434,11 @@ class RandomForest:
         # marginalized predictions for each tree
         dat_ = np.zeros((X.shape[0], self._model_options.num_trees))
         for i, x in enumerate(X):
-
             # marginalize over instances
             # 1. get all leaf values for each tree
-            # type: list[list[float]]
-            preds_trees = [[] for i in range(self._model_options.num_trees)]
+            preds_trees = [
+                [] for i in range(self._model_options.num_trees)
+            ]  # type: list[list[float]]
 
             for feat in self.instance_features:
                 x_ = np.concatenate([x, feat])
