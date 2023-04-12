@@ -25,7 +25,7 @@ class PartialDependencies(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -87,7 +87,7 @@ class PartialDependencies(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -124,13 +124,13 @@ class PartialDependencies(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -164,7 +164,7 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         # Surrogate
         hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
@@ -229,11 +229,11 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)

@@ -454,10 +454,11 @@ class Footprint:
 
         Parameters
         ----------
-        param: str
+        hp: Hyperparameter
             name of parameter to inspect
 
         Returns
+        -------
         int
             Depth of the hyperparameter.
         """
@@ -516,9 +517,7 @@ class Footprint:
         self._objective_model.fit(X, Y)
 
     def _train_on_areas(self) -> None:
-        """
-        Trains the random forest on the "valid" areas.
-        """
+        """Trains the random forest on the "valid" areas."""
         if self._MDS_X is None:
             raise RuntimeError("You need to call `calculate` first.")
 

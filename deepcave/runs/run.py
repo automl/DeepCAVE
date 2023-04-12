@@ -87,13 +87,11 @@ class Run(AbstractRun, ABC):
     @classmethod
     @abstractmethod
     def from_path(cls, path: Path) -> "Run":
-        """
-        Based on a path, return a new Run object.
-        """
+        """Based on a path, return a new Run object."""
         pass
 
     @property
-    def id(self) -> str:
+    def id(self) -> str:  # noqa: D102
         return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
@@ -102,10 +100,7 @@ class Run(AbstractRun, ABC):
 
     @path.setter
     def path(self, value: Optional[Union[str, Path]]):
-        """
-        If path is changed, also change the filenames of all created files.
-        """
-
+        """If path is changed, also change the filenames of all created files."""
         if value is None:
             self._path = None
             return

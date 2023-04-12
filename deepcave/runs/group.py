@@ -91,7 +91,7 @@ class Group(AbstractRun):
             yield run.name
 
     @property
-    def hash(self) -> str:
+    def hash(self) -> str:  # noqa: D102
         hashes = []
         for run in self.runs:
             hashes += [run.hash]
@@ -101,12 +101,12 @@ class Group(AbstractRun):
         return string_to_hash("-".join(hashes))
 
     @property
-    def id(self) -> str:
+    def id(self) -> str:  # noqa: D102
         # Groups do not have a path, therefore we use the name.
         return string_to_hash(f"{self.prefix}:{self.name}")
 
     @property
-    def latest_change(self) -> int:
+    def latest_change(self) -> int:  # noqa: D102
         latest_change = 0
         for run in self.runs:
             if run.latest_change > latest_change:
@@ -135,11 +135,11 @@ class Group(AbstractRun):
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
-    def get_model(self, config_id):
+    def get_model(self, config_id):  # noqa: D102
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
-    def get_trajectory(self, *args, **kwargs):
+    def get_trajectory(self, *args, **kwargs):  # noqa: D102
         # Cache costs
         run_costs = []
         run_times = []

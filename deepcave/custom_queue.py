@@ -180,10 +180,7 @@ class Queue:
         )
 
     def __getattr__(self, name):
-        """
-        If function is not found, make sure we access self._queue directly.
-        """
-
+        """If function is not found, make sure we access self._queue directly."""
         try:
             return self.__getattribute__(name)
         except Exception:

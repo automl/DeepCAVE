@@ -36,9 +36,7 @@ def _process(
 
 
 class StaticPlugin(Plugin, ABC):
-    """
-    Calculation with queue. Made for time-consuming tasks.
-    """
+    """Calculation with queue. Made for time-consuming tasks."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -52,7 +50,7 @@ class StaticPlugin(Plugin, ABC):
         self._blocked = False
 
     @interactive
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         super().register_callbacks()
         self._callback_inputs_changed()
         self._callback_loop_update_status_label()
@@ -294,7 +292,7 @@ class StaticPlugin(Plugin, ABC):
         return f"{run_name}-{inputs_key}"
 
     @interactive
-    def __call__(self) -> List[Component]:  # type: ignore
+    def __call__(self) -> List[Component]:  # type: ignore # noqa: D102
         from deepcave import config
 
         self._setup()

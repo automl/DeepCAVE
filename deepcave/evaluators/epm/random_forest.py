@@ -225,7 +225,6 @@ class RandomForest:
         data : regression.default_data_container
             The filled data container that pyrfr can interpret
         """
-
         # retrieve the types and the bounds from the ConfigSpace
         data = regression.default_data_container(X.shape[1])
 
@@ -360,7 +359,6 @@ class RandomForest:
         vars : np.ndarray [n_samples, 1]
             Predictive variance.
         """
-
         self._check_dimensions(X)
         X = self._impute_inactive(X)
 

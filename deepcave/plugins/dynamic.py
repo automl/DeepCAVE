@@ -15,7 +15,7 @@ class DynamicPlugin(Plugin, ABC):
         super().__init__()
 
     @interactive
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         super().register_callbacks()
         from deepcave import app, c, rc
 
@@ -65,5 +65,5 @@ class DynamicPlugin(Plugin, ABC):
             return self._process_raw_outputs(inputs, raw_outputs)
 
     @interactive
-    def __call__(self) -> List[Component]:  # type: ignore
+    def __call__(self) -> List[Component]:  # type: ignore # noqa: D102
         return super().__call__(False)

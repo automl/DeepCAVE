@@ -30,7 +30,7 @@ class MainLayout(Layout):
             for plugin in plugins:
                 self.plugins[plugin.id] = plugin
 
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         output = Output("content", "children")
         input = Input("on-page-load", "pathname")
 
@@ -54,7 +54,7 @@ class MainLayout(Layout):
 
             return self.not_found_layout(pathname)()
 
-    def __call__(self) -> Component:
+    def __call__(self) -> Component:  # noqa: D102
         return html.Div(
             children=[
                 dcc.Interval(id="global-update", interval=config.REFRESH_RATE),

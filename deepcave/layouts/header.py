@@ -7,7 +7,7 @@ from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         super().register_callbacks()
 
         outputs = [
@@ -37,7 +37,7 @@ class HeaderLayout(Layout):
             else:
                 return "secondary", "off", update
 
-    def __call__(self) -> html.Header:
+    def __call__(self) -> html.Header:  # noqa: D102
         return html.Header(
             className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow",
             children=[

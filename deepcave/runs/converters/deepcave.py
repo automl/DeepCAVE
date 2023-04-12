@@ -9,7 +9,7 @@ class DeepCAVERun(Run):
     _initial_order = 1
 
     @property
-    def hash(self):
+    def hash(self):  # noqa: D102
         if self.path is None:
             return ""
 
@@ -17,12 +17,12 @@ class DeepCAVERun(Run):
         return file_to_hash(self.path / "history.jsonl")
 
     @property
-    def latest_change(self):
+    def latest_change(self):  # noqa: D102
         if self.path is None:
             return 0
 
         return Path(self.path / "history.jsonl").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path):  # noqa: D102
         return DeepCAVERun(path.stem, path=Path(path))

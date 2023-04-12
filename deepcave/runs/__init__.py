@@ -137,7 +137,6 @@ class AbstractRun(ABC):
         Objective
             The objective object.
         """
-
         objectives = self.get_objectives()
         if type(id) == int:
             return objectives[id]
@@ -187,7 +186,6 @@ class AbstractRun(ABC):
         Get the cost name of given objective names.
         Returns "Combined Cost" if multiple objective names were involved.
         """
-
         available_objective_names = self.get_objective_names()
 
         if objectives is None:
@@ -802,7 +800,6 @@ class AbstractRun(ABC):
         ValueError
             If a hyperparameter is not supported.
         """
-
         if objectives is None:
             objectives = self.get_objectives()
 

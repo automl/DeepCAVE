@@ -35,7 +35,7 @@ class ConfigurationCube(DynamicPlugin):
     help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -72,7 +72,7 @@ class ConfigurationCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -98,13 +98,13 @@ class ConfigurationCube(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
+    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -166,7 +166,7 @@ class ConfigurationCube(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
 
@@ -176,11 +176,11 @@ class ConfigurationCube(DynamicPlugin):
         return {"df": serialize(df)}
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         df = deserialize(outputs["df"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameter_names"]
         n_configs = inputs["n_configs"]

@@ -199,7 +199,6 @@ class LPI:
         importances : Dict[str, Tuple[float, float]]
             Hyperparameter name and mean+var importance.
         """
-
         if self.importances is None or self.variances is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
@@ -320,7 +319,6 @@ class LPI:
             The variance over the instance set. If logged values are used, the variance might not
             be able to be used.
         """
-
         config = impute_inactive_values(config)
         array = np.array([config.get_array()])
         mean, var = self._model.predict_marginalized(array)

@@ -22,7 +22,7 @@ class FootPrint(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -75,7 +75,7 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return (
             dbc.Row(
                 [
@@ -103,14 +103,14 @@ class FootPrint(StaticPlugin):
             ),
         )
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "details": {"value": 0.5},
             "show_borders": {"options": get_select_options(binary=True), "value": "true"},
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -142,7 +142,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         details = inputs["details"]
@@ -168,7 +168,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return dbc.Tabs(
             [
                 dbc.Tab(
@@ -187,7 +187,7 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
@@ -276,7 +276,7 @@ class FootPrint(StaticPlugin):
         return [performance, area]
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register):  # noqa: D102
         return [
             dbc.Tabs(
                 [
@@ -293,7 +293,7 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):
+    def load_mpl_outputs(run, inputs, outputs):  # noqa: D102
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]

@@ -31,7 +31,7 @@ class Overview(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return [
             html.Div(
                 id=register("card", "children"),
@@ -71,7 +71,7 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, *_):
+    def load_outputs(run, *_):  # noqa: D102
         # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()
         config_id = run.get_config_id(incumbent)
@@ -291,7 +291,6 @@ class Overview(DynamicPlugin):
         }
 
         for hp_name, hp in run.configspace.get_hyperparameters_dict().items():
-
             log = False
             value = None
             if (
