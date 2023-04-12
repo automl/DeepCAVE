@@ -34,22 +34,22 @@ class Config:
 
     @property
     def DEFAULT_WORKING_DIRECTORY(self) -> Path:
-        """ Specifies the default working directory. """
+        """Specifies the default working directory."""
         return Path.cwd() / "logs"
 
     @property
     def CACHE_DIR(self) -> Path:
-        """ Specifies the default cache directory. """
+        """Specifies the default cache directory."""
         return Path(__file__).parent / "cache"
 
     @property
     def SERVER_NAME(self) -> str:
-        """ Specifies the server name, consisting of address and port. """
+        """Specifies the server name, consisting of address and port."""
         return f"http://{self.DASH_ADDRESS}:{self.DASH_PORT}"
 
     @property
     def PLUGINS(self) -> Dict[str, List["Plugin"]]:
-        """ A list of available plugins per category. """
+        """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
         from deepcave.plugins.hyperparameter.importances import Importances
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
@@ -85,7 +85,7 @@ class Config:
 
     @property
     def CONVERTERS(self) -> List[Type["Run"]]:
-        """ A list of available run converters. """
+        """A list of available run converters."""
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run

@@ -36,7 +36,7 @@ def _process(
 
 
 class StaticPlugin(Plugin, ABC):
-    """ Calculation with queue. Made for time-consuming tasks. """
+    """Calculation with queue. Made for time-consuming tasks."""
 
     def __init__(self) -> None:
         super().__init__()

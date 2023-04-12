@@ -30,7 +30,7 @@ class SMAC3v1Run(Run):
 
     @classmethod
     def from_path(cls, path):  # noqa: D102
-        """ Based on working_dir/run_name/*, return a new trials object. """
+        """Based on working_dir/run_name/*, return a new trials object."""
         path = Path(path)
 
         # Read configspace

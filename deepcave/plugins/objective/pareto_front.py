@@ -174,7 +174,6 @@ class ParetoFront(DynamicPlugin):
 
         is_front: Union[List, np.ndarray] = np.ones(points.shape[0], dtype=bool)
         for point_idx, costs in enumerate(points):
-
             if is_front[point_idx]:
                 # Keep any point with a lower/upper cost
                 # This loop is a little bit complicated than

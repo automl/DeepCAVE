@@ -168,7 +168,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register): # noqa: D102
+    def get_output_layout(register):  # noqa: D102
         return dbc.Tabs(
             [
                 dbc.Tab(

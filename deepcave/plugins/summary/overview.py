@@ -291,7 +291,6 @@ class Overview(DynamicPlugin):
         }
 
         for hp_name, hp in run.configspace.get_hyperparameters_dict().items():
-
             log = False
             value = None
             if (

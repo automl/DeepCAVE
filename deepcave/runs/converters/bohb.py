@@ -49,7 +49,6 @@ class BOHBRun(Run):
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
-
             times = bohb_run.time_stamps
             starttime = times["started"]
             endtime = times["finished"]

@@ -8,7 +8,7 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class RandomForestSurrogate(SurrogateModel):
-    """ Random forest surrogate for the pyPDP package. """
+    """Random forest surrogate for the pyPDP package."""
 
     def __init__(
         self,

@@ -62,7 +62,7 @@ class Recorder:
         pass
 
     def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False):
-        """ Identifies the latest run and sets the path with increased id. """
+        """Identifies the latest run and sets the path with increased id."""
         # Make sure the word is interpreted as folder
         path = Path(path)
         path.mkdir(parents=True, exist_ok=True)

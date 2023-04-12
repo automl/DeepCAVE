@@ -68,7 +68,7 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
 
 
 def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
-    """ Currently (Plotly version 5.3.1) there are 10 possible colors. """
+    """Currently (Plotly version 5.3.1) there are 10 possible colors."""
     color = px.colors.qualitative.Plotly[id_]
 
     r, g, b = hex_to_rgb(color)
