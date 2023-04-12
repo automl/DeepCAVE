@@ -25,7 +25,7 @@ class SidebarLayout(Layout):
 
         self.nav_points = nav_points
 
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         # Update navigation items
         output = Output("navigation-items", "children")
         input = Input("on-page-load", "pathname")
@@ -169,7 +169,7 @@ class SidebarLayout(Layout):
             except Exception:
                 return []
 
-    def __call__(self) -> Union[List[Component], Component]:
+    def __call__(self) -> Union[List[Component], Component]:  # noqa: D102
         return html.Nav(
             className="col-md-3 col-lg-2 d-md-block sidebar collapse",
             id="sidebarMenu",

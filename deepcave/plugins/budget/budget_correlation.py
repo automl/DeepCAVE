@@ -25,7 +25,7 @@ class BudgetCorrelation(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def check_run_compatibility(run) -> bool:
+    def check_run_compatibility(run) -> bool:  # noqa: D102
         if len(run.get_budgets()) == 1:
             notification.update(f"{run.name} can not be selected because it has only one budget.")
             return False
@@ -33,7 +33,7 @@ class BudgetCorrelation(DynamicPlugin):
         return True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -46,7 +46,7 @@ class BudgetCorrelation(DynamicPlugin):
             ),
         ]
 
-    def load_dependency_inputs(self, run, _, inputs):
+    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -63,7 +63,7 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         objective_id = inputs["objective_id"]
         budget_ids = run.get_budget_ids(include_combined=False)
 
@@ -107,7 +107,7 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return [
             html.Div(id=register("text", "children"), className="mb-3"),
             dbc.Tabs(
@@ -124,7 +124,7 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, _, outputs):
+    def load_outputs(run, _, outputs):  # noqa: D102
         traces = []
         categories = defaultdict(list)
         correlations = outputs["correlations"]

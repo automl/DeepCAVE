@@ -14,7 +14,7 @@ class SMAC3v2Run(Run):
     _initial_order = 2
 
     @property
-    def hash(self):
+    def hash(self):  # noqa: D102
         if self.path is None:
             return ""
 
@@ -22,7 +22,7 @@ class SMAC3v2Run(Run):
         return file_to_hash(self.path / "runhistory.json")
 
     @property
-    def latest_change(self):
+    def latest_change(self):  # noqa: D102
         if self.path is None:
             return 0
 
@@ -30,9 +30,7 @@ class SMAC3v2Run(Run):
 
     @classmethod
     def from_path(cls, path):
-        """
-        Based on working_dir/run_name/*, return a new trials object.
-        """
+        """ Based on working_dir/run_name/*, return a new trials object. """
         path = Path(path)
 
         # Read configspace

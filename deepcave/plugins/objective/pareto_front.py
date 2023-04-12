@@ -23,7 +23,7 @@ class ParetoFront(DynamicPlugin):
     icon = "fas fa-wind"
     help = "docs/plugins/pareto_front.rst"
 
-    def check_runs_compatibility(self, runs):
+    def check_runs_compatibility(self, runs):  # noqa: D102
         check_equality(runs, objectives=True, budgets=True)
 
         # Set some attributes here
@@ -38,7 +38,7 @@ class ParetoFront(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -85,7 +85,7 @@ class ParetoFront(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -128,7 +128,7 @@ class ParetoFront(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "objective_id_1": {
                 "options": self.objective_options,
@@ -148,7 +148,7 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         # Get budget
         budget = run.get_budget(inputs["budget_id"])
 
@@ -205,11 +205,11 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs):
+    def load_outputs(runs, inputs, outputs):  # noqa: D102
         show_all = inputs["show_all"]
 
         traces = []
@@ -302,14 +302,14 @@ class ParetoFront(DynamicPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register):  # noqa: D102
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
         )
 
     @staticmethod
-    def load_mpl_outputs(runs, inputs, outputs):
+    def load_mpl_outputs(runs, inputs, outputs):  # noqa: D102
         show_all = inputs["show_all"] == "true"
 
         plt.figure()

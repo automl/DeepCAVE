@@ -8,9 +8,7 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class RandomForestSurrogate(SurrogateModel):
-    """
-    Random forest surrogate for the pyPDP package.
-    """
+    """ Random forest surrogate for the pyPDP package. """
 
     def __init__(
         self,
@@ -20,9 +18,9 @@ class RandomForestSurrogate(SurrogateModel):
         super().__init__(configspace, seed=seed)
         self._model = RandomForest(configspace=configspace, seed=seed)
 
-    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:  # noqa: D102
         means, stds = self._model.predict(X)
         return means[:, 0], stds[:, 0]
 
-    def _fit(self, X: np.ndarray, y: np.ndarray):
+    def _fit(self, X: np.ndarray, y: np.ndarray):  # noqa: D102
         self._model.train(X, y)

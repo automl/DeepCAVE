@@ -133,15 +133,11 @@ class RunCaches:
         cache.set("outputs", value=value)
 
     def clear_run(self, run: AbstractRun) -> None:
-        """
-        Removes all caches for the given run.
-        """
+        """ Removes all caches for the given run. """
         shutil.rmtree(self.cache_dir / run.id)
 
     def clear(self) -> None:
-        """
-        Removes all caches.
-        """
+        """ Removes all caches. """
         try:
             shutil.rmtree(self.cache_dir)
         except Exception:

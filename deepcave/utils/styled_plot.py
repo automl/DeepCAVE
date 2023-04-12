@@ -155,10 +155,7 @@ class StyledPlot:
         return hex_codes[id % len(hex_codes)]
 
     def __getattr__(self, name):
-        """
-        Make sure we access self.plt directly.
-        """
-
+        """ Make sure we access self.plt directly. """
         try:
             return self.__getattribute__(name)
         except:

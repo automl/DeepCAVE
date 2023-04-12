@@ -11,10 +11,7 @@ TYPE = TypeVar("TYPE")
 
 
 def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
-    """
-    Serialize a dataframe to a string.
-    """
-
+    """ Serialize a dataframe to a string. """
     class Encoder(json.JSONEncoder):
         def default(self, obj):
             if isinstance(obj, np.ndarray):
@@ -29,9 +26,7 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
 
 
 def deserialize(string: str, dtype: TYPE = pd.DataFrame) -> TYPE:
-    """
-    Deserialize a dataframe from a string.
-    """
+    """ Deserialize a dataframe from a string. """
     if dtype == pd.DataFrame:
         return pd.DataFrame.from_dict(json.loads(string))
 

@@ -182,7 +182,6 @@ class RunHandler:
 
     def update(self) -> None:
         """Updates the internal run and group instances but only if a hash changed."""
-
         update_required = False
         for run_path in list(self.runs.keys()):
             run = self.runs[run_path]
@@ -248,7 +247,6 @@ class RunHandler:
             If directory can not be transformed into a run, an error is thrown.
 
         """
-
         # Try to get run from current runs
         if run_path in self.runs:
             run = self.runs[run_path]

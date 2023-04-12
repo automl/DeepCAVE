@@ -697,7 +697,8 @@ class Plugin(Layout, ABC):
         ----------
         inputs (dict): Inputs to clean.
 
-        Returns:
+        Returns
+        -------
             dict: Cleaned inputs.
         """
         used_ids = []
@@ -981,7 +982,6 @@ class Plugin(Layout, ABC):
         Dict[str, Any]
             Both runs and groups, separated by a separator.
         """
-
         labels = []
         values = []
         disabled = []

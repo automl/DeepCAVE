@@ -27,7 +27,7 @@ class ParallelCoordinates(StaticPlugin):
     help = "docs/plugins/parallel_coordinates.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -79,7 +79,7 @@ class ParallelCoordinates(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return [
             dbc.Row(
                 [
@@ -120,7 +120,7 @@ class ParallelCoordinates(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "show_important_only": {"options": get_select_options(binary=True), "value": "true"},
             "show_unsuccessful": {"options": get_select_options(binary=True), "value": "false"},
@@ -129,7 +129,7 @@ class ParallelCoordinates(StaticPlugin):
             "hide_hps": {"hidden": True},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
+    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -187,7 +187,7 @@ class ParallelCoordinates(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         df = serialize(run.get_encoded_data(objective, budget))
@@ -205,11 +205,11 @@ class ParallelCoordinates(StaticPlugin):
         return result
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 

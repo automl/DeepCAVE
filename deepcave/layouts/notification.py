@@ -14,7 +14,7 @@ class NotificationLayout(Layout):
     def __init__(self) -> None:
         super().__init__()
 
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         @app.callback(
             Output("alert", "children"),
             Output("alert", "color"),
@@ -28,7 +28,7 @@ class NotificationLayout(Layout):
             else:
                 raise PreventUpdate()
 
-    def __call__(self) -> Union[List[Component], Component]:
+    def __call__(self) -> Union[List[Component], Component]:  # noqa: D102
         return dbc.Alert(
             id="alert",
             is_open=False,

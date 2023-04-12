@@ -11,7 +11,7 @@ class NotFoundLayout(Layout):
         super().__init__()
         self.url = url
 
-    def __call__(self) -> List[Component]:
+    def __call__(self) -> List[Component]:  # noqa: D102
         return [
             html.H2("This page does not exists."),
             html.Div(f"Tried to reach {self.url}."),

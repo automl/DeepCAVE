@@ -17,7 +17,7 @@ from deepcave.utils.util import short_string
 
 
 class GeneralLayout(Layout):
-    def register_callbacks(self) -> None:
+    def register_callbacks(self) -> None:  # noqa: D102
         self._callback_working_directory_changed()
         self._callback_display_available_runs()
         self._callback_display_selected_runs()
@@ -353,7 +353,7 @@ class GeneralLayout(Layout):
             className="mt-2",
         )
 
-    def __call__(self) -> List[Component]:
+    def __call__(self) -> List[Component]:  # noqa: D102
         self._refresh_groups = True
 
         return [

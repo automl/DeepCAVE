@@ -22,7 +22,7 @@ class Importances(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -70,7 +70,7 @@ class Importances(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -101,7 +101,7 @@ class Importances(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
         method_values = ["local", "global"]
 
@@ -116,7 +116,7 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
+    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
         # Prepare objetives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -170,7 +170,7 @@ class Importances(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         objective = run.get_objective(inputs["objective_id"])
         method = inputs["method"]
         n_trees = inputs["n_trees"]
@@ -200,11 +200,11 @@ class Importances(StaticPlugin):
         return data
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]
@@ -281,14 +281,14 @@ class Importances(StaticPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register):  # noqa: D102
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
         )
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):
+    def load_mpl_outputs(run, inputs, outputs):  # noqa: D102
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]

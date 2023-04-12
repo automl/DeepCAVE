@@ -61,7 +61,6 @@ def get_select_options(
     If values are none use labels as values.
     If both are none return empty list.
     """
-
     if labels is None and values is None:
         if binary:
             return [{"label": "Yes", "value": True}, {"label": "No", "value": False}]

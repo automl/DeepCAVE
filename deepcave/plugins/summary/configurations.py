@@ -56,7 +56,7 @@ class Configurations(DynamicPlugin):
         return create_url(url, inputs)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register):  # noqa: D102
         return [
             html.Div(
                 [
@@ -66,12 +66,12 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self):  # noqa: D102
         return {
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
         # Get selected values
         config_id_value = inputs["config_id"]["value"]
         configs = run.get_configs()
@@ -88,7 +88,7 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs):  # noqa: D102
         selected_config_id = int(inputs["config_id"])
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
@@ -168,7 +168,7 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register):  # noqa: D102
         return [
             html.Div(id=register("overview_table", "children"), className="mb-3"),
             html.Hr(),
@@ -312,7 +312,7 @@ class Configurations(DynamicPlugin):
         return fig
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # noqa: D102
         config_id = inputs["config_id"]
         config = run.get_config(config_id)
 
