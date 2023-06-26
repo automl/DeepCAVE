@@ -38,7 +38,8 @@
       "log": false,
       "lower": 1,
       "upper": 8,
-      "default": 4
+      "default": 4,
+      "q": null
     },
     {
       "name": "backbone:num_layers",
@@ -46,7 +47,8 @@
       "log": false,
       "lower": 0,
       "upper": 3,
-      "default": 2
+      "default": 2,
+      "q": null
     },
     {
       "name": "backbone:skip_connection",
@@ -107,7 +109,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.8,
-      "default": 0.5
+      "default": 0.5,
+      "q": null
     },
     {
       "name": "backbone:num_units_layer_1",
@@ -115,7 +118,8 @@
       "log": false,
       "lower": 8,
       "upper": 16,
-      "default": 12
+      "default": 12,
+      "q": null
     },
     {
       "name": "backbone:num_units_layer_2",
@@ -123,7 +127,8 @@
       "log": false,
       "lower": 4,
       "upper": 12,
-      "default": 8
+      "default": 8,
+      "q": null
     },
     {
       "name": "backbone:num_units_layer_3",
@@ -131,7 +136,8 @@
       "log": false,
       "lower": 4,
       "upper": 12,
-      "default": 8
+      "default": 8,
+      "q": null
     },
     {
       "name": "model:dagmm:activation",
@@ -151,7 +157,8 @@
       "log": false,
       "lower": 1,
       "upper": 5,
-      "default": 2
+      "default": 2,
+      "q": null
     },
     {
       "name": "model:dagmm:lambda_1",
@@ -159,7 +166,8 @@
       "log": false,
       "lower": 0.01,
       "upper": 0.5,
-      "default": 0.1
+      "default": 0.1,
+      "q": null
     },
     {
       "name": "model:dagmm:lambda_2",
@@ -167,7 +175,8 @@
       "log": false,
       "lower": 0.0001,
       "upper": 0.05,
-      "default": 0.005
+      "default": 0.005,
+      "q": null
     },
     {
       "name": "model:dagmm:num_units",
@@ -175,7 +184,8 @@
       "log": false,
       "lower": 2,
       "upper": 20,
-      "default": 10
+      "default": 10,
+      "q": null
     },
     {
       "name": "model:dasvdd:K",
@@ -183,7 +193,8 @@
       "log": false,
       "lower": 0.1,
       "upper": 1.0,
-      "default": 0.9
+      "default": 0.9,
+      "q": null
     },
     {
       "name": "model:dasvdd:T",
@@ -191,7 +202,8 @@
       "log": false,
       "lower": 3,
       "upper": 100,
-      "default": 10
+      "default": 10,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:__choice__",
@@ -210,7 +222,8 @@
       "log": false,
       "lower": 0.85,
       "upper": 0.999,
-      "default": 0.9
+      "default": 0.9,
+      "q": null
     },
     {
       "name": "optimizer:AdamWOptimizer:beta2",
@@ -218,7 +231,8 @@
       "log": false,
       "lower": 0.9,
       "upper": 0.9999,
-      "default": 0.999
+      "default": 0.999,
+      "q": null
     },
     {
       "name": "optimizer:AdamWOptimizer:lr",
@@ -226,7 +240,8 @@
       "log": true,
       "lower": 1e-05,
       "upper": 0.1,
-      "default": 0.001
+      "default": 0.001,
+      "q": null
     },
     {
       "name": "optimizer:AdamWOptimizer:weight_decay",
@@ -234,7 +249,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.1,
-      "default": 0.01
+      "default": 0.01,
+      "q": null
     },
     {
       "name": "optimizer:SGDOptimizer:lr",
@@ -242,7 +258,8 @@
       "log": true,
       "lower": 1e-05,
       "upper": 0.1,
-      "default": 0.001
+      "default": 0.001,
+      "q": null
     },
     {
       "name": "optimizer:SGDOptimizer:momentum",
@@ -250,7 +267,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.99,
-      "default": 0.0
+      "default": 0.0,
+      "q": null
     },
     {
       "name": "optimizer:SGDOptimizer:weight_decay",
@@ -258,7 +276,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.1,
-      "default": 0.0
+      "default": 0.0,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdagradOptimizer:lr",
@@ -266,7 +285,8 @@
       "log": false,
       "lower": 1e-05,
       "upper": 2.0,
-      "default": 1.0
+      "default": 1.0,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdagradOptimizer:lr_decay",
@@ -274,7 +294,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.99,
-      "default": 0.01
+      "default": 0.01,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdagradOptimizer:weight_decay",
@@ -282,7 +303,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.1,
-      "default": 0.0
+      "default": 0.0,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdamWOptimizer:beta1",
@@ -290,7 +312,8 @@
       "log": false,
       "lower": 0.85,
       "upper": 0.999,
-      "default": 0.9
+      "default": 0.9,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdamWOptimizer:beta2",
@@ -298,7 +321,8 @@
       "log": false,
       "lower": 0.9,
       "upper": 0.9999,
-      "default": 0.999
+      "default": 0.999,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdamWOptimizer:lr",
@@ -306,7 +330,8 @@
       "log": true,
       "lower": 1e-05,
       "upper": 0.1,
-      "default": 0.001
+      "default": 0.001,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:AdamWOptimizer:weight_decay",
@@ -314,7 +339,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.1,
-      "default": 0.01
+      "default": 0.01,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:SGDOptimizer:lr",
@@ -322,7 +348,8 @@
       "log": true,
       "lower": 1e-05,
       "upper": 0.1,
-      "default": 0.001
+      "default": 0.001,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:SGDOptimizer:momentum",
@@ -330,7 +357,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.99,
-      "default": 0.0
+      "default": 0.0,
+      "q": null
     },
     {
       "name": "model:dasvdd:center_optimizer:SGDOptimizer:weight_decay",
@@ -338,7 +366,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.1,
-      "default": 0.0
+      "default": 0.0,
+      "q": null
     }
   ],
   "conditions": [

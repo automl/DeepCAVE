@@ -6,7 +6,8 @@
       "log": true,
       "lower": 16,
       "upper": 128,
-      "default": 64
+      "default": 64,
+      "q": null
     },
     {
       "name": "dropout",
@@ -15,6 +16,7 @@
       "lower": 0.0,
       "upper": 0.5,
       "default": 0.0
+      "q": null
     },
     {
       "name": "kernel_size",
@@ -23,6 +25,7 @@
       "lower": 2,
       "upper": 16,
       "default": 8
+      "q": null
     },
     {
       "name": "l2_decay",
@@ -30,7 +33,8 @@
       "log": true,
       "lower": 1e-09,
       "upper": 0.0001,
-      "default": 1e-05
+      "default": 1e-05,
+      "q": null
     },
     {
       "name": "learning_rate",
@@ -38,7 +42,8 @@
       "log": true,
       "lower": 0.0001,
       "upper": 0.01,
-      "default": 0.001
+      "default": 0.001,
+      "q": null
     },
     {
       "name": "lr_scheduler",
@@ -56,7 +61,8 @@
       "log": false,
       "lower": 50,
       "upper": 150,
-      "default": 100
+      "default": 100,
+      "q": null
     },
     {
       "name": "num_channels",
@@ -64,7 +70,8 @@
       "log": true,
       "lower": 32,
       "upper": 512,
-      "default": 64
+      "default": 64,
+      "q": null
     },
     {
       "name": "num_levels",
@@ -72,7 +79,8 @@
       "log": false,
       "lower": 1,
       "upper": 5,
-      "default": 3
+      "default": 3,
+      "q": null
     },
     {
       "name": "use_augmentation",
@@ -90,7 +98,8 @@
       "log": true,
       "lower": 1e-09,
       "upper": 0.0001,
-      "default": 1e-05
+      "default": 1e-05,
+      "q": null
     },
     {
       "name": "lr_scheduler_tmult",
@@ -98,7 +107,8 @@
       "log": false,
       "lower": 1,
       "upper": 5,
-      "default": 1
+      "default": 1,
+      "q": null
     }
   ],
   "conditions": [
