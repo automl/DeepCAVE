@@ -48,7 +48,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
 
         try:
             config = deactivate_inactive_hyperparameters(config, configspace)
-            config.is_valid_configuration()
+            config.is_valid_configuration()  # type: ignore[attr-defined]
         except Exception:
             continue
 
@@ -68,7 +68,7 @@ def sample_random_config(
     d : Optional[int], optional
         The possible hyperparameter values can be reduced by this argument as the range gets
         discretized. For example, an integer or float hyperparameter has only four possible values
-        if d=4. By default None (no discretization is done).
+        if d=4. By default, None (no discretization is done).
 
     Yields
     ------

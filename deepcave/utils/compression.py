@@ -1,4 +1,4 @@
-from typing import Dict, List, TypeVar, Union
+from typing import Any, Dict, List, TypeVar, Union
 
 import json
 
@@ -14,7 +14,7 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """Serialize a dataframe to a string."""
 
     class Encoder(json.JSONEncoder):
-        def default(self, obj):
+        def default(self, obj: Any) -> Any:
             if isinstance(obj, np.ndarray):
                 return obj.tolist()
             return json.JSONEncoder.default(self, obj)

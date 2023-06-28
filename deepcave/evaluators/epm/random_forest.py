@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Tuple  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple  # noqa: F401
 
 import functools
 import warnings
@@ -83,14 +83,14 @@ class RandomForest:
         # Prepare the model
         self._model = self._get_model()
         self._model.options = self._get_model_options(
-            n_trees=n_trees,
-            max_features=max_features,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            max_depth=max_depth,
-            max_nodes=max_nodes,
-            eps_purity=eps_purity,
-            bootstrapping=bootstrapping,
+            n_trees=n_trees,  # type: ignore[arg-type]
+            max_features=max_features,  # type: ignore[arg-type]
+            min_samples_split=min_samples_split,  # type: ignore[arg-type]
+            min_samples_leaf=min_samples_leaf,  # type: ignore[arg-type]
+            max_depth=max_depth,  # type: ignore[arg-type]
+            max_nodes=max_nodes,  # type: ignore[arg-type]
+            eps_purity=eps_purity,  # type: ignore[arg-type]
+            bootstrapping=bootstrapping,  # type: ignore[arg-type]
         )
 
     def _get_model(self) -> regression.base_tree:
@@ -104,7 +104,7 @@ class RandomForest:
         """
         return regression.binary_rss_forest()
 
-    def _get_model_options(self, **kwargs) -> regression.forest_opts:
+    def _get_model_options(self, **kwargs: Dict[str, Any]) -> regression.forest_opts:
         """
         Get model options from kwargs. The mapping `PYRFR_MAPPING` is used in combination with
         a recursive attribute setter to set the options for the pyrfr model.
@@ -344,7 +344,7 @@ class RandomForest:
 
         return mean, var
 
-    def _predict(self, X: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    def _predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Predict means and variances for a given X.
 
@@ -369,15 +369,15 @@ class RandomForest:
             # Gather data in a list of 2d arrays and get statistics about the required size of the
             # 3d array
             for row_X in X:
-                preds_per_tree = self._model.all_leaf_values(row_X)
+                preds_per_tree = self._model.all_leaf_values(row_X)  # type: ignore[attr-defined]
                 all_preds.append(preds_per_tree)
                 max_num_leaf_data = max(map(len, preds_per_tree))
                 third_dimension = max(max_num_leaf_data, third_dimension)
 
             # Transform list of 2d arrays into a 3d array
-            preds_as_array = (
-                np.zeros((X.shape[0], self._model_options.num_trees, third_dimension)) * np.NaN
-            )
+            num_trees = self._model_options.num_trees  # type: ignore[attr-defined]
+            shape = (X.shape[0], num_trees, third_dimension)
+            preds_as_array = np.zeros(shape) * np.NaN
             for i, preds_per_tree in enumerate(all_preds):
                 for j, pred in enumerate(preds_per_tree):
                     preds_as_array[i, j, : len(pred)] = pred
@@ -391,7 +391,7 @@ class RandomForest:
         else:
             means, vars_ = [], []
             for row_X in X:
-                mean_, var = self._model.predict_mean_var(row_X)
+                mean_, var = self._model.predict_mean_var(row_X)  # type: ignore[attr-defined]
                 means.append(mean_)
                 vars_.append(var)
 
@@ -431,26 +431,26 @@ class RandomForest:
         X = self._impute_inactive(X)
 
         # marginalized predictions for each tree
-        dat_ = np.zeros((X.shape[0], self._model_options.num_trees))
+        dat_ = np.zeros((X.shape[0], self._model_options.num_trees))  # type: ignore[attr-defined]
         for i, x in enumerate(X):
             # marginalize over instances
             # 1. get all leaf values for each tree
             preds_trees = [
-                [] for i in range(self._model_options.num_trees)
-            ]  # type: list[list[float]]
+                [] for i in range(self._model_options.num_trees)  # type: ignore[attr-defined]
+            ]  # type: List[List[float]]
 
             for feat in self.instance_features:
                 x_ = np.concatenate([x, feat])
-                preds_per_tree = self._model.all_leaf_values(x_)
+                preds_per_tree = self._model.all_leaf_values(x_)  # type: ignore[attr-defined]
                 for tree_id, preds in enumerate(preds_per_tree):
                     preds_trees[tree_id] += preds
 
             # 2. average in each tree
             if self.log_y:
-                for tree_id in range(self._model_options.num_trees):
+                for tree_id in range(self._model_options.num_trees):  # type: ignore[attr-defined]
                     dat_[i, tree_id] = np.log(np.exp(np.array(preds_trees[tree_id])).mean())
             else:
-                for tree_id in range(self._model_options.num_trees):
+                for tree_id in range(self._model_options.num_trees):  # type: ignore[attr-defined]
                     dat_[i, tree_id] = np.array(preds_trees[tree_id]).mean()
 
         # 3. compute statistics across trees
@@ -467,4 +467,4 @@ class RandomForest:
         return mean_, var
 
     def get_leaf_values(self, x: np.ndarray):
-        return self._model.all_leaf_values(x)
+        return self._model.all_leaf_values(x)  # type: ignore[np-untyped-def]

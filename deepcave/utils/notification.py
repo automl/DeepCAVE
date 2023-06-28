@@ -3,7 +3,9 @@ from typing import Optional, Tuple
 
 class Notification:
     def __init__(self) -> None:
-        self.reset()
+        self._update_required = False
+        self._message: Optional[str] = None
+        self._color: Optional[str] = None
 
     def reset(self) -> None:
         self._update_required = False
@@ -16,7 +18,7 @@ class Notification:
         self._color = color
 
     def get_latest(self) -> Optional[Tuple[str, str]]:
-        if self._update_required:
+        if self._update_required and self._message is not None and self._color is not None:
             result = (self._message, self._color)
             self.reset()
 

@@ -9,19 +9,19 @@ def get_random_string(length: int) -> str:
     if length < 0:
         raise ValueError("Length has to be greater than 0")
     letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
 
 
-def short_string(value: Any, length: int = 30, *, mode="prefix") -> str:
+def short_string(value: Any, length: int = 30, *, mode: str = "prefix") -> str:
     value = str(value)
     if len(value) <= length:
         return value
 
-    cutlength = length - 3  # For 3 dots (...)
+    cut_length = length - 3  # For 3 dots (...)
     if mode == "prefix":
-        return f"...{value[-cutlength:]}"
+        return f"...{value[-cut_length:]}"
     elif mode == "suffix":
-        return f"{value[:cutlength]}..."
+        return f"{value[:cut_length]}..."
     raise ValueError(f"Unknown mode '{mode}'")
 
 

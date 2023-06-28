@@ -38,11 +38,11 @@ class LPI:
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default, None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
-            Considered budget. By default None. If None, the highest budget is chosen.
+            Considered budget. By default, None. If None, the highest budget is chosen.
         continous_neighbors : int, optional
-            How many neighbors should be chosen for continous hyperparameters. By default 500.
+            How many neighbors should be chosen for continuous hyperparameters. By default, 500.
         """
         if objectives is None:
             objectives = self.run.get_objectives()
@@ -84,7 +84,7 @@ class LPI:
         # That means performances holds the mean, variances the variance of the forest.
         performances = {}
         variances = {}
-        # This are used for importance and hold the corresponding importance/variance over
+        # These are used for importance and hold the corresponding importance/variance over
         # neighbors. Only import if NOT quantifying importance via performance-variance across
         # neighbours.
         importances = {}
@@ -308,7 +308,7 @@ class LPI:
         Parameter
         ---------
         config:Configuration
-            The self.incumbent of wich the performance across the whole instance set is to be
+            The self.incumbent of which the performance across the whole instance set is to be
             estimated.
 
         Returns
