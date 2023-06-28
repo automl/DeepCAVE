@@ -6,7 +6,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 1.0,
-      "default": 0.5
+      "default": 0.5,
+      "q": null
     },
     {
       "name": "beta",
@@ -14,7 +15,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 1.0,
-      "default": 0.5
+      "default": 0.5,
+      "q": null
     },
     {
       "name": "gamma",
@@ -22,7 +24,8 @@
       "log": false,
       "lower": 0.0,
       "upper": 1.0,
-      "default": 0.5
+      "default": 0.5,
+      "q": null
     }
   ],
   "conditions": [],
