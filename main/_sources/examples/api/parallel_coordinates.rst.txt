@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_api_parallel_coordinates.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_api_parallel_coordinates.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -66,6 +66,8 @@ Note that other plugins use the same interfaces and can be used in the same fash
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

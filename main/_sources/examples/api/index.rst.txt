@@ -22,7 +22,7 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 .. only:: html
 
   .. image:: /examples/api/images/thumb/sphx_glr_parallel_coordinates_thumb.png
-    :alt: Parallel Coordinates
+    :alt:
 
   :ref:`sphx_glr_examples_api_parallel_coordinates.py`
 

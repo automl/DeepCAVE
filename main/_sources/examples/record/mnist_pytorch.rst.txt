@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_record_mnist_pytorch.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_record_mnist_pytorch.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -320,6 +320,8 @@ show the strenghts of DeepCAVE's recorder.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

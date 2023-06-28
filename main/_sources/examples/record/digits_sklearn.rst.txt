@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_record_digits_sklearn.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_record_digits_sklearn.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -126,6 +126,8 @@ process in DeepCAVE format.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python
