@@ -1,7 +1,8 @@
 # Version 1.1.1
 
 ## Bug-Fixes
-- Put in missing "q" values into configspaces to allow using newer ConfigSpace versions. 
+- Put in missing "q" values into configspaces to allow using newer ConfigSpace versions.
+- Fix minimal configspace version.
 
 # Version 1.1
 
