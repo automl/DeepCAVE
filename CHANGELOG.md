@@ -3,6 +3,7 @@
 ## Bug-Fixes
 - Put in missing "q" values into configspaces to allow using newer ConfigSpace versions.
 - Fix minimal configspace version.
+- Fixes in make publish command.
 
 # Version 1.1
 
