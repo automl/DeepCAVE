@@ -29,7 +29,7 @@ def save_image(figure: go.Figure, name: str) -> None:
 
     Parameters
     ----------
-    fig : go.Figure
+    figure : go.Figure
         Plotly figure.
     name : str
         Name of the image with extension. Will be automatically saved to the cache.
@@ -51,6 +51,7 @@ def save_image(figure: go.Figure, name: str) -> None:
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     """
     Converts a hex_string to a tuple of rgb values.
+
     Requires format including #, e.g.:
     #000000
     #ff00ff
@@ -107,7 +108,7 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
         unique_sorted_values += [unique_values[idx]]
         unique_sorted_labels += [unique_labels[idx]]
 
-    # Now we give them new ids and we want to create new z values
+    # Now we give them new ids, and we want to create new z values
     # For that we need a mapping from old to new
     mapping = {}
     v = []
@@ -186,8 +187,10 @@ def get_hyperparameter_ticks(
     include_nan: bool = True,
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both tickvals and ticktext. The background is that
-    you might have encoded data but you don't want to show all of them.
+    Generates tick data for both tickvals and ticktext.
+
+    The background is that
+    you might have encoded data, but you don't want to show all of them.
     With this function, only 6 (default) values are shown. This behaviour is
     ignored if `hp` is categorical.
 
@@ -196,7 +199,7 @@ def get_hyperparameter_ticks(
     hp : Hyperparameter
         Hyperparameter to generate ticks from.
     additional_values : Optional[List], optional
-        Additional values, which are forced in addition. By default None.
+        Additional values, which are forced in addition. By default, None.
     ticks : int, optional
         Number of ticks, by default 6
     include_nan : bool, optional
@@ -289,8 +292,10 @@ def get_hyperparameter_ticks_from_values(
     values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both values and labels. The background is that
-    you might have encoded data but you don't want to show all of them.
+    Generates tick data for both values and labels.
+
+    The background is that
+    you might have encoded data, but you don't want to show all of them.
     With this function, only 6 (default) values are shown. This behaviour is
     ignored if `values` is a list of strings.
 
@@ -302,7 +307,7 @@ def get_hyperparameter_ticks_from_values(
         List of labels. Must be the same size as `values`.
     forced : List[bool], optional
         List of booleans. If True, displaying the particular tick is enforced.
-        Independent from `ticks`.
+        Independent of `ticks`.
     ticks : int, optional
         Number of ticks and labels to show. By default 6.
 
@@ -373,7 +378,7 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
+def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:  # noqa: F821
     if config_id < 0:
         return ""
 

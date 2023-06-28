@@ -1,7 +1,4 @@
-from typing import Generator, Iterator, List, Optional
-
-import random
-from itertools import islice, product
+from typing import Iterator, Optional
 
 import numpy as np
 from ConfigSpace.configuration_space import Configuration, ConfigurationSpace

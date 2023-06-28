@@ -136,14 +136,14 @@ class Configurations(DynamicPlugin):
         # Let's start with the configspace
         X = []
         cs_table_data = {"Hyperparameter": [], "Value": []}
-        for config_id, config in run.get_configs().items():
-            x = run.encode_config(config)
+        for config_id, configuration in run.get_configs().items():
+            x = run.encode_config(configuration)
 
             highlight = 0
             if config_id == selected_config_id:
                 highlight = 1
 
-                for k, v in config.items():
+                for k, v in configuration.items():
                     # Add accurate data for our table here
                     cs_table_data["Hyperparameter"] += [k]
                     cs_table_data["Value"] += [v]

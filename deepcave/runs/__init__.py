@@ -43,7 +43,7 @@ class AbstractRun(ABC):
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Configuration] = {}
         self.origins: Dict[int, str] = {}
-        self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}
+        self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
 
         self.history: List[Trial] = []
         self.trial_keys: Dict[Tuple[str, int], int] = {}  # (config_id, budget) -> trial_id
@@ -66,7 +66,9 @@ class AbstractRun(ABC):
     @abstractmethod
     def hash(self) -> str:
         """
-        Hash of the current run. If hash changes, cache has to be cleared. This ensures that
+        Hash of the current run.
+
+        If hash changes, cache has to be cleared. This ensures that
         the cache always holds the latest results of the run.
 
         Returns
@@ -80,7 +82,9 @@ class AbstractRun(ABC):
     @abstractmethod
     def id(self) -> str:
         """
-        Hash of the file. This is used to identify the file.
+        Hash of the file.
+
+        This is used to identify the file.
         In contrast to `hash`, this hash should not be changed throughout the run.
 
         Returns
@@ -184,6 +188,7 @@ class AbstractRun(ABC):
     def get_objective_name(self, objectives: Optional[List[Objective]] = None) -> str:
         """
         Get the cost name of given objective names.
+
         Returns "Combined Cost" if multiple objective names were involved.
         """
         available_objective_names = self.get_objective_names()
@@ -202,13 +207,15 @@ class AbstractRun(ABC):
 
     def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
         """
-        Get configurations of the run. Optionally, only configurations which were evaluated
+        Get configurations of the run.
+
+        Optionally, only configurations which were evaluated
         on the passed budget are considered.
 
         Parameters
         ----------
         budget : Union[int, float], optional
-            Considered budget. By default None (all configurations are included).
+            Considered budget. By default, None (all configurations are included).
 
         Returns
         -------
@@ -259,7 +266,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         id : Union[int, str]
-            Id of the wanted budget. If id is a string, it is converted to an integer.
+            The id of the wanted budget. If id is a string, it is converted to an integer.
 
         Returns
         -------
@@ -310,7 +317,9 @@ class AbstractRun(ABC):
 
     def get_highest_budget(self, config_id: Optional[int] = None) -> Optional[Union[int, float]]:
         """
-        Returns the highest found budget for a config id. If no config id is specified then
+        Returns the highest found budget for a config id.
+
+        If no config id is specified then
         the highest available budget is returned.
         Moreover, if no budget is available None is returned.
 
@@ -330,7 +339,9 @@ class AbstractRun(ABC):
 
     def _process_costs(self, costs: List[float]) -> List[float]:
         """
-        Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the
+        Processes the costs to get rid of NaNs.
+
+        NaNs are replaced by the worst value of the
         objective.
 
         Parameters
@@ -354,7 +365,9 @@ class AbstractRun(ABC):
 
     def get_costs(self, config_id: int, budget: Optional[Union[int, float]] = None) -> List[float]:
         """
-        Returns the costs of a configuration. In case of multi-objective, multiple costs are
+        Returns the costs of a configuration.
+
+        In case of multi-objective, multiple costs are
         returned.
 
         Parameters
@@ -362,7 +375,7 @@ class AbstractRun(ABC):
         config_id : int
             Configuration id to get the costs for.
         budget : Optional[Union[int, float]], optional
-            Budget to get the costs from the configuration id for. By default None. If budget is
+            Budget to get the costs from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
 
         Raises
@@ -395,14 +408,16 @@ class AbstractRun(ABC):
         statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Dict[int, List[float]]:
         """
-        Get all costs in the history with their config ids. Only configs from the given budget
+        Get all costs in the history with their config ids.
+
+        Only configs from the given budget
         and statuses are returned.
 
         Parameters
         ----------
         budget : Optional[Union[int, float]], optional
             Budget to select the costs. If no budget is given, the highest budget is chosen.
-            By default None.
+            By default, None.
         statuses : Optional[Union[Status, List[Status]]], optional
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
@@ -453,7 +468,7 @@ class AbstractRun(ABC):
         config_id : int
             Configuration id to get the status for.
         budget : Optional[Union[int, float]], optional
-            Budget to get the status from the configuration id for. By default None. If budget is
+            Budget to get the status from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
 
         Raises
@@ -497,11 +512,11 @@ class AbstractRun(ABC):
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default, None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
-            Considered budget. By default None. If None, the highest budget is chosen.
+            Considered budget. By default, None. If None, the highest budget is chosen.
         statuses : Optional[Union[Status, List[Status]]], optional
-            Considered statuses. By default None. If None, all stati are considered.
+            Considered statuses. By default, None. If None, all stati are considered.
 
         Returns
         -------
@@ -538,15 +553,17 @@ class AbstractRun(ABC):
     ) -> float:
         """
         Calculates one cost value from multiple costs.
+
         Normalizes the costs first and weight every cost the same.
         The lower the normalized cost, the better.
 
         Parameters
         ----------
         costs : List[float]
-            The costs, which should be merged. Must be the same length as the original number of objectives.
+            The costs, which should be merged. Must be the same length as the original number of
+            objectives.
         objectives : Optional[List[Objective]], optional
-            The considered objectives to the costs. By default None.
+            The considered objectives to the costs. By default, None.
             If None, all objectives are considered. The passed objectives can differ from the
             original number objectives.
 
@@ -607,7 +624,7 @@ class AbstractRun(ABC):
 
         return cost
 
-    def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:
+    def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
         import torch
 
         filename = self.models_dir / f"{str(config_id)}.pth"
@@ -703,6 +720,7 @@ class AbstractRun(ABC):
     ) -> List:
         """
         Encodes a given config (id) to a normalized list.
+
         If a config is passed, no look-up has to be done.
 
         Parameters
@@ -746,12 +764,12 @@ class AbstractRun(ABC):
         return x
 
     def encode_configs(self, configs: List[Configuration]) -> np.ndarray:
-        X = []
+        x_set = []
         for config in configs:
             x = self.encode_config(config)
-            X.append(x)
+            x_set.append(x)
 
-        return np.array(X)
+        return np.array(x_set)
 
     def get_encoded_data(
         self,
@@ -763,28 +781,28 @@ class AbstractRun(ABC):
         include_combined_cost: bool = False,
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
-        Encodes configurations to process them further. After the configurations are encoded,
+        Encodes configurations to process them further.
+
+        After the configurations are encoded,
         they can be used in model prediction.
 
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
             Which objectives should be considered. If None, all objectives are
-            considered. By default None.
+            considered. By default, None.
         budget : Optional[List[Status]], optional
-            Which budget should be considered. By default None. If None, only the highest budget
+            Which budget should be considered. By default, None. If None, only the highest budget
             is considered.
         statuses : Optional[Union[Status, List[Status]]], optional
-            Which statuses should be considered. By default None. If None, all statuses are
+            Which statuses should be considered. By default, None. If None, all statuses are
             considered.
-        encode_y : bool, optional
-            Whether y should be normalized too. By default False.
         specific : bool, optional
             Whether a specific encoding should be used. This encoding is compatible with pyrfr.
             A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.
             By default False.
         include_config_ids : bool, optional
-            Whether to include config ids. By default False.
+            Whether to include config ids. By default, False.
         include_combined_cost : bool, optional
             Whether to include combined cost. Note that the combined cost is calculated by the
             passed objectives only. By default False.
@@ -806,7 +824,7 @@ class AbstractRun(ABC):
         if isinstance(objectives, Objective):
             objectives = [objectives]
 
-        X, Y = [], []
+        x_set, y_set = [], []
         config_ids = []
 
         results = self.get_all_costs(budget, statuses)
@@ -824,17 +842,17 @@ class AbstractRun(ABC):
             if include_combined_cost:
                 y += [self.merge_costs(costs, objectives)]
 
-            X.append(x)
-            Y.append(y)
+            x_set.append(x)
+            y_set.append(y)
             config_ids.append(config_id)
 
-        X = np.array(X)  # type: ignore
-        Y = np.array(Y)  # type: ignore
+        x_set = np.array(x_set)  # type: ignore
+        y_set = np.array(y_set)  # type: ignore
         config_ids = np.array(config_ids).reshape(-1, 1)  # type: ignore
 
         # Imputation: Easiest case is to replace all nans with -1
-        # However, since Stefan used different values for inactives
-        # we also have to use different inactives to be compatible
+        # However, since Stefan used different values for inactive hyperparameters,
+        # we also have to use different inactive hyperparameters to be compatible
         # with the random forests.
         # https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45
         if specific:
@@ -861,8 +879,8 @@ class AbstractRun(ABC):
                             raise ValueError("Hyperparameter not supported.")
 
                 if conditional[idx] is True:
-                    nonfinite_mask = ~np.isfinite(X[:, idx])
-                    X[nonfinite_mask, idx] = impute_values[idx]
+                    non_finite_mask = ~np.isfinite(x_set[:, idx])
+                    x_set[non_finite_mask, idx] = impute_values[idx]
 
         # Now we create dataframes for both values and labels
         # [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
@@ -878,9 +896,9 @@ class AbstractRun(ABC):
             columns += [COMBINED_COST_NAME]
 
         if include_config_ids:
-            data = np.concatenate((config_ids, X, Y), axis=1)
+            data = np.concatenate((config_ids, x_set, y_set), axis=1)
         else:
-            data = np.concatenate((X, Y), axis=1)
+            data = np.concatenate((x_set, y_set), axis=1)
 
         data = pd.DataFrame(data=data, columns=columns)
 

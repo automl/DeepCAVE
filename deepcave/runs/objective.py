@@ -16,6 +16,8 @@ class Objective:
 
     def __post_init__(self) -> None:
         """
+        Check if bounds should be locked.
+
         Lock the lower bound if lower is not None.
         Lock the upper bound if upper is not None.
 
@@ -81,18 +83,18 @@ class Objective:
         attributes = ["name", "lock_lower", "lock_upper", "optimize"]
         for attribute in attributes:
             if getattr(self, attribute) != getattr(other, attribute):
-                raise NotMergeableError(f"Objective {attribute} is not mergeable.")
+                raise NotMergeableError(f"Objective {attribute} can not be merged.")
 
         if self.lock_lower and self.lock_lower == other.lock_lower:
             if self.lower != other.lower:
-                raise NotMergeableError(f"Objective {other.name}'s lower bound is not mergeable.")
+                raise NotMergeableError(f"Objective {other.name}'s lower bound can not be merged.")
         else:
             if self.lower > other.lower:  # type: ignore
                 self.lower = other.lower
 
         if self.lock_upper and self.lock_upper == other.lock_upper:
             if self.upper != other.upper:
-                raise NotMergeableError(f"Objective {other.name}'s upper bound is not mergeable.")
+                raise NotMergeableError(f"Objective {other.name}'s upper bound can not be merged.")
         else:
             if self.upper < other.upper:  # type: ignore
                 self.upper = other.upper

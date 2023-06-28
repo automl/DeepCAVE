@@ -1,9 +1,5 @@
 import unittest
 
-import numpy as np
-import pytest
-
-from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.lpi import LPI as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac3v1 import SMAC3v1Run
@@ -22,9 +18,9 @@ class TestLPI(unittest.TestCase):
 
         # Calculate
         self.evaluator.calculate(objective, budget)
-        importances = self.evaluator.get_importances(self.hp_names)
+        importance_dict = self.evaluator.get_importances(self.hp_names)
 
-        print(importances)
+        print(importance_dict)
 
 
 if __name__ == "__main__":

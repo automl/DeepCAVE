@@ -3,12 +3,12 @@ from distutils.spawn import find_executable
 import matplotlib
 
 matplotlib.use("Agg")
-import base64
-import io
+import base64  # noqa: E402
+import io  # noqa: E402
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa: E402
 
-from deepcave.utils.logs import get_logger
+from deepcave.utils.logs import get_logger  # noqa: E402
 
 # IEEETrans double column standard
 FIG_WIDTH = 252.0 / 72.27  # 1pt is 1/72.27 inches
@@ -62,7 +62,7 @@ class StyledPlot:
         self.plt.close()
 
     def render(self):
-        # Ccreate a virtual file which matplotlib can use to save the figure
+        # Create a virtual file which matplotlib can use to save the figure
         buffer = io.BytesIO()
         self.plt.savefig(buffer, dpi=400, bbox_inches="tight")
         buffer.seek(0)
@@ -87,7 +87,8 @@ class StyledPlot:
 
     # def grid(self):
     #    pass
-    #    #self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0, alpha=0.5)
+    #    # self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0,
+    #    # alpha=0.5)
 
     def boxplot(self, values, positions, color, widths=0.5):
         bp = self.plt.boxplot(values, positions=positions, patch_artist=True, widths=widths)
@@ -158,8 +159,8 @@ class StyledPlot:
         """Make sure we access self.plt directly."""
         try:
             return self.__getattribute__(name)
-        except:
+        except AttributeError:
             return self.plt.__getattribute__(name)
 
 
-plt = StyledPlot()
+plot = StyledPlot()

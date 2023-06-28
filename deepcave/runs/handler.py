@@ -1,6 +1,5 @@
 from typing import Dict, List, Optional, Type, Union
 
-import logging
 import time
 from pathlib import Path
 
@@ -8,7 +7,9 @@ from deepcave.config import Config
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group
 from deepcave.runs.run import Run
+from deepcave.utils.cache import Cache
 from deepcave.utils.logs import get_logger
+from deepcave.utils.run_caches import RunCaches
 
 
 class RunHandler:
@@ -272,7 +273,8 @@ class RunHandler:
                 run = run_class.from_path(Path(run_path))
                 t2 = time.perf_counter()
                 self.logger.debug(
-                    f'Run "{Path(run_path).stem}" was successfully loaded (took {round(t2 - t1, 2)} seconds).'
+                    f'Run "{Path(run_path).stem}" was successfully loaded (took {round(t2 - t1, 2)}'
+                    f" seconds)."
                 )
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt.

@@ -2,6 +2,9 @@ from typing import Any, Dict, List, Type
 
 from pathlib import Path
 
+from deepcave.plugins import Plugin
+from deepcave.runs.run import Run
+
 
 class Config:
     # General config

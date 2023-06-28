@@ -147,7 +147,7 @@ class Run(AbstractRun, ABC):
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
         origin: str = None,
-        model: Union[str, "torch.nn.Module"] = None,  # type: ignore
+        model: Union[str, "torch.nn.Module"] = None,  # type: ignore # noqa: F821
         additional: Optional[Dict] = None,
     ) -> None:
         """
@@ -162,17 +162,17 @@ class Run(AbstractRun, ABC):
         config : Union[Dict, Configuration]
             The corresponding configuration.
         start_time : float, optional
-            Start time. By default 0.0
+            Start time. By default, 0.0
         end_time : float, optional
-            End time. By default 0.0
+            End time. By default, 0.0
         status : Status, optional
-            Status of the trial. By default Status.SUCCESS
+            Status of the trial. By default, Status.SUCCESS
         origin : str, optional
-            Origin of the trial. By default None
+            Origin of the trial. By default, None
         model : Union[str, &quot;torch.nn.Module&quot;], optional
-            Model of the trial. By default None
+            Model of the trial. By default, None
         additional : Optional[Dict], optional
-            Additional information of the trial. By default None.
+            Additional information of the trial. By default, None.
             Following information is used by DeepCAVE:
             * traceback
 

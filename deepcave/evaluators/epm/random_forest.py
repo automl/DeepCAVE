@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple  # noqa: F401
 
 import functools
 import warnings
@@ -366,7 +366,8 @@ class RandomForest:
             all_preds = []
             third_dimension = 0
 
-            # Gather data in a list of 2d arrays and get statistics about the required size of the 3d array
+            # Gather data in a list of 2d arrays and get statistics about the required size of the
+            # 3d array
             for row_X in X:
                 preds_per_tree = self._model.all_leaf_values(row_X)
                 all_preds.append(preds_per_tree)

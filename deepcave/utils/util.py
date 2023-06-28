@@ -1,22 +1,8 @@
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any
 
-import base64
 import datetime
 import random
 import string
-from io import BytesIO
-
-import pandas as pd
-from ConfigSpace import ConfigurationSpace
-from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
-    FloatHyperparameter,
-    IntegerHyperparameter,
-    OrdinalHyperparameter,
-)
-from dash import html
-from matplotlib import pyplot as plt
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
 def get_random_string(length: int) -> str:

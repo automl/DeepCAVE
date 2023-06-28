@@ -1,10 +1,10 @@
-from typing import Any, Dict, Iterator, Optional, Union
+from typing import Any, Dict
 
 import shutil
 
+from deepcave.config import Config
 from deepcave.runs import AbstractRun
 from deepcave.utils.cache import Cache
-from deepcave.utils.hash import string_to_hash
 from deepcave.utils.logs import get_logger
 
 

@@ -9,7 +9,6 @@ from ConfigSpace import Configuration
 
 from deepcave.runs import Status
 from deepcave.runs.converters.deepcave import DeepCAVERun
-from deepcave.runs.run import Run
 
 
 class Recorder:

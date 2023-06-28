@@ -1,8 +1,5 @@
 import unittest
 
-import numpy as np
-import pytest
-
 from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.epm.random_forest import RandomForest
