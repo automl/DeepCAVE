@@ -1,3 +1,8 @@
+# Version 1.1.1
+
+## Bug-Fixes
+- Put in missing "q" values into configspaces to allow using newer ConfigSpace versions. 
+
 # Version 1.1
 
 ## Converters

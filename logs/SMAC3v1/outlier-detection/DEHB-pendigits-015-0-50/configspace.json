@@ -66,7 +66,8 @@
       "log": false,
       "lower": 32,
       "upper": 512,
-      "default": 128
+      "default": 128,
+      "q": null
     },
     {
       "name": "model:__choice__",

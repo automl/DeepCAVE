@@ -15,7 +15,7 @@
       "log": false,
       "lower": 0.0,
       "upper": 0.5,
-      "default": 0.0
+      "default": 0.0,
       "q": null
     },
     {
@@ -24,7 +24,7 @@
       "log": true,
       "lower": 2,
       "upper": 16,
-      "default": 8
+      "default": 8,
       "q": null
     },
     {
