@@ -2,7 +2,7 @@
 # are usually completed in github actions.
 
 SHELL := /bin/bash
-VERSION := 1.1.1
+VERSION := 1.1.2
 
 NAME := DeepCAVE
 PACKAGE_NAME := deepcave
