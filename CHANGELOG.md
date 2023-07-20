@@ -1,3 +1,8 @@
+# Version 1.1.2
+
+## Bug-Fixes
+- Fix configspace version.
+
 # Version 1.1.1
 
 ## Bug-Fixes
