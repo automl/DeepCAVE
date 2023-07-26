@@ -1,3 +1,8 @@
+# Version 1.1.3
+
+## Bug-Fixes
+- Exchange SMAC log examples to fix issue with PDP (#54).
+
 # Version 1.1.2
 
 ## Bug-Fixes
