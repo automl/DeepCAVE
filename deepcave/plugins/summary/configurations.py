@@ -31,7 +31,7 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_link(run: AbstractRun, config_id: int) -> str:
         """
-        Creates a link to a specific configuration.
+        Create a link to a specific configuration.
 
         Parameters
         ----------

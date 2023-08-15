@@ -44,7 +44,7 @@ class Cache:
             self.read()
 
     def read(self) -> None:
-        """Reads content from a file and load into cache as dictionary."""
+        """Read content from a file and load into cache as dictionary."""
         if self._filename is None or not self._filename.exists():
             return
 
@@ -92,14 +92,14 @@ class Cache:
             self.write()
 
     def set_dict(self, d: Dict, write_file: bool = True) -> None:
-        """Updates cache to a specific value"""
+        """Update cache to a specific value."""
         self._data.update(d)
 
         if write_file:
             self.write()
 
     def get(self, *keys) -> Optional[Any]:
-        """Retrieve value for a specific key"""
+        """Retrieve value for a specific key."""
         d = deepcopy(self._data)
         for key in keys:
             if key not in d:
@@ -110,7 +110,7 @@ class Cache:
         return d
 
     def has(self, *keys) -> bool:
-        """Check whether cache has specific key"""
+        """Check whether cache has specific key."""
         d = self._data
         for key in keys:
             if key not in d:
@@ -120,7 +120,7 @@ class Cache:
         return True
 
     def clear(self, write_file: bool = True) -> None:
-        """Clear all cache and reset to defaults"""
+        """Clear all cache and reset to defaults."""
         filename = self._filename
 
         if filename is not None and filename.exists():

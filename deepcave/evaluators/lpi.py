@@ -33,7 +33,7 @@ class LPI:
         seed: Optional[int] = None,
     ) -> None:
         """
-        Prepares the data and trains a RandomForest model.
+        Prepare the data and trains a RandomForest model.
 
         Parameters
         ----------
@@ -187,7 +187,7 @@ class LPI:
 
     def get_importances(self, hp_names: List[str]) -> Dict[str, Tuple[float, float]]:
         """
-        Returns the importances.
+        Return the importances.
 
         Parameters
         ----------

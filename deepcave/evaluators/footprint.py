@@ -65,7 +65,7 @@ class Footprint:
         exclude_configs: bool = False,
     ) -> None:
         """
-        Calculates the distances and trains the model.
+        Calculate the distances and trains the model.
 
         Parameters
         ----------
@@ -255,7 +255,7 @@ class Footprint:
 
     def get_points(self, category: str = "configs") -> Tuple[List[float], List[float], List[int]]:
         """
-        Returns the points of the MDS plot.
+        Return the points of the MDS plot.
 
         Parameters
         ----------
@@ -319,7 +319,7 @@ class Footprint:
 
     def _get_distance(self, x: np.ndarray, y: np.ndarray) -> float:
         """
-        Calculates distance between x and y. Both arrays must have the same length.
+        Calculate distance between x and y. Both arrays must have the same length.
 
         Parameters
         ----------
@@ -361,7 +361,7 @@ class Footprint:
         self, X: np.ndarray, config_ids: List[int], exclude_configs: bool = False
     ) -> None:
         """
-        Initializes the distances.
+        Initialize the distances.
 
         Parameters
         ----------
@@ -389,7 +389,7 @@ class Footprint:
         rejection_threshold: Optional[float] = 0.0,
     ) -> bool:
         """
-        Updates the internal distance if the passed config is not rejectded.
+        Update the internal distance if the passed config is not rejectded.
 
         Parameters
         ----------

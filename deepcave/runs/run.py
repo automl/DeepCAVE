@@ -18,7 +18,7 @@ from deepcave.utils.hash import string_to_hash
 
 class Run(AbstractRun, ABC):
     """
-    Creates a new run.
+    Create a new run.
     If path is given, runs are loaded from the path.
 
     Parameters
@@ -117,7 +117,7 @@ class Run(AbstractRun, ABC):
 
     def exists(self) -> bool:
         """
-        Checks if the run exists based on the internal path.
+        Check if the run exists based on the internal path.
 
         Returns
         -------
@@ -151,7 +151,7 @@ class Run(AbstractRun, ABC):
         additional: Optional[Dict] = None,
     ) -> None:
         """
-        Adds a trial to the run.
+        Add a trial to the run.
         If combination of config and budget already exists, it will be overwritten.
         Not successful runs are added with `None` costs.
 

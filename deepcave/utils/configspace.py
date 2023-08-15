@@ -13,7 +13,7 @@ from ConfigSpace.util import deactivate_inactive_hyperparameters
 
 def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configuration]:
     """
-    Generates border configurations from the configuration space.
+    Generate border configurations from the configuration space.
 
     Parameters
     ----------
@@ -59,7 +59,7 @@ def sample_random_config(
     configspace: ConfigurationSpace, d: Optional[int] = None
 ) -> Iterator[Configuration]:
     """
-    Generates random configurations from the configuration space.
+    Generate random configurations from the configuration space.
 
     Parameters
     ----------

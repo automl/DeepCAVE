@@ -3,7 +3,7 @@ from typing import Dict
 
 def update_dict(a: Dict[str, Dict], b: Dict[str, Dict]) -> None:
     """
-    Updates dictionary a with dictionary b inplace.
+    Update dictionary a with dictionary b inplace.
 
     Parameters
     ----------

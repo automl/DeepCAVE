@@ -5,6 +5,6 @@ class NotValidRunError(Exception):
 
 
 class NotMergeableError(Exception):
-    """Raised if two or more runs are not mergeable"""
+    """Raised if two or more runs are not mergeable."""
 
     pass

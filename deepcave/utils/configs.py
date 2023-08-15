@@ -10,7 +10,7 @@ from deepcave.config import Config
 
 def parse_config(filename: Optional[str] = None) -> Config:
     """
-    Parses the config given the filename. Both relative and absolute paths are possible.
+    Parse the config given the filename. Both relative and absolute paths are possible.
 
     Parameters
     ----------

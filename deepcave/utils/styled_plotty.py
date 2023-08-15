@@ -25,7 +25,7 @@ logger = get_logger(__name__)
 @interactive
 def save_image(figure: go.Figure, name: str) -> None:
     """
-    Saves a plotly figure as an image.
+    Save a plotly figure as an image.
 
     Parameters
     ----------
@@ -50,7 +50,7 @@ def save_image(figure: go.Figure, name: str) -> None:
 
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     """
-    Converts a hex_string to a tuple of rgb values.
+    Convert a hex_string to a tuple of rgb values.
 
     Requires format including #, e.g.:
     #000000
@@ -69,7 +69,7 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
 
 
 def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
-    """Currently (Plotly version 5.3.1) there are 10 possible colors."""
+    """Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors."""
     color = px.colors.qualitative.Plotly[id_]
 
     r, g, b = hex_to_rgb(color)
@@ -150,7 +150,7 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
 
 def prettify_label(label: Union[str, float, int]) -> str:
     """
-    Takes a label and prettifies it. E.g. floats are shortened.
+    Take a label and prettifies it. E.g. floats are shortened.
 
     Parameters
     ----------
@@ -187,7 +187,7 @@ def get_hyperparameter_ticks(
     include_nan: bool = True,
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both tickvals and ticktext.
+    Generate tick data for both tickvals and ticktext.
 
     The background is that
     you might have encoded data, but you don't want to show all of them.
@@ -292,7 +292,7 @@ def get_hyperparameter_ticks_from_values(
     values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both values and labels.
+    Generate tick data for both values and labels.
 
     The background is that
     you might have encoded data, but you don't want to show all of them.

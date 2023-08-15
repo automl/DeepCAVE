@@ -95,7 +95,7 @@ class RandomForest:
 
     def _get_model(self) -> regression.base_tree:
         """
-        Returns the internal model.
+        Return the internal model.
 
         Returns
         -------
@@ -180,7 +180,7 @@ class RandomForest:
 
     def _check_dimensions(self, X: np.ndarray, Y: Optional[np.ndarray] = None) -> None:
         """
-        Checks if the dimensions of X and Y are correct wrt features.
+        Check if the dimensions of X and Y are correct wrt features.
 
         Parameters
         ----------
@@ -210,7 +210,7 @@ class RandomForest:
         self, X: np.ndarray, y: np.ndarray
     ) -> regression.default_data_container:
         """
-        Fills a pyrfr default data container s.t. the forest knows
+        Fill a pyrfr default data container s.t. the forest knows
         categoricals and bounds for continuous data.
 
         Parameters

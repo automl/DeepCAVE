@@ -61,8 +61,7 @@ def get_select_options(
     binary: bool = False,
 ) -> List[Dict[str, Any]]:
     """
-    If values are none use labels as values.
-    If both are none return empty list.
+    If values are none use labels as values. If both are none return empty list.
     """
     if labels is None and values is None:
         if binary:

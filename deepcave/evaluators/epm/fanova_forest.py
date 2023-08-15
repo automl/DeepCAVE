@@ -50,7 +50,7 @@ class FanovaForest(RandomForest):
 
     def _get_model(self) -> regression.base_tree:
         """
-        Returns the internal model.
+        Return the internal model.
 
         Returns
         -------
@@ -123,7 +123,7 @@ class FanovaForest(RandomForest):
 
     def compute_marginals(self, hp_ids: List[int], depth=1):
         """
-        Returns the marginal of selected parameters.
+        Return the marginal of selected parameters.
 
         Parameters
         ----------

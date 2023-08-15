@@ -38,7 +38,7 @@ class RunHandler:
 
     def set_working_directory(self, working_directory: Union[Path, str]) -> None:
         """
-        Sets the working directoy to the meta cache.
+        Set the working directoy to the meta cache.
 
         Parameters
         ----------
@@ -49,7 +49,7 @@ class RunHandler:
 
     def get_working_directory(self) -> Path:
         """
-        Returns the current working directory in the cache.
+        Return the current working directory in the cache.
 
         Returns
         -------
@@ -60,7 +60,7 @@ class RunHandler:
 
     def get_available_run_paths(self) -> Dict[str, str]:
         """
-        Returns the available run paths from the current directory.
+        Return the available run paths from the current directory.
 
         Returns
         -------
@@ -90,7 +90,7 @@ class RunHandler:
 
     def get_selected_run_paths(self) -> List[str]:
         """
-        Returns the selected run paths from the cache.
+        Return the selected run paths from the cache.
 
         Returns
         -------
@@ -101,7 +101,7 @@ class RunHandler:
 
     def get_selected_run_names(self) -> List[str]:
         """
-        Returns the run names of the selected runs.
+        Return the run names of the selected runs.
 
         Returns
         -------
@@ -112,7 +112,7 @@ class RunHandler:
 
     def get_run_name(self, run_path: Union[Path, str]) -> str:
         """
-        Returns the stem of the path.
+        Return the stem of the path.
 
         Parameters
         ----------
@@ -131,7 +131,7 @@ class RunHandler:
 
     def add_run(self, run_path: str) -> bool:
         """
-        Adds a run path to the cache. If run path is already in cache, do nothing.
+        Add a run path to the cache. If run path is already in cache, do nothing.
 
         Parameters
         ----------
@@ -154,7 +154,7 @@ class RunHandler:
         return True
 
     def remove_run(self, run_path: str) -> None:
-        """Removes a run path from the cache. If run path is not in cache, do nothing.
+        """Remove a run path from the cache. If run path is not in cache, do nothing.
 
         Parameters
         ----------
@@ -182,7 +182,7 @@ class RunHandler:
             self.update_runs()
 
     def update(self) -> None:
-        """Updates the internal run and group instances but only if a hash changed."""
+        """Update the internal run and group instances but only if a hash changed."""
         update_required = False
         for run_path in list(self.runs.keys()):
             run = self.runs[run_path]
@@ -201,7 +201,7 @@ class RunHandler:
 
     def update_runs(self) -> bool:
         """
-        Loads selected runs and update cache if files changed.
+        Load selected runs and update cache if files changed.
 
         Raises
         ------
@@ -240,7 +240,7 @@ class RunHandler:
         self, run_path: str, class_hint: Optional[Type[Run]] = None
     ) -> Optional[AbstractRun]:
         """
-        Loads the run from `self.runs` or creates a new one.
+        Load the run from `self.runs` or creates a new one.
 
         Raises
         ------
@@ -297,7 +297,7 @@ class RunHandler:
 
     def update_groups(self, groups: Optional[Dict[str, str]] = None) -> None:
         """
-        Loads chosen groups. If `groups` is passed, it is used to instantiate the groups and
+        Load chosen groups. If `groups` is passed, it is used to instantiate the groups and
         saved to the cache. Otherwise, `groups` is loaded from the cache.
 
         Raises
@@ -336,7 +336,7 @@ class RunHandler:
 
     def get_run(self, run_id: str) -> AbstractRun:
         """
-        Looks inside `self.runs` and `self.groups` and if the run id is found, returns the run.
+        Look inside `self.runs` and `self.groups` and if the run id is found, returns the run.
 
         Parameters
         ----------
@@ -362,7 +362,7 @@ class RunHandler:
 
     def get_groups(self) -> List[Group]:
         """
-        Returns instantiated grouped runs.
+        Return instantiated grouped runs.
 
         Returns
         -------
@@ -374,7 +374,7 @@ class RunHandler:
 
     def get_runs(self, include_groups=False) -> List[AbstractRun]:
         """
-        Returns the runs from the internal cache. The runs are already loaded and ready to use.
+        Return the runs from the internal cache. The runs are already loaded and ready to use.
         Optional, if `include_groups` is set to True, the groups are also included.
 
         Parameters

@@ -129,7 +129,7 @@ class AbstractRun(ABC):
         return objectives
 
     def get_objective(self, id: Union[str, int]) -> Optional[Objective]:
-        """Returns the objective based on the id or the name.
+        """Return the objective based on the id or the name.
 
         Parameters
         ----------
@@ -154,7 +154,7 @@ class AbstractRun(ABC):
 
     def get_objective_id(self, objective: Union[Objective, str]) -> int:
         """
-        Returns the id of the objective if it is found.
+        Return the id of the objective if it is found.
 
         Parameters
         ----------
@@ -261,7 +261,7 @@ class AbstractRun(ABC):
 
     def get_budget(self, id: Union[int, str], human=False) -> float:
         """
-        Gets the budget given an id.
+        Get the budget given an id.
 
         Parameters
         ----------
@@ -287,7 +287,7 @@ class AbstractRun(ABC):
         self, human: bool = False, include_combined: bool = True
     ) -> List[Union[int, float]]:
         """
-        Returns the budgets from the meta data.
+        Return the budgets from the meta data.
 
         Parameters
         ----------
@@ -317,7 +317,7 @@ class AbstractRun(ABC):
 
     def get_highest_budget(self, config_id: Optional[int] = None) -> Optional[Union[int, float]]:
         """
-        Returns the highest found budget for a config id.
+        Return the highest found budget for a config id.
 
         If no config id is specified then
         the highest available budget is returned.
@@ -339,7 +339,7 @@ class AbstractRun(ABC):
 
     def _process_costs(self, costs: List[float]) -> List[float]:
         """
-        Processes the costs to get rid of NaNs.
+        Process the costs to get rid of NaNs.
 
         NaNs are replaced by the worst value of the
         objective.
@@ -365,7 +365,7 @@ class AbstractRun(ABC):
 
     def get_costs(self, config_id: int, budget: Optional[Union[int, float]] = None) -> List[float]:
         """
-        Returns the costs of a configuration.
+        Return the costs of a configuration.
 
         In case of multi-objective, multiple costs are
         returned.
@@ -461,7 +461,7 @@ class AbstractRun(ABC):
 
     def get_status(self, config_id: int, budget: Optional[Union[int, float]] = None) -> Status:
         """
-        Returns the status of a configuration.
+        Return the status of a configuration.
 
         Parameters
         ----------
@@ -507,7 +507,7 @@ class AbstractRun(ABC):
         statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Tuple[Configuration, float]:
         """
-        Returns the incumbent with its normalized cost.
+        Return the incumbent with its normalized cost.
 
         Parameters
         ----------
@@ -552,7 +552,7 @@ class AbstractRun(ABC):
         self, costs: List[float], objectives: Optional[Union[Objective, List[Objective]]] = None
     ) -> float:
         """
-        Calculates one cost value from multiple costs.
+        Calculate one cost value from multiple costs.
 
         Normalizes the costs first and weight every cost the same.
         The lower the normalized cost, the better.
@@ -637,7 +637,7 @@ class AbstractRun(ABC):
         self, objective: Objective, budget: Optional[Union[int, float]] = None
     ) -> Tuple[List[float], List[float], List[float], List[int], List[int]]:
         """
-        Calculates the trajectory of the given objective and budget.
+        Calculate the trajectory of the given objective and budget.
 
         Parameters
         ----------
@@ -719,7 +719,7 @@ class AbstractRun(ABC):
         self, config: Union[int, Dict[Any, Any], Configuration], specific: bool = False
     ) -> List:
         """
-        Encodes a given config (id) to a normalized list.
+        Encode a given config (id) to a normalized list.
 
         If a config is passed, no look-up has to be done.
 
@@ -781,7 +781,7 @@ class AbstractRun(ABC):
         include_combined_cost: bool = False,
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
-        Encodes configurations to process them further.
+        Encode configurations to process them further.
 
         After the configurations are encoded,
         they can be used in model prediction.
@@ -913,8 +913,8 @@ def check_equality(
     budgets: bool = True,
 ) -> Dict[str, Any]:
     """
-    Checks the passed runs on equality based on the selected runs and returns the requested
-    attributes.
+    Check the passed runs on equality based on the selected runs and
+    returns the requested attributes.
 
     Parameters
     ----------

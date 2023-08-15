@@ -74,7 +74,7 @@ class fANOVA:
         self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
     ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
-        Returns the importance scores from the passed hyperparameter names.
+        Return the importance scores from the passed hyperparameter names.
 
         Warning
         -------

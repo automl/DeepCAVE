@@ -86,7 +86,7 @@ class Plugin(Layout, ABC):
     @interactive
     def get_base_url(cls) -> str:
         """
-        Generates the url for the plugin.
+        Generate the url for the plugin.
 
         Returns
         -------
@@ -100,7 +100,7 @@ class Plugin(Layout, ABC):
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
         """
-        Checks if a run is compatible with this plugin. If a plugin is not compatible,
+        Check if a run is compatible with this plugin. If a plugin is not compatible,
         you can not select the run.
 
         Note
@@ -145,7 +145,7 @@ class Plugin(Layout, ABC):
         type: Any = None,
     ) -> str:
         """
-        Registers an input variable for the plugin. It is important to register the inputs
+        Register an input variable for the plugin. It is important to register the inputs
         because callbacks have to be defined before the server is started.
         After registering all inputs, an internal mapping is created.
 
@@ -189,7 +189,7 @@ class Plugin(Layout, ABC):
         self, id: str, attributes: Union[str, List[str]] = "value", mpl: bool = False
     ) -> str:
         """
-        Registers an output variable for the plugin.
+        Register an output variable for the plugin.
 
         Parameters
         ----------
@@ -230,7 +230,7 @@ class Plugin(Layout, ABC):
     @interactive
     def register_callbacks(self) -> None:
         """
-        Registers basic callbacks for the plugin. Following callbacks are registered:
+        Register basic callbacks for the plugin. Following callbacks are registered:
         - If inputs changes, the changes are pasted back. This is in particular
         interest if input dependencies are used.
         - Raw data dialog to display raw data.
@@ -449,7 +449,7 @@ class Plugin(Layout, ABC):
         self, inputs: Dict[str, Dict[str, str]], last_inputs: Dict[str, Dict[str, str]]
     ) -> Tuple[bool, bool]:
         """
-        Checks if the inputs have changed.
+        Check if the inputs have changed.
 
         Parameters
         ----------
@@ -542,7 +542,7 @@ class Plugin(Layout, ABC):
     @interactive
     def _list_to_dict(self, values: List[str], input: bool = True) -> Dict[str, Dict[str, str]]:
         """
-        Maps the given values to a dict, regarding the sorting from
+        Map the given values to a dict, regarding the sorting from
         either self.inputs or self.outputs.
 
         Parameters
@@ -576,7 +576,7 @@ class Plugin(Layout, ABC):
         self, d: Dict[str, Dict[str, str]], input: bool = False
     ) -> List[Optional[str]]:
         """
-        Maps the given dict to a list, respecting the sorting from either
+        Map the given dict to a list, respecting the sorting from either
         self.inputs or self.outputs.
 
         Parameters
@@ -617,7 +617,7 @@ class Plugin(Layout, ABC):
     @interactive
     def _dict_as_key(self, d: Dict[str, Any], remove_filters: bool = False) -> Optional[str]:
         """
-        Converts a dictionary to a key. Only ids from self.inputs are considered.
+        Convert a dictionary to a key. Only ids from self.inputs are considered.
 
         Parameters
         ----------
@@ -678,7 +678,7 @@ class Plugin(Layout, ABC):
 
     def _clean_inputs(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Cleans the given inputs s.t. only the first value is used.
+        Clean the given inputs s.t. only the first value is used.
         Also, boolean values are casted to booleans.
 
         Example
@@ -742,7 +742,7 @@ class Plugin(Layout, ABC):
     @interactive
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
-        Returns the components for the plugin. Basically, all blocks and elements of the plugin
+        Return the components for the plugin. Basically, all blocks and elements of the plugin
         are stacked-up here
 
         Returns
@@ -933,7 +933,7 @@ class Plugin(Layout, ABC):
     @interactive
     def get_run_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> Component:
         """
-        Generates the run selection input.
+        Generate the run selection input.
         This is only the case if `activate_run_selection` is True.
 
         Parameters
@@ -963,7 +963,7 @@ class Plugin(Layout, ABC):
         check_run_compatibility: Callable[[AbstractRun], bool],
     ) -> Dict[str, Any]:
         """
-        Loads the options for `get_run_input_layout`.
+        Load the options for `get_run_input_layout`.
         Both runs and groups are displayed.
 
         Parameters
@@ -1016,7 +1016,7 @@ class Plugin(Layout, ABC):
     @interactive
     def get_selected_runs(self, inputs: Dict[str, Any]) -> List[AbstractRun]:
         """
-        Parses selected runs from inputs.
+        Parse selected runs from inputs.
         If self.activate_run_selection is set, return only selected run. Otherwise, return all
         possible runs.
 
@@ -1077,7 +1077,8 @@ class Plugin(Layout, ABC):
         inputs: Dict[str, Any],
     ) -> Dict[str, Any]:
         """
-        Same as `load_inputs` but called after inputs have changed. Provides a lot of flexibility.
+        Load the content as in 'load_inputs' but called after inputs have changed.
+        Provides a lot of flexibility.
 
         Note
         ----
@@ -1180,7 +1181,7 @@ class Plugin(Layout, ABC):
         outputs: Dict[str, Union[str, Dict[str, str]]],
     ) -> Union[Component, List[Component]]:
         """
-        Reads in the raw data and prepares them for the layout.
+        Read in the raw data and prepares them for the layout.
 
         Note
         ----
@@ -1212,7 +1213,7 @@ class Plugin(Layout, ABC):
         outputs: Dict[str, Union[str, Dict[str, str]]],
     ) -> Union[Component, List[Component]]:
         """
-        Reads in the raw data and prepares them for the layout.
+        Read in the raw data and prepares them for the layout.
 
         Note
         ----
@@ -1240,7 +1241,7 @@ class Plugin(Layout, ABC):
     @staticmethod
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Returns raw data based on a run and input data.
+        Return raw data based on a run and input data.
 
         Warning
         -------
@@ -1270,7 +1271,7 @@ class Plugin(Layout, ABC):
         cls, runs: Union[AbstractRun, List[AbstractRun]], inputs: Dict[str, Any]
     ) -> Union[Dict[str, Any], Dict[str, Dict[str, Any]]]:
         """
-        Checks whether run selection is active and accepts either one or multiple runs at once.
+        Check whether run selection is active and accepts either one or multiple runs at once.
         Calls `process` internally.
 
         Parameters
@@ -1312,7 +1313,7 @@ class Plugin(Layout, ABC):
 
     def generate_inputs(self, **kwargs: Any) -> Dict[str, Any]:
         """
-        Generates inputs for the `process` and `load_outputs` required for api mode.
+        Generate inputs for the `process` and `load_outputs` required for api mode.
         The arguments are validated against the input schema.
 
         Note
