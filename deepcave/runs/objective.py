@@ -45,6 +45,14 @@ class Objective:
         self.lock_upper = lock_upper
 
     def to_json(self) -> Dict[str, Any]:
+        """
+        Convert objectives attributes to a JSON format.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary with the objects attributes in a JSON format.
+        """
         return {
             "name": self.name,
             "lower": self.lower,
@@ -56,6 +64,19 @@ class Objective:
 
     @staticmethod
     def from_json(d: Dict[str, Any]) -> "Objective":
+        """
+        Create an objective from a JSON format.
+
+        Parameters
+        ----------
+        d : Dict[str, Any]
+            A dictionary in a JSON friendly format containing the attributes
+
+        Returns
+        -------
+        Objective
+            An objective created from the provided JSON data.
+        """
         objective = Objective(
             name=d["name"],
             lower=d["lower"],
@@ -69,6 +90,19 @@ class Objective:
         return objective
 
     def __eq__(self, other: Any) -> bool:
+        """
+        Compare if two instances are qual based on their attributes.
+
+        Parameters
+        ----------
+        other : Any
+            The other instance to compare
+
+        Returns
+        -------
+        bool
+            True if equal, else False.
+        """
         attributes = ["name", "lock_lower", "lock_upper", "optimize"]
         for a in attributes:
             if getattr(self, a) != getattr(other, a):
@@ -100,6 +134,14 @@ class Objective:
                 self.upper = other.upper
 
     def get_worst_value(self) -> float:
+        """
+        Get the worst value based on the optimization setting.
+
+        Returns
+        -------
+        float
+            The worst value based on the optimization setting.
+        """
         if self.optimize == "lower":
             return self.upper  # type: ignore
         else:

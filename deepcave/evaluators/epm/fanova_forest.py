@@ -14,7 +14,7 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 class FanovaForest(RandomForest):
     """A fanova forest wrapper for pyrfr."""
 
-    def __init__(
+    def __init__(  # noqa
         self,
         configspace: ConfigurationSpace,
         n_trees: int = 10,

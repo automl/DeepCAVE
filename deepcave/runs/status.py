@@ -10,4 +10,12 @@ class Status(IntEnum):
     NOT_EVALUATED = 6
 
     def to_text(self) -> str:
+        """
+        Convert name to simpler, lower case text format.
+
+        Returns
+        -------
+        str
+            The converted name in lower case with spaces added
+        """
         return self.name.lower().replace("_", " ")

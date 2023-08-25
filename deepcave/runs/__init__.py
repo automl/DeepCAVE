@@ -96,10 +96,32 @@ class AbstractRun(ABC):
 
     @property
     def latest_change(self) -> float:
+        """
+        Get the latest change value.
+
+        Returns
+        -------
+        float
+            The latest change value set to 0.
+        """
         return 0
 
     @staticmethod
     def get_trial_key(config_id: int, budget: Union[int, float]):
+        """
+        Get the trial key for the configuration and the budget.
+
+        Parameters
+        ----------
+        config_id : int
+            The ID of the configuration
+        budget : Union[int, float]
+            The budget for the Trial
+
+        Returns
+        -------
+
+        """
         return (config_id, budget)
 
     def get_trial(self, trial_key) -> Optional[Trial]:

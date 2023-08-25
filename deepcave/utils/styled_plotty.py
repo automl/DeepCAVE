@@ -379,6 +379,24 @@ def get_hyperparameter_ticks_from_values(
 
 
 def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:  # noqa: F821
+    """
+    Generate hover text with metrics for a configuration.
+
+    The method gets information about a given configuration, including a link, its objectives,
+    budget, costs and hyperparameters
+
+    Parameters
+    ----------
+    run : AbstractRun
+        The run instance
+    config_id : int
+        The ID of the configuration
+
+    Returns
+    -------
+    str
+        The hover text string containing the configuration information.
+    """
     if config_id < 0:
         return ""
 
