@@ -14,11 +14,15 @@ from deepcave.utils.run_caches import RunCaches
 
 class RunHandler:
     """
-    Handles the runs. Based on the meta data in the cache, automatically selects the right converter
+    Handles the runs.
+
+    Based on the meta data in the cache, automatically selects the right converter
     and switches to the right (plugin) cache.
     """
 
-    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCaches") -> None:
+    def __init__(
+        self, config: Config, cache: "Cache", run_cache: "RunCaches"
+    ) -> None:  # noqa: D107
         self.c = cache
         self.rc = run_cache
         # Fields set by self.update()
@@ -297,7 +301,9 @@ class RunHandler:
 
     def update_groups(self, groups: Optional[Dict[str, str]] = None) -> None:
         """
-        Load chosen groups. If `groups` is passed, it is used to instantiate the groups and
+        Load chosen groups.
+
+        If `groups` is passed, it is used to instantiate the groups and
         saved to the cache. Otherwise, `groups` is loaded from the cache.
 
         Raises
@@ -374,7 +380,9 @@ class RunHandler:
 
     def get_runs(self, include_groups=False) -> List[AbstractRun]:
         """
-        Return the runs from the internal cache. The runs are already loaded and ready to use.
+        Return the runs from the internal cache.
+
+        The runs are already loaded and ready to use.
         Optional, if `include_groups` is set to True, the groups are also included.
 
         Parameters

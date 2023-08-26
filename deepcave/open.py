@@ -12,8 +12,8 @@ if __name__ == "__main__":
     if "--port" in sys.argv:
         port = sys.argv[sys.argv.index("--port") + 1]
 
-    # Open the link in browser
     def open_browser() -> None:
+        """Open the link in the browser."""
         webbrowser.open_new(f"http://{address}:{port}")
 
     Timer(DELAY, open_browser).start()

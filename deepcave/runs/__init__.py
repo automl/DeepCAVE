@@ -30,7 +30,7 @@ from deepcave.utils.logs import get_logger
 class AbstractRun(ABC):
     prefix: str
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str) -> None:  # noqa: D107
         self.name: str = name
         self.path: Optional[Path] = None
         self.logger = get_logger(self.__class__.__name__)
@@ -39,6 +39,15 @@ class AbstractRun(ABC):
         self.reset()
 
     def reset(self) -> None:
+        """
+        Reset the abstract run to default values / empties.
+
+        Clear all the initial data and configuraions of the object.
+
+        Returns
+        -------
+        None
+        """
         self.meta: Dict[str, Any] = {}
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Configuration] = {}
@@ -120,29 +129,88 @@ class AbstractRun(ABC):
 
         Returns
         -------
-
+        Tuple[int, Union[int, float]]
+            Tuple representing the trial key, consisting of configuration ID and the budget.
         """
         return (config_id, budget)
 
     def get_trial(self, trial_key) -> Optional[Trial]:
+        """
+        Get the trial with the responding key if existing.
+
+        Parameters
+        ----------
+        trial_key : Any
+            The trial key for the desired trial
+
+        Returns
+        -------
+        Optional[Trial]
+            If available returns the trial object, otherwise returns None.
+        """
         if trial_key not in self.trial_keys:
             return None
 
         return self.history[self.trial_keys[trial_key]]
 
     def get_trials(self) -> Iterator[Trial]:
+        """
+        Get an iterator of all stored trials.
+
+        Returns
+        -------
+        Iterator[Trial]
+            An iterator over all stored trials.
+        """
         yield from self.history
 
     def get_meta(self) -> Dict[str, Any]:
+        """
+        Get a copy of the meta information of this abstract run.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A copy of the meta information dictionary.
+        """
         return self.meta.copy()
 
     def empty(self) -> bool:
+        """
+        Check if the abtract run object's history is empty.
+
+        Returns
+        -------
+        bool
+            True if object history is empty, False otherwise.
+        """
         return len(self.history) == 0
 
     def get_origin(self, config_id: int) -> str:
+        """
+        Get the origin, given a config ID.
+
+        Parameters
+        ----------
+        config_id : int
+            The ID of the configuration.
+
+        Returns
+        -------
+        str
+            An origin string corresponding to the given configuration ID.
+        """
         return self.origins[config_id]
 
     def get_objectives(self) -> List[Objective]:
+        """
+        Get a list of all objectives corresponding to the object.
+
+        Returns
+        -------
+        List[Objective]
+            A list containig all objectives assosiated with the object.
+        """
         objectives = []
         for d in self.meta["objectives"].copy():
             objective = Objective.from_json(d)
@@ -151,7 +219,8 @@ class AbstractRun(ABC):
         return objectives
 
     def get_objective(self, id: Union[str, int]) -> Optional[Objective]:
-        """Return the objective based on the id or the name.
+        """
+        Return the objective based on the id or the name.
 
         Parameters
         ----------
@@ -205,6 +274,14 @@ class AbstractRun(ABC):
         raise RuntimeError("Objective was not found.")
 
     def get_objective_ids(self) -> List[int]:
+        """
+        Get the IDs of the objectives.
+
+        Returns
+        -------
+        List[int]
+            A list of the IDs of the objectives.
+        """
         return list(range(len(self.get_objectives())))
 
     def get_objective_name(self, objectives: Optional[List[Objective]] = None) -> str:
@@ -225,6 +302,14 @@ class AbstractRun(ABC):
         return COMBINED_COST_NAME
 
     def get_objective_names(self) -> List[str]:
+        """
+        Get the names of the objectives.
+
+        Returns
+        -------
+        List[str]
+            A list containig the names of the objectives.
+        """
         return [obj.name for obj in self.get_objectives()]
 
     def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
@@ -264,10 +349,36 @@ class AbstractRun(ABC):
         return configs
 
     def get_config(self, id: int) -> Configuration:
+        """
+        Retrieve a configuration for the corresponding ID.
+
+        Parameters
+        ----------
+        id : int
+            The ID of the wanted configuration.
+
+        Returns
+        -------
+        Configuartion
+            A corresponding Configuration object.
+        """
         config = Configuration(self.configspace, self.configs[id])
         return config
 
     def get_config_id(self, config: Union[Configuration, Dict]) -> Optional[int]:
+        """
+        Retrieve the ID of the configuration.
+
+        Parameters
+        ----------
+        config : Union[Configuration, Dict]
+            The configuration for which to find the ID.
+
+        Returns
+        -------
+        Optional[int]
+            The configuration ID if found, otherwise None.
+        """
         if isinstance(config, Configuration):
             config = config.get_dictionary()
 
@@ -279,6 +390,21 @@ class AbstractRun(ABC):
         return None
 
     def get_num_configs(self, budget: Union[int, float] = None) -> int:
+        """
+        Count the number of configurations stored in this object with a specific budget.
+
+        Parameters
+        ----------
+        budget : Union[int, float], optional
+            The budget for which to count the configurations.
+            If not provided, counts all configurations.
+
+        Returns
+        -------
+        int
+            The number of all configurations with a given budget.
+            If budget is None, counts all configurations.
+        """
         return len(self.get_configs(budget=budget))
 
     def get_budget(self, id: Union[int, str], human=False) -> float:
@@ -299,6 +425,20 @@ class AbstractRun(ABC):
         return budgets[int(id)]
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
+        """
+        Get the corresponding IDs for the budgets.
+
+        Parameters
+        ----------
+        include_combined : bool, optional
+            If True, include the ID for the combined budet. If False, do not include.
+            By default True.
+
+        Returns
+        -------
+        List[int]
+            A list of the budget IDs.
+        """
         budget_ids = list(range(len(self.get_budgets())))
         if not include_combined:
             budget_ids = budget_ids[:-1]
@@ -647,6 +787,20 @@ class AbstractRun(ABC):
         return cost
 
     def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
+        """
+        Get a torch model assosciated with a configuration ID.
+
+        Parameters
+        ----------
+        config_id : int
+            The configuration ID.
+
+        Returns
+        -------
+        Optional["torch.nn.Module]
+            A torch model for the provided configuration ID if available.
+            If not available, returns None.
+        """
         import torch
 
         filename = self.models_dir / f"{str(config_id)}.pth"
@@ -786,6 +940,19 @@ class AbstractRun(ABC):
         return x
 
     def encode_configs(self, configs: List[Configuration]) -> np.ndarray:
+        """
+        Encode a list of configurations into a corresponding numpy array.
+
+        Parameters
+        ----------
+        configs : List[Configuration]
+            A list containing the configurations to be encoded.
+
+        Returns
+        -------
+        np.ndarray
+            A numpy array with the encoded configurations.
+        """
         x_set = []
         for config in configs:
             x = self.encode_config(config)
@@ -935,8 +1102,7 @@ def check_equality(
     budgets: bool = True,
 ) -> Dict[str, Any]:
     """
-    Check the passed runs on equality based on the selected runs and
-    returns the requested attributes.
+    Check the passed runs on equality based on the selected runs.
 
     Parameters
     ----------

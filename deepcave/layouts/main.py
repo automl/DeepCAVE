@@ -18,7 +18,7 @@ from deepcave.utils.dash import alert
 
 
 class MainLayout(Layout):
-    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):  # noqa: D107
         super().__init__()
         self.plugins = {}
         self.sidebar_layout = SidebarLayout(categorized_plugins)

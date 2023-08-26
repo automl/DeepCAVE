@@ -11,7 +11,7 @@ from deepcave.plugins import Plugin
 class DynamicPlugin(Plugin, ABC):
     use_cache = True
 
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # noqa: D107
         super().__init__()
 
     @interactive
@@ -31,7 +31,8 @@ class DynamicPlugin(Plugin, ABC):
         @app.callback(outputs, inputs)
         def plugin_output_update(_, *inputs_list):  # type: ignore
             """
-            Parameters:
+            Parameters
+            ----------
                 *inputs_list: Values from user.
             """
             # Map the list `inputs_list` to a dict s.t.

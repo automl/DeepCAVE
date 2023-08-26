@@ -1,3 +1,9 @@
+"""
+# Worker.
+
+This module can start an RQ worker.
+"""
+
 from rq import Connection, Worker
 
 from deepcave import queue

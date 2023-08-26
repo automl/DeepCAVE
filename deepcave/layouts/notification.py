@@ -1,3 +1,19 @@
+"""
+# Notification.
+
+This module provides a notification layout.
+
+It utilizes Dash and provides utilities for displaying notifications.
+The here proivded NotificationLayout class inherits from Layout.
+With a notification from the Notification module an alert component can be updated.
+It can be updated in content, color as well as visibility.
+
+## Contents
+    - register_callbacks: Updates notification alert display
+        - update_alert: Updates the notification
+    - __call__: Generates notification alert
+"""
+
 from typing import List, Tuple, Union
 
 import dash_bootstrap_components as dbc
@@ -11,7 +27,20 @@ from deepcave.layouts import Layout
 
 
 class NotificationLayout(Layout):
-    def __init__(self) -> None:
+    """
+    Layout class for displaying notifications.
+
+    Extends Layout class, provides callback registering methods.
+
+    Methods
+    -------
+    register_callbacks
+        Register callback for updating notification alert.
+    __call__
+        Generate notification alert component.
+    """
+
+    def __init__(self) -> None:  # noqa: D107
         super().__init__()
 
     def register_callbacks(self) -> None:  # noqa: D102

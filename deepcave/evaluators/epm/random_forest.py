@@ -34,7 +34,9 @@ PYRFR_MAPPING = {
 
 class RandomForest:
     """
-    A random forest wrapper for pyrfr. This is handy because we only need to pass the configspace
+    A random forest wrapper for pyrfr.
+
+    This is handy because we only need to pass the configspace
     and have a working version without specifying e.g. types and bounds.
 
     Note
@@ -57,7 +59,7 @@ class RandomForest:
         pca_components: Optional[int] = 2,
         log_y: bool = False,
         seed: Optional[int] = None,
-    ):
+    ):  # noqa: D107
         self.cs = configspace
         self.log_y = log_y
         self.seed = seed
@@ -106,7 +108,9 @@ class RandomForest:
 
     def _get_model_options(self, **kwargs: Dict[str, Any]) -> regression.forest_opts:
         """
-        Get model options from kwargs. The mapping `PYRFR_MAPPING` is used in combination with
+        Get model options from kwargs.
+
+        The mapping `PYRFR_MAPPING` is used in combination with
         a recursive attribute setter to set the options for the pyrfr model.
 
         Returns
@@ -210,8 +214,9 @@ class RandomForest:
         self, X: np.ndarray, y: np.ndarray
     ) -> regression.default_data_container:
         """
-        Fill a pyrfr default data container s.t. the forest knows
-        categoricals and bounds for continuous data.
+        Fill a pyrfr default data container.
+
+        The goal here is, that the forest knows categoricals and bounds for continuous data.
 
         Parameters
         ----------
@@ -241,7 +246,9 @@ class RandomForest:
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on X and Y. Transforms X if PCA is applied.
+        Trains the random forest on X and Y.
+
+        Transforms X if PCA is applied.
         Afterwards, `_train` is called.
 
         Parameters
@@ -403,6 +410,7 @@ class RandomForest:
     def predict_marginalized(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Predict mean and variance marginalized over all instances.
+
         Returns the predictive mean and variance marginalised over all
         instances for a set of configurations.
 

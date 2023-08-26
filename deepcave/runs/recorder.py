@@ -119,8 +119,9 @@ class Recorder:
         end_time: Optional[float] = None,
     ):
         """
-        In case of multi-processing, config+budget should be passed as otherwise
-        it can't be matched correctly.
+        In case of multi-processing, config+budget should be passed.
+
+        If it can't be passed, it can't be matched correctly.
         """
         if additional is None:
             additional = {}

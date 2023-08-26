@@ -5,6 +5,19 @@ from pathlib import Path
 
 
 def rst_to_md(filename: str | Path) -> str:
+    """
+    Convert a subset of reStructuredText to MarkDown.
+
+    Parameters
+    ----------
+    filename : str | Path
+        The path to the rst file.
+
+    Returns
+    -------
+    str
+        The converted data in MarkDown format.
+    """
     if isinstance(filename, Path):
         filename = str(filename)
 

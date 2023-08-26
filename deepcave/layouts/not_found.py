@@ -7,7 +7,7 @@ from deepcave.layouts import Layout
 
 
 class NotFoundLayout(Layout):
-    def __init__(self, url) -> None:
+    def __init__(self, url) -> None:  # noqa: D107
         super().__init__()
         self.url = url
 

@@ -8,7 +8,7 @@ from deepcave.utils.logs import get_logger
 
 
 class Layout(ABC):
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # noqa: D107
         self.register_callbacks()
         self.logger = get_logger(self.__class__.__name__)
 

@@ -17,7 +17,7 @@ from deepcave.runs.objective import Objective
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
 class LPI:
-    def __init__(self, run: AbstractRun):
+    def __init__(self, run: AbstractRun):  # noqa: D107
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
@@ -226,9 +226,10 @@ class LPI:
 
     def _get_neighborhood(self):
         """
-        Slight modification of ConfigSpace's get_one_exchange neighborhood. This orders the
-        parameter values and samples more neighbors in one go. Further we need to rigorously
-        check each and every neighbor if it is forbidden or not.
+        Slight modification of ConfigSpace's get_one_exchange neighborhood.
+
+        This orders the parameter values and samples more neighbors in one go.
+        Further we need to rigorously check each and every neighbor if it is forbidden or not.
         """
         hp_names = self.cs.get_hyperparameter_names()
 

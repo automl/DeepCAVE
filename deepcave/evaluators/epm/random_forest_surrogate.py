@@ -1,3 +1,14 @@
+"""
+# RandomForest Surrogate.
+
+This module provides an implementation for a RandomForest Surrogate model.
+
+Mean and standard deviation values can be computed for a given input with this module.
+
+## Contents
+    - predict: Predict the deviations
+    - _fit: Fits the model
+"""
 from typing import Tuple
 
 import ConfigSpace as CS
@@ -14,7 +25,7 @@ class RandomForestSurrogate(SurrogateModel):
         self,
         configspace: CS.ConfigurationSpace,
         seed: int = None,
-    ):
+    ):  # noqa: D107
         super().__init__(configspace, seed=seed)
         self._model = RandomForest(configspace=configspace, seed=seed)
 

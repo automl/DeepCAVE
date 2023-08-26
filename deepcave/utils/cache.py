@@ -13,8 +13,9 @@ logger = get_logger(__name__)
 
 class Cache:
     """
-    Cache handles a json file. Decided not to use flask_caching
-    since code is easier to change to our needs.
+    Cache handles a json file.
+
+    Decided not to use flask_caching since code is easier to change to our needs.
     """
 
     def __init__(
@@ -23,7 +24,7 @@ class Cache:
         defaults: Dict = None,
         debug: bool = False,
         write_file: bool = True,
-    ) -> None:
+    ) -> None:  # noqa: D107
         self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
@@ -67,6 +68,7 @@ class Cache:
     def set(self, *keys, value: Any, write_file: bool = True) -> None:
         """
         Set a value from a chain of keys.
+
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
         """

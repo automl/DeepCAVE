@@ -12,7 +12,7 @@ from deepcave.plugins import Plugin
 
 
 class SidebarLayout(Layout):
-    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:  # noqa: D107
         super().__init__()
         self.plugins = categorized_plugins
 

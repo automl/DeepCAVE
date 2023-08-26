@@ -11,7 +11,7 @@ from deepcave.utils.hash import string_to_hash
 class Group(AbstractRun):
     prefix = "group"
 
-    def __init__(self, name: str, runs: List[AbstractRun]):
+    def __init__(self, name: str, runs: List[AbstractRun]):  # noqa: D107
         super(Group, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
         self.reset()

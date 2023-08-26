@@ -19,9 +19,9 @@ def get_types(
     config_space: ConfigurationSpace,
     instance_features: typing.Optional[np.ndarray] = None,
 ) -> typing.Tuple[typing.List[int], typing.List[typing.Tuple[float, float]]]:
-    """Return the types of the hyperparameters and the bounds of the
-    hyperparameters and instance features.
-    """
+    """Return the types of the hyperparameters.
+
+    Also return the bounds of the hyperparameters and instance features."""
     # Extract types vector for rf from config space and the bounds
     types = [0] * len(config_space.get_hyperparameters())
     bounds = [(np.nan, np.nan)] * len(types)

@@ -59,7 +59,7 @@ class Plugin(Layout, ABC):
     button_caption: str = "Process"
     activate_run_selection: bool = False
 
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # noqa: D107
         # Registered inputs and outputs
         self.inputs: List[Tuple[str, str, bool, Any]] = []
         self.outputs: List[Tuple[str, str, bool]] = []
@@ -100,8 +100,9 @@ class Plugin(Layout, ABC):
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
         """
-        Check if a run is compatible with this plugin. If a plugin is not compatible,
-        you can not select the run.
+        Check if a run is compatible with this plugin.
+
+        If a plugin is not compatible, you can not select the run.
 
         Note
         ----
@@ -121,7 +122,8 @@ class Plugin(Layout, ABC):
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         """
-        This function is needed if all selected runs need something in common
+        Needed if all selected runs need something in common.
+
         (e.g. budget or objective). Since this function is called before the layout is created,
         it can be also used to set common values for the plugin.
 
@@ -145,8 +147,10 @@ class Plugin(Layout, ABC):
         type: Any = None,
     ) -> str:
         """
-        Register an input variable for the plugin. It is important to register the inputs
-        because callbacks have to be defined before the server is started.
+        Register an input variable for the plugin.
+
+        It is important to register the inputs.
+        This is, because callbacks have to be defined before the server is started.
         After registering all inputs, an internal mapping is created.
 
         Parameters
@@ -230,7 +234,9 @@ class Plugin(Layout, ABC):
     @interactive
     def register_callbacks(self) -> None:
         """
-        Register basic callbacks for the plugin. Following callbacks are registered:
+        Register basic callbacks for the plugin.
+
+        Following callbacks are registered:
         - If inputs changes, the changes are pasted back. This is in particular
         interest if input dependencies are used.
         - Raw data dialog to display raw data.
@@ -542,8 +548,9 @@ class Plugin(Layout, ABC):
     @interactive
     def _list_to_dict(self, values: List[str], input: bool = True) -> Dict[str, Dict[str, str]]:
         """
-        Map the given values to a dict, regarding the sorting from
-        either self.inputs or self.outputs.
+        Map the given values to a dict.
+
+        Regarding the sorting from either self.inputs or self.outputs.
 
         Parameters
         ----------
@@ -576,8 +583,9 @@ class Plugin(Layout, ABC):
         self, d: Dict[str, Dict[str, str]], input: bool = False
     ) -> List[Optional[str]]:
         """
-        Map the given dict to a list, respecting the sorting from either
-        self.inputs or self.outputs.
+        Map the given dict to a list.
+
+        Respecting the sorting from either self.inputs or self.outputs.
 
         Parameters
         ----------
@@ -645,8 +653,10 @@ class Plugin(Layout, ABC):
 
     def _cast_inputs(self, inputs: Dict[str, Dict[str, str]]) -> Dict[str, Dict[str, str]]:
         """
-        Casts the inputs based on `self.inputs`. Background is that dash always casts integers/
-        booleans to strings. This method ensured that the correct types are returned.
+        Casts the inputs based on `self.inputs`.
+
+        Background is that dash always casts integers/booleans to strings.
+        This method ensures that the correct types are returned.
 
         Parameters
         ----------
@@ -679,6 +689,7 @@ class Plugin(Layout, ABC):
     def _clean_inputs(self, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Clean the given inputs s.t. only the first value is used.
+
         Also, boolean values are casted to booleans.
 
         Example
@@ -742,8 +753,9 @@ class Plugin(Layout, ABC):
     @interactive
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
-        Return the components for the plugin. Basically, all blocks and elements of the plugin
-        are stacked-up here
+        Return the components for the plugin.
+
+        Basically, all blocks and elements of the plugin are stacked-up here.
 
         Returns
         -------
@@ -934,6 +946,7 @@ class Plugin(Layout, ABC):
     def get_run_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> Component:
         """
         Generate the run selection input.
+
         This is only the case if `activate_run_selection` is True.
 
         Parameters
@@ -964,6 +977,7 @@ class Plugin(Layout, ABC):
     ) -> Dict[str, Any]:
         """
         Load the options for `get_run_input_layout`.
+
         Both runs and groups are displayed.
 
         Parameters
@@ -1017,6 +1031,7 @@ class Plugin(Layout, ABC):
     def get_selected_runs(self, inputs: Dict[str, Any]) -> List[AbstractRun]:
         """
         Parse selected runs from inputs.
+
         If self.activate_run_selection is set, return only selected run. Otherwise, return all
         possible runs.
 
@@ -1059,6 +1074,7 @@ class Plugin(Layout, ABC):
     def load_inputs(self) -> Dict[str, Any]:
         """
         Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.
+
         This method is necessary to pre-load contents for the inputs. So, if the plugin is
         called for the first time or there are no results in the cache, the plugin gets its
         content from this method.
@@ -1078,6 +1094,7 @@ class Plugin(Layout, ABC):
     ) -> Dict[str, Any]:
         """
         Load the content as in 'load_inputs' but called after inputs have changed.
+
         Provides a lot of flexibility.
 
         Note
@@ -1272,6 +1289,7 @@ class Plugin(Layout, ABC):
     ) -> Union[Dict[str, Any], Dict[str, Dict[str, Any]]]:
         """
         Check whether run selection is active and accepts either one or multiple runs at once.
+
         Calls `process` internally.
 
         Parameters
@@ -1314,6 +1332,7 @@ class Plugin(Layout, ABC):
     def generate_inputs(self, **kwargs: Any) -> Dict[str, Any]:
         """
         Generate inputs for the `process` and `load_outputs` required for api mode.
+
         The arguments are validated against the input schema.
 
         Note

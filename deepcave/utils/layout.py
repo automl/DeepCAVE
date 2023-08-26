@@ -10,6 +10,23 @@ from deepcave.utils.hash import string_to_hash
 
 
 def help_button(text: str, placement: str = "top") -> html.Span:
+    """
+    Generate button with help icon.
+
+    Displays popover when hovered over, that contains the provided text.
+
+    Parameters
+    ----------
+    text : str
+        The text that will be displayed in the popover.
+    placement : str, optional
+        The placement of the button, default is Top.
+
+    Returns
+    -------
+    html.Span
+        An html structure, that wraps the icon and the popover.
+    """
     id = "help-button-" + string_to_hash(text)
     id += str(uuid.uuid1())
 
@@ -33,6 +50,28 @@ def render_table(df: pd.DataFrame) -> None:
 def get_slider_marks(
     strings: Optional[List[Dict[str, Any]]] = None, steps: int = 10, access_all: bool = False
 ) -> Dict[int, Dict[str, str]]:
+    """
+    Generate a dictionary containing slider marks.
+
+    The slider marks are based on the provided list of strings.
+
+    Parameters
+    ----------
+    strings : Optional[List[Dict[str, Any]]], optional
+        List of dictionaries containing information about the marks.
+        Default value is None.
+    steps : int, optional
+        Number of steps or marks on the slider.
+        Default is 10.
+    access_all : bool, optional
+        Indicates whether to create marks for all items.
+        Default is False.
+
+    Returns
+    -------
+    Dict[int, Dict[str, str]]
+        Contains information about the positions and labels of the marks.
+    """
     marks = {}
     if strings is None:
         marks[0] = {"label": str("None")}
@@ -60,9 +99,7 @@ def get_select_options(
     disabled: Union[List[bool], None] = None,
     binary: bool = False,
 ) -> List[Dict[str, Any]]:
-    """
-    If values are none use labels as values. If both are none return empty list.
-    """
+    """If values are none use labels as values. If both are none return empty list."""
     if labels is None and values is None:
         if binary:
             return [{"label": "Yes", "value": True}, {"label": "No", "value": False}]

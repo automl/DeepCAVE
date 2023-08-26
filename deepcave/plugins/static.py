@@ -38,7 +38,7 @@ def _process(
 class StaticPlugin(Plugin, ABC):
     """Calculation with queue. Made for time-consuming tasks."""
 
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # noqa: D107
         super().__init__()
         self._setup()
 

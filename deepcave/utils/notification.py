@@ -2,7 +2,7 @@ from typing import Optional, Tuple
 
 
 class Notification:
-    def __init__(self) -> None:
+    def __init__(self) -> None:  # noqa: D107
         self._update_required = False
         self._message: Optional[str] = None
         self._color: Optional[str] = None

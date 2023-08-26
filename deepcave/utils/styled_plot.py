@@ -21,10 +21,11 @@ logger = get_logger(__name__)
 class StyledPlot:
     """
     Overwrites default settings from matplotlib.pyplot.
+
     If a function is not overwritten, the default function will be used.
     """
 
-    def __init__(self):
+    def __init__(self):  # noqa: D107
         plt.style.use("seaborn")
 
         # Set MatPlotLib defaults
@@ -73,11 +74,34 @@ class StyledPlot:
         return "data:image/png;base64,{}".format(encoded_image.decode())
 
     def xlim(self, xmin, xmax):
+        """
+        Set the x-axis limits with a margin of a matplot plot.
+
+        Parameters
+        ----------
+        xmin
+            The lower x-axis limit.
+        xmax
+            The upper x-axis limit.
+        """
         xmin_with_margin = xmin - 0.05 * (xmax - xmin)
         xmax_with_margin = xmax + 0.05 * (xmax - xmin)
         self.plt.xlim(xmin_with_margin, xmax_with_margin)
 
     def ylim(self, ymin, ymax, margin=True):
+        """
+        Set the y-axis limit of a matplot plot.
+
+        Parameters
+        ----------
+        ymin
+            The lower y-axis limit.
+        ymax
+            The upper y-axis limit.
+        margin
+            Determines wheter a margin should be added to the limits.
+            Default is True.
+        """
         if margin:
             ymin_with_margin = ymin - 0.05 * (ymax - ymin)
             ymax_with_margin = ymax + 0.05 * (ymax - ymin)
@@ -91,6 +115,21 @@ class StyledPlot:
     #    # alpha=0.5)
 
     def boxplot(self, values, positions, color, widths=0.5):
+        """
+        Create a boxplot on a matplot plot.
+
+        Parameters
+        ----------
+        values
+            Values to create the boxplot.
+        positions
+            The position of the boxplot.
+        color
+            The color of the boxes as well as other elements in the plot.
+        widths, optional
+            The width of the boxes.
+            Default is 0.5.
+        """
         bp = self.plt.boxplot(values, positions=positions, patch_artist=True, widths=widths)
 
         for box in bp["boxes"]:
@@ -118,6 +157,26 @@ class StyledPlot:
             )
 
     def legend(self, cols=1, loc=None, title=None, outside=False):
+        """
+        Customize and add a legend to a matplot plot.
+
+        Customize the placement and appearance of the legend.
+
+        Parameters
+        ----------
+        cols, optional
+            The number of the columns.
+            Default is 1
+        loc, optional
+            The location of the legend.
+            Default is None.
+        title, optional
+            The title for the legend.
+            Default is None.
+        outside, optional
+            Determines if a legend is placed outside of plot area.
+            Default is False.
+        """
         kwargs = {
             "ncol": cols,
             "columnspacing": 0.8,
@@ -148,6 +207,14 @@ class StyledPlot:
             legend.get_frame().set_edgecolor("gray")
 
     def get_color(self, id):
+        """
+        Get the color from color palette based on the given ID.
+
+        Parameters
+        ----------
+        id
+            ID for retrieving a specific color.
+        """
         import seaborn as sns
 
         pal = sns.color_palette()

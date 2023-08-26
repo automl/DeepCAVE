@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 
 class Queue:
-    def __init__(self, address: str, port: int) -> None:
+    def __init__(self, address: str, port: int) -> None:  # noqa: D107
         self._connection = redis.from_url(address + ":" + str(port))
         self._queue = _Queue("high", connection=self._connection, default_timeout=-1)
 
@@ -27,6 +27,24 @@ class Queue:
         return False
 
     def get_worker(self, worker_name) -> Worker:
+        """
+        Retrieve a Worker from a name.
+
+        Parameters
+        ----------
+        worker_name
+            The name of the worker.
+
+        Returns
+        -------
+        Worker
+            The worker object corresponding to the worker name.
+
+        Raises
+        ------
+        ValueError
+            If the Worker object associated with the given name cannot be found.
+        """
         for worker in self.get_workers():
             if worker.name == worker_name:
                 return worker
@@ -37,12 +55,42 @@ class Queue:
         return Worker.all(queue=self._queue)
 
     def is_processed(self, job_id: str) -> bool:
+        """
+        Check if the job is or was processed.
+
+        This means it is either running, pending or finished.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job being checked.
+
+        Returns
+        -------
+        bool
+            True, if the job is or was processed.
+            Otherwise False.
+        """
         if self.is_running(job_id) or self.is_pending(job_id) or self.is_finished(job_id):
             return True
 
         return False
 
     def is_running(self, job_id: str) -> bool:
+        """
+        Check if the job is running.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job being checked.
+
+        Returns
+        -------
+        bool
+            True, if the job is running.
+            Otherwise False.
+        """
         for id in self._queue.started_job_registry.get_job_ids():
             if job_id == id:
                 return True
@@ -50,6 +98,20 @@ class Queue:
         return False
 
     def is_pending(self, job_id: str) -> bool:
+        """
+        Check if the job is pending in a queue.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job being checked.
+
+        Returns
+        -------
+        bool
+            True, if the job is pending.
+            Otherwise False.
+        """
         for id in self._queue.get_job_ids():
             if job_id == id:
                 return True
@@ -57,6 +119,20 @@ class Queue:
         return False
 
     def is_finished(self, job_id: str) -> bool:
+        """
+        Check if the job is finished.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job being checked.
+
+        Returns
+        -------
+        bool
+            True, if the job is finished.
+            Otherwise False.
+        """
         for id in self._queue.finished_job_registry.get_job_ids():
             if job_id == id:
                 return True
@@ -64,6 +140,20 @@ class Queue:
         return False
 
     def has_failed(self, job_id: str) -> bool:
+        """
+        Check if a job has failed in a registry.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job being checked.
+
+        Returns
+        -------
+        bool
+            True, if the job has failed.
+            Otherwise False.
+        """
         for id in self._queue.failed_job_registry.get_job_ids():
             if job_id == id:
                 return True
@@ -74,6 +164,20 @@ class Queue:
         return Job.fetch(job_id, connection=self._connection)
 
     def get_jobs(self, registry: str = "running") -> List[Job]:
+        """
+        Retrieve list of jobs from the registry.
+
+        Parameters
+        ----------
+        registry : str, optional
+            The registry to retrieve jobs from.
+            Default is "running".
+
+        Raises
+        ------
+        NotImplementedError
+            If the registry value is not recognized.
+        """
         if registry == "running":
             r = self._queue.started_job_registry
         elif registry == "pending":
@@ -166,6 +270,22 @@ class Queue:
     def enqueue(
         self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]
     ) -> None:
+        """
+        Add a job for processing to the queue.
+
+        Logs a debug message if the job ID is already in use.
+
+        Parameters
+        ----------
+        func : Callable[[Any], Any]
+            A function to be executed, once the job is done.
+        args : Any
+            Arguments to be passed to func.
+        job_id : str
+            The identifier for the job.
+        meta : Dict[str, str]
+            A dictionary containing the jobs metadata.
+        """
         # First check if job_id is already in use
         if self.is_processed(job_id):
             logger.debug("Job was not added because it was processed already.")

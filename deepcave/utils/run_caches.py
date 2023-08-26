@@ -10,14 +10,16 @@ from deepcave.utils.logs import get_logger
 
 class RunCaches:
     """
-    Hold the caches for the selected runs. The caches are used for the plugins to store the
+    Hold the caches for the selected runs.
+
+    The caches are used for the plugins to store the
     raw outputs so that raw outputs must not be calculated again.
 
     Each input has its own cache. This change was necessary because it ensures that not all data
     are loaded if they are not needed.
     """
 
-    def __init__(self, config: "Config"):
+    def __init__(self, config: "Config"):  # noqa: D107
         self.cache_dir = config.CACHE_DIR / "run_cache"
         self.logger = get_logger("RunCache")
         self._debug = config.DEBUG
@@ -25,6 +27,7 @@ class RunCaches:
     def update(self, run: AbstractRun) -> bool:
         """
         Update the cache for the given run. If the cache does not exists it will be created.
+
         If the run hash is different from the saved variant the cache will be reset.
 
         Parameters
@@ -115,6 +118,7 @@ class RunCaches:
     def set(self, run: AbstractRun, plugin_id: str, inputs_key: str, value: Any) -> None:
         """
         Set the value for the given run, plugin and inputs key.
+
         Since each input key has it's own cache, only necessary data are loaded.
 
         Parameters

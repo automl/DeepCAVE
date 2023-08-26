@@ -22,11 +22,27 @@ class Trial:
         assert isinstance(self.status, Status)
 
     def get_key(self) -> Tuple[int, int]:
+        """
+        Generate a key based on the configuration ID and the budget.
+
+        Returns
+        -------
+        Tupe[int, int]
+            A Tuple representing a unique key based on the configuration ID and the budget.
+        """
         from deepcave.runs import AbstractRun
 
         return AbstractRun.get_trial_key(self.config_id, self.budget)
 
     def to_json(self) -> List[Any]:
+        """
+        Convert Trial Object to JSON-compatible representation.
+
+        Returns
+        -------
+        List[Any]
+            A JSON-compatible list with the Trials attributes.
+        """
         return [
             self.config_id,
             self.budget,

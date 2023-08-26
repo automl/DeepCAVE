@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 
 
 class Footprint:
-    def __init__(self, run: AbstractRun):
+    def __init__(self, run: AbstractRun):  # noqa: D107
         if run.configspace is None:
             raise RuntimeError("The run needs to be initialized.")
 
@@ -299,6 +299,7 @@ class Footprint:
     def _get_max_distance(self) -> float:
         """
         Calculate the maximum distance between all configs.
+
         Basically, we just count the number of hps.
 
         Returns

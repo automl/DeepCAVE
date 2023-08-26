@@ -19,6 +19,7 @@ from deepcave.utils.hash import string_to_hash
 class Run(AbstractRun, ABC):
     """
     Create a new run.
+
     If path is given, runs are loaded from the path.
 
     Parameters
@@ -50,7 +51,7 @@ class Run(AbstractRun, ABC):
         objectives: Union[Objective, List[Objective]] = None,
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
-    ) -> None:
+    ) -> None:  # noqa: D107
         super(Run, self).__init__(name)
 
         if objectives is None:
@@ -152,6 +153,7 @@ class Run(AbstractRun, ABC):
     ) -> None:
         """
         Add a trial to the run.
+
         If combination of config and budget already exists, it will be overwritten.
         Not successful runs are added with `None` costs.
 

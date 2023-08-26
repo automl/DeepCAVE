@@ -12,11 +12,12 @@ from deepcave.runs.objective import Objective
 
 class fANOVA:
     """
-    Calculate and provide midpoints and sizes from the forest's
-    split values in order to get the marginals.
+    Calculate and provide midpoints and sizes.
+
+    They are generated from the forest's split values in order to get the marginals.
     """
 
-    def __init__(self, run: AbstractRun):
+    def __init__(self, run: AbstractRun):  # noqa: D107
         if run.configspace is None:
             raise RuntimeError("The run needs to be initialized.")
 

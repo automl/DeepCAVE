@@ -1,3 +1,21 @@
+"""
+# Styled Plotty.
+
+This module provides utilities for styling and customizing different plots.
+For this, it uses plotly as well as dash.
+
+## Contents
+    - save_image: Saves plotly figure as image.
+    - hex_to_rgb: Converts hex to rgb.
+    - get_color: Gets an rgba color.
+    - get_discrete_heatmap: Generates a discrete colorscale.
+    - prettify_label: Prettifies a label.
+    - get_hyperparameter_ticks: Generates tick data.
+    - get_hyperparameter_ticks_from_values: Generates tick data for values and labels
+    - get_hovertext_from_config: Generates hovertext for a configuration
+    - generate_config_code: Generates configuration code
+"""
+
 from typing import Any, Callable, List, Optional, Tuple, Union
 
 import itertools
@@ -427,6 +445,21 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:  # noq
 
 
 def generate_config_code(register: Callable, variables: List[str]) -> List[Component]:
+    """
+    Generate HTML components to display code.
+
+    Parameters
+    ----------
+    register : Callable
+        A Callable for registering Dash components.
+    variables : List[str]
+        A List of variable names.
+
+    Returns
+    -------
+    List[Component]
+        A List of Dash components
+    """
     code = """
     from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
     from ConfigSpace.read_and_write import cs_json

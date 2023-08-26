@@ -1,3 +1,18 @@
+"""
+# FanovaForest.
+
+The module provides utilities for conducting feature analysis.
+
+It includes a FanovaForest wrapper for pyrfr, which facilitates this analysis.
+The functionality of a FanovaForest Regression model is wrapped.
+FanovaForest can be used for analysing and quantifying the features of a dataset.
+
+## Contents
+    - _get_model: Get the internal model.
+    - _train: Train the Random Forest.
+    - compute_marginals: Compute marginals of selected parameters.
+"""
+
 from typing import List, Optional, Tuple
 
 import itertools as it
@@ -14,7 +29,7 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 class FanovaForest(RandomForest):
     """A fanova forest wrapper for pyrfr."""
 
-    def __init__(  # noqa
+    def __init__(
         self,
         configspace: ConfigurationSpace,
         n_trees: int = 10,
@@ -29,7 +44,7 @@ class FanovaForest(RandomForest):
         pca_components: Optional[int] = 2,
         cutoffs: Tuple[float, float] = (-np.inf, np.inf),
         seed: Optional[int] = None,
-    ):
+    ):  # noqa: D107
         super().__init__(
             configspace=configspace,
             n_trees=n_trees,
@@ -61,7 +76,7 @@ class FanovaForest(RandomForest):
 
     def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on X and Y.
+        Train the random forest on X and Y.
 
         Parameters
         ----------
