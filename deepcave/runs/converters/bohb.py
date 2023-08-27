@@ -1,3 +1,14 @@
+"""
+# BOHBRun.
+
+This module is for managing and processing data concerning BOHB.
+
+## Contents
+    - hash: Calculate a hash value of results.json.
+    - latest_change: Get the timestamp of the latest change made to a file.
+    - from_path: Create a BOHBRun from a specific path.
+"""
+
 from pathlib import Path
 
 from deepcave.runs import Status
@@ -7,6 +18,28 @@ from deepcave.utils.hash import file_to_hash
 
 
 class BOHBRun(Run):
+    """
+    Create a BOHB Run.
+
+    This class extends the Run class.
+
+    Methods
+    -------
+    hash
+        Calculate a hash value of results.json.
+    latest_change
+        Get the timestamp of the latest change made to a file.
+    from_path
+        Create a BOHBRun from a specific path.
+
+    Attributes
+    ----------
+    prefix
+        Set the prefix to "BOHB".
+    _initial_order
+        The initial order, set to 2.
+    """
+
     prefix = "BOHB"
     _initial_order = 2
 

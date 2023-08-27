@@ -223,12 +223,15 @@ class Plugin(Layout, ABC):
         return self.get_internal_output_id(id)
 
     def get_internal_id(self, id: str) -> str:
+        """Get the internal id."""
         return f"{self.id}-{id}"
 
     def get_internal_input_id(self, id: str) -> str:
+        """Get the internal input id."""
         return f"{self.id}-{id}-input"
 
     def get_internal_output_id(self, id: str) -> str:
+        "Get the internal output id."
         return f"{self.id}-{id}-output"
 
     @interactive

@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# RandomForest Surrogate.
+# RandomForest Surrogate
 
 This module provides an implementation for a RandomForest Surrogate model.
 

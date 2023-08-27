@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# RunChaches
+
+This module defines a class for holding the caches for selected runs.
+
+## Contents
+    - update: Update the cache for the given run. If the cache does not exists it will be created.
+    - _reset: Initializes/resets the cache for the given run.
+    - get: Return the raw outputs for the given run, plugin and inputs key.
+    - set: Set the value for the given run, plugin and inputs key.
+    - clear_run: Remove all caches for the given run.
+    - clear: Remove all caches.
+"""
+
 from typing import Any, Dict
 
 import shutil

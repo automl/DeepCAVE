@@ -1,3 +1,21 @@
+#  noqa: D400
+"""
+# Configurations
+
+This module provides utilities to visualize the characteristics of a configuration within a run.
+
+## Contents
+    - get_link: Create a link to a specific configuration.
+    - get_input_layout: Create the input layout.
+    - load_inputs: Load and return the input.
+    - load_dependency_input: Load the dependent input.
+    - process: Generates the table data.
+    - get_output_layout: Get the layout of the output for presenting the result.
+    - _get_objective_figure: Generate the figure for the given Objectives.
+    - _get_configspace_figure: Generate the figure for the given configuration space.
+    - load_outputs: Generate the output.
+"""
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -21,6 +39,46 @@ from deepcave.utils.url import create_url
 
 
 class Configurations(DynamicPlugin):
+    """
+    This class visualizes the characteristics of a configuration.
+
+    Methods
+    -------
+    get_link
+        Create a link to a specific configuration.
+    get_input_layout
+        Create the input layout.
+    load_inputs
+        Load and return the input.
+    load_dependency_input
+        Load the dependent input.
+    process
+        Generates the table data.
+    get_output_layout
+        Get the layout of the output for presenting the result.
+    _get_objective_figure
+        Generate the figure for the given Objectives.
+    _get_configspace_figure
+        Generate the figure for the given configuration space.
+    load_outputs
+        Generate the output.
+
+    Attributes
+    ----------
+    id
+        Identifies the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representin the plugin.
+    help
+        The path to the documentation of the plugin.
+    activate_run_selection
+        Defines whether the run selection feature is activated.
+    use_cache
+        Defines whether the cache is to be used.
+    """
+
     id = "configurations"
     name = "Configurations"
     icon = "fas fa-sliders-h"
@@ -32,6 +90,9 @@ class Configurations(DynamicPlugin):
     def get_link(run: AbstractRun, config_id: int) -> str:
         """
         Create a link to a specific configuration.
+
+        Create "fake" inputs to overwrite the selection.
+        Everything else will be taken from `load_inputs` and `load_dependency_inputs`.
 
         Parameters
         ----------
@@ -45,8 +106,6 @@ class Configurations(DynamicPlugin):
         str
             Link to the configuration.
         """
-        # Create "fake" inputs to overwrite the selection.
-        # Everything else will be taken from `load_inputs` and `load_dependency_inputs`.
         inputs = {
             "run": dict(value=run.id),
             "config_id": dict(value=config_id),

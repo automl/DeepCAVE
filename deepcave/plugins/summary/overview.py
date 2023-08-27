@@ -1,3 +1,13 @@
+"""
+# Overview.
+
+This module provides utilities for visualizing an overviwe of an optimization run.
+
+## Contents
+    - get_output_layout: Generate the layout of the output.
+    - load_outputs: Generate the content of the overview to be displayed.
+"""
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -23,6 +33,32 @@ from deepcave.utils.util import get_latest_change
 
 
 class Overview(DynamicPlugin):
+    """
+    This class visualizes an overall overview of a run.
+
+    Methods
+    -------
+    get_output_layout
+        Generate the layout of the output.
+    load_outputs
+        Generate the content of the overview to be displayed.
+
+    Attributes
+    ----------
+    id
+        Identifies the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representing the plugin.
+    help
+        The path to the documentation of the plugin.
+    use_cache
+        Defines wheter the cache is to be used.
+    activate_run_selection
+        Defines wheter the run selection feature is active.
+    """
+
     id = "overview"
     name = "Overview"
     icon = "fas fa-search"

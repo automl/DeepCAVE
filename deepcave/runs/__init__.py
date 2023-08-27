@@ -1,3 +1,49 @@
+#  noqa: D400
+"""
+# AbstractRun
+
+This module provides utilities to create and handle an abstract run.
+It also provides function to get information of the run, as well as the used objectives.
+
+## Contents
+    - reset: Reset the abstract run to default values / empties.
+    - _update_highest_budget: With success, update the highest budget accordingly.
+    - hash: Get the Hash of the current run.
+    - id: Get the Hash of the file.
+    - latest_change: Get the latest change value.
+    - get_trial_key: Get the trial key for the configuration and the budget.
+    - get_trial: Get the trial with the responding key if existing.
+    - get_trials: Get an iterator of all stored trials.
+    - get_meta: Get a copy of the meta information of this abstract run.
+    - empty: Check if the abtract run object's history is empty.
+    - get_origin: Get the origin, given a config ID.
+    - get_objectives: Get a list of all objectives corresponding to the object.
+    - get_objective: Return the objective based on the id or the name.
+    - get_objective_id: Return the id of the objective if it is found.
+    - get_objectives_id: Get the IDs of the objectives.
+    - get_objective_name: Get the cost name of given objective names.
+    - get_objective_names: Get the names of the objectives.
+    - get_configs: Get configurations of the run.
+    - get_config_id: Retrieve the ID of the configuration.
+    - get_num_configs: Count the number of configurations in this object with a specific budget.
+    - get_budget: Get the budget given an id.
+    - get_budget_ids: Get the corresponding IDs for the budgets.
+    - get_budgets: Return the budgets from the meta data.
+    - get_highest_budget: Return the highest found budget for a config id.
+    - _process_costs: Process the costs to get rid of NaNs.
+    - get_costs: Return the costs of a configuration.
+    - get_all_costs: Get all costs in the history with their config ids.
+    - get_status: Return the status of a configuration.
+    - get_incumbent: Return the incumbent with its normalized cost.
+    - merge_costs: Calculate one cost value from multiple costs.
+    - get_model: Get a torch model assosciated with a configuration ID.
+    - get_trajectory: Calculate the trajectory of the given objective and budget.
+    - encode_config: Encode a given config (id) to a normalized list.
+    - encode_configs: Encode a list of configurations into a corresponding numpy array.
+    - get_encoded_data: Encode configurations to process them further.
+    - check_equality: Check the passed runs on equality based on the selected runs.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
@@ -28,6 +74,83 @@ from deepcave.utils.logs import get_logger
 
 
 class AbstractRun(ABC):
+    """
+    This class can create, handle and get information of an abstract run.
+
+    Methods
+    -------
+    reset
+        Reset the abstract run to default values / empties.
+    _update_highest_budget
+        With success, update the highest budget accordingly.
+    hash
+        Get the Hash of the current run.
+    id
+        Get the Hash of the file.
+    latest_change
+        Get the latest change value.
+    get_trial_key
+        Get the trial key for the configuration and the budget.
+    get_trial
+        Get the trial with the responding key if existing.
+    get_trials
+        Get an iterator of all stored trials.
+    get_meta
+        Get a copy of the meta information of this abstract run.
+    empty
+        Check if the abtract run object's history is empty.
+    get_origin
+        Get the origin, given a config ID.
+    get_objectives
+        Get a list of all objectives corresponding to the object.
+    get_objective
+        Return the objective based on the id or the name.
+    get_objective_id
+        Return the id of the objective if it is found.
+    get_objectives_id
+        Get the IDs of the objectives.
+    get_objective_name
+        Get the cost name of given objective names.
+    get_objective_names
+        Get the names of the objectives.
+    get_configs
+        Get configurations of the run.
+    get_config_id
+        Retrieve the ID of the configuration.
+    get_num_configs
+        Count the number of configurations stored in this object with a specific budget.
+    get_budget
+        Get the budget given an id.
+    get_budget_ids
+        Get the corresponding IDs for the budgets.
+    get_budgets
+        Return the budgets from the meta data.
+    get_highest_budget
+        Return the highest found budget for a config id.
+    _process_costs
+        Process the costs to get rid of NaNs.
+    get_costs
+        Return the costs of a configuration.
+    get_all_costs
+        Get all costs in the history with their config ids.
+    get_status
+        Return the status of a configuration.
+    get_incumbent
+        Return the incumbent with its normalized cost.
+    merge_costs
+        Calculate one cost value from multiple costs.
+    get_model
+        Get a torch model assosciated with a configuration ID.
+    get_trajectory
+        Calculate the trajectory of the given objective and budget.
+    encode_config
+        Encode a given config (id) to a normalized list.
+    encode_configs
+        Encode a list of configurations into a corresponding numpy array.
+    get_encoded_data
+        Encode configurations to process them further.
+    """
+
     prefix: str
 
     def __init__(self, name: str) -> None:  # noqa: D107

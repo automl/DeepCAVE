@@ -52,6 +52,7 @@ class Queue:
         raise ValueError("Worker not found.")
 
     def get_workers(self):
+        """Get the workers in the queue."""
         return Worker.all(queue=self._queue)
 
     def is_processed(self, job_id: str) -> bool:
@@ -161,6 +162,19 @@ class Queue:
         return False
 
     def get_job(self, job_id: str) -> Job:
+        """
+        Get the job fitting the given job ID.
+
+        Parameters
+        ----------
+        job_id : str
+            The ID of the job.
+
+        Returns
+        -------
+        Job
+            The job Object to the job ID.
+        """
         return Job.fetch(job_id, connection=self._connection)
 
     def get_jobs(self, registry: str = "running") -> List[Job]:
@@ -197,12 +211,15 @@ class Queue:
         return results
 
     def get_running_jobs(self) -> List[Job]:
+        """Get the running jobs in the registry."""
         return self.get_jobs(registry="running")
 
     def get_pending_jobs(self) -> List[Job]:
+        """Get the pending jobs in the registry."""
         return self.get_jobs(registry="pending")
 
     def get_finished_jobs(self) -> List[Job]:
+        """Get the finished jobs in the registry."""
         return self.get_jobs(registry="finished")
 
     def delete_job(self, job_id: str = None) -> None:
@@ -265,6 +282,7 @@ class Queue:
         remove_jobs(self._queue.failed_job_registry, job_id)
 
     def delete_jobs(self) -> None:
+        """Delete the jobs in the queue."""
         self.delete_job()
 
     def enqueue(

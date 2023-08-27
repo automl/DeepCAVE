@@ -1,3 +1,20 @@
+"""
+# PartialDependencies.
+
+This module provides utilities for generating Partial Dependency Plots.
+
+These plots are used for visualization of impacts of hyperparameters on the model.
+
+## Contents
+    - get_input_layout: Define the layout of input controls.
+    - get_filter_layout: Define the layout of filter controls.
+    - load_inputs: Load the inputs for the controls.
+    - load_dependeny_inputs: Load the input values to generate the PDP.
+    - process: Process the data to generate the PDP. Also initializes the surrogate model.
+    - get_output_layout: Define the layout of the output plot.
+    - load_output: Output and safe the figure containing the PDP.
+"""
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -18,6 +35,40 @@ MAX_SHOWN_SAMPLES = 100
 
 
 class PartialDependencies(StaticPlugin):
+    """
+    This class generates a PDP for visualizing hyperparameter impacts.
+
+    Methods
+    -------
+    get_input_layout
+        Define the layout of input controls.
+    get_filter_layout
+        Define the layout of filter controls.
+    load_inputs
+        Load the inputs for the controls.
+    load_dependeny_inputs
+        Load the input values to generate the PDP.
+    process
+        Process the data to generate the PDP. Also initializes the surrogate model.
+    get_output_layout
+        Define the layout of the output plot.
+    load_output
+        Output and safe the figure containing the PDP.
+
+    Attributes
+    ----------
+    id
+        Identifier for the plugin.
+    name
+        Name of the plugin.
+    icon
+        Icon representation of the plugin.
+    help
+        Path to the documentation of the plugin.
+    activate_run_selection
+        Defines wheter the run selection feature should be activated.
+    """
+
     id = "pdp"
     name = "Partial Dependencies"
     icon = "far fa-grip-lines"

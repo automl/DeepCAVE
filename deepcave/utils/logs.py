@@ -14,4 +14,5 @@ logging.config.dictConfig(config)
 
 
 def get_logger(logger_name: str) -> logging.Logger:
+    """Get the logger corresponding to the logger name."""
     return logging.getLogger(logger_name)

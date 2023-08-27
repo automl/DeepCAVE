@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# Objective
+
+This module provides utilities to convert and create objectives.
+It also provides functions for merging and comparing objectives.
+
+## Contents
+    - to_json: Convert objectives attributes to a JSON format.
+    - from_json: Create an objective from a JSON format.
+    - __eq__: Compare if two instances are qual based on their attributes.
+    - merge: Merge two Objectives with its attributes.
+    - get_worst_value: Get the worst value based on the optimization setting.
+"""
+
 from typing import Any, Dict, Optional, Union
 
 from dataclasses import dataclass
@@ -9,6 +24,37 @@ from deepcave.runs.exceptions import NotMergeableError
 
 @dataclass
 class Objective:
+    """
+    This class converts and creates objectives.
+
+    Methods
+    -------
+    to_json
+        Convert objectives attributes to a JSON format.
+    from_json
+        Create an objective from a JSON format.
+    __eq__
+        Compare if two instances are qual based on their attributes.
+    merge
+        Merge two Objectives with its attributes.
+    get_worst_value
+        Get the worst value based on the optimization setting.
+
+    Attributes
+    ----------
+    name : str
+        The name of the objective.
+    lower : Optional[Union[int, float]], optional
+        The lower bound of the objective.
+        Default is None.
+    upper : Optional[Union[int, float]], optional
+        The upper bound of the objective.
+        Default is None.
+    optimize : str, optional
+        Defines which bound to optimize.
+        Default is "lower".
+    """
+
     name: str
     lower: Optional[Union[int, float]] = None
     upper: Optional[Union[int, float]] = None
@@ -111,6 +157,20 @@ class Objective:
         return True
 
     def merge(self, other: Any) -> None:
+        """
+        Merge two Objectives with its attributes.
+
+        Fit the attributes of self to the attributes of the other Objective.
+        Parameters
+        ----------
+        other : Any
+            The other Objective to merge.
+
+        Raises
+        ------
+        NotMergableError
+            If parts of the two Objectives are not mergable.
+        """
         if not isinstance(other, Objective):
             raise NotMergeableError("Objective can only be merged with another Objective.")
 

@@ -1,3 +1,10 @@
+#  noqa: D400
+"""
+# Server
+
+This module starts the dash web server.
+"""
+
 from deepcave import app, config
 from deepcave.layouts.main import MainLayout
 

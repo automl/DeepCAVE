@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# Static
+
+This module is used to create different plugins for time-intense calculations.
+
+## Contents
+    - _process: Handle execution of the process.
+    - _setup: Set up the Static Plugin.
+    - register_callbacks: Register the callbacks.
+    - _callback_inputs_changed: Respond to input changes and updates plugin.
+    not done 
+
+"""
+
 from abc import ABC
 from typing import Any, Callable, Dict, List
 

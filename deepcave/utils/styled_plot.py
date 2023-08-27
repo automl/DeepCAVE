@@ -59,6 +59,14 @@ class StyledPlot:
         return f
 
     def save_figure(self, filename):
+        """
+        Save the figure/plot at the given filename.
+
+        Parameters
+        ----------
+        filename
+            The name of the file the plot will be saved at.
+        """
         self.plt.savefig(filename, dpi=400, bbox_inches="tight")
         self.plt.close()
 

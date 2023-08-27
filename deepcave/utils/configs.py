@@ -1,3 +1,13 @@
+#  noqa: D400
+"""
+# configs
+
+This is for parsing the configurations from a filename.
+
+## Contents
+    - parse_config: Parse the config given the filename.
+"""
+
 from typing import Optional
 
 import importlib
@@ -10,7 +20,9 @@ from deepcave.config import Config
 
 def parse_config(filename: Optional[str] = None) -> Config:
     """
-    Parse the config given the filename. Both relative and absolute paths are possible.
+    Parse the config given the filename.
+
+    Both relative and absolute paths are possible.
 
     Parameters
     ----------

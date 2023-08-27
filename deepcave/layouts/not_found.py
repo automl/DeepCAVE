@@ -1,3 +1,12 @@
+#  noqa: D400
+"""
+# Not_Found
+
+This module defines a custom layout for displaying a "NotFound" page.
+
+## Contents
+    - __call__: Create the "NotFound" page.
+"""
 from typing import List
 
 from dash import html
@@ -7,6 +16,15 @@ from deepcave.layouts import Layout
 
 
 class NotFoundLayout(Layout):
+    """
+    This class defines a custom "NotFound" layout.
+
+    Methods
+    -------
+    __call__
+        Create the "NotFound" page.
+    """
+
     def __init__(self, url) -> None:  # noqa: D107
         super().__init__()
         self.url = url

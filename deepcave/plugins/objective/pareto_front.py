@@ -1,3 +1,21 @@
+"""
+# ParetoFront.
+
+This module is for creating a visualization of a Pareto Front.
+For this, it uses Dash as well as matplotlib and plotly.
+
+## Contents
+    - check_runs_compatibility: To ensure the compatibility of runs.
+    - get_input_layout: Define the layout structure.
+    - get_filter_layout: Define the layout structure for filtering options.
+    - load_inputs: Load the default input settings.
+    - process: To process the data for the Pareto Front.
+    - get_output_layout: Define the layout structure for displaying the output.
+    - load_outputs: Generate and load output information for visualization.
+    - get_mpl_output_layout: Define layout structure when using matplotlib.
+    - load_mpl_outputs: Generate and load output info for visualization when using matplotlib.
+"""
+
 from typing import List, Union
 
 import dash_bootstrap_components as dbc
@@ -18,6 +36,42 @@ from deepcave.utils.styled_plotty import (
 
 
 class ParetoFront(DynamicPlugin):
+    """
+    This class generates an interactive Pareto Front visualization.
+
+    Methods
+    -------
+    check_runs_compatibility
+        Ensure the compatibility of the runs provided.
+    get_input_layout
+        Define the layout structure.
+    get_filter_layout
+        Define the layout structure for filtering options.
+    load_inputs
+        Load the default input settings.
+    process
+        To process the data for the Pareto Front.
+    get_output_layout
+        Define the layout structure for displaying the output.
+    load_outputs
+        Generate and load output information for visualization.
+    get_mpl_output_layout
+        Define layout structure when using matplotlib.
+    load_mpl_outputs
+        Generate and load output information for visualization when using matplotlib.
+
+    Attributes
+    ----------
+    id
+        Identifier for the plugin.
+    name
+        Name of the plugin.
+    icon
+        Icon representation for the plugin.
+    help
+        Path to the documentation of the plugin.
+    """
+
     id = "pareto_front"
     name = "Pareto Front"
     icon = "fas fa-wind"

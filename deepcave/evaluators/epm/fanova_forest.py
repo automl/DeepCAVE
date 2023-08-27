@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# FanovaForest.
+# FanovaForest
 
 The module provides utilities for conducting feature analysis.
 

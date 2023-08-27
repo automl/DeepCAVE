@@ -1,3 +1,14 @@
+#  noqa: D400
+"""
+# ConfigSpace
+
+This module samples random as well as border configurations.
+
+## Contents
+    - sample_border_config: Generate border configurations from the configuration space.
+    - sample_random_config: Generate random configurations from the configuration space.
+"""
+
 from typing import Iterator, Optional
 
 import numpy as np

@@ -131,6 +131,7 @@ class RunHandler:
         return Path(run_path).stem
 
     def get_selected_groups(self) -> Dict[str, List[str]]:
+        """Get the selected groups."""
         return self.c.get("groups")
 
     def add_run(self, run_path: str) -> bool:

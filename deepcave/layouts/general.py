@@ -344,6 +344,7 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_converter_text(converters: List[Type[Run]]) -> html.Div:
+        """ """
         converter_text = []
         for converter in converters:
             converter_text += [converter.prefix]

@@ -14,4 +14,5 @@ def flash(message: str, category: str = "info") -> dbc.Alert:
 
 
 def alert(message: str) -> dbc.Alert:
+    """Return an alert message."""
     return flash(message, "danger")

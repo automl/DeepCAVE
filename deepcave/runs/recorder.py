@@ -1,3 +1,15 @@
+#  noqa: D400
+"""
+# Recorder
+
+This module provides utilities to record the trial information.
+
+## Contents
+    - set_path: Identify the latest run and sets the path with increased id.
+    - start: Record the trial information.
+    - end: End the recording of the trial and add it to trial history.
+"""
+
 from typing import Optional, Union
 
 import time
@@ -12,6 +24,19 @@ from deepcave.runs.converters.deepcave import DeepCAVERun
 
 
 class Recorder:
+    """
+    This class defines a Recorder for recording trial information.
+
+    Methods
+    -------
+    set_path
+        Identify the latest run and sets the path with increased id.
+    start
+        Record the trial information.
+    end
+        End the recording of the trial and add it to trial history.
+    """
+
     def __init__(
         self,
         configspace: ConfigSpace.ConfigurationSpace,
@@ -55,14 +80,27 @@ class Recorder:
             self.path.stem, configspace=configspace, objectives=objectives, meta=meta
         )
 
-    def __enter__(self):
+    def __enter__(self):  # noqa: D102, D105
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type, value, traceback):  # noqa: D102, D105
         pass
 
     def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False):
-        """Identify the latest run and sets the path with increased id."""
+        """
+        Identify the latest run and sets the path with increased id.
+
+        Parameters
+        ----------
+        path : Union[str, Path]
+            The path in which to store the run.
+        prefix, optional
+            The prefix for the path.
+            Default is "run".
+        overwrite, optional
+            To determine wheter to overwrite an existing folder.
+            Default is False.
+        """
         # Make sure the word is interpreted as folder
         path = Path(path)
         path.mkdir(parents=True, exist_ok=True)
@@ -93,6 +131,29 @@ class Recorder:
         additional: Optional[dict] = None,
         start_time: Optional[float] = None,
     ):
+        """
+        Record the trial information.
+
+        Parameters
+        ----------
+        config : Union[dict, Configuration]
+            Holds the configuration settings for the trial.
+        budget : Optional[float], optional
+            The budget for the trial.
+            Default is None.
+        model, optional
+            The model used in the trial.
+            Default is None.
+        origin, optional
+            The origin of the trial.
+            Default is None.
+        additional : Optional[dict], optional
+            Additional information of the trial.
+            Default is None.
+        start_time : Optional[float], optional
+            The start time of the trial.
+            Default is None.
+        """
         if additional is None:
             additional = {}
 
@@ -119,9 +180,32 @@ class Recorder:
         end_time: Optional[float] = None,
     ):
         """
-        In case of multi-processing, config+budget should be passed.
+        End the recording of the trial and add it to trial history.
 
+        In case of multi-processing, config+budget should be passed.
         If it can't be passed, it can't be matched correctly.
+        The results of the trial are saved.
+
+        Parameters
+        ----------
+        costs : float, optional
+            The costs of the trial.
+            Default is np.inf.
+        status : Status, optional
+            The status of the trial.
+            Default is Status.Success.
+        config : Union[dict, Configuration], optional
+            The configuration of the trial.
+            Default is None.
+        budget : float, optional
+            The budget of the trial.
+            Default is np.inf.
+        additional : Optional[dict], optional
+            Additional information of the trial.
+            Default is None.
+        end_time : Optional[float], optional
+            The end time of the trial.
+            Default is None.
         """
         if additional is None:
             additional = {}

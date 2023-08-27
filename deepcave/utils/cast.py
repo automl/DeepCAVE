@@ -1,3 +1,12 @@
+#  noqa: D400
+"""
+# Cast
+
+This module conversta any value to an int if possible.
+
+## Contents
+    - optional_int: Convert a value to an int if possible.
+"""
 from typing import Any, Optional
 
 

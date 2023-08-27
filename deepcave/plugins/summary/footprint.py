@@ -1,3 +1,20 @@
+"""
+# FootPrint.
+
+This module provides utilities to visualize a configuration footprint.
+
+## Contents
+    - get_input_layout: Define the layout and configuration of the input controls.
+    - get_filter_layout: Define the layout of the filter input controls.
+    - load_inputs: Load the input controls.
+    - load_dependency_inputs: Load dependent input controls.
+    - process: Generate data for the visualization using an Evaluator.
+    - get_output_layout: Define the layout structure for visualizing the output.
+    - load_outputs: Generate the output and safe the image.
+    - get_mpl_output_layout: Define the layout structure for visualizing the output with matplotlib.
+    - load_mpl_outputs: Generate the output with matplotlib and safe the image.
+"""
+
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -15,6 +32,44 @@ from deepcave.utils.styled_plotty import (
 
 
 class FootPrint(StaticPlugin):
+    """
+    This class visualizes the footprint of a configuartion.
+
+    Methods
+    -------
+    get_input_layout
+        Define the layout and configuration of the input controls.
+    get_filter_layout
+        Define the layout of the filter input controls.
+    load_inputs
+        Load the input controls.
+    load_dependency_inputs
+        Load dependent input controls.
+    process
+        Generate data for the visualization using an Evaluator.
+    get_output_layout
+        Define the layout structure for visualizing the output.
+    load_outputs
+        Generate the output and safe the image.
+    get_mpl_output_layout
+        Define the layout structure for visualizing the output with matplotlib.
+    load_mpl_outputs
+        Generate the output with matplotlib and safe the image.
+
+    Attributes
+    ----------
+    id
+        Identifies the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representation of the plugin.
+    help
+        The path to the documentation of the plugin.
+    activate_run_selection
+        Defines wheter the run selection feature is activated.
+    """
+
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"

@@ -6,6 +6,24 @@ import string
 
 
 def get_random_string(length: int) -> str:
+    """
+    Get a random string with a specific length.
+
+    Parameters
+    ----------
+    length : int
+        The length of the string.
+
+    Returns
+    -------
+    str
+        The random string with the given length.
+
+    Raises
+    ------
+    ValueError
+        If the length is smaller 0.
+    """
     if length < 0:
         raise ValueError("Length has to be greater than 0")
     letters = string.ascii_lowercase
@@ -13,6 +31,32 @@ def get_random_string(length: int) -> str:
 
 
 def short_string(value: Any, length: int = 30, *, mode: str = "prefix") -> str:
+    """
+    Shorten the given string.
+
+    Cut either at prefix or at suffix if necessary.
+
+    Parameters
+    ----------
+    value : Any
+        The value or string to shorten.
+    length : int, optional
+        The length of the returned string.
+        Default is 30.
+    mode : str, optional
+        Define how to shorten the string.
+        Default is "prefix".
+
+    Returns
+    -------
+    str
+        The shortened string.
+
+    Raises
+    ------
+    ValueError
+        If the given mode is unknown.
+    """
     value = str(value)
     if len(value) <= length:
         return value

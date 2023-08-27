@@ -1,3 +1,25 @@
+# noqa: D400
+"""
+# RandomForest
+
+This module is used for training and using a Random Forest Regression model.
+
+A pyrfr wrapper is used for simplification.
+
+## Contents
+    - _get_model: Get the internal model.
+    - _get_model_options: Get the options of the model.
+    - _impute_inactive: Imput inactive values in X.
+    - _check_dimensions:  Check if the dimensions of X and Y are correct wrt features.
+    - _get_data_container: Fill a pyrfr default data container.
+    - train: Train the random forest on X and Y.
+    - _train: Train the random forest on X and Y.
+    - predict: Predict means and variances for a given X.
+    - _predict: Predict means and variances for a given X.
+    - predict_marginalized: Predict mean and variance marginalized over all instances.
+    - get_leaf_values: Return the values of the Forest leafs.
+"""
+
 from typing import Any, Dict, List, Optional, Tuple  # noqa: F401
 
 import functools
@@ -139,7 +161,7 @@ class RandomForest:
 
     def _impute_inactive(self, X: np.ndarray) -> np.ndarray:
         """
-        Imputs inactive values in X.
+        Imput inactive values in X.
 
         Parameters
         ----------
@@ -246,7 +268,7 @@ class RandomForest:
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on X and Y.
+        Train the random forest on X and Y.
 
         Transforms X if PCA is applied.
         Afterwards, `_train` is called.
@@ -289,7 +311,7 @@ class RandomForest:
 
     def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on X and Y.
+        Train the random forest on X and Y.
 
         Parameters
         ----------
@@ -475,4 +497,5 @@ class RandomForest:
         return mean_, var
 
     def get_leaf_values(self, x: np.ndarray):
+        """Get the leaf values of the model."""
         return self._model.all_leaf_values(x)  # type: ignore[np-untyped-def]

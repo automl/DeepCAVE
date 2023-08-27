@@ -1,7 +1,25 @@
+"""
+# Status.
+
+This module provides the information about the status of a run.
+
+## Contents
+    - to_text: Convert the name to a simpler text format.
+"""
+
 from enum import IntEnum
 
 
 class Status(IntEnum):
+    """
+    This class represents the status of a run as an Enum.
+
+    Methods
+    -------
+    to_text
+        Convert the name to a simpler text format.
+    """
+
     SUCCESS = 1
     TIMEOUT = 2
     MEMORYOUT = 3

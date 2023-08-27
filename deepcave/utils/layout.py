@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# Layout
+
+This module provides utilities to customize the layout of the Dash.
+
+## Contents
+    - help_button:  Generate button with help icon.
+    - render_table
+    - get_slider_marks: Generate a dictionary containing slider marks.
+    - get_select_options: Get options for selecting.
+    - get_checklist_options: Get options for a checklist.
+    - get_radio_options: Get options for a radio.
+    - create_table: Create a table from the given data.
+"""
 from typing import Any, Dict, List, Optional, Union
 
 import uuid
@@ -43,7 +58,7 @@ def help_button(text: str, placement: str = "top") -> html.Span:
     )
 
 
-def render_table(df: pd.DataFrame) -> None:
+def render_table(df: pd.DataFrame) -> None:  # noqa: D103
     pass
 
 
@@ -128,12 +143,14 @@ def get_select_options(
 def get_checklist_options(
     labels: Any = None, values: Any = None, binary: bool = False
 ) -> List[Dict[str, Any]]:
+    """Get options for a checklist."""
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
 def get_radio_options(
     labels: Any = None, values: Any = None, binary: Any = False
 ) -> List[Dict[str, Any]]:
+    """Get options for a radio."""
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
@@ -144,6 +161,31 @@ def create_table(
     striped: bool = True,
     mb: bool = True,
 ) -> dbc.Table:
+    """
+    Create a table from the given data.
+
+    Parameters
+    ----------
+    output : Dict[str, str]
+        Containig the information for the table.
+    fixed : bool, optional
+        Indicates whether the table has a fixed layout.
+        Default is False.
+    head : bool, optional
+        Indicates whether the head will be included.
+        Default is True.
+    striped : bool, optional
+        Indicates whether the rows will be striped.
+        Default is True.
+    mb : bool, optional
+        Indicates whether the table has a margin.
+        Default is True.
+
+    Returns
+    -------
+    dbc.Table
+        The created dbc table.
+    """
     className = ""
     if not head:
         className += "exclude-head "
