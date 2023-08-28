@@ -1,3 +1,10 @@
+#  noqa: D400
+"""
+# Constants
+
+This module defines the constants for the DeepCAVE framework.
+"""
+
 NAN_VALUE = -0.2
 NAN_LABEL = "NaN"
 VALUE_RANGE = [NAN_VALUE, 1]

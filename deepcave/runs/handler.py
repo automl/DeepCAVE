@@ -1,3 +1,30 @@
+#  noqa: D400
+"""
+# Handler
+
+This module handles the run.
+It can retrieve working directories, run paths, run names, as well as groups of runs.
+It provides utilities to update and remove runs as well a groups of runs.
+
+## Contents
+    - set_working_directory: Set the working directoy to the meta cache.
+    - get_working_directory: Return the current working directory in the cache.
+    - get_available_run_paths: Return the available run paths from the current directory.
+    - get_selected_run_paths:  Return the selected run paths from the cache.
+    - get_selected_run_names: Return the run names of the selected runs.
+    - get_run_names: Return the stem of the path.
+    - get_selected_groups: Get the selected groups.
+    - add_run: Add a run path to the cache. If run path is already in cache, do nothing.
+    - remove_run: Remove a run path from the cache. If run path is not in cache, do nothing.
+    - update: Update the internal run and group instances but only if a hash changed.
+    - update_runs: Load selected runs and update cache if files changed.
+    - update_run: Load the run from `self.runs` or creates a new one.
+    - update_groups: Load chosen groups.
+    - get_run: Look inside `self.runs` and `self.groups` and if the run id is found, return the run.
+    - get_groups: Return instantiated grouped runs.
+    - get_runs: Return the runs from the internal cache.
+"""
+
 from typing import Dict, List, Optional, Type, Union
 
 import time
@@ -18,6 +45,41 @@ class RunHandler:
 
     Based on the meta data in the cache, automatically selects the right converter
     and switches to the right (plugin) cache.
+
+    Methods
+    -------
+    set_working_directory
+        Set the working directoy to the meta cache.
+    get_working_directory
+        Return the current working directory in the cache.
+    get_available_run_paths
+        Return the available run paths from the current directory.
+    get_selected_run_paths
+        Return the selected run paths from the cache.
+    get_selected_run_names
+        Return the run names of the selected runs.
+    get_run_names
+        Return the stem of the path.
+    get_selected_groups
+        Get the selected groups.
+    add_run
+        Add a run path to the cache. If run path is already in cache, do nothing.
+    remove_run
+        Remove a run path from the cache. If run path is not in cache, do nothing.
+    update
+        Update the internal run and group instances but only if a hash changed.
+    update_runs
+        Load selected runs and update cache if files changed.
+    update_run
+        Load the run from `self.runs` or creates a new one.
+    update_groups
+        Load chosen groups.
+    get_run
+        Look inside `self.runs` and `self.groups` and if the run id is found, returns the run.
+    get_groups
+        Return instantiated grouped runs.
+    get_runs
+        Return the runs from the internal cache.
     """
 
     def __init__(
@@ -159,7 +221,8 @@ class RunHandler:
         return True
 
     def remove_run(self, run_path: str) -> None:
-        """Remove a run path from the cache. If run path is not in cache, do nothing.
+        """
+        Remove a run path from the cache. If run path is not in cache, do nothing.
 
         Parameters
         ----------

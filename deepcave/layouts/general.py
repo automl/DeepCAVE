@@ -1,3 +1,14 @@
+"""
+# GeneralLayout
+
+This module provides the General Layout class.
+It handles different callbacks of the layout.
+
+## Contents
+    - callback: 
+    - get_converter_text: Get the text for the available run converters.
+"""
+
 from typing import Dict, List, Optional, Type
 
 from pathlib import Path

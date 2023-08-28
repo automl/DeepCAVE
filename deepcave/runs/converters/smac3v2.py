@@ -1,3 +1,16 @@
+#  noqa: D400
+"""
+# SMAC3v2Run
+
+his module provides utilities to create a SMAC3v2 run.
+It provides utilities to hash, as well a get the latest change of the object.
+
+## Contents
+    - hash: Create a hash of the object.
+    - latest_change: Retrieve the latest change of the object.
+    - from_path: Return new trail object based of a given path.
+"""
+
 import json
 from pathlib import Path
 
@@ -10,6 +23,30 @@ from deepcave.utils.hash import file_to_hash
 
 
 class SMAC3v2Run(Run):
+    """
+    This class defines a SMAC3v2 run object.
+
+    It also provides utilities to hash it and get its latest change.
+
+    Methods
+    -------
+    hash
+        Create a hash of the object.
+    latest_change
+        Retrieve the latest change of the object.
+    from_path
+        Return new trail object based of a given path.
+
+    Attributes
+    ----------
+    prefix, optional
+        The prefic of the run object.
+        Default is "SMAC3v2".
+    initial_order, optional
+        The initial order.
+        Default is 2.
+    """
+
     prefix = "SMAC3v2"
     _initial_order = 2
 

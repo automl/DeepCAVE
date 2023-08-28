@@ -1,3 +1,42 @@
+#  noqa: D400
+"""
+# Plugins
+
+This module provides a base class for all the available plugins.
+It provides different utilities to handle the plugins and check for compatibility in the runs.
+
+## Contents
+    - get_base_url: Generate the url for the plugin.
+    - check_run_compatibility: Check if a run is compatible with this plugin.
+    - check_runs_compatibility: Needed if all selected runs need something in common.
+    - register_input: Register an input variable for the plugin.
+    - register_output: Register an output variable for the plugin.
+    - get_internal_id: Get the internal id.
+    - get_internal_input_id: Get the internal input id.
+    - get_internal_output_id: Get the internal output id.
+    - register_callbacks: Register basic callbacks for the plugin.
+    - plugin_input_update: Update the input of the plugin.
+    - toggle_raw_data_modal: Toggle the raw data modal.
+    - go_to_configuration: Go to the configuration described in the hovertext.
+    - runs: Get the runs.
+    - groups: Get the groups.
+    - all_runs: Get all runs and include the groups.
+    - register_in: Register the given input.
+    - register_out: Register the output.
+    - get_run_input_layout: Generate the run selection input.
+    - load_run_inputs: Load the options for `get_run_input_layout`.
+    - get_selected_runs: Parse selected runs from inputs.
+    - load_inputs: Load content for defined inputs in `get_input_layout` and `get_filter_layout`.
+    - load_dependency_inputs: Load content as in 'load_inputs', called after inputs have changed.
+    - get_input_layout: Layout for the input block.
+    - get_filter_layout: Layout for the filter block.
+    - get_output_layout: Layout for the output block.
+    - get_mpl_output_layout: Layout for the matplotlib output block.
+    - process: Return raw data based on a run and input data.
+    - generate_outputs: Check whether run selection is active, accepts one or multiple runs at once.
+    - generate_inputs: Generate inputs for the `process` and `load_outputs` required for api mode.
+"""
+
 from abc import ABC
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
@@ -30,6 +69,67 @@ logger = get_logger(__name__)
 class Plugin(Layout, ABC):
     """
     Base class for all plugins.
+
+    Methods
+    -------
+    get_base_url
+        Generate the url for the plugin.
+    check_run_compatibility
+        Check if a run is compatible with this plugin.
+    check_runs_compatibility
+        Needed if all selected runs need something in common.
+    register_input
+        Register an input variable for the plugin.
+    register_output
+        Register an output variable for the plugin.
+    get_internal_id
+        Get the internal id.
+    get_internal_input_id
+        Get the internal input id.
+    get_internal_output_id
+        Get the internal output id.
+    register_callbacks
+        Register basic callbacks for the plugin.
+    plugin_input_update
+        Update the input of the plugin.
+    toggle_raw_data_modal
+        Toggle the raw data modal.
+    go_to_configuration
+        Go to the configuration described in the hovertext.
+    runs
+        Get the runs.
+    groups
+        Get the groups.
+    all_runs
+        Get all runs and include the groups.
+    register_in
+        Register the given input.
+    register_out
+        Register the output.
+    get_run_input_layout
+        Generate the run selection input.
+    load_run_inputs
+        Load the options for `get_run_input_layout`.
+    get_selected_runs
+        Parse selected runs from inputs.
+    load_inputs
+        Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.
+    load_dependency_inputs
+        Load the content as in 'load_inputs' but called after inputs have changed.
+    get_input_layout
+        Layout for the input block.
+    get_filter_layout
+        Layout for the filter block.
+    get_output_layout
+        Layout for the output block.
+    get_mpl_output_layout
+        Layout for the matplotlib output block.
+    process
+        Return raw data based on a run and input data.
+    generate_ outputs
+        Check whether run selection is active and accepts either one or multiple runs at once.
+    generate_inputs
+        Generate inputs for the `process` and `load_outputs` required for api mode.
 
     Attributes
     ----------
@@ -231,7 +331,7 @@ class Plugin(Layout, ABC):
         return f"{self.id}-{id}-input"
 
     def get_internal_output_id(self, id: str) -> str:
-        "Get the internal output id."
+        """Get the internal output id."""
         return f"{self.id}-{id}-output"
 
     @interactive
@@ -267,6 +367,21 @@ class Plugin(Layout, ABC):
 
             @app.callback(outputs, inputs)  # type: ignore
             def plugin_input_update(pathname: str, *inputs_list: str) -> List[str]:
+                """
+                Update the input of the plugin.
+
+                Parameters
+                ----------
+                pathname : str
+                    The name of the path for the passed inputs.
+                *inputs_list : str
+                    The list of the inputs to check if the page was loaded for the first time.
+
+                Returns
+                -------
+                List[str]
+                    The list of the cast inputs.
+                """
                 # Simple check if page was loaded for the first time
                 init = all(input is None for input in inputs_list)
 
@@ -405,6 +520,21 @@ class Plugin(Layout, ABC):
             State(self.get_internal_id("raw_data"), "is_open"),
         )
         def toggle_raw_data_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+            """
+            Toggle the raw data modal.
+
+            Parameters
+            ----------
+            n : Optional[int]
+                A condition.
+            is_open : bool
+                Whether the raw data modal is open or not.
+
+            Returns
+            -------
+            Tuple[bool, str]
+                A tuple containing the is open information and the code.
+            """
             code = ""
             if n:
                 if (out := self.raw_outputs) is not None:
@@ -424,6 +554,21 @@ class Plugin(Layout, ABC):
             State(self.get_internal_id("help"), "is_open"),
         )
         def toggle_help_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+            """
+            Toggle the help modal.
+
+            Parameters
+            ----------
+            n : Optional[int]
+                A condition.
+            is_open : bool
+                Whether the help modal is open or not.
+
+            Returns
+            -------
+            Tuple[bool, str]
+                A tuple containing the is open information and the code.
+            """
             if n:
                 return not is_open
 
@@ -438,6 +583,14 @@ class Plugin(Layout, ABC):
                 Input(internal_id, "clickData"),
             )
             def go_to_configuration(click_data):  # type: ignore
+                """
+                Go to the configuration described in the hovertext.
+
+                Parameters
+                ----------
+                click_data
+                    The data describing the click.
+                """
                 if click_data is not None:
                     # Get hovertext
                     try:
@@ -496,6 +649,21 @@ class Plugin(Layout, ABC):
     def _process_raw_outputs(
         self, inputs: Dict[str, Dict[str, str]], raw_outputs: Dict[str, Any]
     ) -> Union[Any, List[Any]]:
+        """
+        Process the raw outputs and update the layout.
+
+        Parameters
+        ----------
+        inputs : Dict[str, Dict[str, str]]
+            The inputs for the passed runs.
+        raw_outputs : Dict[str, Any]
+            The raw outputs to process.
+
+        Returns
+        -------
+        Union[Any, List[Any]]
+            The processed outputs.
+        """
         from deepcave import c, run_handler
 
         # Use raw outputs to update our layout
@@ -735,6 +903,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def runs(self) -> List[AbstractRun]:
+        """Get the runs."""
         from deepcave import run_handler
 
         return run_handler.get_runs()
@@ -742,6 +911,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def groups(self) -> List[Group]:
+        """Get the groups."""
         from deepcave import run_handler
 
         return run_handler.get_groups()
@@ -749,6 +919,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def all_runs(self) -> List[AbstractRun]:
+        """Get all runs and include the groups."""
         from deepcave import run_handler
 
         return run_handler.get_runs(include_groups=True)
@@ -862,6 +1033,7 @@ class Plugin(Layout, ABC):
         ]
 
         def register_in(a, b):  # type: ignore
+            """Register the given input."""
             return self.register_input(a, b, filter=True)
 
         filter_layout = self.__class__.get_filter_layout(register_in)
@@ -886,6 +1058,7 @@ class Plugin(Layout, ABC):
             ]
 
         def register_out(a, b):  # type: ignore
+            """Register the output."""
             return self.register_output(a, b, mpl=True)
 
         output_layout = self.__class__.get_mpl_output_layout(register_out)

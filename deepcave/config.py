@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# Config
+
+This module defines the config object and its constants.
+It also defines multiple constants for directories, the server name and the available plugins.
+
+## Contents
+    - DEFAULT_WORKING_DIRECTORY: Specifies the default working directory.
+    - CACHE_DIRECTORY: Specifies the default cache directory.
+    - SERVER_NAME: Specifies the server name, consisting of address and port.
+    - PLUGINS: A list of available plugins per category.
+    - CONVERTERS: A list of available run converters.
+"""
+
 from typing import Any, Dict, List, Type
 
 from pathlib import Path
@@ -7,6 +22,55 @@ from deepcave.runs.run import Run
 
 
 class Config:
+    """
+    This class describes the config object.
+
+    It also defines the constants of the config object.
+
+    Methods
+    -------
+    DEFAULT_WORKING_DIRECTORY
+        Specifies the default working directory.
+    CACHE_DIRECTORY
+        Specifies the default cache directory.
+    SERVER_NAME
+        Specifies the server name, consisting of address and port.
+    PLUGINS
+        A list of available plugins per category.
+    CONVERTERS
+        A list of available run converters.
+
+    Constants
+    ---------
+    TITLE : str
+        "DeepCAVE"
+    DEBUG: bool
+        True
+    REFRESH_RATE: int
+        500
+    SAVE_IMAGES
+        False
+    FIGURE_MARGIN
+        dict(t=30, b=0, l=0, r=0)
+    FIGURE_HEIGHT
+        "40vh"
+    REDIS_PORT: int
+        6379
+    REDIS_ADDRESS: str
+        "redis://localhost"
+    DASH_PORT: int
+        8050
+    DASH_ADDRESS: str
+        "127.0.0.1"
+    META_DEFAULT: Dict[str, Any]
+         {
+        "matplotlib-mode": False,
+        "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
+        "selected_run_paths": [],
+        "groups": {},  # {group_name: [run_path, ...]}
+        }
+    """
+
     # General config
     TITLE: str = "DeepCAVE"
     DEBUG: bool = True

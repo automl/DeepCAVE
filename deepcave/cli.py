@@ -1,3 +1,14 @@
+#  noqa: D400
+"""
+# CLI
+
+This module defines command-line options using flags.
+
+## Contents
+    - execute: Entry point for the programms execution.
+    - main: Call the execute function.
+"""
+
 import multiprocessing
 import subprocess
 from pathlib import Path
@@ -22,6 +33,7 @@ flags.DEFINE_string(
 
 
 def execute(_) -> None:
+    """Entry point for the programms execution."""
     if (config_key := FLAGS.get_config_value) is not None:
         config = FLAGS.config
         if config is not None:
@@ -47,4 +59,5 @@ def execute(_) -> None:
 
 
 def main() -> None:
+    """Call the execute function."""
     app.run(execute)

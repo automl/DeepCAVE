@@ -35,6 +35,7 @@ logger = get_logger(__name__)
 class Footprint:
     """
     This class can train and create a footptint of a model.
+
     It uses an MDS plot.
 
     Methods

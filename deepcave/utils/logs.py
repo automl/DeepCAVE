@@ -1,3 +1,13 @@
+#  noqa: D400
+"""
+# Logs
+
+This module sets up and gets the logging configuration.
+
+## Contents
+    - get_logger: Get the logger corresponding to the logger name.
+"""
+
 import logging
 import logging.config
 from pathlib import Path
