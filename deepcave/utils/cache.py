@@ -1,3 +1,20 @@
+#  noqa: D400
+"""
+# Cache
+
+This module provides utilities to handle the cache.
+
+The cache handles a json file.
+
+## Contents
+    - read: Read content from a file and load into cache as dictionary.
+    - write: Write content of cache into file.
+    - set: Set a value from a chain of keys.
+    - set_dict: Update cache to a specific value.
+    - get: Retrieve value for a specific key.
+    - has: heck whether cache has specific key.
+    - clear: Clear all cache and reset to defaults.
+"""
 from typing import Any, Dict, Optional
 
 import json
@@ -16,6 +33,23 @@ class Cache:
     Cache handles a json file.
 
     Decided not to use flask_caching since code is easier to change to our needs.
+
+    Methods
+    -------
+    read
+        Read content from a file and load into cache as dictionary.
+    write
+        Write content of cache into file.
+    set
+        Set a value from a chain of keys.
+    set_dict
+        Update cache to a specific value.
+    get
+        Retrieve value for a specific key.
+    has
+        heck whether cache has specific key.
+    clear
+        Clear all cache and reset to defaults.
     """
 
     def __init__(

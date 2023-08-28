@@ -1,3 +1,21 @@
+#  noqa: D400
+
+"""
+# ParallelCoordinates
+
+This module provides utilities for visualizing the parallel coordinates.
+The labels are of the important hyperparameters, budget and objectives.
+
+## Contents
+    - get_input_layout: Get the layout of the given inputs.
+    - get_filter_layout: Get a filtered layout of the given inputs.
+    - load_inputs: Load the input for the options.
+    - load_dependency_inputs: Load the dependency inputs.
+    - process: Run a quick fANOVA and process the evaluator.
+    - get_output_layout: Get the layout for the output.
+    - load_outputs: Load the outputs and safe image in a file.
+"""
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -20,6 +38,40 @@ logger = get_logger(__name__)
 
 
 class ParallelCoordinates(StaticPlugin):
+    """
+    This class can be used for visualizing the parallel coordinates.
+
+    Methods
+    -------
+    get_input_layout
+        Get the layout of the given inputs.
+    get_filter_layout
+        Get a filtered layout of the given inputs.
+    load_inputs
+        Load the input for the options.
+    load_dependency_inputs
+        Load the dependency inputs.
+    process
+        Run a quick fANOVA and process the evaluator.
+    get_output_layout
+        Get the layout for the output.
+    load_outputs
+        Load the outputs and safe image in a file.
+
+    Attributes
+    ----------
+    id
+        The identificator of the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representing the plugin
+    activate_run_selection
+        Define whether the run selection feature is atcive.
+    help
+        The path to the documentation of the plugin.
+    """
+
     id = "parallel_coordinates"
     name = "Parallel Coordinates"
     icon = "far fa-map"

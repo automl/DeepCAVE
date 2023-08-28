@@ -1,3 +1,23 @@
+#  noqa: D400
+"""
+# Group
+
+This module provides utilities for grouping and managing a group of abstract runs.
+
+## Contents
+    - hash: Get the hash for a group.
+    - id: Get the identificator for a group.
+    - latest_change: Get the latest change of the group.
+    - run_path: Get the path of the runs in the group.
+    - run_names: Get the names of the runs in the group.
+    - get_runs: Get the abstract runs of the group.
+    - get_new_config_id: Get a new identificator for a configuration.
+    - get_original_config_id: Get the original identificator of a configuratrion.
+    - get_original_run: Get the original abstract run.
+    - get_model: Get the model of the runs.
+    - get_trajectory: Get the trajectory of the runs.
+"""
+
 from typing import Dict, List, Tuple
 
 from copy import deepcopy
@@ -9,6 +29,41 @@ from deepcave.utils.hash import string_to_hash
 
 
 class Group(AbstractRun):
+    """
+    This class can group and manage a group of abstract runs.
+
+    Methods
+    -------
+    hash
+        Get the hash for a group.
+    id
+        Get the identificator for a group.
+    latest_change
+        Get the latest change of the group.
+    run_path
+        Get the path of the runs in the group.
+    run_names
+        Get the names of the runs in the group.
+    get_runs
+        Get the abstract runs of the group.
+    get_new_config_id
+        Get a new identificator for a configuration.
+    get_original_config_id
+        Get the original identificator of a configuratrion.
+    get_original_run
+        Get the original abstract run.
+    get_model
+        Get the model of the runs.
+    get_trajectory
+        Get the trajectory of the runs.
+
+    Attributes
+    ----------
+    prefix, optional
+        A prefix.
+        Default is "group".
+    """
+
     prefix = "group"
 
     def __init__(self, name: str, runs: List[AbstractRun]):  # noqa: D107
@@ -87,6 +142,7 @@ class Group(AbstractRun):
             raise NotMergeableError(f"Runs can not be merged: {e}")
 
     def __iter__(self):
+        """Allow to iterate over the object."""
         for run in self.runs:
             yield run.name
 
@@ -116,10 +172,12 @@ class Group(AbstractRun):
 
     @property
     def run_paths(self) -> List[str]:
+        """Get the path of the runs in the group."""
         return [str(run.path) for run in self.runs]
 
     @property
     def run_names(self) -> List[str]:
+        """Get the names of the runs in the group."""
         return [run.name for run in self.runs]
 
     def get_runs(self) -> List[AbstractRun]:
@@ -127,16 +185,20 @@ class Group(AbstractRun):
         return self.runs
 
     def get_new_config_id(self, run_id: int, original_config_id: int) -> int:
+        """Get a new identificator for a configuration."""
         return self._new_config_mapping[(run_id, original_config_id)]
 
     def get_original_config_id(self, config_id: int) -> id:
+        """Get the original identificator of a configuratrion."""
         return self._original_config_mapping[config_id][1]
 
     def get_original_run(self, config_id: int) -> AbstractRun:
+        """Get the original abstract run."""
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
-    def get_model(self, config_id):  # noqa: D102
+    def get_model(self, config_id):
+        """Get the model of the runs."""
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 

@@ -9,8 +9,10 @@ This module is used to create different plugins for time-intense calculations.
     - _setup: Set up the Static Plugin.
     - register_callbacks: Register the callbacks.
     - _callback_inputs_changed: Respond to input changes and updates plugin.
-    not done 
-
+    - _callback_loop_trigger_main_loop: Check if blocked, otherwise prevent updates.
+    - _callback_loop_update_status_label: Update the status label and register updates from inputs.
+    - _get_job_id: Get the identificator of the job.
+    - __call__: Build components for the application.
 """
 
 from abc import ABC
@@ -33,6 +35,8 @@ from deepcave.utils.url import create_url
 
 
 class PluginState(Enum):
+    """An Enum to define the state of the Plugin."""
+
     UNSET = -1
     READY = 0
     NEEDS_PROCESSING = 1

@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# DeepCAVE
+
+This module is used to initialize and set up the configuration for the DeepCAVE framework.
+It also contains Constants and Metadata, as well as the name of the authors and the copyright.
+The Dash application gets created.
+
+## Contents
+    - get_app: Create the Dash application.
+    - interactive: Define the interactive decorator.
+    - inner: The inner function of the decorator.
+"""
+
 from typing import Any, Callable, TypeVar, cast
 
 import datetime
@@ -26,6 +40,19 @@ ROOT_DIR = Path(__file__).parent
 
 
 def get_app(title: str):
+    """
+    Create the Dash application.
+
+    Parameters
+    ----------
+    title : str
+        The title of the application.
+
+    Returns
+    -------
+    DashProxy
+        The dash application.
+    """
     import dash_bootstrap_components as dbc
     from dash_extensions.enrich import (
         DashProxy,
@@ -129,8 +156,38 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 
 def interactive(func: F) -> F:
+    """
+    Define the interactive decorator.
+
+    Parameters
+    ----------
+    func : F
+        The function to be decorated.
+
+    Returns
+    -------
+    F
+        The decorated function.
+    """
+
     @wraps(func)
     def inner(*args: Any, **kwargs: Any) -> Any:
+        """
+        Inner function of the decorator.
+
+        Parameters
+        ----------
+        *args : Any
+            Arguments to be passed to the wrap function
+        **kwargs : Any
+            Keyword arguments to be passed to the wrap function.
+
+        Returns
+        -------
+        Any
+            If _api_mode is True, return immediatly.
+            Otherwise return the result of the function.
+        """
         if _api_mode:
             return
 

@@ -1,3 +1,20 @@
+#  noqa: D400
+"""
+# Run
+
+This module provides utilities to create a new run and get its attributes.
+
+## Contents
+    - from_path: Based on a path, return a new Run object.
+    - id: Get the hashed id of a Run object.
+    - path: Return the path of the Run.
+    - path: Set the the path of the Run.
+    - exists: Check if the run exists based on the internal path.
+    - add: Add a trial to the run.
+    - save: Save the run and its information.
+    - load: Load the run.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Union
 
@@ -97,6 +114,7 @@ class Run(AbstractRun, ABC):
 
     @property
     def path(self) -> Optional[Path]:
+        """Return the path of the Run."""
         return self._path
 
     @path.setter
@@ -259,6 +277,20 @@ class Run(AbstractRun, ABC):
             self.models[config_id] = model
 
     def save(self, path: Optional[Union[str, Path]] = None):
+        """
+        Save the run and its information.
+
+        Parameters
+        ----------
+        path : Optional[Union[str, Path]], optional
+            The path in which to save the run.
+            Default is None.
+
+        Raises
+        ------
+        RuntimeError
+            If the path is not specified.
+        """
         if path is None:
             raise RuntimeError("Please specify a path to save the trials.")
 
@@ -302,6 +334,15 @@ class Run(AbstractRun, ABC):
                 del self.models[config_id]
 
     def load(self, path: Optional[Union[str, Path]] = None) -> None:
+        """
+        Load the run.
+
+        Parameters
+        ----------
+        path : Optional[Union[str, Path]], optional
+            The path where the run to load is.
+            Default is None.
+        """
         self.reset()
 
         if path is None and self.path is None:

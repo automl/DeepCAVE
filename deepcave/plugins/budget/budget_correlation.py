@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# BudgetCorrelation
+
+This module provides utilities to visualize budget correlations.
+
+## Contents
+    - check_run_compatibility: Check if the runs are elligable for comparing.
+    - get_input_layout: Get the layout of the input.
+    - load_dependency_inputs: Load the dependency inputs.
+    - process: Calculate the correlations between the budgets.
+    - get_output_layout: Get the layout for the output.
+    - load_outputs: Create the output table and safe the image.
+"""
 from typing import Dict
 
 from collections import defaultdict
@@ -18,6 +32,39 @@ logger = get_logger(__name__)
 
 
 class BudgetCorrelation(DynamicPlugin):
+    """
+    This class can be used for visualizing the correlation of budgets.
+
+    Methods
+    -------
+    check_run_compatibility
+        Check if the runs are elligable for comparing.
+    get_input_layout
+        Get the layout of the input.
+    load_dependency_inputs
+        Load the dependency inputs.
+    process
+        Calculate the correlations between the budgets.
+    get_output_layout
+        Get the layout for the output.
+    load_outputs
+        Create the output table and safe the image.
+
+    Attributes
+    ----------
+    id
+        The identificator of the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representation of the plugin.
+    help
+        The path to the documentation of the plugin.
+    activate_run_selection
+        Defines wheter the run selection feature is active.
+        Default is True.
+    """
+
     id = "budget_correlation"
     name = "Budget Correlation"
     icon = "fas fa-coins"

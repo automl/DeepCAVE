@@ -1,3 +1,16 @@
+#  noqa: D400
+"""
+# Footprint
+
+This module provides utilities for creating a footprint of a model.
+It uses an MDS plot.
+
+## Contents
+    - calculate: Calculate the distances and trains the model.
+    - get_surface: Get surface of the MDS plot.
+    - get_points: Return the points of the MDS plot.
+"""
+
 from typing import List, Optional, Tuple, Union
 
 import numpy as np
@@ -20,6 +33,20 @@ logger = get_logger(__name__)
 
 
 class Footprint:
+    """
+    This class can train and create a footptint of a model.
+    It uses an MDS plot.
+
+    Methods
+    -------
+    calculate
+        Calculate the distances and trains the model.
+    get_surface
+        Get surface of the MDS plot.
+    get_points
+        Return the points of the MDS plot.
+    """
+
     def __init__(self, run: AbstractRun):  # noqa: D107
         if run.configspace is None:
             raise RuntimeError("The run needs to be initialized.")
@@ -65,7 +92,7 @@ class Footprint:
         exclude_configs: bool = False,
     ) -> None:
         """
-        Calculate the distances and trains the model.
+        Calculate the distances and train the model.
 
         Parameters
         ----------
