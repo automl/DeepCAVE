@@ -1,5 +1,6 @@
+#  noqa: D400
 """
-# Data Structures.
+# Data Structures
 
 This module can be used for updating one dictionary with another dictionary inplace.
 

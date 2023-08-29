@@ -33,7 +33,7 @@ from deepcave.utils.styled_plotty import (
 
 class FootPrint(StaticPlugin):
     """
-    This class visualizes the footprint of a configuartion.
+    Visualize the footprint of a configuartion.
 
     Methods
     -------

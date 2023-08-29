@@ -1,3 +1,13 @@
+#  noqa: D400
+"""
+# Docs
+
+This module provides a function to convert reStructuredText to MarkDown.
+
+## Contents
+    - rst_to_md: Convert a subset of reStructuredText to MarkDown.
+"""
+
 from __future__ import annotations
 
 import re

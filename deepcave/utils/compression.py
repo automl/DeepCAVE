@@ -1,3 +1,23 @@
+#  noqa: D400
+"""
+# Compression
+
+This module provides utilities for serializing and deserializing a dataframe from/to a string.
+
+## Classes
+    - Encoder: This class defines a custom JSON Encoder.
+
+## Constants
+    - JSON_DENSE_SEPARATORS = (",", ":")
+    - JSON_DEFAULT_SEPARATORS = (",", ": ")
+    - TYPE = TypeVar("TYPE")
+
+## Contents
+    - serilaize: Serialize a dataframe to a string.
+    - deserialize: Deserialize a dataframe from a string.
+    - default: Return the object either as list or als JSONEncoder.
+"""
+
 from typing import Any, Dict, List, TypeVar, Union
 
 import json
@@ -14,7 +34,29 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """Serialize a dataframe to a string."""
 
     class Encoder(json.JSONEncoder):
+        """
+        Define a custom JSON Encoder.
+
+        Methods
+        -------
+        default
+            Return the object either as list or als JSONEncoder.
+        """
+
         def default(self, obj: Any) -> Any:
+            """
+            Return the object either as list or als JSONEncoder.
+
+            Parameters
+            ----------
+            obj : Any
+                The object to be converted.
+
+            Returns
+            -------
+            Any
+                The converted object.
+            """
             if isinstance(obj, np.ndarray):
                 return obj.tolist()
             return json.JSONEncoder.default(self, obj)

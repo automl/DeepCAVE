@@ -25,7 +25,7 @@ from deepcave.runs.converters.deepcave import DeepCAVERun
 
 class Recorder:
     """
-    This class defines a Recorder for recording trial information.
+    Define a Recorder for recording trial information.
 
     Methods
     -------

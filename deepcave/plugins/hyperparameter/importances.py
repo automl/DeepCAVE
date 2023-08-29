@@ -1,3 +1,24 @@
+#  noqa: D400
+"""
+# Importances
+
+This module provides a plugin for the visualization of the importances.
+
+## Classes
+    - Importances: This class provides a plugin for the visualization of the importances.
+
+## Contents
+    - get_input_layout: Get the input layout.
+    - get_filter_layout: Get filtered layout of input.
+    - load_inputs: Load the inputs.
+    - load_dependency_inputs: Load the dependency inputs.
+    - process: Process the data.
+    - get_output_layout: Get the layout of the output.
+    - load_outputs: Load the outputs.
+    - get_mpl_output_layout: Get the mpl layout of the output.
+    - load_mpl_output: Load the mpl output.
+"""
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -15,6 +36,44 @@ from deepcave.utils.styled_plotty import get_color, save_image
 
 
 class Importances(StaticPlugin):
+    """
+    Provide a plugin for the visualization of the importances.
+
+    Methods
+    -------
+    get_input_layout
+        Get the input layout.
+    get_filter_layout
+        Get filtered layout of input.
+    load_inputs
+        Load the inputs.
+    load_dependency_inputs
+        Load the dependency inputs.
+    process
+        Process the data.
+    get_output_layout
+        Get the layout of the output.
+    load_outputs
+        Load the outputs.
+    get_mpl_output_layout
+        Get the mpl layout of the output.
+    load_mpl_output
+        Load the mpl output.
+
+    Attributes
+    ----------
+    id
+        The idetificator of the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representation of the plugin.
+    help
+        The path to the documentation of the plugin.
+    activate_run_selection
+        Wheter the run selection feature is active.
+    """
+
     id = "importances"
     name = "Importances"
     icon = "far fa-star"

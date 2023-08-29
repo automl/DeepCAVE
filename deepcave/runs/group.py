@@ -30,7 +30,7 @@ from deepcave.utils.hash import string_to_hash
 
 class Group(AbstractRun):
     """
-    This class can group and manage a group of abstract runs.
+    Can group and manage a group of abstract runs.
 
     Methods
     -------

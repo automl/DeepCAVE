@@ -1,3 +1,21 @@
+#  noqa: D400
+"""
+# StyledPlot
+
+This module provides utilities to customize functions from the matplotlib.
+Plots can be created and different parameters of the plots can be defined.
+
+## Contents
+    - figure: Create a new figure using the input values.
+    - save_figure: Save the figure/plot at the given filename.
+    - render: Render the Styled Plot for displaying.
+    - xlim: Set the x-axis limits with a margin of a matplot plot.
+    - ylim: Set the y-axis limit of a matplot plot.
+    - boxplot: Create a boxplot on a matplot plot.
+    - legend: Customize and add a legend to a matplot plot.
+    - get_color: Get the color from color palette based on the given ID.
+"""
+
 from distutils.spawn import find_executable
 
 import matplotlib
@@ -23,6 +41,25 @@ class StyledPlot:
     Overwrites default settings from matplotlib.pyplot.
 
     If a function is not overwritten, the default function will be used.
+
+    Methods
+    -------
+    figure
+        Create a new figure using the input values.
+    save_figure
+        Save the figure/plot at the given filename.
+    render
+        Render the Styled Plot for displaying.
+    xlim
+        Set the x-axis limits with a margin of a matplot plot.
+    ylim
+        Set the y-axis limit of a matplot plot.
+    boxplot
+        Create a boxplot on a matplot plot.
+    legend
+        Customize and add a legend to a matplot plot.
+    get_color
+        Get the color from color palette based on the given ID.
     """
 
     def __init__(self):  # noqa: D107
@@ -49,6 +86,26 @@ class StyledPlot:
         self.plt = plt
 
     def figure(self, cols=1, rows=1, dpi=200):
+        """
+        Create a new figure using the input values.
+
+        Parameters
+        ----------
+        cols
+            The number of the columns.
+            Default is 1.
+        rows
+            The number of the rows.
+            Default is 1.
+        dpi
+            The dots per inches.
+            Default is 200.
+
+        Returns
+        -------
+        f
+            The figure created with the input information.
+        """
         # Clean all
         self.plt.cla()
         self.plt.clf()
@@ -71,6 +128,13 @@ class StyledPlot:
         self.plt.close()
 
     def render(self):
+        """
+        Render the Styled Plot for displaying.
+
+        Returns
+        -------
+        The rendered image.
+        """
         # Create a virtual file which matplotlib can use to save the figure
         buffer = io.BytesIO()
         self.plt.savefig(buffer, dpi=400, bbox_inches="tight")

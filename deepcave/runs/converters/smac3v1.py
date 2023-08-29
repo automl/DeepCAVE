@@ -23,7 +23,7 @@ from deepcave.utils.hash import file_to_hash
 
 class SMAC3v1Run(Run):
     """
-    This class defines a SMAC3v1 run object.
+    Define a SMAC3v1 run object.
 
     It also provides utilities to hash it and get its latest change.
 

@@ -1,3 +1,21 @@
+#  noqa: D400
+"""
+# CostOverTime
+
+This module provides utilities for visualizing the cost over time.
+It includes a plugin class.
+
+## Contents
+    - check_runs_compatibility: Check if the runs are elligable for comparing.
+    - check_equality: Check if the runs are equal.
+    - get_input_layout: Get the layout of the input.
+    - get_filter_layout: Get filtered layout for input.
+    - load_inputs: Load the inputs.
+    - process: Process the run and the inputs.
+    - get_output_layout: Get the output layout.
+    - load_outputs: Create the figure and safe the image.
+"""
+
 from typing import List
 
 import dash_bootstrap_components as dbc
@@ -18,6 +36,40 @@ from deepcave.utils.styled_plotty import (
 
 
 class CostOverTime(DynamicPlugin):
+    """
+    A plugin to provide a visualization for the cost over time.
+
+    Methods
+    -------
+    check_runs_compatibility
+        Check if the runs are elligable for comparing.
+    check_equality
+        Check if the runs are equal.
+    get_input_layout
+        Get the layout of the input.
+    get_filter_layout
+        Get filtered layout for input.
+    load_inputs
+        Load the inputs.
+    process
+        Process the run and the inputs.
+    get_output_layout
+        Get the output layout.
+    load_outputs
+        Create the figure and safe the image.
+
+    Attributes
+    ----------
+    id
+        The identificator of the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representing the plugin.
+    help
+        The path to the documentation of the plugin.
+    """
+
     id = "cost_over_time"
     name = "Cost Over Time"
     icon = "fas fa-chart-line"

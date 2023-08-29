@@ -1,3 +1,16 @@
+#  noqa: D400
+"""
+# SidebarLayout
+
+This module defines a plugin to define and visualize the Sidebar Layout.
+
+## Contents
+    - register_callbacks: To get and register any callbacks.
+        - update_navigation_items: Update the navigation items.
+        - delete_job: Delete a job from the queue.
+        - update_queue_info: Update the information of the queue.
+"""
+
 from typing import Dict, List, Tuple, Union
 
 import dash_bootstrap_components as dbc
@@ -12,6 +25,21 @@ from deepcave.plugins import Plugin
 
 
 class SidebarLayout(Layout):
+    """
+    Customize the Sidebar Layout.
+
+    Methods
+    -------
+    register_callbacks
+        To get and register any callbacks.
+    update_navigation_items
+        Update the navigation items.
+    delete_job
+        Delete a job from the queue.
+    update_queue_info
+        Update the information of the queue.
+    """
+
     def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:  # noqa: D107
         super().__init__()
         self.plugins = categorized_plugins

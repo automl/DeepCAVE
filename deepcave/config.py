@@ -23,7 +23,7 @@ from deepcave.runs.run import Run
 
 class Config:
     """
-    This class describes the config object.
+    Describe the config object.
 
     It also defines the constants of the config object.
 

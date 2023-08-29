@@ -34,7 +34,7 @@ from deepcave.utils.util import get_latest_change
 
 class Overview(DynamicPlugin):
     """
-    This class visualizes an overall overview of a run.
+    Visualize an overall overview of a run.
 
     Methods
     -------

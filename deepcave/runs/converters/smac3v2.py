@@ -2,7 +2,7 @@
 """
 # SMAC3v2Run
 
-his module provides utilities to create a SMAC3v2 run.
+This module provides utilities to create a SMAC3v2 run.
 It provides utilities to hash, as well a get the latest change of the object.
 
 ## Contents
@@ -24,7 +24,7 @@ from deepcave.utils.hash import file_to_hash
 
 class SMAC3v2Run(Run):
     """
-    This class defines a SMAC3v2 run object.
+    Define a SMAC3v2 run object.
 
     It also provides utilities to hash it and get its latest change.
 

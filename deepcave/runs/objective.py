@@ -25,7 +25,7 @@ from deepcave.runs.exceptions import NotMergeableError
 @dataclass
 class Objective:
     """
-    This class converts and creates objectives.
+    Convert and creates objectives.
 
     Methods
     -------
@@ -161,6 +161,7 @@ class Objective:
         Merge two Objectives with its attributes.
 
         Fit the attributes of self to the attributes of the other Objective.
+
         Parameters
         ----------
         other : Any

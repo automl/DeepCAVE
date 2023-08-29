@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# fANOVA
+
+This module provides a tool for assessing the importance of an algorithms hyperparameters.
+
+## Classes
+    - fANOVA: Calculate and provide midpoints and sizes.
+
+## Contents
+    - calculate: Get the data wrt budget and trains the forest on the encoded data.
+    - get_importances: Return the importance scores from the passed hyperparameter names.
+"""
+
 from typing import Dict, List, Optional, Tuple, Union
 
 import itertools as it
@@ -15,6 +29,13 @@ class fANOVA:
     Calculate and provide midpoints and sizes.
 
     They are generated from the forest's split values in order to get the marginals.
+
+    Methods
+    -------
+    calculate
+        Get the data wrt budget and trains the forest on the encoded data.
+    get_importances
+        Return the importance scores from the passed hyperparameter names.
     """
 
     def __init__(self, run: AbstractRun):  # noqa: D107
@@ -172,7 +193,7 @@ class fANOVA:
     '''
     def marginal_mean_variance_for_values(self, dimlist, values_to_predict):
         """
-        Returns the marginal of selected parameters for specific values
+        Return the marginal of selected parameters for specific values
 
         Parameters
         ----------
@@ -195,7 +216,7 @@ class fANOVA:
 
     def get_most_important_pairwise_marginals(self, params=None, n=10):
         """
-        Returns the n most important pairwise marginals from the whole ConfigSpace.
+        Return the n most important pairwise marginals from the whole ConfigSpace.
 
         Parameters
         ----------
@@ -242,7 +263,7 @@ class fANOVA:
 
     def get_triple_marginals(self, params=None):
         """
-        Returns the n most important pairwise marginals from the whole ConfigSpace
+        Return the n most important pairwise marginals from the whole ConfigSpace
 
         Parameters
         ----------

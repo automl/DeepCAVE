@@ -1,3 +1,32 @@
+#  noqa: D400
+"""
+# Custom Queue
+
+This module provides a class defining a queue for job handling.
+
+## Classes
+    - Queue: This class defines all components for a job queue.
+
+## Contents
+    - ready: Check if the queue object is ready.
+    - get_worker: Retrieve a Worker from a name.
+    - get_workers: Get the workers in the queue.
+    - is_processed: Check if the job is or was processed.
+    - is_running: Check if the job is running.
+    - is_pending: Check if the job is pending in a queue.
+    - is_finished: Check if the job is finished.
+    - has_failed: Check if a job has failed in a registry.
+    - get_job: Get the job fitting the given job ID.
+    - get_jobs: Retrieve list of jobs from the registry.
+    - get_running_jobs: Get the running jobs in the registry.
+    - get_pending_jobs: Get the pending jobs in the registry.
+    - get_finished_jobs: Get the finished jobs in the registry.
+    - delete_job: Delete a job from the queue. If no job_id is given, delete all jobs.
+    - remove_job: Remove a job from the registry. If no job_id is given, remove all.
+    - delete_jobs: Delete the jobs in the queue.
+    - enqueue : Add a job for processing to the queue.
+"""
+
 from typing import Any, Callable, Dict, List
 
 import redis
@@ -13,11 +42,63 @@ logger = get_logger(__name__)
 
 
 class Queue:
+    """
+    Define all components for a job queue.
+
+    Methods
+    -------
+    ready
+        Check if the queue object is ready.
+    get_worker
+        Retrieve a Worker from a name.
+    get_workers
+        Get the workers in the queue.
+    is_processed
+        Check if the job is or was processed.
+    is_running
+        Check if the job is running.
+    is_pending
+        Check if the job is pending in a queue.
+    is_finished
+        Check if the job is finished.
+    has_failed
+        Check if a job has failed in a registry.
+    get_job
+        Get the job fitting the given job ID.
+    get_jobs
+        Retrieve list of jobs from the registry.
+    get_running_jobs
+        Get the running jobs in the registry.
+    get_pending_jobs
+        Get the pending jobs in the registry.
+    get_finished_jobs
+        Get the finished jobs in the registry.
+    delete_job
+        Delete a job from the queue. If no job_id is given, delete all jobs.
+    remove_job
+        Remove a job from the registry. If no job_id is given, remove all.
+    delete_jobs
+        Delete the jobs in the queue.
+    enqueue
+        Add a job for processing to the queue.
+    """
+
     def __init__(self, address: str, port: int) -> None:  # noqa: D107
         self._connection = redis.from_url(address + ":" + str(port))
         self._queue = _Queue("high", connection=self._connection, default_timeout=-1)
 
     def ready(self) -> bool:
+        """
+        Check if the queue object is ready.
+
+        Check if there are already workers in use.
+
+        Returns
+        -------
+        bool
+            True, if the queue is ready.
+            Otherwise False.
+        """
         # Check if at least one worker is in use:
         workers = self.get_workers()
 
@@ -233,6 +314,17 @@ class Queue:
         """
 
         def remove_jobs(registry: BaseRegistry, job_id: str = None) -> None:
+            """
+            Remove a job from the registry. If no job_id is given, remove all.
+
+            Parameters
+            ----------
+            registry : BaseRegistry
+                The registry from where to remove the job.
+            job_id: str, optional
+                The identificator of the job to be removed.
+                Default is None.
+            """
             if job_id is not None:
                 try:
                     registry.remove(job_id, delete_job=True)

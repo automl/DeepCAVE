@@ -1,3 +1,13 @@
+#  noqa: D400
+"""
+# Utils
+
+This module provides a utility to get the types of the hyperparameters.
+
+## Contents
+    - get_types: Return the types of the hyperparameters.
+"""
+
 import typing
 
 import numpy as np

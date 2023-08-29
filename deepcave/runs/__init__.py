@@ -75,7 +75,7 @@ from deepcave.utils.logs import get_logger
 
 class AbstractRun(ABC):
     """
-    This class can create, handle and get information of an abstract run.
+    Can create, handle and get information of an abstract run.
 
     Methods
     -------

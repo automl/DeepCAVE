@@ -13,7 +13,7 @@ from typing import Optional, Tuple
 
 
 class Notification:
-    """This class can create, update and reset a notification."""
+    """Can create, update and reset a notification."""
 
     def __init__(self) -> None:  # noqa: D107
         self._update_required = False

@@ -1,3 +1,22 @@
+#  noqa: D400
+"""
+# ConfiguartionCube
+
+This module provides utilities for visualizing and creating the configruation cube.
+
+## Classes
+    - ConfigurationCube: This class provides a plugin for visualizing the configuration cube.
+
+## Contents
+    - get_input_layout: Get the input layout.
+    - get_filter_layout: Get filtered layout of input.
+    - load_inputs: Load the inputs.
+    - load_dependency_inputs: Load the dependency inputs.
+    - process: Process the data.
+    - get_output_layout: Get the layout of the output.
+    - load_outputs: Load the outputs.
+"""
+
 from typing import Dict, Tuple
 
 import dash_bootstrap_components as dbc
@@ -28,6 +47,40 @@ logger = get_logger(__name__)
 
 
 class ConfigurationCube(DynamicPlugin):
+    """
+    Provide a plugin for visualizing the configuration cube.
+
+    Methods
+    -------
+    get_input_layout
+        Get the input layout.
+    get_filter_layout
+        Get filtered layout of input.
+    load_inputs
+        Load the inputs.
+    load_dependency_inputs
+        Load the dependency inputs.
+    process
+        Process the data.
+    get_output_layout
+        Get the layout of the output.
+    load_outputs
+        Load the outputs.
+
+    Attributes
+    ----------
+    id
+        The identificator of the plugin.
+    name
+        The name of the plugin.
+    icon
+        The icon representation of the plugin.
+    activate_run_selection
+        Whether the run selection feature is active.
+    help
+        The path to the documentation of the plugin.
+    """
+
     id = "ccube"
     name = "Configuration Cube"
     icon = "fas fa-cube"

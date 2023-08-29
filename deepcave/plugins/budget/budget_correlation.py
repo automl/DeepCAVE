@@ -33,7 +33,7 @@ logger = get_logger(__name__)
 
 class BudgetCorrelation(DynamicPlugin):
     """
-    This class can be used for visualizing the correlation of budgets.
+    Can be used for visualizing the correlation of budgets.
 
     Methods
     -------

@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# LPI
+
+This module provides utilties to calculate the local parameter importance.
+
+## Classes
+    - LIP: This class calculates the local parameter importance.
+
+## Contents
+    - calculate: Prepare the data and trains a RandomForest model.
+    - get_importances: Return the importances.
+"""
+
 from typing import Dict, List, Optional, Tuple, Union
 
 from random import random
@@ -17,6 +31,17 @@ from deepcave.runs.objective import Objective
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
 class LPI:
+    """
+    Calculate the local parameter importance.
+
+    Methods
+    -------
+    calculate
+        Prepare the data and trains a RandomForest model.
+    get_importances
+        Return the importances.
+    """
+
     def __init__(self, run: AbstractRun):  # noqa: D107
         self.run = run
         self.cs = run.configspace

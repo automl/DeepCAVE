@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# MainLayout
+
+This module provides and defines the visualization of the main layout.
+
+## Classes
+    - MainLayout: This class defines and provides the main layout.
+
+## Contents
+    - register_callbacks: Register the callbacks.
+        - display_page: Display the page and return the plugin.
+"""
+
 from typing import Dict, List
 
 from urllib.parse import urlparse
@@ -18,6 +32,17 @@ from deepcave.utils.dash import alert
 
 
 class MainLayout(Layout):
+    """
+    Define and provides the main layout.
+
+    Methods
+    -------
+    register_callbacks
+        Register the callbacks.
+    display_page
+        Display the page and return the plugin.
+    """
+
     def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):  # noqa: D107
         super().__init__()
         self.plugins = {}

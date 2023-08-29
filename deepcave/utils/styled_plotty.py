@@ -1,7 +1,7 @@
 """
 # Styled Plotty.
 
-This module provides utilities for styling and customizing different plots.
+This module provides utilities for styling and customizing different plots with plotly.
 For this, it uses plotly as well as dash.
 
 ## Contents

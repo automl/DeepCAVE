@@ -11,7 +11,6 @@ It can be updated in content, color as well as visibility.
 ## Contents
     - register_callbacks: Updates notification alert display
         - update_alert: Updates the notification
-    - __call__: Generates notification alert
 """
 
 from typing import List, Tuple, Union
@@ -36,8 +35,6 @@ class NotificationLayout(Layout):
     -------
     register_callbacks
         Register callback for updating notification alert.
-    __call__
-        Generate notification alert component.
     """
 
     def __init__(self) -> None:  # noqa: D107

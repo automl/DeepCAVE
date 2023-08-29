@@ -12,7 +12,7 @@ from enum import IntEnum
 
 class Status(IntEnum):
     """
-    This class represents the status of a run as an Enum.
+    Represent the status of a run as an Enum.
 
     Methods
     -------

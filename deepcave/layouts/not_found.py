@@ -17,7 +17,7 @@ from deepcave.layouts import Layout
 
 class NotFoundLayout(Layout):
     """
-    This class defines a custom "NotFound" layout.
+    Define a custom "NotFound" layout.
 
     Methods
     -------

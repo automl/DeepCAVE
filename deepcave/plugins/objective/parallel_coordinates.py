@@ -39,7 +39,7 @@ logger = get_logger(__name__)
 
 class ParallelCoordinates(StaticPlugin):
     """
-    This class can be used for visualizing the parallel coordinates.
+    Can be used for visualizing the parallel coordinates.
 
     Methods
     -------

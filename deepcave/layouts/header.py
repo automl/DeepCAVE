@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# Header
+
+This module defines the layout for visualizing the header.
+
+## Classes
+    - HeaderLayout: This class provides the header and its layout.
+
+## Contents
+    - register_callbacks: Register the callbacks.
+        - update_matplotlib_mode: Update the matplotlib mode.
+"""
+
+
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
@@ -7,6 +22,17 @@ from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
+    """
+    Provide the header and its layout.
+
+    Methods
+    -------
+    register_callbacks
+        Register the callbacks.
+    update_matplotlib_mode
+        Update the matplotlib mode.
+    """
+
     def register_callbacks(self) -> None:  # noqa: D102
         super().register_callbacks()
 

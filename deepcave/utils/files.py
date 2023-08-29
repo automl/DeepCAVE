@@ -3,7 +3,7 @@
 """
 # Files
 
-Thie module provides a utility to create directories from a filename.
+This module provides a utility to create directories from a filename.
 
 ## Contents
     - make_dirs: Create a directory.

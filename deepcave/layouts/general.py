@@ -1,3 +1,4 @@
+#  noqa: D400
 """
 # GeneralLayout
 
@@ -5,7 +6,6 @@ This module provides the General Layout class.
 It handles different callbacks of the layout.
 
 ## Contents
-    - callback: 
     - get_converter_text: Get the text for the available run converters.
 """
 
@@ -28,6 +28,8 @@ from deepcave.utils.util import short_string
 
 
 class GeneralLayout(Layout):
+    """Provide different utilities to handle callbacks for the layout."""
+
     def register_callbacks(self) -> None:  # noqa: D102
         self._callback_working_directory_changed()
         self._callback_display_available_runs()
@@ -355,7 +357,19 @@ class GeneralLayout(Layout):
 
     @staticmethod
     def get_converter_text(converters: List[Type[Run]]) -> html.Div:
-        """ """
+        """
+        Get the text for the available run converters.
+
+        Parameters
+        ----------
+        converters : List[Type[Run]]
+            The converters to be put into text.
+
+        Returns
+        -------
+        html.Div
+            The text for the input converters.
+        """
         converter_text = []
         for converter in converters:
             converter_text += [converter.prefix]

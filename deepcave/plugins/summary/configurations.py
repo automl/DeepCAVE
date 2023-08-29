@@ -40,7 +40,7 @@ from deepcave.utils.url import create_url
 
 class Configurations(DynamicPlugin):
     """
-    This class visualizes the characteristics of a configuration.
+    Visualize the characteristics of a configuration.
 
     Methods
     -------

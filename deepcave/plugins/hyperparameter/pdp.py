@@ -36,7 +36,7 @@ MAX_SHOWN_SAMPLES = 100
 
 class PartialDependencies(StaticPlugin):
     """
-    This class generates a PDP for visualizing hyperparameter impacts.
+    Generate a PDP for visualizing hyperparameter impacts.
 
     Methods
     -------

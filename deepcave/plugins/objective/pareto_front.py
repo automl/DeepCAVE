@@ -37,7 +37,7 @@ from deepcave.utils.styled_plotty import (
 
 class ParetoFront(DynamicPlugin):
     """
-    This class generates an interactive Pareto Front visualization.
+    Generate an interactive Pareto Front visualization.
 
     Methods
     -------

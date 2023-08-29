@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# Dynamic
+
+This module provides a plugin class for a dynamic plugin.
+
+## Classes
+    - DynamicPlugin: This class provides a dynamic plugin object.
+
+## Contents
+    - register_callbacks: Register callbacks and updates from inputs.
+        - plugin_output_update: Update the outputs from the inputs.
+"""
+
 from abc import ABC
 from typing import List
 
@@ -9,6 +23,17 @@ from deepcave.plugins import Plugin
 
 
 class DynamicPlugin(Plugin, ABC):
+    """
+    Provide a dynamic plugin object.
+
+    Methods
+    -------
+    register_callbacks
+        Register callbacks and updates from inputs.
+    plugin_output_update
+        Update the outputs from the inputs.
+    """
+
     use_cache = True
 
     def __init__(self) -> None:  # noqa: D107
@@ -31,9 +56,16 @@ class DynamicPlugin(Plugin, ABC):
         @app.callback(outputs, inputs)
         def plugin_output_update(_, *inputs_list):  # type: ignore
             """
+            Update the outputs from the inputs.
+
             Parameters
             ----------
-                *inputs_list: Values from user.
+                *inputs_list
+                    Values from user.
+
+            Returns
+            -------
+            The raw outputs.
             """
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.

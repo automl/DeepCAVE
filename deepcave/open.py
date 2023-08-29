@@ -1,3 +1,16 @@
+#  noqa: D400
+"""
+# Open
+
+This module opens the browser after a given delay.
+
+## Constants
+    - DELAY = 4
+
+## Contents
+    - open_browser: Open the link in the browser.
+"""
+
 import sys
 import webbrowser
 from threading import Timer

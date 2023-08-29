@@ -19,7 +19,7 @@ from deepcave.utils.logs import get_logger
 
 class Layout(ABC):
     """
-    This class is a foundation for creating layouts.
+    A foundation for creating layouts.
 
     Methods
     -------
