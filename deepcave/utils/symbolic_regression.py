@@ -1,5 +1,5 @@
-import sympy
 import numpy as np
+import sympy
 from gplearn import functions
 from gplearn.functions import make_function
 
@@ -14,20 +14,10 @@ def exp(x):
 def get_function_set():
     exp_func = make_function(function=exp, arity=1, name="exp")
 
-    function_set = [
-        "add",
-        "sub",
-        "mul",
-        "div",
-        "sqrt",
-        "log",
-        "sin",
-        "cos",
-        "abs",
-        exp_func
-    ]
+    function_set = ["add", "sub", "mul", "div", "sqrt", "log", "sin", "cos", "abs", exp_func]
 
     return function_set
+
 
 def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.expr:
     """
@@ -68,14 +58,13 @@ def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.
 
     symb_str = str(symb._program)
 
-
     converter = {
         "sub": lambda x, y: x - y,
         "div": lambda x, y: x / y,
         "mul": lambda x, y: x * y,
         "add": lambda x, y: x + y,
         "neg": lambda x: -x,
-        "pow": lambda x, y: x**y
+        "pow": lambda x, y: x**y,
     }
 
     if symb._program.length_ > 300:

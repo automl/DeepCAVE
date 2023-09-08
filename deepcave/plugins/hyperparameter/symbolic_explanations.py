@@ -2,8 +2,8 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
-from pyPDP.algorithms.pdp import PDP
 from gplearn.genetic import SymbolicRegressor
+from pyPDP.algorithms.pdp import PDP
 
 from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
@@ -11,7 +11,7 @@ from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
-from deepcave.utils.symbolic_regression import get_function_set, convert_symb
+from deepcave.utils.symbolic_regression import convert_symb, get_function_set
 
 GRID_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
@@ -24,7 +24,7 @@ class SymbolicExplanations(StaticPlugin):
     id = "symbolic_explanations"
     name = "Symbolic Explanations"
     icon = "fas fa-subscript"
-    help = "docs/plugins/partial_dependencies.rst" # TODO
+    help = "docs/plugins/partial_dependencies.rst"  # TODO
     activate_run_selection = True
 
     @staticmethod
@@ -129,8 +129,8 @@ class SymbolicExplanations(StaticPlugin):
 
     def load_inputs(self):
         return {
-            #"show_confidence": {"options": get_select_options(binary=True), "value": "true"},
-            #"show_ice": {"options": get_select_options(binary=True), "value": "true"},
+            # "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
+            # "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, run, previous_inputs, inputs):
@@ -234,11 +234,7 @@ class SymbolicExplanations(StaticPlugin):
 
         y_symbolic = symb_model.predict(x).tolist()
 
-        return {
-            "x": x,
-            "y": y_symbolic,
-            "expr": str(conv_expr)
-        }
+        return {"x": x, "y": y_symbolic, "expr": str(conv_expr)}
 
     @staticmethod
     def get_output_layout(register):
@@ -313,7 +309,7 @@ class SymbolicExplanations(StaticPlugin):
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
-                    title=expr
+                    title=expr,
                 )
             )
 
