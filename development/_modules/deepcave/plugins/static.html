@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,18 +21,18 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=2eb4fb78" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/documentation_options.js?v=a381bfef"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -696,12 +696,15 @@
 <span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">create_url</span>
 
 
-<div class="viewcode-block" id="PluginState"><a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.PluginState">[docs]</a><span class="k">class</span> <span class="nc">PluginState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PluginState">
+<a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.PluginState">[docs]</a>
+<span class="k">class</span> <span class="nc">PluginState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNSET</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">READY</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">NEEDS_PROCESSING</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">PROCESSING</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">FAILED</span> <span class="o">=</span> <span class="mi">3</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_process</span><span class="p">(</span>
@@ -714,7 +717,9 @@
         <span class="k">raise</span>
 
 
-<div class="viewcode-block" id="StaticPlugin"><a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin">[docs]</a><span class="k">class</span> <span class="nc">StaticPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="StaticPlugin">
+<a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin">[docs]</a>
+<span class="k">class</span> <span class="nc">StaticPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation with queue. Made for time-consuming tasks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -730,12 +735,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_reset_button</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_blocked</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="StaticPlugin.register_callbacks"><a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin.register_callbacks">[docs]</a>    <span class="nd">@interactive</span>
+<div class="viewcode-block" id="StaticPlugin.register_callbacks">
+<a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin.register_callbacks">[docs]</a>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_callbacks</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_inputs_changed</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_loop_update_status_label</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_loop_trigger_main_loop</span><span class="p">()</span></div>
+
 
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">_callback_inputs_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -972,7 +980,9 @@
     <span class="k">def</span> <span class="nf">_get_job_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">run_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">inputs_key</span><span class="si">}</span><span class="s2">&quot;</span>
 
-<div class="viewcode-block" id="StaticPlugin.__call__"><a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin.__call__">[docs]</a>    <span class="nd">@interactive</span>
+<div class="viewcode-block" id="StaticPlugin.__call__">
+<a class="viewcode-back" href="../../../api/deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin.__call__">[docs]</a>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
         <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 
@@ -984,7 +994,9 @@
         <span class="p">]</span>
         <span class="n">components</span> <span class="o">+=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">components</span></div></div>
+        <span class="k">return</span> <span class="n">components</span></div>
+</div>
+
 </pre></div>
 
               </div>
@@ -1013,7 +1025,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.0.1. Template is modified version of <a
+7.2.5. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

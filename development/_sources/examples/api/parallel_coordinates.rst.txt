@@ -58,7 +58,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.000 seconds)
+   **Total running time of the script:** (0 minutes 0.000 seconds)
 
 
 .. _sphx_glr_download_examples_api_parallel_coordinates.py:

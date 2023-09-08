@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,18 +21,18 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=2eb4fb78" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=a381bfef"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -706,7 +706,9 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Plugin"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin">[docs]</a><span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="n">Layout</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="Plugin">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin">[docs]</a>
+<span class="k">class</span> <span class="nc">Plugin</span><span class="p">(</span><span class="n">Layout</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for all plugins.</span>
 
@@ -761,7 +763,9 @@
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Plugin.get_base_url"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_base_url">[docs]</a>    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Plugin.get_base_url">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_base_url">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">get_base_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -776,7 +780,10 @@
 
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;http://</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_ADDRESS</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">DASH_PORT</span><span class="si">}</span><span class="s2">/plugins/</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="Plugin.check_run_compatibility"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.check_run_compatibility">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_run_compatibility">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">check_run_compatibility</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks if a run is compatible with this plugin. If a plugin is not compatible,</span>
@@ -798,7 +805,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="Plugin.check_runs_compatibility"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_runs_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Plugin.check_runs_compatibility">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.check_runs_compatibility">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This function is needed if all selected runs need something in common</span>
 <span class="sd">        (e.g. budget or objective). Since this function is called before the layout is created,</span>
@@ -816,7 +826,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="Plugin.register_input"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">[docs]</a>    <span class="k">def</span> <span class="nf">register_input</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Plugin.register_input">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">[docs]</a>
+    <span class="k">def</span> <span class="nf">register_input</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span>
@@ -864,7 +877,10 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Plugin.register_output"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">[docs]</a>    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Plugin.register_output">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">[docs]</a>
+    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">attributes</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">mpl</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -897,6 +913,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">get_internal_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
 
@@ -906,7 +923,9 @@
     <span class="k">def</span> <span class="nf">get_internal_output_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">-output&quot;</span>
 
-<div class="viewcode-block" id="Plugin.register_callbacks"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">[docs]</a>    <span class="nd">@interactive</span>
+<div class="viewcode-block" id="Plugin.register_callbacks">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">[docs]</a>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers basic callbacks for the plugin. Following callbacks are registered:</span>
@@ -1122,6 +1141,7 @@
                         <span class="k">pass</span>
 
                 <span class="k">return</span> <span class="kc">None</span></div>
+
 
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">_inputs_changed</span><span class="p">(</span>
@@ -1419,7 +1439,9 @@
 
         <span class="k">return</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_runs</span><span class="p">(</span><span class="n">include_groups</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Plugin.__call__"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>    <span class="nd">@interactive</span>
+<div class="viewcode-block" id="Plugin.__call__">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.__call__">[docs]</a>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_button</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the components for the plugin. Basically, all blocks and elements of the plugin</span>
@@ -1609,7 +1631,10 @@
 
         <span class="k">return</span> <span class="n">components</span></div>
 
-<div class="viewcode-block" id="Plugin.get_run_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_run_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.get_run_input_layout">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_run_input_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">get_run_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Component</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1635,7 +1660,10 @@
             <span class="p">]</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Plugin.load_run_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.load_run_inputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">load_run_inputs</span><span class="p">(</span>
         <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">],</span>
@@ -1694,7 +1722,10 @@
             <span class="p">}</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="Plugin.get_selected_runs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">[docs]</a>    <span class="nd">@interactive</span>
+
+<div class="viewcode-block" id="Plugin.get_selected_runs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_selected_runs">[docs]</a>
+    <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">get_selected_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parses selected runs from inputs.</span>
@@ -1737,7 +1768,10 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_runs</span></div>
 
-<div class="viewcode-block" id="Plugin.load_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Plugin.load_inputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_inputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.</span>
 <span class="sd">        This method is necessary to pre-load contents for the inputs. So, if the plugin is</span>
@@ -1751,7 +1785,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{}</span></div>
 
-<div class="viewcode-block" id="Plugin.load_dependency_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_dependency_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span>
+
+<div class="viewcode-block" id="Plugin.load_dependency_inputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_dependency_inputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">run</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]]],</span>
         <span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
@@ -1782,7 +1819,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">inputs</span></div>
 
-<div class="viewcode-block" id="Plugin.get_input_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.get_input_layout">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Layout for the input block.</span>
@@ -1799,7 +1839,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Plugin.get_filter_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_filter_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.get_filter_layout">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_filter_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Layout for the filter block.</span>
@@ -1816,7 +1859,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Plugin.get_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.get_output_layout">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_output_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span>
         <span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]]:</span>
@@ -1835,7 +1881,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Plugin.get_mpl_output_layout"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_mpl_output_layout">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.get_mpl_output_layout">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.get_mpl_output_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span>
         <span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]],</span> <span class="nb">str</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Component</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]]]:</span>
@@ -1854,7 +1903,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Plugin.load_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.load_outputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span>
         <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
@@ -1886,7 +1938,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Plugin.load_mpl_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_mpl_outputs">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.load_mpl_outputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.load_mpl_outputs">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span>
         <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AbstractRun</span><span class="p">]],</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
@@ -1918,7 +1973,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Plugin.process"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.process">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Plugin.process">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.process">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns raw data based on a run and input data.</span>
@@ -1946,7 +2004,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{}</span></div>
 
-<div class="viewcode-block" id="Plugin.generate_outputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_outputs">[docs]</a>    <span class="nd">@classmethod</span>
+
+<div class="viewcode-block" id="Plugin.generate_outputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_outputs">[docs]</a>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">generate_outputs</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]],</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
@@ -1991,7 +2052,10 @@
 
             <span class="k">return</span> <span class="n">outputs</span></div>
 
-<div class="viewcode-block" id="Plugin.generate_inputs"><a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">generate_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Plugin.generate_inputs">
+<a class="viewcode-back" href="../../api/deepcave.plugins.html#deepcave.plugins.Plugin.generate_inputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generates inputs for the `process` and `load_outputs` required for api mode.</span>
 <span class="sd">        The arguments are validated against the input schema.</span>
@@ -2037,7 +2101,9 @@
                 <span class="sa">f</span><span class="s2">&quot;Missing inputs: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">set</span><span class="p">(</span><span class="n">inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">inputs</span></div></div>
+        <span class="k">return</span> <span class="n">inputs</span></div>
+</div>
+
 </pre></div>
 
               </div>
@@ -2066,7 +2132,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.0.1. Template is modified version of <a
+7.2.5. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
