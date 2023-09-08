@@ -5,6 +5,9 @@ jsonlines>=3.0.0
 pandas>=1.3.4
 numpy>=1.22.2
 matplotlib>=3.5.1
+seaborn>=0.12.2
+gplearn>=0.4.2
+sympy>=1.12
 pyyaml
 
 # AutoML packages

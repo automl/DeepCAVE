@@ -3,6 +3,7 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
+from gplearn.genetic import SymbolicRegressor
 
 from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
@@ -10,18 +11,20 @@ from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
+from deepcave.utils.symbolic_regression import get_function_set, convert_symb
 
 GRID_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
 MAX_SHOWN_SAMPLES = 100
+PARSIMONY_COEFFICIENT = 0.0001
 
 
-class PartialDependencies(StaticPlugin):
-    id = "pdp"
-    name = "Partial Dependencies"
-    icon = "fas fa-grip-lines"
-    help = "docs/plugins/partial_dependencies.rst"
+class SymbolicExplanations(StaticPlugin):
+    id = "symbolic_explanations"
+    name = "Symbolic Explanations"
+    icon = "fas fa-subscript"
+    help = "docs/plugins/partial_dependencies.rst" # TODO
     activate_run_selection = True
 
     @staticmethod
@@ -126,8 +129,8 @@ class PartialDependencies(StaticPlugin):
 
     def load_inputs(self):
         return {
-            "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
-            "show_ice": {"options": get_select_options(binary=True), "value": "true"},
+            #"show_confidence": {"options": get_select_options(binary=True), "value": "true"},
+            #"show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
     def load_dependency_inputs(self, run, previous_inputs, inputs):
@@ -212,20 +215,29 @@ class PartialDependencies(StaticPlugin):
         x = pdp.x_pdp.tolist()
         y = pdp.y_pdp.tolist()
 
-        # We have to cut the ICE curves because it's too much data
-        x_ice = pdp._ice.x_ice.tolist()
-        y_ice = pdp._ice.y_ice.tolist()
+        symb_params = dict(
+            population_size=5000,
+            generations=20,
+            function_set=get_function_set(),
+            metric="rmse",
+            parsimony_coefficient=PARSIMONY_COEFFICIENT,
+            verbose=1,
+        )
 
-        if len(x_ice) > MAX_SHOWN_SAMPLES:
-            x_ice = x_ice[:MAX_SHOWN_SAMPLES]
-            y_ice = y_ice[:MAX_SHOWN_SAMPLES]
+        # run SR on samples
+        symb_model = SymbolicRegressor(**symb_params, random_state=0)
+        symb_model.fit(x, y)
+        try:
+            conv_expr = convert_symb(symb_model, n_dim=len(X), n_decimals=3)
+        except:
+            conv_expr = ""
+
+        y_symbolic = symb_model.predict(x).tolist()
 
         return {
             "x": x,
-            "y": y,
-            "variances": pdp.y_variances.tolist(),
-            "x_ice": x_ice,
-            "y_ice": y_ice,
+            "y": y_symbolic,
+            "expr": str(conv_expr)
         }
 
     @staticmethod
@@ -246,58 +258,16 @@ class PartialDependencies(StaticPlugin):
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
 
-        show_confidence = inputs["show_confidence"]
-        show_ice = inputs["show_ice"]
-
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
         # Parse outputs
         x = np.asarray(outputs["x"])
         y = np.asarray(outputs["y"])
-        sigmas = np.sqrt(np.asarray(outputs["variances"]))
-
-        x_ice = np.asarray(outputs["x_ice"])
-        y_ice = np.asarray(outputs["y_ice"])
+        expr = outputs["expr"]
 
         traces = []
         if hp2_idx is None:  # 1D
-            # Add ICE curves
-            if show_ice:
-                for x_, y_ in zip(x_ice, y_ice):
-                    traces += [
-                        go.Scatter(
-                            x=x_[:, hp1_idx],
-                            y=y_,
-                            line=dict(color=get_color(1, 0.1)),
-                            hoverinfo="skip",
-                            showlegend=False,
-                        )
-                    ]
-
-            if show_confidence:
-                traces += [
-                    go.Scatter(
-                        x=x[:, hp1_idx],
-                        y=y + sigmas,
-                        line=dict(color=get_color(0, 0.1)),
-                        hoverinfo="skip",
-                        showlegend=False,
-                    )
-                ]
-
-                traces += [
-                    go.Scatter(
-                        x=x[:, hp1_idx],
-                        y=y - sigmas,
-                        fill="tonexty",
-                        fillcolor=get_color(0, 0.2),
-                        line=dict(color=get_color(0, 0.1)),
-                        hoverinfo="skip",
-                        showlegend=False,
-                    )
-                ]
-
             traces += [
                 go.Scatter(
                     x=x[:, hp1_idx],
@@ -323,15 +293,13 @@ class PartialDependencies(StaticPlugin):
             )
         else:
             z = y
-            if show_confidence:
-                z = sigmas
             traces += [
                 go.Contour(
                     z=z,
                     x=x[:, hp1_idx],
                     y=x[:, hp2_idx],
                     colorbar=dict(
-                        title=objective_name if not show_confidence else "Confidence (1-Sigma)",
+                        title=objective_name,
                     ),
                     hoverinfo="skip",
                 )
@@ -345,6 +313,7 @@ class PartialDependencies(StaticPlugin):
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
+                    title=expr
                 )
             )
 
