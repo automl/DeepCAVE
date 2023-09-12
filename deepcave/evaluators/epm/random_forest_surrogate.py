@@ -4,12 +4,12 @@
 
 This module provides an implementation for a RandomForest Surrogate model.
 
-Mean and standard deviation values can be computed for a given input with this module.
+Mean and standard deviation values can be predicted for a given input with this module.
 
-## Contents
-    - predict: Predict the deviations
-    - _fit: Fits the model
+## Classes
+    - RandomForestSurrogate: Random forest surrogate for the pyPDP package.
 """
+
 from typing import Tuple
 
 import ConfigSpace as CS
@@ -20,19 +20,46 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class RandomForestSurrogate(SurrogateModel):
-    """Random forest surrogate for the pyPDP package."""
+    """
+    Random forest surrogate for the pyPDP package.
+
+    Predict deviations and fit the model.
+    """
 
     def __init__(
         self,
         configspace: CS.ConfigurationSpace,
         seed: int = None,
-    ):  # noqa: D107
+    ):
         super().__init__(configspace, seed=seed)
         self._model = RandomForest(configspace=configspace, seed=seed)
 
-    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:  # noqa: D102
+    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Predict the deviations.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            The data points on which to predict.
+
+        Returns
+        -------
+        Tuple[np.ndarray, np.ndarray]
+            The means and standard deviation.
+        """
         means, stds = self._model.predict(X)
         return means[:, 0], stds[:, 0]
 
-    def _fit(self, X: np.ndarray, y: np.ndarray):  # noqa: D102
+    def _fit(self, X: np.ndarray, y: np.ndarray):
+        """
+        Train the surrogate model.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Input data points.
+        y : np.ndarray
+            Corresponding target values.
+        """
         self._model.train(X, y)

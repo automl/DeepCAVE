@@ -2,14 +2,10 @@
 """
 # LPI
 
-This module provides utilties to calculate the local parameter importance.
+This module provides utilities to calculate the local parameter importance.
 
 ## Classes
     - LIP: This class calculates the local parameter importance.
-
-## Contents
-    - calculate: Prepare the data and trains a RandomForest model.
-    - get_importances: Return the importances.
 """
 
 from typing import Dict, List, Optional, Tuple, Union
@@ -34,15 +30,33 @@ class LPI:
     """
     Calculate the local parameter importance.
 
-    Methods
-    -------
-    calculate
-        Prepare the data and trains a RandomForest model.
-    get_importances
-        Return the importances.
+    Properties
+    ----------
+    run : AbstractRun
+        The AbstractRun ro calculate the importance from.
+    cs : ConfigurationSpace
+        The configuration space of the run.
+    hp_names : List[str]
+        The names of the hyperparameters
+    variances : Dict[Any, list]
+        The overall variances per tree.
+    importances : dict
+        The importances of the hyperparameters.
+    continuous_neighbors : int
+        The number of neighbors chosen for continuous hyperparameters.
+    incumbent : Configuration
+        The incumbent of the run.
+    default : Configuration
+        A configuration containing hyperparameters with default values.
+    incumbent_array : numpy.ndarray
+        The internal vector representation of the incumbent.
+    seed : int
+        The seed. I f not provided it will be random.
+    rs : RandomState
+        A random state with a given seed value.
     """
 
-    def __init__(self, run: AbstractRun):  # noqa: D107
+    def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
@@ -66,8 +80,13 @@ class LPI:
             Considered objectives. By default, None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default, None. If None, the highest budget is chosen.
-        continous_neighbors : int, optional
+        continuous_neighbors : int, optional
             How many neighbors should be chosen for continuous hyperparameters. By default, 500.
+        n_trees : int, optional
+            The number of trees for the fanova forest.
+            Default is 10.
+        seed : Optional[int], optional
+            The seed.
         """
         if objectives is None:
             objectives = self.run.get_objectives()
@@ -111,7 +130,7 @@ class LPI:
         variances = {}
         # These are used for importance and hold the corresponding importance/variance over
         # neighbors. Only import if NOT quantifying importance via performance-variance across
-        # neighbours.
+        # neighbors.
         importances = {}
         # Nested list of values per tree in random forest.
         predictions = {}
@@ -223,6 +242,11 @@ class LPI:
         -------
         importances : Dict[str, Tuple[float, float]]
             Hyperparameter name and mean+var importance.
+
+        Raises
+        ------
+        RuntimeError
+            If the important scores are not calculated.
         """
         if self.importances is None or self.variances is None:
             raise RuntimeError("Importance scores must be calculated first.")

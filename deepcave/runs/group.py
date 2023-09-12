@@ -3,19 +3,10 @@
 # Group
 
 This module provides utilities for grouping and managing a group of abstract runs.
+Utilities include getting attributes of the grouped runs, as well as the group.
 
-## Contents
-    - hash: Get the hash for a group.
-    - id: Get the identificator for a group.
-    - latest_change: Get the latest change of the group.
-    - run_path: Get the path of the runs in the group.
-    - run_names: Get the names of the runs in the group.
-    - get_runs: Get the abstract runs of the group.
-    - get_new_config_id: Get a new identificator for a configuration.
-    - get_original_config_id: Get the original identificator of a configuratrion.
-    - get_original_run: Get the original abstract run.
-    - get_model: Get the model of the runs.
-    - get_trajectory: Get the trajectory of the runs.
+## Classes
+    - Group: Can group and manage a group of abstract runs.
 """
 
 from typing import Dict, List, Tuple
@@ -32,41 +23,42 @@ class Group(AbstractRun):
     """
     Can group and manage a group of abstract runs.
 
-    Methods
-    -------
-    hash
-        Get the hash for a group.
-    id
-        Get the identificator for a group.
-    latest_change
-        Get the latest change of the group.
-    run_path
-        Get the path of the runs in the group.
-    run_names
-        Get the names of the runs in the group.
-    get_runs
-        Get the abstract runs of the group.
-    get_new_config_id
-        Get a new identificator for a configuration.
-    get_original_config_id
-        Get the original identificator of a configuratrion.
-    get_original_run
-        Get the original abstract run.
-    get_model
-        Get the model of the runs.
-    get_trajectory
-        Get the trajectory of the runs.
+    Utilities include getting attributes of the grouped runs, as well as the group.
 
-    Attributes
     ----------
     prefix, optional
         A prefix.
         Default is "group".
+
+    Properties
+    ----------
+    runs : List[AbstractRun]
+        A list of the abstract runs.
+    meta : Dict[str, Any]
+        Contains budgets, objectives and their attributes.
+    configspace : ConfigurationSpace
+        The configuration space of the runs.
+    objectives : Objective
+        The objectives of the runs.
+    budgets : List[Union[int, float]]
+        The budgets of the runs.
+    configs : Dict[int, Any]
+        A dictionary of the configurations and their ids as key.
+    origins : Dict[int, str]
+        The origins of the configurations and their ids as key.
+    trial_keys : Dict[Tuple[str, int], int]
+        The keys of the trial.
+    history : List[Trial]
+        The trial history.
+    prefix : str
+        The prefix for the id of the group.
+    name : str
+        The name for the id of the group.
     """
 
     prefix = "group"
 
-    def __init__(self, name: str, runs: List[AbstractRun]):  # noqa: D107
+    def __init__(self, name: str, runs: List[AbstractRun]):
         super(Group, self).__init__(name)
         self.runs = [run for run in runs if run is not None]  # Filter for Nones
         self.reset()
@@ -147,7 +139,8 @@ class Group(AbstractRun):
             yield run.name
 
     @property
-    def hash(self) -> str:  # noqa: D102
+    def hash(self) -> str:
+        """Get a sorted hash of the runs of the group."""
         hashes = []
         for run in self.runs:
             hashes += [run.hash]
@@ -157,12 +150,14 @@ class Group(AbstractRun):
         return string_to_hash("-".join(hashes))
 
     @property
-    def id(self) -> str:  # noqa: D102
+    def id(self) -> str:
+        """Get a hash as id of the group."""
         # Groups do not have a path, therefore we use the name.
         return string_to_hash(f"{self.prefix}:{self.name}")
 
     @property
-    def latest_change(self) -> int:  # noqa: D102
+    def latest_change(self) -> int:
+        """Get the latest change made to the grouped runs."""
         latest_change = 0
         for run in self.runs:
             if run.latest_change > latest_change:
@@ -189,7 +184,7 @@ class Group(AbstractRun):
         return self._new_config_mapping[(run_id, original_config_id)]
 
     def get_original_config_id(self, config_id: int) -> id:
-        """Get the original identificator of a configuratrion."""
+        """Get the original identificator of a configuration."""
         return self._original_config_mapping[config_id][1]
 
     def get_original_run(self, config_id: int) -> AbstractRun:
@@ -202,7 +197,23 @@ class Group(AbstractRun):
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
-    def get_trajectory(self, *args, **kwargs):  # noqa: D102
+    def get_trajectory(self, *args, **kwargs):
+        """
+        Get the trajectory of the group.
+
+        This includes the times, the mean costs, and the standard deviation of the costs.
+
+        Parameters
+        ----------
+        *args
+            The arguments for the trajectory of a run.
+        **kwargs
+            Keyword arguments for the trajectory of a run.
+
+        Returns
+        -------
+        The trajectory of the grouped runs.
+        """
         # Cache costs
         run_costs = []
         run_times = []

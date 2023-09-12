@@ -185,7 +185,7 @@ def interactive(func: F) -> F:
         Returns
         -------
         Any
-            If _api_mode is True, return immediatly.
+            If _api_mode is True, return immediately.
             Otherwise return the result of the function.
         """
         if _api_mode:

@@ -4,11 +4,6 @@
 
 This module provides utilities for string generation and shortening.
 It also provides a function to get the difference between now and a given timestamp.
-
-## Contents
-    - get_random_string: Get a random string with a specific length.
-    - short_string: Shorten the given string.
-    - get_latest_change: Get the difference between now and a given timestamp.
 """
 from typing import Any
 
@@ -93,7 +88,7 @@ def get_latest_change(st_mtime: int) -> str:
     Returns
     -------
     str
-        A string containig the passed time.
+        A string containing the passed time.
     """
     t = datetime.datetime.fromtimestamp(st_mtime)
     s_diff = (datetime.datetime.now() - t).seconds

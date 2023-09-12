@@ -5,10 +5,7 @@
 This module opens the browser after a given delay.
 
 ## Constants
-    - DELAY = 4
-
-## Contents
-    - open_browser: Open the link in the browser.
+    DELAY = 4
 """
 
 import sys

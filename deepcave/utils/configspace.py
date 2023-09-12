@@ -3,10 +3,6 @@
 # ConfigSpace
 
 This module samples random as well as border configurations.
-
-## Contents
-    - sample_border_config: Generate border configurations from the configuration space.
-    - sample_random_config: Generate random configurations from the configuration space.
 """
 
 from typing import Iterator, Optional
@@ -29,7 +25,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
     Parameters
     ----------
     configspace : ConfigurationSpace
-        The configspace from which the hyperparameters are drawn from.
+        The configuration space from which the hyperparameters are drawn from.
 
     Yields
     ------

@@ -6,18 +6,21 @@ This module is used for training and using a Random Forest Regression model.
 
 A pyrfr wrapper is used for simplification.
 
-## Contents
-    - _get_model: Get the internal model.
-    - _get_model_options: Get the options of the model.
-    - _impute_inactive: Imput inactive values in X.
-    - _check_dimensions:  Check if the dimensions of X and Y are correct wrt features.
-    - _get_data_container: Fill a pyrfr default data container.
-    - train: Train the random forest on X and Y.
-    - _train: Train the random forest on X and Y.
-    - predict: Predict means and variances for a given X.
-    - _predict: Predict means and variances for a given X.
-    - predict_marginalized: Predict mean and variance marginalized over all instances.
-    - get_leaf_values: Return the values of the Forest leafs.
+## Classes
+    - RandomForest: A random forest wrapper for pyrfr.
+
+## Constants
+    VERY_SMALL_NUMBER = 1e-10
+    PYRFR_MAPPING = {
+        "n_trees": "num_trees",
+        "bootstrapping": "do_bootstrapping",
+        "max_features": "tree_opts.max_features",
+        "min_samples_split": "tree_opts.min_samples_to_split",
+        "min_samples_leaf": "tree_opts.min_samples_in_leaf",
+        "max_depth": "tree_opts.max_depth",
+        "eps_purity": "tree_opts.epsilon_purity",
+        "max_nodes": "tree_opts.max_num_nodes",
+    }
 """
 
 from typing import Any, Dict, List, Optional, Tuple  # noqa: F401
@@ -58,12 +61,37 @@ class RandomForest:
     """
     A random forest wrapper for pyrfr.
 
-    This is handy because we only need to pass the configspace
+    This is handy because we only need to pass the configuration space.
     and have a working version without specifying e.g. types and bounds.
 
     Note
     ----
     This wrapper also supports instances.
+
+    Properties
+    ----------
+    cs : ConfigurationSpace
+        The configuration space.
+    log_y : bool
+        Whether y should be treated as a logarithmic transformation.
+    seed : int
+        The seed. If not provided, it is random.
+    types : List[int]
+        The types of the hyperparameters.
+    bounds : List[Tuple[float, float]]
+        The bounds of the hyperparameters.
+    n_params : int
+        The number of hyperparameters in the configuration space.
+    n_features : int
+        The number of features.
+    pca_components : int
+        The number of components to keep for the principal component analysis.
+    pca : PCA
+        The principal component analysis object.
+    scaler : MinMaxScaler
+        A MinMaxScaler to scale the features.
+    instance_features : ndarray
+        The instance features.
     """
 
     def __init__(
@@ -81,7 +109,7 @@ class RandomForest:
         pca_components: Optional[int] = 2,
         log_y: bool = False,
         seed: Optional[int] = None,
-    ):  # noqa: D107
+    ):
         self.cs = configspace
         self.log_y = log_y
         self.seed = seed
@@ -135,6 +163,11 @@ class RandomForest:
         The mapping `PYRFR_MAPPING` is used in combination with
         a recursive attribute setter to set the options for the pyrfr model.
 
+        Parameters
+        ----------
+        **kwargs : Dict[str, Any]
+            The key word arguments for the model options.
+
         Returns
         -------
         options : regression.forest_opts
@@ -161,7 +194,7 @@ class RandomForest:
 
     def _impute_inactive(self, X: np.ndarray) -> np.ndarray:
         """
-        Imput inactive values in X.
+        Impute inactive values in X.
 
         Parameters
         ----------
@@ -250,7 +283,7 @@ class RandomForest:
         Returns
         -------
         data : regression.default_data_container
-            The filled data container that pyrfr can interpret
+            The filled data container that pyrfr can interpret.
         """
         # retrieve the types and the bounds from the ConfigSpace
         data = regression.default_data_container(X.shape[1])
@@ -433,7 +466,7 @@ class RandomForest:
         """
         Predict mean and variance marginalized over all instances.
 
-        Returns the predictive mean and variance marginalised over all
+        Returns the predictive mean and variance marginalized over all
         instances for a set of configurations.
 
         Parameters

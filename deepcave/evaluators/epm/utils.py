@@ -3,9 +3,6 @@
 # Utils
 
 This module provides a utility to get the types of the hyperparameters.
-
-## Contents
-    - get_types: Return the types of the hyperparameters.
 """
 
 import typing
@@ -33,6 +30,26 @@ def get_types(
     Return the types of the hyperparameters.
 
     Also return the bounds of the hyperparameters and instance features.
+
+    Parameters
+    ----------
+    config_space : ConfigurationSpace
+        The configuration space.
+    instance_features : typing.Optional[np.ndarray], optional
+        The instance features.
+        Default is None.
+
+    Returns
+    -------
+    typing.Tuple[typing.List[int], typing.List[typing.Tuple[float, float]]]
+        The types of the hyperparameters, as well as the bounds and instance features.
+
+    Raises
+    ------
+    ValueError
+        Inactive parameters not supported for Beta and Normal Hyperparameters
+    TypeError
+        If the hyperparameter Type is unknown.
     """
     # Extract types vector for rf from config space and the bounds
     types = [0] * len(config_space.get_hyperparameters())

@@ -4,16 +4,10 @@
 
 This module provides utilities to visualize the characteristics of a configuration within a run.
 
-## Contents
-    - get_link: Create a link to a specific configuration.
-    - get_input_layout: Create the input layout.
-    - load_inputs: Load and return the input.
-    - load_dependency_input: Load the dependent input.
-    - process: Generates the table data.
-    - get_output_layout: Get the layout of the output for presenting the result.
-    - _get_objective_figure: Generate the figure for the given Objectives.
-    - _get_configspace_figure: Generate the figure for the given configuration space.
-    - load_outputs: Generate the output.
+The module provides this as a dynamic plugin.
+
+## Classes
+    - Configurations: Visualize the characteristics of a configuration.
 """
 
 from collections import defaultdict
@@ -42,27 +36,6 @@ class Configurations(DynamicPlugin):
     """
     Visualize the characteristics of a configuration.
 
-    Methods
-    -------
-    get_link
-        Create a link to a specific configuration.
-    get_input_layout
-        Create the input layout.
-    load_inputs
-        Load and return the input.
-    load_dependency_input
-        Load the dependent input.
-    process
-        Generates the table data.
-    get_output_layout
-        Get the layout of the output for presenting the result.
-    _get_objective_figure
-        Generate the figure for the given Objectives.
-    _get_configspace_figure
-        Generate the figure for the given configuration space.
-    load_outputs
-        Generate the output.
-
     Attributes
     ----------
     id
@@ -70,7 +43,7 @@ class Configurations(DynamicPlugin):
     name
         The name of the plugin.
     icon
-        The icon representin the plugin.
+        The icon representing the plugin.
     help
         The path to the documentation of the plugin.
     activate_run_selection
@@ -115,7 +88,19 @@ class Configurations(DynamicPlugin):
         return create_url(url, inputs)
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the html container for the layout of the input.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id of the Sliders.
+
+        Returns
+        -------
+        An html container for the layout of the input.
+        """
         return [
             html.Div(
                 [
@@ -125,12 +110,28 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """Get the inputs, containing information about a configuration."""
         return {
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        """
+        Get selected values of the inputs.
+
+        Parameters
+        ----------
+        run : AbstractRun | List[AbstractRun] | None
+            The run(s) to be analyzed.
+        inputs : Dict[str, Any]
+            The inputs for the visualization.
+
+        Returns
+        -------
+        dict[str, dict[str, Any]]
+            A dictionary of information about a configuration.
+        """
         # Get selected values
         config_id_value = inputs["config_id"]["value"]
         configs = run.get_configs()
@@ -147,7 +148,22 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Process the given data show information about the configuration space.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to be analyzed.
+        inputs : Dict[str, Any]
+            The inputs for the visualization.
+
+        Returns
+        -------
+        dict[str, Any]
+            A dictionary containing performance information about the configuration space.
+        """
         selected_config_id = int(inputs["config_id"])
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
@@ -227,7 +243,19 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get an html container as well as a dash bootstrap component for the output layout.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the Div and Graph objects.
+
+        Returns
+        -------
+        An html container as well as a dash bootstrap component for the output layout.
+        """
         return [
             html.Div(id=register("overview_table", "children"), className="mb-3"),
             html.Hr(),
@@ -274,6 +302,20 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     def _get_objective_figure(_, outputs, run):
+        """
+        Get the objective figure and save as image.
+
+        Parameters
+        ----------
+        outputs
+            Contains performance information.
+        run
+            The run to be analyzed.
+
+        Returns
+        -------
+        A plotly objective figure.
+        """
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
             trace_kwargs = {
@@ -326,6 +368,21 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     def _get_configspace_figure(inputs, outputs, run):
+        """
+        Get the configuration space figure.
+
+        Parameters
+        ----------
+        outputs
+            Contains the configuration space data frame.
+        run
+            The run to be analyzed.
+
+        Returns
+        -------
+        fig
+            A plotly configuration space figure.
+        """
         df = outputs["cs_df"]
         df = deserialize(df, dtype=pd.DataFrame)
 
@@ -371,7 +428,23 @@ class Configurations(DynamicPlugin):
         return fig
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load the outputs create the table containing performances and configuration space.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed.
+        inputs
+            Contains information about the configuration.
+        outputs
+            Contains information about the performances, and the configuration space.
+
+        Returns
+        -------
+        A list of the created tables containing the information.
+        """
         config_id = inputs["config_id"]
         config = run.get_config(config_id)
 

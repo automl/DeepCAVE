@@ -1,12 +1,8 @@
 #  noqa: D400
-
 """
 # Files
 
 This module provides a utility to create directories from a filename.
-
-## Contents
-    - make_dirs: Create a directory.
 """
 
 from typing import Union

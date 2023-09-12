@@ -3,14 +3,10 @@
 # Config
 
 This module defines the config object and its constants.
-It also defines multiple constants for directories, the server name and the available plugins.
+Also defines multiple constants for directories, the server name, available plugins and converters.
 
-## Contents
-    - DEFAULT_WORKING_DIRECTORY: Specifies the default working directory.
-    - CACHE_DIRECTORY: Specifies the default cache directory.
-    - SERVER_NAME: Specifies the server name, consisting of address and port.
-    - PLUGINS: A list of available plugins per category.
-    - CONVERTERS: A list of available run converters.
+## Classes
+    - Config: Describe the config object.
 """
 
 from typing import Any, Dict, List, Type
@@ -26,19 +22,7 @@ class Config:
     Describe the config object.
 
     It also defines the constants of the config object.
-
-    Methods
-    -------
-    DEFAULT_WORKING_DIRECTORY
-        Specifies the default working directory.
-    CACHE_DIRECTORY
-        Specifies the default cache directory.
-    SERVER_NAME
-        Specifies the server name, consisting of address and port.
-    PLUGINS
-        A list of available plugins per category.
-    CONVERTERS
-        A list of available run converters.
+    Includes multiple constants for directories, the server name, available plugins and converters.
 
     Constants
     ---------
@@ -69,6 +53,13 @@ class Config:
         "selected_run_paths": [],
         "groups": {},  # {group_name: [run_path, ...]}
         }
+
+    Properties
+    ----------
+    DASH_ADRESS : str
+        The address of the server name.
+    DASH_PORT : int
+        The port of the server name.
     """
 
     # General config
@@ -152,7 +143,7 @@ class Config:
 
     @property
     def CONVERTERS(self) -> List[Type["Run"]]:
-        """A list of available run converters."""
+        """Get a list of available run converters."""
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run

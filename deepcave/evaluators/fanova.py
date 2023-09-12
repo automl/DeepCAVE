@@ -4,12 +4,10 @@
 
 This module provides a tool for assessing the importance of an algorithms hyperparameters.
 
+Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.
+
 ## Classes
     - fANOVA: Calculate and provide midpoints and sizes.
-
-## Contents
-    - calculate: Get the data wrt budget and trains the forest on the encoded data.
-    - get_importances: Return the importance scores from the passed hyperparameter names.
 """
 
 from typing import Dict, List, Optional, Tuple, Union
@@ -30,15 +28,21 @@ class fANOVA:
 
     They are generated from the forest's split values in order to get the marginals.
 
-    Methods
-    -------
-    calculate
-        Get the data wrt budget and trains the forest on the encoded data.
-    get_importances
-        Return the importance scores from the passed hyperparameter names.
+    Properties
+    ----------
+    run : AbstractRun
+        The Abstract Run used for the calculation.
+    cs : ConfigurationSpace
+        The configuration space of the run.
+    hps : List[Hyperparameters]
+        The hyperparameters of the configuration space.
+    hp_names : List[str]
+        The corresponding names of the hyperparameters.
+    n_trees : int
+        The number of trees.
     """
 
-    def __init__(self, run: AbstractRun):  # noqa: D107
+    def __init__(self, run: AbstractRun):
         if run.configspace is None:
             raise RuntimeError("The run needs to be initialized.")
 
@@ -64,7 +68,7 @@ class fANOVA:
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.
         n_trees : int, optional
@@ -106,7 +110,7 @@ class fANOVA:
         ----------
         hp_names : Optional[List[str]]
             Selected hyperparameter names to get the importance scores from. If None, all
-            hyperparameters of the configspace are used.
+            hyperparameters of the configuration space are used.
         depth : int, optional
             How often dimensions should be combined. By default 1.
         sort : bool, optional
@@ -115,7 +119,7 @@ class fANOVA:
         Returns
         -------
         Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]
-            Dictionary with hyperparameter names and the corresbonding importance scores.
+            Dictionary with hyperparameter names and the corresponding importance scores.
             The values are tuples of the form (mean individual, var individual, mean total,
             var total). Note that individual and total are the same if depth is 1.
 

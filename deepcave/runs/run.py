@@ -4,15 +4,8 @@
 
 This module provides utilities to create a new run and get its attributes.
 
-## Contents
-    - from_path: Based on a path, return a new Run object.
-    - id: Get the hashed id of a Run object.
-    - path: Return the path of the Run.
-    - path: Set the the path of the Run.
-    - exists: Check if the run exists based on the internal path.
-    - add: Add a trial to the run.
-    - save: Save the run and its information.
-    - load: Load the run.
+## Classes
+    - Run: Create a new run.
 """
 
 from abc import ABC, abstractmethod
@@ -35,27 +28,39 @@ from deepcave.utils.hash import string_to_hash
 
 class Run(AbstractRun, ABC):
     """
-    Create a new run.
+    Create a new run and get its attributes.
 
     If path is given, runs are loaded from the path.
 
-    Parameters
+    Attributes
     ----------
-    name : str
-        Name of the run.
-    configspace : ConfigSpace, optional
-        Configuration space of the run. Should be None if `path` is used. By default None.
-    objectives : Union[Objective, List[Objective]], optional
-        Objectives of the run. Should be None if `path` is used. By default None
-    meta : Dict[str, Any], optional
-        Meta data of the run. Should be None if `path` is used. By default None.
-    path : Optional[Union[str, Path]], optional
-        If a path is specified, the run is loaded from there. By default None.
+    prefix : str
+        The prefix set to "run".
 
-    Raises
-    ------
-    RuntimeError
-        If no configuration space is provided or found.
+    Properties
+    ----------
+    configspace : ConfigurationSpace
+        The configuration space of the run.
+    path : str | Path | None
+        The path of a run to be loaded.
+    meta : Dict[str, Any]
+        Contains serialized objectives and budgets.
+    prefix : str
+        The prefix for the id.
+    meta_fn : Path
+        The path to the meta JSON file.
+    configspace_fn : Path
+        The path to the configuration space JSON file.
+    configs_fn : Path
+        The path to the configs JSON file.
+    origins_fn : Path
+        The path to the origins JSON file.
+    history_fn : Path
+        The path to the history JSONL file.
+    models_dir : Path
+        The path to the models directory.
+    configs : Dict[int, Configuration]
+        Containing the configurations.
     """
 
     prefix = "run"
@@ -68,7 +73,7 @@ class Run(AbstractRun, ABC):
         objectives: Union[Objective, List[Objective]] = None,
         meta: Dict[str, Any] = None,
         path: Optional[Union[str, Path]] = None,
-    ) -> None:  # noqa: D107
+    ) -> None:
         super(Run, self).__init__(name)
 
         if objectives is None:
@@ -109,7 +114,8 @@ class Run(AbstractRun, ABC):
         pass
 
     @property
-    def id(self) -> str:  # noqa: D102
+    def id(self) -> str:
+        """Get a hash as id."""
         return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
@@ -119,7 +125,14 @@ class Run(AbstractRun, ABC):
 
     @path.setter
     def path(self, value: Optional[Union[str, Path]]):
-        """If path is changed, also change the filenames of all created files."""
+        """
+        If path is changed, also change the filenames of all created files.
+
+        Parameters
+        ----------
+        value : Optional[Union[str, Path]]
+            The path for the directory.
+        """
         if value is None:
             self._path = None
             return
@@ -342,6 +355,12 @@ class Run(AbstractRun, ABC):
         path : Optional[Union[str, Path]], optional
             The path where the run to load is.
             Default is None.
+
+        Raises
+        ------
+        RuntimeError
+            If the path is None.
+            If the trials were not found.
         """
         self.reset()
 

@@ -5,12 +5,8 @@
 This module provides utilities to convert and create objectives.
 It also provides functions for merging and comparing objectives.
 
-## Contents
-    - to_json: Convert objectives attributes to a JSON format.
-    - from_json: Create an objective from a JSON format.
-    - __eq__: Compare if two instances are qual based on their attributes.
-    - merge: Merge two Objectives with its attributes.
-    - get_worst_value: Get the worst value based on the optimization setting.
+## Classes
+    - Objective: Convert and creates objectives.
 """
 
 from typing import Any, Dict, Optional, Union
@@ -25,20 +21,7 @@ from deepcave.runs.exceptions import NotMergeableError
 @dataclass
 class Objective:
     """
-    Convert and creates objectives.
-
-    Methods
-    -------
-    to_json
-        Convert objectives attributes to a JSON format.
-    from_json
-        Create an objective from a JSON format.
-    __eq__
-        Compare if two instances are qual based on their attributes.
-    merge
-        Merge two Objectives with its attributes.
-    get_worst_value
-        Get the worst value based on the optimization setting.
+    Convert, creates and merge objectives.
 
     Attributes
     ----------
@@ -53,6 +36,21 @@ class Objective:
     optimize : str, optional
         Defines which bound to optimize.
         Default is "lower".
+
+    Properties
+    ----------
+    lower : int | float | None
+        The lower bound of the objective.
+    upper : int | float | None
+        The upper bound of the objective.
+    optimize : str
+        Define whether to optimize lower or upper.
+    lock_lower : bool
+        Whether to lock the lower bound.
+    lock_upper : bool
+        Whether to lock the upper bound.
+    name : str
+        The name of the objective.
     """
 
     name: str
@@ -169,8 +167,8 @@ class Objective:
 
         Raises
         ------
-        NotMergableError
-            If parts of the two Objectives are not mergable.
+        NotMergeableError
+            If parts of the two Objectives are not mergeable.
         """
         if not isinstance(other, Objective):
             raise NotMergeableError("Objective can only be merged with another Objective.")

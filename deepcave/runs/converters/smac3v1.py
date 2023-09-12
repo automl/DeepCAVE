@@ -5,10 +5,8 @@
 This module provides utilities to create a SMAC3v1 run.
 It provides utilities to hash, as well a get the latest change of the object.
 
-## Contents
-    - hash: Create a hash of the object.
-    - latest_change: Retrieve the latest change of the object.
-    - from_path: Return new trail object based of a given path.
+## Classes
+    - SMAC3v1Run: Define a SMAC3v1 run object.
 """
 import json
 from pathlib import Path
@@ -27,30 +25,24 @@ class SMAC3v1Run(Run):
 
     It also provides utilities to hash it and get its latest change.
 
-    Methods
-    -------
-    hash
-        Create a hash of the object.
-    latest_change
-        Retrieve the latest change of the object.
-    from_path
-        Return new trail object based of a given path.
-
     Attributes
     ----------
     prefix, optional
-        The prefic of the run object.
+        The prefix of the run object.
         Default is "SMAC3v1".
-    initial_order, optional
-        The initial order.
-        Default is 2.
+
+    Properties
+    ----------
+    path : Path
+        The path to the "runhistory.json" file.
     """
 
     prefix = "SMAC3v1"
     _initial_order = 2
 
     @property
-    def hash(self):  # noqa: D102
+    def hash(self):
+        """Calculate a hash value of a json runhistory file to use as id."""
         if self.path is None:
             return ""
 
@@ -58,15 +50,34 @@ class SMAC3v1Run(Run):
         return file_to_hash(self.path / "runhistory.json")
 
     @property
-    def latest_change(self):  # noqa: D102
+    def latest_change(self):
+        """Get the timestamp of the latest change of the runhistory file."""
         if self.path is None:
             return 0
 
         return Path(self.path / "runhistory.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):  # noqa: D102
-        """Based on working_dir/run_name/*, return a new trials object."""
+    def from_path(cls, path):
+        """
+        Based on working_dir/run_name/*, return a new trials object.
+
+        Parameters
+        ----------
+        path
+            The path to base the trial object on.
+
+        Returns
+        -------
+        The new trial object.
+
+        Raises
+        ------
+        RuntimeError
+            Instances are not supported.
+        RuntimeError
+            Multiple Seeds are not supported.
+        """
         path = Path(path)
 
         # Read configspace

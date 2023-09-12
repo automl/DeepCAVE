@@ -1,12 +1,12 @@
 """
 # BOHBRun.
 
-This module is for managing and processing data concerning BOHB.
+This module is for managing and processing data concerning a BOHB Run.
 
-## Contents
-    - hash: Calculate a hash value of results.json.
-    - latest_change: Get the timestamp of the latest change made to a file.
-    - from_path: Create a BOHBRun from a specific path.
+Utilities provide getting a hash, as well as the latest change of a file.
+
+## Classes
+    - BOHBRun: Create a BOHB Run.
 """
 
 from pathlib import Path
@@ -22,29 +22,25 @@ class BOHBRun(Run):
     Create a BOHB Run.
 
     This class extends the Run class.
-
-    Methods
-    -------
-    hash
-        Calculate a hash value of results.json.
-    latest_change
-        Get the timestamp of the latest change made to a file.
-    from_path
-        Create a BOHBRun from a specific path.
+    Utilities provide getting a hash, as well as the latest change of a file.
 
     Attributes
     ----------
     prefix
         Set the prefix to "BOHB".
-    _initial_order
-        The initial order, set to 2.
+
+    Properties
+    ----------
+    path : Path
+        The path to the "results.json" file.
     """
 
     prefix = "BOHB"
     _initial_order = 2
 
     @property
-    def hash(self):  # noqa: D102
+    def hash(self):
+        """Calculate a hash value of the json result file."""
         if self.path is None:
             return ""
 
@@ -52,14 +48,27 @@ class BOHBRun(Run):
         return file_to_hash(self.path / "results.json")
 
     @property
-    def latest_change(self):  # noqa: D102
+    def latest_change(self):
+        """Get the timestamp of the latest change made to the results file."""
         if self.path is None:
             return 0
 
         return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):  # noqa: D102
+    def from_path(cls, path):
+        """
+        Create a BOHB Run from a given path and add a new trial to it.
+
+        Parameters
+        ----------
+        path
+            The pathname to create the Run from.
+
+        Returns
+        -------
+        The BOHB run
+        """
         path = Path(path)
 
         # Read configspace

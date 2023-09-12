@@ -3,8 +3,18 @@
 
 This module provides the information about the status of a run.
 
-## Contents
-    - to_text: Convert the name to a simpler text format.
+A utility to convert a string text to a simpler, lower case text format is provided.
+
+## Classes
+    - Status: Represent the status of a run as an Enum.
+
+## Constants
+    SUCCESS = 1
+    TIMEOUT = 2
+    MEMORYOUT = 3
+    CRASHED = 4
+    ABORTED = 5
+    NOT_EVALUATED = 6
 """
 
 from enum import IntEnum
@@ -14,10 +24,12 @@ class Status(IntEnum):
     """
     Represent the status of a run as an Enum.
 
-    Methods
-    -------
-    to_text
-        Convert the name to a simpler text format.
+    A utility to convert a string text to a simpler, lower case text format is provided.
+
+    Properties
+    ----------
+    name : str
+        The designation of the status.
     """
 
     SUCCESS = 1

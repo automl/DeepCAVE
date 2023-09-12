@@ -3,10 +3,6 @@
 # Hash
 
 This module provides utilities to convert strings and files to hash.
-
-## Contents
-    - string_to_hash: Convert a string to a hash.
-    - file_to_hash: Convert a file to a hash.
 """
 
 import hashlib
@@ -33,7 +29,7 @@ def string_to_hash(string: str) -> str:
 
 def file_to_hash(filename: Path) -> str:
     """
-    Convert a fileto a hash.
+    Convert a file to a hash.
 
     Parameters
     ----------

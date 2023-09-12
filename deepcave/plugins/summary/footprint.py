@@ -3,16 +3,10 @@
 
 This module provides utilities to visualize a configuration footprint.
 
-## Contents
-    - get_input_layout: Define the layout and configuration of the input controls.
-    - get_filter_layout: Define the layout of the filter input controls.
-    - load_inputs: Load the input controls.
-    - load_dependency_inputs: Load dependent input controls.
-    - process: Generate data for the visualization using an Evaluator.
-    - get_output_layout: Define the layout structure for visualizing the output.
-    - load_outputs: Generate the output and safe the image.
-    - get_mpl_output_layout: Define the layout structure for visualizing the output with matplotlib.
-    - load_mpl_outputs: Generate the output with matplotlib and safe the image.
+The module contains a static plugin class for defining the footprint.
+
+## Classes
+    - FootPrint: Visualize the footprint of a configuration.
 """
 
 import dash_bootstrap_components as dbc
@@ -33,28 +27,9 @@ from deepcave.utils.styled_plotty import (
 
 class FootPrint(StaticPlugin):
     """
-    Visualize the footprint of a configuartion.
+    Visualize the footprint of a configuration.
 
-    Methods
-    -------
-    get_input_layout
-        Define the layout and configuration of the input controls.
-    get_filter_layout
-        Define the layout of the filter input controls.
-    load_inputs
-        Load the input controls.
-    load_dependency_inputs
-        Load dependent input controls.
-    process
-        Generate data for the visualization using an Evaluator.
-    get_output_layout
-        Define the layout structure for visualizing the output.
-    load_outputs
-        Generate the output and safe the image.
-    get_mpl_output_layout
-        Define the layout structure for visualizing the output with matplotlib.
-    load_mpl_outputs
-        Generate the output with matplotlib and safe the image.
+    Represents a static plugin for the footprint.
 
     Attributes
     ----------
@@ -67,7 +42,7 @@ class FootPrint(StaticPlugin):
     help
         The path to the documentation of the plugin.
     activate_run_selection
-        Defines wheter the run selection feature is activated.
+        Defines whether the run selection feature is activated.
     """
 
     id = "footprint"
@@ -77,7 +52,19 @@ class FootPrint(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the input layout as html container and dash bootstrap component.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id for the select object and the slider.
+
+        Returns
+        -------
+        An html container and a dash bootstrap component of the layout of the input.
+        """
         return [
             dbc.Row(
                 [
@@ -130,7 +117,19 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the filtered layout for a dash bootstrap component.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the select object.
+
+        Returns
+        -------
+        A filtered layout with a dash bootstrap component.
+        """
         return (
             dbc.Row(
                 [
@@ -158,15 +157,30 @@ class FootPrint(StaticPlugin):
             ),
         )
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """Get the inputs, containing details, and border/supports information."""
         return {
             "details": {"value": 0.5},
             "show_borders": {"options": get_select_options(binary=True), "value": "true"},
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
-        # Prepare objetives
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        """
+        Load the objectives, budgets and their attributes.
+
+        Parameters
+        ----------
+        run : AbstractRun | List[AbstractRun] | None
+            The run(s) to be analyzed.
+        inputs : Dict[str, Any]
+            Contains information about the objectives and budgets.
+
+        Returns
+        -------
+        The objective, budgets and their attributes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -197,7 +211,23 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Process the data to create different data points.
+
+        These points include, border, incumbent, support, performance, area and configurations.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to be analyzed.
+        inputs : Dict[str, Any]
+            Containing budget, objective and details information.
+
+        Returns
+        -------
+        A dictionary of the different data points.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         details = inputs["details"]
@@ -223,7 +253,19 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get a dash bootstrap component for the output layout.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the dash Graph.
+
+        Returns
+        -------
+        A dash bootstrap component for the output layout.
+        """
         return dbc.Tabs(
             [
                 dbc.Tab(
@@ -242,7 +284,25 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load and save the output plotly figure for visualizing the footprint of the run.
+
+        Get a heatmap for the performance and area data.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed.
+        inputs
+            Containing information about the objective, borders and supports visualization.
+        outputs
+            Containing information about the performance and area data.
+
+        Returns
+        -------
+        The plotly figure of the footprint.
+        """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
@@ -331,7 +391,19 @@ class FootPrint(StaticPlugin):
         return [performance, area]
 
     @staticmethod
-    def get_mpl_output_layout(register):  # noqa: D102
+    def get_mpl_output_layout(register):
+        """
+        Get a dash bootstrap component of the output layout.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the html image container.
+
+        Returns
+        -------
+        A dash bootstrap component of the output layout
+        """
         return [
             dbc.Tabs(
                 [
@@ -348,7 +420,23 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):  # noqa: D102
+    def load_mpl_outputs(run, inputs, outputs):
+        """
+        Load the rendered matplotlib figure of the footprint.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed.
+        inputs
+            Containing information about the objective, borders and supports visualization.
+        outputs
+            Containing information about the data.
+
+        Returns
+        -------
+        The rendered matplotlib figure of the footprint
+        """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]

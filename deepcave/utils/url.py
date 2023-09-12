@@ -3,10 +3,6 @@
 # URL
 
 This module creates and parses an URL according to its input information.
-
-## Contents
-    - create_url: Create an URL with the given pathname and inputs.
-    - parse_url: Parse the URL and extract input information if possible.
 """
 
 from typing import Any, Dict, Optional

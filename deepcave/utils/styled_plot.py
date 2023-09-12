@@ -5,15 +5,12 @@
 This module provides utilities to customize functions from the matplotlib.
 Plots can be created and different parameters of the plots can be defined.
 
-## Contents
-    - figure: Create a new figure using the input values.
-    - save_figure: Save the figure/plot at the given filename.
-    - render: Render the Styled Plot for displaying.
-    - xlim: Set the x-axis limits with a margin of a matplot plot.
-    - ylim: Set the y-axis limit of a matplot plot.
-    - boxplot: Create a boxplot on a matplot plot.
-    - legend: Customize and add a legend to a matplot plot.
-    - get_color: Get the color from color palette based on the given ID.
+## Classes
+    - StyledPlot: Overwrites default settings from matplotlib.pyplot.
+
+## Constants
+    FIG_WIDTH = 252.0 / 72.27
+    FIG_HEIGHT = FIG_WIDTH / 1.618
 """
 
 from distutils.spawn import find_executable
@@ -42,27 +39,14 @@ class StyledPlot:
 
     If a function is not overwritten, the default function will be used.
 
-    Methods
-    -------
-    figure
-        Create a new figure using the input values.
-    save_figure
-        Save the figure/plot at the given filename.
-    render
-        Render the Styled Plot for displaying.
-    xlim
-        Set the x-axis limits with a margin of a matplot plot.
-    ylim
-        Set the y-axis limit of a matplot plot.
-    boxplot
-        Create a boxplot on a matplot plot.
-    legend
-        Customize and add a legend to a matplot plot.
-    get_color
-        Get the color from color palette based on the given ID.
+    Properties
+    ----------
+    plt : Module("matplotlib.pyplot")
+        The matplotlib plot.
+        The style used is seaborn.
     """
 
-    def __init__(self):  # noqa: D107
+    def __init__(self):
         plt.style.use("seaborn")
 
         # Set MatPlotLib defaults
@@ -147,7 +131,7 @@ class StyledPlot:
 
     def xlim(self, xmin, xmax):
         """
-        Set the x-axis limits with a margin of a matplot plot.
+        Set the x-axis limits with a margin of a matplotlib plot.
 
         Parameters
         ----------
@@ -162,7 +146,7 @@ class StyledPlot:
 
     def ylim(self, ymin, ymax, margin=True):
         """
-        Set the y-axis limit of a matplot plot.
+        Set the y-axis limit of a matplotlib plot.
 
         Parameters
         ----------
@@ -171,7 +155,7 @@ class StyledPlot:
         ymax
             The upper y-axis limit.
         margin
-            Determines wheter a margin should be added to the limits.
+            Determines whether a margin should be added to the limits.
             Default is True.
         """
         if margin:
@@ -188,7 +172,7 @@ class StyledPlot:
 
     def boxplot(self, values, positions, color, widths=0.5):
         """
-        Create a boxplot on a matplot plot.
+        Create a boxplot on a matplotlib plot.
 
         Parameters
         ----------

@@ -4,16 +4,11 @@
 
 This module provides utilities to handle the cache.
 
+This includes reading, writing, set and get utilities, as well as clearing the cache.
 The cache handles a json file.
 
-## Contents
-    - read: Read content from a file and load into cache as dictionary.
-    - write: Write content of cache into file.
-    - set: Set a value from a chain of keys.
-    - set_dict: Update cache to a specific value.
-    - get: Retrieve value for a specific key.
-    - has: heck whether cache has specific key.
-    - clear: Clear all cache and reset to defaults.
+## Classes
+    - Cache: Cache handles a json file.
 """
 from typing import Any, Dict, Optional
 
@@ -33,23 +28,6 @@ class Cache:
     Cache handles a json file.
 
     Decided not to use flask_caching since code is easier to change to our needs.
-
-    Methods
-    -------
-    read
-        Read content from a file and load into cache as dictionary.
-    write
-        Write content of cache into file.
-    set
-        Set a value from a chain of keys.
-    set_dict
-        Update cache to a specific value.
-    get
-        Retrieve value for a specific key.
-    has
-        heck whether cache has specific key.
-    clear
-        Clear all cache and reset to defaults.
     """
 
     def __init__(
@@ -58,7 +36,7 @@ class Cache:
         defaults: Dict = None,
         debug: bool = False,
         write_file: bool = True,
-    ) -> None:  # noqa: D107
+    ) -> None:
         self._defaults = {} if defaults is None else defaults
 
         # Fields set by self._setup()
@@ -70,6 +48,17 @@ class Cache:
         self._setup(filename, write_file)
 
     def _setup(self, filename: Optional[Path], write_file: bool = True) -> None:
+        """
+        Initialize setup.
+
+        Parameters
+        ----------
+        filename : Optional[Path]
+            The filename to be set.
+        write_file : bool, optional
+            Define whether do write the content of cache into a file.
+            Default is True.
+        """
         self._data = {}
         self._filename = filename
 
@@ -105,6 +94,21 @@ class Cache:
 
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
+
+        Parameters
+        ----------
+        *keys
+            The keys to set the value from.
+        value : Any
+            The value to be set.
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+
+        Raises
+        ------
+        RuntimeError
+            If the type of the key is not a string.
         """
         name = "(empty)"
         if self._filename is not None:

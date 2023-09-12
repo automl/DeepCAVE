@@ -2,10 +2,7 @@
 """
 # configs
 
-This is for parsing the configurations from a filename.
-
-## Contents
-    - parse_config: Parse the config given the filename.
+This module provides a utility for parsing the configurations from a filename.
 """
 
 from typing import Optional

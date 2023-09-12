@@ -4,8 +4,8 @@
 
 This module defines a custom layout for displaying a "NotFound" page.
 
-## Contents
-    - __call__: Create the "NotFound" page.
+## Classes
+    - NotFoundLayout: Define a custom "NotFound" layout.
 """
 from typing import List
 
@@ -19,13 +19,13 @@ class NotFoundLayout(Layout):
     """
     Define a custom "NotFound" layout.
 
-    Methods
-    -------
-    __call__
-        Create the "NotFound" page.
+    Properties
+    ----------
+    url : str
+        The url that could not be reached.
     """
 
-    def __init__(self, url) -> None:  # noqa: D107
+    def __init__(self, url) -> None:
         super().__init__()
         self.url = url
 

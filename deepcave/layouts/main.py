@@ -4,12 +4,10 @@
 
 This module provides and defines the visualization of the main layout.
 
+Also registers and handles the callbacks.
+
 ## Classes
     - MainLayout: This class defines and provides the main layout.
-
-## Contents
-    - register_callbacks: Register the callbacks.
-        - display_page: Display the page and return the plugin.
 """
 
 from typing import Dict, List
@@ -35,15 +33,25 @@ class MainLayout(Layout):
     """
     Define and provides the main layout.
 
-    Methods
-    -------
-    register_callbacks
-        Register the callbacks.
-    display_page
-        Display the page and return the plugin.
+    It handles different callbacks of the layout.
+
+    Properties
+    ----------
+    plugins : dict
+        A dictionary containing the different plugins.
+    sidebar_layout : SidebarLayout
+        A sidebar layout with the categorized plugins.
+    head_layout : HeaderLayout
+        The header layout.
+    general_layout : GeneralLayout
+        The general layout.
+    notification_layout : NotificationLayout
+        The notification layout.
+    not_found_layout : NotFoundLayout
+        The Not Found layout.
     """
 
-    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):  # noqa: D107
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]):
         super().__init__()
         self.plugins = {}
         self.sidebar_layout = SidebarLayout(categorized_plugins)
@@ -55,12 +63,14 @@ class MainLayout(Layout):
             for plugin in plugins:
                 self.plugins[plugin.id] = plugin
 
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register and handle the callbacks."""
         output = Output("content", "children")
         input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)  # type: ignore
         def display_page(pathname: str):  # type: ignore
+            """Display the page with the given path url, check for plugins."""
             pathname = urlparse(pathname).path
             paths = pathname.split("/")[1:]
 

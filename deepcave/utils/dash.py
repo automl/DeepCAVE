@@ -3,10 +3,6 @@
 # Dash
 
 This module provides utilities to return and flash alerts.
-
-## Contents
-    - flash: Flask style flash-message with Alerts.
-    - alert: Return an alert message.
 """
 
 import dash_bootstrap_components as dbc

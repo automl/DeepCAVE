@@ -3,15 +3,10 @@
 # DeepCAVE
 
 This module defines the DeepCAVE run object.
-It provides utilities to hash and get the DeepCAVE run object.
+It provides utilities to hash and get the DeepCAVE run object, as well as the latest change.
 
 ## Classes
-    - DeepCAVERun: Define the DeepCAVE run and provide handling utilties.
-
-## Contents
-    - hash: Hash the file.
-    - latest_change: Get the latest change of the file.
-    - from_path: Get the run from the given path.
+    - DeepCAVERun: Define the DeepCAVE run and provide handling utilities.
 """
 
 from pathlib import Path
@@ -22,16 +17,7 @@ from deepcave.utils.hash import file_to_hash
 
 class DeepCAVERun(Run):
     """
-    Define the DeepCAVE run and provide handling utilties.
-
-    Methods
-    -------
-    hash
-        Hash the file.
-    latest_change
-        Get the latest change of the file.
-    from_path
-        Get the run from the given path.
+    Define the DeepCAVE run and provide handling utilities.
 
     Attributes
     ----------
@@ -39,13 +25,19 @@ class DeepCAVERun(Run):
         The prefix of the run.
     initial_order
         The initial order.
+
+    Properties
+    ----------
+    path : Path
+        The path to the "history.jsonl" file.
     """
 
     prefix = "DeepCAVE"
     _initial_order = 1
 
     @property
-    def hash(self):  # noqa: D102
+    def hash(self):
+        """Calculate a hash value of a jsonl history file to use as id."""
         if self.path is None:
             return ""
 
@@ -53,12 +45,14 @@ class DeepCAVERun(Run):
         return file_to_hash(self.path / "history.jsonl")
 
     @property
-    def latest_change(self):  # noqa: D102
+    def latest_change(self):
+        """Get the timestamp of the latest change made to the history file."""
         if self.path is None:
             return 0
 
         return Path(self.path / "history.jsonl").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):  # noqa: D102
+    def from_path(cls, path):
+        """Get a DeepCAVE run from a given path."""
         return DeepCAVERun(path.stem, path=Path(path))

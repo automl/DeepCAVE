@@ -4,13 +4,13 @@
 This module provides a notification layout.
 
 It utilizes Dash and provides utilities for displaying notifications.
-The here proivded NotificationLayout class inherits from Layout.
+The here provided NotificationLayout class inherits from Layout.
 With a notification from the Notification module an alert component can be updated.
 It can be updated in content, color as well as visibility.
+Callbacks are registered and handled.
 
-## Contents
-    - register_callbacks: Updates notification alert display
-        - update_alert: Updates the notification
+## Classes
+    - NotificationLayout: Layout class for displaying notifications.
 """
 
 from typing import List, Tuple, Union
@@ -30,17 +30,14 @@ class NotificationLayout(Layout):
     Layout class for displaying notifications.
 
     Extends Layout class, provides callback registering methods.
-
-    Methods
-    -------
-    register_callbacks
-        Register callback for updating notification alert.
     """
 
-    def __init__(self) -> None:  # noqa: D107
+    def __init__(self) -> None:
         super().__init__()
 
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register callback for updating notification alert."""
+
         @app.callback(
             Output("alert", "children"),
             Output("alert", "color"),
@@ -48,6 +45,7 @@ class NotificationLayout(Layout):
             Trigger("global-update", "n_intervals"),
         )
         def update_alert() -> Tuple[str, str, bool]:
+            """Update the notification alert."""
             if (result := notification.get_latest()) is not None:
                 (message, color) = result
                 return message, color, True

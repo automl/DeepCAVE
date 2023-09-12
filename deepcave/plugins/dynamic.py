@@ -4,12 +4,10 @@
 
 This module provides a plugin class for a dynamic plugin.
 
+Registers and handles callbacks.
+
 ## Classes
     - DynamicPlugin: This class provides a dynamic plugin object.
-
-## Contents
-    - register_callbacks: Register callbacks and updates from inputs.
-        - plugin_output_update: Update the outputs from the inputs.
 """
 
 from abc import ABC
@@ -26,21 +24,32 @@ class DynamicPlugin(Plugin, ABC):
     """
     Provide a dynamic plugin object.
 
-    Methods
-    -------
-    register_callbacks
-        Register callbacks and updates from inputs.
-    plugin_output_update
-        Update the outputs from the inputs.
+    Registers and handles callbacks.
+
+    Properties
+    ----------
+    outputs : List[Tuple[str, str, bool]]
+        The registered outputs.
+    inputs : List[Tuple[str, str, bool, Any]]
+        The registered inputs.
+    id : str
+        The identifier of the Plugin.
+    logger : Logger
+        The logger for debugging information.
+    use_cache : bool
+        Defines whether to use the cache.
+    raw_outputs : Dict[str, Any]
+        A dictionary of the raw outputs.
     """
 
     use_cache = True
 
-    def __init__(self) -> None:  # noqa: D107
+    def __init__(self) -> None:
         super().__init__()
 
     @interactive
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register the callbacks and update the outputs from the inputs."""
         super().register_callbacks()
         from deepcave import app, c, rc
 
@@ -60,8 +69,8 @@ class DynamicPlugin(Plugin, ABC):
 
             Parameters
             ----------
-                *inputs_list
-                    Values from user.
+            *inputs_list
+                Values from user.
 
             Returns
             -------

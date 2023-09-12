@@ -3,12 +3,12 @@
 # Footprint
 
 This module provides utilities for creating a footprint of a model.
-It uses an MDS plot.
+It uses multidimensional scaling.
+It also provides utilities to get the surface and the points of the plot.
 
-## Contents
-    - calculate: Calculate the distances and trains the model.
-    - get_surface: Get surface of the MDS plot.
-    - get_points: Return the points of the MDS plot.
+
+## Classes
+    - Footprint: Can train and create a footprint of a model.
 """
 
 from typing import List, Optional, Tuple, Union
@@ -34,21 +34,20 @@ logger = get_logger(__name__)
 
 class Footprint:
     """
-    Can train and create a footptint of a model.
+    Can train and create a footprint of a model.
 
-    It uses an MDS plot.
+    It uses multidimensional scaling.
+    Provides utilities to get the surface and the points of the plot.
 
-    Methods
-    -------
-    calculate
-        Calculate the distances and trains the model.
-    get_surface
-        Get surface of the MDS plot.
-    get_points
-        Return the points of the MDS plot.
+    Properties
+    ----------
+    run : AbstractRun
+        The AbstractRun used for the calculation of the footprint.
+    cs : ConfigurationSpace
+        The configuration space of the run.
     """
 
-    def __init__(self, run: AbstractRun):  # noqa: D107
+    def __init__(self, run: AbstractRun):
         if run.configspace is None:
             raise RuntimeError("The run needs to be initialized.")
 
@@ -73,6 +72,7 @@ class Footprint:
         self._reset()
 
     def _reset(self) -> None:
+        """Reset the footprint."""
         self._objective_model: Optional[RandomForestRegressor] = None
         self._area_model: Optional[RandomForestRegressor] = None
         self._config_ids: Optional[List[int]] = None
@@ -98,7 +98,7 @@ class Footprint:
         Parameters
         ----------
         objective : Objective
-            Objective and colour to show.
+            Objective and color to show.
         budget : Union[int, float]
             All configurations with this budget are considered.
         support_discretization : Optional[int], optional
@@ -111,7 +111,7 @@ class Footprint:
             How many times to retry adding a new configuration.
         exclude_configs : bool, optional
             Whether the configurations from the run should be excluded in the MDS scaling.
-            This is particullary interseting if only the search space should be plotted.
+            This is particularly interesting if only the search space should be plotted.
         """
         # Reset everything
         self._reset()
@@ -230,7 +230,7 @@ class Footprint:
         self, details: float = 0.5, performance: bool = True
     ) -> Tuple[List, List, List]:
         """
-        Get surface of the MDS plot.
+        Get surface of the multidimensional scaling plot.
 
         Parameters
         ----------
@@ -248,6 +248,8 @@ class Footprint:
         ------
         RuntimeError
             If `calculate` was not called before.
+        RuntimeError
+            If evaluated configs weren't included.
         """
         X = self._MDS_X
         if X is None:
@@ -283,7 +285,7 @@ class Footprint:
 
     def get_points(self, category: str = "configs") -> Tuple[List[float], List[float], List[int]]:
         """
-        Return the points of the MDS plot.
+        Return the points of the multidimensional scaling plot.
 
         Parameters
         ----------
@@ -300,6 +302,8 @@ class Footprint:
         ------
         RuntimeError
             If category is not supported.
+        RuntimeError
+            If calculated wasn't called before.
         """
         if category not in ["configs", "borders", "supports", "incumbents"]:
             raise RuntimeError("Unknown category.")
@@ -361,6 +365,11 @@ class Footprint:
         -------
         float
             Distance from configuration 1 and configuration 2.
+
+        Raises
+        ------
+        RuntimeError
+            If calculate wasn't called first.
         """
         if self._depth is None or self._is_categorical is None:
             raise RuntimeError("You need to call `calculate` first.")
@@ -373,6 +382,19 @@ class Footprint:
         return d
 
     def _get_distances(self, X: np.ndarray) -> np.ndarray:
+        """
+        Get the distances between the configurations.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            The configurations.
+
+        Returns
+        -------
+        np.ndarray
+            The calculated distances.
+        """
         n_configs = X.shape[0]
 
         # We initiate the distances
@@ -418,7 +440,7 @@ class Footprint:
         rejection_threshold: Optional[float] = 0.0,
     ) -> bool:
         """
-        Update the internal distance if the passed config is not rejectded.
+        Update the internal distance if the passed config is not rejected.
 
         Parameters
         ----------
@@ -512,7 +534,7 @@ class Footprint:
 
     def _get_mds(self) -> np.ndarray:
         """
-        Perform MDS on the internal distances.
+        Perform multidimensional scaling on the internal distances.
 
         Parameters
         ----------
@@ -522,7 +544,12 @@ class Footprint:
         Returns
         -------
         np.ndarray
-            Numpy array with MDS coordinates in 2D.
+            Numpy array with multidimensional scaling coordinates in 2D.
+
+        Raises
+        ------
+        RuntimeError
+            When calculated wasn't called first.
         """
         if self._distances is None:
             raise RuntimeError("You need to call `calculate` first.")
@@ -537,7 +564,7 @@ class Footprint:
         Parameters
         ----------
         X : np.ndarray
-            Numpy array with MDS coordinates in 2D.
+            Numpy array with multidimensional scaling coordinates in 2D.
         Y : np.ndarray
             Numpy array with costs.
         """
@@ -546,7 +573,14 @@ class Footprint:
         self._objective_model.fit(X, Y)
 
     def _train_on_areas(self) -> None:
-        """Trains the random forest on the "valid" areas."""
+        """
+        Trains the random forest on the "valid" areas.
+
+        Raises
+        ------
+        RuntimeError
+            If calculated wasn't called first.
+        """
         if self._MDS_X is None:
             raise RuntimeError("You need to call `calculate` first.")
 

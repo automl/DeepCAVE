@@ -4,14 +4,7 @@
 
 This module provides utilities to customize the layout of the Dash.
 
-## Contents
-    - help_button:  Generate button with help icon.
-    - render_table
-    - get_slider_marks: Generate a dictionary containing slider marks.
-    - get_select_options: Get options for selecting.
-    - get_checklist_options: Get options for a checklist.
-    - get_radio_options: Get options for a radio.
-    - create_table: Create a table from the given data.
+This includes a help button, slider marks, select/checklist/radio options.
 """
 from typing import Any, Dict, List, Optional, Union
 
@@ -114,7 +107,39 @@ def get_select_options(
     disabled: Union[List[bool], None] = None,
     binary: bool = False,
 ) -> List[Dict[str, Any]]:
-    """If values are none use labels as values. If both are none return empty list."""
+    """
+    Get dictionaries of the selected options.
+
+    If values are none use labels as values. If both are none return empty list.
+
+    Parameters
+    ----------
+    labels : Any, optional
+        To specify the labels of the options.
+        If labels are None, use values als labels.
+        Default is None.
+    values : Any, optional
+        To specify the values corresponding to the options.
+        If values are None, use labels as values.
+        Default is None
+    disabled : Union[List[Bool], None], optional
+        A list containing information whether each option should be disabled or not.
+        Default is None.
+    binary : bool, optional
+        Define whether to return to return two dictionaries with binary choices.
+        Only when both values and labels are None.
+        Default is False.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        A list of dictionaries of the selected options.
+
+    Raises
+    ------
+    ValueError
+        If the labels and values do not have the same length.
+    """
     if labels is None and values is None:
         if binary:
             return [{"label": "Yes", "value": True}, {"label": "No", "value": False}]
@@ -143,14 +168,68 @@ def get_select_options(
 def get_checklist_options(
     labels: Any = None, values: Any = None, binary: bool = False
 ) -> List[Dict[str, Any]]:
-    """Get options for a checklist."""
+    """
+    Get a list of dictionaries of checklist options.
+
+    Parameters
+    ----------
+    labels : Any, optional
+        To specify the labels of the options.
+        If labels are None, use values als labels.
+        Default is None.
+    values : Any, optional
+        To specify the values corresponding to the options.
+        If values are None, use labels as values.
+        Default is None
+    binary : bool, optional
+        Define whether to return to return two dictionaries with binary choices.
+        Only when both values and labels are None.
+        Default is False.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        A list of dictionaries of the checklist options.
+
+    Raises
+    ------
+    ValueError
+        If the labels and values do not have the same length.
+    """
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
 def get_radio_options(
     labels: Any = None, values: Any = None, binary: Any = False
 ) -> List[Dict[str, Any]]:
-    """Get options for a radio."""
+    """
+    Get a list of dictionaries of radio options.
+
+    Parameters
+    ----------
+    labels : Any, optional
+        To specify the labels of the options.
+        If labels are None, use values als labels.
+        Default is None.
+    values : Any, optional
+        To specify the values corresponding to the options.
+        If values are None, use labels as values.
+        Default is None
+    binary : bool, optional
+        Define whether to return to return two dictionaries with binary choices.
+        Only when both values and labels are None.
+        Default is False.
+
+    Returns
+    -------
+    List[Dict[str, Any]]
+        A list of dictionaries of the radio options.
+
+    Raises
+    ------
+    ValueError
+        If the labels and values do not have the same length.
+    """
     return get_select_options(labels=labels, values=values, binary=binary)
 
 
@@ -167,7 +246,7 @@ def create_table(
     Parameters
     ----------
     output : Dict[str, str]
-        Containig the information for the table.
+        Containing the information for the table.
     fixed : bool, optional
         Indicates whether the table has a fixed layout.
         Default is False.

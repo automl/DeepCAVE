@@ -1,16 +1,13 @@
 #  noqa: D400
 """
-# RunChaches
+# RunCaches
 
 This module defines a class for holding the caches for selected runs.
 
-## Contents
-    - update: Update the cache for the given run. If the cache does not exists it will be created.
-    - _reset: Initializes/resets the cache for the given run.
-    - get: Return the raw outputs for the given run, plugin and inputs key.
-    - set: Set the value for the given run, plugin and inputs key.
-    - clear_run: Remove all caches for the given run.
-    - clear: Remove all caches.
+Utilities provided include updating, getting, setting and clearing.
+
+## Classes
+    - RunCaches: Hold the caches for the selected runs.
 """
 
 from typing import Any, Dict
@@ -32,9 +29,16 @@ class RunCaches:
 
     Each input has its own cache. This change was necessary because it ensures that not all data
     are loaded if they are not needed.
+
+    Properties
+    ----------
+    cache_dir : Path
+        The path to the cache directory of the run.
+    logger : Logger
+        The logger for the run cache.
     """
 
-    def __init__(self, config: "Config"):  # noqa: D107
+    def __init__(self, config: "Config"):
         self.cache_dir = config.CACHE_DIR / "run_cache"
         self.logger = get_logger("RunCache")
         self._debug = config.DEBUG

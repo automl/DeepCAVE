@@ -4,19 +4,11 @@
 
 This module provides a plugin for the visualization of the importances.
 
+Provided utilities include getting input and output layout (filtered or non-filtered),
+processing the data and loading the outputs. Also provides a matplotlib version.
+
 ## Classes
     - Importances: This class provides a plugin for the visualization of the importances.
-
-## Contents
-    - get_input_layout: Get the input layout.
-    - get_filter_layout: Get filtered layout of input.
-    - load_inputs: Load the inputs.
-    - load_dependency_inputs: Load the dependency inputs.
-    - process: Process the data.
-    - get_output_layout: Get the layout of the output.
-    - load_outputs: Load the outputs.
-    - get_mpl_output_layout: Get the mpl layout of the output.
-    - load_mpl_output: Load the mpl output.
 """
 
 import dash_bootstrap_components as dbc
@@ -39,31 +31,13 @@ class Importances(StaticPlugin):
     """
     Provide a plugin for the visualization of the importances.
 
-    Methods
-    -------
-    get_input_layout
-        Get the input layout.
-    get_filter_layout
-        Get filtered layout of input.
-    load_inputs
-        Load the inputs.
-    load_dependency_inputs
-        Load the dependency inputs.
-    process
-        Process the data.
-    get_output_layout
-        Get the layout of the output.
-    load_outputs
-        Load the outputs.
-    get_mpl_output_layout
-        Get the mpl layout of the output.
-    load_mpl_output
-        Load the mpl output.
+    Provided utilities include getting input/output layout, data processing
+    and loading outputs. Also provides a matplotlib version.
 
     Attributes
     ----------
     id
-        The idetificator of the plugin.
+        The identificator of the plugin.
     name
         The name of the plugin.
     icon
@@ -71,7 +45,7 @@ class Importances(StaticPlugin):
     help
         The path to the documentation of the plugin.
     activate_run_selection
-        Wheter the run selection feature is active.
+        Whether the run selection feature is active.
     """
 
     id = "importances"
@@ -81,7 +55,19 @@ class Importances(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the html container for the layout of the input.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id of the objective.
+
+        Returns
+        -------
+        An html container for the layout of the input.
+        """
         return [
             html.Div(
                 [
@@ -129,7 +115,19 @@ class Importances(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the layout for a filtered html container.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the Checklist.
+
+        Returns
+        -------
+        A filtered html container.
+        """
         return [
             html.Div(
                 [
@@ -160,7 +158,14 @@ class Importances(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """
+        Load the method labels, values and different attributes.
+
+        Returns
+        -------
+        The attributes of the inputs.
+        """
         method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
         method_values = ["local", "global"]
 
@@ -175,8 +180,22 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
-        # Prepare objetives
+    def load_dependency_inputs(self, run, _, inputs):
+        """
+        Load the objective, budgets and hyperparameters and its attributes.
+
+        Parameters
+        ----------
+        run
+            The run to get the objective from.
+        inputs
+            Contains information about the objective, budgets and number of hps.
+
+        Returns
+        -------
+        The objective, budgets, hyperparameters and their attributes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -229,7 +248,28 @@ class Importances(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Initialize the evaluator, calculate and get the processed data.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to get the objective from.
+        inputs :  Dict[str, Any]
+            Contains information about the method and the number of trees.
+
+        Returns
+        -------
+        The processed data.
+
+        Raises
+        ------
+        RuntimeError
+            If the number of trees is not specified.
+        RuntimeError
+            If the method is not found.
+        """
         objective = run.get_objective(inputs["objective_id"])
         method = inputs["method"]
         n_trees = inputs["n_trees"]
@@ -241,7 +281,7 @@ class Importances(StaticPlugin):
         budgets = run.get_budgets(include_combined=True)
 
         if method == "local":
-            # Intiatize the evaluator
+            # Initialize the evaluator
             evaluator = LocalEvaluator(run)
         elif method == "global":
             evaluator = GlobalEvaluator(run)
@@ -259,11 +299,41 @@ class Importances(StaticPlugin):
         return data
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get a graph with the layout of the output.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            A function to get the id for the graph.
+
+        Returns
+        -------
+        The graph with the layout of the output.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load the importances and the corresponding layout of the figure.
+
+        Also safes the image of the figure.
+
+        Parameters
+        ----------
+        run
+            The run to get the budget from.
+        inputs
+            Containing the hyperparameter names, the budget ids and the number of hps.
+        outputs
+            Containing the budget id and importances.
+
+        Returns
+        -------
+        The figure of the importances.
+        """
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]
@@ -340,14 +410,31 @@ class Importances(StaticPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):  # noqa: D102
+    def get_mpl_output_layout(register):
+        """Get an html container of the output layout."""
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
         )
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):  # noqa: D102
+    def load_mpl_outputs(run, inputs, outputs):
+        """
+        Load the importances and the corresponding layout of the mpl figure.
+
+        Parameters
+        ----------
+        run
+            The run to get the budget from.
+        inputs
+            Containing the hyperparameter names, the budget ids and the number of hps.
+        outputs
+            Containing the budget id and importances.
+
+        Returns
+        -------
+        The rendered mpl figure of the importances.
+        """
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]

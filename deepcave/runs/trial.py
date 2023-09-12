@@ -6,11 +6,7 @@ This module provides the trial object.
 Utilities for handling the trial are provided.
 
 ## Classes
-    - Trial: This class provides the trial object itself and mutlitple handling utilities.
-
-## Contents
-    - get_key: Generate a key based on the configuration ID and the budget.
-    - to_json: Convert Trial Object to JSON-compatible representation.
+    - Trial: This class provides the trial object itself and multiple handling utilities.
 """
 
 from typing import Any, Dict, List, Tuple, Union
@@ -23,14 +19,7 @@ from deepcave.runs.status import Status
 @dataclass
 class Trial:
     """
-    Provide the trial object itself and mutlitple handling utilities.
-
-    Methods
-    -------
-    get_key
-        Generate a key based on the configuration ID and the budget.
-    to_json
-        Convert Trial Object to JSON-compatible representation.
+    Provide the trial object itself and multiple handling utilities.
 
     Attributes
     ----------
@@ -48,6 +37,23 @@ class Trial:
         The status of the trial
     additional: Dict[str, Any]
         Any additional information of the trial.
+
+    Properties
+    ----------
+    status : Status
+        The status of the trial.
+    config_id : int
+        The identificator of the configuration.
+    budget : int | float
+        The budget for the trial.
+    costs : List[float]
+        A list of the costs of the trial.
+    start_time : float
+        The start time of the trial.
+    end_time : float
+        The end time of the trial.
+    additional : Dict[str, Any]
+        A dictionary of additional information of the trial.
     """
 
     config_id: int
@@ -71,7 +77,7 @@ class Trial:
 
         Returns
         -------
-        Tupe[int, int]
+        Tupel[int, int]
             A Tuple representing a unique key based on the configuration ID and the budget.
         """
         from deepcave.runs import AbstractRun

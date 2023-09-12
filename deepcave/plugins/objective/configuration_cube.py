@@ -1,20 +1,11 @@
 #  noqa: D400
 """
-# ConfiguartionCube
+# ConfigurationCube
 
-This module provides utilities for visualizing and creating the configruation cube.
+This module provides utilities for visualizing and creating a configuration cube.
 
 ## Classes
     - ConfigurationCube: This class provides a plugin for visualizing the configuration cube.
-
-## Contents
-    - get_input_layout: Get the input layout.
-    - get_filter_layout: Get filtered layout of input.
-    - load_inputs: Load the inputs.
-    - load_dependency_inputs: Load the dependency inputs.
-    - process: Process the data.
-    - get_output_layout: Get the layout of the output.
-    - load_outputs: Load the outputs.
 """
 
 from typing import Dict, Tuple
@@ -50,23 +41,6 @@ class ConfigurationCube(DynamicPlugin):
     """
     Provide a plugin for visualizing the configuration cube.
 
-    Methods
-    -------
-    get_input_layout
-        Get the input layout.
-    get_filter_layout
-        Get filtered layout of input.
-    load_inputs
-        Load the inputs.
-    load_dependency_inputs
-        Load the dependency inputs.
-    process
-        Process the data.
-    get_output_layout
-        Get the layout of the output.
-    load_outputs
-        Load the outputs.
-
     Attributes
     ----------
     id
@@ -88,7 +62,19 @@ class ConfigurationCube(DynamicPlugin):
     help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Define and get the dash bootstrap components for the input layout.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id for the select object.
+
+        Returns
+        -------
+        An dash bootstrap component of the layout of the input.
+        """
         return [
             dbc.Row(
                 [
@@ -125,7 +111,19 @@ class ConfigurationCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the layout for a filtered html container.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the Slider.
+
+        Returns
+        -------
+        A filtered html container.
+        """
         return [
             html.Div(
                 [
@@ -151,14 +149,31 @@ class ConfigurationCube(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """Load the inputs containing configuration and hyperparameter attributes."""
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
-        # Prepare objetives
+    def load_dependency_inputs(self, run, _, inputs):
+        """
+        Load the objective, budgets and hyperparameters and its attributes.
+
+        It is restricted to three hyperparameters.
+
+        Parameters
+        ----------
+        run
+            The run to get the objective from.
+        inputs
+            Contains information about the objective, budget, configurations and hyperparameters.
+
+        Returns
+        -------
+        The objective, budgets, hyperparameters and their attributes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -219,7 +234,21 @@ class ConfigurationCube(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Get a serialized dataframe of the encoded data.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to be processed.
+        inputs : Dict[str, Any]
+            Containing the budget and objective.
+
+        Returns
+        -------
+        The serialized dataframe.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
 
@@ -229,11 +258,28 @@ class ConfigurationCube(DynamicPlugin):
         return {"df": serialize(df)}
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """Get the output layout as dash Graph object."""
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load and save the output figure.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed.
+        inputs
+            The inputs containing hyperparameters names, number of configs and objectives ids.
+        outputs
+            Contains the serialized dataframe.
+
+        Returns
+        -------
+        The output figure.
+        """
         df = deserialize(outputs["df"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameter_names"]
         n_configs = inputs["n_configs"]

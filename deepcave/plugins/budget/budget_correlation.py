@@ -4,13 +4,11 @@
 
 This module provides utilities to visualize budget correlations.
 
-## Contents
-    - check_run_compatibility: Check if the runs are elligable for comparing.
-    - get_input_layout: Get the layout of the input.
-    - load_dependency_inputs: Load the dependency inputs.
-    - process: Calculate the correlations between the budgets.
-    - get_output_layout: Get the layout for the output.
-    - load_outputs: Create the output table and safe the image.
+Provided utilities include getting input and output layout, processing the data
+and loading the outputs.
+
+## Classes
+    - BudgetCorrelation: Can be used for visualizing the correlation of budgets.
 """
 from typing import Dict
 
@@ -35,20 +33,8 @@ class BudgetCorrelation(DynamicPlugin):
     """
     Can be used for visualizing the correlation of budgets.
 
-    Methods
-    -------
-    check_run_compatibility
-        Check if the runs are elligable for comparing.
-    get_input_layout
-        Get the layout of the input.
-    load_dependency_inputs
-        Load the dependency inputs.
-    process
-        Calculate the correlations between the budgets.
-    get_output_layout
-        Get the layout for the output.
-    load_outputs
-        Create the output table and safe the image.
+    Provided utilities include getting input/output layout, data processing
+    and loading outputs.
 
     Attributes
     ----------
@@ -61,7 +47,7 @@ class BudgetCorrelation(DynamicPlugin):
     help
         The path to the documentation of the plugin.
     activate_run_selection
-        Defines wheter the run selection feature is active.
+        Defines whether the run selection feature is active.
         Default is True.
     """
 
@@ -72,7 +58,20 @@ class BudgetCorrelation(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def check_run_compatibility(run) -> bool:  # noqa: D102
+    def check_run_compatibility(run) -> bool:
+        """
+        Check if the run has more than one budget and is compatible.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to be checked.
+
+        Returns
+        -------
+        bool
+            True if the run is compatible, otherwise False.
+        """
         if len(run.get_budgets()) == 1:
             notification.update(f"{run.name} can not be selected because it has only one budget.")
             return False
@@ -80,7 +79,19 @@ class BudgetCorrelation(DynamicPlugin):
         return True
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the html container for the layout of the input.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the objective.
+
+        Returns
+        -------
+        An html container for the layout of the input.
+        """
         return [
             html.Div(
                 [
@@ -93,7 +104,21 @@ class BudgetCorrelation(DynamicPlugin):
             ),
         ]
 
-    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
+    def load_dependency_inputs(self, run, _, inputs):
+        """
+        Load the objectives attributes.
+
+        Parameters
+        ----------
+        run
+            The run to get the objective from.
+        inputs
+            The inputs containing the objective id and a value.
+
+        Returns
+        -------
+        The objectives id, its options and a value.
+        """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -110,7 +135,21 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Load the budget and the costs of the run. Get the correlations.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to get the budget and the costs from.
+        inputs : Dict[str, Any]
+            The input to get the objective id from.
+
+        Returns
+        -------
+        The correlations as well as the correlations symmetric.
+        """
         objective_id = inputs["objective_id"]
         budget_ids = run.get_budget_ids(include_combined=False)
 
@@ -154,7 +193,19 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get the html container for the layout of the output.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the Div object.
+
+        Returns
+        -------
+        The html container containing the layout of the output.
+        """
         return [
             html.Div(id=register("text", "children"), className="mb-3"),
             dbc.Tabs(
@@ -171,7 +222,21 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, _, outputs):  # noqa: D102
+    def load_outputs(run, _, outputs):
+        """
+        Create the output table and safe the image.
+
+        Parameters
+        ----------
+        run
+            The run to get the budget from.
+        outputs
+            The outputs to get the correlation and its symmetric from.
+
+        Returns
+        -------
+        The text, the figure and the created table.
+        """
         traces = []
         categories = defaultdict(list)
         correlations = outputs["correlations"]

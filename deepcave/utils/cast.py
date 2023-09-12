@@ -2,7 +2,7 @@
 """
 # Cast
 
-This module conversta any value to an int if possible.
+This module converts any value to an int if possible.
 
 ## Contents
     - optional_int: Convert a value to an int if possible.

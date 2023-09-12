@@ -6,14 +6,8 @@
 This module provides utilities for visualizing the parallel coordinates.
 The labels are of the important hyperparameters, budget and objectives.
 
-## Contents
-    - get_input_layout: Get the layout of the given inputs.
-    - get_filter_layout: Get a filtered layout of the given inputs.
-    - load_inputs: Load the input for the options.
-    - load_dependency_inputs: Load the dependency inputs.
-    - process: Run a quick fANOVA and process the evaluator.
-    - get_output_layout: Get the layout for the output.
-    - load_outputs: Load the outputs and safe image in a file.
+## Classes
+    - ParallelCoordinates : Can be used for visualizing the parallel coordinates.
 """
 
 from collections import defaultdict
@@ -41,23 +35,6 @@ class ParallelCoordinates(StaticPlugin):
     """
     Can be used for visualizing the parallel coordinates.
 
-    Methods
-    -------
-    get_input_layout
-        Get the layout of the given inputs.
-    get_filter_layout
-        Get a filtered layout of the given inputs.
-    load_inputs
-        Load the input for the options.
-    load_dependency_inputs
-        Load the dependency inputs.
-    process
-        Run a quick fANOVA and process the evaluator.
-    get_output_layout
-        Get the layout for the output.
-    load_outputs
-        Load the outputs and safe image in a file.
-
     Attributes
     ----------
     id
@@ -67,7 +44,7 @@ class ParallelCoordinates(StaticPlugin):
     icon
         The icon representing the plugin
     activate_run_selection
-        Define whether the run selection feature is atcive.
+        Define whether the run selection feature is active.
     help
         The path to the documentation of the plugin.
     """
@@ -79,7 +56,19 @@ class ParallelCoordinates(StaticPlugin):
     help = "docs/plugins/parallel_coordinates.rst"
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the input layout as html container and dash bootstrap component.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id for the select object.
+
+        Returns
+        -------
+        An html container and a dash bootstrap component of the layout of the input.
+        """
         return [
             dbc.Row(
                 [
@@ -131,7 +120,19 @@ class ParallelCoordinates(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the filtered layout for a dash bootstrap component and html container.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of the Input, select object and html Checklist.
+
+        Returns
+        -------
+        A filtered dash bootstrap component and html container.
+        """
         return [
             dbc.Row(
                 [
@@ -172,7 +173,8 @@ class ParallelCoordinates(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """Load the inputs containing information about the values to be visualized."""
         return {
             "show_important_only": {"options": get_select_options(binary=True), "value": "true"},
             "show_unsuccessful": {"options": get_select_options(binary=True), "value": "false"},
@@ -181,8 +183,22 @@ class ParallelCoordinates(StaticPlugin):
             "hide_hps": {"hidden": True},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):  # noqa: D102
-        # Prepare objetives
+    def load_dependency_inputs(self, run, _, inputs):
+        """
+        Load the objective, budgets and hyperparameters and its attributes.
+
+        Parameters
+        ----------
+        run
+            The run to get the objective, budget and hyperparameters from.
+        inputs
+            Contains information about the objective, budget, configurations and hyperparameters.
+
+        Returns
+        -------
+        The objective, budgets, hyperparameters and their attributes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -239,7 +255,22 @@ class ParallelCoordinates(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Get a serialized dataframe of the data and run a fanova for evaluation.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs : Dict[str, Any]
+            The inputs for the visualization.
+
+        Returns
+        -------
+        result
+            The serialized dataframe.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         df = serialize(run.get_encoded_data(objective, budget))
@@ -257,11 +288,28 @@ class ParallelCoordinates(StaticPlugin):
         return result
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """Get the dash Graph output layout."""
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load and save the output figure.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed.
+        inputs
+            The inputs containing information about what to visualize.
+        outputs
+            Contains the serialized dataframe as well as the important hyperparameter names.
+
+        Returns
+        -------
+        The output figure.
+        """
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 

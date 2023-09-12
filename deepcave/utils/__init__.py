@@ -7,7 +7,7 @@
 cache
     This module provides utilities to handle the cache.
 cast
-    This module conversta any value to an int if possible.
+    This module converts any value to an int if possible.
 compression
     This module provides utilities for serializing and deserializing a dataframe from/to a string.
 configs
@@ -30,7 +30,7 @@ logs
     This module sets up and gets the logging configuration.
 notification
     This module provides utilities for creating, updating and resetting notifications.
-run_chaches
+run_caches
     This module defines a class for holding the caches for selected runs.
 styled_plot
     This module provides utilities to customize functions from the matplotlib.

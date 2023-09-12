@@ -3,10 +3,11 @@
 # GeneralLayout
 
 This module provides the General Layout class.
+
 It handles different callbacks of the layout.
 
-## Contents
-    - get_converter_text: Get the text for the available run converters.
+## Classes
+    - GeneralLayout: Provide different utilities to handle callbacks for the layout.
 """
 
 from typing import Dict, List, Optional, Type
@@ -28,9 +29,17 @@ from deepcave.utils.util import short_string
 
 
 class GeneralLayout(Layout):
-    """Provide different utilities to handle callbacks for the layout."""
+    """
+    Provide different utilities to handle callbacks for the general layout.
 
-    def register_callbacks(self) -> None:  # noqa: D102
+    Properties
+    ----------
+    logger : Logger
+        A logger used for debug information of the groups.
+    """
+
+    def register_callbacks(self) -> None:
+        """Register if there were any callbacks."""
         self._callback_working_directory_changed()
         self._callback_display_available_runs()
         self._callback_display_selected_runs()
@@ -40,6 +49,7 @@ class GeneralLayout(Layout):
         self._callback_clear_cache()
 
     def _callback_working_directory_changed(self) -> None:
+        """Check for change in working directory."""
         inputs = [
             Input("on-page-load", "href"),
             Input("general-working-directory-input", "value"),
@@ -66,6 +76,7 @@ class GeneralLayout(Layout):
             dynamic_n_clicks: List[Optional[int]],
             dynamic_working_dirs: List[str],
         ):
+            """Change the working directory."""
             # `working_dir` is only none on page load
             if working_dir is None:
                 # Handler working directory
@@ -87,11 +98,13 @@ class GeneralLayout(Layout):
             )
 
     def _callback_display_available_runs(self) -> None:
+        """Display available runs."""
         output = Output("general-available-runs-container", "children")
         input = Input("general-available-runs", "data")
 
         @app.callback(output, input)  # type: ignore
         def callback(run_paths: List[str]):  # type: ignore
+            """Display the available runs."""
             children = []
 
             # Add text to go to parent directory
@@ -139,11 +152,13 @@ class GeneralLayout(Layout):
             return children
 
     def _callback_display_selected_runs(self) -> None:
+        """Display the selected runs."""
         output = Output("general-selected-runs-container", "children")
         input = Input("general-selected-runs", "data")
 
         @app.callback(output, input)  # type: ignore
         def callback(run_paths: List[str]):  # type: ignore
+            """Display the selected runs."""
             children = []
 
             for i, run_path in enumerate(run_paths):
@@ -184,6 +199,7 @@ class GeneralLayout(Layout):
             return children
 
     def _callback_manage_run(self) -> None:
+        """Manage runs, including adding and removing them."""
         outputs = [
             Output({"type": "general-dynamic-add-run", "index": ALL}, "n_clicks"),
             Output({"type": "general-dynamic-remove-run", "index": ALL}, "n_clicks"),
@@ -204,6 +220,7 @@ class GeneralLayout(Layout):
         def callback(  # type: ignore
             add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths
         ):
+            """Add and remove runs."""
             # Add run path
             for n_click, run_path in zip(add_n_clicks, available_run_paths):
                 if n_click is not None:
@@ -226,6 +243,7 @@ class GeneralLayout(Layout):
             return add_n_clicks, remove_n_clicks, run_handler.get_selected_run_paths()
 
     def _callback_display_groups(self) -> None:
+        """Responsible of displaying the groups."""
         outputs = [
             Output("general-group-container", "children"),
             Output("general-add-group", "n_clicks"),
@@ -240,12 +258,15 @@ class GeneralLayout(Layout):
         # Let's take care of the groups here
         @app.callback(outputs, inputs)  # type: ignore
         def callback(n_clicks: int, _trigger1, _trigger2, children):  # type: ignore
+            """Display groups."""
+
             def get_layout(
                 index: int,
                 options: Dict[str, str],
                 input_value: str = "",
                 dropdown_value: Optional[List[str]] = None,
             ) -> Component:
+                """Get the layout for the groups."""
                 if dropdown_value is None:
                     dropdown_value = []
 
@@ -289,6 +310,7 @@ class GeneralLayout(Layout):
             return children, None
 
     def _callback_manage_groups(self) -> None:
+        """Manage the groups."""
         outputs = Output("general-group-trigger", "data")
         inputs = [
             Input({"type": "group-name", "index": ALL}, "value"),
@@ -298,6 +320,7 @@ class GeneralLayout(Layout):
 
         @app.callback(outputs, inputs)  # type: ignore
         def callback(group_names, all_run_paths, i):  # type: ignore
+            """Update the groups."""
             # Abort on page load
             if self._refresh_groups:
                 self._refresh_groups = False
@@ -335,11 +358,13 @@ class GeneralLayout(Layout):
             raise PreventUpdate()
 
     def _callback_clear_cache(self) -> None:
+        """Responsible for clearing the cache."""
         output = Output("general-clear-cache-button", "n_clicks")
         input = Input("general-clear-cache-button", "n_clicks")
 
         @app.callback(output, input)  # type: ignore
         def callback(n_clicks):  # type: ignore
+            """Clear the cache, stop all running jobs, create new run caches."""
             if n_clicks is not None:
                 rc.clear()
 

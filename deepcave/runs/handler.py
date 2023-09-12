@@ -6,23 +6,8 @@ This module handles the run.
 It can retrieve working directories, run paths, run names, as well as groups of runs.
 It provides utilities to update and remove runs as well a groups of runs.
 
-## Contents
-    - set_working_directory: Set the working directoy to the meta cache.
-    - get_working_directory: Return the current working directory in the cache.
-    - get_available_run_paths: Return the available run paths from the current directory.
-    - get_selected_run_paths:  Return the selected run paths from the cache.
-    - get_selected_run_names: Return the run names of the selected runs.
-    - get_run_names: Return the stem of the path.
-    - get_selected_groups: Get the selected groups.
-    - add_run: Add a run path to the cache. If run path is already in cache, do nothing.
-    - remove_run: Remove a run path from the cache. If run path is not in cache, do nothing.
-    - update: Update the internal run and group instances but only if a hash changed.
-    - update_runs: Load selected runs and update cache if files changed.
-    - update_run: Load the run from `self.runs` or creates a new one.
-    - update_groups: Load chosen groups.
-    - get_run: Look inside `self.runs` and `self.groups` and if the run id is found, return the run.
-    - get_groups: Return instantiated grouped runs.
-    - get_runs: Return the runs from the internal cache.
+# Classes
+    - RunHandler: Handles the runs.
 """
 
 from typing import Dict, List, Optional, Type, Union
@@ -46,52 +31,35 @@ class RunHandler:
     Based on the meta data in the cache, automatically selects the right converter
     and switches to the right (plugin) cache.
 
-    Methods
-    -------
-    set_working_directory
-        Set the working directoy to the meta cache.
-    get_working_directory
-        Return the current working directory in the cache.
-    get_available_run_paths
-        Return the available run paths from the current directory.
-    get_selected_run_paths
-        Return the selected run paths from the cache.
-    get_selected_run_names
-        Return the run names of the selected runs.
-    get_run_names
-        Return the stem of the path.
-    get_selected_groups
-        Get the selected groups.
-    add_run
-        Add a run path to the cache. If run path is already in cache, do nothing.
-    remove_run
-        Remove a run path from the cache. If run path is not in cache, do nothing.
-    update
-        Update the internal run and group instances but only if a hash changed.
-    update_runs
-        Load selected runs and update cache if files changed.
-    update_run
-        Load the run from `self.runs` or creates a new one.
-    update_groups
-        Load chosen groups.
-    get_run
-        Look inside `self.runs` and `self.groups` and if the run id is found, returns the run.
-    get_groups
-        Return instantiated grouped runs.
-    get_runs
-        Return the runs from the internal cache.
+    Provides utilities to retrieve working directories, run paths, run names, and groups of runs.
+    Also update and remove runs as well a groups of runs.
+
+    Properties
+    ----------
+    c : Cache
+        The cache for the different information.
+    rc : RunCaches
+        The caches for the selected runs.
+    logger : Logger
+        The logger for the run handler.
+    available_run_yfes : List[Type[Run]]
+        A list of the available converters.
+    runs : Dict[str, AbstractRun]
+        A dictionary of abstract runs with their path as key.
+    groups : Dict[str, Group]
+        A dictionary of the groups.
+    available_run_classes : List[Type[Run]]
+        Contains the available run classes.
     """
 
-    def __init__(
-        self, config: Config, cache: "Cache", run_cache: "RunCaches"
-    ) -> None:  # noqa: D107
+    def __init__(self, config: Config, cache: "Cache", run_cache: "RunCaches") -> None:
         self.c = cache
         self.rc = run_cache
         # Fields set by self.update()
         self.logger = get_logger("RunHandler")
 
         # Available converters
-        self.available_run_classes: List[Type[Run]] = config.CONVERTERS
+        self.available_run_yfes: List[Type[Run]] = config.CONVERTERS
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
@@ -104,7 +72,7 @@ class RunHandler:
 
     def set_working_directory(self, working_directory: Union[Path, str]) -> None:
         """
-        Set the working directoy to the meta cache.
+        Set the working directory to the meta cache.
 
         Parameters
         ----------
@@ -132,6 +100,10 @@ class RunHandler:
         -------
         Dict[str, str]
             Run path as key and run name as value.
+
+        Exceptions
+        ----------
+        FileNotFoundError
         """
         runs = {}
         working_dir = self.get_working_directory()
@@ -160,7 +132,7 @@ class RunHandler:
 
         Returns
         -------
-        Dict[str, str]
+        List[str]
             Run paths as a list.
         """
         return self.c.get("selected_run_paths")
@@ -308,13 +280,25 @@ class RunHandler:
         self, run_path: str, class_hint: Optional[Type[Run]] = None
     ) -> Optional[AbstractRun]:
         """
-        Load the run from `self.runs` or creates a new one.
+        Load the run from `self.runs` or create a new one.
+
+        Parameters
+        ----------
+        run_path : str
+            The path where the run should be stored.
+        class_hint : Optional[Type[Run]], optional
+            A hint/suggestion of what the Type of the Run is.
+            Default is None.
+
+        Returns
+        -------
+        Optional[AbstractRun]
+            The Abstract Run added to the cache.
 
         Raises
         ------
         NotValidRunError
             If directory can not be transformed into a run, an error is thrown.
-
         """
         # Try to get run from current runs
         if run_path in self.runs:
@@ -369,6 +353,12 @@ class RunHandler:
 
         If `groups` is passed, it is used to instantiate the groups and
         saved to the cache. Otherwise, `groups` is loaded from the cache.
+
+        Parameters
+        ----------
+        groups : Optional[Dict[str, str]], optional
+            A dictionary used to instantiate the groups.
+            Default is None.
 
         Raises
         ------
@@ -452,7 +442,7 @@ class RunHandler:
         Parameters
         ----------
         include_groups : bool, optional
-            Includes the groups, by default False
+            Includes the groups, by default False.
 
         Returns
         -------

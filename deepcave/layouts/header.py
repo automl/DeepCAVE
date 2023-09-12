@@ -4,12 +4,10 @@
 
 This module defines the layout for visualizing the header.
 
+It handles different callbacks of the layout.
+
 ## Classes
     - HeaderLayout: This class provides the header and its layout.
-
-## Contents
-    - register_callbacks: Register the callbacks.
-        - update_matplotlib_mode: Update the matplotlib mode.
 """
 
 
@@ -25,15 +23,11 @@ class HeaderLayout(Layout):
     """
     Provide the header and its layout.
 
-    Methods
-    -------
-    register_callbacks
-        Register the callbacks.
-    update_matplotlib_mode
-        Update the matplotlib mode.
+    Register and handle callbacks.
     """
 
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register and handle the callbacks."""
         super().register_callbacks()
 
         outputs = [
@@ -48,6 +42,7 @@ class HeaderLayout(Layout):
 
         @app.callback(outputs, inputs)
         def update_matplotlib_mode(n_clicks, pathname):
+            """Update the matplotlib mode."""
             update = None
             mode = c.get("matplotlib-mode")
             if mode is None:

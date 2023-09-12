@@ -6,12 +6,10 @@ The module provides utilities for conducting feature analysis.
 
 It includes a FanovaForest wrapper for pyrfr, which facilitates this analysis.
 The functionality of a FanovaForest Regression model is wrapped.
-FanovaForest can be used for analysing and quantifying the features of a dataset.
+FanovaForest can be used for analyzing and quantifying the features of a dataset.
 
-## Contents
-    - _get_model: Get the internal model.
-    - _train: Train the Random Forest.
-    - compute_marginals: Compute marginals of selected parameters.
+## Classes
+    - FanovaForest: A fanova forest wrapper for pyrfr.
 """
 
 from typing import List, Optional, Tuple
@@ -28,7 +26,37 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 
 class FanovaForest(RandomForest):
-    """A fanova forest wrapper for pyrfr."""
+    """
+    A fanova forest wrapper for pyrfr.
+
+    Properties
+    ----------
+    cutoffs : Tuple[float, float]
+        The cutoff of the model.
+    percentiles : NDArray[floating]
+        The percentiles of the data points Y.
+    all_midpoints : List
+        All midpoints tree wise for the whole forest.
+    all_sizes : List
+        All interval sized tree wise for the whole forest.
+    bounds : List[Tuple[float, float]
+        Stores feature bounds.
+        Can be used as categorical or continuous parameter.
+    trees_total_variances : List
+        The total variances of the trees.
+    trees_total_variance : Any
+        The total variance of a tree.
+    trees_variance_fractions : Dict
+        The variance fractions of the trees.
+    V_U_total : Dict
+        Store variance-related information across all trees.
+    V_U_individual : Dict
+        Store variance-related information for individual subsets.
+    n_params : int
+        The number of parameters to sample.
+    """
+
+    #np.Arrayterator()
 
     def __init__(
         self,
@@ -45,7 +73,7 @@ class FanovaForest(RandomForest):
         pca_components: Optional[int] = 2,
         cutoffs: Tuple[float, float] = (-np.inf, np.inf),
         seed: Optional[int] = None,
-    ):  # noqa: D107
+    ):
         super().__init__(
             configspace=configspace,
             n_trees=n_trees,
@@ -77,7 +105,7 @@ class FanovaForest(RandomForest):
 
     def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Train the random forest on X and Y.
+        Train the Random Forest on X and Y.
 
         Parameters
         ----------
@@ -89,7 +117,7 @@ class FanovaForest(RandomForest):
         super()._train(X, Y)
         self.percentiles = np.percentile(Y, range(0, 100))
 
-        # all midpoints and interval sizes treewise for the whole forest
+        # all midpoints and interval sizes tree wise for the whole forest
         self.all_midpoints = []
         self.all_sizes = []
 
@@ -145,6 +173,10 @@ class FanovaForest(RandomForest):
         ----------
         hp_ids: List[int]
             Contains the indices of the configspace for the selected parameters (starts with 0).
+
+        Returns
+        -------
+        The marginal of selected parameters.
         """
         hp_ids = tuple(hp_ids)
 
@@ -192,7 +224,7 @@ class FanovaForest(RandomForest):
             # line 10 in algorithm 2
             # note that V_U^2 can be computed by var(\hat a)^2 - \sum_{subU} var(f_subU)^2
             # which is why, \hat{f} is never computed in the code, but
-            # appears in the pseudocode
+            # appears in the pseudo code
             V_U_total = np.nan
             V_U_individual = np.nan
 

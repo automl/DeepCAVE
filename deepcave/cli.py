@@ -4,9 +4,7 @@
 
 This module defines command-line options using flags.
 
-## Contents
-    - execute: Entry point for the programms execution.
-    - main: Call the execute function.
+This includes the entry point for the programs execution.
 """
 
 import multiprocessing
@@ -33,7 +31,7 @@ flags.DEFINE_string(
 
 
 def execute(_) -> None:
-    """Entry point for the programms execution."""
+    """Entry point for the programs execution."""
     if (config_key := FLAGS.get_config_value) is not None:
         config = FLAGS.config
         if config is not None:

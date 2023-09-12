@@ -3,45 +3,8 @@
 # AbstractRun
 
 This module provides utilities to create and handle an abstract run.
-It also provides function to get information of the run, as well as the used objectives.
-
-## Contents
-    - reset: Reset the abstract run to default values / empties.
-    - _update_highest_budget: With success, update the highest budget accordingly.
-    - hash: Get the Hash of the current run.
-    - id: Get the Hash of the file.
-    - latest_change: Get the latest change value.
-    - get_trial_key: Get the trial key for the configuration and the budget.
-    - get_trial: Get the trial with the responding key if existing.
-    - get_trials: Get an iterator of all stored trials.
-    - get_meta: Get a copy of the meta information of this abstract run.
-    - empty: Check if the abtract run object's history is empty.
-    - get_origin: Get the origin, given a config ID.
-    - get_objectives: Get a list of all objectives corresponding to the object.
-    - get_objective: Return the objective based on the id or the name.
-    - get_objective_id: Return the id of the objective if it is found.
-    - get_objectives_id: Get the IDs of the objectives.
-    - get_objective_name: Get the cost name of given objective names.
-    - get_objective_names: Get the names of the objectives.
-    - get_configs: Get configurations of the run.
-    - get_config_id: Retrieve the ID of the configuration.
-    - get_num_configs: Count the number of configurations in this object with a specific budget.
-    - get_budget: Get the budget given an id.
-    - get_budget_ids: Get the corresponding IDs for the budgets.
-    - get_budgets: Return the budgets from the meta data.
-    - get_highest_budget: Return the highest found budget for a config id.
-    - _process_costs: Process the costs to get rid of NaNs.
-    - get_costs: Return the costs of a configuration.
-    - get_all_costs: Get all costs in the history with their config ids.
-    - get_status: Return the status of a configuration.
-    - get_incumbent: Return the incumbent with its normalized cost.
-    - merge_costs: Calculate one cost value from multiple costs.
-    - get_model: Get a torch model assosciated with a configuration ID.
-    - get_trajectory: Calculate the trajectory of the given objective and budget.
-    - encode_config: Encode a given config (id) to a normalized list.
-    - encode_configs: Encode a list of configurations into a corresponding numpy array.
-    - get_encoded_data: Encode configurations to process them further.
-    - check_equality: Check the passed runs on equality based on the selected runs.
+It also provides functions to get information of the run, as well as the used objectives.
+Utilities also include encoding configurations and check equality between runs.
 """
 
 from abc import ABC, abstractmethod
@@ -77,78 +40,38 @@ class AbstractRun(ABC):
     """
     Can create, handle and get information of an abstract run.
 
-    Methods
-    -------
-    reset
-        Reset the abstract run to default values / empties.
-    _update_highest_budget
-        With success, update the highest budget accordingly.
-    hash
-        Get the Hash of the current run.
-    id
-        Get the Hash of the file.
-    latest_change
-        Get the latest change value.
-    get_trial_key
-        Get the trial key for the configuration and the budget.
-    get_trial
-        Get the trial with the responding key if existing.
-    get_trials
-        Get an iterator of all stored trials.
-    get_meta
-        Get a copy of the meta information of this abstract run.
-    empty
-        Check if the abtract run object's history is empty.
-    get_origin
-        Get the origin, given a config ID.
-    get_objectives
-        Get a list of all objectives corresponding to the object.
-    get_objective
-        Return the objective based on the id or the name.
-    get_objective_id
-        Return the id of the objective if it is found.
-    get_objectives_id
-        Get the IDs of the objectives.
-    get_objective_name
-        Get the cost name of given objective names.
-    get_objective_names
-        Get the names of the objectives.
-    get_configs
-        Get configurations of the run.
-    get_config_id
-        Retrieve the ID of the configuration.
-    get_num_configs
-        Count the number of configurations stored in this object with a specific budget.
-    get_budget
-        Get the budget given an id.
-    get_budget_ids
-        Get the corresponding IDs for the budgets.
-    get_budgets
-        Return the budgets from the meta data.
-    get_highest_budget
-        Return the highest found budget for a config id.
-    _process_costs
-        Process the costs to get rid of NaNs.
-    get_costs
-        Return the costs of a configuration.
-    get_all_costs
-        Get all costs in the history with their config ids.
-    get_status
-        Return the status of a configuration.
-    get_incumbent
-        Return the incumbent with its normalized cost.
-    merge_costs
-        Calculate one cost value from multiple costs.
-    get_model
-        Get a torch model assosciated with a configuration ID.
-    get_trajectory
-        Calculate the trajectory of the given objective and budget.
-    encode_config
-        Encode a given config (id) to a normalized list.
-    encode_configs
-        Encode a list of configurations into a corresponding numpy array.
-    get_encoded_data
-        Encode configurations to process them further.
+    Provide functions to get information of the run, as well as the used objectives.
+    Utilities also include encoding configurations and check equality between runs.
+
+    Attributes
+    ----------
+    prefix : str
+        The prefix of the run.
+
+    Properties
+    ----------
+    name : str
+        The name of the abstract run.
+    path : Optional[Path]
+        The path to the abstract run.
+    logger : Logger
+        The logger for the abstract run.
+    meta: Dict[str, Any]
+        A dictionary containing the abstract runs meta information.
+    configspace: ConfigSpace.ConfigurationSpace
+        The configuration space of the run.
+    configs: Dict[int, Configuration]
+        A dictionary containing the configurations.
+    origins: Dict[int, str]
+        The origins of the configurations.
+    models: Dict[int, Optional[Union[str, "torch.nn.Module"]]]
+        A dictionary containing pytorch modules.
+    history: List[Trial]
+        The trial history.
+    trial_keys: Dict[Tuple[str, int], int]
+        A dictionary containing config_id and budget and the corresponding trial_id.
+    models_dir : Path
+        The directory of the torch model.
     """
 
     prefix: str
@@ -165,7 +88,7 @@ class AbstractRun(ABC):
         """
         Reset the abstract run to default values / empties.
 
-        Clear all the initial data and configuraions of the object.
+        Clear all the initial data and configurations of the object.
 
         Returns
         -------
@@ -186,6 +109,18 @@ class AbstractRun(ABC):
     def _update_highest_budget(
         self, config_id: int, budget: Union[int, float], status: Status
     ) -> None:
+        """
+        Update the highest budget.
+
+        Parameters
+        ----------
+        config_id : int
+            The identificator of the configuration.
+        budget : Union[int, float]
+            The new highest budget.
+        status : Status
+            The status of the run.
+        """
         if status == Status.SUCCESS:
             # Update highest budget
             if config_id not in self._highest_budget:
@@ -300,7 +235,7 @@ class AbstractRun(ABC):
 
     def empty(self) -> bool:
         """
-        Check if the abtract run object's history is empty.
+        Check if the abstract run object's history is empty.
 
         Returns
         -------
@@ -332,7 +267,7 @@ class AbstractRun(ABC):
         Returns
         -------
         List[Objective]
-            A list containig all objectives assosiated with the object.
+            A list containing all objectives associated with the object.
         """
         objectives = []
         for d in self.meta["objectives"].copy():
@@ -431,7 +366,7 @@ class AbstractRun(ABC):
         Returns
         -------
         List[str]
-            A list containig the names of the objectives.
+            A list containing the names of the objectives.
         """
         return [obj.name for obj in self.get_objectives()]
 
@@ -482,7 +417,7 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        Configuartion
+        Configuration
             A corresponding Configuration object.
         """
         config = Configuration(self.configspace, self.configs[id])
@@ -554,7 +489,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         include_combined : bool, optional
-            If True, include the ID for the combined budet. If False, do not include.
+            If True, include the ID for the combined budget. If False, do not include.
             By default True.
 
         Returns
@@ -856,6 +791,12 @@ class AbstractRun(ABC):
         -------
         float
             Merged costs.
+
+        Raises
+        ------
+        RuntimeError
+            If the number of costs is different from the original number of objectives.
+            If the objective was not found.
         """
         # Get rid of NaN values
         costs = self._process_costs(costs)
@@ -911,7 +852,7 @@ class AbstractRun(ABC):
 
     def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
         """
-        Get a torch model assosciated with a configuration ID.
+        Get a torch model associated with a configuration ID.
 
         Parameters
         ----------
@@ -1244,6 +1185,14 @@ def check_equality(
     -------
     Dict[str, Any]
         Dictionary containing the checked attributes.
+
+    Raises
+    ------
+    NotMergeableError
+        If the meta data of the runs are not equal.
+        If the configuration spaces of the runs are not equal.
+        If the budgets of the runs are not equal.
+        If the objective of the runs are not equal.
     """
     result = {}
 

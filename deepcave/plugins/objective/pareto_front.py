@@ -3,17 +3,10 @@
 
 This module is for creating a visualization of a Pareto Front.
 For this, it uses Dash as well as matplotlib and plotly.
+It includes the Pareto Front plugin.
 
-## Contents
-    - check_runs_compatibility: To ensure the compatibility of runs.
-    - get_input_layout: Define the layout structure.
-    - get_filter_layout: Define the layout structure for filtering options.
-    - load_inputs: Load the default input settings.
-    - process: To process the data for the Pareto Front.
-    - get_output_layout: Define the layout structure for displaying the output.
-    - load_outputs: Generate and load output information for visualization.
-    - get_mpl_output_layout: Define layout structure when using matplotlib.
-    - load_mpl_outputs: Generate and load output info for visualization when using matplotlib.
+## Classes
+    - ParetoFront: Generate an interactive Pareto Front visualization.
 """
 
 from typing import List, Union
@@ -39,26 +32,7 @@ class ParetoFront(DynamicPlugin):
     """
     Generate an interactive Pareto Front visualization.
 
-    Methods
-    -------
-    check_runs_compatibility
-        Ensure the compatibility of the runs provided.
-    get_input_layout
-        Define the layout structure.
-    get_filter_layout
-        Define the layout structure for filtering options.
-    load_inputs
-        Load the default input settings.
-    process
-        To process the data for the Pareto Front.
-    get_output_layout
-        Define the layout structure for displaying the output.
-    load_outputs
-        Generate and load output information for visualization.
-    get_mpl_output_layout
-        Define layout structure when using matplotlib.
-    load_mpl_outputs
-        Generate and load output information for visualization when using matplotlib.
+    Utilities provided for plotly, as well as matplotlib.
 
     Attributes
     ----------
@@ -70,6 +44,13 @@ class ParetoFront(DynamicPlugin):
         Icon representation for the plugin.
     help
         Path to the documentation of the plugin.
+
+    Properties
+    ----------
+    objective_options : List[Dict[str, Any]]
+        A list of the objective options.
+    budget_options : List[Dict[str, Any]]
+        A list of the budget options.
     """
 
     id = "pareto_front"
@@ -77,7 +58,25 @@ class ParetoFront(DynamicPlugin):
     icon = "fas fa-wind"
     help = "docs/plugins/pareto_front.rst"
 
-    def check_runs_compatibility(self, runs):  # noqa: D102
+    def check_runs_compatibility(self, runs):
+        """
+        Check if the runs are compatible.
+
+        If so, get some attributes from the first run of the list.
+
+        Parameters
+        ----------
+        runs : List[AbstractRun]
+            A list containing the abstract runs.
+
+        Raises
+        ------
+        NotMergeableError
+            If the meta data of the runs are not equal.
+            If the configuration spaces of the runs are not equal.
+            If the budgets of the runs are not equal.
+            If the objective of the runs are not equal.
+        """
         check_equality(runs, objectives=True, budgets=True)
 
         # Set some attributes here
@@ -92,7 +91,19 @@ class ParetoFront(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Get the input layout as html container and dash bootstrap component.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used to get the id for the select object.
+
+        Returns
+        -------
+        An html container and a dash bootstrap component of the layout of the input.
+        """
         return [
             dbc.Row(
                 [
@@ -139,7 +150,19 @@ class ParetoFront(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the filtered layout for a dash bootstrap component and html container.
+
+        Parameters
+        ----------
+        register : (str, str | List[str]) -> str
+            Used for the id of Select object.
+
+        Returns
+        -------
+        A filtered dash bootstrap component and html container.
+        """
         return [
             html.Div(
                 [
@@ -182,7 +205,12 @@ class ParetoFront(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """
+        Load the inputs containing information about the values to be visualized.
+
+        This includes, the objectives and budgets attributes.
+        """
         return {
             "objective_id_1": {
                 "options": self.objective_options,
@@ -202,7 +230,22 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Process the data and get the according pareto front and its points.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs : Dict[str, Any]
+            The inputs for the visualization.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Containing the pareto fronts attributes.
+        """
         # Get budget
         budget = run.get_budget(inputs["budget_id"])
 
@@ -258,11 +301,28 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """Get the dash Graph layout of the output."""
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs):  # noqa: D102
+    def load_outputs(runs, inputs, outputs):
+        """
+        Load and save the output figure.
+
+        Parameters
+        ----------
+        runs : AbstractRun | Dict[str, AbstractRun]
+            The run(s) to be analyzed.
+        inputs : Dict[str, Dict[str, str]]
+            The inputs containing information about what to visualize.
+        outputs : Dict[str, str | Dict[str, str]]
+            Contains different attributes of the pareto front.
+
+        Returns
+        -------
+        The output figure.
+        """
         show_all = inputs["show_all"]
 
         traces = []
@@ -355,14 +415,31 @@ class ParetoFront(DynamicPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):  # noqa: D102
+    def get_mpl_output_layout(register):
+        """Get an html container of the output layout."""
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
         )
 
     @staticmethod
-    def load_mpl_outputs(runs, inputs, outputs):  # noqa: D102
+    def load_mpl_outputs(runs, inputs, outputs):
+        """
+        Get the pareto front and the corresponding layout of the matplotlib figure.
+
+        Parameters
+        ----------
+        runs : AbstractRun | Dict[str, AbstractRun]
+            The run(s) to analyze.
+        inputs : Dict[str, Dict[str, str]]
+            Containing the inputs for the visualization.
+        outputs :  Dict[str, str | Dict[str, str]]
+            Containing the pareto fronts attributes.
+
+        Returns
+        -------
+        The rendered mpl figure of the pareto front.
+        """
         show_all = inputs["show_all"] == "true"
 
         plt.figure()

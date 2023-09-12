@@ -4,15 +4,17 @@
 This module provides utilities for generating Partial Dependency Plots.
 
 These plots are used for visualization of impacts of hyperparameters on the model.
+Provided utilities include getting input and output layout (filtered or non-filtered),
+processing the data and loading the outputs.
 
-## Contents
-    - get_input_layout: Define the layout of input controls.
-    - get_filter_layout: Define the layout of filter controls.
-    - load_inputs: Load the inputs for the controls.
-    - load_dependeny_inputs: Load the input values to generate the PDP.
-    - process: Process the data to generate the PDP. Also initializes the surrogate model.
-    - get_output_layout: Define the layout of the output plot.
-    - load_output: Output and safe the figure containing the PDP.
+## Classes
+    - PartialDependencies: Generate a PDP for visualizing hyperparameter impacts.
+
+## Constants
+    GRID_POINTS_PER_AXIS = 20
+    SAMPLES_PER_HP = 10
+    MAX_SAMPLES = 10000
+    MAX_SHOWN_SAMPLES = 100
 """
 
 import dash_bootstrap_components as dbc
@@ -36,24 +38,10 @@ MAX_SHOWN_SAMPLES = 100
 
 class PartialDependencies(StaticPlugin):
     """
-    Generate a PDP for visualizing hyperparameter impacts.
+    Generate Partial Dependency Plots for visualizing hyperparameter impacts.
 
-    Methods
-    -------
-    get_input_layout
-        Define the layout of input controls.
-    get_filter_layout
-        Define the layout of filter controls.
-    load_inputs
-        Load the inputs for the controls.
-    load_dependeny_inputs
-        Load the input values to generate the PDP.
-    process
-        Process the data to generate the PDP. Also initializes the surrogate model.
-    get_output_layout
-        Define the layout of the output plot.
-    load_output
-        Output and safe the figure containing the PDP.
+    Provided utilities include getting input and output layout (filtered or non-filtered),
+    processing the data and loading the outputs.
 
     Attributes
     ----------
@@ -66,7 +54,7 @@ class PartialDependencies(StaticPlugin):
     help
         Path to the documentation of the plugin.
     activate_run_selection
-        Defines wheter the run selection feature should be activated.
+        Defines whether the run selection feature should be activated.
     """
 
     id = "pdp"
@@ -76,7 +64,19 @@ class PartialDependencies(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):  # noqa: D102
+    def get_input_layout(register):
+        """
+        Define and get the dash bootstrap components for the input layout.
+
+        Parameters
+        ----------
+        register
+            Used for the Select id.
+
+        Returns
+        -------
+        The dash bootstrap components for the input layout.
+        """
         return [
             dbc.Row(
                 [
@@ -138,7 +138,19 @@ class PartialDependencies(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):  # noqa: D102
+    def get_filter_layout(register):
+        """
+        Get the dbc containing an html container for the filtered layout.
+
+        Parameters
+        ----------
+        register
+            Used for the select id.
+
+        Returns
+        -------
+        The dbc containing an html container for the filtered layout.
+        """
         return [
             dbc.Row(
                 [
@@ -175,13 +187,34 @@ class PartialDependencies(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):  # noqa: D102
+    def load_inputs(self):
+        """
+        Load the confidence values as well as the ice.
+
+        Returns
+        -------
+        The confidence values as well as the ice.
+        """
         return {
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):  # noqa: D102
+    def load_dependency_inputs(self, run, previous_inputs, inputs):
+        """
+        Load the objectives, budgets, hyperparameter names and their attributes.
+
+        Parameters
+        ----------
+        run
+            The run to get the objective, budget and hyperparameters from.
+        inputs
+            The inputs to get the selected values from.
+
+        Returns
+        -------
+        The objective, budget, hyperparameter and their corresponding options and values.
+        """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -215,7 +248,28 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):  # noqa: D102
+    def process(run, inputs):
+        """
+        Fit a surrogate model with the given data.
+
+        With that we call the Partial Dependency Plot and calculate the results.
+
+        Parameters
+        ----------
+        run
+            The run to calculate the Partial Dependencies of.
+        inputs
+            A dictionary to get the hyperparameters from.
+
+        Returns
+        -------
+        A dictionary with the output values.
+
+        Raises
+        ------
+        RuntimeError
+            If the objective is None.
+        """
         # Surrogate
         hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
@@ -280,11 +334,39 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get the graph of the output.
+
+        Parameters
+        ----------
+        register
+            A function to get the id for the graph.
+
+        Returns
+        -------
+        A dash graph.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):  # noqa: D102
+    def load_outputs(run, inputs, outputs):
+        """
+        Load the output figure and save the Partial Dependency Plot as image.
+
+        Parameters
+        ----------
+        run
+            The run to load the attributes from.
+        inputs
+            The inputs for parsing.
+        outputs
+            The outputs for parsing.
+
+        Returns
+        -------
+        The figure of the Partial Dependency Plot.
+        """
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)

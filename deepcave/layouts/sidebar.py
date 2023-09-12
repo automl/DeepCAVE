@@ -4,11 +4,10 @@
 
 This module defines a plugin to define and visualize the Sidebar Layout.
 
-## Contents
-    - register_callbacks: To get and register any callbacks.
-        - update_navigation_items: Update the navigation items.
-        - delete_job: Delete a job from the queue.
-        - update_queue_info: Update the information of the queue.
+Callbacks are registered and handled.
+
+## Classes
+    - SidebarLayout: Customize the Sidebar Layout.
 """
 
 from typing import Dict, List, Tuple, Union
@@ -28,19 +27,17 @@ class SidebarLayout(Layout):
     """
     Customize the Sidebar Layout.
 
-    Methods
-    -------
-    register_callbacks
-        To get and register any callbacks.
-    update_navigation_items
-        Update the navigation items.
-    delete_job
-        Delete a job from the queue.
-    update_queue_info
-        Update the information of the queue.
+    Callbacks are registered and handled.
+
+    Properties
+    ----------
+    plugins : Dict[str, List[Plugin]]
+        A dictionary of all categorized plugins.
+    nav_points : Dict[str, List[Tuple[str, str, str]]]
+        A dictionary with plugins attributes corresponding to their category.
     """
 
-    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:  # noqa: D107
+    def __init__(self, categorized_plugins: Dict[str, List[Plugin]]) -> None:
         super().__init__()
         self.plugins = categorized_plugins
 
@@ -53,13 +50,15 @@ class SidebarLayout(Layout):
 
         self.nav_points = nav_points
 
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register the callbacks for the sidebar layout."""
         # Update navigation items
         output = Output("navigation-items", "children")
         input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)  # type: ignore
         def update_navigation_items(pathname):  # type: ignore
+            """Update the navigation items."""
             layouts = []
             for category, points in self.nav_points.items():
                 layouts += [
@@ -114,6 +113,7 @@ class SidebarLayout(Layout):
             State({"type": "cancel-job", "index": ALL}, "name"),
         )
         def delete_job(n_clicks, job_ids):  # type: ignore
+            """Delete the job from the queue."""
             for n_click, job_id in zip(n_clicks, job_ids):
                 if n_click is not None:
                     queue.delete_job(job_id)
@@ -123,6 +123,7 @@ class SidebarLayout(Layout):
 
         @app.callback(output, Trigger("global-update", "n_intervals"))  # type: ignore
         def update_queue_info() -> List[Component]:
+            """Delete the information of the queue."""
             try:
                 all_jobs = [
                     queue.get_finished_jobs(),

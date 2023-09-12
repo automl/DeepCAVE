@@ -4,10 +4,8 @@
 
 This module provides utilities for creating, updating and resetting notifications.
 
-## Contents
-    - reset: Reset the notification.
-    - update: Update the notification
-    - get_latest: Retrieve and reset the latest notification.
+## Classes
+    - Notification: Can create, update and reset a notification.
 """
 from typing import Optional, Tuple
 
@@ -27,7 +25,17 @@ class Notification:
         self._color = None
 
     def update(self, message: str, color: str = "danger") -> None:
-        """Update the notification."""
+        """
+        Update the notification.
+
+        Parameters
+        ----------
+        message : str
+            The message of the notification.
+        color : str, optional
+            The color of the notification.
+            Default is "danger".
+        """
         self._update_required = True
         self._message = message
         self._color = color

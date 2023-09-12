@@ -5,36 +5,8 @@
 This module provides a base class for all the available plugins.
 It provides different utilities to handle the plugins and check for compatibility in the runs.
 
-## Contents
-    - get_base_url: Generate the url for the plugin.
-    - check_run_compatibility: Check if a run is compatible with this plugin.
-    - check_runs_compatibility: Needed if all selected runs need something in common.
-    - register_input: Register an input variable for the plugin.
-    - register_output: Register an output variable for the plugin.
-    - get_internal_id: Get the internal id.
-    - get_internal_input_id: Get the internal input id.
-    - get_internal_output_id: Get the internal output id.
-    - register_callbacks: Register basic callbacks for the plugin.
-    - plugin_input_update: Update the input of the plugin.
-    - toggle_raw_data_modal: Toggle the raw data modal.
-    - go_to_configuration: Go to the configuration described in the hovertext.
-    - runs: Get the runs.
-    - groups: Get the groups.
-    - all_runs: Get all runs and include the groups.
-    - register_in: Register the given input.
-    - register_out: Register the output.
-    - get_run_input_layout: Generate the run selection input.
-    - load_run_inputs: Load the options for `get_run_input_layout`.
-    - get_selected_runs: Parse selected runs from inputs.
-    - load_inputs: Load content for defined inputs in `get_input_layout` and `get_filter_layout`.
-    - load_dependency_inputs: Load content as in 'load_inputs', called after inputs have changed.
-    - get_input_layout: Layout for the input block.
-    - get_filter_layout: Layout for the filter block.
-    - get_output_layout: Layout for the output block.
-    - get_mpl_output_layout: Layout for the matplotlib output block.
-    - process: Return raw data based on a run and input data.
-    - generate_outputs: Check whether run selection is active, accepts one or multiple runs at once.
-    - generate_inputs: Generate inputs for the `process` and `load_outputs` required for api mode.
+## Classes
+    - Plugin: Base class for all plugins.
 """
 
 from abc import ABC
@@ -70,66 +42,7 @@ class Plugin(Layout, ABC):
     """
     Base class for all plugins.
 
-    Methods
-    -------
-    get_base_url
-        Generate the url for the plugin.
-    check_run_compatibility
-        Check if a run is compatible with this plugin.
-    check_runs_compatibility
-        Needed if all selected runs need something in common.
-    register_input
-        Register an input variable for the plugin.
-    register_output
-        Register an output variable for the plugin.
-    get_internal_id
-        Get the internal id.
-    get_internal_input_id
-        Get the internal input id.
-    get_internal_output_id
-        Get the internal output id.
-    register_callbacks
-        Register basic callbacks for the plugin.
-    plugin_input_update
-        Update the input of the plugin.
-    toggle_raw_data_modal
-        Toggle the raw data modal.
-    go_to_configuration
-        Go to the configuration described in the hovertext.
-    runs
-        Get the runs.
-    groups
-        Get the groups.
-    all_runs
-        Get all runs and include the groups.
-    register_in
-        Register the given input.
-    register_out
-        Register the output.
-    get_run_input_layout
-        Generate the run selection input.
-    load_run_inputs
-        Load the options for `get_run_input_layout`.
-    get_selected_runs
-        Parse selected runs from inputs.
-    load_inputs
-        Load the content for the defined inputs in `get_input_layout` and `get_filter_layout`.
-    load_dependency_inputs
-        Load the content as in 'load_inputs' but called after inputs have changed.
-    get_input_layout
-        Layout for the input block.
-    get_filter_layout
-        Layout for the filter block.
-    get_output_layout
-        Layout for the output block.
-    get_mpl_output_layout
-        Layout for the matplotlib output block.
-    process
-        Return raw data based on a run and input data.
-    generate_ outputs
-        Check whether run selection is active and accepts either one or multiple runs at once.
-    generate_inputs
-        Generate inputs for the `process` and `load_outputs` required for api mode.
+    Provides different utilities to handle the plugins and check for compatibility in the runs.
 
     Attributes
     ----------
@@ -149,6 +62,31 @@ class Plugin(Layout, ABC):
         Shows a dropdown to select a run in the inputs layout.
         This feature is useful if only one run could be viewed at a time.
         Moreover, it prevents the plugin to calculate results across all runs.
+    
+    Properties
+    ----------
+    inputs : List[Tuple[str, str, bool, Any]]
+        The registered inputs.
+    outputs : List[Tuple[str, str, bool]]
+        The registered outputs.
+    previous_inputs : Dict[str, Dict[str, str]]
+        The previous inputs for the runtime.
+    raw_outputs : Optional[Dict[str, Any]]
+        The raw outputs.
+    activate_run_selection : bool
+        Whether to activate the run selection.
+    if : str
+        The id of the plugin.
+    runs : List[AbstractRun]
+        A list of the abstract runs.
+    groups : List[Group]
+        A list of the groups.
+    help : str
+        The path to the documentation.
+    name : str
+        The name of the plugin.
+    button_caption : str
+        The caption of the plugin button.
     """
 
     id: str
@@ -159,7 +97,7 @@ class Plugin(Layout, ABC):
     button_caption: str = "Process"
     activate_run_selection: bool = False
 
-    def __init__(self) -> None:  # noqa: D107
+    def __init__(self) -> None:
         # Registered inputs and outputs
         self.inputs: List[Tuple[str, str, bool, Any]] = []
         self.outputs: List[Tuple[str, str, bool]] = []
@@ -803,7 +741,7 @@ class Plugin(Layout, ABC):
         d : Dict[str, Any]
             Dictionary to get the key from.
         remove_filters : bool, optional
-            Option wheather the filters should be included or not. By default False.
+            Option whether the filters should be included or not. By default False.
 
         Returns
         -------
@@ -884,7 +822,7 @@ class Plugin(Layout, ABC):
         used_ids = []
         cleaned_inputs = {}
         for id, attribute, *_ in self.inputs:
-            # Since self.inputs is ordered, we use the first occuring attribute and add
+            # Since self.inputs is ordered, we use the first occurring attribute and add
             # the id so it is not used again.
             if id not in used_ids:
                 i = inputs[id][attribute]
@@ -1527,7 +1465,7 @@ class Plugin(Layout, ABC):
         """
         mapping = {}
         for id, attribute, *_ in self.inputs:
-            # Since `self.inputs` is ordered, we use the first occuring attribute and add
+            # Since `self.inputs` is ordered, we use the first occurring attribute and add
             # the id so it is not used again.
             if id not in mapping:
                 mapping[id] = attribute

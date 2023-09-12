@@ -11,11 +11,6 @@ This module provides utilities for serializing and deserializing a dataframe fro
     - JSON_DENSE_SEPARATORS = (",", ":")
     - JSON_DEFAULT_SEPARATORS = (",", ": ")
     - TYPE = TypeVar("TYPE")
-
-## Contents
-    - serilaize: Serialize a dataframe to a string.
-    - deserialize: Deserialize a dataframe from a string.
-    - default: Return the object either as list or als JSONEncoder.
 """
 
 from typing import Any, Dict, List, TypeVar, Union
@@ -31,7 +26,19 @@ TYPE = TypeVar("TYPE")
 
 
 def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
-    """Serialize a dataframe to a string."""
+    """
+    Serialize a dataframe to a string.
+
+    Parameters
+    ----------
+    data : Union[Dict, List, pd.DataFrame]
+        The dataframe to be serialized.
+
+    Returns
+    -------
+    str
+        The serialized object as a JSON formatted string.
+    """
 
     class Encoder(json.JSONEncoder):
         """

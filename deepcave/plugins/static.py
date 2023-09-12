@@ -4,15 +4,11 @@
 
 This module is used to create different plugins for time-intense calculations.
 
-## Contents
-    - _process: Handle execution of the process.
-    - _setup: Set up the Static Plugin.
-    - register_callbacks: Register the callbacks.
-    - _callback_inputs_changed: Respond to input changes and updates plugin.
-    - _callback_loop_trigger_main_loop: Check if blocked, otherwise prevent updates.
-    - _callback_loop_update_status_label: Update the status label and register updates from inputs.
-    - _get_job_id: Get the identificator of the job.
-    - __call__: Build components for the application.
+It provides an Enum used for the plugin state and a static plugin definition.
+
+## Classes
+    - PluginState: An Enum to define the state of the Plugin.
+    - StaticPlugin: Calculation with queue. Made for time-consuming tasks.
 """
 
 from abc import ABC
@@ -47,6 +43,7 @@ class PluginState(Enum):
 def _process(
     process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs: Dict[str, Any]
 ) -> Any:
+    """Process the run if possible."""
     try:
         return process(run, inputs)
     except Exception:
@@ -55,13 +52,35 @@ def _process(
 
 
 class StaticPlugin(Plugin, ABC):
-    """Calculation with queue. Made for time-consuming tasks."""
+    """
+    Calculation with queue. Made for time-consuming tasks.
 
-    def __init__(self) -> None:  # noqa: D107
+    Properties
+    ----------
+    outputs : List[Tuple[str, str, bool]]
+        The plugin specific outputs.
+    inputs : List[Tuple[str, str, bool, Any]]
+        The plugin specific inputs.
+    id : str
+        The plugin id.
+    raw_outputs : dict[str, Any]
+        The raw outputs of a run.
+    logger : Logger
+        The logger for the plugin.
+    name : str
+        The name of the plugin.
+    process
+        Returns raw data based on a run and input data.
+    button_caption : str
+        The caption for the button.
+    """
+
+    def __init__(self) -> None:
         super().__init__()
         self._setup()
 
     def _setup(self) -> None:
+        """Set up the plugin."""
         self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
         self._previous_state = None  # Used for updating status
         self._refresh_required = True
@@ -69,7 +88,8 @@ class StaticPlugin(Plugin, ABC):
         self._blocked = False
 
     @interactive
-    def register_callbacks(self) -> None:  # noqa: D102
+    def register_callbacks(self) -> None:
+        """Register different callbacks."""
         super().register_callbacks()
         self._callback_inputs_changed()
         self._callback_loop_update_status_label()
@@ -77,6 +97,7 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def _callback_inputs_changed(self) -> None:
+        """Handle callback if the inputs changed."""
         from deepcave import app, c, queue, rc, run_handler
 
         # Plugin specific outputs
@@ -96,6 +117,7 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(outputs, inputs)
         def plugin_process(n_clicks, _, *inputs_list):  # type: ignore
+            """Register updates from inputs."""
             self._blocked = True
 
             # Map the list `inputs_list` to a dict s.t.
@@ -248,6 +270,7 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def _callback_loop_update_status_label(self) -> None:
+        """Set up a callback function that indirectly influences the behavior of the main loop."""
         from deepcave import app, notification
 
         output = [
@@ -261,6 +284,7 @@ class StaticPlugin(Plugin, ABC):
         # Register updates from inputs
         @app.callback(output, input)
         def plugin_update_status(_):  # type: ignore
+            """Update the status of the plugin."""
             button_text = [html.Span(self.button_caption)]
 
             if self._state == PluginState.UNSET:
@@ -308,6 +332,7 @@ class StaticPlugin(Plugin, ABC):
             return button_text, button, disabled
 
     def _get_job_id(self, run_name: str, inputs_key: str) -> str:
+        """Get the job id."""
         return f"{run_name}-{inputs_key}"
 
     @interactive

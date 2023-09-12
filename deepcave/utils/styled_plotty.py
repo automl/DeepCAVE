@@ -3,17 +3,6 @@
 
 This module provides utilities for styling and customizing different plots with plotly.
 For this, it uses plotly as well as dash.
-
-## Contents
-    - save_image: Saves plotly figure as image.
-    - hex_to_rgb: Converts hex to rgb.
-    - get_color: Gets an rgba color.
-    - get_discrete_heatmap: Generates a discrete colorscale.
-    - prettify_label: Prettifies a label.
-    - get_hyperparameter_ticks: Generates tick data.
-    - get_hyperparameter_ticks_from_values: Generates tick data for values and labels
-    - get_hovertext_from_config: Generates hovertext for a configuration
-    - generate_config_code: Generates configuration code
 """
 
 from typing import Any, Callable, List, Optional, Tuple, Union
@@ -73,6 +62,22 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     Requires format including #, e.g.:
     #000000
     #ff00ff
+
+    Parameters
+    ----------
+    hex_string : str
+        The hex string to be converted.
+
+    Returns
+    -------
+    Tuple[int, int, int]
+        A Tuple of the converted RGB values
+
+    Raises
+    ------
+    ValueError
+        If the hex string is longer than 7.
+        If there are invalid characters in the hex string.
     """
     if len(hex_string) != 7:
         raise ValueError(f"Invalid length for #{hex_string}")
@@ -100,13 +105,18 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
 
     Parameters
     ----------
-    values : _type_
-        _description_
+    x
+        List of values that present the x-axis of the heatmap.
+    y
+         List of values that present the y-axis of the heatmap.
+    values : List[Any]
+        Contains the data values for the heatmap.
+    labels : List[Any]
+        Contains the labels corresponding to the values.
 
     Returns
     -------
-    _type_
-        _description_
+    A Plotly Heatmap object corresponding to the input.
     """
     flattened_values = list(itertools.chain(*values))
     flattened_labels = list(itertools.chain(*labels))
@@ -209,7 +219,7 @@ def get_hyperparameter_ticks(
 
     The background is that
     you might have encoded data, but you don't want to show all of them.
-    With this function, only 6 (default) values are shown. This behaviour is
+    With this function, only 6 (default) values are shown. This behavior is
     ignored if `hp` is categorical.
 
     Parameters
@@ -314,7 +324,7 @@ def get_hyperparameter_ticks_from_values(
 
     The background is that
     you might have encoded data, but you don't want to show all of them.
-    With this function, only 6 (default) values are shown. This behaviour is
+    With this function, only 6 (default) values are shown. This behavior is
     ignored if `values` is a list of strings.
 
     Parameters
@@ -333,6 +343,11 @@ def get_hyperparameter_ticks_from_values(
     -------
     Tuple[List, List]
         Returns tickvals and ticktext as list.
+
+    Raises
+    ------
+    RuntimeError
+        If values contain both strings and non-strings.
     """
     assert len(values) == len(labels)
 

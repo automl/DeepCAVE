@@ -1,11 +1,12 @@
 """
 # Overview.
 
-This module provides utilities for visualizing an overviwe of an optimization run.
+This module provides utilities for visualizing an overview of an optimization run.
 
-## Contents
-    - get_output_layout: Generate the layout of the output.
-    - load_outputs: Generate the content of the overview to be displayed.
+The module includes a dynamic plugin for the overview.
+
+## Classes
+    - Overview: Visualize an overall overview of a run.
 """
 
 import dash_bootstrap_components as dbc
@@ -36,13 +37,6 @@ class Overview(DynamicPlugin):
     """
     Visualize an overall overview of a run.
 
-    Methods
-    -------
-    get_output_layout
-        Generate the layout of the output.
-    load_outputs
-        Generate the content of the overview to be displayed.
-
     Attributes
     ----------
     id
@@ -54,9 +48,9 @@ class Overview(DynamicPlugin):
     help
         The path to the documentation of the plugin.
     use_cache
-        Defines wheter the cache is to be used.
+        Defines whether the cache is to be used.
     activate_run_selection
-        Defines wheter the run selection feature is active.
+        Defines whether the run selection feature is active.
     """
 
     id = "overview"
@@ -67,7 +61,19 @@ class Overview(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_output_layout(register):  # noqa: D102
+    def get_output_layout(register):
+        """
+        Get an html container with the output layout.
+
+        Parameters
+        ----------
+        register : str, str | List[str]) -> str
+            Used for the id of the html Div object, as well as the dash Graph.
+
+        Returns
+        -------
+        An html container with the output layout
+        """
         return [
             html.Div(
                 id=register("card", "children"),
@@ -107,7 +113,21 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, *_):  # noqa: D102
+    def load_outputs(run, *_):
+        """
+        Load the outputs for the overview of the run.
+
+        A dash card for quick information is provided.
+
+        Parameters
+        ----------
+        run
+            The run to be analyzed for an overview.
+
+        Returns
+        -------
+        A list of dash figures and tables containing the overviews information.
+        """
         # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()
         config_id = run.get_config_id(incumbent)

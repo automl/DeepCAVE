@@ -4,10 +4,8 @@
 
 This module provides utilities to record the trial information.
 
-## Contents
-    - set_path: Identify the latest run and sets the path with increased id.
-    - start: Record the trial information.
-    - end: End the recording of the trial and add it to trial history.
+## Classes
+    - Recorder: Define a Recorder for recording trial information.
 """
 
 from typing import Optional, Union
@@ -27,14 +25,24 @@ class Recorder:
     """
     Define a Recorder for recording trial information.
 
-    Methods
-    -------
-    set_path
-        Identify the latest run and sets the path with increased id.
-    start
-        Record the trial information.
-    end
-        End the recording of the trial and add it to trial history.
+    Properties
+    ----------
+    path : Path
+        The path to the recorded information.
+    last_trial_id : tuple[dict | Any, float | None]
+        The last trial id containing the configuration and the budget.
+    start_time : float
+        The current time in seconds since the Epoch
+    start_times : dict
+        A dictionary containing the start times with their id as key.
+    models : dict
+        The models used in the trial, with their id as key.
+    origins : dict
+        The origins of the trial, with their id as key.
+    additionals : dict
+        Additional information of the trial, with the id as key.
+    run : DeepCAVERun
+        The deepcave run trials container.
     """
 
     def __init__(
@@ -98,7 +106,7 @@ class Recorder:
             The prefix for the path.
             Default is "run".
         overwrite, optional
-            To determine wheter to overwrite an existing folder.
+            To determine whether to overwrite an existing folder.
             Default is False.
         """
         # Make sure the word is interpreted as folder

@@ -3,9 +3,6 @@
 # Data Structures
 
 This module can be used for updating one dictionary with another dictionary inplace.
-
-## Contents
-    - update_dict: Update dictionary with another inplace
 """
 
 from typing import Dict
