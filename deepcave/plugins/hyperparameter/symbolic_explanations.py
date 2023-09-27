@@ -1,6 +1,7 @@
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
+from ConfigSpace.hyperparameters import CategoricalHyperparameter
 from dash import dcc, html
 from gplearn.genetic import SymbolicRegressor
 from pyPDP.algorithms.pdp import PDP
@@ -142,7 +143,12 @@ class SymbolicExplanations(StaticPlugin):
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_dict = run.configspace.get_hyperparameters_dict()
+        hp_names_numerical = []
+        for k, v in hp_dict.items():
+            if not isinstance(v, CategoricalHyperparameter):
+                hp_names_numerical.append(k)
+        hp_names = hp_names_numerical
 
         # Get selected values
         objective_value = inputs["objective_id"]["value"]
