@@ -3,6 +3,10 @@ import sympy
 from gplearn import functions
 from gplearn.functions import make_function
 
+from deepcave.utils.logs import get_logger
+
+logger = get_logger(__name__)
+
 
 # Create a safe exp function which does not cause problems
 def exp(x):
@@ -80,6 +84,8 @@ def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.
     if n_dim == 2:
         X0, X1 = sympy.symbols("X0 X1", real=True)
         symb_conv = symb_conv.subs(X0, X1)
+
+    logger.debug("Start to simplify the expression with Sympy.")
     symb_simpl = sympy.simplify(symb_conv)
 
     if n_decimals:

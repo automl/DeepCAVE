@@ -1,3 +1,5 @@
+import signal
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -18,7 +20,6 @@ GRID_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
 MAX_SHOWN_SAMPLES = 100
-PARSIMONY_COEFFICIENT = 0.0001
 
 
 class SymbolicExplanations(StaticPlugin):
@@ -88,6 +89,18 @@ class SymbolicExplanations(StaticPlugin):
                     ),
                 ],
             ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            dbc.Label("Parsimony Hyperparameter"),
+                            help_button("Controls the complexity of the resulting formulas."),
+                            dbc.Input(id=register("parsimony", type=float), type="float"),
+                        ],
+                        md=6,
+                    ),
+                ],
+            ),
         ]
 
     @staticmethod
@@ -130,7 +143,7 @@ class SymbolicExplanations(StaticPlugin):
 
     def load_inputs(self):
         return {
-            # "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
+            "parsimony": {"value": "0.0001"},
             # "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
@@ -154,6 +167,7 @@ class SymbolicExplanations(StaticPlugin):
         objective_value = inputs["objective_id"]["value"]
         budget_value = inputs["budget_id"]["value"]
         hp1_value = inputs["hyperparameter_name_1"]["value"]
+        parsimony = inputs["parsimony"]["value"]
 
         if objective_value is None:
             objective_value = objective_ids[0]
@@ -170,6 +184,7 @@ class SymbolicExplanations(StaticPlugin):
             "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
             },
+            "parsimony": {"value": inputs["parsimony"]["value"]},
         }
 
     @staticmethod
@@ -180,6 +195,7 @@ class SymbolicExplanations(StaticPlugin):
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
         hp2 = inputs["hyperparameter_name_2"]
+        parsimony = inputs["parsimony"]
 
         if objective is None:
             raise RuntimeError("Objective not found.")
@@ -226,21 +242,31 @@ class SymbolicExplanations(StaticPlugin):
             generations=20,
             function_set=get_function_set(),
             metric="rmse",
-            parsimony_coefficient=PARSIMONY_COEFFICIENT,
+            parsimony_coefficient=parsimony,
             verbose=1,
         )
 
         # run SR on samples
         symb_model = SymbolicRegressor(**symb_params, random_state=0)
         symb_model.fit(x, y)
-        try:
-            conv_expr = convert_symb(symb_model, n_dim=len(X), n_decimals=3)
-        except:
-            conv_expr = ""
 
-        y_symbolic = symb_model.predict(x).tolist()
+        def handler(signo, frame):
+            raise RuntimeError
 
-        return {"x": x, "y": y_symbolic, "expr": str(conv_expr)}
+        signal.signal(signal.SIGALRM, handler)
+        signal.alarm(6)  # seconds
+        while True:
+            try:
+                conv_expr = convert_symb(symb_model, n_dim=len(X), n_decimals=3)
+            except:
+                conv_expr = (
+                    "The conversion of the expression failed. Please try another seed or increase "
+                    "the parsimony hyperparameter to obtain a symbolic explanation."
+                )
+
+            y_symbolic = symb_model.predict(x).tolist()
+
+            return {"x": x, "y": y_symbolic, "expr": str(conv_expr)}
 
     @staticmethod
     def get_output_layout(register):
