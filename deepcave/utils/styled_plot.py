@@ -13,6 +13,8 @@ Plots can be created and different parameters of the plots can be defined.
     FIG_HEIGHT = FIG_WIDTH / 1.618
 """
 
+from typing import Any
+
 from distutils.spawn import find_executable
 
 import matplotlib
@@ -46,7 +48,7 @@ class StyledPlot:
         The style used is seaborn.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         plt.style.use("seaborn")
 
         # Set MatPlotLib defaults
@@ -111,7 +113,7 @@ class StyledPlot:
         self.plt.savefig(filename, dpi=400, bbox_inches="tight")
         self.plt.close()
 
-    def render(self):
+    def render(self) -> str:
         """
         Render the Styled Plot for displaying.
 
@@ -212,7 +214,7 @@ class StyledPlot:
                 alpha=0.5,
             )
 
-    def legend(self, cols=1, loc=None, title=None, outside=False):
+    def legend(self, cols: int = 1, loc=None, title: str = None, outside: bool = False):
         """
         Customize and add a legend to a matplot plot.
 
@@ -262,7 +264,7 @@ class StyledPlot:
             legend.get_frame().set_linewidth(0.5)
             legend.get_frame().set_edgecolor("gray")
 
-    def get_color(self, id):
+    def get_color(self, id: int) -> str:
         """
         Get the color from color palette based on the given ID.
 
@@ -275,10 +277,9 @@ class StyledPlot:
 
         pal = sns.color_palette()
         hex_codes = pal.as_hex()
-
         return hex_codes[id % len(hex_codes)]
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         """Make sure we access self.plt directly."""
         try:
             return self.__getattribute__(name)

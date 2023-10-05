@@ -101,7 +101,7 @@ class AbstractRun(ABC):
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
 
         self.history: List[Trial] = []
-        self.trial_keys: Dict[Tuple[str, int], int] = {}  # (config_id, budget) -> trial_id
+        self.trial_keys: Dict[Tuple[int, int], int] = {}  # (config_id, budget) -> trial_id
 
         # Cached data
         self._highest_budget: Dict[int, Union[int, float]] = {}  # config_id -> budget
@@ -174,7 +174,9 @@ class AbstractRun(ABC):
         return 0
 
     @staticmethod
-    def get_trial_key(config_id: int, budget: Union[int, float]):
+    def get_trial_key(
+        config_id: int, budget: Union[int, float, None]
+    ) -> Tuple[int, Union[int, float]]:
         """
         Get the trial key for the configuration and the budget.
 
@@ -192,7 +194,7 @@ class AbstractRun(ABC):
         """
         return (config_id, budget)
 
-    def get_trial(self, trial_key) -> Optional[Trial]:
+    def get_trial(self, trial_key: Tuple[int, Union[int, float]]) -> Optional[Trial]:
         """
         Get the trial with the responding key if existing.
 
@@ -465,7 +467,7 @@ class AbstractRun(ABC):
         """
         return len(self.get_configs(budget=budget))
 
-    def get_budget(self, id: Union[int, str], human=False) -> float:
+    def get_budget(self, id: Union[int, str], human: bool = False) -> float:
         """
         Get the budget given an id.
 
@@ -1032,7 +1034,7 @@ class AbstractRun(ABC):
         specific: bool = False,
         include_config_ids: bool = False,
         include_combined_cost: bool = False,
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    ) -> pd.DataFrame:
         """
         Encode configurations to process them further.
 
@@ -1149,7 +1151,7 @@ class AbstractRun(ABC):
             columns += [COMBINED_COST_NAME]
 
         if include_config_ids:
-            data = np.concatenate((config_ids, x_set, y_set), axis=1)
+            data: np.ndarray = np.concatenate((config_ids, x_set, y_set), axis=1)
         else:
             data = np.concatenate((x_set, y_set), axis=1)
 

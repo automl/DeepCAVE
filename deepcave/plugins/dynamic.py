@@ -78,7 +78,8 @@ class DynamicPlugin(Plugin, ABC):
             """
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
-            inputs = self._list_to_dict(inputs_list, input=True)
+            inputs = self._list_to_dict(list(inputs_list), input=True)
+            # We would need to change the Optional[str] to a str as return type annotation
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             cleaned_inputs = self._clean_inputs(inputs)
             runs = self.get_selected_runs(inputs)

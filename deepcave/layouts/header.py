@@ -11,6 +11,8 @@ It handles different callbacks of the layout.
 """
 
 
+from typing import Literal, Tuple, Union
+
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
@@ -40,8 +42,13 @@ class HeaderLayout(Layout):
             Input("matplotlib-mode-refresh", "pathname"),
         ]
 
-        @app.callback(outputs, inputs)
-        def update_matplotlib_mode(n_clicks, pathname):
+        @app.callback(outputs, inputs)  # type: ignore
+        def update_matplotlib_mode(
+            n_clicks: int, pathname: str
+        ) -> Union[
+            Tuple[Literal["primary"], Literal["on"], str],
+            Tuple[Literal["secondary"], Literal["off"], str],
+        ]:
             """Update the matplotlib mode."""
             update = None
             mode = c.get("matplotlib-mode")

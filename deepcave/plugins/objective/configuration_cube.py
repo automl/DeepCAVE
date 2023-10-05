@@ -8,7 +8,7 @@ This module provides utilities for visualizing and creating a configuration cube
     - ConfigurationCube: This class provides a plugin for visualizing the configuration cube.
 """
 
-from typing import Dict, Tuple
+from typing import Any, Callable, Dict, List, Tuple, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -19,7 +19,7 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import Status
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import (
     get_checklist_options,
@@ -62,7 +62,7 @@ class ConfigurationCube(DynamicPlugin):
     help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
         Define and get the dash bootstrap components for the input layout.
 
@@ -111,7 +111,7 @@ class ConfigurationCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[html.Div]:
         """
         Get the layout for a filtered html container.
 
@@ -149,13 +149,16 @@ class ConfigurationCube(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(
+        self,
+    ) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]], List[Dict[str, Any]]]]]:
         """Load the inputs containing configuration and hyperparameter attributes."""
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
+    # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs):
         """
         Load the objective, budgets and hyperparameters and its attributes.
@@ -224,6 +227,7 @@ class ConfigurationCube(DynamicPlugin):
             "n_configs": {
                 "min": 0,
                 "max": len(configs) - 1,
+                # not sure how to convert this
                 "marks": get_slider_marks(list(range(len(configs)))),
                 "value": n_configs_value,
             },
@@ -234,7 +238,7 @@ class ConfigurationCube(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, str]:
         """
         Get a serialized dataframe of the encoded data.
 
@@ -258,11 +262,13 @@ class ConfigurationCube(DynamicPlugin):
         return {"df": serialize(df)}
 
     @staticmethod
-    def get_output_layout(register):
+    # Why a Tuple?
+    def get_output_layout(register: Callable) -> Tuple[dcc.Graph,]:
         """Get the output layout as dash Graph object."""
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load and save the output figure.

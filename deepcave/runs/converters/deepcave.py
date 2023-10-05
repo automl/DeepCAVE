@@ -9,6 +9,8 @@ It provides utilities to hash and get the DeepCAVE run object, as well as the la
     - DeepCAVERun: Define the DeepCAVE run and provide handling utilities.
 """
 
+from typing import Union
+
 from pathlib import Path
 
 from deepcave.runs.run import Run
@@ -36,7 +38,7 @@ class DeepCAVERun(Run):
     _initial_order = 1
 
     @property
-    def hash(self):
+    def hash(self) -> str:
         """Calculate a hash value of a jsonl history file to use as id."""
         if self.path is None:
             return ""
@@ -45,7 +47,7 @@ class DeepCAVERun(Run):
         return file_to_hash(self.path / "history.jsonl")
 
     @property
-    def latest_change(self):
+    def latest_change(self) -> Union[float, int]:
         """Get the timestamp of the latest change made to the history file."""
         if self.path is None:
             return 0

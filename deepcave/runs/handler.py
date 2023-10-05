@@ -60,6 +60,7 @@ class RunHandler:
 
         # Available converters
         self.available_run_yfes: List[Type[Run]] = config.CONVERTERS
+        self.available_run_classes: List[Type[Run]]
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
@@ -347,7 +348,7 @@ class RunHandler:
 
         return run
 
-    def update_groups(self, groups: Optional[Dict[str, str]] = None) -> None:
+    def update_groups(self, groups: Optional[Dict[str, List[str]]] = None) -> None:
         """
         Load chosen groups.
 

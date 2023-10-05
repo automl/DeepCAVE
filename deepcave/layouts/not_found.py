@@ -25,7 +25,7 @@ class NotFoundLayout(Layout):
         The url that could not be reached.
     """
 
-    def __init__(self, url) -> None:
+    def __init__(self, url: str) -> None:
         super().__init__()
         self.url = url
 

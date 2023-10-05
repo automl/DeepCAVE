@@ -94,7 +94,7 @@ class Recorder:
     def __exit__(self, type, value, traceback):  # noqa: D102, D105
         pass
 
-    def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False):
+    def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False) -> None:
         """
         Identify the latest run and sets the path with increased id.
 

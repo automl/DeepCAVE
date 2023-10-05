@@ -9,7 +9,7 @@ It includes the Pareto Front plugin.
     - ParetoFront: Generate an interactive Pareto Front visualization.
 """
 
-from typing import List, Union
+from typing import Any, Callable, Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -18,7 +18,7 @@ from dash import dcc, html
 
 from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import Status, check_equality
+from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import (
@@ -58,7 +58,7 @@ class ParetoFront(DynamicPlugin):
     icon = "fas fa-wind"
     help = "docs/plugins/pareto_front.rst"
 
-    def check_runs_compatibility(self, runs):
+    def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         """
         Check if the runs are compatible.
 
@@ -91,7 +91,7 @@ class ParetoFront(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
         Get the input layout as html container and dash bootstrap component.
 
@@ -150,7 +150,7 @@ class ParetoFront(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Union[html.Div, dbc.Row]]:
         """
         Get the filtered layout for a dash bootstrap component and html container.
 
@@ -205,7 +205,7 @@ class ParetoFront(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
         Load the inputs containing information about the values to be visualized.
 
@@ -230,6 +230,7 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Process the data and get the according pareto front and its points.
@@ -269,7 +270,7 @@ class ParetoFront(DynamicPlugin):
         points = points[sorted_idx]
         config_ids = config_ids[sorted_idx]
 
-        is_front: Union[List, np.ndarray] = np.ones(points.shape[0], dtype=bool)
+        is_front: np.ndarray = np.ones(points.shape[0], dtype=bool)
         for point_idx, costs in enumerate(points):
             if is_front[point_idx]:
                 # Keep any point with a lower/upper cost
@@ -301,11 +302,12 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
         """Get the dash Graph layout of the output."""
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(runs, inputs, outputs):
         """
         Load and save the output figure.
@@ -415,7 +417,7 @@ class ParetoFront(DynamicPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable) -> html.Img:
         """Get an html container of the output layout."""
         return html.Img(
             id=register("graph", "src"),
@@ -423,6 +425,7 @@ class ParetoFront(DynamicPlugin):
         )
 
     @staticmethod
+    # Types dont match superclass
     def load_mpl_outputs(runs, inputs, outputs):
         """
         Get the pareto front and the corresponding layout of the matplotlib figure.

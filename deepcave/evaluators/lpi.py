@@ -8,7 +8,7 @@ This module provides utilities to calculate the local parameter importance.
     - LIP: This class calculates the local parameter importance.
 """
 
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from random import random
 
@@ -60,8 +60,8 @@ class LPI:
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
-        self.variances = None
-        self.importances = None
+        self.variances: Optional[Dict[Any, List[Any]]] = None
+        self.importances: Optional[Dict[Any, Any]] = None
 
     def calculate(
         self,
@@ -92,7 +92,7 @@ class LPI:
             objectives = self.run.get_objectives()
 
         if budget is None:
-            budget = self.get_highest_budget()
+            budget = self.run.get_highest_budget()
 
         # Set variables
         self.continous_neighbors = continous_neighbors
@@ -126,14 +126,14 @@ class LPI:
 
         # These are used for plotting and hold the predictions for each neighbor of each parameter.
         # That means performances holds the mean, variances the variance of the forest.
-        performances = {}
-        variances = {}
+        performances: Dict[str, List[np.ndarray]] = {}
+        variances: Dict[str, List[np.ndarray]] = {}
         # These are used for importance and hold the corresponding importance/variance over
         # neighbors. Only import if NOT quantifying importance via performance-variance across
         # neighbors.
         importances = {}
         # Nested list of values per tree in random forest.
-        predictions = {}
+        predictions: Dict[str, List[List[np.ndarray]]] = {}
 
         # Iterate over parameters
         for hp_idx, hp_name in enumerate(self.incumbent.keys()):
@@ -225,7 +225,7 @@ class LPI:
             p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
             for p, trees in overall_var_per_tree.items()
         }
-
+        # Same none problem here
         self.variances = overall_var_per_tree
         self.importances = importances
 
@@ -251,7 +251,7 @@ class LPI:
         if self.importances is None or self.variances is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        importances = {}
+        importances: Dict[str, Tuple[float, float]] = {}
         for hp_name in hp_names:
             mean = 0
             std = 0
@@ -273,7 +273,7 @@ class LPI:
 
         return importances
 
-    def _get_neighborhood(self):
+    def _get_neighborhood(self) -> Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]:
         """
         Slight modification of ConfigSpace's get_one_exchange neighborhood.
 
@@ -351,7 +351,7 @@ class LPI:
 
         return neighborhood
 
-    def _predict_mean_var(self, config):
+    def _predict_mean_var(self, config: Configuration) -> Tuple[np.ndarray, np.ndarray]:
         """
         Small wrapper to predict marginalized over instances.
 

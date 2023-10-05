@@ -43,7 +43,7 @@ class NotificationLayout(Layout):
             Output("alert", "color"),
             Output("alert", "is_open"),
             Trigger("global-update", "n_intervals"),
-        )
+        )  # type: ignore
         def update_alert() -> Tuple[str, str, bool]:
             """Update the notification alert."""
             if (result := notification.get_latest()) is not None:

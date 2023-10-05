@@ -9,6 +9,8 @@ Utilities provide getting a hash, as well as the latest change of a file.
     - BOHBRun: Create a BOHB Run.
 """
 
+from typing import Any, Dict, Union
+
 from pathlib import Path
 
 from deepcave.runs import Status
@@ -39,7 +41,7 @@ class BOHBRun(Run):
     _initial_order = 2
 
     @property
-    def hash(self):
+    def hash(self) -> str:
         """Calculate a hash value of the json result file."""
         if self.path is None:
             return ""
@@ -48,7 +50,7 @@ class BOHBRun(Run):
         return file_to_hash(self.path / "results.json")
 
     @property
-    def latest_change(self):
+    def latest_change(self) -> Union[float, int]:
         """Get the timestamp of the latest change made to the results file."""
         if self.path is None:
             return 0
@@ -56,7 +58,7 @@ class BOHBRun(Run):
         return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path: Union[Path, str]) -> "BOHBRun":
         """
         Create a BOHB Run from a given path and add a new trial to it.
 
@@ -105,19 +107,25 @@ class BOHBRun(Run):
             budget = bohb_run.budget
 
             if bohb_run.info is None:
-                status = "CRASHED"
+                status_string = "CRASHED"
             else:
-                status = bohb_run.info["state"]
+                status_string = bohb_run.info["state"]
 
             config = config_mapping[bohb_run.config_id]["config"]
 
-            origin = None
-            additional = {}
+            additional: Dict[str, Any] = {}
+            status: Status
 
             # QUEUED, RUNNING, CRASHED, REVIEW, TERMINATED, COMPLETED, SUCCESS
-            if "SUCCESS" in status or "TERMINATED" in status or "COMPLETED" in status:
+            if (
+                "SUCCESS" in status_string
+                or "TERMINATED" in status_string
+                or "COMPLETED" in status_string
+            ):
                 status = Status.SUCCESS
-            elif "RUNNING" in status or "QUEUED" in status or "REVIEW" in status:
+            elif (
+                "RUNNING" in status_string or "QUEUED" in status_string or "REVIEW" in status_string
+            ):  # RUNNING is no attribute in Status, Issue already opened
                 status = Status.RUNNING
             else:
                 status = Status.CRASHED
@@ -133,7 +141,6 @@ class BOHBRun(Run):
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
-                origin=origin,
                 additional=additional,
             )
 

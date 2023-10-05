@@ -56,12 +56,14 @@ def render_table(df: pd.DataFrame) -> None:  # noqa: D103
 
 
 def get_slider_marks(
-    strings: Optional[List[Dict[str, Any]]] = None, steps: int = 10, access_all: bool = False
+    strings: Optional[List[Union[Dict[str, Any], int]]] = None,
+    steps: int = 10,
+    access_all: bool = False,
 ) -> Dict[int, Dict[str, str]]:
     """
     Generate a dictionary containing slider marks.
 
-    The slider marks are based on the provided list of strings.
+    The slider marks are based on the provided list of dictionaries.
 
     Parameters
     ----------
@@ -234,7 +236,7 @@ def get_radio_options(
 
 
 def create_table(
-    output: Dict[str, str],
+    output: Dict[str, List[str]],
     fixed: bool = False,
     head: bool = True,
     striped: bool = True,
@@ -245,7 +247,7 @@ def create_table(
 
     Parameters
     ----------
-    output : Dict[str, str]
+    output : Dict[str, List[str]]
         Containing the information for the table.
     fixed : bool, optional
         Indicates whether the table has a fixed layout.

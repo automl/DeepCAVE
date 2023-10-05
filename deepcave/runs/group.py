@@ -192,7 +192,7 @@ class Group(AbstractRun):
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
-    def get_model(self, config_id):
+    def get_model(self, config_id: int):
         """Get the model of the runs."""
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)

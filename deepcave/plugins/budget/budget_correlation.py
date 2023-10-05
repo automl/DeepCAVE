@@ -10,7 +10,7 @@ and loading the outputs.
 ## Classes
     - BudgetCorrelation: Can be used for visualizing the correlation of budgets.
 """
-from typing import Dict
+from typing import Any, Callable, DefaultDict, Dict, List, Union
 
 from collections import defaultdict
 
@@ -21,7 +21,7 @@ from scipy import stats
 
 from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import Status
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import create_table, get_select_options
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
@@ -58,7 +58,7 @@ class BudgetCorrelation(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def check_run_compatibility(run) -> bool:
+    def check_run_compatibility(run: AbstractRun) -> bool:
         """
         Check if the run has more than one budget and is compatible.
 
@@ -79,7 +79,7 @@ class BudgetCorrelation(DynamicPlugin):
         return True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[html.Div]:
         """
         Get the html container for the layout of the input.
 
@@ -104,7 +104,10 @@ class BudgetCorrelation(DynamicPlugin):
             ),
         ]
 
-    def load_dependency_inputs(self, run, _, inputs):
+    # Types dont match superclass
+    def load_dependency_inputs(
+        self, run, _: Any, inputs
+    ) -> Dict[str, Dict[str, Union[List[Dict[str, Any]], int]]]:
         """
         Load the objectives attributes.
 
@@ -135,7 +138,9 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(
+        run: AbstractRun, inputs: Dict[str, int]
+    ) -> Dict[str, DefaultDict[str, Dict[str, float]]]:
         """
         Load the budget and the costs of the run. Get the correlations.
 
@@ -143,7 +148,7 @@ class BudgetCorrelation(DynamicPlugin):
         ----------
         run : AbstractRun
             The run to get the budget and the costs from.
-        inputs : Dict[str, Any]
+        inputs : Dict[str, int]
             The input to get the objective id from.
 
         Returns
@@ -154,9 +159,10 @@ class BudgetCorrelation(DynamicPlugin):
         budget_ids = run.get_budget_ids(include_combined=False)
 
         # Add symmetric correlations; table ready
-        correlations_symmetric: Dict[str, Dict[str, float]] = defaultdict(dict)
+        # Issue already opened with this matrix
+        correlations_symmetric: DefaultDict[str, Dict[str, float]] = defaultdict(dict)
 
-        correlations: Dict[str, Dict[str, float]] = defaultdict(dict)
+        correlations: DefaultDict[str, Dict[str, float]] = defaultdict(dict)
         for budget1_id in budget_ids:
             budget1 = run.get_budget(budget1_id)
             budget1_readable = run.get_budget(budget1_id, human=True)
@@ -193,7 +199,7 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable[[str, Union[str, List[str]]], str]) -> list:
         """
         Get the html container for the layout of the output.
 
@@ -222,7 +228,8 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, _, outputs):
+    # Types dont match superclass
+    def load_outputs(run, _: Any, outputs) -> List[Union[str, go.Figure, dbc.Table]]:
         """
         Create the output table and safe the image.
 
@@ -238,7 +245,7 @@ class BudgetCorrelation(DynamicPlugin):
         The text, the figure and the created table.
         """
         traces = []
-        categories = defaultdict(list)
+        categories: defaultdict = defaultdict(list)
         correlations = outputs["correlations"]
         correlations_symmetric = outputs["correlations_symmetric"]
         for idx, (budget1, budgets) in enumerate(correlations.items()):
@@ -320,7 +327,6 @@ class BudgetCorrelation(DynamicPlugin):
             text += f"{pairs_text} is {relation}"
             if i == n_categories - 1:
                 text += "."
-
         return [
             text,
             figure,

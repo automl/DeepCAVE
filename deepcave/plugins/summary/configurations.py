@@ -10,6 +10,8 @@ The module provides this as a dynamic plugin.
     - Configurations: Visualize the characteristics of a configuration.
 """
 
+from typing import Any, Callable, Dict, List, Union
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -88,7 +90,7 @@ class Configurations(DynamicPlugin):
         return create_url(url, inputs)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> List[html.Div]:
         """
         Get the html container for the layout of the input.
 
@@ -110,13 +112,16 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]]]]]:
         """Get the inputs, containing information about a configuration."""
         return {
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    # Types dont match superclass
+    def load_dependency_inputs(
+        self, run, previous_inputs: Dict[str, Any], inputs: Dict[str, Any]
+    ) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]]]]]:
         """
         Get selected values of the inputs.
 
@@ -148,6 +153,7 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Process the given data show information about the configuration space.
@@ -182,8 +188,8 @@ class Configurations(DynamicPlugin):
                 str(original_run.path) + f" (Configuration ID: {original_config_id})"
             ]
 
-        performances = {}
-        performances_table_data = {"Budget": []}
+        performances: Dict[str, Dict[Union[int, float], float]] = {}
+        performances_table_data: Dict[str, List[Any]] = {"Budget": []}
         for objective_id, objective in enumerate(objectives):
             if objective.name not in performances:
                 performances[objective.name] = {}
@@ -210,7 +216,7 @@ class Configurations(DynamicPlugin):
 
         # Let's start with the configspace
         X = []
-        cs_table_data = {"Hyperparameter": [], "Value": []}
+        cs_table_data: Dict[str, List[Any]] = {"Hyperparameter": [], "Value": []}
         for config_id, configuration in run.get_configs().items():
             x = run.encode_config(configuration)
 
@@ -243,7 +249,9 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(
+        register: Callable,
+    ) -> List[Union[html.Div, html.Hr, html.H3, dbc.Tabs, dbc.Accordion]]:
         """
         Get an html container as well as a dash bootstrap component for the output layout.
 
@@ -301,7 +309,9 @@ class Configurations(DynamicPlugin):
         ]
 
     @staticmethod
-    def _get_objective_figure(_, outputs, run):
+    def _get_objective_figure(
+        _: Any, outputs: Dict[str, Dict[str, Dict[Any, Any]]], run: AbstractRun
+    ) -> go.Figure:
         """
         Get the objective figure and save as image.
 
@@ -331,7 +341,7 @@ class Configurations(DynamicPlugin):
             trace = go.Scatter(**trace_kwargs)
             objective_data.append(trace)
 
-        layout_kwargs = {
+        layout_kwargs: Dict[str, Union[Any, Dict[str, Any]]] = {
             "margin": config.FIGURE_MARGIN,
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
@@ -367,7 +377,9 @@ class Configurations(DynamicPlugin):
         return objective_figure
 
     @staticmethod
-    def _get_configspace_figure(inputs, outputs, run):
+    def _get_configspace_figure(
+        inputs: Any, outputs: Dict[str, str], run: AbstractRun
+    ) -> go.Figure:
         """
         Get the configuration space figure.
 
@@ -383,8 +395,7 @@ class Configurations(DynamicPlugin):
         fig
             A plotly configuration space figure.
         """
-        df = outputs["cs_df"]
-        df = deserialize(df, dtype=pd.DataFrame)
+        df = deserialize(outputs["cs_df"], dtype=pd.DataFrame)
 
         highlighted = df["highlighted"].values
         hp_names = run.configspace.get_hyperparameter_names()
@@ -392,7 +403,7 @@ class Configurations(DynamicPlugin):
         # Get highlighted column
         highlighted_df = df[df["highlighted"] == 1]
 
-        data = defaultdict(dict)
+        data: defaultdict = defaultdict(dict)
         for hp_name in hp_names:
             data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
@@ -428,6 +439,7 @@ class Configurations(DynamicPlugin):
         return fig
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load the outputs create the table containing performances and configuration space.

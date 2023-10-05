@@ -9,6 +9,8 @@ The module includes a dynamic plugin for the overview.
     - Overview: Visualize an overall overview of a run.
 """
 
+from typing import Any, Callable, Dict, List, Union
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -61,7 +63,7 @@ class Overview(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable[[str, Union[str, List[str]]], str]) -> list:
         """
         Get an html container with the output layout.
 
@@ -113,7 +115,8 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, *_):
+    # Types dont match superclass
+    def load_outputs(run, *_: Any) -> List[Union[str, dbc.Table, go.Figure, dbc.Card]]:
         """
         Load the outputs for the overview of the run.
 
@@ -198,7 +201,7 @@ class Overview(DynamicPlugin):
         )
 
         # Meta
-        meta = {"Attribute": [], "Value": []}
+        meta: Dict[str, List[str]] = {"Attribute": [], "Value": []}
         for k, v in run.get_meta().items():
             if k == "objectives":
                 continue
@@ -210,7 +213,7 @@ class Overview(DynamicPlugin):
             meta["Value"].append(str(v))
 
         # Objectives
-        objectives = {"Name": [], "Bounds": []}
+        objectives: Dict[str, List[str]] = {"Name": [], "Bounds": []}
         for objective in run.get_objectives():
             objectives["Name"].append(objective.name)
             objectives["Bounds"].append(f"[{objective.lower}, {objective.upper}]")
@@ -219,8 +222,13 @@ class Overview(DynamicPlugin):
         budgets = run.get_budgets(include_combined=False)
 
         # Statistics
-        status_statistics = {}
-        status_details = {"Configuration ID": [], "Budget": [], "Status": [], "Error": []}
+        status_statistics: Dict[float, Dict[Status, int]] = {}
+        status_details: Dict[str, List[Any]] = {
+            "Configuration ID": [],
+            "Budget": [],
+            "Status": [],
+            "Error": [],
+        }
         for budget in budgets:
             budget = round(budget, 2)
             if budget not in status_statistics:
@@ -297,8 +305,8 @@ class Overview(DynamicPlugin):
             str(round(count / len_trials * 100, 2)) + "%" for count in status_budget.values()
         ]
         status_budget_values_text = "/".join(status_budget_values)
-        status_budget_keys_text = [str(key) for key in status_budget.keys()]
-        status_budget_keys_text = "/".join(status_budget_keys_text)
+        status_budget_keys_text_list = [str(key) for key in status_budget.keys()]
+        status_budget_keys_text = "/".join(status_budget_keys_text_list)
 
         status_text = f"""
         Taking all evaluated trials into account, {successful_trials_rate}% have been successful.
@@ -339,7 +347,7 @@ class Overview(DynamicPlugin):
         config_statistics["Z_labels"] = z_labels
 
         # Prepare configspace table
-        configspace = {
+        configspace: Dict[str, List] = {
             "Hyperparameter": [],
             "Possible Values": [],
             "Default": [],
@@ -365,12 +373,12 @@ class Overview(DynamicPlugin):
                 value = str(hp.value)
 
             default = str(hp.default_value)
-            log = str(log)
+            log_str = str(log)
 
             configspace["Hyperparameter"].append(hp_name)
             configspace["Possible Values"].append(value)
             configspace["Default"].append(default)
-            configspace["Log"].append(log)
+            configspace["Log"].append(log_str)
 
         stats_data = []
         for budget, stats in status_statistics.items():

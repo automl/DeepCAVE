@@ -8,6 +8,8 @@ It provides utilities to hash, as well a get the latest change of the object.
 ## Classes
     - SMAC3v1Run: Define a SMAC3v1 run object.
 """
+from typing import Optional, Union
+
 import json
 from pathlib import Path
 
@@ -41,7 +43,7 @@ class SMAC3v1Run(Run):
     _initial_order = 2
 
     @property
-    def hash(self):
+    def hash(self) -> str:
         """Calculate a hash value of a json runhistory file to use as id."""
         if self.path is None:
             return ""
@@ -50,7 +52,7 @@ class SMAC3v1Run(Run):
         return file_to_hash(self.path / "runhistory.json")
 
     @property
-    def latest_change(self):
+    def latest_change(self) -> Union[float, int]:
         """Get the timestamp of the latest change of the runhistory file."""
         if self.path is None:
             return 0
@@ -58,7 +60,7 @@ class SMAC3v1Run(Run):
         return Path(self.path / "runhistory.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path: Union[Path, str]) -> "SMAC3v1Run":
         """
         Based on working_dir/run_name/*, return a new trials object.
 
@@ -182,7 +184,7 @@ class SMAC3v1Run(Run):
             # Round budget
             budget = np.round(budget, 2)
 
-            origin = None
+            origin: Optional[str] = None
             if config_id in config_origins:
                 origin = config_origins[config_id]
 

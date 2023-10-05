@@ -41,6 +41,7 @@ repos:
       - id: mypy
         name: mypy deepcave
         files: deepcave
+        args: ["--check-untyped-defs", "--install-types", "--non-interactive", "--ignore-missing-imports"]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0

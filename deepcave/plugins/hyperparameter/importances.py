@@ -11,6 +11,8 @@ processing the data and loading the outputs. Also provides a matplotlib version.
     - Importances: This class provides a plugin for the visualization of the importances.
 """
 
+from typing import Any, Callable, Dict, List, Optional, Union
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -21,6 +23,7 @@ from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
+from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plot import plt
@@ -55,7 +58,7 @@ class Importances(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Any]:
         """
         Get the html container for the layout of the input.
 
@@ -115,7 +118,7 @@ class Importances(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[html.Div]:
         """
         Get the layout for a filtered html container.
 
@@ -158,7 +161,7 @@ class Importances(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
         Load the method labels, values and different attributes.
 
@@ -180,7 +183,10 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
+    # Types dont match superclass
+    def load_dependency_inputs(
+        self, run, _: Any, inputs: Dict[str, Any]
+    ) -> Dict[str, Dict[str, Union[List[Dict[str, Any]], int, Dict[str, Any], Any, List]]]:
         """
         Load the objective, budgets and hyperparameters and its attributes.
 
@@ -248,7 +254,8 @@ class Importances(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    # Return doesnt match superclass type
+    def process(run: AbstractRun, inputs: Dict[str, Any]):
         """
         Initialize the evaluator, calculate and get the processed data.
 
@@ -280,6 +287,7 @@ class Importances(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets(include_combined=True)
 
+        evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
         if method == "local":
             # Initialize the evaluator
             evaluator = LocalEvaluator(run)
@@ -299,7 +307,7 @@ class Importances(StaticPlugin):
         return data
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
         """
         Get a graph with the layout of the output.
 
@@ -315,6 +323,7 @@ class Importances(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load the importances and the corresponding layout of the figure.
@@ -410,7 +419,7 @@ class Importances(StaticPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable) -> html.Img:
         """Get an html container of the output layout."""
         return html.Img(
             id=register("graph", "src"),
@@ -418,7 +427,8 @@ class Importances(StaticPlugin):
         )
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):
+    # Types dont match superclass
+    def load_mpl_outputs(run, inputs: Dict[str, Any], outputs) -> str:
         """
         Load the importances and the corresponding layout of the mpl figure.
 
@@ -480,7 +490,7 @@ class Importances(StaticPlugin):
                 hp_name = "..." + hp_name[-18:]
 
             x_labels += [hp_name]
-        x = np.arange(len(x_labels))
+        x_values = np.arange(len(x_labels))
 
         plt.figure()
         for budget_id, values in data.items():
@@ -492,7 +502,7 @@ class Importances(StaticPlugin):
 
             budget = run.get_budget(budget_id, human=True)
             plt.bar(
-                x,
+                x_values,
                 y,
                 yerr=y_err,
                 color=plt.get_color(budget_id),
@@ -503,7 +513,7 @@ class Importances(StaticPlugin):
         plt.legend(title="Budgets")
 
         # Rotate x ticks
-        plt.xticks(x, x_labels, rotation=90)
+        plt.xticks(x_values, x_labels, rotation=90)
         plt.ylabel("Importance")
 
         return plt.render()

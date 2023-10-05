@@ -59,7 +59,7 @@ check-pydocstyle:
 	$(PYDOCSTYLE) ${SOURCE_DIR} || :
 
 check-mypy:
-	$(MYPY) ${SOURCE_DIR} || :
+	$(MYPY) --check-untyped-defs ${SOURCE_DIR} || :
 
 check-flake8:
 	$(FLAKE8) ${SOURCE_DIR} || :

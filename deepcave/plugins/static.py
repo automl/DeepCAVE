@@ -12,7 +12,7 @@ It provides an Enum used for the plugin state and a static plugin definition.
 """
 
 from abc import ABC
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional
 
 import traceback
 from enum import Enum
@@ -82,7 +82,7 @@ class StaticPlugin(Plugin, ABC):
     def _setup(self) -> None:
         """Set up the plugin."""
         self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
-        self._previous_state = None  # Used for updating status
+        self._previous_state: Optional[PluginState] = None  # Used for updating status
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False
@@ -119,10 +119,10 @@ class StaticPlugin(Plugin, ABC):
         def plugin_process(n_clicks, _, *inputs_list):  # type: ignore
             """Register updates from inputs."""
             self._blocked = True
-
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
-            inputs = self._list_to_dict(inputs_list, input=True)
+            inputs = self._list_to_dict(list(inputs_list), input=True)
+            # Wait for meeting
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             cleaned_inputs = self._clean_inputs(inputs)
             last_inputs = c.get("last_inputs", self.id)
@@ -137,7 +137,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
+                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)  # same problem
 
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False
@@ -166,7 +166,7 @@ class StaticPlugin(Plugin, ABC):
 
                     # Check if we need to process
                     for run in runs:
-                        job_id = self._get_job_id(run.id, inputs_key)
+                        job_id = self._get_job_id(run.id, inputs_key)  # same problem
 
                         # We already got our results or it was already processed
                         if raw_outputs[run.id] is not None or queue.is_processed(job_id):
@@ -188,7 +188,7 @@ class StaticPlugin(Plugin, ABC):
                             _process,
                             args=[self.process, run, cleaned_inputs],
                             job_id=job_id,
-                            meta=job_meta,
+                            meta=job_meta,  # wait for meeting
                         )
 
                     # Reset button
@@ -206,9 +206,11 @@ class StaticPlugin(Plugin, ABC):
                             job_plugin_id = job_meta["plugin_id"]
 
                             self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}.")
+                            # Waiting for meeting
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
+                            # Same optional string problem
                             rc.set(run, job_plugin_id, job_inputs_key, job_run_outputs)
                             self.logger.debug(f"Job {job_id} cached.")
 
@@ -228,6 +230,7 @@ class StaticPlugin(Plugin, ABC):
                     queue_running = False
                     queue_pending = False
                     for run in runs:
+                        # Same problem, wait till meeting
                         job_id = self._get_job_id(run.id, inputs_key)
                         if queue.is_running(job_id):
                             queue_running = True
@@ -304,6 +307,7 @@ class StaticPlugin(Plugin, ABC):
             ):
                 # However: We have to unset the previous state so if we really change the inputs
                 # the visualizes will be updated.
+                # Same problem, wait till meeting
                 self._previous_state = PluginState.UNSET
                 raise PreventUpdate
 

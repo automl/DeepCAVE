@@ -10,6 +10,8 @@ The labels are of the important hyperparameters, budget and objectives.
     - ParallelCoordinates : Can be used for visualizing the parallel coordinates.
 """
 
+from typing import Any, Callable, Dict, List, Union
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -56,7 +58,7 @@ class ParallelCoordinates(StaticPlugin):
     help = "docs/plugins/parallel_coordinates.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Union[html.Div, dbc.Row]]:
         """
         Get the input layout as html container and dash bootstrap component.
 
@@ -120,7 +122,7 @@ class ParallelCoordinates(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
         Get the filtered layout for a dash bootstrap component and html container.
 
@@ -173,7 +175,7 @@ class ParallelCoordinates(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """Load the inputs containing information about the values to be visualized."""
         return {
             "show_important_only": {"options": get_select_options(binary=True), "value": "true"},
@@ -183,6 +185,7 @@ class ParallelCoordinates(StaticPlugin):
             "hide_hps": {"hidden": True},
         }
 
+    # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs):
         """
         Load the objective, budgets and hyperparameters and its attributes.
@@ -255,6 +258,7 @@ class ParallelCoordinates(StaticPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Get a serialized dataframe of the data and run a fanova for evaluation.
@@ -274,25 +278,26 @@ class ParallelCoordinates(StaticPlugin):
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         df = serialize(run.get_encoded_data(objective, budget))
-        result = {"df": df}
+        result: Dict[str, Any] = {"df": df}
 
         if inputs["show_important_only"]:
             # Let's run a quick fANOVA here
             evaluator = fANOVA(run)
             evaluator.calculate(objective, budget, n_trees=10, seed=0)
-            importances = evaluator.get_importances()
-            importances = {u: v[0] for u, v in importances.items()}
+            importances_dict = evaluator.get_importances()
+            importances = {u: v[0] for u, v in importances_dict.items()}
             important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
             result["important_hp_names"] = important_hp_names
 
         return result
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
         """Get the dash Graph output layout."""
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load and save the output figure.
@@ -339,7 +344,7 @@ class ParallelCoordinates(StaticPlugin):
             if b:
                 objective_values += [value]
 
-        data = defaultdict(dict)
+        data: defaultdict = defaultdict(dict)
         for hp_name in hp_names:
             values = []
             for hp_v, objective_v in zip(df[hp_name].values, df[objective_name].values):

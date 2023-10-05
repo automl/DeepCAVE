@@ -17,6 +17,8 @@ processing the data and loading the outputs.
     MAX_SHOWN_SAMPLES = 100
 """
 
+from typing import Any, Callable, Dict, List
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -64,7 +66,7 @@ class PartialDependencies(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
         Define and get the dash bootstrap components for the input layout.
 
@@ -138,9 +140,9 @@ class PartialDependencies(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
         """
-        Get the dbc containing an html container for the filtered layout.
+        Get the dash bootstrap component containing an html container for the filtered layout.
 
         Parameters
         ----------
@@ -187,7 +189,7 @@ class PartialDependencies(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
         Load the confidence values as well as the ice.
 
@@ -200,6 +202,7 @@ class PartialDependencies(StaticPlugin):
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
+    # Types dont match superclass
     def load_dependency_inputs(self, run, previous_inputs, inputs):
         """
         Load the objectives, budgets, hyperparameter names and their attributes.
@@ -248,6 +251,7 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Fit a surrogate model with the given data.
@@ -334,7 +338,7 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
         """
         Get the graph of the output.
 
@@ -350,6 +354,7 @@ class PartialDependencies(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load the output figure and save the Partial Dependency Plot as image.

@@ -62,7 +62,7 @@ class Plugin(Layout, ABC):
         Shows a dropdown to select a run in the inputs layout.
         This feature is useful if only one run could be viewed at a time.
         Moreover, it prevents the plugin to calculate results across all runs.
-    
+
     Properties
     ----------
     inputs : List[Tuple[str, str, bool, Any]]
@@ -732,7 +732,7 @@ class Plugin(Layout, ABC):
         return result
 
     @interactive
-    def _dict_as_key(self, d: Dict[str, Any], remove_filters: bool = False) -> Optional[str]:
+    def _dict_as_key(self, d: Dict[str, Any], remove_filters: bool = False) -> str:
         """
         Convert a dictionary to a key. Only ids from self.inputs are considered.
 
@@ -747,9 +747,14 @@ class Plugin(Layout, ABC):
         -------
         Optional[str]
             Key as string from the given dictionary. Returns none if `d` is not a dictionary.
+
+        Raises
+        ------
+        TypeError
+            If `d` is not a dictionary.
         """
         if not isinstance(d, dict):
-            return None
+            raise TypeError("d must be a dictionary.")
 
         new_d = copy.deepcopy(d)
         if remove_filters:

@@ -7,6 +7,8 @@ This module defines command-line options using flags.
 This includes the entry point for the programs execution.
 """
 
+from typing import Any
+
 import multiprocessing
 import subprocess
 from pathlib import Path
@@ -30,7 +32,7 @@ flags.DEFINE_string(
 )
 
 
-def execute(_) -> None:
+def execute(_: Any) -> None:
     """Entry point for the programs execution."""
     if (config_key := FLAGS.get_config_value) is not None:
         config = FLAGS.config

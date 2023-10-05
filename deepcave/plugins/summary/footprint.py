@@ -9,6 +9,8 @@ The module contains a static plugin class for defining the footprint.
     - FootPrint: Visualize the footprint of a configuration.
 """
 
+from typing import Any, Callable, Dict, List, Union
+
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -52,7 +54,7 @@ class FootPrint(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
         Get the input layout as html container and dash bootstrap component.
 
@@ -117,7 +119,7 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[dbc.Row]:
         """
         Get the filtered layout for a dash bootstrap component.
 
@@ -130,7 +132,7 @@ class FootPrint(StaticPlugin):
         -------
         A filtered layout with a dash bootstrap component.
         """
-        return (
+        return [
             dbc.Row(
                 [
                     dbc.Col(
@@ -153,11 +155,11 @@ class FootPrint(StaticPlugin):
                         ],
                         md=6,
                     ),
-                ],
-            ),
-        )
+                ]
+            )
+        ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """Get the inputs, containing details, and border/supports information."""
         return {
             "details": {"value": 0.5},
@@ -165,6 +167,7 @@ class FootPrint(StaticPlugin):
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
+    # Types dont match superclass
     def load_dependency_inputs(self, run, previous_inputs, inputs):
         """
         Load the objectives, budgets and their attributes.
@@ -211,6 +214,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Process the data to create different data points.
@@ -253,7 +257,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dbc.Tabs:
         """
         Get a dash bootstrap component for the output layout.
 
@@ -284,6 +288,7 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
         Load and save the output plotly figure for visualizing the footprint of the run.
@@ -391,7 +396,7 @@ class FootPrint(StaticPlugin):
         return [performance, area]
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable) -> List[dbc.Tabs]:
         """
         Get a dash bootstrap component of the output layout.
 
@@ -420,6 +425,7 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
+    # Types dont match superclass
     def load_mpl_outputs(run, inputs, outputs):
         """
         Load the rendered matplotlib figure of the footprint.

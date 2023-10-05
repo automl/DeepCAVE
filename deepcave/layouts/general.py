@@ -319,9 +319,10 @@ class GeneralLayout(Layout):
         ]
 
         @app.callback(outputs, inputs)  # type: ignore
-        def callback(group_names, all_run_paths, i):  # type: ignore
+        def callback(group_names: List[str], all_run_paths, i):  # type: ignore
             """Update the groups."""
             # Abort on page load
+            self._refresh_groups: bool
             if self._refresh_groups:
                 self._refresh_groups = False
                 raise PreventUpdate()

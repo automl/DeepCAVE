@@ -458,6 +458,8 @@ class Footprint:
             Whether the config was rejected or not.
         """
         X = self._X
+
+        assert self._distances is not None
         distances = self._distances
 
         if X is None:
@@ -494,6 +496,7 @@ class Footprint:
                 X = np.concatenate((X, np.array([config])), axis=0)
 
             self._X = X
+            # We cant += to a None, an Issue has already been created
             self._config_ids += [config_id]
             self._distances = new_distances
 

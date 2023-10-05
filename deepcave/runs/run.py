@@ -124,7 +124,7 @@ class Run(AbstractRun, ABC):
         return self._path
 
     @path.setter
-    def path(self, value: Optional[Union[str, Path]]):
+    def path(self, value: Optional[Union[str, Path]]) -> None:
         """
         If path is changed, also change the filenames of all created files.
 
@@ -178,7 +178,7 @@ class Run(AbstractRun, ABC):
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
-        origin: str = None,
+        origin: Optional[str] = None,
         model: Union[str, "torch.nn.Module"] = None,  # type: ignore # noqa: F821
         additional: Optional[Dict] = None,
     ) -> None:
@@ -289,7 +289,7 @@ class Run(AbstractRun, ABC):
         if model is not None:
             self.models[config_id] = model
 
-    def save(self, path: Optional[Union[str, Path]] = None):
+    def save(self, path: Optional[Union[str, Path]] = None) -> None:
         """
         Save the run and its information.
 

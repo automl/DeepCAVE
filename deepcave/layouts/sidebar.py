@@ -87,8 +87,6 @@ class SidebarLayout(Layout):
 
                 layouts += [html.Ul(className="nav flex-column", children=point_layouts)]
 
-            icon = {"data-feather": "file-text"}
-
             return html.Div(
                 className="position-sticky pt-3",
                 children=[

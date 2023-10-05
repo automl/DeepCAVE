@@ -56,7 +56,7 @@ class FanovaForest(RandomForest):
         The number of parameters to sample.
     """
 
-    #np.Arrayterator()
+    # np.Arrayterator()
 
     def __init__(
         self,
@@ -150,12 +150,12 @@ class FanovaForest(RandomForest):
             self.all_sizes.append(sizes)
 
         # capital V in the paper
-        self.trees_total_variances = []
+        self.trees_total_variances: list = []
 
         # dict of lists where the keys are tuples of the dimensions
         # and the value list contains \hat{f}_U for the individual trees
         # reset all the variance fractions computed
-        self.trees_variance_fractions = {}
+        self.trees_variance_fractions: dict = {}
         self.V_U_total = {}
         self.V_U_individual = {}
 
@@ -165,7 +165,7 @@ class FanovaForest(RandomForest):
         # recompute the trees' total variance
         self.trees_total_variance = self._model.get_trees_total_variances()
 
-    def compute_marginals(self, hp_ids: List[int], depth=1):
+    def compute_marginals(self, hp_ids: List[int], depth: int = 1):
         """
         Return the marginal of selected parameters.
 
@@ -210,7 +210,7 @@ class FanovaForest(RandomForest):
             prod_midpoints = it.product(*midpoints)
             prod_sizes = it.product(*sizes)
 
-            sample = np.full(self.n_params, np.nan, dtype=float)
+            sample: np.ndarray = np.full(self.n_params, np.nan, dtype=float)
 
             # make prediction for all midpoints and weigh them by the corresponding size
             for i, (m, s) in enumerate(zip(prod_midpoints, prod_sizes)):

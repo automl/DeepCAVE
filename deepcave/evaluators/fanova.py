@@ -10,7 +10,7 @@ Utilities provide calculation of the data wrt the budget and train the forest on
     - fANOVA: Calculate and provide midpoints and sizes.
 """
 
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import itertools as it
 
@@ -80,7 +80,7 @@ class fANOVA:
             objectives = self.run.get_objectives()
 
         if budget is None:
-            budget = self.get_highest_budget()
+            budget = self.run.get_highest_budget()
 
         self.n_trees = n_trees
 
@@ -138,14 +138,13 @@ class fANOVA:
         # Calculate the marginals
         vu_individual, vu_total = self._model.compute_marginals(hp_ids, depth)
 
-        importances = {}
+        importances: Dict[Tuple[Any, ...], Tuple[float, float, float, float]] = {}
         for k in range(1, len(hp_ids) + 1):
             if k > depth:
                 break
 
             for sub_hp_ids in it.combinations(hp_ids, k):
                 sub_hp_ids = tuple(sub_hp_ids)
-                importances[sub_hp_ids] = {}
 
                 # clean here to catch zero variance in a trees
                 non_zero_idx = np.nonzero(
@@ -183,14 +182,15 @@ class fANOVA:
 
         # We want to replace the ids with hyperparameter names again
         all_hp_names = self.cs.get_hyperparameter_names()
-        importances_ = {}
-        for hp_ids, values in importances.items():
-            hp_names = [all_hp_names[hp_id] for hp_id in hp_ids]
+        importances_: Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]] = {}
+        for hp_ids_importances, values in importances.items():
+            hp_names = [all_hp_names[hp_id] for hp_id in hp_ids_importances]
+            hp_names_key: Union[Tuple[str, ...], str]
             if len(hp_names) == 1:
-                hp_names = hp_names[0]
+                hp_names_key = hp_names[0]
             else:
-                hp_names = tuple(hp_names)
-            importances_[hp_names] = values
+                hp_names_key = tuple(hp_names)
+            importances_[hp_names_key] = values
 
         return importances_
 

@@ -55,13 +55,13 @@ class Queue:
 
         return False
 
-    def get_worker(self, worker_name) -> Worker:
+    def get_worker(self, worker_name: str) -> Worker:
         """
         Retrieve a Worker from a name.
 
         Parameters
         ----------
-        worker_name
+        worker_name : str
             The name of the worker.
 
         Returns
@@ -80,7 +80,7 @@ class Queue:
 
         raise ValueError("Worker not found.")
 
-    def get_workers(self):
+    def get_workers(self) -> List[Worker]:
         """Get the workers in the queue."""
         return Worker.all(queue=self._queue)
 
@@ -331,7 +331,7 @@ class Queue:
         self.delete_job()
 
     def enqueue(
-        self, func: Callable[[Any], Any], args: Any, job_id: str, meta: Dict[str, str]
+        self, func: Callable[..., Any], args: Any, job_id: str, meta: Dict[str, str]
     ) -> None:
         """
         Add a job for processing to the queue.

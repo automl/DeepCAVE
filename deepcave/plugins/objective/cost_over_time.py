@@ -9,7 +9,7 @@ It includes a plugin class.
     - CostOverTime: A plugin to provide a visualization for the cost over time.
 """
 
-from typing import List
+from typing import Any, Callable, Dict, List
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -89,7 +89,7 @@ class CostOverTime(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
         Define and get a dash bootstrap component of the layout of the input.
 
@@ -134,7 +134,7 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
         """
         Get the filtered layout for a html container.
 
@@ -184,7 +184,7 @@ class CostOverTime(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Any]:
         """
         Get the inputs, containing objectives and budgets attributes.
 
@@ -212,6 +212,7 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
+    # Types dont match superclass
     def process(run, inputs):
         """
         Get the trajectory of the run, as well as its budget and objective.
@@ -243,11 +244,12 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
         """Get the dash graph for the output layout."""
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
+    # Types dont match superclass
     def load_outputs(runs, inputs, outputs):
         """
         Load and save the output figure.
@@ -292,7 +294,7 @@ class CostOverTime(DynamicPlugin):
             y_lower = list(y - y_err)
             y = list(y)
 
-            hovertext = ""
+            hovertext = None
             hoverinfo = "skip"
             symbol = None
             mode = "lines"
