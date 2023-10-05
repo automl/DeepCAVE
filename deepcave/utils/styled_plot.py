@@ -13,11 +13,14 @@ Plots can be created and different parameters of the plots can be defined.
     FIG_HEIGHT = FIG_WIDTH / 1.618
 """
 
-from typing import Any
+from typing import Any, Dict, Optional, Union
 
 from distutils.spawn import find_executable
+from pathlib import Path
 
 import matplotlib
+import numpy as np
+from numpy.typing import ArrayLike
 
 matplotlib.use("Agg")
 import base64  # noqa: E402
@@ -71,19 +74,19 @@ class StyledPlot:
 
         self.plt = plt
 
-    def figure(self, cols=1, rows=1, dpi=200):
+    def figure(self, cols: int = 1, rows: int = 1, dpi: int = 200) -> plt.Figure:
         """
         Create a new figure using the input values.
 
         Parameters
         ----------
-        cols
+        cols : int, optional
             The number of the columns.
             Default is 1.
-        rows
+        rows : int, optional
             The number of the rows.
             Default is 1.
-        dpi
+        dpi : int, optional
             The dots per inches.
             Default is 200.
 
@@ -101,13 +104,13 @@ class StyledPlot:
 
         return f
 
-    def save_figure(self, filename):
+    def save_figure(self, filename: Union[str, Path]) -> None:
         """
         Save the figure/plot at the given filename.
 
         Parameters
         ----------
-        filename
+        filename : Union[str, Path]
             The name of the file the plot will be saved at.
         """
         self.plt.savefig(filename, dpi=400, bbox_inches="tight")
@@ -131,32 +134,32 @@ class StyledPlot:
         encoded_image = base64.b64encode(buffer.read())
         return "data:image/png;base64,{}".format(encoded_image.decode())
 
-    def xlim(self, xmin, xmax):
+    def xlim(self, xmin: Union[float, int], xmax: Union[float, int]) -> None:
         """
         Set the x-axis limits with a margin of a matplotlib plot.
 
         Parameters
         ----------
-        xmin
+        xmin : Union[float, int]
             The lower x-axis limit.
-        xmax
+        xmax : Union[float, int]
             The upper x-axis limit.
         """
         xmin_with_margin = xmin - 0.05 * (xmax - xmin)
         xmax_with_margin = xmax + 0.05 * (xmax - xmin)
         self.plt.xlim(xmin_with_margin, xmax_with_margin)
 
-    def ylim(self, ymin, ymax, margin=True):
+    def ylim(self, ymin: Union[float, int], ymax: Union[float, int], margin: bool = True) -> None:
         """
         Set the y-axis limit of a matplotlib plot.
 
         Parameters
         ----------
-        ymin
+        ymin : Union[float, int]
             The lower y-axis limit.
-        ymax
+        ymax : Union[float, int]
             The upper y-axis limit.
-        margin
+        margin : bool, optional
             Determines whether a margin should be added to the limits.
             Default is True.
         """
@@ -172,7 +175,9 @@ class StyledPlot:
     #    # self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0,
     #    # alpha=0.5)
 
-    def boxplot(self, values, positions, color, widths=0.5):
+    def boxplot(
+        self, values: np.ndarray, positions: ArrayLike, color: str, widths: float = 0.5
+    ) -> None:
         """
         Create a boxplot on a matplotlib plot.
 
@@ -214,7 +219,13 @@ class StyledPlot:
                 alpha=0.5,
             )
 
-    def legend(self, cols: int = 1, loc=None, title: str = None, outside: bool = False):
+    def legend(
+        self,
+        cols: int = 1,
+        loc: Optional[str] = None,
+        title: Optional[str] = None,
+        outside: bool = False,
+    ) -> None:
         """
         Customize and add a legend to a matplot plot.
 
@@ -235,7 +246,7 @@ class StyledPlot:
             Determines if a legend is placed outside of plot area.
             Default is False.
         """
-        kwargs = {
+        kwargs: Dict[str, Any] = {
             "ncol": cols,
             "columnspacing": 0.8,
             "labelspacing": 0,

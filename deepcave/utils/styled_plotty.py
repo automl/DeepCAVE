@@ -24,6 +24,7 @@ from dash.development.base_component import Component
 
 from deepcave import interactive
 from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
+from deepcave.runs import AbstractRun
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -411,7 +412,7 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:  # noqa: F821
+def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:  # noqa: F821
     """
     Generate hover text with metrics for a configuration.
 
@@ -446,6 +447,7 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:  # noq
     budget = run.get_highest_budget(config_id)
     costs = run.get_costs(config_id, budget)
 
+    assert budget is not None
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
     for objective, cost in zip(objectives, costs):
         string += f"{objective.name}: {cost}<br>"
