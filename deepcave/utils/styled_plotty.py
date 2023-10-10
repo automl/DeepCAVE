@@ -240,6 +240,7 @@ def get_hyperparameter_ticks(
         tickvals and ticktext.
     """
     # This is basically the inverse of `encode_config`.
+    tickvals: List[Union[float, int]]
     if isinstance(hp, CategoricalHyperparameter):
         ticktext = hp.choices
         if len(ticktext) == 1:
@@ -256,7 +257,7 @@ def get_hyperparameter_ticks(
         min_v = 0
         max_v = 1
 
-        values = [min_v]
+        values: List[Union[float, int]] = [min_v]
 
         # Get values for each tick
         factors = [i / (ticks - 1) for i in range(1, ticks - 1)]

@@ -59,7 +59,7 @@ check-pydocstyle:
 	$(PYDOCSTYLE) ${SOURCE_DIR} || :
 
 check-mypy:
-	$(MYPY) --check-untyped-defs ${SOURCE_DIR} || :
+	$(MYPY) --check-untyped-defs --install-types --non-interactive --ignore-missing-imports ${SOURCE_DIR} || :
 
 check-flake8:
 	$(FLAKE8) ${SOURCE_DIR} || :

@@ -36,12 +36,32 @@ repos:
         additional_dependencies: ["tomli"] # Needed to parse pyproject.toml
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.2.0
+    rev: v1.5.1
     hooks:
       - id: mypy
         name: mypy deepcave
         files: deepcave
-        args: ["--check-untyped-defs", "--install-types", "--non-interactive", "--ignore-missing-imports"]
+        args: [--check-untyped-defs, --ignore-missing-imports]
+        additional_dependencies: [
+            'wheel',
+            'setuptools',
+            'absl-py>=1.0.0',
+            'jsonlines>=3.0.0',
+            'pandas>=1.3.4',
+            'numpy>=1.22.2',
+            'matplotlib>=3.5.1',
+            'pyyaml',
+            'ConfigSpace',
+            'pyrfr>=0.9.0',
+            'hpbandster==0.7.4',
+            'dash==2.0.0',
+            'dash-extensions==0.0.71',
+            'dash-bootstrap-components==1.0.3',
+            'redis>=4.1.4',
+            'rq>=1.10.1',
+            'werkzeug==2.0.3',
+            'pyPDPPartitioner'
+        ]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
