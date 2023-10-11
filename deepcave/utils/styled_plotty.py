@@ -100,7 +100,9 @@ def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, floa
     return f"rgba({r}, {g}, {b}, {alpha})"
 
 
-def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
+def get_discrete_heatmap(
+    x: List[Union[float, int]], y: List[int], values: List[Any], labels: List[Any]
+) -> go.Heatmap:
     """
     Generate a discrete colorscale from a (nested) list or numpy array of values.
 
@@ -150,8 +152,11 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
         for i2, v2 in enumerate(v1):
             z[i1][i2] = mapping[v2]
 
-    n_intervals = v + [len(v)]
-    n_intervals = [(i - n_intervals[0]) / (n_intervals[-1] - n_intervals[0]) for i in n_intervals]
+    n_intervals_int = v + [len(v)]
+    n_intervals = [
+        (i - n_intervals_int[0]) / (n_intervals_int[-1] - n_intervals_int[0])
+        for i in n_intervals_int
+    ]
     colors = [get_color(i) for i in range(len(n_intervals))]
 
     discrete_colorscale = []
@@ -161,12 +166,12 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
     tickvals = [np.mean(n_intervals[k : k + 2]) for k in range(len(n_intervals) - 1)]
     ticktext = unique_sorted_labels
 
-    x = [str(i) for i in x]
-    y = [str(i) for i in y]
+    x_str = [str(i) for i in x]
+    y_str = [str(i) for i in y]
 
     return go.Heatmap(
-        x=x,
-        y=y,
+        x=x_str,
+        y=y_str,
         z=z,
         showscale=True,
         colorscale=discrete_colorscale,

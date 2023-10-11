@@ -370,7 +370,9 @@ class RunHandler:
         instantiated_groups = {}
         if groups is None:
             groups = self.c.get("groups")
-
+        # This check is necessary because groups could still be None
+        if groups is None:
+            raise TypeError("Groups can not be None.")
         # Add grouped runs
         for group_name, run_paths in groups.items():
             runs = []
@@ -433,7 +435,7 @@ class RunHandler:
         self.update()
         return list(self.groups.values())
 
-    def get_runs(self, include_groups=False) -> List[AbstractRun]:
+    def get_runs(self, include_groups: bool = False) -> List[AbstractRun]:
         """
         Return the runs from the internal cache.
 

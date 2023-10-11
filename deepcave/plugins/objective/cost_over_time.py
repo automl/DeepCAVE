@@ -292,7 +292,7 @@ class CostOverTime(DynamicPlugin):
             y_err = np.array(outputs[run.id]["costs_std"])
             y_upper = list(y + y_err)
             y_lower = list(y - y_err)
-            y = list(y)
+            y_list = list(y)
 
             hovertext = None
             hoverinfo = "skip"
@@ -307,7 +307,7 @@ class CostOverTime(DynamicPlugin):
             traces.append(
                 go.Scatter(
                     x=x,
-                    y=y,
+                    y=y_list,
                     name=run.name,
                     line_shape="hv",
                     line=dict(color=get_color(idx)),

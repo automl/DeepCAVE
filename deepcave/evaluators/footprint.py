@@ -67,7 +67,7 @@ class Footprint:
         self._depth = np.array(depth)  # type: ignore
 
         # Global variables
-        self._distances = None
+        self._distances: Optional[np.ndarray] = None
         self._trained = False
         self._reset()
 
@@ -142,6 +142,7 @@ class Footprint:
 
         # Init distances
         self._init_distances(X, config_ids, exclude_configs=exclude_configs)
+        assert self._distances is not None
 
         border_generator = sample_border_config(self.cs)
         random_generator = sample_random_config(self.cs, d=support_discretization)
@@ -173,8 +174,8 @@ class Footprint:
                     continue
 
                 # Encode config
-                config = np.array(self.run.encode_config(config))
-                rejected = self._update_distances(config, config_id, rejection_threshold)
+                config_array = np.array(self.run.encode_config(config))
+                rejected = self._update_distances(config_array, config_id, rejection_threshold)
                 if not rejected:
                     # Count
                     if config_id == BORDER_CONFIG_ID:
@@ -196,15 +197,12 @@ class Footprint:
                 break
 
             # Or if we reach more than 4000 (otherwise it takes too long)
-            assert self._distances is not None
-
             if self._distances.shape[0] % 100 == 0:
                 logger.info(f"Found {self._distances.shape[0]} configurations...")
 
             if self._distances.shape[0] > 4000:
                 break
 
-        assert self._distances is not None
         logger.info(f"Added {count_border} border configs and {count_random} random configs.")
         logger.info(f"Total configurations: {self._distances.shape[0]}.")
         logger.info("Getting MDS data...")

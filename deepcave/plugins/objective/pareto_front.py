@@ -9,7 +9,7 @@ It includes the Pareto Front plugin.
     - ParetoFront: Generate an interactive Pareto Front visualization.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Literal, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -470,7 +470,9 @@ class ParetoFront(DynamicPlugin):
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
 
+            # Issue opened
             color = plt.get_color(idx)  # , alpha=0.1)
+            # Issue opened
             color_pareto = plt.get_color(idx)
 
             if show_all:
@@ -482,6 +484,7 @@ class ParetoFront(DynamicPlugin):
             optimize1 = objective_1.optimize
             optimize2 = objective_2.optimize
 
+            line_shape: Union[Literal["post"], Literal["pre"], Literal["mid"]]
             if optimize1 == optimize2:
                 if objective_1.optimize == "lower":
                     line_shape = "post"
@@ -504,5 +507,5 @@ class ParetoFront(DynamicPlugin):
             plt.ylabel(objective_2.name)
 
         plt.legend()
-
+        # Issue already opened
         return plt.render()

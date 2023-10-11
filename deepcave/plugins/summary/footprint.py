@@ -486,13 +486,13 @@ class FootPrint(StaticPlugin):
                 if points == "incumbent_points":
                     size = 10
                     marker_symbol = "^"
-
+                # Issue opened
                 color = plt.get_color(color_id)
                 plt.scatter(x, y, marker=marker_symbol, s=size, label=name, c=color)
 
             plt.axis("off")
             plt.legend(loc="lower right")
-
+            # Issue opened
             images += [plt.render()]
 
         return images

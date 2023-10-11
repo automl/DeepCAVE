@@ -20,6 +20,13 @@ import sys
 from functools import wraps
 from pathlib import Path
 
+from dash_extensions.enrich import (
+    DashProxy,
+    MultiplexerTransform,
+    NoOutputTransform,
+    TriggerTransform,
+)
+
 name = "DeepCAVE"
 package_name = "deepcave"
 author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
@@ -39,7 +46,7 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 ROOT_DIR = Path(__file__).parent
 
 
-def get_app(title: str):
+def get_app(title: str) -> DashProxy:
     """
     Create the Dash application.
 
@@ -54,12 +61,6 @@ def get_app(title: str):
         The dash application.
     """
     import dash_bootstrap_components as dbc
-    from dash_extensions.enrich import (
-        DashProxy,
-        MultiplexerTransform,
-        NoOutputTransform,
-        TriggerTransform,
-    )
 
     app = DashProxy(
         __name__,

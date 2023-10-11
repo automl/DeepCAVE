@@ -505,6 +505,7 @@ class Importances(StaticPlugin):
                 x_values,
                 y,
                 yerr=y_err,
+                # plt is matplotlib object and has no function get_color, Issue opened
                 color=plt.get_color(budget_id),
                 label=budget,
                 error_kw=dict(lw=1, capsize=2, capthick=1),
@@ -515,5 +516,5 @@ class Importances(StaticPlugin):
         # Rotate x ticks
         plt.xticks(x_values, x_labels, rotation=90)
         plt.ylabel("Importance")
-
+        # plt is matplotlib object and has no function render, Issue opened
         return plt.render()

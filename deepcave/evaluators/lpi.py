@@ -282,7 +282,7 @@ class LPI:
         """
         hp_names = self.cs.get_hyperparameter_names()
 
-        neighborhood = {}
+        neighborhood: Dict[str, List[Union[np.ndarray, List[np.ndarray]]]] = {}
         for hp_idx, hp_name in enumerate(hp_names):
             # Check if hyperparameter is active
             if not np.isfinite(self.incumbent_array[hp_idx]):
@@ -301,7 +301,7 @@ class LPI:
                     base = np.e
                     log_lower = np.log(hp.lower) / np.log(base)
                     log_upper = np.log(hp.upper) / np.log(base)
-                    neighbors = np.logspace(
+                    neighbors_range = np.logspace(
                         start=log_lower,
                         stop=log_upper,
                         num=self.continous_neighbors,
@@ -309,8 +309,8 @@ class LPI:
                         base=base,
                     )
                 else:
-                    neighbors = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
-                neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors))
+                    neighbors_range = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
+                neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors_range))
             else:
                 neighbors = hp.get_neighbors(self.incumbent_array[hp_idx], self.rs)
 
@@ -336,18 +336,21 @@ class LPI:
                 map(lambda x: x[0], sorted(enumerate(checked_neighbors), key=lambda y: y[1]))
             )
             if isinstance(self.cs.get_hyperparameter(hp_name), CategoricalHyperparameter):
-                checked_neighbors_non_unit_cube = list(
+                checked_neighbors_non_unit_cube_categorical = list(
                     np.array(checked_neighbors_non_unit_cube)[sort_idx]
                 )
-            else:
-                checked_neighbors_non_unit_cube = np.array(checked_neighbors_non_unit_cube)[
-                    sort_idx
+                neighborhood[hp_name] = [
+                    np.array(checked_neighbors)[sort_idx],
+                    checked_neighbors_non_unit_cube_categorical,
                 ]
-
-            neighborhood[hp_name] = [
-                np.array(checked_neighbors)[sort_idx],
-                checked_neighbors_non_unit_cube,
-            ]
+            else:
+                checked_neighbors_non_unit_cube_non_categorical = np.array(
+                    checked_neighbors_non_unit_cube
+                )[sort_idx]
+                neighborhood[hp_name] = [
+                    np.array(checked_neighbors)[sort_idx],
+                    checked_neighbors_non_unit_cube_non_categorical,
+                ]
 
         return neighborhood
 

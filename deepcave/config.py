@@ -119,6 +119,7 @@ class Config:
         from deepcave.plugins.summary.footprint import FootPrint
         from deepcave.plugins.summary.overview import Overview
 
+        plugins: Dict[str, List["Plugin"]] = {}
         plugins = {
             "Summary": [
                 Overview(),
