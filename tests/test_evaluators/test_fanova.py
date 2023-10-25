@@ -21,13 +21,13 @@ class TestFanova(unittest.TestCase):
         objective = self.run.get_objective(0)
 
         # Calculate
-        self.evaluator.calculate(objective, budget)
+        self.evaluator.calculate(objective, budget, seed=0)
         importances = self.evaluator.get_importances(self.hp_names)
 
-        self.evaluator.calculate(objective, budget)
+        self.evaluator.calculate(objective, budget, seed=42)
         importances2 = self.evaluator.get_importances(self.hp_names)
 
-        # No seed: Different results
+        # Different seed: Different results
         assert importances["n_neurons"][1] != importances2["n_neurons"][1]
 
     def test_seed(self):
