@@ -1,6 +1,7 @@
 # Version 1.1.3
 
 ## Bug-Fixes
+- Fix seaborn style name (#82).
 - Exchange SMAC log examples to fix issue with PDP (#54).
 
 # Version 1.1.2
