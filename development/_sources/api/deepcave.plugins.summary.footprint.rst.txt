@@ -1,0 +1,29 @@
+deepcave.plugins.summary.footprint
+==================================
+
+.. automodule:: deepcave.plugins.summary.footprint
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      FootPrint
+   
+   
+
+   
+   
+   
+
+
+
