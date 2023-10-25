@@ -1,3 +1,8 @@
+# Version 1.1.3
+
+## Bug-Fixes
+- Fix seaborn style name (#82).
+
 # Version 1.1.2
 
 ## Bug-Fixes
