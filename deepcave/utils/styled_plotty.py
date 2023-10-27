@@ -74,7 +74,7 @@ def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, floa
     if id_ < 10:
         color = px.colors.qualitative.Plotly[id_]
     else:
-        color = px.colors.qualitative.Alphabet[id_ % 10]
+        color = px.colors.qualitative.Alphabet[id_ - 10]
 
     r, g, b = hex_to_rgb(color)
     return f"rgba({r}, {g}, {b}, {alpha})"
