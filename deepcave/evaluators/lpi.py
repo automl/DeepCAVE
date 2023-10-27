@@ -30,7 +30,7 @@ class LPI:
         budget: Optional[Union[int, float]] = None,
         continous_neighbors: int = 500,
         n_trees: int = 10,
-        seed: Optional[int] = None,
+        seed: int = 0,
     ) -> None:
         """
         Prepares the data and trains a RandomForest model.
@@ -56,9 +56,6 @@ class LPI:
         self.default = self.cs.get_default_configuration()
         self.incumbent_array = self.incumbent.get_array()
 
-        # Set the seed
-        if seed is None:
-            seed = int(random() * 9999)
         self.seed = seed
         self.rs = np.random.RandomState(seed)
 
