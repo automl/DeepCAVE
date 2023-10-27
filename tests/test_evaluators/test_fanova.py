@@ -28,7 +28,7 @@ class TestFanova(unittest.TestCase):
         importances2 = self.evaluator.get_importances(self.hp_names)
 
         # Different seed: Different results
-        assert importances["n_neurons"][1] != importances2["n_neurons"][1]
+        assert importances["batch_size"][1] != importances2["batch_size"][1]
 
     def test_seed(self):
         budget = self.run.get_budget(0)
@@ -41,8 +41,8 @@ class TestFanova(unittest.TestCase):
         self.evaluator.calculate(objective, budget, seed=0)
         importances2 = self.evaluator.get_importances(self.hp_names)
 
-        # No seed: Different results
-        assert importances["n_neurons"][1] == importances2["n_neurons"][1]
+        # Same seed: Same results
+        assert importances["batch_size"][1] == importances2["batch_size"][1]
 
 
 if __name__ == "__main__":

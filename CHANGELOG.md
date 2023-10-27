@@ -3,6 +3,7 @@
 ## Bug-Fixes
 - Fix seaborn style name (#82).
 - Remove potential sources of nondeterminism in evaluators by not setting seeds randomly (#75).
+- Exchange SMAC log examples to fix issue with PDP (#54).
 
 # Version 1.1.2
 
