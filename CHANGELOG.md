@@ -2,6 +2,7 @@
 
 ## Bug-Fixes
 - Fix seaborn style name (#82).
+- Fix error when requesting more than 10 colors in a plot (36 colors available now).
 
 # Version 1.1.2
 

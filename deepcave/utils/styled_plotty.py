@@ -69,9 +69,12 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
 
 def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
     """
-    Currently (Plotly version 5.3.1) there are 10 possible colors.
+    Using Plotly palette for the first 10 ids and Alphabet palette for the next 26, currently 36 colors are possible.
     """
-    color = px.colors.qualitative.Plotly[id_]
+    if id_ < 10:
+        color = px.colors.qualitative.Plotly[id_]
+    else:
+        color = px.colors.qualitative.Alphabet[id_ % 10]
 
     r, g, b = hex_to_rgb(color)
     return f"rgba({r}, {g}, {b}, {alpha})"
