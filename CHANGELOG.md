@@ -2,12 +2,12 @@
 
 ## Bug-Fixes
 - Fix seaborn style name (#82).
+- Remove potential sources of nondeterminism in evaluators by not setting seeds randomly (#75).
 
 # Version 1.1.2
 
 ## Bug-Fixes
 - Fix configspace version.
-- Remove potential sources of nondeterminism in evaluators by not setting seeds randomly.
 
 # Version 1.1.1
 
