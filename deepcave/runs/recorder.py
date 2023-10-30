@@ -8,7 +8,7 @@ This module provides utilities to record the trial information.
     - Recorder: Define a Recorder for recording trial information.
 """
 
-from typing import Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import time
 from pathlib import Path
@@ -16,9 +16,11 @@ from pathlib import Path
 import ConfigSpace
 import numpy as np
 from ConfigSpace import Configuration
+from typing_extensions import Self
 
 from deepcave.runs import Status
 from deepcave.runs.converters.deepcave import DeepCAVERun
+from deepcave.runs.objective import Objective
 
 
 class Recorder:
@@ -48,11 +50,11 @@ class Recorder:
     def __init__(
         self,
         configspace: ConfigSpace.ConfigurationSpace,
-        objectives=None,
-        meta=None,
-        save_path="logs",
-        prefix="run",
-        overwrite=False,
+        objectives: Optional[List[Objective]] = None,
+        meta: Optional[Dict[str, Any]] = None,
+        save_path: str = "logs",
+        prefix: str = "run",
+        overwrite: bool = False,
     ):
         """
         All objectives follow the scheme the lower the better.
@@ -72,29 +74,41 @@ class Recorder:
         if meta is None:
             meta = {}
 
-        self.path: Path = None
+        self.path: Path
         self._set_path(save_path, prefix, overwrite)
 
         # Set variables
-        self.last_trial_id = None
+        self.last_trial_id: Optional[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]]
+        ] = None
         self.start_time = time.time()
-        self.start_times = {}
-        self.models = {}
-        self.origins = {}
-        self.additionals = {}
+        self.start_times: Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], float
+        ] = {}
+        self.models: Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Union[str, Any]]
+        ] = {}
+        self.origins: Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[str]
+        ] = {}
+        self.additionals: Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Dict[Any, Any]
+        ] = {}
 
         # Define trials container
         self.run = DeepCAVERun(
             self.path.stem, configspace=configspace, objectives=objectives, meta=meta
         )
 
-    def __enter__(self):  # noqa: D102, D105
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, type, value, traceback):  # noqa: D102, D105
+    def __exit__(self, type, value, traceback) -> None:  # type: ignore
         pass
 
-    def _set_path(self, path: Union[str, Path], prefix="run", overwrite=False) -> None:
+    def _set_path(
+        self, path: Union[str, Path], prefix: str = "run", overwrite: bool = False
+    ) -> None:
         """
         Identify the latest run and sets the path with increased id.
 
@@ -120,9 +134,9 @@ class Recorder:
                     continue
                 idx = file.name.split("_")[-1]
                 if idx.isnumeric():
-                    idx = int(idx)
-                    if idx > new_idx:
-                        new_idx = idx
+                    idx_int = int(idx)
+                    if idx_int > new_idx:
+                        new_idx = idx_int
 
             # And increase the id
             new_idx += 1
@@ -134,11 +148,11 @@ class Recorder:
         self,
         config: Union[dict, Configuration],
         budget: Optional[float] = None,
-        model=None,
-        origin=None,
+        model: Optional[Union[str, Any]] = None,
+        origin: Optional[str] = None,
         additional: Optional[dict] = None,
         start_time: Optional[float] = None,
-    ):
+    ) -> None:
         """
         Record the trial information.
 
@@ -165,7 +179,7 @@ class Recorder:
         if additional is None:
             additional = {}
 
-        id = (config, budget)
+        id: Tuple[Union[Dict[Any, Any], Configuration], Optional[float]] = (config, budget)
 
         if start_time is None:
             start_time = time.time() - self.start_time
@@ -182,11 +196,11 @@ class Recorder:
         self,
         costs: float = np.inf,
         status: Status = Status.SUCCESS,
-        config: Union[dict, Configuration] = None,
-        budget: float = np.inf,
+        config: Optional[Union[dict, Configuration]] = None,
+        budget: Optional[float] = np.inf,
         additional: Optional[dict] = None,
         end_time: Optional[float] = None,
-    ):
+    ) -> None:
         """
         End the recording of the trial and add it to trial history.
 
@@ -214,6 +228,11 @@ class Recorder:
         end_time : Optional[float], optional
             The end time of the trial.
             Default is None.
+
+        Raises
+        ------
+        AssertionError
+            If no trial was started yet.
         """
         if additional is None:
             additional = {}
@@ -221,6 +240,7 @@ class Recorder:
         if config is not None:
             id = (config, budget)
         else:
+            assert self.last_trial_id is not None, "No trial started yet."
             id = self.last_trial_id
             config, budget = id[0], id[1]
 
@@ -231,6 +251,8 @@ class Recorder:
 
         if end_time is None:
             end_time = time.time() - self.start_time
+
+        assert budget is not None
 
         # Add to trial history
         self.run.add(

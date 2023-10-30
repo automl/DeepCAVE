@@ -1,5 +1,6 @@
 # noqa
-"""from typing import Any, Dict, List
+"""from typing import Any, Dict, List, Optional
+
 
 import numpy as np
 from ConfigSpace import ConfigurationSpace
@@ -104,7 +105,14 @@ print(type(hex_codes[5 % len(hex_codes)]))
 styled_plot = styled_plot.StyledPlot()
 plt = styled_plot.plt
 
-print(type(plt.render()))"""
+print(type(plt.render()))
 
 list = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 list_comp = [1.5 for i in list]
+
+
+def test(hallo: Optional[int] = 2):
+    print(type(hallo))
+
+test(5)
+test()"""

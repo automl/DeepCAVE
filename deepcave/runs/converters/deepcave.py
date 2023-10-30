@@ -55,6 +55,6 @@ class DeepCAVERun(Run):
         return Path(self.path / "history.jsonl").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path: Path) -> "DeepCAVERun":
         """Get a DeepCAVE run from a given path."""
         return DeepCAVERun(path.stem, path=Path(path))

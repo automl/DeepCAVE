@@ -10,7 +10,7 @@ Utilities provided include updating, getting, setting and clearing.
     - RunCaches: Hold the caches for the selected runs.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import shutil
 
@@ -108,7 +108,7 @@ class RunCaches:
 
         cache.write()
 
-    def get(self, run: AbstractRun, plugin_id: str, inputs_key: str) -> Dict[str, Any]:
+    def get(self, run: AbstractRun, plugin_id: str, inputs_key: str) -> Optional[Dict[str, Any]]:
         """
         Return the raw outputs for the given run, plugin and inputs key.
 
@@ -125,6 +125,11 @@ class RunCaches:
         -------
         Dict[str, Any]
             Raw outputs for the given run, plugin and inputs key.
+
+        Raises
+        ------
+        AssertionError
+            If the outputs of the cache are not a dict.
         """
         filename = self.cache_dir / run.id / plugin_id / f"{inputs_key}.json"
 
@@ -132,7 +137,9 @@ class RunCaches:
             return None
 
         cache = Cache(filename, debug=self._debug, write_file=False)
-        return cache.get("outputs")
+        outputs = cache.get("outputs")
+        assert isinstance(outputs, dict), "Outputs of cache must be a dict."
+        return outputs
 
     def set(self, run: AbstractRun, plugin_id: str, inputs_key: str, value: Any) -> None:
         """

@@ -36,6 +36,7 @@ from deepcave.runs.trial import Trial
 from deepcave.utils.logs import get_logger
 
 
+
 class AbstractRun(ABC):
     """
     Can create, handle and get information of an abstract run.
@@ -96,8 +97,8 @@ class AbstractRun(ABC):
         """
         self.meta: Dict[str, Any] = {}
         self.configspace: ConfigSpace.ConfigurationSpace
-        self.configs: Dict[int, Configuration] = {}
-        self.origins: Dict[int, str] = {}
+        self.configs: Dict[int, Union[Configuration, Dict[Any, Any]]] = {}
+        self.origins: Dict[int, Optional[str]] = {}
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
 
         self.history: List[Trial] = []
@@ -246,7 +247,7 @@ class AbstractRun(ABC):
         """
         return len(self.history) == 0
 
-    def get_origin(self, config_id: int) -> str:
+    def get_origin(self, config_id: int) -> Optional[str]:
         """
         Get the origin, given a config ID.
 
@@ -372,7 +373,7 @@ class AbstractRun(ABC):
         """
         return [obj.name for obj in self.get_objectives()]
 
-    def get_configs(self, budget: Union[int, float] = None) -> Dict[int, Configuration]:
+    def get_configs(self, budget: Optional[Union[int, float]] = None) -> Dict[int, Configuration]:
         """
         Get configurations of the run.
 
@@ -449,7 +450,7 @@ class AbstractRun(ABC):
 
         return None
 
-    def get_num_configs(self, budget: Union[int, float] = None) -> int:
+    def get_num_configs(self, budget: Optional[Union[int, float]] = None) -> int:
         """
         Count the number of configurations stored in this object with a specific budget.
 
@@ -1196,7 +1197,7 @@ def check_equality(
         If the budgets of the runs are not equal.
         If the objective of the runs are not equal.
     """
-    result = {}
+    result: Dict[str, Any] = {}
 
     if len(runs) == 0:
         return result
@@ -1259,6 +1260,7 @@ def check_equality(
             for o1_, o2_ in zip(o1, o2):
                 o1_.merge(o2_)
 
+        assert o1 is not None
         serialized_objectives = [o.to_json() for o in o1]
         result["objectives"] = serialized_objectives
         if meta:

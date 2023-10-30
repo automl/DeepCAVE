@@ -10,7 +10,7 @@ as well as deleting and adding jobs from/to the queue.
     - Queue: This class defines all components for a job queue.
 """
 
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional
 
 import redis
 from rq import Queue as _Queue
@@ -256,7 +256,7 @@ class Queue:
         """Get the finished jobs in the registry."""
         return self.get_jobs(registry="finished")
 
-    def delete_job(self, job_id: str = None) -> None:
+    def delete_job(self, job_id: Optional[str] = None) -> None:
         """
         Delete a job from the queue. If no job_id is given, delete all jobs.
 
@@ -266,7 +266,7 @@ class Queue:
             Id of the job, which should be removed. By default None.
         """
 
-        def remove_jobs(registry: BaseRegistry, job_id: str = None) -> None:
+        def remove_jobs(registry: BaseRegistry, job_id: Optional[str] = None) -> None:
             """
             Remove a job from the registry. If no job_id is given, remove all.
 
@@ -280,17 +280,18 @@ class Queue:
             """
             if job_id is not None:
                 try:
-                    registry.remove(job_id, delete_job=True)
+                    registry.remove(self.get_job(job_id), delete_job=True)
                 except Exception:
                     pass
             else:
                 # Remove all
                 for job_id in registry.get_job_ids():
                     try:
-                        registry.remove(job_id, delete_job=True)
+                        registry.remove(self.get_job(job_id), delete_job=True)
                     except Exception:
-                        registry.remove(job_id)
+                        registry.remove(self.get_job(job_id))
 
+        # Issue opened
         remove_jobs(self._queue, job_id)
         remove_jobs(self._queue.finished_job_registry, job_id)
         remove_jobs(self._queue.canceled_job_registry, job_id)
@@ -362,7 +363,7 @@ class Queue:
             result_ttl=-1,  # Make sure it's not automatically deleted.
         )
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         """If function is not found, make sure we access self._queue directly."""
         try:
             return self.__getattribute__(name)

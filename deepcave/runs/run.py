@@ -69,10 +69,10 @@ class Run(AbstractRun, ABC):
     def __init__(
         self,
         name: str,
-        configspace: ConfigSpace = None,
-        objectives: Union[Objective, List[Objective]] = None,
-        meta: Dict[str, Any] = None,
-        path: Optional[Union[str, Path]] = None,
+        configspace: Optional[ConfigSpace.ConfigurationSpace] = None,
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
+        meta: Optional[Dict[str, Any]] = None,
+        path: Optional[Path] = None,
     ) -> None:
         super(Run, self).__init__(name)
 
@@ -83,7 +83,8 @@ class Run(AbstractRun, ABC):
 
         # Reset and load configspace/path
         self.reset()
-        self.configspace = configspace
+        if configspace is not None:
+            self.configspace = configspace
         self.path = path
         if self.path is not None:
             self.load()
@@ -213,6 +214,8 @@ class Run(AbstractRun, ABC):
         ------
         RuntimeError
             If number of costs does not match number of objectives.
+        ValueError
+            If config id is None.
         """
         if additional is None:
             additional = {}
@@ -252,11 +255,14 @@ class Run(AbstractRun, ABC):
             config = config.get_dictionary()
 
         if config not in self.configs.values():
-            config_id = len(self.configs)
-            self.configs[config_id] = config
-            self.origins[config_id] = origin
+            config_id_len = len(self.configs)
+            self.configs[config_id_len] = config
+            self.origins[config_id_len] = origin
 
         config_id = self.get_config_id(config)
+        if config_id is None:
+            raise ValueError("Config id is None.")
+
         trial = Trial(
             config_id=config_id,
             budget=budget,

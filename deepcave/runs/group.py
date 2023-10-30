@@ -9,7 +9,7 @@ Utilities include getting attributes of the grouped runs, as well as the group.
     - Group: Can group and manage a group of abstract runs.
 """
 
-from typing import Dict, List, Tuple
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from copy import deepcopy
 
@@ -133,7 +133,7 @@ class Group(AbstractRun):
         except Exception as e:
             raise NotMergeableError(f"Runs can not be merged: {e}")
 
-    def __iter__(self):
+    def __iter__(self: "Group") -> Iterator[str]:
         """Allow to iterate over the object."""
         for run in self.runs:
             yield run.name
@@ -156,9 +156,9 @@ class Group(AbstractRun):
         return string_to_hash(f"{self.prefix}:{self.name}")
 
     @property
-    def latest_change(self) -> int:
+    def latest_change(self) -> float:
         """Get the latest change made to the grouped runs."""
-        latest_change = 0
+        latest_change = 0.0
         for run in self.runs:
             if run.latest_change > latest_change:
                 latest_change = run.latest_change
@@ -183,7 +183,7 @@ class Group(AbstractRun):
         """Get a new identificator for a configuration."""
         return self._new_config_mapping[(run_id, original_config_id)]
 
-    def get_original_config_id(self, config_id: int) -> id:
+    def get_original_config_id(self, config_id: int) -> int:
         """Get the original identificator of a configuration."""
         return self._original_config_mapping[config_id][1]
 
@@ -192,11 +192,12 @@ class Group(AbstractRun):
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
-    def get_model(self, config_id: int):
+    def get_model(self, config_id: int) -> Optional[Any]:
         """Get the model of the runs."""
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
+    # wait until meeting
     def get_trajectory(self, *args, **kwargs):
         """
         Get the trajectory of the group.
@@ -251,10 +252,10 @@ class Group(AbstractRun):
             all_costs.append(y)
 
         # Make numpy arrays
-        all_costs = np.array(all_costs)
+        all_costs_array = np.array(all_costs)
 
         times = all_times
-        costs_mean = np.mean(all_costs, axis=1)
-        costs_std = np.std(all_costs, axis=1)
+        costs_mean = np.mean(all_costs_array, axis=1)
+        costs_std = np.std(all_costs_array, axis=1)
 
         return times, list(costs_mean), list(costs_std), [], []

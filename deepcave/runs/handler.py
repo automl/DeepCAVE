@@ -90,8 +90,17 @@ class RunHandler:
         -------
         Path
             Path of the working directory.
+
+        Raises
+        ------
+        AssertionError
+            If the working directory is not a string or a path like, an error is thrown.
         """
-        return Path(self.c.get("working_dir"))
+        working_dir = self.c.get("working_dir")
+        assert isinstance(
+            working_dir, (str, Path)
+        ), "Working directory of cache must be a string or a Path like."
+        return Path(working_dir)
 
     def get_available_run_paths(self) -> Dict[str, str]:
         """
@@ -135,8 +144,17 @@ class RunHandler:
         -------
         List[str]
             Run paths as a list.
+
+        Raises
+        ------
+        AssertionError.
+            If the selected run paths are not a list, an error is thrown.
         """
-        return self.c.get("selected_run_paths")
+        selected_run_paths = self.c.get("selected_run_paths")
+        assert isinstance(
+            selected_run_paths, list
+        ), "The selected run paths of the cache must be a list."
+        return selected_run_paths
 
     def get_selected_run_names(self) -> List[str]:
         """
@@ -166,8 +184,19 @@ class RunHandler:
         return Path(run_path).stem
 
     def get_selected_groups(self) -> Dict[str, List[str]]:
-        """Get the selected groups."""
-        return self.c.get("groups")
+        """
+        Get the selected groups.
+
+        Raises
+        ------
+        AssertionError
+            If groups in cache is not a dict, an error is thrown.
+        """
+        selected_groups = self.c.get("groups")
+        assert isinstance(
+            selected_groups, dict
+        ), "The groups aquired from the cache must be a dictionary."
+        return selected_groups
 
     def add_run(self, run_path: str) -> bool:
         """
@@ -201,8 +230,16 @@ class RunHandler:
         ----------
         run_path : str
             Path of a run.
+
+        Raises
+        ------
+        TypeError
+            If `selected_run_paths` or `groups` is None, an error is thrown.
         """
         selected_run_paths = self.c.get("selected_run_paths")
+
+        if selected_run_paths is None:
+            raise TypeError("Selected run paths can not be None.")
 
         if run_path in selected_run_paths:
             selected_run_paths.remove(run_path)
@@ -211,7 +248,10 @@ class RunHandler:
             # We have to check the groups here because the removed run_path may
             # still be included
             groups = {}
-            for group_name, run_paths in self.c.get("groups").items():
+            group_it = self.c.get("groups")
+            if group_it is None:
+                raise TypeError("Groups can not be None.")
+            for group_name, run_paths in group_it.items():
                 if run_path in run_paths:
                     run_paths.remove(run_path)
                 groups[group_name] = run_paths
@@ -365,7 +405,8 @@ class RunHandler:
         ------
         NotMergeableError
             If runs can not be merged, an error is thrown.
-
+        TypeError
+            If `groups` is None, an error is thrown.
         """
         instantiated_groups = {}
         if groups is None:
