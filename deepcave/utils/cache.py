@@ -33,7 +33,7 @@ class Cache:
     def __init__(
         self,
         filename: Optional[Path] = None,
-        defaults: Dict = None,
+        defaults: Optional[Dict] = None,
         debug: bool = False,
         write_file: bool = True,
     ) -> None:
@@ -88,7 +88,7 @@ class Cache:
             else:
                 json.dump(self._data, f, separators=JSON_DENSE_SEPARATORS)
 
-    def set(self, *keys, value: Any, write_file: bool = True) -> None:
+    def set(self, *keys: str, value: Any, write_file: bool = True) -> None:
         """
         Set a value from a chain of keys.
 
@@ -138,7 +138,7 @@ class Cache:
         if write_file:
             self.write()
 
-    def get(self, *keys) -> Optional[Any]:
+    def get(self, *keys: str) -> Optional[Any]:
         """Retrieve value for a specific key."""
         d = deepcopy(self._data)
         for key in keys:
@@ -149,7 +149,7 @@ class Cache:
 
         return d
 
-    def has(self, *keys) -> bool:
+    def has(self, *keys: str) -> bool:
         """Check whether cache has specific key."""
         d = self._data
         for key in keys:
@@ -163,7 +163,8 @@ class Cache:
         """Clear all cache and reset to defaults."""
         filename = self._filename
 
-        if filename is not None and filename.exists():
-            self._filename.unlink()
+        if self._filename is not None:
+            if self._filename.exists():
+                self._filename.unlink()
 
         self._setup(filename, write_file=write_file)

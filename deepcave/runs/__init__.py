@@ -36,7 +36,6 @@ from deepcave.runs.trial import Trial
 from deepcave.utils.logs import get_logger
 
 
-
 class AbstractRun(ABC):
     """
     Can create, handle and get information of an abstract run.
@@ -99,10 +98,13 @@ class AbstractRun(ABC):
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Union[Configuration, Dict[Any, Any]]] = {}
         self.origins: Dict[int, Optional[str]] = {}
+        # Wait until meeting
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
 
         self.history: List[Trial] = []
-        self.trial_keys: Dict[Tuple[int, int], int] = {}  # (config_id, budget) -> trial_id
+        self.trial_keys: Dict[
+            Tuple[int, Union[int, float, None]], int
+        ] = {}  # (config_id, budget) -> trial_id
 
         # Cached data
         self._highest_budget: Dict[int, Union[int, float]] = {}  # config_id -> budget
@@ -177,7 +179,7 @@ class AbstractRun(ABC):
     @staticmethod
     def get_trial_key(
         config_id: int, budget: Union[int, float, None]
-    ) -> Tuple[int, Union[int, float]]:
+    ) -> Tuple[int, Union[int, float, None]]:
         """
         Get the trial key for the configuration and the budget.
 
@@ -195,7 +197,7 @@ class AbstractRun(ABC):
         """
         return (config_id, budget)
 
-    def get_trial(self, trial_key: Tuple[int, Union[int, float]]) -> Optional[Trial]:
+    def get_trial(self, trial_key: Tuple[int, int]) -> Optional[Trial]:
         """
         Get the trial with the responding key if existing.
 
@@ -468,7 +470,7 @@ class AbstractRun(ABC):
         """
         return len(self.get_configs(budget=budget))
 
-    def get_budget(self, id: Union[int, str], human: bool = False) -> float:
+    def get_budget(self, id: Union[int, str], human: bool = False) -> Union[int, float]:
         """
         Get the budget given an id.
 
@@ -479,11 +481,19 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        float
+        float, int
             Budget.
+
+        Raises
+        ------
+        TypeError
+            If the budget with this id is invalid.
         """
         budgets = self.get_budgets(human=human)
-        return budgets[int(id)]
+        budget = budgets[int(id)]
+        if isinstance(budget, str):
+            raise TypeError("The budget with this id is invalid.")
+        return budget
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
         """
@@ -508,7 +518,7 @@ class AbstractRun(ABC):
 
     def get_budgets(
         self, human: bool = False, include_combined: bool = True
-    ) -> List[Union[int, float]]:
+    ) -> List[Union[int, float, str]]:
         """
         Return the budgets from the meta data.
 
@@ -519,15 +529,15 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        List[Union[int, float]]
-            List of budgets.
+        List[Union[int, float, str]]
+            List of budgets. In a readable form, if human is True.
         """
         budgets = self.meta["budgets"].copy()
         if include_combined and len(budgets) > 1 and COMBINED_BUDGET not in budgets:
             budgets += [COMBINED_BUDGET]
 
         if human:
-            readable_budgets = []
+            readable_budgets: List[Union[str, float]] = []
             for b in budgets:
                 if b == COMBINED_BUDGET:
                     readable_budgets += ["Combined"]
@@ -853,6 +863,7 @@ class AbstractRun(ABC):
 
         return cost
 
+    # Wait until meeting
     def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
         """
         Get a torch model associated with a configuration ID.
@@ -870,6 +881,7 @@ class AbstractRun(ABC):
         """
         import torch
 
+        # Issue is opened
         filename = self.models_dir / f"{str(config_id)}.pth"
         if not filename.exists():
             return None
@@ -951,7 +963,7 @@ class AbstractRun(ABC):
                 current_cost = cost
 
                 costs_mean.append(cost)
-                costs_std.append(0)
+                costs_std.append(0.0)
                 times.append(trial.end_time)
                 ids.append(id)
                 config_ids.append(trial.config_id)
@@ -1102,8 +1114,8 @@ class AbstractRun(ABC):
             y_set.append(y)
             config_ids.append(config_id)
 
-        x_set = np.array(x_set)  # type: ignore
-        y_set = np.array(y_set)  # type: ignore
+        x_set_array = np.array(x_set)
+        y_set_array = np.array(y_set)
         config_ids = np.array(config_ids).reshape(-1, 1)  # type: ignore
 
         # Imputation: Easiest case is to replace all nans with -1
@@ -1135,8 +1147,8 @@ class AbstractRun(ABC):
                             raise ValueError("Hyperparameter not supported.")
 
                 if conditional[idx] is True:
-                    non_finite_mask = ~np.isfinite(x_set[:, idx])
-                    x_set[non_finite_mask, idx] = impute_values[idx]
+                    non_finite_mask = ~np.isfinite(x_set_array[:, idx])
+                    x_set_array[non_finite_mask, idx] = impute_values[idx]
 
         # Now we create dataframes for both values and labels
         # [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
@@ -1152,9 +1164,10 @@ class AbstractRun(ABC):
             columns += [COMBINED_COST_NAME]
 
         if include_config_ids:
-            data: np.ndarray = np.concatenate((config_ids, x_set, y_set), axis=1)
+            # wait till meeting
+            data: np.ndarray = np.concatenate((config_ids, x_set_array, y_set_array), axis=1)
         else:
-            data = np.concatenate((x_set, y_set), axis=1)
+            data = np.concatenate((x_set_array, y_set_array), axis=1)
 
         data = pd.DataFrame(data=data, columns=columns)
 

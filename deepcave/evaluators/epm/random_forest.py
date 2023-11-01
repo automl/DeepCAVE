@@ -115,7 +115,8 @@ class RandomForest:
         self.seed = seed
 
         # Set types and bounds automatically
-        self.types, self.bounds = get_types(configspace, instance_features)
+        types, self.bounds = get_types(configspace, instance_features)
+        self.types = np.array(types)
 
         # Prepare everything for PCA
         self.n_params = len(configspace.get_hyperparameters())
@@ -176,13 +177,14 @@ class RandomForest:
         # Now we set the options
         options = regression.forest_opts()
 
-        def rgetattr(obj, attr, *args):
-            def _getattr(obj, attr):
+        def rgetattr(obj: object, attr: str, *args: Any) -> Any:
+            def _getattr(obj: object, attr: object) -> Any:
+                attr = str(attr)
                 return getattr(obj, attr, *args)
 
             return functools.reduce(_getattr, [obj] + attr.split("."))
 
-        def rsetattr(obj, attr, val):
+        def rsetattr(obj: object, attr: str, val: Any) -> None:
             pre, _, post = attr.rpartition(".")
             return setattr(rgetattr(obj, pre) if pre else obj, post, val)
 
@@ -365,7 +367,7 @@ class RandomForest:
         self._model.options.num_data_points_per_tree = X.shape[0]
         self._model.fit(data, rng=rng)
 
-    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+    def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Predict means and variances for a given X.
 
@@ -378,7 +380,7 @@ class RandomForest:
         -------
         means : np.ndarray [n_samples, n_objectives]
             Predictive mean.
-        vars : Optional[np.ndarray] [n_samples, n_objectives] or [n_samples, n_samples]
+        vars : np.ndarray [n_samples, n_objectives] or [n_samples, n_samples]
             Predictive variance or standard deviation.
         """
         self._check_dimensions(X)
@@ -529,6 +531,7 @@ class RandomForest:
 
         return mean_, var
 
-    def get_leaf_values(self, x: np.ndarray):
+    # Wait until meeting
+    def get_leaf_values(self, x: np.ndarray) -> regression.binary_rss_forest:
         """Get the leaf values of the model."""
         return self._model.all_leaf_values(x)  # type: ignore[np-untyped-def]

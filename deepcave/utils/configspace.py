@@ -54,12 +54,12 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
             config[hp_name] = value
 
         try:
-            config = deactivate_inactive_hyperparameters(config, configspace)
-            config.is_valid_configuration()  # type: ignore[attr-defined]
+            configuration = deactivate_inactive_hyperparameters(config, configspace)
+            configuration.is_valid_configuration()  # type: ignore[attr-defined]
         except Exception:
             continue
 
-        yield config
+        yield configuration
 
 
 def sample_random_config(
@@ -91,7 +91,7 @@ def sample_random_config(
     rng = np.random.RandomState(0)
 
     while True:
-        config = {}
+        config_dict = {}
 
         # Iterates over the hyperparameters to get considered values
         for hp_name, hp in zip(
@@ -121,12 +121,12 @@ def sample_random_config(
 
             # Get a random choice
             value = rng.choice(values)
-            config[hp_name] = value
+            config_dict[hp_name] = value
 
         try:
-            config = deactivate_inactive_hyperparameters(config, configspace)
-            config.is_valid_configuration()
+            configuration = deactivate_inactive_hyperparameters(config_dict, configspace)
+            configuration.is_valid_configuration()
         except Exception:
             continue
 
-        yield config
+        yield configuration

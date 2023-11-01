@@ -491,7 +491,7 @@ class Plugin(Layout, ABC):
             Input(self.get_internal_id("show_help"), "n_clicks"),
             State(self.get_internal_id("help"), "is_open"),
         )
-        def toggle_help_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
+        def toggle_help_modal(n: Optional[int], is_open: bool) -> bool:
             """
             Toggle the help modal.
 

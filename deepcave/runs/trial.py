@@ -71,7 +71,7 @@ class Trial:
 
         assert isinstance(self.status, Status)
 
-    def get_key(self) -> Tuple[int, int]:
+    def get_key(self) -> Tuple[int, Union[int, float, None]]:
         """
         Generate a key based on the configuration ID and the budget.
 

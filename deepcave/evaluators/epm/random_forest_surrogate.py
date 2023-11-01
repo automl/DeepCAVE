@@ -10,7 +10,7 @@ Mean and standard deviation values can be predicted for a given input with this 
     - RandomForestSurrogate: Random forest surrogate for the pyPDP package.
 """
 
-from typing import Tuple
+from typing import Optional, Tuple
 
 import ConfigSpace as CS
 import numpy as np
@@ -29,7 +29,7 @@ class RandomForestSurrogate(SurrogateModel):
     def __init__(
         self,
         configspace: CS.ConfigurationSpace,
-        seed: int = None,
+        seed: Optional[int] = None,
     ):
         super().__init__(configspace, seed=seed)
         self._model = RandomForest(configspace=configspace, seed=seed)

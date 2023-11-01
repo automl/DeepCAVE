@@ -12,7 +12,7 @@ FanovaForest can be used for analyzing and quantifying the features of a dataset
     - FanovaForest: A fanova forest wrapper for pyrfr.
 """
 
-from typing import List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import itertools as it
 
@@ -126,7 +126,7 @@ class FanovaForest(RandomForest):
 
         # compute midpoints and interval sizes for variables in each tree
         for tree_split_values in forest_split_values:
-            sizes = []
+            sizes: List = []
             midpoints = []
             for i, split_vals in enumerate(tree_split_values):
                 if np.isnan(self.bounds[i][1]):  # categorical parameter
@@ -156,8 +156,8 @@ class FanovaForest(RandomForest):
         # and the value list contains \hat{f}_U for the individual trees
         # reset all the variance fractions computed
         self.trees_variance_fractions: dict = {}
-        self.V_U_total = {}
-        self.V_U_individual = {}
+        self.V_U_total: Dict[Tuple[int, ...], List[Union[Any, float]]] = {}
+        self.V_U_individual: Dict[Tuple[int, ...], List[Union[Any, float]]] = {}
 
         # Set cut-off
         self._model.set_cutoffs(self.cutoffs[0], self.cutoffs[1])
@@ -165,7 +165,12 @@ class FanovaForest(RandomForest):
         # recompute the trees' total variance
         self.trees_total_variance = self._model.get_trees_total_variances()
 
-    def compute_marginals(self, hp_ids: List[int], depth: int = 1):
+    def compute_marginals(
+        self, hp_ids: Union[List[int], Tuple[int, ...]], depth: int = 1
+    ) -> Tuple[
+        Dict[Tuple[int, ...], List[Union[Any, float]]],
+        Dict[Tuple[int, ...], List[Union[Any, float]]],
+    ]:
         """
         Return the marginal of selected parameters.
 
@@ -178,7 +183,8 @@ class FanovaForest(RandomForest):
         -------
         The marginal of selected parameters.
         """
-        hp_ids = tuple(hp_ids)
+        if not isinstance(hp_ids, tuple):
+            hp_ids = tuple(hp_ids)
 
         # check if values has been previously computed
         if hp_ids in self.V_U_individual:
