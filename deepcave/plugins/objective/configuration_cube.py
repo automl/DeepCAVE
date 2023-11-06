@@ -227,7 +227,6 @@ class ConfigurationCube(DynamicPlugin):
             "n_configs": {
                 "min": 0,
                 "max": len(configs) - 1,
-                # not sure how to convert this
                 "marks": get_slider_marks(list(range(len(configs)))),
                 "value": n_configs_value,
             },

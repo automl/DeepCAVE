@@ -531,7 +531,18 @@ class RandomForest:
 
         return mean_, var
 
-    # Wait until meeting
     def get_leaf_values(self, x: np.ndarray) -> regression.binary_rss_forest:
-        """Get the leaf values of the model."""
+        """
+        Get the leaf values of the model.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            Input data points.
+
+        Returns
+        -------
+        regression.binary_rss_forest
+            The leaf values of the model.
+        """
         return self._model.all_leaf_values(x)  # type: ignore[np-untyped-def]

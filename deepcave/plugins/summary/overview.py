@@ -116,7 +116,7 @@ class Overview(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, *_: Any) -> List[Union[str, dbc.Table, go.Figure, dbc.Card]]:
+    def load_outputs(run, *_: Any) -> List[Any]:
         """
         Load the outputs for the overview of the run.
 

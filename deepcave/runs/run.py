@@ -295,7 +295,7 @@ class Run(AbstractRun, ABC):
         if model is not None:
             self.models[config_id] = model
 
-    def save(self, path: Optional[Union[str, Path]] = None) -> None:
+    def save(self, path: Union[str, Path]) -> None:
         """
         Save the run and its information.
 

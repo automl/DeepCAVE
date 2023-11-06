@@ -76,7 +76,18 @@ class GeneralLayout(Layout):
             dynamic_n_clicks: List[Optional[int]],
             dynamic_working_dirs: List[str],
         ):
-            """Change the working directory."""
+            """
+            Change the working directory.
+
+            Parameters
+            ----------
+            working_dir : str
+                The working directory.
+            dynamic_n_clicks : List[Optional[int]]
+                The number of clicks.
+            dynamic_working_dirs : List[str]
+                The working directories.
+            """
             # `working_dir` is only none on page load
             if working_dir is None:
                 # Handler working directory
@@ -103,8 +114,15 @@ class GeneralLayout(Layout):
         input = Input("general-available-runs", "data")
 
         @app.callback(output, input)  # type: ignore
-        def callback(run_paths: List[str]):  # type: ignore
-            """Display the available runs."""
+        def callback(run_paths: List[str]):
+            """
+            Display the available runs.
+
+            Parameters
+            ----------
+            run_paths : List[str]
+                The run paths.
+            """
             children = []
 
             # Add text to go to parent directory
@@ -157,8 +175,15 @@ class GeneralLayout(Layout):
         input = Input("general-selected-runs", "data")
 
         @app.callback(output, input)  # type: ignore
-        def callback(run_paths: List[str]):  # type: ignore
-            """Display the selected runs."""
+        def callback(run_paths: List[str]):  
+            """
+            Display the selected runs.
+            
+            Parameters
+            ----------
+            run_paths : List[str]
+                The run paths.
+            """
             children = []
 
             for i, run_path in enumerate(run_paths):
@@ -266,7 +291,25 @@ class GeneralLayout(Layout):
                 input_value: str = "",
                 dropdown_value: Optional[List[str]] = None,
             ) -> Component:
-                """Get the layout for the groups."""
+                """
+                Get the layout for the groups.
+                
+                Parameters
+                ----------
+                index : int
+                    The index.
+                options : Dict[str, str]
+                    The options.
+                input_value : str, optional
+                    The input value, by default "".
+                dropdown_value : Optional[List[str]], optional
+                    The dropdown value, by default None.
+                
+                Returns
+                -------
+                Component
+                    The layout for the groups.
+                """
                 if dropdown_value is None:
                     dropdown_value = []
 

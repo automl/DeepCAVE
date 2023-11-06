@@ -21,9 +21,10 @@ class Layout(ABC):
     """
     A foundation for creating layouts.
 
-    Methods
-    -------
-    register_callback
+    Properties
+    ----------
+    logger : Logger
+        A logger for the class.
     """
 
     def __init__(self) -> None:  # noqa: D107

@@ -197,8 +197,7 @@ class Group(AbstractRun):
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
-    # wait until meeting
-    def get_trajectory(self, *args, **kwargs):
+    def get_trajectory(self, *args, **kwargs):  # type: ignore
         """
         Get the trajectory of the group.
 

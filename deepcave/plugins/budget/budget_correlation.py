@@ -105,9 +105,7 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     # Types dont match superclass
-    def load_dependency_inputs(
-        self, run, _: Any, inputs
-    ) -> Dict[str, Dict[str, Union[List[Dict[str, Any]], int]]]:
+    def load_dependency_inputs(self, run, _: Any, inputs) -> Dict[str, Dict[str, Any]]:
         """
         Load the objectives attributes.
 
@@ -229,7 +227,7 @@ class BudgetCorrelation(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, _: Any, outputs) -> List[Union[str, go.Figure, dbc.Table]]:
+    def load_outputs(run, _: Any, outputs) -> List[Any]:
         """
         Create the output table and safe the image.
 

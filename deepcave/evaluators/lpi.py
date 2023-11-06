@@ -86,7 +86,7 @@ class LPI:
             The number of trees for the fanova forest.
             Default is 10.
         seed : Optional[int], optional
-            The seed.
+            The seed. By default None. If None, a random seed is chosen.
         """
         if objectives is None:
             objectives = self.run.get_objectives()
@@ -225,7 +225,6 @@ class LPI:
             p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
             for p, trees in overall_var_per_tree.items()
         }
-        # Same none problem here
         self.variances = overall_var_per_tree
         self.importances = importances
 
@@ -279,6 +278,11 @@ class LPI:
 
         This orders the parameter values and samples more neighbors in one go.
         Further we need to rigorously check each and every neighbor if it is forbidden or not.
+
+        Returns
+        -------
+        neighborhood : Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]
+            The neighborhood.
         """
         hp_names = self.cs.get_hyperparameter_names()
 
@@ -366,9 +370,9 @@ class LPI:
 
         Returns
         -------
-        mean
+        mean: np.ndarray
             The mean performance over the instance set.
-        var
+        var: np.ndarray
             The variance over the instance set. If logged values are used, the variance might not
             be able to be used.
         """

@@ -56,7 +56,7 @@ def render_table(df: pd.DataFrame) -> None:  # noqa: D103
 
 
 def get_slider_marks(
-    strings: Optional[List[Union[Dict[str, Any], int]]] = None,
+    strings: Optional[List[Any]] = None,
     steps: int = 10,
     access_all: bool = False,
 ) -> Dict[int, Dict[str, str]]:
@@ -84,7 +84,7 @@ def get_slider_marks(
     """
     marks = {}
     if strings is None:
-        marks[0] = {"label": str("None")}
+        marks[0] = {"label": "None"}
         return marks
 
     if len(strings) < steps:

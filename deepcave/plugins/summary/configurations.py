@@ -121,7 +121,7 @@ class Configurations(DynamicPlugin):
     # Types dont match superclass
     def load_dependency_inputs(
         self, run, previous_inputs: Dict[str, Any], inputs: Dict[str, Any]
-    ) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]]]]]:
+    ) -> Dict[str, Any]:
         """
         Get selected values of the inputs.
 

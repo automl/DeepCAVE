@@ -48,15 +48,13 @@ class FanovaForest(RandomForest):
         The total variance of a tree.
     trees_variance_fractions : Dict
         The variance fractions of the trees.
-    V_U_total : Dict
+    V_U_total : Dict[Tuple[int, ...], List[Union[Any, float]]]
         Store variance-related information across all trees.
-    V_U_individual : Dict
+    V_U_individual : Dict[Tuple[int, ...], List[Union[Any, float]]]
         Store variance-related information for individual subsets.
     n_params : int
         The number of parameters to sample.
     """
-
-    # np.Arrayterator()
 
     def __init__(
         self,
@@ -127,7 +125,7 @@ class FanovaForest(RandomForest):
         # compute midpoints and interval sizes for variables in each tree
         for tree_split_values in forest_split_values:
             sizes: List = []
-            midpoints = []
+            midpoints: List = []
             for i, split_vals in enumerate(tree_split_values):
                 if np.isnan(self.bounds[i][1]):  # categorical parameter
                     # check if the tree actually splits on this parameter
@@ -176,12 +174,17 @@ class FanovaForest(RandomForest):
 
         Parameters
         ----------
-        hp_ids: List[int]
+        hp_ids: Union[List[int], Tuple[int, ...]]
             Contains the indices of the configspace for the selected parameters (starts with 0).
+        depth: int
+            The depth of the marginalization.
+            Default value is 1.
 
         Returns
         -------
-        The marginal of selected parameters.
+        Tuple[Dict[Tuple[int, ...], List[Union[Any, float]]],
+        Dict[Tuple[int, ...], List[Union[Any, float]]],
+            The marginal of selected parameters.
         """
         if not isinstance(hp_ids, tuple):
             hp_ids = tuple(hp_ids)

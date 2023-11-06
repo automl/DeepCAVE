@@ -103,15 +103,19 @@ class Footprint:
             All configurations with this budget are considered.
         support_discretization : Optional[int], optional
             Discretization steps for integer and float hyperparameter values.
+            Default is set to 10.
         rejection_rate : float, optional
             Rejection rate whether a configuration should be rejected or not. Internally,
             the max distance is calculated and if a configuration has a distance smaller than
             max distance * rejection_rate, the configuration is rejected.
+            Default is set to 0.01.
         retries : int, optional
             How many times to retry adding a new configuration.
+            Default is set to 3.
         exclude_configs : bool, optional
             Whether the configurations from the run should be excluded in the MDS scaling.
             This is particularly interesting if only the search space should be plotted.
+            Default is set to False.
         """
         # Reset everything
         self._reset()
@@ -236,6 +240,7 @@ class Footprint:
             Steps to create the meshgrid. By default 0.5.
         performance : bool, optional
             Whether to get the surface from the performance or the valid areas.
+            Default is set to True.
 
         Returns
         -------
@@ -536,11 +541,6 @@ class Footprint:
     def _get_mds(self) -> np.ndarray:
         """
         Perform multidimensional scaling on the internal distances.
-
-        Parameters
-        ----------
-        distances : np.ndarray
-            Numpy array with distances between configurations.
 
         Returns
         -------

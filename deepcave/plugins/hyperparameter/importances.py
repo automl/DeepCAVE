@@ -184,9 +184,7 @@ class Importances(StaticPlugin):
         }
 
     # Types dont match superclass
-    def load_dependency_inputs(
-        self, run, _: Any, inputs: Dict[str, Any]
-    ) -> Dict[str, Dict[str, Union[List[Dict[str, Any]], int, Dict[str, Any], Any, List]]]:
+    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Load the objective, budgets and hyperparameters and its attributes.
 
@@ -299,6 +297,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
+            assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
