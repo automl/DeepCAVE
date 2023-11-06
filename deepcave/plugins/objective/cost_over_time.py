@@ -34,13 +34,13 @@ class CostOverTime(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         The identificator of the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representing the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
 
     Properties
@@ -95,12 +95,14 @@ class CostOverTime(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id for the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A dash bootstrap component of the layout of the input.
+        List[dbc.Row]
+            A dash bootstrap component of the layout of the input.
         """
         return [
             dbc.Row(
@@ -140,12 +142,14 @@ class CostOverTime(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered html container.
+        List[Any]
+            A filtered html container.
         """
         return [
             html.Div(
@@ -213,7 +217,7 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:
         """
         Get the trajectory of the run, as well as its budget and objective.
 
@@ -226,7 +230,8 @@ class CostOverTime(DynamicPlugin):
 
         Returns
         -------
-        The attributes of the run including mean and standard deviated costs and times.
+        Dict[str, Any]
+            The attributes of the run including mean and standard deviated costs and times.
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
@@ -245,7 +250,20 @@ class CostOverTime(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
-        """Get the dash graph for the output layout."""
+        """
+        Get the dash graph for the output layout.
+
+        Parameters
+        ----------
+        register : Callable
+            Used for the id of the graph object.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            A dash graph object.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
@@ -256,11 +274,11 @@ class CostOverTime(DynamicPlugin):
 
         Parameters
         ----------
-        runs : AbstractRun | Dict[str, AbstractRun]
+        runs :
             The runs to be analyzed.
-        inputs : Dict[str, Dict[str, str]]
+        inputs :
             The input for the figure.
-        outputs : Dict[str, str | Dict[str, str]]
+        outputs :
             The outputs for the figure.
 
         Returns

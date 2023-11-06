@@ -49,7 +49,22 @@ class HeaderLayout(Layout):
             Tuple[Literal["primary"], Literal["on"], str],
             Tuple[Literal["secondary"], Literal["off"], str],
         ]:
-            """Update the matplotlib mode."""
+            """
+            Update the matplotlib mode.
+
+            Parameters
+            ----------
+            n_clicks : int
+                Number of clicks.
+            pathname : str
+                Pathname.
+
+            Returns
+            -------
+            Tuple[Literal["primary"], Literal["on"], str],
+            Tuple[Literal["secondary"], Literal["off"], str]
+                Tuple of either "primary", "on", pathname or "secondary", "off", pathname.
+            """
             update = None
             mode = c.get("matplotlib-mode")
             if mode is None:

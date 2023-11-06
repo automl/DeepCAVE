@@ -41,14 +41,7 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """
 
     class Encoder(json.JSONEncoder):
-        """
-        Define a custom JSON Encoder.
-
-        Methods
-        -------
-        default
-            Return the object either as list or als JSONEncoder.
-        """
+        """Define a custom JSON Encoder."""
 
         def default(self, obj: Any) -> Any:
             """
@@ -76,7 +69,22 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
 
 
 def deserialize(string: str, dtype: TYPE = pd.DataFrame) -> TYPE:
-    """Deserialize a dataframe from a string."""
+    """
+    Deserialize a dataframe from a string.
+
+    Parameters
+    ----------
+    string : str
+        The string to be deserialized.
+    dtype : TYPE, optional
+        The type of the object.
+        Default is pd.DataFrame.
+
+    Returns
+    -------
+    TYPE
+        The deserialized object.
+    """
     if dtype == pd.DataFrame:
         return pd.DataFrame.from_dict(json.loads(string))
 

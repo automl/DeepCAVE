@@ -92,7 +92,7 @@ class StyledPlot:
 
         Returns
         -------
-        f
+        plt.Figure
             The figure created with the input information.
         """
         # Clean all
@@ -122,7 +122,8 @@ class StyledPlot:
 
         Returns
         -------
-        The rendered image.
+        str
+            The rendered plot.
         """
         # Create a virtual file which matplotlib can use to save the figure
         buffer = io.BytesIO()
@@ -183,13 +184,13 @@ class StyledPlot:
 
         Parameters
         ----------
-        values
+        values : np.ndarray
             Values to create the boxplot.
-        positions
+        positions : ArrayLike
             The position of the boxplot.
-        color
+        color : str
             The color of the boxes as well as other elements in the plot.
-        widths, optional
+        widths : float, optional
             The width of the boxes.
             Default is 0.5.
         """
@@ -233,16 +234,16 @@ class StyledPlot:
 
         Parameters
         ----------
-        cols, optional
+        cols : int, optional
             The number of the columns.
             Default is 1
-        loc, optional
+        loc : Optional[str], optional
             The location of the legend.
             Default is None.
-        title, optional
+        title : Optional[str], optional
             The title for the legend.
             Default is None.
-        outside, optional
+        outside : bool, optional
             Determines if a legend is placed outside of plot area.
             Default is False.
         """
@@ -281,8 +282,13 @@ class StyledPlot:
 
         Parameters
         ----------
-        id
+        id : int
             ID for retrieving a specific color.
+
+        Returns
+        -------
+        str
+            The color from the color palette.
         """
         import seaborn as sns
 

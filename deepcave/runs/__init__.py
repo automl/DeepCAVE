@@ -5,6 +5,9 @@
 This module provides utilities to create and handle an abstract run.
 It also provides functions to get information of the run, as well as the used objectives.
 Utilities also include encoding configurations and check equality between runs.
+
+## Classes
+    - AbstractRun: Can create, handle and get information of an abstract run.
 """
 
 from abc import ABC, abstractmethod
@@ -89,10 +92,6 @@ class AbstractRun(ABC):
         Reset the abstract run to default values / empties.
 
         Clear all the initial data and configurations of the object.
-
-        Returns
-        -------
-        None
         """
         self.meta: Dict[str, Any] = {}
         self.configspace: ConfigSpace.ConfigurationSpace
@@ -187,12 +186,12 @@ class AbstractRun(ABC):
         ----------
         config_id : int
             The ID of the configuration
-        budget : Union[int, float]
+        budget : Union[int, float, None]
             The budget for the Trial
 
         Returns
         -------
-        Tuple[int, Union[int, float]]
+        Tuple[int, Union[int, float, None]]
             Tuple representing the trial key, consisting of configuration ID and the budget.
         """
         return (config_id, budget)
@@ -203,7 +202,7 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        trial_key : Any
+        trial_key : Tuple[int, int]
             The trial key for the desired trial
 
         Returns
@@ -260,7 +259,7 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        str
+        Optional[str]
             An origin string corresponding to the given configuration ID.
         """
         return self.origins[config_id]
@@ -292,7 +291,7 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        Objective
+        Optional[Objective]
             The objective object.
         """
         objectives = self.get_objectives()
@@ -352,6 +351,17 @@ class AbstractRun(ABC):
         Get the cost name of given objective names.
 
         Returns "Combined Cost" if multiple objective names were involved.
+
+        Parameters
+        ----------
+        objectives : Optional[List[Objective]], optional
+            A list of objectives for which to get the cost name. By default, None.
+
+        Returns
+        -------
+        str
+            The name of the objective.
+            Returns "Combined Cost" if multiple objective names were involved.
         """
         available_objective_names = self.get_objective_names()
 
@@ -461,6 +471,7 @@ class AbstractRun(ABC):
         budget : Union[int, float], optional
             The budget for which to count the configurations.
             If not provided, counts all configurations.
+            Default is None.
 
         Returns
         -------
@@ -478,6 +489,8 @@ class AbstractRun(ABC):
         ----------
         id : Union[int, str]
             The id of the wanted budget. If id is a string, it is converted to an integer.
+        human : bool, optional
+            Make the output better readable. By default False.
 
         Returns
         -------
@@ -526,6 +539,9 @@ class AbstractRun(ABC):
         ----------
         human : bool, optional
             Make the output better readable. By default False.
+        include_combined : bool, optional
+            If True, include the combined budget. If False, do not include.
+            By default True.
 
         Returns
         -------
@@ -555,6 +571,11 @@ class AbstractRun(ABC):
         If no config id is specified then
         the highest available budget is returned.
         Moreover, if no budget is available None is returned.
+
+        Parameters
+        ----------
+        config_id : Optional[int], optional
+            The config id for which the highest budget is returned. By default, None.
 
         Returns
         -------
@@ -611,17 +632,17 @@ class AbstractRun(ABC):
             Budget to get the costs from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
 
+        Returns
+        -------
+        List[float]
+            List of costs from the associated configuration.
+
         Raises
         ------
         ValueError
             If the configuration id is not found.
         RuntimeError
             If the budget was not evaluated for the passed config id.
-
-        Returns
-        -------
-        List[float]
-            List of costs from the associated configuration.
         """
         if budget is None:
             budget = self.get_highest_budget()
@@ -1189,13 +1210,13 @@ def check_equality(
     runs : list[AbstractRun]
         Runs to check for equality.
     meta : bool, optional
-        Meta-Data excluding objectives and budgets, by default True
+        Meta-Data excluding objectives and budgets, by default True.
     configspace : bool, optional
-        ConfigSpace, by default True
+        Wheter to include the configuration space, by default True.
     objectives : bool, optional
-        Objectives, by default True
+        Wheter to include the objectives, by default True.
     budgets : bool, optional
-        Budgets, by default True
+        Whether to include the budgets, by default True.
 
     Returns
     -------

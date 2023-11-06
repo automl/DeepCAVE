@@ -10,7 +10,7 @@ and loading the outputs.
 ## Classes
     - BudgetCorrelation: Can be used for visualizing the correlation of budgets.
 """
-from typing import Any, Callable, DefaultDict, Dict, List, Union
+from typing import Any, Callable, DefaultDict, Dict, List
 
 from collections import defaultdict
 
@@ -38,15 +38,15 @@ class BudgetCorrelation(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         The identificator of the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representation of the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Defines whether the run selection feature is active.
         Default is True.
     """
@@ -85,12 +85,14 @@ class BudgetCorrelation(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the objective.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container for the layout of the input.
+        List[html.Div]
+            An html container for the layout of the input.
         """
         return [
             html.Div(
@@ -105,7 +107,7 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     # Types dont match superclass
-    def load_dependency_inputs(self, run, _: Any, inputs) -> Dict[str, Dict[str, Any]]:
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Dict[str, Any]]:
         """
         Load the objectives attributes.
 
@@ -118,7 +120,8 @@ class BudgetCorrelation(DynamicPlugin):
 
         Returns
         -------
-        The objectives id, its options and a value.
+        Dict[str, Dict[str, Any]]
+            The objectives id, its options and a value.
         """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -136,9 +139,7 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def process(
-        run: AbstractRun, inputs: Dict[str, int]
-    ) -> Dict[str, DefaultDict[str, Dict[str, float]]]:
+    def process(run: AbstractRun, inputs: Dict[str, int]) -> Dict[str, Any]:
         """
         Load the budget and the costs of the run. Get the correlations.
 
@@ -151,7 +152,8 @@ class BudgetCorrelation(DynamicPlugin):
 
         Returns
         -------
-        The correlations as well as the correlations symmetric.
+        Dict[str, Any]
+            The correlations as well as the correlations symmetric.
         """
         objective_id = inputs["objective_id"]
         budget_ids = run.get_budget_ids(include_combined=False)
@@ -197,18 +199,20 @@ class BudgetCorrelation(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register: Callable[[str, Union[str, List[str]]], str]) -> list:
+    def get_output_layout(register: Callable) -> List[Any]:
         """
         Get the html container for the layout of the output.
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the Div object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        The html container containing the layout of the output.
+        List[Any]
+            The html container containing the layout of the output.
         """
         return [
             html.Div(id=register("text", "children"), className="mb-3"),
@@ -227,7 +231,7 @@ class BudgetCorrelation(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, _: Any, outputs) -> List[Any]:
+    def load_outputs(run, _, outputs) -> List[Any]:
         """
         Create the output table and safe the image.
 
@@ -240,7 +244,8 @@ class BudgetCorrelation(DynamicPlugin):
 
         Returns
         -------
-        The text, the figure and the created table.
+        List[Any]
+            The text, the figure and the created table.
         """
         traces = []
         categories: defaultdict = defaultdict(list)

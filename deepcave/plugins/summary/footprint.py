@@ -35,15 +35,15 @@ class FootPrint(StaticPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         Identifies the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representation of the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Defines whether the run selection feature is activated.
     """
 
@@ -60,12 +60,14 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id for the select object and the slider.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container and a dash bootstrap component of the layout of the input.
+        List[Union[dbc.Row, html.Div]]
+            An html container and a dash bootstrap component of the layout of the input.
         """
         return [
             dbc.Row(
@@ -125,12 +127,14 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered layout with a dash bootstrap component.
+        List[dbc.Row]
+            A filtered layout with a dash bootstrap component.
         """
         return [
             dbc.Row(
@@ -174,9 +178,9 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        run : AbstractRun | List[AbstractRun] | None
+        run :
             The run(s) to be analyzed.
-        inputs : Dict[str, Any]
+        inputs :
             Contains information about the objectives and budgets.
 
         Returns
@@ -223,9 +227,9 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        run : AbstractRun
+        run
             The run to be analyzed.
-        inputs : Dict[str, Any]
+        inputs
             Containing budget, objective and details information.
 
         Returns
@@ -263,12 +267,14 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the dash Graph.
+            The register_output function is located in the Plugin superclass.
 
         Returns
         -------
-        A dash bootstrap component for the output layout.
+        dbc.Tabs
+            A dash bootstrap component for the output layout.
         """
         return dbc.Tabs(
             [
@@ -289,7 +295,7 @@ class FootPrint(StaticPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> List[Any]:
         """
         Load and save the output plotly figure for visualizing the footprint of the run.
 
@@ -306,7 +312,8 @@ class FootPrint(StaticPlugin):
 
         Returns
         -------
-        The plotly figure of the footprint.
+        List[Any]
+            The plotly figure of the footprint.
         """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
@@ -402,12 +409,14 @@ class FootPrint(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the html image container.
+            The register_output function is located in the Plugin superclass.
 
         Returns
         -------
-        A dash bootstrap component of the output layout
+        List[dbc.Tabs]
+            A dash bootstrap component of the output layout
         """
         return [
             dbc.Tabs(

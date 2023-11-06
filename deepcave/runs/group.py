@@ -26,7 +26,7 @@ class Group(AbstractRun):
     Utilities include getting attributes of the grouped runs, as well as the group.
 
     ----------
-    prefix, optional
+    prefix, optional : str
         A prefix.
         Default is "group".
 
@@ -180,20 +180,70 @@ class Group(AbstractRun):
         return self.runs
 
     def get_new_config_id(self, run_id: int, original_config_id: int) -> int:
-        """Get a new identificator for a configuration."""
+        """
+        Get a new identificator for a configuration.
+
+        Parameters
+        ----------
+        run_id : int
+            The id of the run.
+        original_config_id : int
+            The original identificator of a configuration.
+
+        Returns
+        -------
+        int
+            The new identificator of a configuration.
+        """
         return self._new_config_mapping[(run_id, original_config_id)]
 
     def get_original_config_id(self, config_id: int) -> int:
-        """Get the original identificator of a configuration."""
+        """
+        Get the original identificator of a configuration.
+
+        Parameters
+        ----------
+        config_id : int
+            The identificator of a configuration.
+
+        Returns
+        -------
+        int
+            The original identificator of a configuration.
+        """
         return self._original_config_mapping[config_id][1]
 
     def get_original_run(self, config_id: int) -> AbstractRun:
-        """Get the original abstract run."""
+        """
+        Get the original abstract run.
+
+        Parameters
+        ----------
+        config_id : int
+            The identificator of a configuration.
+
+        Returns
+        -------
+        AbstractRun
+            The original abstract run.
+        """
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
     def get_model(self, config_id: int) -> Optional[Any]:
-        """Get the model of the runs."""
+        """
+        Get the model of the runs.
+
+        Parameters
+        ----------
+        config_id : int
+            The identificator of a configuration.
+
+        Returns
+        -------
+        Optional[Any]
+            The model of the runs.
+        """
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
@@ -207,8 +257,10 @@ class Group(AbstractRun):
         ----------
         *args
             The arguments for the trajectory of a run.
+            Should be an objective.
         **kwargs
             Keyword arguments for the trajectory of a run.
+            Should bean int, float or None, representing the budget.
 
         Returns
         -------

@@ -5,11 +5,6 @@
 This module is used to initialize and set up the configuration for the DeepCAVE framework.
 It also contains Constants and Metadata, as well as the name of the authors and the copyright.
 The Dash application gets created.
-
-## Contents
-    - get_app: Create the Dash application.
-    - interactive: Define the interactive decorator.
-    - inner: The inner function of the decorator.
 """
 
 from typing import Any, Callable, TypeVar, cast

@@ -8,7 +8,7 @@ It provides an Enum used for the plugin state and a static plugin definition.
 
 ## Classes
     - PluginState: An Enum to define the state of the Plugin.
-    - StaticPlugin: Calculation with queue. Made for time-consuming tasks.
+    - StaticPlugin: This class provides a dynamic plugin object.
 """
 
 from abc import ABC
@@ -42,8 +42,24 @@ class PluginState(Enum):
 
 def _process(
     process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs: Dict[str, Any]
-) -> Any:
-    """Process the run if possible."""
+) -> None:
+    """
+    Process the run if possible.
+
+    Parameters
+    ----------
+    process : Callable[[AbstractRun, Any], None]
+        The process function.
+    run : AbstractRun
+        The run.
+    inputs : Dict[str, Any]
+        The inputs as a dictionary
+
+    Raises
+    ------
+    Exception
+        If the process function fails.
+    """
     try:
         return process(run, inputs)
     except Exception:
@@ -53,7 +69,9 @@ def _process(
 
 class StaticPlugin(Plugin, ABC):
     """
-    Calculation with queue. Made for time-consuming tasks.
+    Provide a static plugin object.
+
+    Registers and handles callbacks.
 
     Properties
     ----------
@@ -69,7 +87,7 @@ class StaticPlugin(Plugin, ABC):
         The logger for the plugin.
     name : str
         The name of the plugin.
-    process
+    process : Callable
         Returns raw data based on a run and input data.
     button_caption : str
         The caption for the button.
@@ -265,6 +283,7 @@ class StaticPlugin(Plugin, ABC):
         # prevent output updates from previous callback calls.
         @app.callback(output, inputs)
         def plugin_check_blocked(_, data):  # type: ignore
+            """Check if blocked."""
             if self._blocked:
                 raise PreventUpdate
 
@@ -336,7 +355,21 @@ class StaticPlugin(Plugin, ABC):
             return button_text, button, disabled
 
     def _get_job_id(self, run_name: str, inputs_key: str) -> str:
-        """Get the job id."""
+        """
+        Get the job id.
+
+        Parameters
+        ----------
+        run_name : str
+            The run name.
+        inputs_key : str
+            The inputs key.
+
+        Returns
+        -------
+        str
+            The job id.
+        """
         return f"{run_name}-{inputs_key}"
 
     @interactive

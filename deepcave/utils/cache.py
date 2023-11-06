@@ -97,7 +97,7 @@ class Cache:
 
         Parameters
         ----------
-        *keys
+        *keys : str
             The keys to set the value from.
         value : Any
             The value to be set.
@@ -132,14 +132,36 @@ class Cache:
             self.write()
 
     def set_dict(self, d: Dict, write_file: bool = True) -> None:
-        """Update cache to a specific value."""
+        """
+        Update cache to a specific value.
+
+        Parameters
+        ----------
+        d : Dict
+            The dictionary to be set.
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+        """
         self._data.update(d)
 
         if write_file:
             self.write()
 
     def get(self, *keys: str) -> Optional[Any]:
-        """Retrieve value for a specific key."""
+        """
+        Retrieve value for a specific key.
+
+        Parameters
+        ----------
+        *keys : str
+            The keys to retrieve the value from.
+
+        Returns
+        -------
+        Optional[Any]
+            The value of the key.
+        """
         d = deepcopy(self._data)
         for key in keys:
             if key not in d:
@@ -150,7 +172,19 @@ class Cache:
         return d
 
     def has(self, *keys: str) -> bool:
-        """Check whether cache has specific key."""
+        """
+        Check whether cache has specific key.
+
+        Parameters
+        ----------
+        *keys : str
+            The keys to check for.
+
+        Returns
+        -------
+        bool
+            Whether cache has specific key.
+        """
         d = self._data
         for key in keys:
             if key not in d:
@@ -160,7 +194,15 @@ class Cache:
         return True
 
     def clear(self, write_file: bool = True) -> None:
-        """Clear all cache and reset to defaults."""
+        """
+        Clear all cache and reset to defaults.
+
+        Parameters
+        ----------
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+        """
         filename = self._filename
 
         if self._filename is not None:

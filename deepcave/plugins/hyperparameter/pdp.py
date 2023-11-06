@@ -47,15 +47,15 @@ class PartialDependencies(StaticPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         Identifier for the plugin.
-    name
+    name : str
         Name of the plugin.
-    icon
+    icon : str
         Icon representation of the plugin.
-    help
+    help : str
         Path to the documentation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Defines whether the run selection feature should be activated.
     """
 
@@ -72,12 +72,14 @@ class PartialDependencies(StaticPlugin):
 
         Parameters
         ----------
-        register
+        register : Callable
             Used for the Select id.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        The dash bootstrap components for the input layout.
+        List[dbc.Row]
+            The dash bootstrap components for the input layout.
         """
         return [
             dbc.Row(
@@ -146,12 +148,14 @@ class PartialDependencies(StaticPlugin):
 
         Parameters
         ----------
-        register
+        register : Callable
             Used for the select id.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        The dbc containing an html container for the filtered layout.
+        List[Any]
+            The dbc containing an html container for the filtered layout.
         """
         return [
             dbc.Row(
@@ -195,7 +199,8 @@ class PartialDependencies(StaticPlugin):
 
         Returns
         -------
-        The confidence values as well as the ice.
+        Dict[str, Dict[str, Any]]
+            The confidence values as well as the ice.
         """
         return {
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
@@ -344,12 +349,14 @@ class PartialDependencies(StaticPlugin):
 
         Parameters
         ----------
-        register
+        register : Callable
             A function to get the id for the graph.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A dash graph.
+        dcc.Graph
+            A dash graph.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 

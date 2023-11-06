@@ -33,7 +33,7 @@ def file_to_hash(filename: Path) -> str:
 
     Parameters
     ----------
-    filename : path
+    filename : Path
         The path to the file to be converted.
 
     Returns

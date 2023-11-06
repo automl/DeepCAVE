@@ -175,10 +175,10 @@ class GeneralLayout(Layout):
         input = Input("general-selected-runs", "data")
 
         @app.callback(output, input)  # type: ignore
-        def callback(run_paths: List[str]):  
+        def callback(run_paths: List[str]):
             """
             Display the selected runs.
-            
+
             Parameters
             ----------
             run_paths : List[str]
@@ -293,7 +293,7 @@ class GeneralLayout(Layout):
             ) -> Component:
                 """
                 Get the layout for the groups.
-                
+
                 Parameters
                 ----------
                 index : int
@@ -304,7 +304,7 @@ class GeneralLayout(Layout):
                     The input value, by default "".
                 dropdown_value : Optional[List[str]], optional
                     The dropdown value, by default None.
-                
+
                 Returns
                 -------
                 Component

@@ -123,7 +123,7 @@ class RunCaches:
 
         Returns
         -------
-        Dict[str, Any]
+        Optional[Dict[str, Any]]
             Raw outputs for the given run, plugin and inputs key.
 
         Raises

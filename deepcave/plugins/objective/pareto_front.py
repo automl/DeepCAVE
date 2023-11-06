@@ -36,13 +36,13 @@ class ParetoFront(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         Identifier for the plugin.
-    name
+    name : str
         Name of the plugin.
-    icon
+    icon : str
         Icon representation for the plugin.
-    help
+    help : str
         Path to the documentation of the plugin.
 
     Properties
@@ -97,12 +97,14 @@ class ParetoFront(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id for the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container and a dash bootstrap component of the layout of the input.
+        List[Union[dbc.Row, html.Div]]
+            An html container and a dash bootstrap component of the layout of the input.
         """
         return [
             dbc.Row(
@@ -156,12 +158,14 @@ class ParetoFront(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of Select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered dash bootstrap component and html container.
+        List[Union[html.Div, dbc.Row]]
+            A filtered dash bootstrap component and html container.
         """
         return [
             html.Div(
@@ -231,7 +235,7 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:
         """
         Process the data and get the according pareto front and its points.
 
@@ -303,7 +307,20 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
-        """Get the dash Graph layout of the output."""
+        """
+        Get the dash Graph layout of the output.
+
+        Parameters
+        ----------
+        register : Callable
+            Used to get the id for the graph.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            The dash Graph layout of the output.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
@@ -314,11 +331,11 @@ class ParetoFront(DynamicPlugin):
 
         Parameters
         ----------
-        runs : AbstractRun | Dict[str, AbstractRun]
+        runs :
             The run(s) to be analyzed.
-        inputs : Dict[str, Dict[str, str]]
+        inputs :
             The inputs containing information about what to visualize.
-        outputs : Dict[str, str | Dict[str, str]]
+        outputs :
             Contains different attributes of the pareto front.
 
         Returns
@@ -418,7 +435,20 @@ class ParetoFront(DynamicPlugin):
 
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> html.Img:
-        """Get an html container of the output layout."""
+        """
+        Get an html container of the output layout.
+
+        Parameters
+        ----------
+        register : Callable
+            Used to get the id.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        html.Img
+            An html container of the matplotlib output layout.
+        """
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
@@ -432,11 +462,11 @@ class ParetoFront(DynamicPlugin):
 
         Parameters
         ----------
-        runs : AbstractRun | Dict[str, AbstractRun]
+        runs :
             The run(s) to analyze.
-        inputs : Dict[str, Dict[str, str]]
+        inputs :
             Containing the inputs for the visualization.
-        outputs :  Dict[str, str | Dict[str, str]]
+        outputs :
             Containing the pareto fronts attributes.
 
         Returns

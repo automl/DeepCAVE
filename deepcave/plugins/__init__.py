@@ -286,7 +286,7 @@ class Plugin(Layout, ABC):
         Raises
         ------
         RuntimeError
-            _description_
+            If no run id is found.
         """
         from deepcave import app, c, run_handler
 
@@ -672,7 +672,7 @@ class Plugin(Layout, ABC):
         Returns
         -------
         Dict[str, Dict[str, str]]
-            _description_
+            Dictionary containing the mapping information.
         """
         if input:
             order = self.inputs
@@ -823,7 +823,8 @@ class Plugin(Layout, ABC):
 
         Returns
         -------
-            dict: Cleaned inputs.
+        Dict[str, Any]
+            Cleaned inputs.
         """
         used_ids = []
         cleaned_inputs = {}
@@ -847,7 +848,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def runs(self) -> List[AbstractRun]:
-        """Get the runs."""
+        """Get the runs as a list."""
         from deepcave import run_handler
 
         return run_handler.get_runs()
@@ -855,7 +856,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def groups(self) -> List[Group]:
-        """Get the groups."""
+        """Get the groups as a list."""
         from deepcave import run_handler
 
         return run_handler.get_groups()
@@ -863,7 +864,7 @@ class Plugin(Layout, ABC):
     @property  # type: ignore
     @interactive
     def all_runs(self) -> List[AbstractRun]:
-        """Get all runs and include the groups."""
+        """Get all runs and include the groups as a list."""
         from deepcave import run_handler
 
         return run_handler.get_runs(include_groups=True)
@@ -875,10 +876,22 @@ class Plugin(Layout, ABC):
 
         Basically, all blocks and elements of the plugin are stacked-up here.
 
+        Parameters
+        ----------
+        render_button : bool, optional
+            Whether to render the button or not. By default False.
+
         Returns
         -------
         List[Component]
             Layout as list of components.
+
+        Raises
+        ------
+        NotMergeableError
+            If runs are not compatible, an error is thrown.
+        FileNotFoundError
+            If the help file is not found, an error is thrown.
         """
         from deepcave import c, notification
 
@@ -1063,7 +1076,7 @@ class Plugin(Layout, ABC):
 
     @staticmethod
     @interactive
-    def get_run_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> Component:
+    def get_run_input_layout(register: Callable) -> Component:
         """
         Generate the run selection input.
 
@@ -1071,8 +1084,9 @@ class Plugin(Layout, ABC):
 
         Parameters
         ----------
-        register : Callable[[str, Union[str, List[str]]], str]
+        register : Callable
             The register method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
@@ -1240,14 +1254,15 @@ class Plugin(Layout, ABC):
         return inputs
 
     @staticmethod
-    def get_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> List[Component]:
+    def get_input_layout(register: Callable) -> List[Component]:
         """
         Layout for the input block.
 
         Parameters
         ----------
-        register : Callable[[str, Union[str, List[str]]], str]
+        register : Callable
             The register method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
@@ -1257,14 +1272,15 @@ class Plugin(Layout, ABC):
         return []
 
     @staticmethod
-    def get_filter_layout(register: Callable[[str, Union[str, List[str]]], str]) -> List[Component]:
+    def get_filter_layout(register: Callable) -> List[Component]:
         """
         Layout for the filter block.
 
         Parameters
         ----------
-        register : Callable[[str, Union[str, List[str]]], str]
+        register : Callable[
             The register method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
@@ -1274,16 +1290,15 @@ class Plugin(Layout, ABC):
         return []
 
     @staticmethod
-    def get_output_layout(
-        register: Callable[[str, Union[str, List[str]]], str]
-    ) -> Optional[Union[Component, List[Component]]]:
+    def get_output_layout(register: Callable) -> Optional[Union[Component, List[Component]]]:
         """
         Layout for the output block.
 
         Parameters
         ----------
-        register : Callable[[str, Union[str, List[str]]], str]
+        register : Callable
             The register method to register outputs.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
@@ -1293,16 +1308,15 @@ class Plugin(Layout, ABC):
         return None
 
     @staticmethod
-    def get_mpl_output_layout(
-        register: Callable[[str, Union[str, List[str]]], str]
-    ) -> Optional[Union[Component, List[Component]]]:
+    def get_mpl_output_layout(register: Callable) -> Optional[Union[Component, List[Component]]]:
         """
         Layout for the matplotlib output block.
 
         Parameters
         ----------
-        register : Callable[[str, Union[str, List[str]]], str]
+        register : Callable
             The register method to register outputs.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
@@ -1468,6 +1482,12 @@ class Plugin(Layout, ABC):
         -------
         Dict[str, Any]
             The inputs for the run.
+
+        Raises
+        ------
+        ValueError
+            If an unknown input is passed.
+            If an input is missing.
         """
         mapping = {}
         for id, attribute, *_ in self.inputs:

@@ -29,7 +29,7 @@ class SMAC3v1Run(Run):
 
     Attributes
     ----------
-    prefix, optional
+    prefix, optional : str
         The prefix of the run object.
         Default is "SMAC3v1".
 
@@ -66,12 +66,12 @@ class SMAC3v1Run(Run):
 
         Parameters
         ----------
-        path
+        path : Union[Path, str]
             The path to base the trial object on.
 
         Returns
         -------
-        The new trial object.
+        A SMAC3v1 run.
 
         Raises
         ------

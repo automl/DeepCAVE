@@ -93,7 +93,21 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
 
 
 def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
-    """Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors."""
+    """
+    Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors.
+
+    Parameters
+    ----------
+    id_ : int
+        ID for retrieving a specific color.
+    alpha : float, optional
+        Alpha value for the color, by default 1.
+
+    Returns
+    -------
+    Union[str, Tuple[float, float, float, float]]
+        The color from the color palette.
+    """
     color = px.colors.qualitative.Plotly[id_]
 
     r, g, b = hex_to_rgb(color)
@@ -108,9 +122,9 @@ def get_discrete_heatmap(
 
     Parameters
     ----------
-    x
+    x : List[Union[float, int]]
         List of values that present the x-axis of the heatmap.
-    y
+    y : List[int]
          List of values that present the y-axis of the heatmap.
     values : List[Any]
         Contains the data values for the heatmap.
@@ -119,7 +133,8 @@ def get_discrete_heatmap(
 
     Returns
     -------
-    A Plotly Heatmap object corresponding to the input.
+    go.Heatmap
+        A Plotly Heatmap object corresponding to the input.
     """
     flattened_values = list(itertools.chain(*values))
     flattened_labels = list(itertools.chain(*labels))
@@ -235,7 +250,7 @@ def get_hyperparameter_ticks(
     additional_values : Optional[List], optional
         Additional values, which are forced in addition. By default, None.
     ticks : int, optional
-        Number of ticks, by default 6
+        Number of ticks, by default 4
     include_nan : bool, optional
         Whether "nan" as tick should be included. By default True.
 
@@ -340,7 +355,7 @@ def get_hyperparameter_ticks_from_values(
         List of values.
     labels : List
         List of labels. Must be the same size as `values`.
-    forced : List[bool], optional
+    forced : Optional[List[bool]], optional
         List of booleans. If True, displaying the particular tick is enforced.
         Independent of `ticks`.
     ticks : int, optional
@@ -418,7 +433,7 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:  # noqa: F821
+def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
     """
     Generate hover text with metrics for a configuration.
 
@@ -475,13 +490,14 @@ def generate_config_code(register: Callable, variables: List[str]) -> List[Compo
     ----------
     register : Callable
         A Callable for registering Dash components.
+        The register_input function is located in the Plugin superclass.
     variables : List[str]
         A List of variable names.
 
     Returns
     -------
     List[Component]
-        A List of Dash components
+        A List of Dash components.
     """
     code = """
     from ConfigSpace.configuration_space import ConfigurationSpace, Configuration

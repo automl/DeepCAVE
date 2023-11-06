@@ -274,9 +274,14 @@ class Queue:
             ----------
             registry : BaseRegistry
                 The registry from where to remove the job.
-            job_id: str, optional
+            job_id: Optional[str], optional
                 The identificator of the job to be removed.
                 Default is None.
+
+            Raises
+            ------
+            Exception
+                If the job could not be removed.
             """
             if job_id is not None:
                 try:

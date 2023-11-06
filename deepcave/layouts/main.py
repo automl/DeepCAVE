@@ -10,7 +10,7 @@ Also registers and handles the callbacks.
     - MainLayout: This class defines and provides the main layout.
 """
 
-from typing import Dict, List
+from typing import Any, Dict, List, Union
 
 from urllib.parse import urlparse
 
@@ -37,7 +37,7 @@ class MainLayout(Layout):
 
     Properties
     ----------
-    plugins : dict
+    plugins : Dict[str, Plugin]
         A dictionary containing the different plugins.
     sidebar_layout : SidebarLayout
         A sidebar layout with the categorized plugins.
@@ -69,8 +69,20 @@ class MainLayout(Layout):
         input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)  # type: ignore
-        def display_page(pathname: str):  # type: ignore
-            """Display the page with the given path url, check for plugins."""
+        def display_page(pathname: str) -> Union[Component, Any]:
+            """
+            Display the page with the given path url, check for plugins.
+
+            Parameters
+            ----------
+            pathname : str
+                Pathname.
+
+            Returns
+            -------
+            Union[Component, Any]
+                Either a General Layout, Not Found Layout or an Alert.
+            """
             pathname = urlparse(pathname).path
             paths = pathname.split("/")[1:]
 

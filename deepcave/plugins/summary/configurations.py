@@ -40,17 +40,17 @@ class Configurations(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         Identifies the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representing the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Defines whether the run selection feature is activated.
-    use_cache
+    use_cache : bool
         Defines whether the cache is to be used.
     """
 
@@ -90,18 +90,20 @@ class Configurations(DynamicPlugin):
         return create_url(url, inputs)
 
     @staticmethod
-    def get_input_layout(register: Callable[[str, Union[str, List[str]]], str]) -> List[html.Div]:
+    def get_input_layout(register: Callable) -> List[html.Div]:
         """
         Get the html container for the layout of the input.
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id of the Sliders.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container for the layout of the input.
+        List[html.Div]
+            An html container for the layout of the input.
         """
         return [
             html.Div(
@@ -112,7 +114,7 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]]]]]:
+    def load_inputs(self) -> Dict[str, Any]:
         """Get the inputs, containing information about a configuration."""
         return {
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
@@ -127,14 +129,14 @@ class Configurations(DynamicPlugin):
 
         Parameters
         ----------
-        run : AbstractRun | List[AbstractRun] | None
+        run :
             The run(s) to be analyzed.
         inputs : Dict[str, Any]
             The inputs for the visualization.
 
         Returns
         -------
-        dict[str, dict[str, Any]]
+        Dict[str, Any]
             A dictionary of information about a configuration.
         """
         # Get selected values
@@ -154,20 +156,20 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:
         """
         Process the given data show information about the configuration space.
 
         Parameters
         ----------
-        run : AbstractRun
+        run :
             The run to be analyzed.
-        inputs : Dict[str, Any]
+        inputs :
             The inputs for the visualization.
 
         Returns
         -------
-        dict[str, Any]
+        Dict[str, Any]
             A dictionary containing performance information about the configuration space.
         """
         selected_config_id = int(inputs["config_id"])
@@ -251,18 +253,20 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_output_layout(
         register: Callable,
-    ) -> List[Union[html.Div, html.Hr, html.H3, dbc.Tabs, dbc.Accordion]]:
+    ) -> List[Any]:
         """
         Get an html container as well as a dash bootstrap component for the output layout.
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the Div and Graph objects.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container as well as a dash bootstrap component for the output layout.
+        List[Any]
+            An html container as well as a dash bootstrap component for the output layout.
         """
         return [
             html.Div(id=register("overview_table", "children"), className="mb-3"),
@@ -317,14 +321,15 @@ class Configurations(DynamicPlugin):
 
         Parameters
         ----------
-        outputs
+        outputs : Dict[str, Dict[str, Dict[Any, Any]]]
             Contains performance information.
-        run
+        run : AbstractRun
             The run to be analyzed.
 
         Returns
         -------
-        A plotly objective figure.
+        go.Figure
+            A plotly objective figure.
         """
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
@@ -385,14 +390,14 @@ class Configurations(DynamicPlugin):
 
         Parameters
         ----------
-        outputs
+        outputs : Dict[str, str]
             Contains the configuration space data frame.
-        run
+        run : AbstractRun
             The run to be analyzed.
 
         Returns
         -------
-        fig
+        go.Figure
             A plotly configuration space figure.
         """
         df = deserialize(outputs["cs_df"], dtype=pd.DataFrame)
@@ -440,7 +445,7 @@ class Configurations(DynamicPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> List[Any]:
         """
         Load the outputs create the table containing performances and configuration space.
 
@@ -455,7 +460,8 @@ class Configurations(DynamicPlugin):
 
         Returns
         -------
-        A list of the created tables containing the information.
+        List[Any]
+            A list of the created tables containing the information.
         """
         config_id = inputs["config_id"]
         config = run.get_config(config_id)

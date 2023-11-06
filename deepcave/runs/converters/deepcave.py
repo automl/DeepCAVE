@@ -23,10 +23,8 @@ class DeepCAVERun(Run):
 
     Attributes
     ----------
-    prefix
+    prefix : str
         The prefix of the run.
-    initial_order
-        The initial order.
 
     Properties
     ----------

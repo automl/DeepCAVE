@@ -57,8 +57,20 @@ class SidebarLayout(Layout):
         input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)  # type: ignore
-        def update_navigation_items(pathname):  # type: ignore
-            """Update the navigation items."""
+        def update_navigation_items(pathname: str) -> List[Component]:
+            """
+            Update the navigation items.
+
+            Parameters
+            ----------
+            pathname : str
+                The pathname.
+
+            Returns
+            -------
+            List[Component]
+                The navigation items.
+            """
             layouts = []
             for category, points in self.nav_points.items():
                 layouts += [

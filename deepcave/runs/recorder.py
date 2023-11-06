@@ -35,13 +35,21 @@ class Recorder:
         The last trial id containing the configuration and the budget.
     start_time : float
         The current time in seconds since the Epoch
-    start_times : dict
+    start_times : Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], float
+        ]
         A dictionary containing the start times with their id as key.
-    models : dict
+    models : Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Union[str, Any]]
+        ]
         The models used in the trial, with their id as key.
-    origins : dict
+    origins : Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[str]
+        ]
         The origins of the trial, with their id as key.
-    additionals : dict
+    additionals : Dict[
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Dict[Any, Any]
+        ]
         Additional information of the trial, with the id as key.
     run : DeepCAVERun
         The deepcave run trials container.
@@ -63,11 +71,20 @@ class Recorder:
 
         Parameters
         ----------
-            save_path (str):
-            configspace (ConfigSpace):
-            objectives (list of Objective):
-            prefix: Name of the trial. If not given, trial_x will be used.
-            overwrite: Uses the prefix as name and overwrites the file.
+        save_path : str, otpional
+            The path in which to store the run.
+            Default is "logs".
+        configspace : ConfigSpace.ConfigurationSpace
+            The configuration space.
+        objectives Optional[List[Objective]], optional
+            The objectives of the run.
+            Default is None.
+        prefix ; str, optional
+            Name of the trial. If not given, trial_x will be used.
+            Default is "run".
+        overwrite : bool, optional
+            Uses the prefix as name and overwrites the file.
+            Default is False.
         """
         if objectives is None:
             objectives = []
@@ -163,10 +180,10 @@ class Recorder:
         budget : Optional[float], optional
             The budget for the trial.
             Default is None.
-        model, optional
+        model : Optional[Union[str, Any]], optional
             The model used in the trial.
             Default is None.
-        origin, optional
+        origin : Optional[str], optional
             The origin of the trial.
             Default is None.
         additional : Optional[dict], optional

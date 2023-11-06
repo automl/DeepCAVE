@@ -187,6 +187,11 @@ class RunHandler:
         """
         Get the selected groups.
 
+        Returns
+        -------
+        Dict[str, List[str]]
+            Dictionary of the selected groups.
+
         Raises
         ------
         AssertionError
@@ -450,7 +455,7 @@ class RunHandler:
         Returns
         -------
         AbstractRun
-            Run
+            Run.
 
         Raises
         ------

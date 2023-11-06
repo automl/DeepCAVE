@@ -121,7 +121,7 @@ class Run(AbstractRun, ABC):
 
     @property
     def path(self) -> Optional[Path]:
-        """Return the path of the Run."""
+        """Return the path of the Run if it exists."""
         return self._path
 
     @path.setter
@@ -203,7 +203,7 @@ class Run(AbstractRun, ABC):
             Status of the trial. By default, Status.SUCCESS
         origin : str, optional
             Origin of the trial. By default, None
-        model : Union[str, &quot;torch.nn.Module&quot;], optional
+        model : Union[str, "torch.nn.Module"], optional
             Model of the trial. By default, None
         additional : Optional[Dict], optional
             Additional information of the trial. By default, None.
@@ -301,9 +301,8 @@ class Run(AbstractRun, ABC):
 
         Parameters
         ----------
-        path : Optional[Union[str, Path]], optional
+        path : Optional[Union[str, Path]]
             The path in which to save the run.
-            Default is None.
 
         Raises
         ------

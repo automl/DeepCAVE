@@ -9,7 +9,7 @@ The module includes a dynamic plugin for the overview.
     - Overview: Visualize an overall overview of a run.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -41,17 +41,17 @@ class Overview(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         Identifies the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representing the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
-    use_cache
+    use_cache : bool
         Defines whether the cache is to be used.
-    activate_run_selection
+    activate_run_selection : bool
         Defines whether the run selection feature is active.
     """
 
@@ -63,18 +63,20 @@ class Overview(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_output_layout(register: Callable[[str, Union[str, List[str]]], str]) -> list:
+    def get_output_layout(register: Callable) -> List[Any]:
         """
         Get an html container with the output layout.
 
         Parameters
         ----------
-        register : str, str | List[str]) -> str
+        register : Callable
             Used for the id of the html Div object, as well as the dash Graph.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container with the output layout
+        List[Any]
+            An html container with the output layout
         """
         return [
             html.Div(
@@ -129,7 +131,8 @@ class Overview(DynamicPlugin):
 
         Returns
         -------
-        A list of dash figures and tables containing the overviews information.
+        List[Any]
+            A list of dash figures and tables containing the overviews information.
         """
         # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()

@@ -39,15 +39,15 @@ class Importances(StaticPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         The identificator of the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representation of the plugin.
-    help
+    help : str
         The path to the documentation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Whether the run selection feature is active.
     """
 
@@ -64,12 +64,14 @@ class Importances(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id of the objective.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container for the layout of the input.
+        List[Any]
+            An html container for the layout of the input.
         """
         return [
             html.Div(
@@ -124,12 +126,14 @@ class Importances(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the Checklist.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered html container.
+        List[html.Div]
+            A filtered html container.
         """
         return [
             html.Div(
@@ -167,7 +171,8 @@ class Importances(StaticPlugin):
 
         Returns
         -------
-        The attributes of the inputs.
+        Dict[str, Dict[str, Any]]
+            The attributes of the inputs.
         """
         method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
         method_values = ["local", "global"]
@@ -192,12 +197,13 @@ class Importances(StaticPlugin):
         ----------
         run
             The run to get the objective from.
-        inputs
+        inputs : Dict[str, Any]
             Contains information about the objective, budgets and number of hps.
 
         Returns
         -------
-        The objective, budgets, hyperparameters and their attributes.
+        Dict[str, Any]
+            The objective, budgets, hyperparameters and their attributes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -312,12 +318,14 @@ class Importances(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             A function to get the id for the graph.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        The graph with the layout of the output.
+        dcc.Graph
+            The graph with the layout of the output.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
@@ -419,7 +427,20 @@ class Importances(StaticPlugin):
 
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> html.Img:
-        """Get an html container of the output layout."""
+        """
+        Get an html container of the output layout.
+
+        Parameters
+        ----------
+        register : Callable
+            A function to get the id.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        html.Img
+            An html container of the matplotlib output layout.
+        """
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
@@ -427,7 +448,7 @@ class Importances(StaticPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def load_mpl_outputs(run, inputs: Dict[str, Any], outputs) -> str:
+    def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):
         """
         Load the importances and the corresponding layout of the mpl figure.
 
@@ -435,7 +456,7 @@ class Importances(StaticPlugin):
         ----------
         run
             The run to get the budget from.
-        inputs
+        inputs : Dict[str, Any]
             Containing the hyperparameter names, the budget ids and the number of hps.
         outputs
             Containing the budget id and importances.

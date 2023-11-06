@@ -39,15 +39,15 @@ class ParallelCoordinates(StaticPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         The identificator of the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representing the plugin
-    activate_run_selection
+    activate_run_selection : bool
         Define whether the run selection feature is active.
-    help
+    help : str
         The path to the documentation of the plugin.
     """
 
@@ -64,12 +64,14 @@ class ParallelCoordinates(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id for the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An html container and a dash bootstrap component of the layout of the input.
+        List[Union[html.Div, dbc.Row]]
+            An html container and a dash bootstrap component of the layout of the input.
         """
         return [
             dbc.Row(
@@ -128,12 +130,14 @@ class ParallelCoordinates(StaticPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the Input, select object and html Checklist.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered dash bootstrap component and html container.
+        List[Union[dbc.Row, html.Div]]
+            A filtered dash bootstrap component and html container.
         """
         return [
             dbc.Row(
@@ -293,7 +297,20 @@ class ParallelCoordinates(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
-        """Get the dash Graph output layout."""
+        """
+        Get the dash Graph output layout.
+
+        Parameters
+        ----------
+        register : Callable
+            Used for the id of the output object.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            The dash Graph output layout.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod

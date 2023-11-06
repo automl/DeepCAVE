@@ -8,7 +8,7 @@ This module provides utilities for visualizing and creating a configuration cube
     - ConfigurationCube: This class provides a plugin for visualizing the configuration cube.
 """
 
-from typing import Any, Callable, Dict, List, Tuple, Union
+from typing import Any, Callable, Dict, List, Tuple
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -43,15 +43,15 @@ class ConfigurationCube(DynamicPlugin):
 
     Attributes
     ----------
-    id
+    id : str
         The identificator of the plugin.
-    name
+    name : str
         The name of the plugin.
-    icon
+    icon : str
         The icon representation of the plugin.
-    activate_run_selection
+    activate_run_selection : bool
         Whether the run selection feature is active.
-    help
+    help : str
         The path to the documentation of the plugin.
     """
 
@@ -68,12 +68,14 @@ class ConfigurationCube(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used to get the id for the select object.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        An dash bootstrap component of the layout of the input.
+        List[dbc.Row]
+            An dash bootstrap component of the layout of the input.
         """
         return [
             dbc.Row(
@@ -117,12 +119,14 @@ class ConfigurationCube(DynamicPlugin):
 
         Parameters
         ----------
-        register : (str, str | List[str]) -> str
+        register : Callable
             Used for the id of the Slider.
+            The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        A filtered html container.
+        List[html.Div]
+            A filtered html container.
         """
         return [
             html.Div(
@@ -151,7 +155,7 @@ class ConfigurationCube(DynamicPlugin):
 
     def load_inputs(
         self,
-    ) -> Dict[str, Dict[str, Union[int, Dict[int, Dict[str, str]], List[Dict[str, Any]]]]]:
+    ) -> Dict[str, Any]:
         """Load the inputs containing configuration and hyperparameter attributes."""
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
@@ -250,7 +254,8 @@ class ConfigurationCube(DynamicPlugin):
 
         Returns
         -------
-        The serialized dataframe.
+        Dict[str, str]
+            The serialized dataframe.
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
@@ -261,9 +266,21 @@ class ConfigurationCube(DynamicPlugin):
         return {"df": serialize(df)}
 
     @staticmethod
-    # Why a Tuple?
     def get_output_layout(register: Callable) -> Tuple[dcc.Graph,]:
-        """Get the output layout as dash Graph object."""
+        """
+        Get the output layout as dash Graph object.
+
+        Parameters
+        ----------
+        register : Callable
+            Used to get the id for the graph object.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        Tuple[dcc.Graph,]
+            The output layout as dash Graph object.
+        """
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod

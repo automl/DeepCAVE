@@ -28,7 +28,7 @@ class BOHBRun(Run):
 
     Attributes
     ----------
-    prefix
+    prefix : str
         Set the prefix to "BOHB".
 
     Properties
@@ -64,7 +64,7 @@ class BOHBRun(Run):
 
         Parameters
         ----------
-        path
+        path : Union[Path, str]
             The pathname to create the Run from.
 
         Returns
