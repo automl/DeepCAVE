@@ -163,7 +163,7 @@ class Recorder:
 
     def start(
         self,
-        config: Union[dict, Configuration],
+        config: Configuration,
         budget: Optional[float] = None,
         model: Optional[Union[str, Any]] = None,
         origin: Optional[str] = None,
@@ -175,7 +175,7 @@ class Recorder:
 
         Parameters
         ----------
-        config : Union[dict, Configuration]
+        config : Configuration
             Holds the configuration settings for the trial.
         budget : Optional[float], optional
             The budget for the trial.

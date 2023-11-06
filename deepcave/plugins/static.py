@@ -140,7 +140,6 @@ class StaticPlugin(Plugin, ABC):
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(list(inputs_list), input=True)
-            # Wait for meeting
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             cleaned_inputs = self._clean_inputs(inputs)
             last_inputs = c.get("last_inputs", self.id)
@@ -206,7 +205,7 @@ class StaticPlugin(Plugin, ABC):
                             _process,
                             args=[self.process, run, cleaned_inputs],
                             job_id=job_id,
-                            meta=job_meta,  # wait for meeting
+                            meta=job_meta,
                         )
 
                     # Reset button
@@ -224,7 +223,6 @@ class StaticPlugin(Plugin, ABC):
                             job_plugin_id = job_meta["plugin_id"]
 
                             self.logger.debug(f"Job {job_id} for run_id {job_meta['run_id']}.")
-                            # Waiting for meeting
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
@@ -248,7 +246,6 @@ class StaticPlugin(Plugin, ABC):
                     queue_running = False
                     queue_pending = False
                     for run in runs:
-                        # Same problem, wait till meeting
                         job_id = self._get_job_id(run.id, inputs_key)
                         if queue.is_running(job_id):
                             queue_running = True
@@ -326,7 +323,6 @@ class StaticPlugin(Plugin, ABC):
             ):
                 # However: We have to unset the previous state so if we really change the inputs
                 # the visualizes will be updated.
-                # Same problem, wait till meeting
                 self._previous_state = PluginState.UNSET
                 raise PreventUpdate
 

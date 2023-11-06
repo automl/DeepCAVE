@@ -508,9 +508,7 @@ class Plugin(Layout, ABC):
                 A tuple containing the is open information and the code.
             """
             if n:
-                # Wait for meeting
                 return not is_open
-            # Wait for meeting
             return is_open
 
         # Register callback to click on configurations

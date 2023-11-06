@@ -97,7 +97,6 @@ class AbstractRun(ABC):
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Union[Configuration, Dict[Any, Any]]] = {}
         self.origins: Dict[int, Optional[str]] = {}
-        # Wait until meeting
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
 
         self.history: List[Trial] = []
@@ -884,7 +883,6 @@ class AbstractRun(ABC):
 
         return cost
 
-    # Wait until meeting
     def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
         """
         Get a torch model associated with a configuration ID.
@@ -1185,7 +1183,6 @@ class AbstractRun(ABC):
             columns += [COMBINED_COST_NAME]
 
         if include_config_ids:
-            # wait till meeting
             data: np.ndarray = np.concatenate((config_ids, x_set_array, y_set_array), axis=1)
         else:
             data = np.concatenate((x_set_array, y_set_array), axis=1)
