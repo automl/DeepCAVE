@@ -1,3 +1,11 @@
+# Version 1.1.3
+
+## Bug-Fixes
+- Fix seaborn style name (#82).
+- Remove potential sources of nondeterminism in evaluators by not setting seeds randomly (#75).
+- Exchange SMAC log examples to fix issue with PDP (#54).
+- Fix error when requesting more than 10 colors in a plot (36 colors available now).
+
 # Version 1.1.2
 
 ## Bug-Fixes

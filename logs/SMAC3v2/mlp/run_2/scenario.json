@@ -1,44 +1,38 @@
 {
-    "name": "a51c7eb78bfca7abe982cbd5dcd9b3ff",
-    "deterministic": false,
+    "name": "fce6c8cd40ecc7f175a91742c869d89a",
+    "deterministic": true,
     "objectives": "cost",
     "crash_cost": Infinity,
     "termination_cost_threshold": Infinity,
-    "walltime_limit": 60,
+    "walltime_limit": Infinity,
     "cputime_limit": Infinity,
     "trial_walltime_limit": null,
     "trial_memory_limit": null,
-    "n_trials": 500,
+    "n_trials": 60,
     "instances": null,
     "instance_features": null,
-    "min_budget": 1,
-    "max_budget": 25,
+    "min_budget": null,
+    "max_budget": null,
     "seed": 0,
-    "n_workers": 8,
+    "n_workers": 1,
     "_meta": {
         "facade": {
-            "name": "MultiFidelityFacade"
+            "name": "BlackBoxFacade"
         },
         "runner": {
-            "name": "DaskParallelRunner"
+            "name": "TargetFunctionRunner",
+            "code": "b't\\x00j\\x01|\\x00|\\x01d\\x01\\x8d\\x02}\\x02|\\x02d\\x02\\x19\\x00S\\x00'"
         },
         "model": {
-            "name": "RandomForest",
+            "name": "GaussianProcess",
             "types": [
-                3,
                 0,
                 0,
-                3,
                 0,
-                4,
                 0
             ],
             "bounds": [
                 [
-                    3,
-                    NaN
-                ],
-                [
                     0,
                     1.0
                 ],
@@ -47,48 +41,108 @@
                     1.0
                 ],
                 [
-                    3,
-                    NaN
-                ],
-                [
-                    -1.0,
+                    0,
                     1.0
                 ],
                 [
-                    4,
-                    NaN
-                ],
-                [
-                    -1.0,
+                    0,
                     1.0
                 ]
             ],
             "pca_components": 7,
-            "n_trees": 10,
-            "n_points_per_tree": -1,
-            "ratio_features": 1.0,
-            "min_samples_split": 2,
-            "min_samples_leaf": 1,
-            "max_depth": 1048576,
-            "eps_purity": 1e-08,
-            "max_nodes": 1048576,
-            "bootstrapping": true
+            "kernel": {
+                "name": "SumKernel",
+                "k1": {
+                    "name": "ProductKernel",
+                    "k1": {
+                        "name": "ConstantKernel",
+                        "constant_value": 2.0,
+                        "constant_value_bounds": [
+                            4.5399929762484854e-05,
+                            7.38905609893065
+                        ],
+                        "operate_on": null,
+                        "has_conditions": false,
+                        "prior": {
+                            "name": "LogNormalPrior",
+                            "seed": 0,
+                            "sigma": 1.0,
+                            "mean": 0.0
+                        }
+                    },
+                    "k2": {
+                        "name": "MaternKernel",
+                        "length_scale": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "length_scale_bounds": [
+                            [
+                                0.0011660758342839901,
+                                1.0896579055674775
+                            ],
+                            [
+                                0.0011660758342839901,
+                                1.0896579055674775
+                            ],
+                            [
+                                0.0011660758342839901,
+                                1.0896579055674775
+                            ],
+                            [
+                                0.0011660758342839901,
+                                1.0896579055674775
+                            ]
+                        ],
+                        "nu": 2.5,
+                        "operate_on": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
+                        "has_conditions": false,
+                        "prior": null
+                    },
+                    "has_conditions": false
+                },
+                "k2": {
+                    "name": "WhiteKernel",
+                    "noise_level": 1e-08,
+                    "noise_level_bounds": [
+                        1.3887943864964021e-11,
+                        7.38905609893065
+                    ],
+                    "operate_on": null,
+                    "has_conditions": false,
+                    "prior": {
+                        "name": "HorseshoePrior",
+                        "seed": 0,
+                        "scale": 0.1
+                    }
+                },
+                "has_conditions": false
+            },
+            "n_restarts": 10,
+            "normalize_y": true
         },
         "acquisition_maximizer": {
             "name": "LocalAndSortedRandomSearch",
             "acquisition_function": {
                 "name": "EI",
                 "xi": 0.0,
-                "log": true
+                "log": false
             },
-            "challengers": 10000,
+            "challengers": 1000,
             "seed": 0,
             "random_search": {
                 "name": "RandomSearch",
                 "acquisition_function": {
                     "name": "EI",
                     "xi": 0.0,
-                    "log": true
+                    "log": false
                 },
                 "challengers": 5000,
                 "seed": 0
@@ -98,7 +152,7 @@
                 "acquisition_function": {
                     "name": "EI",
                     "xi": 0.0,
-                    "log": true
+                    "log": false
                 },
                 "challengers": 5000,
                 "seed": 0,
@@ -111,30 +165,27 @@
         "acquisition_function": {
             "name": "EI",
             "xi": 0.0,
-            "log": true
+            "log": false
         },
         "intensifier": {
-            "name": "SuccessiveHalving",
-            "max_incumbents": 10,
-            "seed": 0,
-            "eta": 3,
-            "instance_seed_order": "shuffle_once",
-            "incumbent_selection": "highest_budget"
+            "name": "Intensifier",
+            "max_incumbents": 20,
+            "seed": 0
         },
         "initial_design": {
-            "name": "RandomInitialDesign",
-            "n_configs": 5,
-            "n_configs_per_hyperparameter": 10,
+            "name": "SobolInitialDesign",
+            "n_configs": 15,
+            "n_configs_per_hyperparameter": 8,
             "additional_configs": [],
             "seed": 0
         },
         "random_design": {
             "name": "ProbabilityRandomDesign",
             "seed": 0,
-            "probability": 0.2
+            "probability": 0.08447232371720552
         },
         "runhistory_encoder": {
-            "name": "RunHistoryLogScaledEncoder",
+            "name": "RunHistoryEncoder",
             "considered_states": [
                 1,
                 2,
@@ -147,11 +198,11 @@
         "multi_objective_algorithm": null,
         "config_selector": {
             "name": "ConfigSelector",
-            "retrain_after": 8,
+            "retrain_after": 1,
             "retries": 16,
             "min_trials": 1
         },
-        "version": "2.0.0b2"
+        "version": "2.0.0"
     },
-    "output_directory": "smac3_output/a51c7eb78bfca7abe982cbd5dcd9b3ff/0"
+    "output_directory": "results/runs_sampling_hpobench/smac/NN_alpha_batch_size_depth_learning_rate_init_blood-transfusion-service-center/smac/NN/fce6c8cd40ecc7f175a91742c869d89a/0"
 }

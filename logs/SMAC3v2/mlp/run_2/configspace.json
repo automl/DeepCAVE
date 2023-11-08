@@ -1,101 +1,39 @@
 {
   "hyperparameters": [
     {
-      "name": "activation",
-      "type": "categorical",
-      "choices": [
-        "logistic",
-        "tanh",
-        "relu"
-      ],
-      "default": "tanh",
-      "weights": null
-    },
-    {
-      "name": "n_layer",
-      "type": "uniform_int",
-      "log": false,
-      "lower": 1,
-      "upper": 5,
-      "default": 1,
-      "q": null
-    },
-    {
-      "name": "n_neurons",
-      "type": "uniform_int",
+      "name": "alpha",
+      "type": "uniform_float",
       "log": true,
-      "lower": 8,
-      "upper": 256,
-      "default": 10,
-      "q": null
-    },
-    {
-      "name": "solver",
-      "type": "categorical",
-      "choices": [
-        "lbfgs",
-        "sgd",
-        "adam"
-      ],
-      "default": "adam",
-      "weights": null
+      "lower": 1e-08,
+      "upper": 1.0,
+      "default": 0.001
     },
     {
       "name": "batch_size",
       "type": "uniform_int",
-      "log": false,
-      "lower": 30,
-      "upper": 300,
-      "default": 200,
-      "q": null
+      "log": true,
+      "lower": 4,
+      "upper": 256,
+      "default": 32
     },
     {
-      "name": "learning_rate",
-      "type": "categorical",
-      "choices": [
-        "constant",
-        "invscaling",
-        "adaptive"
-      ],
-      "default": "constant",
-      "weights": null
+      "name": "depth",
+      "type": "uniform_int",
+      "log": false,
+      "lower": 1,
+      "upper": 3,
+      "default": 3
     },
     {
       "name": "learning_rate_init",
       "type": "uniform_float",
       "log": true,
-      "lower": 0.0001,
+      "lower": 1e-05,
       "upper": 1.0,
-      "default": 0.001,
-      "q": null
+      "default": 0.001
     }
   ],
-  "conditions": [
-    {
-      "child": "batch_size",
-      "parent": "solver",
-      "type": "IN",
-      "values": [
-        "sgd",
-        "adam"
-      ]
-    },
-    {
-      "child": "learning_rate",
-      "parent": "solver",
-      "type": "EQ",
-      "value": "sgd"
-    },
-    {
-      "child": "learning_rate_init",
-      "parent": "solver",
-      "type": "IN",
-      "values": [
-        "sgd",
-        "adam"
-      ]
-    }
-  ],
+  "conditions": [],
   "forbiddens": [],
   "python_module_version": "0.6.1",
   "json_format_version": 0.4
