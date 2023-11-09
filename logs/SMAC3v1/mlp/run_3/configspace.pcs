@@ -1,0 +1,4 @@
+alpha real [1e-08, 1.0] [0.001]log
+batch_size integer [4, 256] [32]log
+depth integer [1, 3] [3]
+learning_rate_init real [1e-05, 1.0] [0.001]log
