@@ -13,22 +13,22 @@ extras_require = {
     "dev": [
         # Tests
         "pytest>=4.6",
-        "pytest-cov",
-        "pytest-xdist",
-        "pytest-timeout",
-        "mypy",
-        "isort",
-        "black",
-        "pydocstyle",
-        "pre-commit",
-        "flake8",
+        "pytest-cov>=4.1.0",
+        "pytest-xdist>=3.3.1",
+        "pytest-timeout>=2.2.0",
+        "mypy>=1.6.1",
+        "isort>=5.12.0",
+        "black>=23.11.0",
+        "pydocstyle>=6.3.0",
+        "pre-commit>=3.5.0",
+        "flake8>=6.1.0",
         # Docs
         "automl-sphinx-theme>=0.1.10",
     ],
     "examples": [
-        "torch",
-        "torchvision",
-        "pytorch-lightning",
+        "torch>=2.1.0",
+        "torchvision>=0.16.0",
+        "pytorch-lightning>=2.1.1",
     ],
 }
 
