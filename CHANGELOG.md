@@ -1,3 +1,8 @@
+# Version 1.1.4
+
+## Enhancements
+- Fix lower bounds of dependency versions.
+
 # Version 1.1.3
 
 ## Bug-Fixes
