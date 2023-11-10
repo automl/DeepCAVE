@@ -1,3 +1,8 @@
+# Version 1.1.4
+
+## Enhancements
+- Do not disable existing loggers.
+
 # Version 1.1.3
 
 ## Bug-Fixes
