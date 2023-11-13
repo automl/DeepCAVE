@@ -9,5 +9,5 @@ configurations
 footprint
     This module provides utilities to visualize a configuration footprint.
 overview
-    This module provides utilities for visualizing an overviwe of an optimization run.
+    This module provides utilities for visualizing an overview of an optimization run.
 """

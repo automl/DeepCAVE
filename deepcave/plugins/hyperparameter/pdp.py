@@ -1,20 +1,22 @@
+#  noqa: D400
 """
-# PartialDependencies.
+# PartialDependencies
 
-This module provides utilities for generating Partial Dependency Plots.
+This module provides utilities for generating Partial Dependency Plots (PDP).
 
-These plots are used for visualization of impacts of hyperparameters on the model.
+These plots are used for visualization of impacts of hyperparameters (HPs) on the model.
 Provided utilities include getting input and output layout (filtered or non-filtered),
 processing the data and loading the outputs.
 
 ## Classes
-    - PartialDependencies: Generate a PDP for visualizing hyperparameter impacts.
+    - PartialDependencies: Generate a Partial Dependency Plot (PDP)
+    for visualizing hyperparameter impacts.
 
 ## Constants
-    GRID_POINTS_PER_AXIS = 20
-    SAMPLES_PER_HP = 10
-    MAX_SAMPLES = 10000
-    MAX_SHOWN_SAMPLES = 100
+    GRID_POINTS_PER_AXIS : int
+    SAMPLES_PER_HP : int
+    MAX_SAMPLES : int
+    MAX_SHOWN_SAMPLES : int
 """
 
 from typing import Any, Callable, Dict, List
@@ -40,7 +42,7 @@ MAX_SHOWN_SAMPLES = 100
 
 class PartialDependencies(StaticPlugin):
     """
-    Generate Partial Dependency Plots for visualizing hyperparameter impacts.
+    Generate Partial Dependency Plots (PDP) for visualizing hyperparameter (HP) impacts.
 
     Provided utilities include getting input and output layout (filtered or non-filtered),
     processing the data and loading the outputs.
@@ -68,7 +70,7 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get the dash bootstrap components for the input layout.
+        Define and get the dash bootstrap components (DBC) for the input layout.
 
         Parameters
         ----------
@@ -79,7 +81,7 @@ class PartialDependencies(StaticPlugin):
         Returns
         -------
         List[dbc.Row]
-            The dash bootstrap components for the input layout.
+            The dash bootstrap components (DBC) for the input layout.
         """
         return [
             dbc.Row(
@@ -144,7 +146,7 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[Any]:
         """
-        Get the dash bootstrap component containing an html container for the filtered layout.
+        Get the dash bootstrap component (DBC) containing an html container for the filtered layout.
 
         Parameters
         ----------
@@ -155,7 +157,7 @@ class PartialDependencies(StaticPlugin):
         Returns
         -------
         List[Any]
-            The dbc containing an html container for the filtered layout.
+            The dash bootstrap component (DPC) containing an html container for the filtered layout.
         """
         return [
             dbc.Row(
@@ -210,18 +212,18 @@ class PartialDependencies(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, previous_inputs, inputs):
         """
-        Load the objectives, budgets, hyperparameter names and their attributes.
+        Load the objectives, budgets, hyperparameter (HP) names and their attributes.
 
         Parameters
         ----------
         run
-            The run to get the objective, budget and hyperparameters from.
+            The run to get the objective, budget and hyperparameters (HPs) from.
         inputs
             The inputs to get the selected values from.
 
         Returns
         -------
-        The objective, budget, hyperparameter and their corresponding options and values.
+        The objective, budget, hyperparameter (HP) and their corresponding options and values.
         """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -261,14 +263,14 @@ class PartialDependencies(StaticPlugin):
         """
         Fit a surrogate model with the given data.
 
-        With that we call the Partial Dependency Plot and calculate the results.
+        With that the Partial Dependency Plot (PDP) is called and results are calculated.
 
         Parameters
         ----------
         run
             The run to calculate the Partial Dependencies of.
         inputs
-            A dictionary to get the hyperparameters from.
+            A dictionary to get the hyperparameters (HPs) from.
 
         Returns
         -------
@@ -310,7 +312,7 @@ class PartialDependencies(StaticPlugin):
             selected_hyperparameters += [hp2]
 
         num_samples = SAMPLES_PER_HP * len(X)
-        # We limit the samples to max 10k
+        # The samples are limited to max 10k
         if num_samples > MAX_SAMPLES:
             num_samples = MAX_SAMPLES
 
@@ -326,7 +328,7 @@ class PartialDependencies(StaticPlugin):
         x = pdp.x_pdp.tolist()
         y = pdp.y_pdp.tolist()
 
-        # We have to cut the ICE curves because it's too much data
+        # The ICE curves have to be cut because it's too much data
         x_ice = pdp._ice.x_ice.tolist()
         y_ice = pdp._ice.y_ice.tolist()
 
@@ -364,7 +366,7 @@ class PartialDependencies(StaticPlugin):
     # Types dont match superclass
     def load_outputs(run, inputs, outputs):
         """
-        Load the output figure and save the Partial Dependency Plot as image.
+        Load the output figure and save the Partial Dependency Plot (PDP) as image.
 
         Parameters
         ----------
@@ -377,7 +379,7 @@ class PartialDependencies(StaticPlugin):
 
         Returns
         -------
-        The figure of the Partial Dependency Plot.
+        The figure of the Partial Dependency Plot (PDP).
         """
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]

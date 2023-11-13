@@ -70,7 +70,7 @@ class GeneralLayout(Layout):
 
         # Register updates from inputs
         @app.callback(outputs, inputs)  # type: ignore
-        def callback(  # type: ignore
+        def callback(
             _,
             working_dir: str,
             dynamic_n_clicks: List[Optional[int]],
@@ -242,9 +242,7 @@ class GeneralLayout(Layout):
         ]
 
         @app.callback(outputs, inputs, states)  # type: ignore
-        def callback(  # type: ignore
-            add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths
-        ):
+        def callback(add_n_clicks, remove_n_clicks, available_run_paths, selected_run_paths):
             """Add and remove runs."""
             # Add run path
             for n_click, run_path in zip(add_n_clicks, available_run_paths):
@@ -282,7 +280,7 @@ class GeneralLayout(Layout):
 
         # Let's take care of the groups here
         @app.callback(outputs, inputs)  # type: ignore
-        def callback(n_clicks: int, _trigger1, _trigger2, children):  # type: ignore
+        def callback(n_clicks: int, _trigger1, _trigger2, children):
             """Display groups."""
 
             def get_layout(
@@ -362,7 +360,7 @@ class GeneralLayout(Layout):
         ]
 
         @app.callback(outputs, inputs)  # type: ignore
-        def callback(group_names: List[str], all_run_paths, i):  # type: ignore
+        def callback(group_names: List[str], all_run_paths, i):
             """Update the groups."""
             # Abort on page load
             self._refresh_groups: bool
@@ -407,7 +405,7 @@ class GeneralLayout(Layout):
         input = Input("general-clear-cache-button", "n_clicks")
 
         @app.callback(output, input)  # type: ignore
-        def callback(n_clicks):  # type: ignore
+        def callback(n_clicks):
             """Clear the cache, stop all running jobs, create new run caches."""
             if n_clicks is not None:
                 rc.clear()
@@ -415,10 +413,10 @@ class GeneralLayout(Layout):
                 # Also remove last inputs
                 c.set("last_inputs", value={})
 
-                # Also: We have to stop all running jobs
+                # Also: All the running jobs have to be stopped
                 queue.delete_jobs()
 
-                # We have to call `update_runs` now to create the run caches again
+                # `update_runs` has to be called now to create the run caches again
                 run_handler.update_runs()
                 notification.update("Plugin caches successfully cleared.", "success")
 

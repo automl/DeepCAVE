@@ -2,7 +2,7 @@
 """
 # fANOVA
 
-This module provides a tool for assessing the importance of an algorithms hyperparameters.
+This module provides a tool for assessing the importance of an algorithms hyperparameters (HPs).
 
 Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.
 
@@ -35,9 +35,9 @@ class fANOVA:
     cs : ConfigurationSpace
         The configuration space of the run.
     hps : List[Hyperparameters]
-        The hyperparameters of the configuration space.
+        The hyperparameters (HPs) of the configuration space.
     hp_names : List[str]
-        The corresponding names of the hyperparameters.
+        The corresponding names of the hyperparameters (HPs).
     n_trees : int
         The number of trees.
     """
@@ -59,7 +59,7 @@ class fANOVA:
         seed: Optional[int] = None,
     ) -> None:
         """
-        Get the data wrt budget and trains the forest on the encoded data.
+        Get the data wrt budget and train the forest on the encoded data.
 
         Note
         ----
@@ -100,7 +100,7 @@ class fANOVA:
         self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
     ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
-        Return the importance scores from the passed hyperparameter names.
+        Return the importance scores from the passed hyperparameter (HP) names.
 
         Warning
         -------
@@ -109,17 +109,17 @@ class fANOVA:
         Parameters
         ----------
         hp_names : Optional[List[str]]
-            Selected hyperparameter names to get the importance scores from. If None, all
-            hyperparameters of the configuration space are used.
+            Selected hyperparameter (HP) names to get the importance scores from. If None, all
+            hyperparameters (HPs) of the configuration space are used.
         depth : int, optional
             How often dimensions should be combined. By default 1.
         sort : bool, optional
-            Whether the hyperparameters should be sorted by importance. By default True.
+            Whether the hyperparameters (HPs) should be sorted by importance. By default True.
 
         Returns
         -------
         Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]
-            Dictionary with hyperparameter names and the corresponding importance scores.
+            Dictionary with hyperparameter (HP) names and the corresponding importance scores.
             The values are tuples of the form (mean individual, var individual, mean total,
             var total). Note that individual and total are the same if depth is 1.
 
@@ -180,7 +180,7 @@ class fANOVA:
                 k: v for k, v in sorted(importances.items(), key=lambda item: item[1][2])
             }
 
-        # We want to replace the ids with hyperparameter names again
+        # The ids get replaced with hyperparameter names again
         all_hp_names = self.cs.get_hyperparameter_names()
         importances_: Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]] = {}
         for hp_ids_importances, values in importances.items():

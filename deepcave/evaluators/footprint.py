@@ -3,7 +3,7 @@
 # Footprint
 
 This module provides utilities for creating a footprint of a model.
-It uses multidimensional scaling.
+It uses multidimensional scaling (MDS).
 It also provides utilities to get the surface and the points of the plot.
 
 
@@ -36,7 +36,7 @@ class Footprint:
     """
     Can train and create a footprint of a model.
 
-    It uses multidimensional scaling.
+    It uses multidimensional scaling (MDS).
     Provides utilities to get the surface and the points of the plot.
 
     Properties
@@ -63,8 +63,8 @@ class Footprint:
                 is_categorical.append(False)
             depth.append(self._get_depth(hp))
 
-        self._is_categorical = np.array(is_categorical)  # type: ignore
-        self._depth = np.array(depth)  # type: ignore
+        self._is_categorical = np.array(is_categorical)
+        self._depth = np.array(depth)
 
         # Global variables
         self._distances: Optional[np.ndarray] = None
@@ -102,7 +102,7 @@ class Footprint:
         budget : Union[int, float]
             All configurations with this budget are considered.
         support_discretization : Optional[int], optional
-            Discretization steps for integer and float hyperparameter values.
+            Discretization steps for integer and float hyperparameter (HP) values.
             Default is set to 10.
         rejection_rate : float, optional
             Rejection rate whether a configuration should be rejected or not. Internally,
@@ -113,7 +113,8 @@ class Footprint:
             How many times to retry adding a new configuration.
             Default is set to 3.
         exclude_configs : bool, optional
-            Whether the configurations from the run should be excluded in the MDS scaling.
+            Whether the configurations from the run should be excluded
+            in the multidimensional scaling (MDS).
             This is particularly interesting if only the search space should be plotted.
             Default is set to False.
         """
@@ -135,7 +136,7 @@ class Footprint:
         # Make numpy arrays
         X = data[hp_names].to_numpy()
         Y = data[objective.name].to_numpy()
-        config_ids = data["config_id"].values.tolist()  # type: ignore
+        config_ids = data["config_id"].values.tolist()
 
         # Get the incumbent
         incumbent_config, _ = self.run.get_incumbent(objective, budget)
@@ -151,7 +152,7 @@ class Footprint:
         border_generator = sample_border_config(self.cs)
         random_generator = sample_random_config(self.cs, d=support_discretization)
 
-        # Now we add the border and random configs
+        # Now the border and random configs are added
         count_border = 0
         count_random = 0
         tries = 0
@@ -191,7 +192,7 @@ class Footprint:
                     counter += 1
 
             # Abort criteria
-            # If we don't get new configs
+            # If there are no new configs
             if counter == 0:
                 tries += 1
             else:
@@ -200,7 +201,7 @@ class Footprint:
             if tries >= retries:
                 break
 
-            # Or if we reach more than 4000 (otherwise it takes too long)
+            # Or if reach more than 4000 are reached (otherwise it takes too long)
             if self._distances.shape[0] % 100 == 0:
                 logger.info(f"Found {self._distances.shape[0]} configurations...")
 
@@ -216,8 +217,8 @@ class Footprint:
         self._MDS_X = MDS_X
 
         # But here's the catch: Get rid of border and random configs because
-        # we don't have the y values for them.
-        # However, it makes no sense to train the RF if we exclude the configs
+        # the y values for them are not known.
+        # However, it makes no sense to train the RF if the configs are excluded
         # which were evaluated.
         if not exclude_configs:
             self._train_on_objective(MDS_X[: len(X)], Y.ravel())
@@ -232,7 +233,7 @@ class Footprint:
         self, details: float = 0.5, performance: bool = True
     ) -> Tuple[List, List, List]:
         """
-        Get surface of the multidimensional scaling plot.
+        Get surface of the multidimensional scaling (MDS) plot.
 
         Parameters
         ----------
@@ -288,7 +289,7 @@ class Footprint:
 
     def get_points(self, category: str = "configs") -> Tuple[List[float], List[float], List[int]]:
         """
-        Return the points of the multidimensional scaling plot.
+        Return the points of the multidimensional scaling (MDS) plot.
 
         Parameters
         ----------
@@ -324,7 +325,7 @@ class Footprint:
                 or (category == "incumbents" and config_id == self._incumbent_id)
                 or (category == "supports" and config_id == RANDOM_CONFIG_ID)
             ):
-                x = x.tolist()  # type: ignore
+                x = x.tolist()
                 X += [x[0]]
                 Y += [x[1]]
                 config_ids += [config_id]
@@ -335,15 +336,15 @@ class Footprint:
         """
         Calculate the maximum distance between all configs.
 
-        Basically, we just count the number of hps.
+        Basically, the number of hyperparameters (HPS) are just counted.
 
         Returns
         -------
         float
             Maximal distance between two configurations.
         """
-        # We just count the number of hps
-        # Since X is normalized, we can just sum 1
+        # The number of hps is just counted
+        # Since X is normalized, 1 can just be added
         max_distance = 0
         for hp in self.cs.get_hyperparameters():
             if isinstance(hp, CategoricalHyperparameter) or isinstance(hp, Constant):
@@ -400,7 +401,7 @@ class Footprint:
         """
         n_configs = X.shape[0]
 
-        # We initiate the distances
+        # The distances are initiated
         distances = np.zeros((n_configs, n_configs))
 
         for i in tqdm(range(n_configs)):
@@ -422,7 +423,7 @@ class Footprint:
         X : np.ndarray
             Encoded data.
         config_ids : List[int]
-            Corresponding config_ids.
+            Corresponding configuration ids.
         exclude_configs : bool, optional
             Whether the passed X should be used or not. By default False.
         """
@@ -443,22 +444,22 @@ class Footprint:
         rejection_threshold: Optional[float] = 0.0,
     ) -> bool:
         """
-        Update the internal distance if the passed config is not rejected.
+        Update the internal distance if the passed configuration is not rejected.
 
         Parameters
         ----------
         config : np.ndarray
-            Config, which is tried to be added.
+            Configuration, which is tried to be added.
         config_id : int
-            Corresponding config id. This is important for later identification as the config might
-            be a border or random configuration.
+            Corresponding configuration id. This is important for later identification
+            as the configuration might be a border or random configuration.
         rejection_threshold : Optional[float], optional
-            Threshold for rejecting the config. By default 0.0.
+            Threshold for rejecting the configuration. By default 0.0.
 
         Returns
         -------
         rejected : bool
-            Whether the config was rejected or not.
+            Whether the configuration was rejected or not.
         """
         X = self._X
 
@@ -499,7 +500,7 @@ class Footprint:
                 X = np.concatenate((X, np.array([config])), axis=0)
 
             self._X = X
-            # We cant += to a None, an Issue has already been created
+            # There is no += to a None, an Issue has already been created
             self._config_ids += [config_id]
             self._distances = new_distances
 
@@ -507,7 +508,7 @@ class Footprint:
 
     def _get_depth(self, hp: Hyperparameter) -> int:
         """
-        Get depth (generations above) in configuration space of a given hyperparameter.
+        Get depth (generations above) in configuration space of a given hyperparameter (HP).
 
         Parameters
         ----------
@@ -517,7 +518,7 @@ class Footprint:
         Returns
         -------
         int
-            Depth of the hyperparameter.
+            Depth of the hyperparameter (HP).
         """
         parents = self.cs.get_parents_of(hp)
         if not parents:
@@ -540,12 +541,12 @@ class Footprint:
 
     def _get_mds(self) -> np.ndarray:
         """
-        Perform multidimensional scaling on the internal distances.
+        Perform multidimensional scaling (MDS) on the internal distances.
 
         Returns
         -------
         np.ndarray
-            Numpy array with multidimensional scaling coordinates in 2D.
+            Numpy array with multidimensional scaling (MDS) coordinates in 2D.
 
         Raises
         ------
@@ -565,7 +566,7 @@ class Footprint:
         Parameters
         ----------
         X : np.ndarray
-            Numpy array with multidimensional scaling coordinates in 2D.
+            Numpy array with multidimensional scaling (MDS) coordinates in 2D.
         Y : np.ndarray
             Numpy array with costs.
         """
@@ -588,7 +589,7 @@ class Footprint:
         logger.info("Training on area...")
         MDS_X = self._MDS_X
 
-        # We basically have to create a grid here
+        # Basically, a grid has to be created here
         x_min, x_max = MDS_X[:, 0].min() - 1, MDS_X[:, 0].max() + 1
         y_min, y_max = MDS_X[:, 1].min() - 1, MDS_X[:, 1].max() + 1
 
@@ -611,9 +612,9 @@ class Footprint:
                 X.append(center)
                 Y.append(value)
 
-        X = np.array(X)  # type: ignore
-        Y = np.array(Y)  # type: ignore
+        X_array = np.array(X)
+        Y_array = np.array(Y)
 
         # Train the model
         self._area_model = RandomForestRegressor(random_state=0)
-        self._area_model.fit(X, Y)
+        self._area_model.fit(X_array, Y_array)

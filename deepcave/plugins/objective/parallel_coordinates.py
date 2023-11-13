@@ -4,7 +4,7 @@
 # ParallelCoordinates
 
 This module provides utilities for visualizing the parallel coordinates.
-The labels are of the important hyperparameters, budget and objectives.
+The labels are of the important hyperparameters (HPs), budget and objectives.
 
 ## Classes
     - ParallelCoordinates : Can be used for visualizing the parallel coordinates.
@@ -60,7 +60,7 @@ class ParallelCoordinates(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[Union[html.Div, dbc.Row]]:
         """
-        Get the input layout as html container and dash bootstrap component.
+        Get the input layout as html container and dash bootstrap component (DBC).
 
         Parameters
         ----------
@@ -71,7 +71,7 @@ class ParallelCoordinates(StaticPlugin):
         Returns
         -------
         List[Union[html.Div, dbc.Row]]
-            An html container and a dash bootstrap component of the layout of the input.
+            An html container and a dash bootstrap component (DBC) of the layout of the input.
         """
         return [
             dbc.Row(
@@ -126,7 +126,7 @@ class ParallelCoordinates(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
-        Get the filtered layout for a dash bootstrap component and html container.
+        Get the filtered layout for a dash bootstrap component (DBC) and html container.
 
         Parameters
         ----------
@@ -137,7 +137,7 @@ class ParallelCoordinates(StaticPlugin):
         Returns
         -------
         List[Union[dbc.Row, html.Div]]
-            A filtered dash bootstrap component and html container.
+            A filtered dash bootstrap component (DBC) and html container.
         """
         return [
             dbc.Row(
@@ -192,18 +192,19 @@ class ParallelCoordinates(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs):
         """
-        Load the objective, budgets and hyperparameters and its attributes.
+        Load the objective, budgets and hyperparameters (HPs) and its attributes.
 
         Parameters
         ----------
         run
-            The run to get the objective, budget and hyperparameters from.
+            The run to get the objective, budget and hyperparameters (HPs) from.
         inputs
-            Contains information about the objective, budget, configurations and hyperparameters.
+            Contains information about the objective, budget, configurations
+            and hyperparameters (HPs).
 
         Returns
         -------
-        The objective, budgets, hyperparameters and their attributes.
+        The objective, budgets, hyperparameters (HPs) and their attributes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -326,7 +327,8 @@ class ParallelCoordinates(StaticPlugin):
         inputs
             The inputs containing information about what to visualize.
         outputs
-            Contains the serialized dataframe as well as the important hyperparameter names.
+            Contains the serialized dataframe as well as the important
+            hyperparameter (HPs) names.
 
         Returns
         -------

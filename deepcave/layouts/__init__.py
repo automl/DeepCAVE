@@ -3,9 +3,6 @@
 # Layout
 
 This module provides a foundation to create layouts.
-
-## Contents
-    - regsiter_callbacks
 """
 
 from abc import ABC, abstractmethod
@@ -27,7 +24,7 @@ class Layout(ABC):
         A logger for the class.
     """
 
-    def __init__(self) -> None:  # noqa: D107
+    def __init__(self) -> None:
         self.register_callbacks()
         self.logger = get_logger(self.__class__.__name__)
 

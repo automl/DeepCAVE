@@ -10,7 +10,7 @@ Also registers and handles the callbacks.
     - MainLayout: This class defines and provides the main layout.
 """
 
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from urllib.parse import urlparse
 
@@ -31,7 +31,7 @@ from deepcave.utils.dash import alert
 
 class MainLayout(Layout):
     """
-    Define and provides the main layout.
+    Define and provide the main layout.
 
     It handles different callbacks of the layout.
 
@@ -69,7 +69,7 @@ class MainLayout(Layout):
         input = Input("on-page-load", "pathname")
 
         @app.callback(output, input)  # type: ignore
-        def display_page(pathname: str) -> Union[Component, Any]:
+        def display_page(pathname: str) -> Any:
             """
             Display the page with the given path url, check for plugins.
 
@@ -80,7 +80,7 @@ class MainLayout(Layout):
 
             Returns
             -------
-            Union[Component, Any]
+            Any
                 Either a General Layout, Not Found Layout or an Alert.
             """
             pathname = urlparse(pathname).path

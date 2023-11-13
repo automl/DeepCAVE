@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# Overview.
+# Overview
 
 This module provides utilities for visualizing an overview of an optimization run.
 

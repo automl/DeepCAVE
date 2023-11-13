@@ -1,5 +1,6 @@
+#  noqa: D400
 """
-# ParetoFront.
+# ParetoFront
 
 This module is for creating a visualization of a Pareto Front.
 For this, it uses Dash as well as matplotlib and plotly.
@@ -93,7 +94,7 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
-        Get the input layout as html container and dash bootstrap component.
+        Get the input layout as html container and dash bootstrap component (DBC).
 
         Parameters
         ----------
@@ -104,7 +105,7 @@ class ParetoFront(DynamicPlugin):
         Returns
         -------
         List[Union[dbc.Row, html.Div]]
-            An html container and a dash bootstrap component of the layout of the input.
+            An html container and a dash bootstrap component (DBC) of the layout of the input.
         """
         return [
             dbc.Row(
@@ -154,7 +155,7 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[Union[html.Div, dbc.Row]]:
         """
-        Get the filtered layout for a dash bootstrap component and html container.
+        Get the filtered layout for a dash bootstrap component (DBC) and html container.
 
         Parameters
         ----------
@@ -165,7 +166,7 @@ class ParetoFront(DynamicPlugin):
         Returns
         -------
         List[Union[html.Div, dbc.Row]]
-            A filtered dash bootstrap component and html container.
+            A filtered dash bootstrap component (DBC) and html container.
         """
         return [
             html.Div(
@@ -213,7 +214,7 @@ class ParetoFront(DynamicPlugin):
         """
         Load the inputs containing information about the values to be visualized.
 
-        This includes, the objectives and budgets attributes.
+        This includes the objectives and budgets attributes.
         """
         return {
             "objective_id_1": {
@@ -281,7 +282,7 @@ class ParetoFront(DynamicPlugin):
                 # This loop is a little bit complicated than
                 # is_front[is_front] = np.any(points[is_front] < c, axis=1)
                 # because objectives can be optimized in different directions.
-                # We therefore have to check for each objective separately.
+                # Therefore it has to be checked for each objective separately.
                 select = None
                 for idx, (objective, cost) in enumerate(zip([objective_1, objective_2], costs)):
                     if objective.optimize == "upper":
@@ -388,7 +389,7 @@ class ParetoFront(DynamicPlugin):
                     )
                 )
 
-            # Check if we need hv or vh
+            # Check if hv or vh is needed
             objective_1 = run.get_objective(inputs["objective_id_1"])
             objective_2 = run.get_objective(inputs["objective_id_2"])
             optimize1 = objective_1.optimize
@@ -508,7 +509,7 @@ class ParetoFront(DynamicPlugin):
             if show_all:
                 plt.scatter(x, y, color=color, marker="o", alpha=0.1, s=3)
 
-            # Check if we need hv or vh
+            # Check if hv or vh is needed
             objective_1 = run.get_objective(inputs["objective_id_1"])
             objective_2 = run.get_objective(inputs["objective_id_2"])
             optimize1 = objective_1.optimize

@@ -1,7 +1,9 @@
+# noqa: D400
 """
-# BOHBRun.
+# BOHBRun
 
-This module is for managing and processing data concerning a BOHB Run.
+This module is for managing and processing data concerning a BOHB
+(Bayesian Optimization and Hyperparameter Bandits) run.
 
 Utilities provide getting a hash, as well as the latest change of a file.
 
@@ -22,6 +24,8 @@ from deepcave.utils.hash import file_to_hash
 class BOHBRun(Run):
     """
     Create a BOHB Run.
+
+    (Bayesian Optimization and Hyperparameter Bandits)
 
     This class extends the Run class.
     Utilities provide getting a hash, as well as the latest change of a file.
@@ -79,7 +83,7 @@ class BOHBRun(Run):
         configspace = cs_json.read((path / "configspace.json").read_text())
 
         # Read objectives
-        # We have to define it ourselves, because we don't know the type of the objective
+        # It has to be defined here, because the type of the objective is not known
         # Only lock lower
         objective = Objective("Cost", lower=0)
 
@@ -131,7 +135,7 @@ class BOHBRun(Run):
                 status = Status.CRASHED
 
             if status != Status.SUCCESS:
-                # We don't want cost included which are failed
+                # Costs which failed, should not be included
                 cost = None
 
             run.add(

@@ -48,9 +48,9 @@ class FanovaForest(RandomForest):
         The total variance of a tree.
     trees_variance_fractions : Dict
         The variance fractions of the trees.
-    V_U_total : Dict[Tuple[int, ...], List[Union[Any, float]]]
+    V_U_total : Dict[Tuple[int, ...], List[Any]]
         Store variance-related information across all trees.
-    V_U_individual : Dict[Tuple[int, ...], List[Union[Any, float]]]
+    V_U_individual : Dict[Tuple[int, ...], List[Any]]
         Store variance-related information for individual subsets.
     n_params : int
         The number of parameters to sample.
@@ -154,8 +154,8 @@ class FanovaForest(RandomForest):
         # and the value list contains \hat{f}_U for the individual trees
         # reset all the variance fractions computed
         self.trees_variance_fractions: dict = {}
-        self.V_U_total: Dict[Tuple[int, ...], List[Union[Any, float]]] = {}
-        self.V_U_individual: Dict[Tuple[int, ...], List[Union[Any, float]]] = {}
+        self.V_U_total: Dict[Tuple[int, ...], List[Any]] = {}
+        self.V_U_individual: Dict[Tuple[int, ...], List[Any]] = {}
 
         # Set cut-off
         self._model.set_cutoffs(self.cutoffs[0], self.cutoffs[1])
@@ -165,10 +165,7 @@ class FanovaForest(RandomForest):
 
     def compute_marginals(
         self, hp_ids: Union[List[int], Tuple[int, ...]], depth: int = 1
-    ) -> Tuple[
-        Dict[Tuple[int, ...], List[Union[Any, float]]],
-        Dict[Tuple[int, ...], List[Union[Any, float]]],
-    ]:
+    ) -> Tuple[Dict[Tuple[int, ...], List[Any]], Dict[Tuple[int, ...], List[Any]],]:
         """
         Return the marginal of selected parameters.
 
@@ -182,8 +179,8 @@ class FanovaForest(RandomForest):
 
         Returns
         -------
-        Tuple[Dict[Tuple[int, ...], List[Union[Any, float]]],
-        Dict[Tuple[int, ...], List[Union[Any, float]]],
+        Tuple[Dict[Tuple[int, ...], List[Any]],
+        Dict[Tuple[int, ...], List[Any]],
             The marginal of selected parameters.
         """
         if not isinstance(hp_ids, tuple):

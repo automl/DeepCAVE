@@ -175,7 +175,7 @@ class BudgetCorrelation(DynamicPlugin):
                 costs2 = run.get_all_costs(budget2, statuses=[Status.SUCCESS])
 
                 # Combine config ids
-                # So we make sure we have the same number of configs for each budget
+                # So it is guaranteed that there is the same number of configs for each budget
                 config_ids = set(costs1.keys()) & set(costs2.keys())
 
                 c1, c2 = [], []

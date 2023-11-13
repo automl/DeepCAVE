@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# Notification.
+# Notification
 
 This module provides a notification layout.
 

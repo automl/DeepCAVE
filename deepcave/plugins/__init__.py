@@ -75,7 +75,7 @@ class Plugin(Layout, ABC):
         The raw outputs.
     activate_run_selection : bool
         Whether to activate the run selection.
-    if : str
+    id : str
         The id of the plugin.
     runs : List[AbstractRun]
         A list of the abstract runs.
@@ -106,7 +106,7 @@ class Plugin(Layout, ABC):
         self.previous_inputs: Dict[str, Dict[str, str]] = {}
         self.raw_outputs: Optional[Dict[str, Any]] = None
 
-        # We have to call the output layout one time to register
+        # The output layout has to be called one time to register
         # the values
         # Problem: Inputs/Outputs can't be changed afterwards anymore.
 
@@ -220,9 +220,9 @@ class Plugin(Layout, ABC):
             if key not in self.inputs:
                 self.inputs.append(key)
 
-        # We have to rearrange the inputs because `State`
-        # must follow all `Input`. Since all filters are `Input`, we have to
-        # shift them to the front.
+        # The inputs have to be rearranged, because `State`
+        # must follow all `Input`. Since all filters are `Input`, they have to
+        # be shifted to the front.
         self.inputs.sort(key=lambda x: x[2], reverse=True)
 
         return self.get_internal_input_id(id)
@@ -304,7 +304,7 @@ class Plugin(Layout, ABC):
         if len(outputs) > 0:
 
             @app.callback(outputs, inputs)  # type: ignore
-            def plugin_input_update(pathname: str, *inputs_list: str) -> List[str]:
+            def plugin_input_update(pathname: str, *inputs_list: str) -> List[Optional[str]]:
                 """
                 Update the input of the plugin.
 
@@ -335,10 +335,10 @@ class Plugin(Layout, ABC):
                         # Overwrite/set the passed inputs
                         update_dict(inputs, passed_inputs)
 
-                        # Then we have to take care of the run_selection
+                        # Then the run_selection has to be taken care of
                         selected_run: Optional[AbstractRun] = None
                         if self.activate_run_selection:
-                            # If run_selection is active and we don't have an id, then
+                            # If run_selection is active and the id is not known, then
                             # the passed inputs have no use.
                             try:
                                 run_id = passed_inputs["run"]["value"]
@@ -383,7 +383,7 @@ class Plugin(Layout, ABC):
                             if attribute not in inputs[id]:
                                 inputs[id][attribute] = None
                     elif inputs is not None:
-                        # We have to update the options of the run selection here.
+                        # The options of the run selection have to be updated here.
                         # This is important if the user have added/removed runs.
                         if self.activate_run_selection:
                             run_value = inputs["run"]["value"]
@@ -398,13 +398,16 @@ class Plugin(Layout, ABC):
                             inputs["run"]["value"] = run_value
                 else:
                     # Map the list `inputs` to a dict.
-                    inputs = self._list_to_dict(inputs_list)  # type: ignore
+                    # inputs_list_as_list is necessary as new variable,
+                    # because inputs_list is a tuple and cant be passed to _list_to_dict.
+                    inputs_list_as_list = list(inputs_list)
+                    inputs = self._list_to_dict(inputs_list_as_list)
 
                     if len(self.previous_inputs) == 0:
                         self.previous_inputs = inputs.copy()
 
                     # Only work on copies.
-                    # We don't want the inputs dict to be changed by the user.
+                    # The inputs dict should not be changed by the user.
                     _previous_inputs = self.previous_inputs.copy()
                     _inputs = inputs.copy()
 
@@ -418,9 +421,9 @@ class Plugin(Layout, ABC):
 
                         # Reset everything if run name changed.
                         if _previous_run_id is not None and _previous_run_id != _run_id:
-                            # We can't use load_inputs here only
+                            # load_inputs cannot be used here, only
                             # because `run` would be removed.
-                            # Also: We want to keep the current run name.
+                            # Also: The current run name does not need to be kept.
                             update_dict(_inputs, self.load_inputs())
 
                             # TODO: Reset only inputs which are not available in another run.
@@ -436,17 +439,17 @@ class Plugin(Layout, ABC):
                     )
 
                     # Update dict
-                    # dict.update() remove keys, so we use our own method to do so
+                    # dict.update() removes keys, so our own method is used to do so
                     update_dict(inputs, user_dependencies_inputs)  # inplace operation
 
                 # Let's cast the inputs
                 inputs = self._cast_inputs(inputs)
 
                 # From dict to list
-                inputs_list = self._dict_to_list(inputs, input=True)  # type: ignore
+                inputs_list_from_dict = self._dict_to_list(inputs, input=True)
                 self.previous_inputs = inputs
 
-                return list(inputs_list)
+                return inputs_list_from_dict
 
         # Register modal for raw data here
         @app.callback(  # type: ignore
@@ -518,14 +521,14 @@ class Plugin(Layout, ABC):
             @app.callback(
                 Output(internal_id, "clickData"),
                 Input(internal_id, "clickData"),
-            )
-            def go_to_configuration(click_data):  # type: ignore
+            )  # type: ignore
+            def go_to_configuration(click_data: Any):
                 """
                 Go to the configuration described in the hovertext.
 
                 Parameters
                 ----------
-                click_data
+                click_data : Any
                     The data describing the click.
                 """
                 if click_data is not None:
@@ -566,7 +569,7 @@ class Plugin(Layout, ABC):
         inputs_changed = False
         filters_changed = False
 
-        # If only filters changed, then we don't need to
+        # If only filters changed, there is no need to
         # calculate the results again.
         if last_inputs is not None:
             for id, attribute, filter, _ in self.inputs:
@@ -585,7 +588,7 @@ class Plugin(Layout, ABC):
     @interactive
     def _process_raw_outputs(
         self, inputs: Dict[str, Dict[str, str]], raw_outputs: Dict[str, Any]
-    ) -> Union[Any, List[Any]]:
+    ) -> Any:
         """
         Process the raw outputs and update the layout.
 
@@ -598,19 +601,20 @@ class Plugin(Layout, ABC):
 
         Returns
         -------
-        Union[Any, List[Any]]
+        Any
             The processed outputs.
         """
         from deepcave import c, run_handler
 
         # Use raw outputs to update our layout
         mpl_active = c.get("matplotlib-mode")
+        passed_runs: Union[List[AbstractRun], AbstractRun]
 
         if self.activate_run_selection:
             passed_runs = run_handler.get_run(inputs["run"]["value"])
             passed_outputs = raw_outputs[passed_runs.id]
         else:
-            passed_runs = self.all_runs  # type: ignore
+            passed_runs = self.all_runs
             passed_outputs = raw_outputs
 
         # Clean inputs
@@ -634,7 +638,7 @@ class Plugin(Layout, ABC):
             if not isinstance(outputs, list):
                 outputs = [outputs]
 
-        # We have to add no_updates here for the mode we don't want
+        # no_updates has to be added here for the mode that is not wanted
         count_outputs = 0
         count_mpl_outputs = 0
         for _, _, mpl_mode in self.outputs:
@@ -672,10 +676,13 @@ class Plugin(Layout, ABC):
         Dict[str, Dict[str, str]]
             Dictionary containing the mapping information.
         """
+        # This is necessary, because of the conditional type of order
+        order: Union[List[Tuple[str, str, bool]], List[Tuple[str, str, bool, Any]]]
+
         if input:
             order = self.inputs
         else:
-            order = self.outputs  # type: ignore
+            order = self.outputs
 
         mapping: Dict[str, Any] = {}
         for value, (id, attribute, *_) in zip(values, order):
@@ -709,10 +716,13 @@ class Plugin(Layout, ABC):
         """
         from deepcave import c
 
+        # This is necessary, because of the conditional type of order
+        order: Union[List[Tuple[str, str, bool]], List[Tuple[str, str, bool, Any]]]
+
         if input:
             order = self.inputs
         else:
-            order = self.outputs  # type: ignore
+            order = self.outputs
 
         result: List[Optional[str]] = []
         for id, attribute, instance, *_ in order:
@@ -803,7 +813,7 @@ class Plugin(Layout, ABC):
         """
         Clean the given inputs s.t. only the first value is used.
 
-        Also, boolean values are casted to booleans.
+        Also, boolean values are cast to booleans.
 
         Example
         -------
@@ -827,8 +837,8 @@ class Plugin(Layout, ABC):
         used_ids = []
         cleaned_inputs = {}
         for id, attribute, *_ in self.inputs:
-            # Since self.inputs is ordered, we use the first occurring attribute and add
-            # the id so it is not used again.
+            # Since self.inputs is ordered, the first occurring attribute is used and
+            # the id is added so it is not used again.
             if id not in used_ids:
                 i = inputs[id][attribute]
 
@@ -843,7 +853,7 @@ class Plugin(Layout, ABC):
 
         return cleaned_inputs
 
-    @property  # type: ignore
+    @property
     @interactive
     def runs(self) -> List[AbstractRun]:
         """Get the runs as a list."""
@@ -851,7 +861,7 @@ class Plugin(Layout, ABC):
 
         return run_handler.get_runs()
 
-    @property  # type: ignore
+    @property
     @interactive
     def groups(self) -> List[Group]:
         """Get the groups as a list."""
@@ -859,7 +869,7 @@ class Plugin(Layout, ABC):
 
         return run_handler.get_groups()
 
-    @property  # type: ignore
+    @property
     @interactive
     def all_runs(self) -> List[AbstractRun]:
         """Get all runs and include the groups as a list."""
@@ -971,7 +981,7 @@ class Plugin(Layout, ABC):
             ],
         )
 
-        # We always have to render it because of the button.
+        # It always has to be rendered, because of the button.
         # Button tells us if the page was just loaded.
         components += [
             html.Div(
@@ -987,7 +997,7 @@ class Plugin(Layout, ABC):
             )
         ]
 
-        def register_in(a, b):  # type: ignore
+        def register_in(a: str, b: Union[List[str], str]) -> str:
             """Register the given input."""
             return self.register_input(a, b, filter=True)
 
@@ -1012,7 +1022,7 @@ class Plugin(Layout, ABC):
                 )
             ]
 
-        def register_out(a, b):  # type: ignore
+        def register_out(a: str, b: Union[List[str], str]) -> str:
             """Register the output."""
             return self.register_output(a, b, mpl=True)
 
@@ -1114,9 +1124,9 @@ class Plugin(Layout, ABC):
 
         Parameters
         ----------
-        runs : Dict[str, Run]
+        runs : List[AbstractRun]
             The runs to display.
-        groups : Dict[str, Group]
+        groups : List[Group]
             The groups to display.
         check_run_compatibility : Callable[[AbstractRun], bool]
             If a single run is compatible. If not, the run is not shown.
@@ -1195,7 +1205,7 @@ class Plugin(Layout, ABC):
 
             # Also:
             # Remove `run` from inputs_key because
-            # we don't want the run names included.
+            # The runs name does not need to be included
             _inputs = inputs.copy()
             del _inputs["run"]
 
@@ -1236,7 +1246,7 @@ class Plugin(Layout, ABC):
 
         Parameters
         ----------
-        selected_run : Optional[Union[AbstractRun, List[AbstractRun]]], optional
+        run : Optional[Union[AbstractRun, List[AbstractRun]]], optional
             The selected run from the user. In case of `activate_run_selection`, only one run
             is passed. Defaults to None.
         previous_inputs : Dict[str, Any]
@@ -1318,7 +1328,7 @@ class Plugin(Layout, ABC):
 
         Returns
         -------
-        Union[Component, List[Component]]
+        Optional[Union[Component, List[Component]]]
             Layout for the matplotlib output block.
         """
         return None
@@ -1362,7 +1372,7 @@ class Plugin(Layout, ABC):
         outputs: Dict[str, Union[str, Dict[str, str]]],
     ) -> Union[Component, List[Component]]:
         """
-        Read in the raw data and prepares them for the layout.
+        Read in the raw data and prepare them for the layout.
 
         Note
         ----
@@ -1489,8 +1499,8 @@ class Plugin(Layout, ABC):
         """
         mapping = {}
         for id, attribute, *_ in self.inputs:
-            # Since `self.inputs` is ordered, we use the first occurring attribute and add
-            # the id so it is not used again.
+            # Since `self.inputs` is ordered, the first occurring attribute is used and
+            # the id is added, so it is not used again.
             if id not in mapping:
                 mapping[id] = attribute
 

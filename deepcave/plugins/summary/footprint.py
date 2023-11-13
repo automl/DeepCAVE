@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# FootPrint.
+# FootPrint
 
 This module provides utilities to visualize a configuration footprint.
 
@@ -56,7 +57,7 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
         """
-        Get the input layout as html container and dash bootstrap component.
+        Get the input layout as html container and dash bootstrap component (DBC).
 
         Parameters
         ----------
@@ -67,7 +68,7 @@ class FootPrint(StaticPlugin):
         Returns
         -------
         List[Union[dbc.Row, html.Div]]
-            An html container and a dash bootstrap component of the layout of the input.
+            An html container and a dash bootstrap component (DBC) of the layout of the input.
         """
         return [
             dbc.Row(
@@ -123,7 +124,7 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[dbc.Row]:
         """
-        Get the filtered layout for a dash bootstrap component.
+        Get the filtered layout for a dash bootstrap component (DBC).
 
         Parameters
         ----------
@@ -134,7 +135,7 @@ class FootPrint(StaticPlugin):
         Returns
         -------
         List[dbc.Row]
-            A filtered layout with a dash bootstrap component.
+            A filtered layout with a dash bootstrap component (DBC).
         """
         return [
             dbc.Row(
@@ -263,7 +264,7 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dbc.Tabs:
         """
-        Get a dash bootstrap component for the output layout.
+        Get a dash bootstrap component (DBC) for the output layout.
 
         Parameters
         ----------
@@ -274,7 +275,7 @@ class FootPrint(StaticPlugin):
         Returns
         -------
         dbc.Tabs
-            A dash bootstrap component for the output layout.
+            A dash bootstrap component (DBC) for the output layout.
         """
         return dbc.Tabs(
             [
@@ -405,7 +406,7 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> List[dbc.Tabs]:
         """
-        Get a dash bootstrap component of the output layout.
+        Get a dash bootstrap component (DBC) of the output layout.
 
         Parameters
         ----------
@@ -416,7 +417,7 @@ class FootPrint(StaticPlugin):
         Returns
         -------
         List[dbc.Tabs]
-            A dash bootstrap component of the output layout
+            A dash bootstrap component (DBC) of the output layout
         """
         return [
             dbc.Tabs(

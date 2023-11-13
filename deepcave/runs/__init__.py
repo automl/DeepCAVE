@@ -60,7 +60,7 @@ class AbstractRun(ABC):
     logger : Logger
         The logger for the abstract run.
     meta: Dict[str, Any]
-        A dictionary containing the abstract runs meta information.
+        A dictionary containing the abstract run's meta information.
     configspace: ConfigSpace.ConfigurationSpace
         The configuration space of the run.
     configs: Dict[int, Configuration]
@@ -79,7 +79,7 @@ class AbstractRun(ABC):
 
     prefix: str
 
-    def __init__(self, name: str) -> None:  # noqa: D107
+    def __init__(self, name: str) -> None:
         self.name: str = name
         self.path: Optional[Path] = None
         self.logger = get_logger(self.__class__.__name__)
@@ -184,9 +184,9 @@ class AbstractRun(ABC):
         Parameters
         ----------
         config_id : int
-            The ID of the configuration
+            The identificator of the configuration.
         budget : Union[int, float, None]
-            The budget for the Trial
+            The budget for the Trial.
 
         Returns
         -------
@@ -254,7 +254,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         config_id : int
-            The ID of the configuration.
+            The identificator of the configuration.
 
         Returns
         -------
@@ -291,7 +291,7 @@ class AbstractRun(ABC):
         Returns
         -------
         Optional[Objective]
-            The objective object.
+            The objective.
         """
         objectives = self.get_objectives()
         if type(id) == int:
@@ -401,7 +401,7 @@ class AbstractRun(ABC):
         Dict[int, Configuration]
             Configuration id and the configuration.
         """
-        # Include all configs if we have combined budget
+        # Include all configs if budget is a combined budget
         if budget == COMBINED_BUDGET:
             budget = None
 
@@ -432,7 +432,7 @@ class AbstractRun(ABC):
         Returns
         -------
         Configuration
-            A corresponding Configuration object.
+            A corresponding Configuration.
         """
         config = Configuration(self.configspace, self.configs[id])
         return config
@@ -683,7 +683,7 @@ class AbstractRun(ABC):
         if budget is None:
             budget = self.get_highest_budget()
 
-        # In case of COMBINED_BUDGET, we only keep the costs of the highest found budget
+        # In case of COMBINED_BUDGET, only the costs of the highest found budget are kept
         highest_evaluated_budget = {}
 
         results = {}
@@ -700,7 +700,7 @@ class AbstractRun(ABC):
                     highest_evaluated_budget[trial.config_id] = trial.budget
 
                 latest_budget = highest_evaluated_budget[trial.config_id]
-                # We only keep the highest budget
+                # Only the highest budget is kept
                 if trial.budget >= latest_budget:
                     results[trial.config_id] = trial.costs
             else:
@@ -745,7 +745,7 @@ class AbstractRun(ABC):
 
         trial_key = self.get_trial_key(config_id, budget)
 
-        # Unfortunately, we have to iterate through the history to find the status
+        # Unfortunately, it is necessary to iterate through the history to find the status
         # TODO: Cache the stati
         for trial in self.history:
             if trial_key == trial.get_key():
@@ -807,7 +807,7 @@ class AbstractRun(ABC):
         """
         Calculate one cost value from multiple costs.
 
-        Normalizes the costs first and weight every cost the same.
+        Normalizes the costs first and weigh every cost the same.
         The lower the normalized cost, the better.
 
         Parameters
@@ -867,8 +867,8 @@ class AbstractRun(ABC):
             b = objective.upper - objective.lower
             normalized_cost = a / b
 
-            # We optimize the lower
-            # So we need to flip the normalized cost
+            # The lower is optimized
+            # So the normalized cost needs to be flipped
             if objective.optimize == "upper":
                 normalized_cost = 1 - normalized_cost
 
@@ -962,7 +962,7 @@ class AbstractRun(ABC):
         for id, _ in order:
             trial = self.history[id]
 
-            # We want to use all budgets
+            # All budgets should should be used
             if budget != COMBINED_BUDGET:
                 # Only consider selected/last budget
                 if trial.budget != budget:
@@ -1103,7 +1103,7 @@ class AbstractRun(ABC):
         Raises
         ------
         ValueError
-            If a hyperparameter is not supported.
+            If a hyperparameter (HP) is not supported.
         """
         if objectives is None:
             objectives = self.get_objectives()
@@ -1135,11 +1135,11 @@ class AbstractRun(ABC):
 
         x_set_array = np.array(x_set)
         y_set_array = np.array(y_set)
-        config_ids = np.array(config_ids).reshape(-1, 1)  # type: ignore
+        config_ids_array = np.array(config_ids).reshape(-1, 1)
 
         # Imputation: Easiest case is to replace all nans with -1
         # However, since Stefan used different values for inactive hyperparameters,
-        # we also have to use different inactive hyperparameters to be compatible
+        # Also different inactive hyperparameters have to be used, to be compatible
         # with the random forests.
         # https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45
         if specific:
@@ -1169,7 +1169,7 @@ class AbstractRun(ABC):
                     non_finite_mask = ~np.isfinite(x_set_array[:, idx])
                     x_set_array[non_finite_mask, idx] = impute_values[idx]
 
-        # Now we create dataframes for both values and labels
+        # Now dataframes are created for both values and labels
         # [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]
         if include_config_ids:
             columns = ["config_id"]
@@ -1183,7 +1183,7 @@ class AbstractRun(ABC):
             columns += [COMBINED_COST_NAME]
 
         if include_config_ids:
-            data: np.ndarray = np.concatenate((config_ids, x_set_array, y_set_array), axis=1)
+            data: np.ndarray = np.concatenate((config_ids_array, x_set_array, y_set_array), axis=1)
         else:
             data = np.concatenate((x_set_array, y_set_array), axis=1)
 

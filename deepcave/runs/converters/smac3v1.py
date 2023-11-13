@@ -2,7 +2,8 @@
 """
 # SMAC3v1Run
 
-This module provides utilities to create a SMAC3v1 run.
+This module provides utilities to create a SMAC3v1
+(Sequential Model-based Algorithm Configuration) run.
 It provides utilities to hash, as well a get the latest change of the object.
 
 ## Classes
@@ -24,6 +25,8 @@ from deepcave.utils.hash import file_to_hash
 class SMAC3v1Run(Run):
     """
     Define a SMAC3v1 run object.
+
+    (Sequential Model-based Algorithm Configuration)
 
     It also provides utilities to hash it and get its latest change.
 
@@ -89,7 +92,7 @@ class SMAC3v1Run(Run):
             configspace = cs_json.read(f.read())
 
         # Read objectives
-        # We have to define it ourselves, because we don't know the type of the objective
+        # It has to be defined here, because the type of the objective is not known
         # Only lock lower
         objective1 = Objective("Cost", lower=0)
         objective2 = Objective("Time", lower=0)
@@ -116,7 +119,7 @@ class SMAC3v1Run(Run):
             name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
         )
 
-        # We have to set the path manually
+        # The path has to be set manually
         run._path = path
 
         # Iterate over the runhistory
@@ -175,7 +178,7 @@ class SMAC3v1Run(Run):
                 status = Status.CRASHED
 
             if status != Status.SUCCESS:
-                # We don't want cost included which are failed
+                # Costs which failed, should not be included
                 cost = None
                 time = None
             else:

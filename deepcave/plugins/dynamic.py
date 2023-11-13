@@ -4,14 +4,14 @@
 
 This module provides a plugin class for a dynamic plugin.
 
-Registers and handles callbacks.
+Register and handle callbacks.
 
 ## Classes
     - DynamicPlugin: This class provides a dynamic plugin object.
 """
 
 from abc import ABC
-from typing import List
+from typing import Any, List
 
 from dash.dependencies import Input, Output
 from dash.development.base_component import Component
@@ -24,7 +24,7 @@ class DynamicPlugin(Plugin, ABC):
     """
     Provide a dynamic plugin object.
 
-    Registers and handles callbacks.
+    Register and handle callbacks.
 
     Properties
     ----------
@@ -62,8 +62,8 @@ class DynamicPlugin(Plugin, ABC):
             inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
-        @app.callback(outputs, inputs)
-        def plugin_output_update(_, *inputs_list):  # type: ignore
+        @app.callback(outputs, inputs)  # type: ignore
+        def plugin_output_update(_: Any, *inputs_list: str) -> Any:
             """
             Update the outputs from the inputs.
 
@@ -74,12 +74,14 @@ class DynamicPlugin(Plugin, ABC):
 
             Returns
             -------
-            The raw outputs.
+            Any
+                The raw outputs.
             """
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
             inputs = self._list_to_dict(list(inputs_list), input=True)
-            # We would need to change the Optional[str] to a str as return type annotation
+            # The Optional[str] would need tobe changed to a str as return type annotation
+            # of the function _dict_as_key.
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             cleaned_inputs = self._clean_inputs(inputs)
             runs = self.get_selected_runs(inputs)
@@ -108,5 +110,6 @@ class DynamicPlugin(Plugin, ABC):
             return self._process_raw_outputs(inputs, raw_outputs)
 
     @interactive
-    def __call__(self) -> List[Component]:  # type: ignore # noqa: D102
+    # Return type does not match the superclass
+    def __call__(self) -> List[Component]:  # noqa: D102
         return super().__call__(False)

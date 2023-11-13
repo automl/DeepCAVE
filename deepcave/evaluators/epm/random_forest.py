@@ -10,20 +10,12 @@ A pyrfr wrapper is used for simplification.
     - RandomForest: A random forest wrapper for pyrfr.
 
 ## Constants
-    VERY_SMALL_NUMBER = 1e-10
-    PYRFR_MAPPING = {
-        "n_trees": "num_trees",
-        "bootstrapping": "do_bootstrapping",
-        "max_features": "tree_opts.max_features",
-        "min_samples_split": "tree_opts.min_samples_to_split",
-        "min_samples_leaf": "tree_opts.min_samples_in_leaf",
-        "max_depth": "tree_opts.max_depth",
-        "eps_purity": "tree_opts.epsilon_purity",
-        "max_nodes": "tree_opts.max_num_nodes",
+    VERY_SMALL_NUMBER : float
+    PYRFR_MAPPING : Dict[str, str]
     }
 """
 
-from typing import Any, Dict, List, Optional, Tuple  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import functools
 import warnings
@@ -61,7 +53,7 @@ class RandomForest:
     """
     A random forest wrapper for pyrfr.
 
-    This is handy because we only need to pass the configuration space.
+    This is handy because only the configuration space needs to be passed.
     and have a working version without specifying e.g. types and bounds.
 
     Note
@@ -77,17 +69,17 @@ class RandomForest:
     seed : int
         The seed. If not provided, it is random.
     types : List[int]
-        The types of the hyperparameters.
+        The types of the hyperparameters (HPS).
     bounds : List[Tuple[float, float]]
-        The bounds of the hyperparameters.
+        The bounds of the hyperparameters (HPS).
     n_params : int
-        The number of hyperparameters in the configuration space.
+        The number of hyperparameters (HPS) in the configuration space.
     n_features : int
         The number of features.
     pca_components : int
-        The number of components to keep for the principal component analysis.
+        The number of components to keep for the principal component analysis (PCA).
     pca : PCA
-        The principal component analysis object.
+        The principal component analysis (PCA) object.
     scaler : MinMaxScaler
         A MinMaxScaler to scale the features.
     instance_features : ndarray
@@ -136,14 +128,14 @@ class RandomForest:
         # Prepare the model
         self._model = self._get_model()
         self._model.options = self._get_model_options(
-            n_trees=n_trees,  # type: ignore[arg-type]
-            max_features=max_features,  # type: ignore[arg-type]
-            min_samples_split=min_samples_split,  # type: ignore[arg-type]
-            min_samples_leaf=min_samples_leaf,  # type: ignore[arg-type]
-            max_depth=max_depth,  # type: ignore[arg-type]
-            max_nodes=max_nodes,  # type: ignore[arg-type]
-            eps_purity=eps_purity,  # type: ignore[arg-type]
-            bootstrapping=bootstrapping,  # type: ignore[arg-type]
+            n_trees=n_trees,
+            max_features=max_features,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            max_depth=max_depth,
+            max_nodes=max_nodes,
+            eps_purity=eps_purity,
+            bootstrapping=bootstrapping,
         )
 
     def _get_model(self) -> regression.base_tree:
@@ -157,7 +149,7 @@ class RandomForest:
         """
         return regression.binary_rss_forest()
 
-    def _get_model_options(self, **kwargs: Dict[str, Any]) -> regression.forest_opts:
+    def _get_model_options(self, **kwargs: Union[int, float, bool]) -> regression.forest_opts:
         """
         Get model options from kwargs.
 
@@ -174,7 +166,7 @@ class RandomForest:
         options : regression.forest_opts
             Random forest options.
         """
-        # Now we set the options
+        # Now the options are set
         options = regression.forest_opts()
 
         def rgetattr(obj: object, attr: str, *args: Any) -> Any:
@@ -211,10 +203,10 @@ class RandomForest:
         Raises
         ------
         ValueError
-            If hyperparameter is not supported.
+            If hyperparameter (HP) is not supported.
         """
-        conditional = {}  # type: Dict[int, bool]
-        impute_values = {}  # type: Dict[int, float]
+        conditional: Dict[int, bool] = {}
+        impute_values: Dict[int, float] = {}
 
         X = X.copy()
         for idx, hp in enumerate(self.cs.get_hyperparameters()):
@@ -305,7 +297,7 @@ class RandomForest:
         """
         Train the random forest on X and Y.
 
-        Transforms X if PCA is applied.
+        Transforms X if principal component analysis (PCA) is applied.
         Afterwards, `_train` is called.
 
         Parameters
@@ -433,13 +425,13 @@ class RandomForest:
             # Gather data in a list of 2d arrays and get statistics about the required size of the
             # 3d array
             for row_X in X:
-                preds_per_tree = self._model.all_leaf_values(row_X)  # type: ignore[attr-defined]
+                preds_per_tree = self._model.all_leaf_values(row_X)
                 all_preds.append(preds_per_tree)
                 max_num_leaf_data = max(map(len, preds_per_tree))
                 third_dimension = max(max_num_leaf_data, third_dimension)
 
             # Transform list of 2d arrays into a 3d array
-            num_trees = self._model_options.num_trees  # type: ignore[attr-defined]
+            num_trees = self._model_options.num_trees
             shape = (X.shape[0], num_trees, third_dimension)
             preds_as_array = np.zeros(shape) * np.NaN
             for i, preds_per_tree in enumerate(all_preds):
@@ -455,7 +447,7 @@ class RandomForest:
         else:
             means, vars_ = [], []
             for row_X in X:
-                mean_, var = self._model.predict_mean_var(row_X)  # type: ignore[attr-defined]
+                mean_, var = self._model.predict_mean_var(row_X)
                 means.append(mean_)
                 vars_.append(var)
 
@@ -496,26 +488,24 @@ class RandomForest:
         X = self._impute_inactive(X)
 
         # marginalized predictions for each tree
-        dat_ = np.zeros((X.shape[0], self._model_options.num_trees))  # type: ignore[attr-defined]
+        dat_ = np.zeros((X.shape[0], self._model_options.num_trees))
         for i, x in enumerate(X):
             # marginalize over instances
             # 1. get all leaf values for each tree
-            preds_trees = [
-                [] for i in range(self._model_options.num_trees)  # type: ignore[attr-defined]
-            ]  # type: List[List[float]]
+            preds_trees: List[List[float]] = [[] for i in range(self._model_options.num_trees)]
 
             for feat in self.instance_features:
                 x_ = np.concatenate([x, feat])
-                preds_per_tree = self._model.all_leaf_values(x_)  # type: ignore[attr-defined]
+                preds_per_tree = self._model.all_leaf_values(x_)
                 for tree_id, preds in enumerate(preds_per_tree):
                     preds_trees[tree_id] += preds
 
             # 2. average in each tree
             if self.log_y:
-                for tree_id in range(self._model_options.num_trees):  # type: ignore[attr-defined]
+                for tree_id in range(self._model_options.num_trees):
                     dat_[i, tree_id] = np.log(np.exp(np.array(preds_trees[tree_id])).mean())
             else:
-                for tree_id in range(self._model_options.num_trees):  # type: ignore[attr-defined]
+                for tree_id in range(self._model_options.num_trees):
                     dat_[i, tree_id] = np.array(preds_trees[tree_id]).mean()
 
         # 3. compute statistics across trees
@@ -545,4 +535,4 @@ class RandomForest:
         regression.binary_rss_forest
             The leaf values of the model.
         """
-        return self._model.all_leaf_values(x)  # type: ignore[np-untyped-def]
+        return self._model.all_leaf_values(x)

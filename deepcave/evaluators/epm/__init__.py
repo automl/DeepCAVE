@@ -11,5 +11,5 @@ random_forest
 random_forest_surrogate
     This module provides an implementation for a RandomForest Surrogate model.
 utils
-    Return types and bounds of hyperparameter.
+    Return types and bounds of hyperparameter (HP).
 """

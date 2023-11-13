@@ -191,19 +191,20 @@ class Importances(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Load the objective, budgets and hyperparameters and its attributes.
+        Load the objective, budgets and hyperparameters (HPs) and its attributes.
 
         Parameters
         ----------
         run
             The run to get the objective from.
         inputs : Dict[str, Any]
-            Contains information about the objective, budgets and number of hps.
+            Contains information about the objective, budgets
+            and number of hyperparamaters (HPs).
 
         Returns
         -------
         Dict[str, Any]
-            The objective, budgets, hyperparameters and their attributes.
+            The objective, budgets, hyperparameters (HPs) and their attributes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -342,7 +343,8 @@ class Importances(StaticPlugin):
         run
             The run to get the budget from.
         inputs
-            Containing the hyperparameter names, the budget ids and the number of hps.
+            Containing the hyperparameter (HPs) names, the budget ids
+            and the number of hyperparamaters (HPs).
         outputs
             Containing the budget id and importances.
 
@@ -450,20 +452,21 @@ class Importances(StaticPlugin):
     # Types dont match superclass
     def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):
         """
-        Load the importances and the corresponding layout of the mpl figure.
+        Load the importances and the corresponding layout of the matplotlib figure.
 
         Parameters
         ----------
         run
             The run to get the budget from.
         inputs : Dict[str, Any]
-            Containing the hyperparameter names, the budget ids and the number of hps.
+            Containing the hyperparameter (HPs) names, the budget ids
+            and the number of hyperparameters (HPs).
         outputs
             Containing the budget id and importances.
 
         Returns
         -------
-        The rendered mpl figure of the importances.
+        The rendered matplotlib figure of the importances.
         """
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]

@@ -2,10 +2,10 @@
 """
 # LPI
 
-This module provides utilities to calculate the local parameter importance.
+This module provides utilities to calculate the local parameter importance (LPI).
 
 ## Classes
-    - LIP: This class calculates the local parameter importance.
+    - LPI: This class calculates the local parameter importance (LPI).
 """
 
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -28,7 +28,7 @@ from deepcave.runs.objective import Objective
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
 class LPI:
     """
-    Calculate the local parameter importance.
+    Calculate the local parameter importance (LPI).
 
     Properties
     ----------
@@ -37,21 +37,21 @@ class LPI:
     cs : ConfigurationSpace
         The configuration space of the run.
     hp_names : List[str]
-        The names of the hyperparameters
+        The names of the hyperparameters (HPs).
     variances : Dict[Any, list]
         The overall variances per tree.
     importances : dict
-        The importances of the hyperparameters.
+        The importances of the hyperparameters (HPs).
     continuous_neighbors : int
-        The number of neighbors chosen for continuous hyperparameters.
+        The number of neighbors chosen for continuous hyperparameters (HPs).
     incumbent : Configuration
         The incumbent of the run.
     default : Configuration
-        A configuration containing hyperparameters with default values.
+        A configuration containing hyperparameters (HPs) with default values.
     incumbent_array : numpy.ndarray
         The internal vector representation of the incumbent.
     seed : int
-        The seed. I f not provided it will be random.
+        The seed. If not provided it will be random.
     rs : RandomState
         A random state with a given seed value.
     """
@@ -72,7 +72,7 @@ class LPI:
         seed: Optional[int] = None,
     ) -> None:
         """
-        Prepare the data and trains a RandomForest model.
+        Prepare the data and train a RandomForest model.
 
         Parameters
         ----------
@@ -81,7 +81,8 @@ class LPI:
         budget : Optional[Union[int, float]], optional
             Considered budget. By default, None. If None, the highest budget is chosen.
         continuous_neighbors : int, optional
-            How many neighbors should be chosen for continuous hyperparameters. By default, 500.
+            How many neighbors should be chosen for continuous hyperparameters (HPs).
+            By default, 500.
         n_trees : int, optional
             The number of trees for the fanova forest.
             Default is 10.
@@ -119,7 +120,7 @@ class LPI:
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()
 
-        # We need the delta performance from the default configuration and the incumbent
+        # The delta performance is needed from the default configuration and the incumbent
         def_perf, def_var = self._predict_mean_var(self.default)
         inc_perf, inc_var = self._predict_mean_var(self.incumbent)
         delta = def_perf - inc_perf
@@ -235,12 +236,12 @@ class LPI:
         Parameters
         ----------
         hp_names : List[str]
-            Selected hyperparameter names to get the importance scores from.
+            Selected hyperparameter (HP) names to get the importance scores from.
 
         Returns
         -------
         importances : Dict[str, Tuple[float, float]]
-            Hyperparameter name and mean+var importance.
+            Hyperparameter (HP) name and mean+var importance.
 
         Raises
         ------
@@ -277,7 +278,7 @@ class LPI:
         Slight modification of ConfigSpace's get_one_exchange neighborhood.
 
         This orders the parameter values and samples more neighbors in one go.
-        Further we need to rigorously check each and every neighbor if it is forbidden or not.
+        Further each and every neighbor needs to be rigorously checked if it is forbidden or not.
 
         Returns
         -------

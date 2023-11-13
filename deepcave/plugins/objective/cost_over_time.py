@@ -47,7 +47,7 @@ class CostOverTime(DynamicPlugin):
     ----------
     objective_options : List[Dict[str, Any]]
         A list of dictionaries of the objective options.
-    budget_options : List[Dict[srr, Any]]
+    budget_options : List[Dict[str, Any]]
         A list of dictionaries of the budget options.
     """
 
@@ -91,7 +91,7 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get a dash bootstrap component of the layout of the input.
+        Define and get a dash bootstrap component (DBC) of the layout of the input.
 
         Parameters
         ----------
@@ -102,7 +102,7 @@ class CostOverTime(DynamicPlugin):
         Returns
         -------
         List[dbc.Row]
-            A dash bootstrap component of the layout of the input.
+            A dash bootstrap component (DBC) of the layout of the input.
         """
         return [
             dbc.Row(
@@ -192,7 +192,7 @@ class CostOverTime(DynamicPlugin):
         """
         Get the inputs, containing objectives and budgets attributes.
 
-        Also contains runs, groups, and xaxis options.
+        Also contains runs, groups, and x-axis options.
         """
         return {
             "objective_id": {

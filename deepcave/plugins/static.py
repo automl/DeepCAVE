@@ -2,17 +2,17 @@
 """
 # Static
 
-This module is used to create different plugins for time-intense calculations.
+This module provides a plugin class for a static plugin.
 
-It provides an Enum used for the plugin state and a static plugin definition.
+It provides an Enum used for the plugin state.
 
 ## Classes
     - PluginState: An Enum to define the state of the Plugin.
-    - StaticPlugin: This class provides a dynamic plugin object.
+    - StaticPlugin: This class provides a static plugin object.
 """
 
 from abc import ABC
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import traceback
 from enum import Enum
@@ -71,7 +71,7 @@ class StaticPlugin(Plugin, ABC):
     """
     Provide a static plugin object.
 
-    Registers and handles callbacks.
+    Register and handle callbacks.
 
     Properties
     ----------
@@ -133,8 +133,8 @@ class StaticPlugin(Plugin, ABC):
             inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
-        @app.callback(outputs, inputs)
-        def plugin_process(n_clicks, _, *inputs_list):  # type: ignore
+        @app.callback(outputs, inputs)  # type: ignore
+        def plugin_process(n_clicks: int, _: Any, *inputs_list: str) -> Optional[Any]:
             """Register updates from inputs."""
             self._blocked = True
             # Map the list `inputs_list` to a dict s.t.
@@ -181,11 +181,11 @@ class StaticPlugin(Plugin, ABC):
                 if button_pressed and self._state != PluginState.PROCESSING:
                     self.logger.debug("Button pressed.")
 
-                    # Check if we need to process
+                    # Check if processing is needed
                     for run in runs:
                         job_id = self._get_job_id(run.id, inputs_key)  # same problem
 
-                        # We already got our results or it was already processed
+                        # Results are already achieved or it was already processed
                         if raw_outputs[run.id] is not None or queue.is_processed(job_id):
                             continue
 
@@ -278,8 +278,8 @@ class StaticPlugin(Plugin, ABC):
         # Interval should not always run the main callback the whole time
         # Especially not if it's blocked because PreventUpdate
         # prevent output updates from previous callback calls.
-        @app.callback(output, inputs)
-        def plugin_check_blocked(_, data):  # type: ignore
+        @app.callback(output, inputs)  # type: ignore
+        def plugin_check_blocked(_: Any, data: Any) -> Any:
             """Check if blocked."""
             if self._blocked:
                 raise PreventUpdate
@@ -301,8 +301,8 @@ class StaticPlugin(Plugin, ABC):
 
         # Update status label
         # Register updates from inputs
-        @app.callback(output, input)
-        def plugin_update_status(_):  # type: ignore
+        @app.callback(output, input)  # type: ignore
+        def plugin_update_status(_: Any) -> Tuple[List[Any], Optional[Any], bool]:
             """Update the status of the plugin."""
             button_text = [html.Span(self.button_caption)]
 
@@ -310,7 +310,7 @@ class StaticPlugin(Plugin, ABC):
                 # Disable and reset button
                 return button_text, None, True
 
-            # Important so we don't update the button every time (would result in an ugly spinner)
+            # Important so the button is not updated every time (would result in an ugly spinner)
             if self._previous_state == self._state:
                 raise PreventUpdate
 
@@ -321,8 +321,8 @@ class StaticPlugin(Plugin, ABC):
                 self._previous_state == PluginState.PROCESSING
                 and self._state == PluginState.NEEDS_PROCESSING
             ):
-                # However: We have to unset the previous state so if we really change the inputs
-                # the visualizes will be updated.
+                # However: The previous state has to be unset, so if the inputs are really changed
+                # the visualizer will be updated.
                 self._previous_state = PluginState.UNSET
                 raise PreventUpdate
 
@@ -369,7 +369,8 @@ class StaticPlugin(Plugin, ABC):
         return f"{run_name}-{inputs_key}"
 
     @interactive
-    def __call__(self) -> List[Component]:  # type: ignore # noqa: D102
+    # Return type does not match the superclass
+    def __call__(self) -> List[Component]:  # noqa: D102
         from deepcave import config
 
         self._setup()

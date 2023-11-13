@@ -64,7 +64,7 @@ class ConfigurationCube(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get the dash bootstrap components for the input layout.
+        Define and get the dash bootstrap components (DBC) for the input layout.
 
         Parameters
         ----------
@@ -75,7 +75,7 @@ class ConfigurationCube(DynamicPlugin):
         Returns
         -------
         List[dbc.Row]
-            An dash bootstrap component of the layout of the input.
+            An dash bootstrap component (DBC) of the layout of the input.
         """
         return [
             dbc.Row(
@@ -156,7 +156,7 @@ class ConfigurationCube(DynamicPlugin):
     def load_inputs(
         self,
     ) -> Dict[str, Any]:
-        """Load the inputs containing configuration and hyperparameter attributes."""
+        """Load the inputs containing configuration and hyperparameter (HP) attributes."""
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
@@ -165,20 +165,21 @@ class ConfigurationCube(DynamicPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs):
         """
-        Load the objective, budgets and hyperparameters and its attributes.
+        Load the objective, budgets and hyperparameters (HPs) and its attributes.
 
-        It is restricted to three hyperparameters.
+        It is restricted to three hyperparameters (HPs).
 
         Parameters
         ----------
         run
             The run to get the objective from.
         inputs
-            Contains information about the objective, budget, configurations and hyperparameters.
+            Contains information about the objective, budget, configurations
+            and hyperparameters (HPs).
 
         Returns
         -------
-        The objective, budgets, hyperparameters and their attributes.
+        The objective, budgets, hyperparameters (HPs) and their attributes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -294,7 +295,8 @@ class ConfigurationCube(DynamicPlugin):
         run
             The run to be analyzed.
         inputs
-            The inputs containing hyperparameters names, number of configs and objectives ids.
+            The inputs containing hyperparameters (HPs) names, number of configs
+            and objectives ids.
         outputs
             Contains the serialized dataframe.
 
@@ -337,7 +339,7 @@ class ConfigurationCube(DynamicPlugin):
         # Transforms data to values
         values = np.transpose(np.array(data)).tolist()
 
-        # Now we want to filter duplicates
+        # Now the duplicates are filtered
         filtered_data: Dict[Tuple[int, float], Tuple] = {}
         for config_id, cost, v in zip(config_ids, costs, values):
             v = tuple(v)  # Make hashable
@@ -355,7 +357,7 @@ class ConfigurationCube(DynamicPlugin):
                     if old_cost > cost:
                         continue
 
-                # Otherwise we have to replace
+                # Otherwise it is replaced
                 del filtered_data[old_key]
 
             filtered_data[key] = v

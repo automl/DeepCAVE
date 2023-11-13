@@ -158,7 +158,7 @@ class Configurations(DynamicPlugin):
     # Types dont match superclass
     def process(run, inputs) -> Dict[str, Any]:
         """
-        Process the given data show information about the configuration space.
+        Process the given data, show information about the configuration space.
 
         Parameters
         ----------
@@ -231,7 +231,7 @@ class Configurations(DynamicPlugin):
                     cs_table_data["Hyperparameter"] += [k]
                     cs_table_data["Value"] += [v]
 
-            # We simply add highlight as a new column
+            # Highlight is simply added as a new column
             x += [highlight]
 
             # And add it to the lists
@@ -255,7 +255,7 @@ class Configurations(DynamicPlugin):
         register: Callable,
     ) -> List[Any]:
         """
-        Get an html container as well as a dash bootstrap component for the output layout.
+        Get an html container as well as a dash bootstrap component (DBC) for the output layout.
 
         Parameters
         ----------
@@ -266,7 +266,7 @@ class Configurations(DynamicPlugin):
         Returns
         -------
         List[Any]
-            An html container as well as a dash bootstrap component for the output layout.
+            An html container as well as a dash bootstrap component (DBC) for the output layout.
         """
         return [
             html.Div(id=register("overview_table", "children"), className="mb-3"),
@@ -346,12 +346,12 @@ class Configurations(DynamicPlugin):
             trace = go.Scatter(**trace_kwargs)
             objective_data.append(trace)
 
-        layout_kwargs: Dict[str, Union[Any, Dict[str, Any]]] = {
+        layout_kwargs: Dict[str, Any] = {
             "margin": config.FIGURE_MARGIN,
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
 
-        # We create an axis for each objective now
+        # An axis is created for each objective now
         for id, objective in enumerate(run.get_objectives()):
             yaxis = "yaxis"
             if id > 0:
