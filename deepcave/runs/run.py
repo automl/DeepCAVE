@@ -239,12 +239,12 @@ class Run(AbstractRun, ABC):
             # If cost is none, replace it later with the highest cost
             if cost is not None:
                 # Update bounds here
-                if not objective.lock_lower:
-                    if cost < objective.lower:  # type: ignore
+                if not objective.lock_lower and objective.lower is not None:
+                    if cost < objective.lower:
                         objective.lower = cost
 
-                if not objective.lock_upper:
-                    if cost > objective.upper:  # type: ignore
+                if not objective.lock_upper and objective.upper is not None:
+                    if cost > objective.upper:
                         objective.upper = cost
 
             updated_objectives += [objective.to_json()]
@@ -289,8 +289,8 @@ class Run(AbstractRun, ABC):
         self._update_highest_budget(config_id, budget, status)
 
         # Update models
-        # Problem: We don't want to have the model in the cache.
-        # Therefore, we first keep the model as it is,
+        # Problem: The model should not be in the cache.
+        # Therefore, first the model is kept as it is,
         # but remove it from the dict and save it to the disk later on.
         if model is not None:
             self.models[config_id] = model
@@ -333,7 +333,7 @@ class Run(AbstractRun, ABC):
 
         # Models
         if len(self.models) > 0:
-            # We import torch here because we don't want to have it as requirement.
+            # torch is imported here, because it is not wanted as requirement.
             import torch
 
             # Iterate over models and save them if they are a module.

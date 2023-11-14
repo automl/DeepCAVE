@@ -7,11 +7,11 @@
 cache
     This module provides utilities to handle the cache.
 cast
-    This module converts any value to an int if possible.
+    This module provides a utilitiy to convert any value to an int if possible.
 compression
     This module provides utilities for serializing and deserializing a dataframe from/to a string.
 configs
-    This is for parsing the configurations from a filename.
+    This module is for parsing the configurations from a filename.
 configspace
     This module samples random as well as border configurations.
 dash
@@ -19,7 +19,7 @@ dash
 data_structure
     This module can be used for updating one dictionary with another dictionary inplace.
 docs
-    This module provides a function to convert reStructuredText to MarkDown.
+    This module provides a function to convert reStructuredText (RST) to MarkDown (MD).
 files
     This module provides a utility to create directories from a filename.
 hash

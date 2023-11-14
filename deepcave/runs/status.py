@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# Status.
+# Status
 
 This module provides the information about the status of a run.
 
@@ -9,12 +10,12 @@ A utility to convert a string text to a simpler, lower case text format is provi
     - Status: Represent the status of a run as an Enum.
 
 ## Constants
-    SUCCESS = 1
-    TIMEOUT = 2
-    MEMORYOUT = 3
-    CRASHED = 4
-    ABORTED = 5
-    NOT_EVALUATED = 6
+    SUCCESS: int
+    TIMEOUT: int
+    MEMORYOUT: int
+    CRASHED: int
+    ABORTED: int
+    NOT_EVALUATED: int
 """
 
 from enum import IntEnum

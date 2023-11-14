@@ -2,10 +2,7 @@
 """
 # Cast
 
-This module converts any value to an int if possible.
-
-## Contents
-    - optional_int: Convert a value to an int if possible.
+This module provides a utility to convert any value to an int if possible.
 """
 from typing import Any, Optional
 

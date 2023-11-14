@@ -1,5 +1,6 @@
+# noqa: D400
 """
-# Styled Plotty.
+# Styled Plotty
 
 This module provides utilities for styling and customizing different plots with plotly.
 For this, it uses plotly as well as dash.
@@ -154,8 +155,8 @@ def get_discrete_heatmap(
         unique_sorted_values += [unique_values[idx]]
         unique_sorted_labels += [unique_labels[idx]]
 
-    # Now we give them new ids, and we want to create new z values
-    # For that we need a mapping from old to new
+    # Now they are given new ids, and new z values should be created
+    # For that a mapping from old to new is needed
     mapping = {}
     v = []
     for new, old in enumerate(unique_sorted_values):
@@ -295,7 +296,7 @@ def get_hyperparameter_ticks(
         for value in values:
             inverse_values += [hp._transform_scalar(value)]
 
-        # Integers are rounded, so we map then back
+        # Integers are rounded, they are mapped
         if isinstance(hp, IntegerHyperparameter):
             for label in inverse_values:
                 value = hp._inverse_transform(label)
@@ -305,7 +306,7 @@ def get_hyperparameter_ticks(
                     ticktext += [label]
 
             if additional_values is not None:
-                # Now we add additional values
+                # Now add additional values are added
                 for value in additional_values:
                     if not (value is None or np.isnan(value) or value == NAN_VALUE):
                         label = hp._transform_scalar(value)
@@ -320,7 +321,7 @@ def get_hyperparameter_ticks(
                 ticktext += [label]
 
             if additional_values is not None:
-                # Now we add additional values
+                # Now additional values are added
                 for value in additional_values:
                     if (
                         not (value is None or np.isnan(value) or value == NAN_VALUE)
@@ -391,9 +392,9 @@ def get_hyperparameter_ticks_from_values(
     tickvals = []
     ticktext = []
 
-    # If we have less than x values, we also show them
+    # If there are less than x values, they are also shown
     if return_all or len(unique_values) <= ticks:
-        # Make sure we don't have multiple (same) labels for the same value
+        # Make sure there are no multiple (same) labels for the same value
         for value, label in zip(unique_values, unique_labels):
             tickvals.append(value)
             ticktext.append(label)
@@ -403,8 +404,8 @@ def get_hyperparameter_ticks_from_values(
             tickvals.append(values[idx])
             ticktext.append(labels[idx])
 
-        # After we added min and max values, we want to add
-        # intermediate values too
+        # After min and max values are added,
+        # intermediate values should be added too
         min_v = np.min(values)
         max_v = np.max(values)
 
@@ -438,7 +439,7 @@ def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
     Generate hover text with metrics for a configuration.
 
     The method gets information about a given configuration, including a link, its objectives,
-    budget, costs and hyperparameters
+    budget, costs and hyperparameters (HPs).
 
     Parameters
     ----------

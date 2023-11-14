@@ -25,6 +25,7 @@ class Group(AbstractRun):
 
     Utilities include getting attributes of the grouped runs, as well as the group.
 
+    Attributes
     ----------
     prefix, optional : str
         A prefix.
@@ -74,7 +75,7 @@ class Group(AbstractRun):
             self.objectives = attributes["objectives"]
             self.budgets = attributes["budgets"]
 
-            # We need new config ids
+            # New config ids are needed
             current_config_id = 0
 
             # Key: new_config_id; Value: (run_id, config_id)
@@ -116,7 +117,7 @@ class Group(AbstractRun):
                     # Update config id
                     trial.config_id = new_config_id
 
-                    # Now we add it to the history
+                    # Now it is added to the history
                     trial_key = trial.get_key()
                     if trial_key not in self.trial_keys:
                         self.trial_keys[trial_key] = len(self.history)
@@ -145,14 +146,14 @@ class Group(AbstractRun):
         for run in self.runs:
             hashes += [run.hash]
 
-        # We sort hashes now because we don't want to be dependent on the order
+        # Hashes are sorted now, so there is no dependence on the order
         hashes = sorted(hashes)
         return string_to_hash("-".join(hashes))
 
     @property
     def id(self) -> str:
         """Get a hash as id of the group."""
-        # Groups do not have a path, therefore we use the name.
+        # Groups do not have a path, therefore the name is used.
         return string_to_hash(f"{self.prefix}:{self.name}")
 
     @property
@@ -247,6 +248,7 @@ class Group(AbstractRun):
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
+    # Types dont match superclass
     def get_trajectory(self, *args, **kwargs):  # type: ignore
         """
         Get the trajectory of the group.
@@ -270,18 +272,18 @@ class Group(AbstractRun):
         run_costs = []
         run_times = []
 
-        # All x values on which we need y values
+        # All x values on which y values are needed
         all_times = []
 
         for _, run in enumerate(self.runs):
             times, costs_mean, _, _, _ = run.get_trajectory(*args, **kwargs)
 
-            # Cache s.t. we don't calculate it multiple times
+            # Cache s.t. calculate it is not calculated multiple times
             run_costs.append(costs_mean)
             run_times.append(times)
 
             # Add all times
-            # We want to calculate standard deviation on all times
+            # Standard deviation needs to be calculated on all times
             for time in times:
                 if time not in all_times:
                     all_times.append(time)

@@ -8,9 +8,9 @@ This module provides utilities for serializing and deserializing a dataframe fro
     - Encoder: This class defines a custom JSON Encoder.
 
 ## Constants
-    - JSON_DENSE_SEPARATORS = (",", ":")
-    - JSON_DEFAULT_SEPARATORS = (",", ": ")
-    - TYPE = TypeVar("TYPE")
+    - JSON_DENSE_SEPARATORS: Tuple(str, str)
+    - JSON_DEFAULT_SEPARATORS: Tuple(str, str)
+    - TYPE: TypeVar
 """
 
 from typing import Any, Dict, List, TypeVar, Union

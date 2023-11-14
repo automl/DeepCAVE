@@ -27,32 +27,16 @@ class Config:
     Constants
     ---------
     TITLE : str
-        "DeepCAVE"
     DEBUG: bool
-        True
     REFRESH_RATE: int
-        500
-    SAVE_IMAGES
-        False
-    FIGURE_MARGIN
-        dict(t=30, b=0, l=0, r=0)
-    FIGURE_HEIGHT
-        "40vh"
+    SAVE_IMAGES: bool
+    FIGURE_MARGIN: Dict
+    FIGURE_HEIGHT: str
     REDIS_PORT: int
-        6379
     REDIS_ADDRESS: str
-        "redis://localhost"
     DASH_PORT: int
-        8050
     DASH_ADDRESS: str
-        "127.0.0.1"
-    META_DEFAULT: Dict[str, Any]
-         {
-        "matplotlib-mode": False,
-        "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
-        "selected_run_paths": [],
-        "groups": {},  # {group_name: [run_path, ...]}
-        }
+    META_DEFAULT: Dict
 
     Properties
     ----------

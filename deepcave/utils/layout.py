@@ -265,7 +265,7 @@ def create_table(
     Returns
     -------
     dbc.Table
-        The created dbc table.
+        The created dash bootstrap component (DBC) table.
     """
     className = ""
     if not head:

@@ -5,7 +5,7 @@
 This module opens the browser after a given delay.
 
 ## Constants
-    DELAY = 4
+    DELAY: int
 """
 
 import sys

@@ -3,7 +3,7 @@
 # DeepCAVE
 
 This module is used to initialize and set up the configuration for the DeepCAVE framework.
-It also contains Constants and Metadata, as well as the name of the authors and the copyright.
+
 The Dash application gets created.
 """
 
@@ -84,8 +84,8 @@ def get_app(title: str) -> DashProxy:
 if any(file in _exec_file for file in _exec_files):
     from deepcave.custom_queue import Queue
     from deepcave.runs.handler import RunHandler
-    from deepcave.runs.objective import Objective  # noqa
-    from deepcave.runs.recorder import Recorder  # noqa
+    from deepcave.runs.objective import Objective
+    from deepcave.runs.recorder import Recorder
     from deepcave.utils.cache import Cache
     from deepcave.utils.configs import parse_config
     from deepcave.utils.notification import Notification
@@ -174,7 +174,7 @@ def interactive(func: F) -> F:
         Parameters
         ----------
         *args : Any
-            Arguments to be passed to the wrap function
+            Arguments to be passed to the wrap function.
         **kwargs : Any
             Keyword arguments to be passed to the wrap function.
 

@@ -28,7 +28,7 @@ class RunCaches:
     raw outputs so that raw outputs must not be calculated again.
 
     Each input has its own cache. This change was necessary because it ensures that not all data
-    are loaded if they are not needed.
+    is loaded if not needed.
 
     Properties
     ----------

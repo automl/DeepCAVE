@@ -25,7 +25,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
     Parameters
     ----------
     configspace : ConfigurationSpace
-        The configuration space from which the hyperparameters are drawn from.
+        The configuration space from which the hyperparameters (HPs) are drawn from.
 
     Yields
     ------
@@ -55,7 +55,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
 
         try:
             configuration = deactivate_inactive_hyperparameters(config, configspace)
-            configuration.is_valid_configuration()  # type: ignore[attr-defined]
+            configuration.is_valid_configuration()
         except Exception:
             continue
 
@@ -71,11 +71,11 @@ def sample_random_config(
     Parameters
     ----------
     configspace : ConfigurationSpace
-        The configspace from which the hyperparameters are drawn from.
+        The configspace from which the hyperparameters (HPs) are drawn from.
     d : Optional[int], optional
-        The possible hyperparameter values can be reduced by this argument as the range gets
-        discretized. For example, an integer or float hyperparameter has only four possible values
-        if d=4. By default, None (no discretization is done).
+        The possible hyperparameter (HP) values can be reduced by this argument as the range gets
+        discretized. For example, an integer or float hyperparameter (HP) has only four possible
+        values if d=4. By default, None (no discretization is done).
 
     Yields
     ------

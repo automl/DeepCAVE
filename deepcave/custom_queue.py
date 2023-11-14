@@ -302,7 +302,7 @@ class Queue:
         remove_jobs(self._queue.canceled_job_registry, job_id)
 
         # Started jobs perform differently
-        # We have to "kill" the worker
+        # The worker has to be "killed"
         for worker in self.get_workers():
             job_id_ = str(worker._job_id)  # b'cbece'
             job_id_ = job_id_.replace("b'", "").replace("'", "")
@@ -326,10 +326,10 @@ class Queue:
 
             # Wait till the job is actually canceled
             while worker.state == "busy":
-                # We need to "update" the worker every time
+                # The worker needs to be "updated" every time
                 worker = self.get_worker(worker.name)
 
-        # Now we also have to remove the failed jobs caused by the kill horse command
+        # Now the failed jobs also have to be removed caused by the kill horse command
         remove_jobs(self._queue.failed_job_registry, job_id)
 
     def delete_jobs(self) -> None:
@@ -369,7 +369,7 @@ class Queue:
         )
 
     def __getattr__(self, name: str) -> Any:
-        """If function is not found, make sure we access self._queue directly."""
+        """If function is not found, make sure self._queue is accessed directly."""
         try:
             return self.__getattribute__(name)
         except Exception:

@@ -9,26 +9,26 @@ Plots can be created and different parameters of the plots can be defined.
     - StyledPlot: Overwrites default settings from matplotlib.pyplot.
 
 ## Constants
-    FIG_WIDTH = 252.0 / 72.27
-    FIG_HEIGHT = FIG_WIDTH / 1.618
+    FIG_WIDTH: float
+    FIG_HEIGHT: float
 """
 
 from typing import Any, Dict, Optional, Union
 
+import base64
+import io
 from distutils.spawn import find_executable
 from pathlib import Path
 
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
 
+from deepcave.utils.logs import get_logger
+
 matplotlib.use("Agg")
-import base64  # noqa: E402
-import io  # noqa: E402
 
-import matplotlib.pyplot as plt  # noqa: E402
-
-from deepcave.utils.logs import get_logger  # noqa: E402
 
 # IEEETrans double column standard
 FIG_WIDTH = 252.0 / 72.27  # 1pt is 1/72.27 inches
@@ -297,7 +297,7 @@ class StyledPlot:
         return hex_codes[id % len(hex_codes)]
 
     def __getattr__(self, name: str) -> Any:
-        """Make sure we access self.plt directly."""
+        """Make sure self.plt is accessed directly."""
         try:
             return self.__getattribute__(name)
         except AttributeError:

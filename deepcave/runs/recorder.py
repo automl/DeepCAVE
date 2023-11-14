@@ -31,7 +31,7 @@ class Recorder:
     ----------
     path : Path
         The path to the recorded information.
-    last_trial_id : tuple[dict | Any, float | None]
+    last_trial_id : tuple[Any, float | None]
         The last trial id containing the configuration and the budget.
     start_time : float
         The current time in seconds since the Epoch
@@ -40,7 +40,7 @@ class Recorder:
         ]
         A dictionary containing the start times with their id as key.
     models : Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Union[str, Any]]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Any]
         ]
         The models used in the trial, with their id as key.
     origins : Dict[
@@ -66,8 +66,6 @@ class Recorder:
     ):
         """
         All objectives follow the scheme the lower the better.
-
-        If file
 
         Parameters
         ----------
@@ -103,7 +101,7 @@ class Recorder:
             Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], float
         ] = {}
         self.models: Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Union[str, Any]]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Any]
         ] = {}
         self.origins: Dict[
             Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[str]
@@ -165,7 +163,7 @@ class Recorder:
         self,
         config: Configuration,
         budget: Optional[float] = None,
-        model: Optional[Union[str, Any]] = None,
+        model: Optional[Any] = None,
         origin: Optional[str] = None,
         additional: Optional[dict] = None,
         start_time: Optional[float] = None,
@@ -180,7 +178,7 @@ class Recorder:
         budget : Optional[float], optional
             The budget for the trial.
             Default is None.
-        model : Optional[Union[str, Any]], optional
+        model : Optional[Any], optional
             The model used in the trial.
             Default is None.
         origin : Optional[str], optional

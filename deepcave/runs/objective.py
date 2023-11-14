@@ -6,7 +6,7 @@ This module provides utilities to convert and create objectives.
 It also provides functions for merging and comparing objectives.
 
 ## Classes
-    - Objective: Convert and creates objectives.
+    - Objective: Convert and create objectives.
 """
 
 from typing import Any, Dict, Optional, Union
@@ -21,7 +21,7 @@ from deepcave.runs.exceptions import NotMergeableError
 @dataclass
 class Objective:
     """
-    Convert, creates and merge objectives.
+    Convert, create and merge objectives.
 
     Attributes
     ----------
@@ -114,7 +114,7 @@ class Objective:
         Parameters
         ----------
         d : Dict[str, Any]
-            A dictionary in a JSON friendly format containing the attributes
+            A dictionary in a JSON friendly format containing the attributes.
 
         Returns
         -------
@@ -140,7 +140,7 @@ class Objective:
         Parameters
         ----------
         other : Any
-            The other instance to compare
+            The other instance to compare.
 
         Returns
         -------
@@ -169,6 +169,9 @@ class Objective:
         ------
         NotMergeableError
             If parts of the two Objectives are not mergeable.
+        ValueError
+            If the lower bound of one Objective is None.
+            If the upper bound of one Objective is None.
         """
         if not isinstance(other, Objective):
             raise NotMergeableError("Objective can only be merged with another Objective.")
@@ -178,21 +181,26 @@ class Objective:
             if getattr(self, attribute) != getattr(other, attribute):
                 raise NotMergeableError(f"Objective {attribute} can not be merged.")
 
+        if self.lower is None or other.lower is None:
+            raise ValueError("The lower bound of one Objective is None.")
+        if self.upper is None or other.upper is None:
+            raise ValueError("The upper bound of one Objective is None.")
+
         if self.lock_lower and self.lock_lower == other.lock_lower:
             if self.lower != other.lower:
                 raise NotMergeableError(f"Objective {other.name}'s lower bound can not be merged.")
         else:
-            if self.lower > other.lower:  # type: ignore
+            if self.lower > other.lower:
                 self.lower = other.lower
 
         if self.lock_upper and self.lock_upper == other.lock_upper:
             if self.upper != other.upper:
                 raise NotMergeableError(f"Objective {other.name}'s upper bound can not be merged.")
         else:
-            if self.upper < other.upper:  # type: ignore
+            if self.upper < other.upper:
                 self.upper = other.upper
 
-    def get_worst_value(self) -> float:
+    def get_worst_value(self) -> Optional[Union[int, float]]:
         """
         Get the worst value based on the optimization setting.
 
@@ -202,6 +210,6 @@ class Objective:
             The worst value based on the optimization setting.
         """
         if self.optimize == "lower":
-            return self.upper  # type: ignore
+            return self.upper
         else:
-            return self.lower  # type: ignore
+            return self.lower

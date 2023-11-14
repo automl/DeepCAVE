@@ -58,7 +58,7 @@ def parse_config(filename: Optional[str] = None) -> Config:
             script_dir = path.stem  # That's the path without the script name
             module_name = p.stem  # That's the script name without the extension
 
-            # Now we add to sys path
+            # Now it is added to sys path
             sys.path.append(str(path))
 
             module = importlib.import_module(f"{script_dir}.{module_name}")

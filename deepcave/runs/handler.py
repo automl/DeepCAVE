@@ -7,7 +7,7 @@ It can retrieve working directories, run paths, run names, as well as groups of 
 It provides utilities to update and remove runs as well a groups of runs.
 
 # Classes
-    - RunHandler: Handles the runs.
+    - RunHandler: Handle the runs.
 """
 
 from typing import Dict, List, Optional, Type, Union
@@ -26,7 +26,7 @@ from deepcave.utils.run_caches import RunCaches
 
 class RunHandler:
     """
-    Handles the runs.
+    Handle the runs.
 
     Based on the meta data in the cache, automatically selects the right converter
     and switches to the right (plugin) cache.
@@ -250,7 +250,7 @@ class RunHandler:
             selected_run_paths.remove(run_path)
             self.c.set("selected_run_paths", value=selected_run_paths)
 
-            # We have to check the groups here because the removed run_path may
+            # The groups have to be checked here because the removed run_path may
             # still be included
             groups = {}
             group_it = self.c.get("groups")
@@ -263,7 +263,7 @@ class RunHandler:
 
             self.c.set("groups", value=groups)
 
-            # We also remove last inputs here
+            # Last inputs are also removed here
             self.c.set("last_inputs", value={})
             self.update_runs()
 
