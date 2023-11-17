@@ -32,11 +32,6 @@ class Run(AbstractRun, ABC):
 
     If path is given, runs are loaded from the path.
 
-    Attributes
-    ----------
-    prefix : str
-        The prefix set to "run".
-
     Properties
     ----------
     configspace : ConfigurationSpace

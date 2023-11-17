@@ -32,20 +32,7 @@ class FootPrint(StaticPlugin):
     """
     Visualize the footprint of a configuration.
 
-    Represents a static plugin for the footprint.
-
-    Attributes
-    ----------
-    id : str
-        Identifies the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representation of the plugin.
-    help : str
-        The path to the documentation of the plugin.
-    activate_run_selection : bool
-        Defines whether the run selection feature is activated.
+    Represent a static plugin for the footprint.
     """
 
     id = "footprint"

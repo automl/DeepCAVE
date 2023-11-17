@@ -35,20 +35,6 @@ class BudgetCorrelation(DynamicPlugin):
 
     Provided utilities include getting input/output layout, data processing
     and loading outputs.
-
-    Attributes
-    ----------
-    id : str
-        The identificator of the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representation of the plugin.
-    help : str
-        The path to the documentation of the plugin.
-    activate_run_selection : bool
-        Defines whether the run selection feature is active.
-        Default is True.
     """
 
     id = "budget_correlation"

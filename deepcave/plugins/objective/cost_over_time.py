@@ -32,17 +32,6 @@ class CostOverTime(DynamicPlugin):
     """
     A plugin to provide a visualization for the cost over time.
 
-    Attributes
-    ----------
-    id : str
-        The identificator of the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representing the plugin.
-    help : str
-        The path to the documentation of the plugin.
-
     Properties
     ----------
     objective_options : List[Dict[str, Any]]

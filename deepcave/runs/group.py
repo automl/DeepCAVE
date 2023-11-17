@@ -25,12 +25,6 @@ class Group(AbstractRun):
 
     Utilities include getting attributes of the grouped runs, as well as the group.
 
-    Attributes
-    ----------
-    prefix, optional : str
-        A prefix.
-        Default is "group".
-
     Properties
     ----------
     runs : List[AbstractRun]

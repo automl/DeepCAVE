@@ -21,11 +21,6 @@ class DeepCAVERun(Run):
     """
     Define the DeepCAVE run and provide handling utilities.
 
-    Attributes
-    ----------
-    prefix : str
-        The prefix of the run.
-
     Properties
     ----------
     path : Path

@@ -46,19 +46,6 @@ class PartialDependencies(StaticPlugin):
 
     Provided utilities include getting input and output layout (filtered or non-filtered),
     processing the data and loading the outputs.
-
-    Attributes
-    ----------
-    id : str
-        Identifier for the plugin.
-    name : str
-        Name of the plugin.
-    icon : str
-        Icon representation of the plugin.
-    help : str
-        Path to the documentation of the plugin.
-    activate_run_selection : bool
-        Defines whether the run selection feature should be activated.
     """
 
     id = "pdp"

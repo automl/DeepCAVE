@@ -46,11 +46,6 @@ class AbstractRun(ABC):
     Provide functions to get information of the run, as well as the used objectives.
     Utilities also include encoding configurations and check equality between runs.
 
-    Attributes
-    ----------
-    prefix : str
-        The prefix of the run.
-
     Properties
     ----------
     name : str
@@ -97,7 +92,9 @@ class AbstractRun(ABC):
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Union[Configuration, Dict[Any, Any]]] = {}
         self.origins: Dict[int, Optional[str]] = {}
-        self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}  # noqa: F821
+        self.models: Dict[  # type: ignore
+            int, Optional[Union[str, "torch.nn.Module"]]  # noqa: F821
+        ] = {}
 
         self.history: List[Trial] = []
         self.trial_keys: Dict[
@@ -883,7 +880,7 @@ class AbstractRun(ABC):
 
         return cost
 
-    def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # noqa: F821
+    def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # type: ignore # noqa: F821
         """
         Get a torch model associated with a configuration ID.
 

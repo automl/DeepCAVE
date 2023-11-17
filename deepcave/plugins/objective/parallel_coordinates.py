@@ -34,22 +34,7 @@ logger = get_logger(__name__)
 
 
 class ParallelCoordinates(StaticPlugin):
-    """
-    Can be used for visualizing the parallel coordinates.
-
-    Attributes
-    ----------
-    id : str
-        The identificator of the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representing the plugin
-    activate_run_selection : bool
-        Define whether the run selection feature is active.
-    help : str
-        The path to the documentation of the plugin.
-    """
+    """Can be used for visualizing the parallel coordinates."""
 
     id = "parallel_coordinates"
     name = "Parallel Coordinates"

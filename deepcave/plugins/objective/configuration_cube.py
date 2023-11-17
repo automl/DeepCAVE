@@ -38,22 +38,7 @@ logger = get_logger(__name__)
 
 
 class ConfigurationCube(DynamicPlugin):
-    """
-    Provide a plugin for visualizing the configuration cube.
-
-    Attributes
-    ----------
-    id : str
-        The identificator of the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representation of the plugin.
-    activate_run_selection : bool
-        Whether the run selection feature is active.
-    help : str
-        The path to the documentation of the plugin.
-    """
+    """Provide a plugin for visualizing the configuration cube."""
 
     id = "ccube"
     name = "Configuration Cube"

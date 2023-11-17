@@ -30,11 +30,6 @@ class BOHBRun(Run):
     This class extends the Run class.
     Utilities provide getting a hash, as well as the latest change of a file.
 
-    Attributes
-    ----------
-    prefix : str
-        Set the prefix to "BOHB".
-
     Properties
     ----------
     path : Path

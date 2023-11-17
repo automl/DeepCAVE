@@ -35,24 +35,7 @@ from deepcave.utils.url import create_url
 
 
 class Configurations(DynamicPlugin):
-    """
-    Visualize the characteristics of a configuration.
-
-    Attributes
-    ----------
-    id : str
-        Identifies the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representing the plugin.
-    help : str
-        The path to the documentation of the plugin.
-    activate_run_selection : bool
-        Defines whether the run selection feature is activated.
-    use_cache : bool
-        Defines whether the cache is to be used.
-    """
+    """Visualize the characteristics of a configuration."""
 
     id = "configurations"
     name = "Configurations"

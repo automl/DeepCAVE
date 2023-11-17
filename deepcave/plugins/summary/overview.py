@@ -37,24 +37,7 @@ from deepcave.utils.util import get_latest_change
 
 
 class Overview(DynamicPlugin):
-    """
-    Visualize an overall overview of a run.
-
-    Attributes
-    ----------
-    id : str
-        Identifies the plugin.
-    name : str
-        The name of the plugin.
-    icon : str
-        The icon representing the plugin.
-    help : str
-        The path to the documentation of the plugin.
-    use_cache : bool
-        Defines whether the cache is to be used.
-    activate_run_selection : bool
-        Defines whether the run selection feature is active.
-    """
+    """Visualize an overall overview of a run."""
 
     id = "overview"
     name = "Overview"

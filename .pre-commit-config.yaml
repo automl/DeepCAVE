@@ -61,7 +61,7 @@ repos:
             'rq>=1.10.1',
             'werkzeug==2.0.3',
             'pyPDPPartitioner'
-        ]
+        ] # Needed for mypy, so that it knows the types to check
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0

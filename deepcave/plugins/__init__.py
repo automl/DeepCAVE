@@ -44,25 +44,6 @@ class Plugin(Layout, ABC):
 
     Provides different utilities to handle the plugins and check for compatibility in the runs.
 
-    Attributes
-    ----------
-    id : int
-        Unique identifier for the plugin.
-    name : str
-        Name of the plugin. It is shown in the navigation and in the title.
-    description : str, optional
-        Description of the plugin. Displayed below the title.
-    icon : str, optional
-        FontAwesome icon. Shown in the navigation.
-    help : str, optional
-        Path to the help file.
-    button_caption : str, optional
-        Caption of the button. Shown only, if `StaticPlugin` is used.
-    activate_run_selection : bool, optional
-        Shows a dropdown to select a run in the inputs layout.
-        This feature is useful if only one run could be viewed at a time.
-        Moreover, it prevents the plugin to calculate results across all runs.
-
     Properties
     ----------
     inputs : List[Tuple[str, str, bool, Any]]
@@ -620,6 +601,8 @@ class Plugin(Layout, ABC):
         # Clean inputs
         cleaned_inputs = self._clean_inputs(inputs)
 
+        # passed runs could be a list, but load mpl outputs and load outputs do not
+        # accept lists, but expect single runs
         if mpl_active:
             outputs = self.__class__.load_mpl_outputs(passed_runs, cleaned_inputs, passed_outputs)
         else:
@@ -880,7 +863,7 @@ class Plugin(Layout, ABC):
     @interactive
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
-        Return the components for the plugin.
+        Create and return the components for the plugin.
 
         Basically, all blocks and elements of the plugin are stacked-up here.
 

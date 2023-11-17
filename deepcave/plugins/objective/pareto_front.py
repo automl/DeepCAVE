@@ -35,17 +35,6 @@ class ParetoFront(DynamicPlugin):
 
     Utilities provided for plotly, as well as matplotlib.
 
-    Attributes
-    ----------
-    id : str
-        Identifier for the plugin.
-    name : str
-        Name of the plugin.
-    icon : str
-        Icon representation for the plugin.
-    help : str
-        Path to the documentation of the plugin.
-
     Properties
     ----------
     objective_options : List[Dict[str, Any]]

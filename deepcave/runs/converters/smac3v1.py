@@ -30,12 +30,6 @@ class SMAC3v1Run(Run):
 
     It also provides utilities to hash it and get its latest change.
 
-    Attributes
-    ----------
-    prefix, optional : str
-        The prefix of the run object.
-        Default is "SMAC3v1".
-
     Properties
     ----------
     path : Path

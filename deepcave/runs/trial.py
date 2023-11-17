@@ -21,23 +21,6 @@ class Trial:
     """
     Provide the trial object itself and multiple handling utilities.
 
-    Attributes
-    ----------
-    config_id: int
-        The configuration identificator.
-    budget: Union[int, float]
-        The budget of the trial.
-    costs: List[float]
-        The costs of the trial
-    start_time: float
-        The start time of the trial.
-    end_time: float
-        The end time of the trial
-    status: Status
-        The status of the trial
-    additional: Dict[str, Any]
-        Any additional information of the trial.
-
     Properties
     ----------
     status : Status

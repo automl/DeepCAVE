@@ -23,20 +23,6 @@ class Objective:
     """
     Convert, create and merge objectives.
 
-    Attributes
-    ----------
-    name : str
-        The name of the objective.
-    lower : Optional[Union[int, float]], optional
-        The lower bound of the objective.
-        Default is None.
-    upper : Optional[Union[int, float]], optional
-        The upper bound of the objective.
-        Default is None.
-    optimize : str, optional
-        Defines which bound to optimize.
-        Default is "lower".
-
     Properties
     ----------
     lower : int | float | None
