@@ -17,7 +17,8 @@
       "log": false,
       "lower": 16,
       "upper": 256,
-      "default": 136
+      "default": 136,
+      "q": null
     },
     {
       "name": "dropout_rate",
@@ -25,7 +26,8 @@
       "log": false,
       "lower": 0.1,
       "upper": 0.9,
-      "default": 0.5
+      "default": 0.5,
+      "q": null
     },
     {
       "name": "learning_rate",
@@ -33,7 +35,8 @@
       "log": true,
       "lower": 0.0001,
       "upper": 0.1,
-      "default": 0.0031622777
+      "default": 0.0031622777,
+      "q": null
     },
     {
       "name": "model",
@@ -51,7 +54,8 @@
       "log": false,
       "lower": 5,
       "upper": 100,
-      "default": 52
+      "default": 52,
+      "q": null
     },
     {
       "name": "num_neurons_layer2",
@@ -59,7 +63,8 @@
       "log": false,
       "lower": 5,
       "upper": 100,
-      "default": 52
+      "default": 52,
+      "q": null
     }
   ],
   "conditions": [
