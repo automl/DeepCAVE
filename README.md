@@ -47,6 +47,11 @@ conda install -c anaconda swig
 make install-dev
 ```
 
+If you want to use the given examples, run this after installing:
+```bash
+make install-examples
+```
+
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get
 further help (e.g. if you can not install redis server or you are on a mac).
 

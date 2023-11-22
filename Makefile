@@ -46,6 +46,9 @@ install-dev:
 	$(PIP) install -e ".[dev]"
 	pre-commit install
 	
+install-examples:
+	$(PIP) install -e ".[examples]"
+	
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :
 	$(BLACK) ${EXAMPLES_DIR} --check || :
