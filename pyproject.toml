@@ -53,14 +53,15 @@ add-ignore = [ # http://www.pydocstyle.org/en/stable/error_codes.html
 ]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 show_error_codes = true
 warn_unused_configs = true         # warn about unused [tool.mypy] lines
 follow_imports = "normal"          # Type check top level api code we use from imports
-ignore_missing_imports = true     # prefer explicit ignores
+ignore_missing_imports = true      # prefer explicit ignores
 disallow_untyped_defs = true       # All functions must have types
 disallow_untyped_decorators = true # ... even decorators
 disallow_incomplete_defs = true    # ... all types
+check_untyped_defs = true          # Problems are shown, even if def is check_untyped_defs
 
 [[tool.mypy.overrides]]
 module = ["setuptools.*"]     # Add modules that give import errors here

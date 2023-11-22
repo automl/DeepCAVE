@@ -41,7 +41,7 @@ repos:
       - id: mypy
         name: mypy deepcave
         files: deepcave
-        args: [--check-untyped-defs, --ignore-missing-imports, --install-types, --non-interactive]
+        args: [--install-types, --non-interactive]
         additional_dependencies: [
             'wheel',
             'setuptools',
