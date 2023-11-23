@@ -10,8 +10,6 @@ This module provides utilities to calculate the local parameter importance (LPI)
 
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from random import random
-
 import numpy as np
 from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value, check_forbidden

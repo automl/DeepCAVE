@@ -19,7 +19,6 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import functools
 import warnings
-from random import random
 
 import numpy as np
 import pyrfr.regression as regression
