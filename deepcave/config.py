@@ -13,7 +13,6 @@ from typing import Any, Dict, List, Type
 
 from pathlib import Path
 
-from deepcave.plugins import Plugin
 from deepcave.runs.run import Run
 
 
@@ -90,7 +89,7 @@ class Config:
         return f"http://{self.DASH_ADDRESS}:{self.DASH_PORT}"
 
     @property
-    def PLUGINS(self) -> Dict[str, List["Plugin"]]:
+    def PLUGINS(self) -> Dict[str, List[Any]]:
         """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
         from deepcave.plugins.hyperparameter.importances import Importances
@@ -103,7 +102,7 @@ class Config:
         from deepcave.plugins.summary.footprint import FootPrint
         from deepcave.plugins.summary.overview import Overview
 
-        plugins: Dict[str, List["Plugin"]] = {}
+        plugins: Dict[str, List[Any]] = {}
         plugins = {
             "Summary": [
                 Overview(),
