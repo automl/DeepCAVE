@@ -1,3 +1,23 @@
+# Version 1.1.4
+
+## Version-Updates
+- Black version from 23.1.0 to 23.3.0
+- Mypy from 0.930 to 1.5.1
+
+## Mypy
+- Updated args so there are no missing imports
+- Updated additional dependencies, so mypy can check all types
+- Note: If the installs in requirements change, it has to be adapted in additional dependencies
+- Added many type annotations
+- In some cases internal refactoring for variables, due to typing
+
+## Pydocstyle and Linter
+- Major overhaul of docstrings in various files
+- Removed unused imports and variables
+
+## Additional Changes
+- Added a "make install examples" in Makefile
+
 # Version 1.1.3
 
 ## Bug-Fixes
