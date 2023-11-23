@@ -56,7 +56,7 @@ class fANOVA:
         objectives: Optional[Union[Objective, List[Objective]]] = None,
         budget: Optional[Union[int, float]] = None,
         n_trees: int = 16,
-        seed: Optional[int] = None,
+        seed: int = 0,
     ) -> None:
         """
         Get the data wrt budget and train the forest on the encoded data.
@@ -73,8 +73,8 @@ class fANOVA:
             Considered budget. By default None. If None, the highest budget is chosen.
         n_trees : int, optional
             How many trees should be used. By default 16.
-        seed : Optional[int], optional
-            Random seed. By default None.
+        seed : int
+            Random seed. By default 0.
         """
         if objectives is None:
             objectives = self.run.get_objectives()

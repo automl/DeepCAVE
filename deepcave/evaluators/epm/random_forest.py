@@ -100,7 +100,7 @@ class RandomForest:
         instance_features: Optional[np.ndarray] = None,
         pca_components: Optional[int] = 2,
         log_y: bool = False,
-        seed: Optional[int] = None,
+        seed: int = 0,
     ):
         self.cs = configspace
         self.log_y = log_y
@@ -350,8 +350,6 @@ class RandomForest:
         # Now we can start to prepare the data for the pyrfr
         data = self._get_data_container(X, Y.flatten())
         seed = self.seed
-        if seed is None:
-            seed = int(random() * 9999)
 
         rng = regression.default_random_engine(seed)
 

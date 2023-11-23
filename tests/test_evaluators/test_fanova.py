@@ -40,6 +40,5 @@ class TestFanova(unittest.TestCase):
         # With seed: Same results
         assert importance_dict_run_1["n_neurons"][1] == importance_dict_run_2["n_neurons"][1]
 
-
 if __name__ == "__main__":
     unittest.main()

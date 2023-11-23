@@ -70,7 +70,7 @@ class FanovaForest(RandomForest):
         instance_features: Optional[np.ndarray] = None,
         pca_components: Optional[int] = 2,
         cutoffs: Tuple[float, float] = (-np.inf, np.inf),
-        seed: Optional[int] = None,
+        seed: int = 0,
     ):
         super().__init__(
             configspace=configspace,

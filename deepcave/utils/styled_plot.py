@@ -51,6 +51,7 @@ class StyledPlot:
         The style used is seaborn.
     """
 
+
     def __init__(self) -> None:
         plt.style.use("seaborn-v0_8")
 
