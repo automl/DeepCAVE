@@ -59,8 +59,7 @@ class RunHandler:
         self.logger = get_logger("RunHandler")
 
         # Available converters
-        self.available_run_yfes: List[Type[Run]] = config.CONVERTERS
-        self.available_run_classes: List[Type[Run]]
+        self.available_run_classes: List[Type[Run]] = config.CONVERTERS
 
         # Internal state
         self.runs: Dict[str, AbstractRun] = {}  # run_name -> Run
