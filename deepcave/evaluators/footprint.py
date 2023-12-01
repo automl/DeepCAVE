@@ -501,7 +501,8 @@ class Footprint:
 
             self._X = X
             # There is no += to a None, an Issue has already been created
-            self._config_ids += [config_id]
+            if self._config_ids is not None:
+                self._config_ids += [config_id]
             self._distances = new_distances
 
         return rejected
