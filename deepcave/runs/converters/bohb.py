@@ -49,7 +49,6 @@ class BOHBRun(Run):
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
-
             times = bohb_run.time_stamps
             starttime = times["started"]
             endtime = times["finished"]
@@ -77,7 +76,7 @@ class BOHBRun(Run):
             if "SUCCESS" in status or "TERMINATED" in status or "COMPLETED" in status:
                 status = Status.SUCCESS
             elif "RUNNING" in status or "QUEUED" in status or "REVIEW" in status:
-                status = Status.RUNNING
+                continue
             else:
                 status = Status.CRASHED
 
