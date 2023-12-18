@@ -1,5 +1,8 @@
 # Version 1.1.4
 
+## Enhancements
+- Fix lower bounds of dependency versions.
+
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
 
