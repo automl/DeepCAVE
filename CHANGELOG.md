@@ -1,5 +1,9 @@
 # Version 1.1.4
 
+## Enhancements
+- Fix lower bounds of dependency versions.
+- Allow to load multi-objective SMAC3v2 and add example (#69)
+
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
 
