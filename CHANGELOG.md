@@ -1,7 +1,11 @@
 # Version 1.1.4
 
+## Enhancements
+- Fix lower bounds of dependency versions.
+
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106)
 
 # Version 1.1.3
 

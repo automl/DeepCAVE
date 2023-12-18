@@ -126,6 +126,7 @@ class ConfigurationCube(DynamicPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
+        if budget_value is None:
             budget_value = budget_ids[-1]
         else:
             budget_value = inputs["budget_id"]["value"]
