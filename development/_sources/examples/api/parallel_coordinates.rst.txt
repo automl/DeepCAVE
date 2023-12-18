@@ -26,7 +26,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
 
 .. GENERATED FROM PYTHON SOURCE LINES 8-34
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
@@ -56,24 +56,16 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # figure.write_image("examples/api/test.png")
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
-
-
 .. _sphx_glr_download_examples_api_parallel_coordinates.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: parallel_coordinates.ipynb <parallel_coordinates.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parallel_coordinates.py <parallel_coordinates.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: parallel_coordinates.ipynb <parallel_coordinates.ipynb>`

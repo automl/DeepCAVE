@@ -26,7 +26,7 @@ show the strenghts of DeepCAVE's recorder.
 
 .. GENERATED FROM PYTHON SOURCE LINES 8-288
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -310,24 +310,16 @@ show the strenghts of DeepCAVE's recorder.
                         r.end(costs=[accuracy_, loss_, elapsed_time], status=status)
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
-
-
 .. _sphx_glr_download_examples_record_mnist_pytorch.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: mnist_pytorch.ipynb <mnist_pytorch.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: mnist_pytorch.py <mnist_pytorch.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: mnist_pytorch.ipynb <mnist_pytorch.ipynb>`

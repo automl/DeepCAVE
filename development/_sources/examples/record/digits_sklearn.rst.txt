@@ -26,7 +26,7 @@ process in DeepCAVE format.
 
 .. GENERATED FROM PYTHON SOURCE LINES 8-94
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from sklearn.neural_network import MLPClassifier
@@ -116,24 +116,16 @@ process in DeepCAVE format.
                         r.end(costs=[score, None])
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
-
-
 .. _sphx_glr_download_examples_record_digits_sklearn.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: digits_sklearn.ipynb <digits_sklearn.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: digits_sklearn.py <digits_sklearn.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: digits_sklearn.ipynb <digits_sklearn.ipynb>`

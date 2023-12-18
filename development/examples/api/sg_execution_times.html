@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>deepcave.utils.logs &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>Computation times &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     
       
 
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=2eb4fb78" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
-  <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
+  <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.utils.notification" href="deepcave.utils.notification.html" />
-    <link rel="prev" title="deepcave.utils.layout" href="deepcave.utils.layout.html" />
+    <script src="../../_static/documentation_options.js?v=0ac1cb89"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -55,7 +53,7 @@
   <div id="navbar-start">
     
     
-  <a class="navbar-brand" href="../index.html">
+  <a class="navbar-brand" href="../../index.html">
   <!-- <p class="title">DeepCAVE Documentation</p> -->
   </a>
 
@@ -105,7 +103,7 @@
       </div>
       
       <div class="navbar-end-item">
-        <form class="bd-search align-items-center" action="../search.html" method="get" style="width: 100%;">
+        <form class="bd-search align-items-center" action="../../search.html" method="get" style="width: 100%;">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control btn btn-md" name="q" id="search-input"
     placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off">
@@ -123,22 +121,22 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../index.html">DeepCAVE Documentation</a></h4>
 <div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <ul class="current nav bd-sidenav">
+    <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../installation.html">
+  <a class="reference internal" href="../../installation.html">
    Installation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../getting_started.html">
+  <a class="reference internal" href="../../getting_started.html">
    Getting Started
   </a>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../examples/index.html">
+  <a class="reference internal" href="../index.html">
    Examples
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -148,7 +146,7 @@
   </label>
   <ul>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="../examples/api/index.html">
+    <a class="reference internal" href="index.html">
      API
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
@@ -158,14 +156,14 @@
     </label>
     <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="../examples/api/parallel_coordinates.html">
+      <a class="reference internal" href="parallel_coordinates.html">
        Parallel Coordinates
       </a>
      </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="../examples/record/index.html">
+    <a class="reference internal" href="../record/index.html">
      Record
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
@@ -175,17 +173,17 @@
     </label>
     <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="../examples/record/minimal.html">
+      <a class="reference internal" href="../record/minimal.html">
        Record Minimal Run
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../examples/record/digits_sklearn.html">
+      <a class="reference internal" href="../record/digits_sklearn.html">
        Multi-Layer Perceptron via Sklearn
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../examples/record/mnist_pytorch.html">
+      <a class="reference internal" href="../record/mnist_pytorch.html">
        Multi-Layer Perceptron via PyTorch
       </a>
      </li>
@@ -194,7 +192,7 @@
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../plugins/index.html">
+  <a class="reference internal" href="../../plugins/index.html">
    Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
@@ -204,74 +202,74 @@
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/overview.html">
+    <a class="reference internal" href="../../plugins/overview.html">
      Overview
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/configurations.html">
+    <a class="reference internal" href="../../plugins/configurations.html">
      Configurations
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/configuration_footprint.html">
+    <a class="reference internal" href="../../plugins/configuration_footprint.html">
      Configuration Footprint
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/cost_over_time.html">
+    <a class="reference internal" href="../../plugins/cost_over_time.html">
      Cost Over Time
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/configuration_cube.html">
+    <a class="reference internal" href="../../plugins/configuration_cube.html">
      Configuration Cube
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/pareto_front.html">
+    <a class="reference internal" href="../../plugins/pareto_front.html">
      Pareto Front
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/parallel_coordinates.html">
+    <a class="reference internal" href="../../plugins/parallel_coordinates.html">
      Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/budget_correlation.html">
+    <a class="reference internal" href="../../plugins/budget_correlation.html">
      Budget Correlation
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/importances.html">
+    <a class="reference internal" href="../../plugins/importances.html">
      Importances
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/partial_dependencies.html">
+    <a class="reference internal" href="../../plugins/partial_dependencies.html">
      Partial Dependencies
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../converters.html">
+  <a class="reference internal" href="../../converters.html">
    Converters
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="../api.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../api.html">
    API References
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
   <label for="toctree-checkbox-5">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="deepcave.runs.html">
+    <a class="reference internal" href="../../api/deepcave.runs.html">
      deepcave.runs
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
@@ -281,7 +279,7 @@
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="deepcave.runs.converters.html">
+      <a class="reference internal" href="../../api/deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
       <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
@@ -291,71 +289,71 @@
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.bohb.html">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.deepcave.html">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.smac3v1.html">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.smac3v1.html">
          deepcave.runs.converters.smac3v1
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.smac3v2.html">
+        <a class="reference internal" href="../../api/deepcave.runs.converters.smac3v2.html">
          deepcave.runs.converters.smac3v2
         </a>
        </li>
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.exceptions.html">
+      <a class="reference internal" href="../../api/deepcave.runs.exceptions.html">
        deepcave.runs.exceptions
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.group.html">
+      <a class="reference internal" href="../../api/deepcave.runs.group.html">
        deepcave.runs.group
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.handler.html">
+      <a class="reference internal" href="../../api/deepcave.runs.handler.html">
        deepcave.runs.handler
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.objective.html">
+      <a class="reference internal" href="../../api/deepcave.runs.objective.html">
        deepcave.runs.objective
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.recorder.html">
+      <a class="reference internal" href="../../api/deepcave.runs.recorder.html">
        deepcave.runs.recorder
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.run.html">
+      <a class="reference internal" href="../../api/deepcave.runs.run.html">
        deepcave.runs.run
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.status.html">
+      <a class="reference internal" href="../../api/deepcave.runs.status.html">
        deepcave.runs.status
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.runs.trial.html">
+      <a class="reference internal" href="../../api/deepcave.runs.trial.html">
        deepcave.runs.trial
       </a>
      </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="deepcave.plugins.html">
+    <a class="reference internal" href="../../api/deepcave.plugins.html">
      deepcave.plugins
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
@@ -365,17 +363,17 @@
     </label>
     <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.plugins.budget.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.budget.html">
        deepcave.plugins.budget
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.plugins.dynamic.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.dynamic.html">
        deepcave.plugins.dynamic
       </a>
      </li>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="deepcave.plugins.hyperparameter.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
       <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
@@ -385,19 +383,19 @@
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.hyperparameter.importances.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.hyperparameter.pdp.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.pdp.html">
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="deepcave.plugins.objective.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
       <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
@@ -407,34 +405,34 @@
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.configuration_cube.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.configuration_cube.html">
          deepcave.plugins.objective.configuration_cube
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.cost_over_time.html">
          deepcave.plugins.objective.cost_over_time
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.objective.pareto_front.html">
          deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.plugins.static.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.static.html">
        deepcave.plugins.static
       </a>
      </li>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="deepcave.plugins.summary.html">
+      <a class="reference internal" href="../../api/deepcave.plugins.summary.html">
        deepcave.plugins.summary
       </a>
       <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
@@ -444,17 +442,17 @@
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.summary.configurations.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.configurations.html">
          deepcave.plugins.summary.configurations
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.summary.footprint.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.footprint.html">
          deepcave.plugins.summary.footprint
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.summary.overview.html">
+        <a class="reference internal" href="../../api/deepcave.plugins.summary.overview.html">
          deepcave.plugins.summary.overview
         </a>
        </li>
@@ -463,7 +461,7 @@
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="deepcave.layouts.html">
+    <a class="reference internal" href="../../api/deepcave.layouts.html">
      deepcave.layouts
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
@@ -473,19 +471,19 @@
     </label>
     <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.layouts.not_found.html">
+      <a class="reference internal" href="../../api/deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.layouts.sidebar.html">
+      <a class="reference internal" href="../../api/deepcave.layouts.sidebar.html">
        deepcave.layouts.sidebar
       </a>
      </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
-    <a class="reference internal" href="deepcave.evaluators.html">
+    <a class="reference internal" href="../../api/deepcave.evaluators.html">
      deepcave.evaluators
     </a>
     <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
@@ -495,7 +493,7 @@
     </label>
     <ul>
      <li class="toctree-l3 has-children">
-      <a class="reference internal" href="deepcave.evaluators.epm.html">
+      <a class="reference internal" href="../../api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
       </a>
       <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
@@ -505,141 +503,141 @@
       </label>
       <ul>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.evaluators.epm.fanova_forest.html">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.fanova_forest.html">
          deepcave.evaluators.epm.fanova_forest
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.evaluators.epm.random_forest.html">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.random_forest.html">
          deepcave.evaluators.epm.random_forest
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.evaluators.epm.random_forest_surrogate.html">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.random_forest_surrogate.html">
          deepcave.evaluators.epm.random_forest_surrogate
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.evaluators.epm.utils.html">
+        <a class="reference internal" href="../../api/deepcave.evaluators.epm.utils.html">
          deepcave.evaluators.epm.utils
         </a>
        </li>
       </ul>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.evaluators.fanova.html">
+      <a class="reference internal" href="../../api/deepcave.evaluators.fanova.html">
        deepcave.evaluators.fanova
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.evaluators.footprint.html">
+      <a class="reference internal" href="../../api/deepcave.evaluators.footprint.html">
        deepcave.evaluators.footprint
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.evaluators.lpi.html">
+      <a class="reference internal" href="../../api/deepcave.evaluators.lpi.html">
        deepcave.evaluators.lpi
       </a>
      </li>
     </ul>
    </li>
-   <li class="toctree-l2 current active has-children">
-    <a class="reference internal" href="deepcave.utils.html">
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../api/deepcave.utils.html">
      deepcave.utils
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
     <label for="toctree-checkbox-15">
      <i class="fas fa-chevron-down">
      </i>
     </label>
-    <ul class="current">
+    <ul>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.cache.html">
+      <a class="reference internal" href="../../api/deepcave.utils.cache.html">
        deepcave.utils.cache
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.cast.html">
+      <a class="reference internal" href="../../api/deepcave.utils.cast.html">
        deepcave.utils.cast
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.compression.html">
+      <a class="reference internal" href="../../api/deepcave.utils.compression.html">
        deepcave.utils.compression
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.configs.html">
+      <a class="reference internal" href="../../api/deepcave.utils.configs.html">
        deepcave.utils.configs
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.configspace.html">
+      <a class="reference internal" href="../../api/deepcave.utils.configspace.html">
        deepcave.utils.configspace
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.dash.html">
+      <a class="reference internal" href="../../api/deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.data_structures.html">
+      <a class="reference internal" href="../../api/deepcave.utils.data_structures.html">
        deepcave.utils.data_structures
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.docs.html">
+      <a class="reference internal" href="../../api/deepcave.utils.docs.html">
        deepcave.utils.docs
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.files.html">
+      <a class="reference internal" href="../../api/deepcave.utils.files.html">
        deepcave.utils.files
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.hash.html">
+      <a class="reference internal" href="../../api/deepcave.utils.hash.html">
        deepcave.utils.hash
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.layout.html">
+      <a class="reference internal" href="../../api/deepcave.utils.layout.html">
        deepcave.utils.layout
       </a>
      </li>
-     <li class="toctree-l3 current active">
-      <a class="current reference internal" href="#">
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.logs.html">
        deepcave.utils.logs
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.notification.html">
+      <a class="reference internal" href="../../api/deepcave.utils.notification.html">
        deepcave.utils.notification
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.run_caches.html">
+      <a class="reference internal" href="../../api/deepcave.utils.run_caches.html">
        deepcave.utils.run_caches
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.styled_plot.html">
+      <a class="reference internal" href="../../api/deepcave.utils.styled_plot.html">
        deepcave.utils.styled_plot
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.styled_plotty.html">
+      <a class="reference internal" href="../../api/deepcave.utils.styled_plotty.html">
        deepcave.utils.styled_plotty
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.url.html">
+      <a class="reference internal" href="../../api/deepcave.utils.url.html">
        deepcave.utils.url
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.util.html">
+      <a class="reference internal" href="../../api/deepcave.utils.util.html">
        deepcave.utils.util
       </a>
      </li>
@@ -648,12 +646,12 @@
   </ul>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../glossary.html">
+  <a class="reference internal" href="../../glossary.html">
    Glossary
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../faq.html">
+  <a class="reference internal" href="../../faq.html">
    Frequently Asked Questions
   </a>
  </li>
@@ -693,21 +691,36 @@
               
               <div>
                 
-  <section id="module-deepcave.utils.logs">
-<span id="deepcave-utils-logs"></span><h1>deepcave.utils.logs<a class="headerlink" href="#module-deepcave.utils.logs" title="Link to this heading">¶</a></h1>
-<p class="rubric">Functions</p>
-<table class="autosummary longtable table autosummary">
+  <section id="computation-times">
+<span id="sphx-glr-examples-api-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Link to this heading">¶</a></h1>
+<p><strong>00:00.000</strong> total execution time for 1 file <strong>from examples/api</strong>:</p>
+<div class="docutils container">
+<style scoped>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+</style>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script type="text/javascript" class="init">
+$(document).ready( function () {
+    $('table.sg-datatable').DataTable({order: [[1, 'desc']]});
+} );
+</script><table class="table table-striped sg-datatable">
+<thead>
+<tr class="row-odd"><th class="head"><p>Example</p></th>
+<th class="head"><p>Time</p></th>
+<th class="head"><p>Mem (MB)</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_logger</span></code>(logger_name)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Logger</span></code></span></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="parallel_coordinates.html#sphx-glr-examples-api-parallel-coordinates-py"><span class="std std-ref">Parallel Coordinates</span></a> (<code class="docutils literal notranslate"><span class="pre">parallel_coordinates.py</span></code>)</p></td>
+<td><p>00:00.000</p></td>
+<td><p>0.0</p></td>
 </tr>
 </tbody>
 </table>
+</div>
 </section>
 
 
@@ -715,21 +728,7 @@
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.utils.layout.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.utils.layout</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="deepcave.utils.notification.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.utils.notification</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+<div class='prev-next-area'>
 </div>
               
           </main>
@@ -738,7 +737,7 @@
       </div>
     </div>
   
-  <script src="../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+  <script src="../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
 <footer class="footer mt-5 mt-md-0">
   <div class="container">
     
