@@ -23,7 +23,7 @@ def get_function_set():
     return function_set
 
 
-def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.expr:
+def convert_symb(symb, n_decimals: int = None, hp_names: list = None) -> sympy.core.expr:
     """
     Convert a fitted symbolic regression to a simplified and potentially rounded mathematical expression.
     Warning: eval is used in this function, thus it should not be used on unsanitized input (see
@@ -32,8 +32,8 @@ def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.
     Parameters
     ----------
     symb: Fitted symbolic regressor to find a simplified expression for.
-    n_dim: Number of input dimensions. If input has only a single dimension, X0 in expression is exchanged by x.
     n_decimals: If set, round floats in the expression to this number of decimals.
+    hp_names: If set, replace X0 and X1 in the expression by the names given.
 
     Returns
     -------
@@ -78,12 +78,19 @@ def convert_symb(symb, n_dim: int = None, n_decimals: int = None) -> sympy.core.
         return symb_str
 
     symb_conv = sympy.sympify(symb_str.replace("[", "").replace("]", ""), locals=converter)
-    if n_dim == 1:
-        x, X0 = sympy.symbols("x X0")
-        symb_conv = symb_conv.subs(X0, x)
-    if n_dim == 2:
-        X0, X1 = sympy.symbols("X0 X1", real=True)
-        symb_conv = symb_conv.subs(X0, X1)
+    if hp_names is not None:
+        if len(hp_names) == 1:
+            X0, hp0 = sympy.symbols(f"X0 {hp_names[0]}")
+            symb_conv = symb_conv.subs(X0, hp0)
+        elif len(hp_names) == 2:
+            X0, hp0, X1, hp1 = sympy.symbols(f"X0 {hp_names[0]} X1 {hp_names[1]}")
+            symb_conv = symb_conv.subs(X0, hp0)
+            symb_conv = symb_conv.subs(X1, hp1)
+        else:
+            raise ValueError(
+                f"Numer of hyperparameters to be explained by symbolic explanations must not "
+                f"be larger than 2"
+            )
 
     logger.debug("Start to simplify the expression with Sympy.")
     symb_simpl = sympy.simplify(symb_conv)
