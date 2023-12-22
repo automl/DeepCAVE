@@ -9,7 +9,11 @@ from deepcave.layouts import Layout
 class HeaderLayout(Layout):
     def register_callbacks(self) -> None:
         super().register_callbacks()
+        self._callback_update_matplotlib_mode()
+        self._callback_exit_deepcave()
+        self._callback_exit_deepcave2()
 
+    def _callback_update_matplotlib_mode(self) -> None:
         outputs = [
             Output("matplotlib-mode-toggle", "color"),
             Output("matplotlib-mode-badge", "children"),
@@ -21,7 +25,7 @@ class HeaderLayout(Layout):
         ]
 
         @app.callback(outputs, inputs)
-        def update_matplotlib_mode(n_clicks, pathname):
+        def callback(n_clicks, pathname):
             update = None
             mode = c.get("matplotlib-mode")
             if mode is None:
@@ -36,6 +40,35 @@ class HeaderLayout(Layout):
                 return "primary", "on", update
             else:
                 return "secondary", "off", update
+
+    def _callback_exit_deepcave(self) -> None:
+        inputs = [Input("exit-deepcave", "n_clicks")]
+        outputs = [
+            Output("exit-deepcave", "color"),
+            Output("exit-deepcave", "children"),
+            Output("exit-deepcave", "disabled"),
+        ]
+
+        @app.callback(inputs, outputs)
+        def callback(n_clicks):
+            if n_clicks is not None:
+                from deepcave import queue
+                queue.delete_jobs()
+                return "danger", "Terminated DeepCAVE", True
+            else:
+                return "primary", "Exit", False
+
+    def _callback_exit_deepcave2(self) -> None:
+        inputs = [Input("exit-deepcave", "n_clicks")]
+        outputs = []
+
+        @app.callback(inputs, outputs)
+        def callback(n_clicks):
+            if n_clicks is not None:
+                import os
+                import time
+                time.sleep(1)
+                os._exit(130)
 
     def __call__(self) -> html.Header:
         return html.Header(
@@ -59,5 +92,12 @@ class HeaderLayout(Layout):
                     className="me-2",
                     id="matplotlib-mode-toggle",
                 ),
-            ],
+                dbc.Button(
+                    "Exit",
+                    color="secondary",
+                    className="me-2",
+                    id="exit-deepcave",
+                    disabled=False
+                ),
+                ],
         )

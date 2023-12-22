@@ -7,6 +7,7 @@ class Config:
     # General config
     TITLE: str = "DeepCAVE"
     DEBUG: bool = True
+    DEV_TOOLS: bool = False
     # How often to refresh background activities (such as update the sidebar or process button for
     # static plugins). Value in milliseconds.
     REFRESH_RATE: int = 500

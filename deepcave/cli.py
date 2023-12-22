@@ -1,5 +1,4 @@
-from typing import Any, List
-
+import os
 import multiprocessing
 import subprocess
 from pathlib import Path
@@ -49,4 +48,8 @@ def execute(_) -> None:
 
 
 def main() -> None:
-    app.run(execute)
+    try:
+        app.run(execute)
+    except KeyboardInterrupt:
+        print('KeyboardInterrupt')
+        os._exit(130)
