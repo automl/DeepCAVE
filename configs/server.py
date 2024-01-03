@@ -3,7 +3,6 @@ from deepcave.config import Config as C
 
 class Config(C):
     DEBUG = False
-    DEV_TOOLS = False
 
     REDIS_PORT = 6379
     REDIS_ADDRESS = "redis://localhost"
