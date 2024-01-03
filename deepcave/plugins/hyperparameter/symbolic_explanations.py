@@ -26,7 +26,7 @@ class SymbolicExplanations(StaticPlugin):
     id = "symbolic_explanations"
     name = "Symbolic Explanations"
     icon = "fas fa-subscript"
-    help = "docs/plugins/partial_dependencies.rst"  # TODO
+    help = "docs/plugins/symbolic_explanations.rst"
     activate_run_selection = True
 
     @staticmethod
@@ -326,18 +326,25 @@ class SymbolicExplanations(StaticPlugin):
         signal.alarm(6)  # seconds
         while True:
             try:
-                conv_expr = convert_symb(
-                    symb_model, n_decimals=3, hp_names=selected_hyperparameters
+                conv_expr = (
+                    f"{objective.name} = "
+                    f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
                 )
             except:
                 conv_expr = (
-                    "The conversion of the expression failed. Please try another seed or increase "
-                    "the parsimony hyperparameter to obtain a symbolic explanation."
+                    "Conversion of the expression failed. Please try another seed or increase "
+                    "the parsimony hyperparameter."
+                )
+
+            if len(conv_expr) > 115:
+                conv_expr = (
+                    "Expression is too long to display. Please try another seed or increase "
+                    "the parsimony hyperparameter."
                 )
 
             y_symbolic = symb_model.predict(x).tolist()
 
-            return {"x": x, "y": y_symbolic, "expr": str(conv_expr)}
+            return {"x": x, "y": y_symbolic, "expr": conv_expr}
 
     @staticmethod
     def get_output_layout(register):
@@ -385,7 +392,7 @@ class SymbolicExplanations(StaticPlugin):
                     "yaxis": {
                         "title": objective_name,
                     },
-                    "title": f"{objective.name} = {expr}",
+                    "title": expr,
                 }
             )
         else:
@@ -410,7 +417,7 @@ class SymbolicExplanations(StaticPlugin):
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
-                    title=f"{objective.name} = {expr}",
+                    title=expr,
                 )
             )
 

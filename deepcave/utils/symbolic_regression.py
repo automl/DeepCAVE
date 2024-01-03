@@ -71,13 +71,14 @@ def convert_symb(symb, n_decimals: int = None, hp_names: list = None) -> sympy.c
         "pow": lambda x, y: x**y,
     }
 
+    # Abort conversion for very long programs, as they take too much time or do not finish at all.
     if symb._program.length_ > 300:
-        print(
-            f"Expression of length {symb._program._length} too long to convert, return raw string."
-        )
         return symb_str
 
+    # Convert formula string to SymPy object
     symb_conv = sympy.sympify(symb_str.replace("[", "").replace("]", ""), locals=converter)
+
+    # Replace variable names in formula by hyperparameter names
     if hp_names is not None:
         if len(hp_names) == 1:
             X0, hp0 = sympy.symbols(f"X0 {hp_names[0]}")
@@ -92,9 +93,14 @@ def convert_symb(symb, n_decimals: int = None, hp_names: list = None) -> sympy.c
                 f"be larger than 2"
             )
 
-    logger.debug("Start to simplify the expression with Sympy.")
-    symb_simpl = sympy.simplify(symb_conv)
+    # Simplify the formula
+    try:
+        # Simplification can fail in some cases. If so, use the unsimplified version.
+        symb_simpl = sympy.simplify(symb_conv)
+    except:
+        symb_simpl = symb_conv
 
+    # Round floats to n_decimals
     if n_decimals:
         # Make sure also floats deeper in the expression tree are rounded
         for a in sympy.preorder_traversal(symb_simpl):
