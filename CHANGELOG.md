@@ -1,7 +1,14 @@
-# Version 1.1.4
+# Version 1.2
+
+## Plugins
+- Add symbolic explanations plugin.
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
+- Update author email.
+- Add exit button which first deletes running jobs and then terminates DeepCave.
+- Nicer handling of Keyboard Interrupt.
+- Disable debug mode.
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).

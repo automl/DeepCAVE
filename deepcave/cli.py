@@ -51,5 +51,4 @@ def main() -> None:
     try:
         app.run(execute)
     except KeyboardInterrupt:
-        print('KeyboardInterrupt')
-        os._exit(130)
+        exit("KeyboardInterrupt.")
