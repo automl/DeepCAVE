@@ -319,32 +319,26 @@ class SymbolicExplanations(StaticPlugin):
         symb_model = SymbolicRegressor(**symb_params)
         symb_model.fit(x, y)
 
-        def handler(signo, frame):
-            raise RuntimeError
+        try:
+            conv_expr = (
+                f"{objective.name} = "
+                f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
+            )
+        except:
+            conv_expr = (
+                "Conversion of the expression failed. Please try another seed or increase "
+                "the parsimony hyperparameter."
+            )
 
-        signal.signal(signal.SIGALRM, handler)
-        signal.alarm(6)  # seconds
-        while True:
-            try:
-                conv_expr = (
-                    f"{objective.name} = "
-                    f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
-                )
-            except:
-                conv_expr = (
-                    "Conversion of the expression failed. Please try another seed or increase "
-                    "the parsimony hyperparameter."
-                )
+        if len(conv_expr) > 115:
+            conv_expr = (
+                "Expression is too long to display. Please try another seed or increase "
+                "the parsimony hyperparameter."
+            )
 
-            if len(conv_expr) > 115:
-                conv_expr = (
-                    "Expression is too long to display. Please try another seed or increase "
-                    "the parsimony hyperparameter."
-                )
+        y_symbolic = symb_model.predict(x).tolist()
 
-            y_symbolic = symb_model.predict(x).tolist()
-
-            return {"x": x, "y": y_symbolic, "expr": conv_expr}
+        return {"x": x, "y": y_symbolic, "expr": conv_expr}
 
     @staticmethod
     def get_output_layout(register):
