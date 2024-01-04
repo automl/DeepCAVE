@@ -1,7 +1,7 @@
 # Version 1.2
 
 ## Plugins
-- Add symbolic explanations plugin.
+- Add symbolic explanations plugin (#46).
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
