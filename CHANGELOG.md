@@ -5,6 +5,7 @@
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- Fix api examples (#68).
 
 # Version 1.1.3
 

@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
@@ -230,7 +230,7 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -344,7 +344,7 @@ class PartialDependencies(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=config.FIGURE_MARGIN,
+                    margin=Config.FIGURE_MARGIN,
                 )
             )
 
