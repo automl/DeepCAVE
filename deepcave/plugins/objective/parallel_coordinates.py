@@ -164,7 +164,6 @@ class ParallelCoordinates(StaticPlugin):
             objective_value = objective_ids[0]
             budget_value = budget_ids[-1]
             hp_value = hp_names
-            n_hps = len(hp_names)
 
         if n_hps == 0:
             n_hps = len(hp_names)

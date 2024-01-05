@@ -137,7 +137,6 @@ class Importances(StaticPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
-            n_hps = len(hp_names)
 
         if n_hps == 0:
             n_hps = len(hp_names)

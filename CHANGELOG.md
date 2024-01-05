@@ -5,6 +5,7 @@
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- Fix errors due to changing inputs before runselection (#64).
 
 # Version 1.1.3
 
