@@ -127,8 +127,7 @@ class SymbolicExplanations(StaticPlugin):
                                     dbc.Input(
                                         id=register("generations", type=int),
                                         type="number",
-                                        min=5,
-                                        step=5,
+                                        min=1,
                                     ),
                                 ],
                                 md=6,
@@ -142,8 +141,7 @@ class SymbolicExplanations(StaticPlugin):
                                     dbc.Input(
                                         id=register("population_size", type=int),
                                         type="number",
-                                        min=1000,
-                                        step=1000,
+                                        min=1,
                                     ),
                                 ],
                                 md=6,
