@@ -215,10 +215,13 @@ class SymbolicExplanations(StaticPlugin):
         objective_value = inputs["objective_id"]["value"]
         budget_value = inputs["budget_id"]["value"]
         hp1_value = inputs["hyperparameter_name_1"]["value"]
+        hp2_value = inputs["hyperparameter_name_2"]["value"]
 
         if objective_value is None:
             objective_value = objective_ids[0]
+        if budget_value is None:
             budget_value = budget_ids[-1]
+        if hp1_value is None:
             hp1_value = hp_names[0]
 
         return {
@@ -230,6 +233,7 @@ class SymbolicExplanations(StaticPlugin):
             },
             "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
+                "value": hp2_value,
             },
         }
 
