@@ -5,6 +5,7 @@
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- For fANOVA, remove constant hyperparameters from configspace (#9).
 
 # Version 1.1.3
 
