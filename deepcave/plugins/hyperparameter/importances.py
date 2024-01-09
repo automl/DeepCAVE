@@ -182,7 +182,7 @@ class Importances(StaticPlugin):
         # Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr and pyrfr cannot be applied
         # to constant hyperparameters (see https://github.com/automl/fanova/issues/81), as a workaround we remove
         # constant hyperparameters before calculation.
-        # Note: This will break if there are conditions including constant hyperparameters.
+        # Note: This will break if there are conditions or forbiddens including constant hyperparameters.
         hp_dict = run.configspace.get_hyperparameters_dict()
         if method == "global" and any([type(v) == Constant for v in hp_dict.values()]):
             hp_dict_wo_const = {
@@ -191,6 +191,7 @@ class Importances(StaticPlugin):
             for k in hp_dict_wo_const.keys():
                 configspace_wo_const.add_hyperparameter(hp_dict_wo_const[k])
             configspace_wo_const.add_conditions(run.configspace.get_conditions())
+            configspace_wo_const.add_forbidden_clauses(run.configspace.get_forbiddens())
             run.configspace = configspace_wo_const
 
             configs_wo_const = []
