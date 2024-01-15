@@ -190,6 +190,10 @@ class PartialDependencies(StaticPlugin):
         surrogate_model = RandomForestSurrogate(run.configspace, seed=0)
         surrogate_model.fit(X, Y)
 
+        # This is necessary as the run configspace can differ from the surrogate, which would be problematic as the
+        # surrogate configspace is used in the PDP and the run configspace for plotting in load_outputs()
+        surrogate_model.config_space = run.configspace
+
         # Prepare the hyperparameters
         selected_hyperparameters = [hp1]
         if hp2 is not None and hp2 != "":
