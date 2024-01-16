@@ -336,7 +336,7 @@ class SymbolicExplanations(StaticPlugin):
                 "the parsimony hyperparameter."
             )
 
-        if len(conv_expr) > 115:
+        if len(conv_expr) > 150:
             conv_expr = (
                 "Expression is too long to display. Please try another seed or increase "
                 "the parsimony hyperparameter."
