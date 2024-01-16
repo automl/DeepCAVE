@@ -837,10 +837,13 @@
         <span class="n">objective_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
         <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp2_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">objective_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">objective_value</span> <span class="o">=</span> <span class="n">objective_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">budget_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget_value</span> <span class="o">=</span> <span class="n">budget_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hp1_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="p">{</span>
@@ -852,6 +855,7 @@
             <span class="p">},</span>
             <span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">hp_names</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp2_value</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">}</span></div>
 
@@ -1076,7 +1080,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
