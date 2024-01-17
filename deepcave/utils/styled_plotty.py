@@ -34,15 +34,15 @@ def save_image(figure: go.Figure, name: str) -> None:
     name : str
         Name of the image with extension. Will be automatically saved to the cache.
     """
-    from deepcave import config
+    from deepcave.config import Config
 
-    if not config.SAVE_IMAGES:
+    if not Config.SAVE_IMAGES:
         return
 
     ratio = 16 / 9
     width = 500
     height = int(width / ratio)
-    path = config.CACHE_DIR / "figures" / name
+    path = Config.CACHE_DIR / "figures" / name
 
     figure.write_image(path, width=width, height=height)
     logger.info(f"Saved figure {name} to {path}.")
