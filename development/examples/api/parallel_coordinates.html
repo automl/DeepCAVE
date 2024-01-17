@@ -37,7 +37,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Record" href="../record/index.html" />
-    <link rel="prev" title="API" href="index.html" />
+    <link rel="prev" title="Importances" href="importances.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -157,6 +157,16 @@
      </i>
     </label>
     <ul class="current">
+     <li class="toctree-l3">
+      <a class="reference internal" href="pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3 current active">
       <a class="current reference internal" href="#">
        Parallel Coordinates
@@ -700,15 +710,16 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="parallel-coordinates">
 <span id="sphx-glr-examples-api-parallel-coordinates-py"></span><h1>Parallel Coordinates<a class="headerlink" href="#parallel-coordinates" title="Link to this heading">¶</a></h1>
-<p>This example shows how to use the plugin parallel coordinates.
+<p>This example shows how to use the plugin Parallel Coordinates.
 Note that other plugins use the same interfaces and can be used in the same fashion.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">deepcave.plugins.objective.parallel_coordinates</span> <span class="kn">import</span> <span class="n">ParallelCoordinates</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.converters.deepcave</span> <span class="kn">import</span> <span class="n">DeepCAVERun</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="c1"># Instantiate the run</span>
-    <span class="n">run</span> <span class="o">=</span> <span class="n">DeepCAVERun</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="s2">&quot;examples/record/logs/DeepCAVE/mlp/run_2&quot;</span><span class="p">)</span>
+    <span class="n">run</span> <span class="o">=</span> <span class="n">DeepCAVERun</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;logs/DeepCAVE/minimal/run_2&quot;</span><span class="p">))</span>
     <span class="n">objective_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">budget_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget_ids</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
@@ -718,6 +729,10 @@ Note that other plugins use the same interfaces and can be used in the same fash
         <span class="n">hyperparameter_names</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">(),</span>
         <span class="n">objective_id</span><span class="o">=</span><span class="n">objective_id</span><span class="p">,</span>
         <span class="n">budget_id</span><span class="o">=</span><span class="n">budget_id</span><span class="p">,</span>
+        <span class="n">show_important_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">show_unsuccessful</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">hide_hps</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">n_hps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># Note: Filter variables are not considered.</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">generate_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
@@ -725,8 +740,8 @@ Note that other plugins use the same interfaces and can be used in the same fash
     <span class="c1"># Finally, you can load the figure. Here, the filter variables play a role.</span>
     <span class="c1"># Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.</span>
     <span class="n">figure</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>  <span class="c1"># plotly.go figure</span>
+    <span class="n">figure</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="s2">&quot;examples/api/parallel_coordinates.png&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
     <span class="c1"># figure.show()</span>
-    <span class="c1"># figure.write_image(&quot;examples/api/test.png&quot;)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-api-parallel-coordinates-py">
@@ -745,11 +760,11 @@ Note that other plugins use the same interfaces and can be used in the same fash
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="importances.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">API</p>
+            <p class="prev-next-title">Importances</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../record/index.html" title="next page">
