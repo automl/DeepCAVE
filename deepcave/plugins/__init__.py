@@ -370,16 +370,18 @@ class Plugin(Layout, ABC):
                             if "hyperparameter_name_2" in _inputs.keys():
                                 update_dict(_inputs, {"hyperparameter_name_2": {"value": None}})
 
-                        selected_run = run_handler.get_run(_run_id)
+                        if _run_id:
+                            selected_run = run_handler.get_run(_run_id)
 
-                    # How to update only parameters which have a dependency?
-                    user_dependencies_inputs = self.load_dependency_inputs(
-                        selected_run, _previous_inputs, _inputs
-                    )
+                    if selected_run is not None:
+                        # How to update only parameters which have a dependency?
+                        user_dependencies_inputs = self.load_dependency_inputs(
+                            selected_run, _previous_inputs, _inputs
+                        )
 
-                    # Update dict
-                    # dict.update() remove keys, so we use our own method to do so
-                    update_dict(inputs, user_dependencies_inputs)  # inplace operation
+                        # Update dict
+                        # dict.update() remove keys, so we use our own method to do so
+                        update_dict(inputs, user_dependencies_inputs)  # inplace operation
 
                 # Let's cast the inputs
                 inputs = self._cast_inputs(inputs)
