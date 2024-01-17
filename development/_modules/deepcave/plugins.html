@@ -1078,16 +1078,18 @@
                             <span class="k">if</span> <span class="s2">&quot;hyperparameter_name_2&quot;</span> <span class="ow">in</span> <span class="n">_inputs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                                 <span class="n">update_dict</span><span class="p">(</span><span class="n">_inputs</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}})</span>
 
-                        <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">_run_id</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">_run_id</span><span class="p">:</span>
+                            <span class="n">selected_run</span> <span class="o">=</span> <span class="n">run_handler</span><span class="o">.</span><span class="n">get_run</span><span class="p">(</span><span class="n">_run_id</span><span class="p">)</span>
 
-                    <span class="c1"># How to update only parameters which have a dependency?</span>
-                    <span class="n">user_dependencies_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span>
-                        <span class="n">selected_run</span><span class="p">,</span> <span class="n">_previous_inputs</span><span class="p">,</span> <span class="n">_inputs</span>
-                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">selected_run</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="c1"># How to update only parameters which have a dependency?</span>
+                        <span class="n">user_dependencies_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dependency_inputs</span><span class="p">(</span>
+                            <span class="n">selected_run</span><span class="p">,</span> <span class="n">_previous_inputs</span><span class="p">,</span> <span class="n">_inputs</span>
+                        <span class="p">)</span>
 
-                    <span class="c1"># Update dict</span>
-                    <span class="c1"># dict.update() remove keys, so we use our own method to do so</span>
-                    <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">user_dependencies_inputs</span><span class="p">)</span>  <span class="c1"># inplace operation</span>
+                        <span class="c1"># Update dict</span>
+                        <span class="c1"># dict.update() remove keys, so we use our own method to do so</span>
+                        <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">user_dependencies_inputs</span><span class="p">)</span>  <span class="c1"># inplace operation</span>
 
                 <span class="c1"># Let&#39;s cast the inputs</span>
                 <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
