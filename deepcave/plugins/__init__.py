@@ -360,11 +360,15 @@ class Plugin(Layout, ABC):
                             # because `run` would be removed.
                             # Also: We want to keep the current run name.
                             update_dict(_inputs, self.load_inputs())
-
-                            # TODO: Reset only inputs which are not available in another run.
-                            # E.g. if options from budget in run_2 and run_3 are the same
-                            # take the budget from run_2 if changed to run_3. Otherwise,
-                            # reset budgets.
+                            # Reset inputs
+                            if "objective_id" in _inputs.keys():
+                                update_dict(_inputs, {"objective_id": {"value": None}})
+                            if "budget_id" in _inputs.keys():
+                                update_dict(_inputs, {"budget_id": {"value": None}})
+                            if "hyperparameter_name_1" in _inputs.keys():
+                                update_dict(_inputs, {"hyperparameter_name_1": {"value": None}})
+                            if "hyperparameter_name_2" in _inputs.keys():
+                                update_dict(_inputs, {"hyperparameter_name_2": {"value": None}})
 
                         selected_run = run_handler.get_run(_run_id)
 
