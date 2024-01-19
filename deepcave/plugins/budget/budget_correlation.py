@@ -31,7 +31,7 @@ logger = get_logger(__name__)
 
 class BudgetCorrelation(DynamicPlugin):
     """
-    Can be used for visualizing the correlation of budgets.
+    Used for visualizing the correlation of budgets.
 
     Provided utilities include getting input/output layout, data processing
     and loading outputs.
@@ -67,18 +67,18 @@ class BudgetCorrelation(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[html.Div]:
         """
-        Get the html container for the layout of the input.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the objective.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[html.Div]
-            An html container for the layout of the input.
+            Layouts for the input block.
         """
         return [
             html.Div(
@@ -95,7 +95,11 @@ class BudgetCorrelation(DynamicPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Dict[str, Any]]:
         """
-        Load the objectives attributes.
+        Same as 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes are returned, they will be later merged with the inputs.
 
         Parameters
         ----------
@@ -107,7 +111,7 @@ class BudgetCorrelation(DynamicPlugin):
         Returns
         -------
         Dict[str, Dict[str, Any]]
-            The objectives id, its options and a value.
+            A dictionary with the changes.
         """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -127,19 +131,30 @@ class BudgetCorrelation(DynamicPlugin):
     @staticmethod
     def process(run: AbstractRun, inputs: Dict[str, int]) -> Dict[str, Any]:
         """
-        Load the budget and the costs of the run. Get the correlations.
+        Return raw data based on a run and the input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ 
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run : AbstractRun
-            The run to get the budget and the costs from.
+            The run to process.
         inputs : Dict[str, int]
             The input to get the objective id from.
 
         Returns
         -------
         Dict[str, Any]
-            The correlations as well as the correlations symmetric.
+            Serialized dictionary with the correlations 
+            as well as the correlations symmetric.
         """
         objective_id = inputs["objective_id"]
         budget_ids = run.get_budget_ids(include_combined=False)
@@ -187,18 +202,18 @@ class BudgetCorrelation(DynamicPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> List[Any]:
         """
-        Get the html container for the layout of the output.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the Div object.
+            Method to register outputs.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[Any]
-            The html container containing the layout of the output.
+            Layout for the output block.
         """
         return [
             html.Div(id=register("text", "children"), className="mb-3"),
@@ -219,14 +234,20 @@ class BudgetCorrelation(DynamicPlugin):
     # Types dont match superclass
     def load_outputs(run, _, outputs) -> List[Any]:
         """
-        Create the output table and safe the image.
+        Read the raw data and prepare it for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ 
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to get the budget from.
+            The selected run.
         outputs
-            The outputs to get the correlation and its symmetric from.
+            Raw output from the run.
 
         Returns
         -------

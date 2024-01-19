@@ -4,8 +4,10 @@
 
 This module provides utilities for visualizing and creating a configuration cube.
 
+The configuration cube displays configurations and their score on the objective.
+
 ## Classes
-    - ConfigurationCube: This class provides a plugin for visualizing the configuration cube.
+    - ConfigurationCube: This class provides a plugin for visualizing a configuration cube.
 """
 
 from typing import Any, Callable, Dict, List, Tuple
@@ -38,7 +40,7 @@ logger = get_logger(__name__)
 
 
 class ConfigurationCube(DynamicPlugin):
-    """Provide a plugin for visualizing the configuration cube."""
+    """Provide a plugin for visualizing a configuration cube."""
 
     id = "ccube"
     name = "Configuration Cube"
@@ -49,12 +51,12 @@ class ConfigurationCube(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get the dash bootstrap components (DBC) for the input layout.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns

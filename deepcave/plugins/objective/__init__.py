@@ -5,7 +5,7 @@
 ## Modules
 ----------
 configuration_cube
-    This module provides utilities for visualizing and creating the configruation cube.
+    This module provides utilities for visualizing and creating a configruation cube.
 cost_over_time
     This module provides utilities for visualizing the cost over time.
 parallel_coordinates

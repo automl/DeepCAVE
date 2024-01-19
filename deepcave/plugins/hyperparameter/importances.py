@@ -47,18 +47,18 @@ class Importances(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[Any]:
         """
-        Get the html container for the layout of the input.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id of the objective.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[Any]
-            An html container for the layout of the input.
+            Layout for the input block.
         """
         return [
             html.Div(
@@ -109,18 +109,18 @@ class Importances(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[html.Div]:
         """
-        Get the layout for a filtered html container.
+        Get the layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the Checklist.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[html.Div]
-            A filtered html container.
+            Layout for the filter block.
         """
         return [
             html.Div(
@@ -154,12 +154,15 @@ class Importances(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the method labels, values and different attributes.
+        Load the content for the defined inputs in 'get_input_layout'
+        and 'get_filter_layout'. This method is necessary to pre-load contents for the inputs.
+        If the plugin is called for the first time, or there are no results in the cache,
+        the plugin gets its content from this method.
 
         Returns
         -------
         Dict[str, Dict[str, Any]]
-            The attributes of the inputs.
+            Content to be filled.
         """
         method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
         method_values = ["local", "global"]
@@ -178,20 +181,24 @@ class Importances(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Load the objective, budgets and hyperparameters (HPs) and its attributes.
+        Same as 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
 
         Parameters
         ----------
         run
-            The run to get the objective from.
+            The selected run.
         inputs : Dict[str, Any]
-            Contains information about the objective, budgets
-            and number of hyperparamaters (HPs).
+            Current content of the inputs.
 
         Returns
         -------
         Dict[str, Any]
-            The objective, budgets, hyperparameters (HPs) and their attributes.
+            A dictionary with the changes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -247,26 +254,36 @@ class Importances(StaticPlugin):
 
     @staticmethod
     # Return doesnt match superclass type
-    def process(run: AbstractRun, inputs: Dict[str, Any]):
+    def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Initialize the evaluator, calculate and get the processed data.
+        Return raw data based on the run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ 
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run : AbstractRun
-            The run to get the objective from.
+            The run to process.
         inputs :  Dict[str, Any]
-            Contains information about the method and the number of trees.
+            The input data.
 
         Returns
         -------
-        The processed data.
+        Dict[str, Any]
+            A serialzied dictionary.
 
         Raises
         ------
         RuntimeError
             If the number of trees is not specified.
-        RuntimeError
             If the method is not found.
         """
         objective = run.get_objective(inputs["objective_id"])
@@ -302,42 +319,49 @@ class Importances(StaticPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
         """
-        Get a graph with the layout of the output.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            A function to get the id for the graph.
+            Method to register outputs.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         dcc.Graph
-            The graph with the layout of the output.
+            Layout for the output block.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> go.Figure:
         """
-        Load the importances and the corresponding layout of the figure.
+        Read in raw data and prepare for layout.
 
-        Also safes the image of the figure.
+        Also save the image of the figure.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ 
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
 
         Parameters
         ----------
         run
-            The run to get the budget from.
+            The selected run.
         inputs
-            Containing the hyperparameter (HPs) names, the budget ids
-            and the number of hyperparamaters (HPs).
+            Input and filter values from the user.
         outputs
-            Containing the budget id and importances.
+            Raw output from the run.
 
         Returns
         -------
-        The figure of the importances.
+        go.figure
+            The figure of the importances.
         """
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
@@ -417,18 +441,18 @@ class Importances(StaticPlugin):
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> html.Img:
         """
-        Get an html container of the output layout.
+        Get the layout for the matplotlib output block.
 
         Parameters
         ----------
         register : Callable
-            A function to get the id.
+            Method to register outputs.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         html.Img
-            An html container of the matplotlib output layout.
+            The layout for the matplotlib output block.
         """
         return html.Img(
             id=register("graph", "src"),
@@ -439,17 +463,16 @@ class Importances(StaticPlugin):
     # Types dont match superclass
     def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):
         """
-        Load the importances and the corresponding layout of the matplotlib figure.
+        Read the raw data and prepare it for the layout.
 
         Parameters
         ----------
         run
-            The run to get the budget from.
+            The selected run.
         inputs : Dict[str, Any]
-            Containing the hyperparameter (HPs) names, the budget ids
-            and the number of hyperparameters (HPs).
+            Input and filter values from the user.
         outputs
-            Containing the budget id and importances.
+            Raw output from the run.
 
         Returns
         -------

@@ -4,13 +4,11 @@
 
 This module provides utilities for generating Partial Dependency Plots (PDP).
 
-These plots are used for visualization of impacts of hyperparameters (HPs) on the model.
 Provided utilities include getting input and output layout (filtered or non-filtered),
 processing the data and loading the outputs.
 
 ## Classes
-    - PartialDependencies: Generate a Partial Dependency Plot (PDP)
-    for visualizing hyperparameter impacts.
+    - PartialDependencies: Generate a Partial Dependency Plot (PDP).
 
 ## Constants
     GRID_POINTS_PER_AXIS : int
@@ -42,7 +40,7 @@ MAX_SHOWN_SAMPLES = 100
 
 class PartialDependencies(StaticPlugin):
     """
-    Generate Partial Dependency Plots (PDP) for visualizing hyperparameter (HP) impacts.
+    Generate Partial Dependency Plots (PDP).
 
     Provided utilities include getting input and output layout (filtered or non-filtered),
     processing the data and loading the outputs.
@@ -57,18 +55,18 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get the dash bootstrap components (DBC) for the input layout.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used for the Select id.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[dbc.Row]
-            The dash bootstrap components (DBC) for the input layout.
+            The layout for the input block.
         """
         return [
             dbc.Row(
@@ -133,18 +131,18 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[Any]:
         """
-        Get the dash bootstrap component (DBC) containing an html container for the filtered layout.
+        Get the layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the select id.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[Any]
-            The dash bootstrap component (DPC) containing an html container for the filtered layout.
+            The layout for the filter block.
         """
         return [
             dbc.Row(
@@ -184,12 +182,15 @@ class PartialDependencies(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the confidence values as well as the ice.
+        Load the content for the defined inputs in 'get_input_layout'
+        and 'get_filter_layout'. This method is necessary to pre-load contents for the inputs.
+        If the plugin is called for the first time, or there are no results in the cache,
+        the plugin gets its content from this method.
 
         Returns
         -------
         Dict[str, Dict[str, Any]]
-            The confidence values as well as the ice.
+            Content to be filled.
         """
         return {
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
@@ -197,20 +198,26 @@ class PartialDependencies(StaticPlugin):
         }
 
     # Types dont match superclass
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
         """
-        Load the objectives, budgets, hyperparameter (HP) names and their attributes.
+        Same as 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned. The returned dictionary
+        will be merged with the inputs.
 
         Parameters
         ----------
         run
-            The run to get the objective, budget and hyperparameters (HPs) from.
+            The selected run.
         inputs
-            The inputs to get the selected values from.
+            Current content of the inputs.
 
         Returns
         -------
-        The objective, budget, hyperparameter (HP) and their corresponding options and values.
+        Dict[str, Any]
+            Dictionary with the changes.
         """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
@@ -246,22 +253,31 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:
         """
-        Fit a surrogate model with the given data.
+        Return raw data based on a run and the input data.
 
-        With that the Partial Dependency Plot (PDP) is called and results are calculated.
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ 
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to calculate the Partial Dependencies of.
+            The run to process.
         inputs
-            A dictionary to get the hyperparameters (HPs) from.
+            The input data.
 
         Returns
         -------
-        A dictionary with the output values.
+        Dict[str, Any]
+            A serialized dictionary.
 
         Raises
         ------
@@ -334,39 +350,48 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
         """
-        Get the graph of the output.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            A function to get the id for the graph.
+            Method to register outputs.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         dcc.Graph
-            A dash graph.
+            Layout for the output block.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> go.Figure:
         """
-        Load the output figure and save the Partial Dependency Plot (PDP) as image.
+        Read the raw data and prepare it for the layout. 
+        
+        Save the Partial Dependency Plot (PDP) as image.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to load the attributes from.
+            The selected run.
         inputs
-            The inputs for parsing.
+            Input and filter values from the user.
         outputs
-            The outputs for parsing.
+            Raw output from the run.
 
         Returns
         -------
-        The figure of the Partial Dependency Plot (PDP).
+        go.Figure
+            The figure of the Partial Dependency Plot (PDP).
         """
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]

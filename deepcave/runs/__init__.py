@@ -499,10 +499,7 @@ class AbstractRun(ABC):
             If the budget with this id is invalid.
         """
         budgets = self.get_budgets(human=human)
-        budget = budgets[int(id)]
-        if isinstance(budget, str):
-            raise TypeError("The budget with this id is invalid.")
-        return budget
+        return budgets[int(id)]
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
         """
