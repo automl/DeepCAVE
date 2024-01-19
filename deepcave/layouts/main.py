@@ -33,7 +33,7 @@ class MainLayout(Layout):
     """
     Define and provide the main layout.
 
-    It handles different callbacks of the layout.
+    Handle different callbacks of the layout.
 
     Properties
     ----------

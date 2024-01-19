@@ -2,7 +2,7 @@
 """
 # SidebarLayout
 
-This module defines a plugin to define and visualize the Sidebar Layout.
+This module defines layout for the sidebar.
 
 Callbacks are registered and handled.
 
@@ -133,7 +133,7 @@ class SidebarLayout(Layout):
 
         @app.callback(output, Trigger("global-update", "n_intervals"))  # type: ignore
         def update_queue_info() -> List[Component]:
-            """Delete the information of the queue."""
+            """Update the information of the queue."""
             try:
                 all_jobs = [
                     queue.get_finished_jobs(),

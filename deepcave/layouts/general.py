@@ -2,7 +2,7 @@
 """
 # GeneralLayout
 
-This module provides the General Layout class.
+This module provides the General Layout.
 
 It handles different callbacks of the layout.
 
@@ -77,7 +77,7 @@ class GeneralLayout(Layout):
             dynamic_working_dirs: List[str],
         ):
             """
-            Change the working directory.
+            Register updates from inputs.
 
             Parameters
             ----------
@@ -361,7 +361,7 @@ class GeneralLayout(Layout):
 
         @app.callback(outputs, inputs)  # type: ignore
         def callback(group_names: List[str], all_run_paths, i):
-            """Update the groups."""
+            """Manage the groups."""
             # Abort on page load
             self._refresh_groups: bool
             if self._refresh_groups:
@@ -430,12 +430,12 @@ class GeneralLayout(Layout):
         Parameters
         ----------
         converters : List[Type[Run]]
-            The converters to be put into text.
+            A list of the avaialble run converters.
 
         Returns
         -------
         html.Div
-            The text for the input converters.
+            The text with all the available converters.
         """
         converter_text = []
         for converter in converters:

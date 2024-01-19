@@ -5,9 +5,7 @@
 This module provides a notification layout.
 
 It utilizes Dash and provides utilities for displaying notifications.
-The here provided NotificationLayout class inherits from Layout.
 With a notification from the Notification module an alert component can be updated.
-It can be updated in content, color as well as visibility.
 Callbacks are registered and handled.
 
 ## Classes
@@ -30,14 +28,14 @@ class NotificationLayout(Layout):
     """
     Layout class for displaying notifications.
 
-    Extends Layout class, provides callback registering methods.
+    Provide callback registering methods.
     """
 
     def __init__(self) -> None:
         super().__init__()
 
     def register_callbacks(self) -> None:
-        """Register callback for updating notification alert."""
+        """Register callbacks for updating notification alert."""
 
         @app.callback(
             Output("alert", "children"),
