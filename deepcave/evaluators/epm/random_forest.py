@@ -2,7 +2,7 @@
 """
 # RandomForest
 
-This module is used for training and using a Random Forest Regression model.
+This module can be used for training and using a Random Forest Regression model.
 
 A pyrfr wrapper is used for simplification.
 
@@ -12,7 +12,6 @@ A pyrfr wrapper is used for simplification.
 ## Constants
     VERY_SMALL_NUMBER : float
     PYRFR_MAPPING : Dict[str, str]
-    }
 """
 
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -68,11 +67,11 @@ class RandomForest:
     seed : int
         The seed. If not provided, it is random.
     types : List[int]
-        The types of the hyperparameters (HPS).
+        The types of the Hyperparameters.
     bounds : List[Tuple[float, float]]
-        The bounds of the hyperparameters (HPS).
+        The bounds of the Hyperparameters.
     n_params : int
-        The number of hyperparameters (HPS) in the configuration space.
+        The number of Hyperparameters in the configuration space.
     n_features : int
         The number of features.
     pca_components : int
@@ -202,7 +201,7 @@ class RandomForest:
         Raises
         ------
         ValueError
-            If hyperparameter (HP) is not supported.
+            If Hyperparameter is not supported.
         """
         conditional: Dict[int, bool] = {}
         impute_values: Dict[int, float] = {}
@@ -296,7 +295,7 @@ class RandomForest:
         """
         Train the random forest on X and Y.
 
-        Transforms X if principal component analysis (PCA) is applied.
+        Transform X if principal component analysis (PCA) is applied.
         Afterwards, `_train` is called.
 
         Parameters
@@ -403,7 +402,8 @@ class RandomForest:
 
         Parameters
         ----------
-        X : np.ndarray [n_samples, n_features (config + instance features)]
+        X : np.ndarray 
+            [n_samples, n_features (config + instance features)]
 
         Returns
         -------
@@ -457,7 +457,7 @@ class RandomForest:
         """
         Predict mean and variance marginalized over all instances.
 
-        Returns the predictive mean and variance marginalized over all
+        Return the predictive mean and variance marginalized over all
         instances for a set of configurations.
 
         Parameters
@@ -525,7 +525,7 @@ class RandomForest:
         Parameters
         ----------
         x : np.ndarray
-            Input data points.
+            Input data array.
 
         Returns
         -------

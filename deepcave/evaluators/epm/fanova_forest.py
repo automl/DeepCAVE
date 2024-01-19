@@ -2,14 +2,13 @@
 """
 # FanovaForest
 
-The module provides utilities for conducting feature analysis.
+The module provides utilities for creating a fANOVA forest.
 
-It includes a FanovaForest wrapper for pyrfr, which facilitates this analysis.
-The functionality of a FanovaForest Regression model is wrapped.
-FanovaForest can be used for analyzing and quantifying the features of a dataset.
+It includes a FanovaForest wrapper for pyrfr.
+fANOVA can be used for analyzing the importances of Hyperparameters.
 
 ## Classes
-    - FanovaForest: A fanova forest wrapper for pyrfr.
+    - FanovaForest: A fANOVA forest wrapper for pyrfr.
 """
 
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -27,21 +26,20 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 class FanovaForest(RandomForest):
     """
-    A fanova forest wrapper for pyrfr.
+    A fANOVA forest wrapper for pyrfr.
 
     Properties
     ----------
     cutoffs : Tuple[float, float]
-        The cutoff of the model.
+        The cutoffs of the model.
     percentiles : NDArray[floating]
         The percentiles of the data points Y.
     all_midpoints : List
         All midpoints tree wise for the whole forest.
     all_sizes : List
-        All interval sized tree wise for the whole forest.
+        All interval sizes tree wise for the whole forest.
     bounds : List[Tuple[float, float]
         Stores feature bounds.
-        Can be used as categorical or continuous parameter.
     trees_total_variances : List
         The total variances of the trees.
     trees_total_variance : Any
@@ -53,7 +51,7 @@ class FanovaForest(RandomForest):
     V_U_individual : Dict[Tuple[int, ...], List[Any]]
         Store variance-related information for individual subsets.
     n_params : int
-        The number of parameters to sample.
+        The number of Hyperparameters to sample.
     """
 
     def __init__(
@@ -167,12 +165,13 @@ class FanovaForest(RandomForest):
         self, hp_ids: Union[List[int], Tuple[int, ...]], depth: int = 1
     ) -> Tuple[Dict[Tuple[int, ...], List[Any]], Dict[Tuple[int, ...], List[Any]],]:
         """
-        Return the marginal of selected parameters.
+        Return the marginal of selected Hyperparameters.
 
         Parameters
         ----------
         hp_ids: Union[List[int], Tuple[int, ...]]
-            Contains the indices of the configspace for the selected parameters (starts with 0).
+            Contains the indices of the configspace for the selected Hyperparameters 
+            (starts with 0).
         depth: int
             The depth of the marginalization.
             Default value is 1.
@@ -181,7 +180,7 @@ class FanovaForest(RandomForest):
         -------
         Tuple[Dict[Tuple[int, ...], List[Any]],
         Dict[Tuple[int, ...], List[Any]],
-            The marginal of selected parameters.
+            The marginal of selected Hyperparameters.
         """
         if not isinstance(hp_ids, tuple):
             hp_ids = tuple(hp_ids)

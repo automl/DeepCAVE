@@ -2,7 +2,7 @@
 """
 # RandomForest Surrogate
 
-This module provides an implementation for a RandomForest Surrogate model.
+This module provides a RandomForest Surrogate model.
 
 Mean and standard deviation values can be predicted for a given input with this module.
 

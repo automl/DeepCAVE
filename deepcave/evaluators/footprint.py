@@ -2,13 +2,13 @@
 """
 # Footprint
 
-This module provides utilities for creating a footprint of a model.
+This module provides utilities for creating a footprint of a run.
 It uses multidimensional scaling (MDS).
 It also provides utilities to get the surface and the points of the plot.
 
 
 ## Classes
-    - Footprint: Can train and create a footprint of a model.
+    - Footprint: Can train and create a footprint of a run.
 """
 
 from typing import List, Optional, Tuple, Union
@@ -34,7 +34,7 @@ logger = get_logger(__name__)
 
 class Footprint:
     """
-    Can train and create a footprint of a model.
+    Can train and create a footprint of a run.
 
     It uses multidimensional scaling (MDS).
     Provides utilities to get the surface and the points of the plot.
@@ -336,7 +336,7 @@ class Footprint:
         """
         Calculate the maximum distance between all configs.
 
-        Basically, the number of hyperparameters (HPS) are just counted.
+        Basically, the number of Hyperparameters are just counted.
 
         Returns
         -------
@@ -514,12 +514,12 @@ class Footprint:
         Parameters
         ----------
         hp: Hyperparameter
-            name of parameter to inspect
+            name of Hyperparameter to inspect
 
         Returns
         -------
         int
-            Depth of the hyperparameter (HP).
+            Depth of the Hyperparameter.
         """
         parents = self.cs.get_parents_of(hp)
         if not parents:
@@ -562,7 +562,7 @@ class Footprint:
 
     def _train_on_objective(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on the performance.
+        Train the random forest on the performance.
 
         Parameters
         ----------
@@ -577,7 +577,7 @@ class Footprint:
 
     def _train_on_areas(self) -> None:
         """
-        Trains the random forest on the "valid" areas.
+        Train the random forest on the "valid" areas.
 
         Raises
         ------

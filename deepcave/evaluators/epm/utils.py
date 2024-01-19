@@ -2,7 +2,8 @@
 """
 # Utils
 
-This module provides a utility to get the types of the hyperparameters (HPs).
+This module provides a utility to get the types 
+as well as the bounds of the Hyperparameters.
 """
 
 import typing
@@ -27,9 +28,9 @@ def get_types(
     instance_features: typing.Optional[np.ndarray] = None,
 ) -> typing.Tuple[typing.List[int], typing.List[typing.Tuple[float, float]]]:
     """
-    Return the types of the hyperparameters (HPs).
+    Return the types of the Hyperparameters.
 
-    Also return the bounds of the hyperparameters (HPs) and instance features.
+    Also return the bounds of the Hyperparameters and instance features.
 
     Parameters
     ----------
@@ -42,14 +43,14 @@ def get_types(
     Returns
     -------
     Tuple[typing.List[int], List[Tuple[float, float]]]
-        The types of the hyperparameters (HPs), as well as the bounds and instance features.
+        The types of the Hyperparameters, as well as the bounds and instance features.
 
     Raises
     ------
     ValueError
-        Inactive parameters not supported for Beta and Normal Hyperparameters (HPs).
+        Inactive parameters not supported for Beta and Normal Hyperparameters.
     TypeError
-        If the hyperparameter (HP) Type is unknown.
+        If the Hyperparameter Type is unknown.
     """
     # Extract types vector for rf from config space and the bounds
     types = [0] * len(config_space.get_hyperparameters())

@@ -31,21 +31,21 @@ class LPI:
     Properties
     ----------
     run : AbstractRun
-        The AbstractRun ro calculate the importance from.
+        The AbstractRun to get the importance from.
     cs : ConfigurationSpace
         The configuration space of the run.
     hp_names : List[str]
-        The names of the hyperparameters (HPs).
+        The names of the Hyperparameters.
     variances : Dict[Any, list]
         The overall variances per tree.
     importances : dict
-        The importances of the hyperparameters (HPs).
+        The importances of the Hyperparameters.
     continuous_neighbors : int
-        The number of neighbors chosen for continuous hyperparameters (HPs).
+        The number of neighbors chosen for continuous Hyperparameters.
     incumbent : Configuration
         The incumbent of the run.
     default : Configuration
-        A configuration containing hyperparameters (HPs) with default values.
+        A configuration containing Hyperparameters with default values.
     incumbent_array : numpy.ndarray
         The internal vector representation of the incumbent.
     seed : int
@@ -231,12 +231,12 @@ class LPI:
         Parameters
         ----------
         hp_names : List[str]
-            Selected hyperparameter (HP) names to get the importance scores from.
+            Selected Hyperparameter names to get the importance scores from.
 
         Returns
         -------
         importances : Dict[str, Tuple[float, float]]
-            Hyperparameter (HP) name and mean+var importance.
+            Hyperparameter name and mean+var importance.
 
         Raises
         ------

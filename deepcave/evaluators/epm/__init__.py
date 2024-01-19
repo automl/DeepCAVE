@@ -5,11 +5,12 @@
 ## Modules
 ----------
 fanova_forest
-    This module provides utilities for conducting feature analysis.
+    The module provides utilities for creating a fANOVA forest.
 random_forest
-    This module is used for training and using a Random Forest Regression model.
+    This module can be used for training and using a Random Forest Regression model.
 random_forest_surrogate
-    This module provides an implementation for a RandomForest Surrogate model.
+    This module provides a RandomForest Surrogate model.
 utils
-    Return types and bounds of hyperparameter (HP).
+    This module provides a utility to get the types 
+    as well as the bounds of the Hyperparameters.
 """

@@ -2,7 +2,7 @@
 """
 # fANOVA
 
-This module provides a tool for assessing the importance of an algorithms hyperparameters (HPs).
+This module provides a tool for assessing the importance of an algorithms Hyperparameters.
 
 Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.
 
@@ -35,9 +35,9 @@ class fANOVA:
     cs : ConfigurationSpace
         The configuration space of the run.
     hps : List[Hyperparameters]
-        The hyperparameters (HPs) of the configuration space.
+        The Hyperparameters of the configuration space.
     hp_names : List[str]
-        The corresponding names of the hyperparameters (HPs).
+        The corresponding names of the Hyperparameters.
     n_trees : int
         The number of trees.
     """
@@ -100,7 +100,7 @@ class fANOVA:
         self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
     ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
-        Return the importance scores from the passed hyperparameter (HP) names.
+        Return the importance scores from the passed Hyperparameter names.
 
         Warning
         -------
@@ -109,17 +109,17 @@ class fANOVA:
         Parameters
         ----------
         hp_names : Optional[List[str]]
-            Selected hyperparameter (HP) names to get the importance scores from. If None, all
-            hyperparameters (HPs) of the configuration space are used.
+            Selected Hyperparameter names to get the importance scores from. If None, all
+            Hyperparameters of the configuration space are used.
         depth : int, optional
             How often dimensions should be combined. By default 1.
         sort : bool, optional
-            Whether the hyperparameters (HPs) should be sorted by importance. By default True.
+            Whether the Hyperparameters should be sorted by importance. By default True.
 
         Returns
         -------
         Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]
-            Dictionary with hyperparameter (HP) names and the corresponding importance scores.
+            Dictionary with Hyperparameter names and the corresponding importance scores.
             The values are tuples of the form (mean individual, var individual, mean total,
             var total). Note that individual and total are the same if depth is 1.
 
