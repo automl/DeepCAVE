@@ -2,9 +2,9 @@
 """
 # ParetoFront
 
-This module is for creating a visualization of a Pareto Front.
-For this, it uses Dash as well as matplotlib and plotly.
-It includes the Pareto Front plugin.
+This module provides utilities for creating a visualization of the Pareto Front.
+
+It includes the corresponding Pareto Front plugin.
 
 ## Classes
     - ParetoFront: Generate an interactive Pareto Front visualization.
@@ -33,8 +33,6 @@ class ParetoFront(DynamicPlugin):
     """
     Generate an interactive Pareto Front visualization.
 
-    Utilities provided for plotly, as well as matplotlib.
-
     Properties
     ----------
     objective_options : List[Dict[str, Any]]
@@ -52,12 +50,14 @@ class ParetoFront(DynamicPlugin):
         """
         Check if the runs are compatible.
 
-        If so, get some attributes from the first run of the list.
+        This function is needed if all selected runs need something in common (e.g. budget or objective). 
+        Since this function is called before the layout is created, 
+        it can be also used to set common values for the plugin.
 
         Parameters
         ----------
         runs : List[AbstractRun]
-            A list containing the abstract runs.
+            A list containing the selected runs.
 
         Raises
         ------
@@ -81,20 +81,20 @@ class ParetoFront(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
+    def get_input_layout(register: Callable) -> List[Any]:
         """
-        Get the input layout as html container and dash bootstrap component (DBC).
+        Get layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        List[Union[dbc.Row, html.Div]]
-            An html container and a dash bootstrap component (DBC) of the layout of the input.
+        List[Any]
+            The layouts for the input block.
         """
         return [
             dbc.Row(
@@ -142,20 +142,20 @@ class ParetoFront(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register: Callable) -> List[Union[html.Div, dbc.Row]]:
+    def get_filter_layout(register: Callable) -> List[Any]:
         """
-        Get the filtered layout for a dash bootstrap component (DBC) and html container.
+        Get the layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of Select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        List[Union[html.Div, dbc.Row]]
-            A filtered dash bootstrap component (DBC) and html container.
+        List[Any]
+            The layouts for the filter block.
         """
         return [
             html.Div(
@@ -201,9 +201,15 @@ class ParetoFront(DynamicPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the inputs containing information about the values to be visualized.
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
+        This method is necessary to pre-load contents for the inputs. 
+        So, if the plugin is called for the first time or there are no results in the cache, 
+        the plugin gets its content from this method.
 
-        This includes the objectives and budgets attributes.
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            The content to be filled.
         """
         return {
             "objective_id_1": {
@@ -227,19 +233,28 @@ class ParetoFront(DynamicPlugin):
     # Types dont match superclass
     def process(run, inputs) -> Dict[str, Any]:
         """
-        Process the data and get the according pareto front and its points.
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run : AbstractRun
             The run to process.
         inputs : Dict[str, Any]
-            The inputs for the visualization.
+            The input data.
 
         Returns
         -------
         Dict[str, Any]
-            Containing the pareto fronts attributes.
+            The serialized dictionary.
         """
         # Get budget
         budget = run.get_budget(inputs["budget_id"])
@@ -298,39 +313,45 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
         """
-        Get the dash Graph layout of the output.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the graph.
+            Method to register outputs.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         dcc.Graph
-            The dash Graph layout of the output.
+            The layout for the output block.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(runs, inputs, outputs):
+    def load_outputs(runs, inputs, outputs) -> go.Figure:
         """
-        Load and save the output figure.
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         runs :
-            The run(s) to be analyzed.
+            The selected runs.
         inputs :
-            The inputs containing information about what to visualize.
+            The input and filter values from the user.
         outputs :
-            Contains different attributes of the pareto front.
+            Raw outputs from the runs.
 
         Returns
         -------
-        The output figure.
+        go.Figure
+            The output figure.
         """
         show_all = inputs["show_all"]
 
@@ -426,18 +447,18 @@ class ParetoFront(DynamicPlugin):
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> html.Img:
         """
-        Get an html container of the output layout.
+        Get the layout for the matplotlib output block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id.
+            Method to register outputs.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         html.Img
-            An html container of the matplotlib output layout.
+            The layout for the matplotlib output block.
         """
         return html.Img(
             id=register("graph", "src"),
@@ -448,20 +469,25 @@ class ParetoFront(DynamicPlugin):
     # Types dont match superclass
     def load_mpl_outputs(runs, inputs, outputs):
         """
-        Get the pareto front and the corresponding layout of the matplotlib figure.
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         runs :
-            The run(s) to analyze.
+            The selected runs.
         inputs :
-            Containing the inputs for the visualization.
+            Input and filter values from the user.
         outputs :
-            Containing the pareto fronts attributes.
+            Raw outputs from the runs.
 
         Returns
         -------
-        The rendered mpl figure of the pareto front.
+        The rendered matplotlib figure.
         """
         show_all = inputs["show_all"] == "true"
 

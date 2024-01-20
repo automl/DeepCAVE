@@ -3,7 +3,9 @@
 # CostOverTime
 
 This module provides utilities for visualizing the cost over time.
-It includes a plugin class.
+
+Visualized changes can be regarding to number of configurations or time.
+It includes a corresponding plugin class.
 
 ## Classes
     - CostOverTime: A plugin to provide a visualization for the cost over time.
@@ -49,12 +51,14 @@ class CostOverTime(DynamicPlugin):
         """
         Check if the runs are compatible.
 
-        If so, get some attributes from the first run of the list.
+        This function is needed if all selected runs need something in common (e.g. budget or objective). 
+        Since this function is called before the layout is created, 
+        it can be also used to set common values for the plugin.
 
         Parameters
         ----------
         runs : List[AbstractRun]
-            A list containing the abstract runs.
+            A list containing the selected runs.
 
         Raises
         ------
@@ -80,18 +84,18 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
         """
-        Define and get a dash bootstrap component (DBC) of the layout of the input.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[dbc.Row]
-            A dash bootstrap component (DBC) of the layout of the input.
+            Layouts for the input block.
         """
         return [
             dbc.Row(
@@ -127,18 +131,18 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[Any]:
         """
-        Get the filtered layout for a html container.
+        Get the layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[Any]
-            A filtered html container.
+            Layouts for the filter block.
         """
         return [
             html.Div(
@@ -179,9 +183,15 @@ class CostOverTime(DynamicPlugin):
 
     def load_inputs(self) -> Dict[str, Any]:
         """
-        Get the inputs, containing objectives and budgets attributes.
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
+        This method is necessary to pre-load contents for the inputs. 
+        So, if the plugin is called for the first time or there are no results in the cache, 
+        the plugin gets its content from this method.
 
-        Also contains runs, groups, and x-axis options.
+        Returns
+        -------
+        Dict[str, Any]
+            The content to be filled.
         """
         return {
             "objective_id": {
@@ -208,19 +218,28 @@ class CostOverTime(DynamicPlugin):
     # Types dont match superclass
     def process(run, inputs) -> Dict[str, Any]:
         """
-        Get the trajectory of the run, as well as its budget and objective.
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run : AbstractRun
-            The run to process.
+            The selected run to process.
         inputs : Dict[str, Any]
-            Containing the budget id and objective id.
+            The input data.
 
         Returns
         -------
         Dict[str, Any]
-            The attributes of the run including mean and standard deviated costs and times.
+            A serialized dictionary.
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
@@ -240,39 +259,45 @@ class CostOverTime(DynamicPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
         """
-        Get the dash graph for the output layout.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the graph object.
+            Method to register outputs.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         dcc.Graph
-            A dash graph object.
+            The layouts for the output block.
         """
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(runs, inputs, outputs):
+    def load_outputs(runs, inputs, outputs) -> go.Figure:
         """
-        Load and save the output figure.
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         runs :
-            The runs to be analyzed.
+            The selected runs.
         inputs :
-            The input for the figure.
+            The input and filter values from the user.
         outputs :
-            The outputs for the figure.
+            The raw outputs from the runs.
 
         Returns
         -------
-        The output figure.
+        go.Figure
+            The output figure.
         """
         show_runs = inputs["show_runs"]
         show_groups = inputs["show_groups"]

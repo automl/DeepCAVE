@@ -370,8 +370,6 @@ class PartialDependencies(StaticPlugin):
     def load_outputs(run, inputs, outputs) -> go.Figure:
         """
         Read the raw data and prepare it for the layout. 
-        
-        Save the Partial Dependency Plot (PDP) as image.
 
         Note
         ----

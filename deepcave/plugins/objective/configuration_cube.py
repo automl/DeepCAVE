@@ -7,7 +7,7 @@ This module provides utilities for visualizing and creating a configuration cube
 The configuration cube displays configurations and their score on the objective.
 
 ## Classes
-    - ConfigurationCube: This class provides a plugin for visualizing a configuration cube.
+    - ConfigurationCube: A plugin for visualizing a configuration cube.
 """
 
 from typing import Any, Callable, Dict, List, Tuple
@@ -40,7 +40,7 @@ logger = get_logger(__name__)
 
 
 class ConfigurationCube(DynamicPlugin):
-    """Provide a plugin for visualizing a configuration cube."""
+    """A plugin for visualizing a configuration cube."""
 
     id = "ccube"
     name = "Configuration Cube"
@@ -62,7 +62,7 @@ class ConfigurationCube(DynamicPlugin):
         Returns
         -------
         List[dbc.Row]
-            An dash bootstrap component (DBC) of the layout of the input.
+            Layouts for the input block.
         """
         return [
             dbc.Row(
@@ -102,18 +102,18 @@ class ConfigurationCube(DynamicPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[html.Div]:
         """
-        Get the layout for a filtered html container.
+        Get the layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the Slider.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[html.Div]
-            A filtered html container.
+            Layouts for the filter block.
         """
         return [
             html.Div(
@@ -150,23 +150,28 @@ class ConfigurationCube(DynamicPlugin):
         }
 
     # Types dont match superclass
-    def load_dependency_inputs(self, run, _, inputs):
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:
         """
-        Load the objective, budgets and hyperparameters (HPs) and its attributes.
+        Same as load_inputs but called after inputs have changed.
 
-        It is restricted to three hyperparameters (HPs).
+        It is restricted to three Hyperparameters.
+
+        Note
+        ----
+        Only the changes have to be returned. 
+        The returned dictionary will be merged with the inputs.
 
         Parameters
         ----------
         run
-            The run to get the objective from.
+            The selected run.
         inputs
-            Contains information about the objective, budget, configurations
-            and hyperparameters (HPs).
+            Current content of the inputs.
 
         Returns
         -------
-        The objective, budgets, hyperparameters (HPs) and their attributes.
+        Dict[str, Any]
+           The dictionary with the changes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -231,19 +236,28 @@ class ConfigurationCube(DynamicPlugin):
     @staticmethod
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, str]:
         """
-        Get a serialized dataframe of the encoded data.
+        Return raw data based on the run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run : AbstractRun
-            The run to be processed.
+            The selected run.
         inputs : Dict[str, Any]
-            Containing the budget and objective.
+            The input data.
 
         Returns
         -------
         Dict[str, str]
-            The serialized dataframe.
+            The serialized dictionary.
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
@@ -256,40 +270,45 @@ class ConfigurationCube(DynamicPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> Tuple[dcc.Graph,]:
         """
-        Get the output layout as dash Graph object.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the graph object.
+            Method to register output.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         Tuple[dcc.Graph,]
-            The output layout as dash Graph object.
+            Layout for the output block.
         """
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod
     # Types dont match superclass
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> go.Figure:
         """
-        Load and save the output figure.
+        Read in the raw data and prepares them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to be analyzed.
+            The selected run.
         inputs
-            The inputs containing hyperparameters (HPs) names, number of configs
-            and objectives ids.
+            Input and filter values from the user.
         outputs
-            Contains the serialized dataframe.
+            Raw output from the run.
 
         Returns
         -------
-        The output figure.
+        go.Figure
+            The output figure.
         """
         df = deserialize(outputs["df"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameter_names"]

@@ -340,8 +340,6 @@ class Importances(StaticPlugin):
         """
         Read in raw data and prepare for layout.
 
-        Also save the image of the figure.
-
         Note
         ----
         The passed inputs are cleaned and therefore differ 

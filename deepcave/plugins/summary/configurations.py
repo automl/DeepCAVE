@@ -4,7 +4,7 @@
 
 This module provides utilities to visualize the characteristics of a configuration within a run.
 
-The module provides this as a dynamic plugin.
+The module provides a corresponding dynamic plugin.
 
 ## Classes
     - Configurations: Visualize the characteristics of a configuration.
@@ -49,21 +49,20 @@ class Configurations(DynamicPlugin):
         """
         Create a link to a specific configuration.
 
-        Create "fake" inputs to overwrite the selection.
-        Everything else will be taken from `load_inputs` and `load_dependency_inputs`.
-
         Parameters
         ----------
         run : AbstractRun
-            Selected run.
+            The selected run.
         config_id : int
-            Configuration, which should be visited.
+            Configuration which should be visited.
 
         Returns
         -------
         str
             Link to the configuration.
         """
+        # Create "fake" inputs to overwrite the selection.
+        # Everything else will be taken from `load_inputs` and `load_dependency_inputs`.
         inputs = {
             "run": dict(value=run.id),
             "config_id": dict(value=config_id),
@@ -75,18 +74,18 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[html.Div]:
         """
-        Get the html container for the layout of the input.
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id of the Sliders.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[html.Div]
-            An html container for the layout of the input.
+            The layouts for the input block.
         """
         return [
             html.Div(

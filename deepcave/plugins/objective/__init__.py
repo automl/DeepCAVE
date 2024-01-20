@@ -11,5 +11,5 @@ cost_over_time
 parallel_coordinates
     This module provides utilities for visualizing the parallel coordinates.
 pareto_front
-    This module is for creating a visualization of a Pareto Front.
+    This module provides utilities for creating a visualization of the Pareto Front.
 """
