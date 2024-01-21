@@ -140,10 +140,18 @@ class ConfigurationCube(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(
-        self,
-    ) -> Dict[str, Any]:
-        """Load the inputs containing configuration and hyperparameter (HP) attributes."""
+    def load_inputs(self) -> Dict[str, Any]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache, 
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The content to be filled.
+        """
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
@@ -152,7 +160,7 @@ class ConfigurationCube(DynamicPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:
         """
-        Same as load_inputs but called after inputs have changed.
+        Same as 'load_inputs' but called after inputs have changed.
 
         It is restricted to three Hyperparameters.
 

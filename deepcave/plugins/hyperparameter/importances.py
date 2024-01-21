@@ -346,7 +346,6 @@ class Importances(StaticPlugin):
         compared to 'load_inputs' or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
-
         Parameters
         ----------
         run
@@ -462,7 +461,7 @@ class Importances(StaticPlugin):
     def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):
         """
         Read the raw data and prepare it for the layout.
-
+        
         Parameters
         ----------
         run

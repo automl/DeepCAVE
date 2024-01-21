@@ -7,7 +7,7 @@ This module provides utilities to visualize a configuration footprint.
 The module contains a static plugin class for defining the footprint.
 
 ## Classes
-    - FootPrint: Visualize the footprint of a configuration.
+    - FootPrint: A static plugin for the footprint of a configuration.
 """
 
 from typing import Any, Callable, Dict, List, Union
@@ -32,7 +32,7 @@ class FootPrint(StaticPlugin):
     """
     Visualize the footprint of a configuration.
 
-    Represent a static plugin for the footprint.
+    A static plugin for the footprint.
     """
 
     id = "footprint"
@@ -42,20 +42,20 @@ class FootPrint(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Div]]:
+    def get_input_layout(register: Callable) -> List[Any]:
         """
-        Get the input layout as html container and dash bootstrap component (DBC).
+        Get the layout for the input block.
 
         Parameters
         ----------
         register : Callable
-            Used to get the id for the select object and the slider.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
-        List[Union[dbc.Row, html.Div]]
-            An html container and a dash bootstrap component (DBC) of the layout of the input.
+        List[Any]
+            The layouts for the input block.
         """
         return [
             dbc.Row(
@@ -111,18 +111,18 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_filter_layout(register: Callable) -> List[dbc.Row]:
         """
-        Get the filtered layout for a dash bootstrap component (DBC).
+        Get layout for the filter block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the select object.
+            Method to register (user) variables.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[dbc.Row]
-            A filtered layout with a dash bootstrap component (DBC).
+            The layouts for the filter block.
         """
         return [
             dbc.Row(
@@ -152,7 +152,17 @@ class FootPrint(StaticPlugin):
         ]
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
-        """Get the inputs, containing details, and border/supports information."""
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+        This method is necessary to pre-load contents for the inputs. 
+        So, if the plugin is called for the first time or there are no results in the cache, 
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            The content to be filled.
+        """
         return {
             "details": {"value": 0.5},
             "show_borders": {"options": get_select_options(binary=True), "value": "true"},
