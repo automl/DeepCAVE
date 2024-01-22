@@ -170,20 +170,27 @@ class FootPrint(StaticPlugin):
         }
 
     # Types dont match superclass
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
         """
-        Load the objectives, budgets and their attributes.
+        Same as 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned. The returned dictionary will be merged with the inputs.
 
         Parameters
         ----------
         run :
-            The run(s) to be analyzed.
+            The selected run.
+        previous_inputs :
+            Previous content of the inputs.
         inputs :
-            Contains information about the objectives and budgets.
+            Current content of the inputs.
 
         Returns
         -------
-        The objective, budgets and their attributes.
+        Dict[str, Any]
+            The dictionary with the changes.
         """
         # Prepare objectives
         objective_names = run.get_objective_names()
@@ -217,22 +224,30 @@ class FootPrint(StaticPlugin):
 
     @staticmethod
     # Types dont match superclass
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:
         """
-        Process the data to create different data points.
+        Return raw data based on a run and input data.
 
-        These points include, border, incumbent, support, performance, area and configurations.
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to be analyzed.
+            The selected run.
         inputs
-            Containing budget, objective and details information.
+            The input data.
 
         Returns
         -------
-        A dictionary of the different data points.
+        Dict[str, Any]
+            A serialized dictionary.
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
@@ -261,18 +276,18 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> dbc.Tabs:
         """
-        Get a dash bootstrap component (DBC) for the output layout.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the dash Graph.
+            Method for registering outputs.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         dbc.Tabs
-            A dash bootstrap component (DBC) for the output layout.
+            The layout for the output block.
         """
         return dbc.Tabs(
             [
@@ -295,23 +310,26 @@ class FootPrint(StaticPlugin):
     # Types dont match superclass
     def load_outputs(run, inputs, outputs) -> List[Any]:
         """
-        Load and save the output plotly figure for visualizing the footprint of the run.
+        Read in the raw data and prepare them for the layout.
 
-        Get a heatmap for the performance and area data.
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to be analyzed.
+            The selected run.
         inputs
-            Containing information about the objective, borders and supports visualization.
+            Input and filter values from the user.
         outputs
-            Containing information about the performance and area data.
+            Raw output from the run.
 
         Returns
         -------
         List[Any]
-            The plotly figure of the footprint.
+            The plotly figure of the footprint performance and area.
         """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
@@ -403,18 +421,18 @@ class FootPrint(StaticPlugin):
     @staticmethod
     def get_mpl_output_layout(register: Callable) -> List[dbc.Tabs]:
         """
-        Get a dash bootstrap component (DBC) of the output layout.
+        Get the layout for the matplotlib output block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the html image container.
+            Method to register the outputs.
             The register_output function is located in the Plugin superclass.
 
         Returns
         -------
         List[dbc.Tabs]
-            A dash bootstrap component (DBC) of the output layout
+            The layout for the output block.
         """
         return [
             dbc.Tabs(
@@ -435,16 +453,21 @@ class FootPrint(StaticPlugin):
     # Types dont match superclass
     def load_mpl_outputs(run, inputs, outputs):
         """
-        Load the rendered matplotlib figure of the footprint.
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to be analyzed.
+            The selected run.
         inputs
-            Containing information about the objective, borders and supports visualization.
+            Input and filter values from the user.
         outputs
-            Containing information about the data.
+            Raw outputs from the run.
 
         Returns
         -------

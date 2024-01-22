@@ -2,12 +2,14 @@
 """
 # Overview
 
-This module provides utilities for visualizing an overview of an optimization run.
+This module provides utilities for visualizing an overview of the selected runs.
+
+It holds the most important information, e.g. meta data, objectives and statistics.
 
 The module includes a dynamic plugin for the overview.
 
 ## Classes
-    - Overview: Visualize an overall overview of a run.
+    - Overview: Visualize an overall overview of the selected run.
 """
 
 from typing import Any, Callable, Dict, List
@@ -37,7 +39,7 @@ from deepcave.utils.util import get_latest_change
 
 
 class Overview(DynamicPlugin):
-    """Visualize an overall overview of a run."""
+    """Visualize an overall overview of the selected run."""
 
     id = "overview"
     name = "Overview"
@@ -49,18 +51,18 @@ class Overview(DynamicPlugin):
     @staticmethod
     def get_output_layout(register: Callable) -> List[Any]:
         """
-        Get an html container with the output layout.
+        Get the layout for the output block.
 
         Parameters
         ----------
         register : Callable
-            Used for the id of the html Div object, as well as the dash Graph.
+            Method to register the outputs.
             The register_input function is located in the Plugin superclass.
 
         Returns
         -------
         List[Any]
-            An html container with the output layout
+            The layouts for the output block.
         """
         return [
             html.Div(
@@ -104,19 +106,22 @@ class Overview(DynamicPlugin):
     # Types dont match superclass
     def load_outputs(run, *_: Any) -> List[Any]:
         """
-        Load the outputs for the overview of the run.
-
-        A dash card for quick information is provided.
+        Read in the raw data and prepare them for the layout.
+        
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        Please see '_clean_inputs' for more information.
 
         Parameters
         ----------
         run
-            The run to be analyzed for an overview.
+            The selected run.
 
         Returns
         -------
         List[Any]
-            A list of dash figures and tables containing the overviews information.
+            A list of the created tables of the overview.
         """
         # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()

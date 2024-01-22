@@ -461,8 +461,6 @@ class Configurations(DynamicPlugin):
         The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
-        The returned components must be in the same position as defined in 'get_output_layout'.
-
         Parameters
         ----------
         run

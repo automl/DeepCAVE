@@ -51,13 +51,15 @@ class Plugin(Layout, ABC):
     outputs : List[Tuple[str, str, bool]]
         The registered outputs.
     previous_inputs : Dict[str, Dict[str, str]]
-        The previous inputs for the runtime.
+        The previous inputs.
     raw_outputs : Optional[Dict[str, Any]]
         The raw outputs.
     activate_run_selection : bool
-        Whether to activate the run selection.
+        Shows a dropdown to select a run in the inputs layout.
+        This feature is useful if only one run could be viewed at a time.
+        Moreover, it prevents the plugin to calculate results across all runs.
     id : str
-        The id of the plugin.
+        The unique identifier for the plugin.
     runs : List[AbstractRun]
         A list of the abstract runs.
     groups : List[Group]
@@ -66,8 +68,9 @@ class Plugin(Layout, ABC):
         The path to the documentation.
     name : str
         The name of the plugin.
+        It is shown in the navigation and title.
     button_caption : str
-        The caption of the plugin button.
+        Caption of the button. Shown only, if `StaticPlugin` is used.
     """
 
     id: str
@@ -177,7 +180,7 @@ class Plugin(Layout, ABC):
         id : str
             Specifies the id of the input.
         attributes : Union[str, List[str]], optional
-            Attributes which should be passed to the (dash) component, by default ("value",)
+            Attributes which should be passed to the (dash) component, by default ("value",).
         filter : bool, optional
             Specifies if the input is a filter. By default False.
         type : Any, optional
@@ -286,21 +289,7 @@ class Plugin(Layout, ABC):
 
             @app.callback(outputs, inputs)  # type: ignore
             def plugin_input_update(pathname: str, *inputs_list: str) -> List[Optional[str]]:
-                """
-                Update the input of the plugin.
-
-                Parameters
-                ----------
-                pathname : str
-                    The name of the path for the passed inputs.
-                *inputs_list : str
-                    The list of the inputs to check if the page was loaded for the first time.
-
-                Returns
-                -------
-                List[str]
-                    The list of the cast inputs.
-                """
+                """Update the input of the plugin."""
                 # Simple check if page was loaded for the first time
                 init = all(input is None for input in inputs_list)
 
@@ -442,21 +431,7 @@ class Plugin(Layout, ABC):
             State(self.get_internal_id("raw_data"), "is_open"),
         )
         def toggle_raw_data_modal(n: Optional[int], is_open: bool) -> Tuple[bool, str]:
-            """
-            Toggle the raw data modal.
-
-            Parameters
-            ----------
-            n : Optional[int]
-                A condition.
-            is_open : bool
-                Whether the raw data modal is open or not.
-
-            Returns
-            -------
-            Tuple[bool, str]
-                A tuple containing the is open information and the code.
-            """
+            """Toggle the raw data modal."""
             code = ""
             if n:
                 if (out := self.raw_outputs) is not None:
@@ -476,21 +451,7 @@ class Plugin(Layout, ABC):
             State(self.get_internal_id("help"), "is_open"),
         )
         def toggle_help_modal(n: Optional[int], is_open: bool) -> bool:
-            """
-            Toggle the help modal.
-
-            Parameters
-            ----------
-            n : Optional[int]
-                A condition.
-            is_open : bool
-                Whether the help modal is open or not.
-
-            Returns
-            -------
-            Tuple[bool, str]
-                A tuple containing the is open information and the code.
-            """
+            """Toggle the help modal."""
             if n:
                 return not is_open
             return is_open
@@ -504,14 +465,7 @@ class Plugin(Layout, ABC):
                 Input(internal_id, "clickData"),
             )  # type: ignore
             def go_to_configuration(click_data: Any):
-                """
-                Go to the configuration described in the hovertext.
-
-                Parameters
-                ----------
-                click_data : Any
-                    The data describing the click.
-                """
+                """Open link from hovertext."""
                 if click_data is not None:
                     # Get hovertext
                     try:
@@ -759,7 +713,7 @@ class Plugin(Layout, ABC):
 
     def _cast_inputs(self, inputs: Dict[str, Dict[str, str]]) -> Dict[str, Dict[str, str]]:
         """
-        Casts the inputs based on `self.inputs`.
+        Cast the inputs based on `self.inputs`.
 
         Background is that dash always casts integers/booleans to strings.
         This method ensures that the correct types are returned.
@@ -810,7 +764,8 @@ class Plugin(Layout, ABC):
 
         Parameters
         ----------
-        inputs (dict): Inputs to clean.
+        inputs : Dict[str, Any]
+            Inputs to clean.
 
         Returns
         -------
@@ -839,7 +794,14 @@ class Plugin(Layout, ABC):
     @property
     @interactive
     def runs(self) -> List[AbstractRun]:
-        """Get the runs as a list."""
+        """
+        Get the runs as a list.
+        
+        Returns
+        -------
+        List[AbstractRun]
+            The list with the runs.
+        """
         from deepcave import run_handler
 
         return run_handler.get_runs()
@@ -847,7 +809,14 @@ class Plugin(Layout, ABC):
     @property
     @interactive
     def groups(self) -> List[Group]:
-        """Get the groups as a list."""
+        """
+        Get the groups as a list.
+        
+        Returns
+        -------
+        List[Group]
+            The list with the groups.
+        """
         from deepcave import run_handler
 
         return run_handler.get_groups()
@@ -855,7 +824,14 @@ class Plugin(Layout, ABC):
     @property
     @interactive
     def all_runs(self) -> List[AbstractRun]:
-        """Get all runs and include the groups as a list."""
+        """
+        Get all runs and include the groups as a list.
+        
+        Returns
+        -------
+        List[AbstractRun]
+            The list with all runs and included groups.
+        """
         from deepcave import run_handler
 
         return run_handler.get_runs(include_groups=True)
@@ -863,7 +839,7 @@ class Plugin(Layout, ABC):
     @interactive
     def __call__(self, render_button: bool = False) -> List[Component]:
         """
-        Create and return the components for the plugin.
+        Return the components for the plugin.
 
         Basically, all blocks and elements of the plugin are stacked-up here.
 
@@ -880,9 +856,9 @@ class Plugin(Layout, ABC):
         Raises
         ------
         NotMergeableError
-            If runs are not compatible, an error is thrown.
+            If runs are not compatible.
         FileNotFoundError
-            If the help file is not found, an error is thrown.
+            If the help file can not be found.
         """
         from deepcave import c, notification
 
@@ -981,7 +957,25 @@ class Plugin(Layout, ABC):
         ]
 
         def register_in(a: str, b: Union[List[str], str]) -> str:
-            """Register the given input."""
+            """
+            Register the given input.
+
+            Note
+            ----
+            For more information, see 'register_input'.
+            
+            Parameters
+            ----------
+            a : str
+                Specifies the id of the input.
+            b : Union[List[str], str]
+                Attributes which should be passed to the (dash) component, by default ("value",).
+            
+            Returns
+            -------
+            str
+                Unique id for the input and plugin. This is necessary because ids are defined globally. 
+            """
             return self.register_input(a, b, filter=True)
 
         filter_layout = self.__class__.get_filter_layout(register_in)
@@ -1006,7 +1000,25 @@ class Plugin(Layout, ABC):
             ]
 
         def register_out(a: str, b: Union[List[str], str]) -> str:
-            """Register the output."""
+            """
+            Register the output.
+            
+            Note
+            ----
+            For more information, see 'register_output'
+
+            Parameters
+            ----------
+            a : str
+                Specifies the id of the output.
+            b : Union[List[str], str]
+                Attribute.
+            
+            Returns
+            -------
+            str
+                Unique id for the output and plugin. This is necessary because ids are defined globally.
+            """
             return self.register_output(a, b, mpl=True)
 
         output_layout = self.__class__.get_mpl_output_layout(register_out)
@@ -1077,7 +1089,7 @@ class Plugin(Layout, ABC):
         ----------
         register : Callable
             The register method to register (user) variables.
-            The register_input function is located in the Plugin superclass.
+            For more information, see 'register_input'.
 
         Returns
         -------
@@ -1253,7 +1265,7 @@ class Plugin(Layout, ABC):
         ----------
         register : Callable
             The register method to register (user) variables.
-            The register_input function is located in the Plugin superclass.
+            For more information, see 'register_input'.
 
         Returns
         -------
@@ -1269,9 +1281,9 @@ class Plugin(Layout, ABC):
 
         Parameters
         ----------
-        register : Callable[
+        register : Callable
             The register method to register (user) variables.
-            The register_input function is located in the Plugin superclass.
+            For more information, see 'register_input'.
 
         Returns
         -------
@@ -1289,7 +1301,7 @@ class Plugin(Layout, ABC):
         ----------
         register : Callable
             The register method to register outputs.
-            The register_input function is located in the Plugin superclass.
+            For more information, see 'register_input'.
 
         Returns
         -------
@@ -1307,7 +1319,7 @@ class Plugin(Layout, ABC):
         ----------
         register : Callable
             The register method to register outputs.
-            The register_input function is located in the Plugin superclass.
+            For more information, see 'register_input'.
 
         Returns
         -------
@@ -1323,7 +1335,7 @@ class Plugin(Layout, ABC):
         outputs: Dict[str, Union[str, Dict[str, str]]],
     ) -> Union[Component, List[Component]]:
         """
-        Read in the raw data and prepares them for the layout.
+        Read in the raw data and prepare them for the layout.
 
         Note
         ----

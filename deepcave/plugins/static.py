@@ -44,7 +44,9 @@ def _process(
     process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs: Dict[str, Any]
 ) -> None:
     """
-    Process the run if possible.
+    Process the run with the input data if possible.
+
+    Return raw data based on a run and input data.
 
     Parameters
     ----------
@@ -53,7 +55,7 @@ def _process(
     run : AbstractRun
         The run.
     inputs : Dict[str, Any]
-        The inputs as a dictionary
+        The inputs as a dictionary.
 
     Raises
     ------
@@ -71,6 +73,7 @@ class StaticPlugin(Plugin, ABC):
     """
     Provide a static plugin object.
 
+    Calculation with queue. Made for time-consuming tasks.
     Register and handle callbacks.
 
     Properties
@@ -88,7 +91,7 @@ class StaticPlugin(Plugin, ABC):
     name : str
         The name of the plugin.
     process : Callable
-        Returns raw data based on a run and input data.
+        Return raw data based on a run and input data.
     button_caption : str
         The caption for the button.
     """
@@ -280,7 +283,14 @@ class StaticPlugin(Plugin, ABC):
         # prevent output updates from previous callback calls.
         @app.callback(output, inputs)  # type: ignore
         def plugin_check_blocked(_: Any, data: Any) -> Any:
-            """Check if blocked."""
+            """
+            Check if blocked.
+            
+            Raises
+            ------
+            PreventUpdate
+                If '_blocked' is True.
+            """
             if self._blocked:
                 raise PreventUpdate
 
@@ -289,7 +299,6 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def _callback_loop_update_status_label(self) -> None:
-        """Set up a callback function that indirectly influences the behavior of the main loop."""
         from deepcave import app, notification
 
         output = [
@@ -357,7 +366,7 @@ class StaticPlugin(Plugin, ABC):
         Parameters
         ----------
         run_name : str
-            The run name.
+            The name of the run.
         inputs_key : str
             The inputs key.
 
@@ -370,7 +379,17 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     # Return type does not match the superclass
-    def __call__(self) -> List[Component]:  # noqa: D102
+    def __call__(self) -> List[Component]:
+        """
+        Return the components for the plugin. 
+        
+        Basically, all blocks and elements of the plugin are stacked-up here.
+
+        Returns
+        -------
+        List[Component]
+            Layout as list of components.
+        """
         from deepcave import config
 
         self._setup()

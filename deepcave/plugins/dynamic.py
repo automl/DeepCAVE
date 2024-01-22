@@ -49,7 +49,13 @@ class DynamicPlugin(Plugin, ABC):
 
     @interactive
     def register_callbacks(self) -> None:
-        """Register the callbacks and update the outputs from the inputs."""
+        """
+        Register basic callbacks for the plugin. 
+        Following callbacks are registered: 
+        - If inputs changes, the changes are pasted back. This is in particular interest if input dependencies are used. 
+        - Raw data dialog to display raw data. 
+        - Callback to be redirected to the config if clicked on it.
+        """
         super().register_callbacks()
         from deepcave import app, c, rc
 
@@ -65,12 +71,12 @@ class DynamicPlugin(Plugin, ABC):
         @app.callback(outputs, inputs)  # type: ignore
         def plugin_output_update(_: Any, *inputs_list: str) -> Any:
             """
-            Update the outputs from the inputs.
+            Update the outputs.
 
             Parameters
             ----------
             *inputs_list
-                Values from user.
+                Input values from user.
 
             Returns
             -------
@@ -111,5 +117,15 @@ class DynamicPlugin(Plugin, ABC):
 
     @interactive
     # Return type does not match the superclass
-    def __call__(self) -> List[Component]:  # noqa: D102
+    def __call__(self) -> List[Component]:
+        """
+        Return the components for the plugin. 
+        
+        Basically, all blocks and elements of the plugin are stacked-up here.
+
+        Returns
+        -------
+        List[Component]
+            Layout as list of components.
+        """
         return super().__call__(False)
