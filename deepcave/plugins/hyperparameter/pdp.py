@@ -237,7 +237,7 @@ class PartialDependencies(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def get_pdp_figure(run, inputs, outputs, show_confidence, show_ice, title=None):
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
@@ -249,9 +249,6 @@ class PartialDependencies(StaticPlugin):
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
-
-        show_confidence = inputs["show_confidence"]
-        show_ice = inputs["show_ice"]
 
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
@@ -323,6 +320,7 @@ class PartialDependencies(StaticPlugin):
                     "yaxis": {
                         "title": objective_name,
                     },
+                    "title": title
                 }
             )
         else:
@@ -349,10 +347,20 @@ class PartialDependencies(StaticPlugin):
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
+                    title=title
                 )
             )
 
         figure = go.Figure(data=traces, layout=layout)
         save_image(figure, "pdp.pdf")
+
+        return figure
+
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
+        show_confidence = inputs["show_confidence"]
+        show_ice = inputs["show_ice"]
+
+        figure = PartialDependencies.get_pdp_figure(run, inputs, outputs, show_confidence, show_ice)
 
         return figure
