@@ -7,7 +7,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status
 from deepcave.utils.compression import deserialize, serialize
@@ -126,6 +126,7 @@ class ConfigurationCube(DynamicPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
+        if budget_value is None:
             budget_value = budget_ids[-1]
         else:
             budget_value = inputs["budget_id"]["value"]
@@ -177,7 +178,7 @@ class ConfigurationCube(DynamicPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
+        return (dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),)
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -277,7 +278,7 @@ class ConfigurationCube(DynamicPlugin):
             layout = go.Layout(**layout_kwargs)
 
         figure = go.Figure(data=trace, layout=layout)
-        figure.update_layout(dict(margin=config.FIGURE_MARGIN))
+        figure.update_layout(dict(margin=Config.FIGURE_MARGIN))
         save_image(figure, "configuration_cube.pdf")
 
         return figure
