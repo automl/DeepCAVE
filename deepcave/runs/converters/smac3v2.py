@@ -52,7 +52,7 @@ class SMAC3v2Run(Run):
         for obj in objectives:
             obj_list.append(Objective(obj))
         # Only lock lower for time
-        obj_list.append(Objective("Time", lower=0))
+        obj_list.append(Objective("Time"))
 
         # Read meta
         with (path / "scenario.json").open() as json_file:
