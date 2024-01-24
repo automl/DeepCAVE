@@ -4,7 +4,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
@@ -145,10 +145,13 @@ class PartialDependencies(StaticPlugin):
         objective_value = inputs["objective_id"]["value"]
         budget_value = inputs["budget_id"]["value"]
         hp1_value = inputs["hyperparameter_name_1"]["value"]
+        hp2_value = inputs["hyperparameter_name_2"]["value"]
 
         if objective_value is None:
             objective_value = objective_ids[0]
+        if budget_value is None:
             budget_value = budget_ids[-1]
+        if hp1_value is None:
             hp1_value = hp_names[0]
 
         return {
@@ -160,6 +163,7 @@ class PartialDependencies(StaticPlugin):
             },
             "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
+                "value": hp2_value,
             },
         }
 
@@ -234,7 +238,7 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
     def get_pdp_figure(run, inputs, outputs, show_confidence, show_ice, title=None):
@@ -346,7 +350,7 @@ class PartialDependencies(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=config.FIGURE_MARGIN,
+                    margin=Config.FIGURE_MARGIN,
                     title=title
                 )
             )

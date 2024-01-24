@@ -1,10 +1,11 @@
-# Version 1.2
+# Version 1.1.4
 
 ## Plugins
 - Add symbolic explanations plugin (#46).
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
+- Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
@@ -12,6 +13,9 @@
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- Fix api examples (#68).
+- Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
+- Fix errors due to changing inputs before runselection (#64).
 - Fix varying configspace index order in PDP and symbolic explanations.
 
 # Version 1.1.3
