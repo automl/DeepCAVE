@@ -49,9 +49,9 @@ class SMAC3v2Run(Run):
         obj_list = list()
         if not isinstance(objectives, list):
             objectives = [objectives]
-        # Only lock lower
         for obj in objectives:
-            obj_list.append(Objective(obj, lower=0))
+            obj_list.append(Objective(obj))
+        # Only lock lower for time
         obj_list.append(Objective("Time", lower=0))
 
         # Read meta
