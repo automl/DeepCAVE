@@ -5,7 +5,6 @@
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
-- Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
