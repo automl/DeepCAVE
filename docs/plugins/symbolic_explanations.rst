@@ -12,3 +12,6 @@ performance, the Symbolic Explanations plugin additionally allows to obtain an e
 these effects.
 
 .. image:: ../images/plugins/symbolic_explanations.png
+
+To learn more about Symbolic Explanations, please see the paper
+`Symbolic Explanations for Hyperparameter Optimization <https://openreview.net/forum?id=JQwAc91sg_x>`_.

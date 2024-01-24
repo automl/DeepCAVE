@@ -279,37 +279,39 @@ class SymbolicExplanations(StaticPlugin):
             idx2 = run.configspace.get_idx_by_hyperparameter_name(hp2)
             idxs += [idx2]
 
+        num_samples = SAMPLES_PER_HP * len(X)
+        # We limit the samples to max 10k
+        if num_samples > MAX_SAMPLES:
+            num_samples = MAX_SAMPLES
+
+        # And finally call PDP
+        pdp = PDP.from_random_points(
+            surrogate_model,
+            selected_hyperparameter=selected_hyperparameters,
+            seed=0,
+            num_grid_points_per_axis=SR_TRAIN_POINTS_PER_AXIS,
+            num_samples=num_samples,
+        )
+
+        x_pdp = pdp.x_pdp
+        y_pdp = pdp.y_pdp.tolist()
+        pdp_variances = pdp.y_variances.tolist()
+
+        x_ice = pdp._ice.x_ice.tolist()
+        y_ice = pdp._ice.y_ice.tolist()
+
+        # We have to cut the ICE curves because it's too much data
+        if len(x_ice) > MAX_SHOWN_SAMPLES:
+            x_ice = x_ice[:MAX_SHOWN_SAMPLES]
+            y_ice = y_ice[:MAX_SHOWN_SAMPLES]
+
         if len(selected_hyperparameters) < len(hp_names):
-            num_samples = SAMPLES_PER_HP * len(X)
-            # We limit the samples to max 10k
-            if num_samples > MAX_SAMPLES:
-                num_samples = MAX_SAMPLES
-
-            # And finally call PDP
-            pdp = PDP.from_random_points(
-                surrogate_model,
-                selected_hyperparameter=selected_hyperparameters,
-                seed=0,
-                num_grid_points_per_axis=SR_TRAIN_POINTS_PER_AXIS,
-                num_samples=num_samples,
-            )
-
-            x = pdp.x_pdp
-            y = pdp.y_pdp.tolist()
-
-            # Save PDP information for PDP plot as comparison
-            y_pdp = y
-            pdp_variances = pdp.y_variances.tolist()
-
-            # We have to cut the ICE curves because it's too much data
-            x_ice = pdp._ice.x_ice.tolist()
-            y_ice = pdp._ice.y_ice.tolist()
-
-            if len(x_ice) > MAX_SHOWN_SAMPLES:
-                x_ice = x_ice[:MAX_SHOWN_SAMPLES]
-                y_ice = y_ice[:MAX_SHOWN_SAMPLES]
-
+            # If number of hyperparameters to explain is smaller than number of hyperparameters optimizes,
+            # use PDP to train the symbolic explanation
+            x_symbolic = x_pdp
+            y_train = y_pdp
         else:
+            # Else, use random samples evaluated with the surrogate model to train the symbolic explanation
             cs = surrogate_model.config_space
             random_samples = np.asarray(
                 [
@@ -319,9 +321,8 @@ class SymbolicExplanations(StaticPlugin):
                     )
                 ]
             )
-            x = random_samples
-            y = surrogate_model.predict(random_samples)[0]
-            x_ice, y_ice, pdp_variances, y_pdp = [], [], [], []
+            x_symbolic = random_samples
+            y_train = surrogate_model.predict(random_samples)[0]
 
         symb_params = dict(
             population_size=population_size,
@@ -335,7 +336,7 @@ class SymbolicExplanations(StaticPlugin):
 
         # run SR on samples
         symb_model = SymbolicRegressor(**symb_params)
-        symb_model.fit(x[:, idxs], y)
+        symb_model.fit(x_symbolic[:, idxs], y_train)
 
         try:
             conv_expr = (
@@ -354,10 +355,11 @@ class SymbolicExplanations(StaticPlugin):
                 "the parsimony hyperparameter."
             )
 
-        y_symbolic = symb_model.predict(x[:, idxs]).tolist()
+        y_symbolic = symb_model.predict(x_symbolic[:, idxs]).tolist()
 
         return {
-            "x": x.tolist(),
+            "x": x_pdp.tolist(),
+            "x_symbolic": x_symbolic.tolist(),
             "y": y_pdp,
             "y_symbolic": y_symbolic,
             "expr": conv_expr,
@@ -377,6 +379,7 @@ class SymbolicExplanations(StaticPlugin):
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
         hp1 = run.configspace.get_hyperparameter(hp1_name)
+        selected_hyperparameters = [hp1]
 
         hp2_name = inputs["hyperparameter_name_2"]
         hp2_idx = None
@@ -384,12 +387,14 @@ class SymbolicExplanations(StaticPlugin):
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
+            selected_hyperparameters += [hp2]
 
+        hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
         # Parse outputs
-        x = np.asarray(outputs["x"])
+        x_symbolic = np.asarray(outputs["x_symbolic"])
         y_symbolic = np.asarray(outputs["y_symbolic"])
         expr = outputs["expr"]
 
@@ -397,7 +402,7 @@ class SymbolicExplanations(StaticPlugin):
         if hp2 is None:  # 1D
             traces1 += [
                 go.Scatter(
-                    x=x[:, hp1_idx],
+                    x=x_symbolic[:, hp1_idx],
                     y=y_symbolic,
                     line=dict(color=get_color(0, 1)),
                     hoverinfo="skip",
@@ -424,8 +429,8 @@ class SymbolicExplanations(StaticPlugin):
             traces1 += [
                 go.Contour(
                     z=z,
-                    x=x[:, hp1_idx],
-                    y=x[:, hp2_idx],
+                    x=x_symbolic[:, hp1_idx],
+                    y=x_symbolic[:, hp2_idx],
                     colorbar=dict(
                         title=objective_name,
                     ),
@@ -448,14 +453,15 @@ class SymbolicExplanations(StaticPlugin):
         figure1 = go.Figure(data=traces1, layout=layout1)
         save_image(figure1, "symbolic_explanation.pdf")
 
-        if len(outputs["y_ice"]) > 0:
-            figure2 = PartialDependencies.get_pdp_figure(run, inputs, outputs,
-                                                         show_confidence=False,
-                                                         show_ice=True,
-                                                         title="Partial Dependency Plot leveraged for training of "
-                                                               "Symbolic Explanation:"
-                                                         )
-
-            return [figure1, figure2]
+        if len(selected_hyperparameters) < len(hp_names):
+            pdp_title = "Partial Dependency leveraged for training of Symbolic Explanation:"
         else:
-            return [figure1, []]
+            pdp_title = "Partial Dependency for comparison:"
+
+        figure2 = PartialDependencies.get_pdp_figure(run, inputs, outputs,
+                                                     show_confidence=False,
+                                                     show_ice=False,
+                                                     title=pdp_title
+                                                     )
+
+        return [figure1, figure2]
