@@ -5,7 +5,7 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 from ConfigSpace import ConfigurationSpace, Constant
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -138,7 +138,6 @@ class Importances(StaticPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
-            n_hps = len(hp_names)
 
         if n_hps == 0:
             n_hps = len(hp_names)
@@ -222,7 +221,7 @@ class Importances(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs):
@@ -294,7 +293,7 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=config.FIGURE_MARGIN,
+            margin=Config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
         )
         save_image(figure, "importances.pdf")
