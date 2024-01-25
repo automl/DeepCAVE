@@ -2,11 +2,11 @@
 """
 # Group
 
-This module provides utilities for grouping and managing a group of abstract runs.
-Utilities include getting attributes of the grouped runs, as well as the group.
+This module provides utilities for grouping and managing a group of runs.
+Utilities include getting attributes of the grouped runs, as well as the group itself.
 
 ## Classes
-    - Group: Can group and manage a group of abstract runs.
+    - Group: Can group and manage a group of runs.
 """
 
 from typing import Any, Dict, Iterator, List, Optional, Tuple
@@ -21,14 +21,14 @@ from deepcave.utils.hash import string_to_hash
 
 class Group(AbstractRun):
     """
-    Can group and manage a group of abstract runs.
+    Can group and manage a group of runs.
 
-    Utilities include getting attributes of the grouped runs, as well as the group.
+    Utilities include getting attributes of the grouped runs, as well as the group itself.
 
     Properties
     ----------
     runs : List[AbstractRun]
-        A list of the abstract runs.
+        A list of the runs.
     meta : Dict[str, Any]
         Contains budgets, objectives and their attributes.
     configspace : ConfigurationSpace
@@ -135,7 +135,14 @@ class Group(AbstractRun):
 
     @property
     def hash(self) -> str:
-        """Get a sorted hash of the runs of the group."""
+        """
+        Sorted hashes of the group. 
+
+        Returns
+        -------
+        str
+            The sorted hash of the group.
+        """
         hashes = []
         for run in self.runs:
             hashes += [run.hash]
@@ -146,13 +153,28 @@ class Group(AbstractRun):
 
     @property
     def id(self) -> str:
-        """Get a hash as id of the group."""
+        """
+        Get the hash as id of the group.
+        In contrast to hash, this hash should not be changed throughout the run.
+
+        Returns
+        -------
+        str
+            The hash of the group.
+        """
         # Groups do not have a path, therefore the name is used.
         return string_to_hash(f"{self.prefix}:{self.name}")
 
     @property
     def latest_change(self) -> float:
-        """Get the latest change made to the grouped runs."""
+        """
+        Get the latest change made to the grouped runs.
+
+        Returns
+        -------
+        float
+            The latest change.
+        """
         latest_change = 0.0
         for run in self.runs:
             if run.latest_change > latest_change:
@@ -167,11 +189,25 @@ class Group(AbstractRun):
 
     @property
     def run_names(self) -> List[str]:
-        """Get the names of the runs in the group."""
+        """
+        Get the names of the runs in the group.
+        
+        Returns
+        -------
+        List[str]
+            A list of the names of the runs in the group.
+        """
         return [run.name for run in self.runs]
 
     def get_runs(self) -> List[AbstractRun]:
-        """Get the abstract runs."""
+        """
+        Get the runs in the group.
+        
+        Returns
+        -------
+        List[AbstractRun]
+            A list of the grouped runs.
+        """
         return self.runs
 
     def get_new_config_id(self, run_id: int, original_config_id: int) -> int:

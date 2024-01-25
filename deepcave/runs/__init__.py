@@ -3,11 +3,11 @@
 # AbstractRun
 
 This module provides utilities to create and handle an abstract run.
-It also provides functions to get information of the run, as well as the used objectives.
-Utilities also include encoding configurations and check equality between runs.
+
+It provides functions to get information of the run, as well as the used objectives.
 
 ## Classes
-    - AbstractRun: Can create, handle and get information of an abstract run.
+    - AbstractRun: Create a new run.
 """
 
 from abc import ABC, abstractmethod
@@ -41,35 +41,34 @@ from deepcave.utils.logs import get_logger
 
 class AbstractRun(ABC):
     """
-    Can create, handle and get information of an abstract run.
-
+    Create a new run. 
+    
     Provide functions to get information of the run, as well as the used objectives.
-    Utilities also include encoding configurations and check equality between runs.
 
     Properties
     ----------
     name : str
-        The name of the abstract run.
+        The name of the run.
     path : Optional[Path]
-        The path to the abstract run.
+        The path to the run.
     logger : Logger
-        The logger for the abstract run.
+        The logger for the run.
     meta: Dict[str, Any]
-        A dictionary containing the abstract run's meta information.
+        Contains the run's meta information.
     configspace: ConfigSpace.ConfigurationSpace
         The configuration space of the run.
     configs: Dict[int, Configuration]
-        A dictionary containing the configurations.
+        Contains the configurations.
     origins: Dict[int, str]
-        The origins of the configurations.
+        The origin of the configuration.
     models: Dict[int, Optional[Union[str, "torch.nn.Module"]]]
-        A dictionary containing pytorch modules.
+        Contains the modules.
     history: List[Trial]
-        The trial history.
+        The history of Trials.
     trial_keys: Dict[Tuple[str, int], int]
-        A dictionary containing config_id and budget and the corresponding trial_id.
+        Contains config_id, budget and the corresponding trial_id.
     models_dir : Path
-        The directory of the torch model.
+        The directory of the model.
     """
 
     prefix: str
@@ -84,9 +83,9 @@ class AbstractRun(ABC):
 
     def reset(self) -> None:
         """
-        Reset the abstract run to default values / empties.
+        Reset the run to default values / empties.
 
-        Clear all the initial data and configurations of the object.
+        Clear the initial data and configurations of the object.
         """
         self.meta: Dict[str, Any] = {}
         self.configspace: ConfigSpace.ConfigurationSpace
@@ -162,12 +161,12 @@ class AbstractRun(ABC):
     @property
     def latest_change(self) -> float:
         """
-        Get the latest change value.
+        Get the latest change.
 
         Returns
         -------
         float
-            The latest change value set to 0.
+            The latest change.
         """
         return 0
 
@@ -176,19 +175,21 @@ class AbstractRun(ABC):
         config_id: int, budget: Union[int, float, None]
     ) -> Tuple[int, Union[int, float, None]]:
         """
-        Get the trial key for the configuration and the budget.
+        Get the trial key.
+        
+        It is obtained through the assembly of configuration and budget.
 
         Parameters
         ----------
         config_id : int
             The identificator of the configuration.
         budget : Union[int, float, None]
-            The budget for the Trial.
+            The budget of the Trial.
 
         Returns
         -------
         Tuple[int, Union[int, float, None]]
-            Tuple representing the trial key, consisting of configuration ID and the budget.
+            Tuple representing the trial key, consisting of configuration id and the budget.
         """
         return (config_id, budget)
 
@@ -199,12 +200,12 @@ class AbstractRun(ABC):
         Parameters
         ----------
         trial_key : Tuple[int, int]
-            The trial key for the desired trial
+            The key for the desired trial.
 
         Returns
         -------
         Optional[Trial]
-            If available returns the trial object, otherwise returns None.
+            The trial object.
         """
         if trial_key not in self.trial_keys:
             return None
@@ -224,29 +225,29 @@ class AbstractRun(ABC):
 
     def get_meta(self) -> Dict[str, Any]:
         """
-        Get a copy of the meta information of this abstract run.
+        Get a shallow copy of the meta information.
 
         Returns
         -------
         Dict[str, Any]
-            A copy of the meta information dictionary.
+            A shallow copy of the meta information dictionary.
         """
         return self.meta.copy()
 
     def empty(self) -> bool:
         """
-        Check if the abstract run object's history is empty.
+        Check if the run's history is empty.
 
         Returns
         -------
         bool
-            True if object history is empty, False otherwise.
+            True if run history is empty, False otherwise.
         """
         return len(self.history) == 0
 
     def get_origin(self, config_id: int) -> Optional[str]:
         """
-        Get the origin, given a config ID.
+        Get the origin, given a config id.
 
         Parameters
         ----------
@@ -256,18 +257,18 @@ class AbstractRun(ABC):
         Returns
         -------
         Optional[str]
-            An origin string corresponding to the given configuration ID.
+            An origin string corresponding to the given configuration id.
         """
         return self.origins[config_id]
 
     def get_objectives(self) -> List[Objective]:
         """
-        Get a list of all objectives corresponding to the object.
+        Get a list of all objectives corresponding to the run.
 
         Returns
         -------
         List[Objective]
-            A list containing all objectives associated with the object.
+            A list containing all objectives associated with the run.
         """
         objectives = []
         for d in self.meta["objectives"].copy():
@@ -333,12 +334,12 @@ class AbstractRun(ABC):
 
     def get_objective_ids(self) -> List[int]:
         """
-        Get the IDs of the objectives.
+        Get the ids of the objectives.
 
         Returns
         -------
         List[int]
-            A list of the IDs of the objectives.
+            A list of the ids of the objectives.
         """
         return list(range(len(self.get_objectives())))
 
@@ -350,8 +351,9 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        objectives : Optional[List[Objective]], optional
-            A list of objectives for which to get the cost name. By default, None.
+        objectives : Optional[List[Objective]]
+            A list of the objectives. 
+            By default, None.
 
         Returns
         -------
@@ -390,8 +392,9 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        budget : Union[int, float], optional
-            Considered budget. By default, None (all configurations are included).
+        budget : Optiona[Union[int, float]]
+            Considered budget. 
+            By default, None (all configurations are included).
 
         Returns
         -------
@@ -419,34 +422,34 @@ class AbstractRun(ABC):
 
     def get_config(self, id: int) -> Configuration:
         """
-        Retrieve a configuration for the corresponding ID.
+        Retrieve the configuration with the corresponding id.
 
         Parameters
         ----------
         id : int
-            The ID of the wanted configuration.
+            The id of the configuration.
 
         Returns
         -------
         Configuration
-            A corresponding Configuration.
+            The corresponding Configuration.
         """
         config = Configuration(self.configspace, self.configs[id])
         return config
 
     def get_config_id(self, config: Union[Configuration, Dict]) -> Optional[int]:
         """
-        Retrieve the ID of the configuration.
+        Get the id of the configuration.
 
         Parameters
         ----------
         config : Union[Configuration, Dict]
-            The configuration for which to find the ID.
+            The configuration for which to find the id.
 
         Returns
         -------
         Optional[int]
-            The configuration ID if found, otherwise None.
+            The configuration id.
         """
         if isinstance(config, Configuration):
             config = config.get_dictionary()
@@ -460,11 +463,11 @@ class AbstractRun(ABC):
 
     def get_num_configs(self, budget: Optional[Union[int, float]] = None) -> int:
         """
-        Count the number of configurations stored in this object with a specific budget.
+        Count the number of configurations stored in this run with a specific budget.
 
         Parameters
         ----------
-        budget : Union[int, float], optional
+        budget : Optional[Union[int, float]]
             The budget for which to count the configurations.
             If not provided, counts all configurations.
             Default is None.
@@ -484,14 +487,16 @@ class AbstractRun(ABC):
         Parameters
         ----------
         id : Union[int, str]
-            The id of the wanted budget. If id is a string, it is converted to an integer.
+            The id of the wanted budget. 
+            If id is a string, it is converted to an integer.
         human : bool, optional
-            Make the output better readable. By default False.
+            Make the output more readable. 
+            By default False.
 
         Returns
         -------
         float, int
-            Budget.
+            The budget.
 
         Raises
         ------
@@ -503,18 +508,18 @@ class AbstractRun(ABC):
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
         """
-        Get the corresponding IDs for the budgets.
+        Get the corresponding ids for the budgets.
 
         Parameters
         ----------
         include_combined : bool, optional
-            If True, include the ID for the combined budget. If False, do not include.
+            If False, cut last id of budget ids.
             By default True.
 
         Returns
         -------
         List[int]
-            A list of the budget IDs.
+            A list of the budget ids.
         """
         budget_ids = list(range(len(self.get_budgets())))
         if not include_combined:
@@ -531,9 +536,10 @@ class AbstractRun(ABC):
         Parameters
         ----------
         human : bool, optional
-            Make the output better readable. By default False.
+            Make the output more readable. 
+            By default False.
         include_combined : bool, optional
-            If True, include the combined budget. If False, do not include.
+            If True, include the combined budget.
             By default True.
 
         Returns
@@ -567,8 +573,8 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        config_id : Optional[int], optional
-            The config id for which the highest budget is returned. By default, None.
+        config_id : Optional[int]
+            The config id for which the highest budget is returned. 
 
         Returns
         -------
@@ -594,7 +600,8 @@ class AbstractRun(ABC):
         Parameters
         ----------
         costs : List[float]
-            Costs, which should be processed. Must be the same length as the number of objectives.
+            Costs, which should be processed. 
+            Must be the same length as the number of objectives.
 
         Returns
         -------
@@ -621,7 +628,7 @@ class AbstractRun(ABC):
         ----------
         config_id : int
             Configuration id to get the costs for.
-        budget : Optional[Union[int, float]], optional
+        budget : Optional[Union[int, float]]
             Budget to get the costs from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
 
@@ -662,10 +669,10 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        budget : Optional[Union[int, float]], optional
+        budget : Optional[Union[int, float]]
             Budget to select the costs. If no budget is given, the highest budget is chosen.
             By default, None.
-        statuses : Optional[Union[Status, List[Status]]], optional
+        statuses : Optional[Union[Status, List[Status]]]
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
 
@@ -714,19 +721,19 @@ class AbstractRun(ABC):
         ----------
         config_id : int
             Configuration id to get the status for.
-        budget : Optional[Union[int, float]], optional
+        budget : Optional[Union[int, float]]
             Budget to get the status from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
-
-        Raises
-        ------
-        ValueError
-            If the configuration id is not found.
 
         Returns
         -------
         Status
             Status of the configuration.
+
+        Raises
+        ------
+        ValueError
+            If the configuration id is not found.
         """
         if budget == COMBINED_BUDGET:
             return Status.NOT_EVALUATED
@@ -758,11 +765,11 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        objectives : Optional[Union[Objective, List[Objective]]], optional
+        objectives : Optional[Union[Objective, List[Objective]]]
             Considered objectives. By default, None. If None, all objectives are considered.
-        budget : Optional[Union[int, float]], optional
+        budget : Optional[Union[int, float]]
             Considered budget. By default, None. If None, the highest budget is chosen.
-        statuses : Optional[Union[Status, List[Status]]], optional
+        statuses : Optional[Union[Status, List[Status]]]
             Considered statuses. By default, None. If None, all stati are considered.
 
         Returns
@@ -809,7 +816,7 @@ class AbstractRun(ABC):
         costs : List[float]
             The costs, which should be merged. Must be the same length as the original number of
             objectives.
-        objectives : Optional[List[Objective]], optional
+        objectives : Optional[List[Objective]]
             The considered objectives to the costs. By default, None.
             If None, all objectives are considered. The passed objectives can differ from the
             original number objectives.
@@ -879,18 +886,17 @@ class AbstractRun(ABC):
 
     def get_model(self, config_id: int) -> Optional["torch.nn.Module"]:  # type: ignore # noqa: F821
         """
-        Get a torch model associated with a configuration ID.
+        Get a model associated with the configuration id.
 
         Parameters
         ----------
         config_id : int
-            The configuration ID.
+            The configuration id.
 
         Returns
         -------
         Optional["torch.nn.Module]
-            A torch model for the provided configuration ID if available.
-            If not available, returns None.
+            A model for the provided configuration id.
         """
         import torch
 
@@ -911,23 +917,24 @@ class AbstractRun(ABC):
         ----------
         objective : Objective
             Objective to calculate the trajectory for.
-        budget : Optional[Union[int, float]], optional
+        budget : Optional[Union[int, float]]
             Budget to calculate the trajectory for. If no budget is given, then the highest budget
             is chosen. By default None.
 
         Returns
         -------
-        times : List[float]
-            Times of the trajectory.
-        costs_mean : List[float]
-            Costs of the trajectory.
-        costs_std : List[float]
-            Standard deviation of the costs of the trajectory. This is particularly useful for
-            grouped runs.
-        ids : List[int]
-            The "global" ids of the selected trials.
-        config_ids : List[int]
-            Config ids of the selected trials.
+        Tuple[List[float], List[float], List[float], List[int], List[int]]
+            times : List[float]
+                Times of the trajectory.
+            costs_mean : List[float]
+                Costs of the trajectory.
+            costs_std : List[float]
+                Standard deviation of the costs of the trajectory. This is particularly useful for
+                grouped runs.
+            ids : List[int]
+                The "global" ids of the selected trials.
+            config_ids : List[int]
+                Config ids of the selected trials.
         """
         if budget is None:
             budget = self.get_highest_budget()
@@ -987,15 +994,16 @@ class AbstractRun(ABC):
         self, config: Union[int, Dict[Any, Any], Configuration], specific: bool = False
     ) -> List:
         """
-        Encode a given config (id) to a normalized list.
+        Encode a given configuration (id) to a normalized list.
 
-        If a config is passed, no look-up has to be done.
+        If a configuration is passed, no look-up has to be done.
 
         Parameters
         ----------
         config : Union[int, Dict[Any, Any], Configuration]
-            Either the config id, config as dict, or Configuration itself.
-        specific : bool, optional
+            Either the configuration id, as configuration as dict, 
+            or a Configuration itself.
+        specific : bool
             Use specific encoding for fanova tree, by default False.
 
         Returns
@@ -1069,21 +1077,21 @@ class AbstractRun(ABC):
 
         Parameters
         ----------
-        objectives : Optional[Union[Objective, List[Objective]]], optional
+        objectives : Optional[Union[Objective, List[Objective]]]
             Which objectives should be considered. If None, all objectives are
             considered. By default, None.
-        budget : Optional[List[Status]], optional
+        budget : Optional[List[Status]]
             Which budget should be considered. By default, None. If None, only the highest budget
             is considered.
-        statuses : Optional[Union[Status, List[Status]]], optional
+        statuses : Optional[Union[Status, List[Status]]]
             Which statuses should be considered. By default, None. If None, all statuses are
             considered.
-        specific : bool, optional
+        specific : bool
             Whether a specific encoding should be used. This encoding is compatible with pyrfr.
             A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.
             By default False.
-        include_config_ids : bool, optional
-            Whether to include config ids. By default, False.
+        include_config_ids : bool
+            Whether to include configuration ids. By default, False.
         include_combined_cost : bool, optional
             Whether to include combined cost. Note that the combined cost is calculated by the
             passed objectives only. By default False.
@@ -1195,6 +1203,8 @@ def check_equality(
 ) -> Dict[str, Any]:
     """
     Check the passed runs on equality based on the selected runs.
+
+    Return the requested attributes.
 
     Parameters
     ----------

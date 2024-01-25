@@ -56,6 +56,8 @@ class Run(AbstractRun, ABC):
         The path to the models directory.
     configs : Dict[int, Configuration]
         Containing the configurations.
+    models : Dict[int, Optional[Union[str, "torch.nn.Module"]]]
+        Contains the models.
     """
 
     prefix = "run"
