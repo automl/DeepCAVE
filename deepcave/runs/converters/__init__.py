@@ -5,8 +5,8 @@
 ## Modules
 ----------
 bohb
-    This module is for managing and processing data concerning BOHB
-    (Bayesian Optimization and Hyperparameter Bandits).
+    This module provides utilities for managing and processing data concerning a BOHB
+    (Bayesian Optimization and Hyperparameter Bandits) run.
 deepcave
     This module defines the DeepCAVE run object.
 smac3v1

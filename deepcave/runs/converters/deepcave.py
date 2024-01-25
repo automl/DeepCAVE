@@ -3,10 +3,9 @@
 # DeepCAVE
 
 This module defines the DeepCAVE run object.
-It provides utilities to hash and get the DeepCAVE run object, as well as the latest change.
 
 ## Classes
-    - DeepCAVERun: Define the DeepCAVE run and provide handling utilities.
+    - DeepCAVERun: Create a DeepCAVE run and provide handling utilities.
 """
 
 from typing import Union
@@ -19,12 +18,12 @@ from deepcave.utils.hash import file_to_hash
 
 class DeepCAVERun(Run):
     """
-    Define the DeepCAVE run and provide handling utilities.
+    Create a DeepCAVE run and provide handling utilities.
 
     Properties
     ----------
     path : Path
-        The path to the "history.jsonl" file.
+        The path the run.
     """
 
     prefix = "DeepCAVE"
@@ -32,7 +31,17 @@ class DeepCAVERun(Run):
 
     @property
     def hash(self) -> str:
-        """Calculate a hash value of a jsonl history file to use as id."""
+        """
+        Hash of the current run. 
+        
+        If the hash changes, the cache has to be cleared. 
+        This ensures that the cache always holds the latest results of the run.
+
+        Returns
+        -------
+        str
+            The hash of the run.
+        """
         if self.path is None:
             return ""
 
@@ -41,7 +50,14 @@ class DeepCAVERun(Run):
 
     @property
     def latest_change(self) -> Union[float, int]:
-        """Get the timestamp of the latest change made to the history file."""
+        """
+        Get the timestamp of the latest change.
+
+        Returns
+        -------
+        Union[float, int]
+            The latest change.
+        """
         if self.path is None:
             return 0
 
@@ -49,5 +65,16 @@ class DeepCAVERun(Run):
 
     @classmethod
     def from_path(cls, path: Path) -> "DeepCAVERun":
-        """Get a DeepCAVE run from a given path."""
+        """
+        Get a DeepCAVE run from a given path.
+
+        Parameters
+        ----------
+        path : Path
+            The path to base the run on.
+
+        Returns
+        -------
+        The DeepCAVE run.
+        """
         return DeepCAVERun(path.stem, path=Path(path))

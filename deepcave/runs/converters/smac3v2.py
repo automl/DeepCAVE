@@ -4,7 +4,8 @@
 
 This module provides utilities to create a SMAC3v2
 (Sequential Model-based Algorithm Configuration) run.
-It provides utilities to hash, as well a get the latest change of the object.
+
+Version 2.0.0 is used.
 
 ## Classes
     - SMAC3v2Run: Define a SMAC3v2 run object.
@@ -25,16 +26,14 @@ from deepcave.utils.hash import file_to_hash
 
 class SMAC3v2Run(Run):
     """
-    Define a SMAC3v2 run object.
+    Define a SMAC3v2 (Sequential Model-based Algorithm Configuration) run object.
 
-    (Sequential Model-based Algorithm Configuration)
-
-    It also provides utilities to hash it and get its latest change.
+    Version 2.0.0 is used.
 
     Properties
     ----------
     path : Path
-        The path to the "runhistory.json" file.
+        The path to the run.
     """
 
     prefix = "SMAC3v2"
@@ -42,7 +41,17 @@ class SMAC3v2Run(Run):
 
     @property
     def hash(self) -> str:
-        """Calculate a hash value of a json runhistory file to use as id."""
+        """
+        Hash of the current run. 
+        
+        If the hash changes, the cache has to be cleared. 
+        This ensures that the cache always holds the latest results of the run.
+
+        Returns
+        -------
+        str
+            The hash of the run.
+        """
         if self.path is None:
             return ""
 
@@ -51,7 +60,14 @@ class SMAC3v2Run(Run):
 
     @property
     def latest_change(self) -> Union[float, int]:
-        """Get the timestamp of the latest change of the runhistory file."""
+        """
+        Get the timestamp of the latest change.
+        
+        Returns
+        -------
+        Union[float, int]
+            The latest change.
+        """
         if self.path is None:
             return 0
 
