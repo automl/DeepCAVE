@@ -2,6 +2,7 @@
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
+- Allow to load multi-objective SMAC3v2 and add example (#69)
 - Do not disable existing loggers.
 
 ## Bug-Fixes
