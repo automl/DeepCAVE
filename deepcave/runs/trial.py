@@ -9,6 +9,7 @@ from deepcave.runs.status import Status
 class Trial:
     config_id: int
     budget: Union[int, float]
+    seed: int
     costs: List[float]
     start_time: float
     end_time: float
@@ -24,12 +25,13 @@ class Trial:
     def get_key(self) -> Tuple[int, int]:
         from deepcave.runs import AbstractRun
 
-        return AbstractRun.get_trial_key(self.config_id, self.budget)
+        return AbstractRun.get_trial_key(self.config_id, self.budget, self.seed)
 
     def to_json(self) -> List[Any]:
         return [
             self.config_id,
             self.budget,
+            self.seed,
             self.costs,
             self.start_time,
             self.end_time,

@@ -58,6 +58,7 @@ class SMAC3v2Run(Run):
         with (path / "scenario.json").open() as json_file:
             meta = json.load(json_file)
             meta["run_objectives"] = meta.pop("objectives")
+            meta["experiment_seed"] = meta.pop("seed")
 
         # Let's create a new run object
         run = SMAC3v2Run(
@@ -102,9 +103,6 @@ class SMAC3v2Run(Run):
             if seed not in seeds:
                 seeds.append(seed)
 
-            if len(seeds) > 1:
-                raise RuntimeError("Multiple seeds are not supported.")
-
             if first_starttime is None:
                 first_starttime = starttime
 
@@ -144,6 +142,7 @@ class SMAC3v2Run(Run):
                 costs=cost + [time] if isinstance(cost, list) else [cost, time],
                 config=config,
                 budget=budget,
+                seed=seed,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,

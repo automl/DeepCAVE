@@ -1,5 +1,6 @@
 import dash_bootstrap_components as dbc
 import numpy as np
+import itertools
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -72,7 +73,7 @@ class Overview(DynamicPlugin):
 
     @staticmethod
     def load_outputs(run, *_):
-        # Get best cost across all objectives, highest budget
+        # Get best cost across all objectives, seeds, highest budget
         incumbent, _ = run.get_incumbent()
         config_id = run.get_config_id(incumbent)
         objective_names = run.get_objective_names()
@@ -162,25 +163,33 @@ class Overview(DynamicPlugin):
         # Budgets
         budgets = run.get_budgets(include_combined=False)
 
+        # Seeds
+        seeds = run.get_seeds(include_combined=False)
+
+        # Budget-seed combinations
+        budget_seed_combinations = list(itertools.product(budgets, seeds))
+
         # Statistics
         status_statistics = {}
-        status_details = {"Configuration ID": [], "Budget": [], "Status": [], "Error": []}
-        for budget in budgets:
+        status_details = {"Configuration ID": [], "Budget": [], "Seed": [], "Status": [], "Error": []}
+        for budget, seed in budget_seed_combinations:
             budget = round(budget, 2)
-            if budget not in status_statistics:
-                status_statistics[budget] = {}
-
+            budget_seed = f"{budget} ({seed})"
+            if budget_seed not in status_statistics:
+                status_statistics[budget_seed] = {}
                 for s in Status:
-                    status_statistics[budget][s] = 0
+                    status_statistics[budget_seed][s] = 0
 
         status_statistics_total = {}
         status_budget = {}
         len_trials = 0
         for trial in run.get_trials():
             budget = round(trial.budget, 2)
+            seed = trial.seed
+            budget_seed = f"{budget} ({seed})"
 
             len_trials += 1
-            status_statistics[budget][trial.status] += 1
+            status_statistics[budget_seed][trial.status] += 1
 
             # For text information
             if trial.status not in status_statistics_total:
@@ -202,6 +211,7 @@ class Overview(DynamicPlugin):
                     html.A(trial.config_id, href=link, target="_blank")
                 ]
                 status_details["Budget"] += [budget]
+                status_details["Seed"] += [seed]
                 status_details["Status"] += [trial.status.to_text()]
 
                 if "traceback" in trial.additional:
@@ -247,37 +257,36 @@ class Overview(DynamicPlugin):
         status_text = f"""
         Taking all evaluated trials into account, {successful_trials_rate}% have been successful.
         {unsuccessful_trials_text}
-        Moreover, {status_budget_values_text} of the configurations were evaluated on budget
+        Moreover, {status_budget_values_text} of the trials were evaluated on budget
         {status_budget_keys_text}, respectively.
         """
 
         # Now remove status that are not used
-        for budget in list(status_statistics.keys()):
-            for status in list(status_statistics[budget].keys()):
-                if status_statistics[budget][status] == 0:
-                    del status_statistics[budget][status]
+        for budget_seed in list(status_statistics.keys()):
+            for status in list(status_statistics[budget_seed].keys()):
+                if status_statistics[budget_seed][status] == 0:
+                    del status_statistics[budget_seed][status]
 
         # It is interesting to see on which budget a configuration was evaluated
         config_statistics = {}
         configs = run.get_configs()
         config_ids = list(configs.keys())
 
-        z_values = np.zeros((len(config_ids), len(budgets))).tolist()
-        z_labels = np.zeros((len(config_ids), len(budgets))).tolist()
+        z_values = np.zeros((len(config_ids), len(budget_seed_combinations))).tolist()
+        z_labels = np.zeros((len(config_ids), len(budget_seed_combinations))).tolist()
 
         for i, config_id in enumerate(configs.keys()):
-            for j, budget in enumerate(budgets):
-                trial_key = run.get_trial_key(config_id, budget)
+            for j, (b, s) in enumerate(budget_seed_combinations):
+                trial_key = run.get_trial_key(config_id, b, s)
                 trial = run.get_trial(trial_key)
 
                 status = Status.NOT_EVALUATED
                 if trial is not None:
                     status = trial.status
-
                 z_values[i][j] = status.value
                 z_labels[i][j] = status.to_text()
 
-        config_statistics["X"] = budgets
+        config_statistics["X"] = budget_seed_combinations
         config_statistics["Y"] = config_ids
         config_statistics["Z_values"] = z_values
         config_statistics["Z_labels"] = z_labels
@@ -318,13 +327,13 @@ class Overview(DynamicPlugin):
             configspace["Log"].append(log)
 
         stats_data = []
-        for budget, stats in status_statistics.items():
+        for budget_seed, stats in status_statistics.items():
             x = [s.to_text() for s in stats.keys()]
-            trace = go.Bar(x=x, y=list(stats.values()), name=budget)
+            trace = go.Bar(x=x, y=list(stats.values()), name=budget_seed)
             stats_data.append(trace)
 
         stats_layout = go.Layout(
-            legend={"title": "Budget"},
+            legend={"title": "Budget (Seed)"},
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
@@ -335,7 +344,7 @@ class Overview(DynamicPlugin):
 
         config_layout = go.Layout(
             legend={"title": "Status"},
-            xaxis=dict(title="Budget"),
+            xaxis=dict(title="Budget (Seed)"),
             yaxis=dict(title="Configuration ID"),
             margin=Config.FIGURE_MARGIN,
         )
