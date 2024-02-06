@@ -565,8 +565,7 @@ class AbstractRun(ABC):
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.
         seed : Optional[int], optional
-            Seed to get the costs from the configuration id for. By default None. If no seed is given,
-            all seeds are considered.
+            Considered seed. By default None. If no seed is given, all seeds are considered.
         statuses : Optional[Union[Status, List[Status]]], optional
             Considered statuses. By default None. If None, all stati are considered.
 

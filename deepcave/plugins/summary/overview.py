@@ -169,41 +169,43 @@ class Overview(DynamicPlugin):
         # Budget-seed combinations
         budget_seed_combinations = list(itertools.product(budgets, seeds))
 
-        # Statistics
+        # Setup statistics dict for bar plot
         status_statistics = {}
-        status_details = {"Configuration ID": [], "Budget": [], "Seed": [], "Status": [], "Error": []}
-        for budget, seed in budget_seed_combinations:
+        for budget in budgets:
             budget = round(budget, 2)
-            budget_seed = f"{budget} ({seed})"
-            if budget_seed not in status_statistics:
-                status_statistics[budget_seed] = {}
+            if budget not in status_statistics:
+                status_statistics[budget] = {}
                 for s in Status:
-                    status_statistics[budget_seed][s] = 0
+                    status_statistics[budget][s] = 0
 
-        status_statistics_total = {}
-        status_budget = {}
+        # Setup details dict for to collect information on failed trials
+        status_details = {"Configuration ID": [], "Budget": [], "Seed": [], "Status": [], "Error": []}
+
+        status_count = {}
+        budget_count = {}
         len_trials = 0
         for trial in run.get_trials():
             budget = round(trial.budget, 2)
             seed = trial.seed
-            budget_seed = f"{budget} ({seed})"
 
             len_trials += 1
-            status_statistics[budget_seed][trial.status] += 1
 
-            # For text information
-            if trial.status not in status_statistics_total:
-                status_statistics_total[trial.status] = 1
+            # Status count over budget for bar plot
+            status_statistics[budget][trial.status] += 1
+
+            # Total status count for text information
+            if trial.status not in status_count:
+                status_count[trial.status] = 1
             else:
-                status_statistics_total[trial.status] += 1
+                status_count[trial.status] += 1
 
-            # For text information
-            if budget not in status_budget:
-                status_budget[budget] = 1
+            # Total budget count for text information
+            if budget not in budget_count:
+                budget_count[budget] = 1
             else:
-                status_budget[budget] += 1
+                budget_count[budget] += 1
 
-            # Add to table data
+            # Add failed trials information to details dict
             if trial.status != Status.SUCCESS:
                 link = Configurations.get_link(run, trial.config_id)
 
@@ -220,11 +222,12 @@ class Overview(DynamicPlugin):
                 else:
                     status_details["Error"] += ["No traceback available."]
 
-        successful_trials_rate = status_statistics_total[Status.SUCCESS] / len_trials * 100
+        # Successful / unsuccessful trials rate for text information
+        successful_trials_rate = status_count[Status.SUCCESS] / len_trials * 100
         successful_trials_rate = round(successful_trials_rate, 2)
 
         trials_rates = []
-        for status, count in status_statistics_total.items():
+        for status, count in status_count.items():
             if status == Status.SUCCESS:
                 continue
 
@@ -247,27 +250,29 @@ class Overview(DynamicPlugin):
         else:
             unsuccessful_trials_text = ""
 
-        status_budget_values = [
-            str(round(count / len_trials * 100, 2)) + "%" for count in status_budget.values()
+        # Budget rate for text information
+        budget_rate = [
+            str(round(count / len_trials * 100, 2)) + "%" for count in budget_count.values()
         ]
-        status_budget_values_text = "/".join(status_budget_values)
-        status_budget_keys_text = [str(key) for key in status_budget.keys()]
-        status_budget_keys_text = "/".join(status_budget_keys_text)
+        budget_rate_text = "/".join(budget_rate)
+        budget_keys_text = [str(key) for key in budget_count.keys()]
+        budget_keys_text = "/".join(budget_keys_text)
 
+        # Text information
         status_text = f"""
         Taking all evaluated trials into account, {successful_trials_rate}% have been successful.
         {unsuccessful_trials_text}
-        Moreover, {status_budget_values_text} of the trials were evaluated on budget
-        {status_budget_keys_text}, respectively.
+        Moreover, {budget_rate_text} of the trials were evaluated on budget
+        {budget_keys_text}, respectively.
         """
 
-        # Now remove status that are not used
-        for budget_seed in list(status_statistics.keys()):
-            for status in list(status_statistics[budget_seed].keys()):
-                if status_statistics[budget_seed][status] == 0:
-                    del status_statistics[budget_seed][status]
+        # Status statistics for bar plot: remove status that are not used
+        for budget in list(status_statistics.keys()):
+            for status in list(status_statistics[budget].keys()):
+                if status_statistics[budget][status] == 0:
+                    del status_statistics[budget][status]
 
-        # It is interesting to see on which budget a configuration was evaluated
+        # Config statistics for heatmap showing on which budget / seed a configuration was evaluated
         config_statistics = {}
         configs = run.get_configs()
         config_ids = list(configs.keys())
@@ -327,9 +332,9 @@ class Overview(DynamicPlugin):
             configspace["Log"].append(log)
 
         stats_data = []
-        for budget_seed, stats in status_statistics.items():
+        for budget, stats in status_statistics.items():
             x = [s.to_text() for s in stats.keys()]
-            trace = go.Bar(x=x, y=list(stats.values()), name=budget_seed)
+            trace = go.Bar(x=x, y=list(stats.values()), name=budget)
             stats_data.append(trace)
 
         stats_layout = go.Layout(

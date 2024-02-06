@@ -58,7 +58,7 @@ class SMAC3v2Run(Run):
         with (path / "scenario.json").open() as json_file:
             meta = json.load(json_file)
             meta["run_objectives"] = meta.pop("objectives")
-            meta["experiment_seed"] = meta.pop("seed")
+            meta["optimizer_seed"] = meta.pop("seed")
 
         # Let's create a new run object
         run = SMAC3v2Run(
