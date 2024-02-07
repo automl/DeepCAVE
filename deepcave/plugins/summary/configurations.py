@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import dash_bootstrap_components as dbc
 import pandas as pd
+import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
@@ -93,6 +94,7 @@ class Configurations(DynamicPlugin):
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
         budgets = run.get_budgets(include_combined=False)
+        seeds = run.get_seeds(include_combined=False)
 
         overview_table_data = {
             "Key": ["Selected Configuration", "Origin"],
@@ -113,25 +115,33 @@ class Configurations(DynamicPlugin):
             if objective.name not in performances:
                 performances[objective.name] = {}
                 performances_table_data[objective.name] = []
-
             for budget in budgets:
                 # Budget might not be evaluated
-                try:
-                    costs = run.get_costs(selected_config_id, budget)
-                except Exception:
-                    costs = [None for _ in range(len(objectives))]
+                seeds_evaluated = 0
+                cost = []
+                for seed in seeds:
+                    try:
+                        cost.append(run.get_costs(selected_config_id, budget, seed)[objective_id])
+                        seeds_evaluated += 1
+                    except Exception:
+                        continue
 
-                performances[objective.name][budget] = costs[objective_id]
-
-                # And add table data
+                # Add table data
                 if budget not in performances_table_data["Budget"]:
                     performances_table_data["Budget"] += [budget]
-
-                status = run.get_status(selected_config_id, budget)
-                if status == Status.SUCCESS:
-                    performances_table_data[objective.name] += [costs[objective_id]]
+                if seeds_evaluated > 0:
+                    performances[objective.name][budget] = cost
+                    if len(seeds) > 1:
+                        performances_table_data[f"{objective.name}"] += [f"{np.mean(cost)} (\u00B1 {np.std(cost)})"]
+                    else:
+                        performances_table_data[f"{objective.name}"] += [np.mean(cost)]
                 else:
-                    performances_table_data[objective.name] += [status.to_text()]
+                    performances[objective.name][budget] = None
+                    if len(seeds) > 1:
+                        performances_table_data[f"{objective.name}"] += ["No seed evaluated"]
+                    else:
+                        status = run.get_status(selected_config_id, seeds[0], budget)
+                        performances_table_data[objective.name] += [status.to_text()]
 
         # Let's start with the configspace
         X = []
@@ -219,7 +229,8 @@ class Configurations(DynamicPlugin):
         for i, (metric, values) in enumerate(outputs["performances"].items()):
             trace_kwargs = {
                 "x": list(values.keys()),
-                "y": list(values.values()),
+                "y": np.mean(np.array(list(values.values())), axis=1),
+                "error_y": dict(type='data', symmetric=True, array=np.std(np.array(list(values.values())), axis=1)),
                 "name": metric,
                 "fill": "tozeroy",
             }
