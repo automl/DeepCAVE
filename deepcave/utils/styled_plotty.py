@@ -41,7 +41,8 @@ def save_image(figure: go.Figure, name: str) -> None:
     figure : go.Figure
         Plotly figure.
     name : str
-        Name of the image with extension. Will be automatically saved to the cache.
+        Name of the image with extension. 
+        Will be automatically saved to the cache.
     """
     from deepcave import config
 
@@ -203,7 +204,8 @@ def get_discrete_heatmap(
 
 def prettify_label(label: Union[str, float, int]) -> str:
     """
-    Take a label and prettifies it. E.g. floats are shortened.
+    Take a label and prettifies it. 
+    E.g. floats are shortened.
 
     Parameters
     ----------
@@ -442,14 +444,14 @@ def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
     Generate hover text with metrics for a configuration.
 
     The method gets information about a given configuration, including a link, its objectives,
-    budget, costs and hyperparameters (HPs).
+    budget, costs and hyperparameters.
 
     Parameters
     ----------
     run : AbstractRun
         The run instance
     config_id : int
-        The ID of the configuration
+        The id of the configuration
 
     Returns
     -------
@@ -494,7 +496,7 @@ def generate_config_code(register: Callable, variables: List[str]) -> List[Compo
     ----------
     register : Callable
         A Callable for registering Dash components.
-        The register_input function is located in the Plugin superclass.
+        The register_input function is located in the Plugin class.
     variables : List[str]
         A List of variable names.
 

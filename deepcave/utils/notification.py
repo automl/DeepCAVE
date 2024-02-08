@@ -41,7 +41,14 @@ class Notification:
         self._color = color
 
     def get_latest(self) -> Optional[Tuple[str, str]]:
-        """Retrieve and reset the latest notification."""
+        """
+        Retrieve the latest notification and reset.
+        
+        Returns
+        -------
+        Optional[Tuple[str, str]]
+            The latest notification
+        """
         if self._update_required and self._message is not None and self._color is not None:
             result = (self._message, self._color)
             self.reset()

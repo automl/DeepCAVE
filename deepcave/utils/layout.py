@@ -2,7 +2,7 @@
 """
 # Layout
 
-This module provides utilities to customize the layout of the Dash.
+This module provides utilities to customize the layout.
 
 This includes a help button, slider marks, select/checklist/radio options.
 """
@@ -21,7 +21,7 @@ def help_button(text: str, placement: str = "top") -> html.Span:
     """
     Generate button with help icon.
 
-    Displays popover when hovered over, that contains the provided text.
+    Displays popover when hovered over that contains the provided text.
 
     Parameters
     ----------
@@ -128,7 +128,7 @@ def get_select_options(
         A list containing information whether each option should be disabled or not.
         Default is None.
     binary : bool, optional
-        Define whether to return to return two dictionaries with binary choices.
+        Define whether to return two dictionaries with binary choices.
         Only when both values and labels are None.
         Default is False.
 
@@ -184,7 +184,7 @@ def get_checklist_options(
         If values are None, use labels as values.
         Default is None
     binary : bool, optional
-        Define whether to return to return two dictionaries with binary choices.
+        Define whether to return two dictionaries with binary choices.
         Only when both values and labels are None.
         Default is False.
 
@@ -218,7 +218,7 @@ def get_radio_options(
         If values are None, use labels as values.
         Default is None
     binary : bool, optional
-        Define whether to return to return two dictionaries with binary choices.
+        Define whether to return two dictionaries with binary choices.
         Only when both values and labels are None.
         Default is False.
 

@@ -45,7 +45,7 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
 
         def default(self, obj: Any) -> Any:
             """
-            Return the object either as list or als JSONEncoder.
+            Return the object as list if np.ndarray.
 
             Parameters
             ----------

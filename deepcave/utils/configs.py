@@ -1,6 +1,6 @@
 #  noqa: D400
 """
-# configs
+# Configs
 
 This module provides a utility for parsing the configurations from a filename.
 """

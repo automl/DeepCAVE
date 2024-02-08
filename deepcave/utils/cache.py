@@ -49,7 +49,7 @@ class Cache:
 
     def _setup(self, filename: Optional[Path], write_file: bool = True) -> None:
         """
-        Initialize setup.
+        Initialize the setup.
 
         Parameters
         ----------
@@ -155,7 +155,7 @@ class Cache:
         Parameters
         ----------
         *keys : str
-            The keys to retrieve the value from.
+            The key to retrieve the value from.
 
         Returns
         -------
@@ -178,7 +178,7 @@ class Cache:
         Parameters
         ----------
         *keys : str
-            The keys to check for.
+            The key to check for.
 
         Returns
         -------

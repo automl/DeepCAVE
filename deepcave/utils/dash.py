@@ -42,7 +42,7 @@ def alert(message: str) -> dbc.Alert:
     Parameters
     ----------
     message : str
-        The message to be flashed.
+        The message of the alert.
 
     Returns
     -------

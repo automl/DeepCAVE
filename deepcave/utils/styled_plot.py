@@ -87,7 +87,7 @@ class StyledPlot:
             The number of the rows.
             Default is 1.
         dpi : int, optional
-            The dots per inches.
+            The dots per inches (dpi).
             Default is 200.
 
         Returns
@@ -278,12 +278,12 @@ class StyledPlot:
 
     def get_color(self, id: int) -> str:
         """
-        Get the color from color palette based on the given ID.
+        Get the color from color palette based on the given id.
 
         Parameters
         ----------
         id : int
-            ID for retrieving a specific color.
+            id for retrieving a specific color.
 
         Returns
         -------
