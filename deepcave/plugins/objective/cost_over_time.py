@@ -217,8 +217,7 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    # Types dont match superclass
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Return raw data based on a run and input data.
 
@@ -278,8 +277,7 @@ class CostOverTime(DynamicPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(runs, inputs, outputs) -> go.Figure:
+    def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 

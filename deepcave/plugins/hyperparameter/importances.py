@@ -179,8 +179,7 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    # Types dont match superclass
-    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:
+    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore # noqa: E501
         """
         Work like 'load_inputs' but called after inputs have changed.
 
@@ -254,7 +253,6 @@ class Importances(StaticPlugin):
         }
 
     @staticmethod
-    # Return doesnt match superclass type
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """
         Return raw data based on the run and input data.
@@ -315,7 +313,7 @@ class Importances(StaticPlugin):
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances
 
-        return data
+        return data  # type: ignore
 
     @staticmethod
     def get_output_layout(register: Callable) -> dcc.Graph:
@@ -336,8 +334,7 @@ class Importances(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, inputs, outputs) -> go.Figure:
+    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
         """
         Read in raw data and prepare for layout.
 
@@ -458,8 +455,7 @@ class Importances(StaticPlugin):
         )
 
     @staticmethod
-    # Types dont match superclass
-    def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):
+    def load_mpl_outputs(run, inputs: Dict[str, Any], outputs):  # type: ignore
         """
         Read the raw data and prepare it for the layout.
 
@@ -536,8 +532,7 @@ class Importances(StaticPlugin):
                 x_values,
                 y,
                 yerr=y_err,
-                # plt is matplotlib object and has no function get_color, Issue opened
-                color=plt.get_color(budget_id),
+                color=plt.get_color(budget_id),  # type: ignore
                 label=budget,
                 error_kw=dict(lw=1, capsize=2, capthick=1),
             )
@@ -547,5 +542,5 @@ class Importances(StaticPlugin):
         # Rotate x ticks
         plt.xticks(x_values, x_labels, rotation=90)
         plt.ylabel("Importance")
-        # plt is matplotlib object and has no function render, Issue opened
-        return plt.render()
+
+        return plt.render()  # type: ignore

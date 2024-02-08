@@ -113,8 +113,7 @@ class Configurations(DynamicPlugin):
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    # Types dont match superclass
-    def load_dependency_inputs(
+    def load_dependency_inputs(  # type: ignore
         self, run, previous_inputs: Dict[str, Any], inputs: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
@@ -131,6 +130,7 @@ class Configurations(DynamicPlugin):
             The selected run.
         previous_inputs :
             Previous content of the inputs.
+            Not used in this specific function
         inputs : Dict[str, Any]
             The current content of the inputs.
 
@@ -155,8 +155,7 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    # Types dont match superclass
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Return raw data based on a run and input data.
 
@@ -454,8 +453,7 @@ class Configurations(DynamicPlugin):
         return fig
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, inputs, outputs) -> List[Any]:
+    def load_outputs(run, inputs, outputs) -> List[Any]:  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 

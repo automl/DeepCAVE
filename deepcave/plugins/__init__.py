@@ -558,9 +558,9 @@ class Plugin(Layout, ABC):
         # passed runs could be a list, but load mpl outputs and load outputs do not
         # accept lists, but expect single runs
         if mpl_active:
-            outputs = self.__class__.load_mpl_outputs(passed_runs, cleaned_inputs, passed_outputs)
+            outputs = self.__class__.load_mpl_outputs(passed_runs, cleaned_inputs, passed_outputs)  # type: ignore # noqa: E501
         else:
-            outputs = self.__class__.load_outputs(passed_runs, cleaned_inputs, passed_outputs)
+            outputs = self.__class__.load_outputs(passed_runs, cleaned_inputs, passed_outputs)  # type: ignore # noqa: E501
 
         logger.debug("Raw outputs processed successfully.")
 
@@ -1342,7 +1342,9 @@ class Plugin(Layout, ABC):
         Note
         ----
         The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or
-        `load_dependency_inputs`. Please see `_clean_inputs` for more information.
+        `load_dependency_inputs`.
+        Inputs are cleaned s.t. only the first value is used.
+        Also, boolean values are casted to booleans.
 
         Parameters
         ----------
@@ -1374,7 +1376,8 @@ class Plugin(Layout, ABC):
         Note
         ----
         The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or
-        `load_dependency_inputs`. Please see `_clean_inputs` for more information.
+        `load_dependency_inputs`. Inputs are cleaned s.t. only the first value is used.
+        Also, boolean values are casted to booleans.
 
         Parameters
         ----------
@@ -1406,7 +1409,8 @@ class Plugin(Layout, ABC):
         Note
         ----
         The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or
-        `load_dependency_inputs`. Please see `_clean_inputs` for more information.
+        `load_dependency_inputs`. Inputs are cleaned s.t. only the first value is used.
+        Also, boolean values are casted to booleans.
 
         Parameters
         ----------

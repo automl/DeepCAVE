@@ -504,7 +504,7 @@ class AbstractRun(ABC):
             If the budget with this id is invalid.
         """
         budgets = self.get_budgets(human=human)
-        return budgets[int(id)]
+        return budgets[int(id)]  # type: ignore
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
         """
@@ -900,8 +900,7 @@ class AbstractRun(ABC):
         """
         import torch
 
-        # Issue is opened
-        filename = self.models_dir / f"{str(config_id)}.pth"
+        filename = self.models_dir / f"{str(config_id)}.pth"  # type: ignore
         if not filename.exists():
             return None
 

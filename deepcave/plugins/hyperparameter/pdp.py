@@ -198,8 +198,7 @@ class PartialDependencies(StaticPlugin):
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    # Types dont match superclass
-    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
         """
         Work like 'load_inputs' but called after inputs have changed.
 
@@ -214,6 +213,9 @@ class PartialDependencies(StaticPlugin):
             The selected run.
         inputs
             Current content of the inputs.
+        previous_inputs
+            Previous content of the inputs.
+            Not used in this specific function.
 
         Returns
         -------
@@ -253,8 +255,7 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    # Types dont match superclass
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Return raw data based on a run and the input data.
 
@@ -367,8 +368,7 @@ class PartialDependencies(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, inputs, outputs) -> go.Figure:
+    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
         """
         Read the raw data and prepare it for the layout.
 

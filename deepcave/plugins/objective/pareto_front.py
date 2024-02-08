@@ -232,8 +232,7 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    # Types dont match superclass
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Return raw data based on a run and input data.
 
@@ -332,8 +331,7 @@ class ParetoFront(DynamicPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(runs, inputs, outputs) -> go.Figure:
+    def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 
@@ -470,8 +468,7 @@ class ParetoFront(DynamicPlugin):
         )
 
     @staticmethod
-    # Types dont match superclass
-    def load_mpl_outputs(runs, inputs, outputs):
+    def load_mpl_outputs(runs, inputs, outputs):  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 
@@ -521,10 +518,9 @@ class ParetoFront(DynamicPlugin):
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
 
-            # Issue opened
-            color = plt.get_color(idx)  # , alpha=0.1)
-            # Issue opened
-            color_pareto = plt.get_color(idx)
+            # , alpha=0.1)
+            color = plt.get_color(idx)  # type: ignore
+            color_pareto = plt.get_color(idx)  # type: ignore
 
             if show_all:
                 plt.scatter(x, y, color=color, marker="o", alpha=0.1, s=3)
@@ -558,5 +554,5 @@ class ParetoFront(DynamicPlugin):
             plt.ylabel(objective_2.name)
 
         plt.legend()
-        # Issue already opened
-        return plt.render()
+
+        return plt.render()  # type: ignore

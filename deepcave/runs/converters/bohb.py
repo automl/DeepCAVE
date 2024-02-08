@@ -134,8 +134,8 @@ class BOHBRun(Run):
                 status = Status.SUCCESS
             elif (
                 "RUNNING" in status_string or "QUEUED" in status_string or "REVIEW" in status_string
-            ):  # RUNNING is no attribute in Status, Issue already opened
-                status = Status.RUNNING
+            ):
+                status = Status.RUNNING  # type: ignore
             else:
                 status = Status.CRASHED
 

@@ -158,8 +158,7 @@ class ConfigurationCube(DynamicPlugin):
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    # Types dont match superclass
-    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Work like 'load_inputs' but called after inputs have changed.
 
@@ -296,8 +295,7 @@ class ConfigurationCube(DynamicPlugin):
         return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, inputs, outputs) -> go.Figure:
+    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
         """
         Read in the raw data and prepares them for the layout.
 

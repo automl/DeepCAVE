@@ -92,8 +92,7 @@ class BudgetCorrelation(DynamicPlugin):
             ),
         ]
 
-    # Types dont match superclass
-    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Dict[str, Any]]:
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Dict[str, Any]]:  # type: ignore
         """
         Work like 'load_inputs' but called after inputs have changed.
 
@@ -160,7 +159,6 @@ class BudgetCorrelation(DynamicPlugin):
         budget_ids = run.get_budget_ids(include_combined=False)
 
         # Add symmetric correlations; table ready
-        # Issue already opened with this matrix
         correlations_symmetric: DefaultDict[str, Dict[str, float]] = defaultdict(dict)
 
         correlations: DefaultDict[str, Dict[str, float]] = defaultdict(dict)
@@ -185,14 +183,14 @@ class BudgetCorrelation(DynamicPlugin):
                     c2 += [costs2[config_id][objective_id]]
 
                 correlation = round(stats.spearmanr(c1, c2).correlation, 2)
-                correlations_symmetric["Budget"][budget2_readable] = budget2_readable
-                correlations_symmetric[budget1_readable][budget2_readable] = correlation
+                correlations_symmetric["Budget"][budget2_readable] = budget2_readable  # type: ignore # noqa: E501
+                correlations_symmetric[budget1_readable][budget2_readable] = correlation  # type: ignore # noqa: E501
 
                 # Exclude if budget2 is higher than budget1
                 if budget2 > budget1:
                     continue
 
-                correlations[budget1_readable][budget2_readable] = correlation
+                correlations[budget1_readable][budget2_readable] = correlation  # type: ignore
 
         return {
             "correlations": correlations,
@@ -231,8 +229,7 @@ class BudgetCorrelation(DynamicPlugin):
         ]
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, _, outputs) -> List[Any]:
+    def load_outputs(run, _, outputs) -> List[Any]:  # type: ignore
         """
         Read the raw data and prepare it for the layout.
 

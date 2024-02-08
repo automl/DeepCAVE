@@ -118,8 +118,7 @@ class DynamicPlugin(Plugin, ABC):
             return self._process_raw_outputs(inputs, raw_outputs)
 
     @interactive
-    # Return type does not match the superclass
-    def __call__(self) -> List[Component]:
+    def __call__(self) -> List[Component]:  # type: ignore
         """
         Return the components for the plugin.
 

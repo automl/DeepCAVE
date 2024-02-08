@@ -170,8 +170,7 @@ class FootPrint(StaticPlugin):
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    # Types dont match superclass
-    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
         """
         Work like 'load_inputs' but called after inputs have changed.
 
@@ -186,6 +185,7 @@ class FootPrint(StaticPlugin):
             The selected run.
         previous_inputs :
             Previous content of the inputs.
+            Not used in this specific function.
         inputs :
             Current content of the inputs.
 
@@ -225,8 +225,7 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    # Types dont match superclass
-    def process(run, inputs) -> Dict[str, Any]:
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
         """
         Return raw data based on a run and input data.
 
@@ -310,8 +309,7 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, inputs, outputs) -> List[Any]:
+    def load_outputs(run, inputs, outputs) -> List[Any]:  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 
@@ -454,8 +452,7 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    # Types dont match superclass
-    def load_mpl_outputs(run, inputs, outputs):
+    def load_mpl_outputs(run, inputs, outputs):  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 
@@ -521,13 +518,13 @@ class FootPrint(StaticPlugin):
                 if points == "incumbent_points":
                     size = 10
                     marker_symbol = "^"
-                # Issue opened
-                color = plt.get_color(color_id)
+
+                color = plt.get_color(color_id)  # type: ignore
                 plt.scatter(x, y, marker=marker_symbol, s=size, label=name, c=color)
 
             plt.axis("off")
             plt.legend(loc="lower right")
-            # Issue opened
-            images += [plt.render()]
+
+            images += [plt.render()]  # type: ignore
 
         return images

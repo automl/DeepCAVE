@@ -103,8 +103,7 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    # Types dont match superclass
-    def load_outputs(run, *_: Any) -> List[Any]:
+    def load_outputs(run, *_: Any) -> List[Any]:  # type: ignore
         """
         Read in the raw data and prepare them for the layout.
 

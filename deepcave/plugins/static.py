@@ -378,8 +378,7 @@ class StaticPlugin(Plugin, ABC):
         return f"{run_name}-{inputs_key}"
 
     @interactive
-    # Return type does not match the superclass
-    def __call__(self) -> List[Component]:
+    def __call__(self) -> List[Component]:  # type: ignore
         """
         Return the components for the plugin.
 

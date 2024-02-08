@@ -324,8 +324,7 @@ class Queue:
                     except Exception:
                         registry.remove(self.get_job(job_id))
 
-        # Issue opened
-        remove_jobs(self._queue, job_id)
+        remove_jobs(self._queue, job_id)  # type: ignore
         remove_jobs(self._queue.finished_job_registry, job_id)
         remove_jobs(self._queue.canceled_job_registry, job_id)
 
