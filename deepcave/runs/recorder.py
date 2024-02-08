@@ -2,10 +2,10 @@
 """
 # Recorder
 
-This module provides utilities to record the trial information.
+This module provides utilities to record information.
 
 ## Classes
-    - Recorder: Define a Recorder for recording trial information.
+    - Recorder: Define a Recorder for recording information.
 """
 
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -25,34 +25,26 @@ from deepcave.runs.objective import Objective
 
 class Recorder:
     """
-    Define a Recorder for recording trial information.
+    Define a Recorder for recording information.
 
     Properties
     ----------
     path : Path
         The path to the recorded information.
-    last_trial_id : tuple[Any, float | None]
-        The last trial id containing the configuration and the budget.
+    last_trial_id : tuple[Any, Optional[float]]
+        The last id containing the configuration and the budget.
     start_time : float
-        The current time in seconds since the Epoch
-    start_times : Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], float
-        ]
+        The current time in seconds since the epoch.
+    start_times : Dict[Any, Any]
         A dictionary containing the start times with their id as key.
-    models : Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Any]
-        ]
-        The models used in the trial, with their id as key.
-    origins : Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[str]
-        ]
-        The origins of the trial, with their id as key.
-    additionals : Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Dict[Any, Any]
-        ]
-        Additional information of the trial, with the id as key.
+    models : Dict[Any, Any|
+        The models used with their id as key.
+    origins : Dict[Any, Any]
+        The origins with their id as key.
+    additionals : Dict[Any, Any]
+        Additional information with the id as key.
     run : DeepCAVERun
-        The deepcave run trials container.
+        The deepcave run container.
     """
 
     def __init__(
@@ -70,7 +62,7 @@ class Recorder:
         Parameters
         ----------
         save_path : str, otpional
-            The path in which to store the run.
+            The path to the recording.
             Default is "logs".
         configspace : ConfigSpace.ConfigurationSpace
             The configuration space.
@@ -125,12 +117,12 @@ class Recorder:
         self, path: Union[str, Path], prefix: str = "run", overwrite: bool = False
     ) -> None:
         """
-        Identify the latest run and sets the path with increased id.
+        Set the path.
 
         Parameters
         ----------
         path : Union[str, Path]
-            The path in which to store the run.
+            The path to set.
         prefix, optional
             The prefix for the path.
             Default is "run".
@@ -169,26 +161,26 @@ class Recorder:
         start_time: Optional[float] = None,
     ) -> None:
         """
-        Record the trial information.
+        Start recording the information.
 
         Parameters
         ----------
         config : Configuration
-            Holds the configuration settings for the trial.
+            Holds the configuration settings.
         budget : Optional[float], optional
-            The budget for the trial.
+            The budget.
             Default is None.
         model : Optional[Any], optional
-            The model used in the trial.
+            The model used.
             Default is None.
         origin : Optional[str], optional
-            The origin of the trial.
+            The origin.
             Default is None.
         additional : Optional[dict], optional
-            Additional information of the trial.
+            Additional information.
             Default is None.
         start_time : Optional[float], optional
-            The start time of the trial.
+            The start time.
             Default is None.
         """
         if additional is None:
@@ -217,31 +209,30 @@ class Recorder:
         end_time: Optional[float] = None,
     ) -> None:
         """
-        End the recording of the trial and add it to trial history.
+        End the recording and add it to the trial history.
 
         In case of multi-processing, config+budget should be passed.
         If it can't be passed, it can't be matched correctly.
-        The results of the trial are saved.
 
         Parameters
         ----------
         costs : float, optional
-            The costs of the trial.
+            The costs.
             Default is np.inf.
         status : Status, optional
-            The status of the trial.
+            The status.
             Default is Status.Success.
         config : Union[dict, Configuration], optional
-            The configuration of the trial.
+            The configuration.
             Default is None.
         budget : float, optional
-            The budget of the trial.
+            The budget.
             Default is np.inf.
         additional : Optional[dict], optional
-            Additional information of the trial.
+            Additional information.
             Default is None.
         end_time : Optional[float], optional
-            The end time of the trial.
+            The end time.
             Default is None.
 
         Raises

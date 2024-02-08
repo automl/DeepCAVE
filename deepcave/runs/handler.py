@@ -2,9 +2,10 @@
 """
 # Handler
 
-This module handles the run.
+This module provides utilities to handle a run.
+
 It can retrieve working directories, run paths, run names, as well as groups of runs.
-It provides utilities to update and remove runs as well a groups of runs.
+It provides utilities to update and remove runs as well as groups of runs.
 
 # Classes
     - RunHandler: Handle the runs.
@@ -37,7 +38,7 @@ class RunHandler:
     Properties
     ----------
     c : Cache
-        The cache for the different information.
+        The cache containing information about a run(s).
     rc : RunCaches
         The caches for the selected runs.
     logger : Logger
@@ -45,7 +46,7 @@ class RunHandler:
     available_run_yfes : List[Type[Run]]
         A list of the available converters.
     runs : Dict[str, AbstractRun]
-        A dictionary of abstract runs with their path as key.
+        A dictionary of runs with their path as key.
     groups : Dict[str, Group]
         A dictionary of the groups.
     available_run_classes : List[Type[Run]]
@@ -93,7 +94,7 @@ class RunHandler:
         Raises
         ------
         AssertionError
-            If the working directory is not a string or a path like, an error is thrown.
+            If the working directory is not a string or a Path, an error is thrown.
         """
         working_dir = self.c.get("working_dir")
         assert isinstance(
@@ -189,12 +190,12 @@ class RunHandler:
         Returns
         -------
         Dict[str, List[str]]
-            Dictionary of the selected groups.
+            Dictionary with the selected groups.
 
         Raises
         ------
         AssertionError
-            If groups in cache is not a dict, an error is thrown.
+            If groups in cache is not a dictionary, an error is thrown.
         """
         selected_groups = self.c.get("groups")
         assert isinstance(
@@ -204,7 +205,9 @@ class RunHandler:
 
     def add_run(self, run_path: str) -> bool:
         """
-        Add a run path to the cache. If run path is already in cache, do nothing.
+        Add a run path to the cache. 
+        
+        If run path is already in cache, do nothing.
 
         Parameters
         ----------
@@ -228,7 +231,9 @@ class RunHandler:
 
     def remove_run(self, run_path: str) -> None:
         """
-        Remove a run path from the cache. If run path is not in cache, do nothing.
+        Remove a run path from the cache. 
+        
+        If run path is not in cache, do nothing.
 
         Parameters
         ----------
@@ -288,15 +293,15 @@ class RunHandler:
         """
         Load selected runs and update cache if files changed.
 
-        Raises
-        ------
-        NotValidRunError
-            If directory can not be transformed into a run, an error is thrown.
-
         Returns
         -------
         bool
             True if all selected runs could be loaded, False otherwise.
+
+        Raises
+        ------
+        NotValidRunError
+            If directory can not be transformed into a run, an error is thrown.
         """
         runs: Dict[str, AbstractRun] = {}  # run_path: Run
         success = True
@@ -330,7 +335,7 @@ class RunHandler:
         Parameters
         ----------
         run_path : str
-            The path where the run should be stored.
+            The path of the run.
         class_hint : Optional[Type[Run]], optional
             A hint/suggestion of what the Type of the Run is.
             Default is None.
@@ -338,7 +343,7 @@ class RunHandler:
         Returns
         -------
         Optional[AbstractRun]
-            The Abstract Run added to the cache.
+            The Run added to the cache.
 
         Raises
         ------
@@ -402,7 +407,7 @@ class RunHandler:
         Parameters
         ----------
         groups : Optional[Dict[str, str]], optional
-            A dictionary used to instantiate the groups.
+            A dictionary with the groups.
             Default is None.
 
         Raises

@@ -36,22 +36,22 @@ class Run(AbstractRun, ABC):
     ----------
     configspace : ConfigurationSpace
         The configuration space of the run.
-    path : str | Path | None
+    path : Optional[Union[str, Path]]
         The path of a run to be loaded.
     meta : Dict[str, Any]
         Contains serialized objectives and budgets.
     prefix : str
         The prefix for the id.
     meta_fn : Path
-        The path to the meta JSON file.
+        The path to the meta data.
     configspace_fn : Path
-        The path to the configuration space JSON file.
+        The path to the configuration space file.
     configs_fn : Path
-        The path to the configs JSON file.
+        The path to the configurations file.
     origins_fn : Path
-        The path to the origins JSON file.
+        The path to the origins file.
     history_fn : Path
-        The path to the history JSONL file.
+        The path to the history file.
     models_dir : Path
         The path to the models directory.
     configs : Dict[int, Configuration]
@@ -108,23 +108,49 @@ class Run(AbstractRun, ABC):
     @classmethod
     @abstractmethod
     def from_path(cls, path: Path) -> "Run":
-        """Based on a path, return a new Run object."""
+        """
+        Based on a path, return a new Run object.
+        
+        Parameters
+        ----------
+        path : Path
+            The path to get the run from.
+        
+        Returns
+        -------
+        "Run"
+            The run loaded from the path.
+        """
         pass
 
     @property
     def id(self) -> str:
-        """Get a hash as id."""
+        """
+        Get a hash as id.
+        
+        Returns
+        -------
+        str
+            The hashed id.
+        """
         return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
     def path(self) -> Optional[Path]:
-        """Return the path of the Run if it exists."""
+        """
+        Return the path of the run if it exists.
+        
+        Returns
+        -------
+        Optional[Path]
+            The path of the run.
+        """
         return self._path
 
     @path.setter
     def path(self, value: Optional[Union[str, Path]]) -> None:
         """
-        If path is changed, also change the filenames of all created files.
+        Set the paths of the run and the JSON files.
 
         Parameters
         ----------
@@ -299,7 +325,7 @@ class Run(AbstractRun, ABC):
         Parameters
         ----------
         path : Optional[Union[str, Path]]
-            The path in which to save the run.
+            The path in which to save the trials.
 
         Raises
         ------
@@ -355,7 +381,7 @@ class Run(AbstractRun, ABC):
         Parameters
         ----------
         path : Optional[Union[str, Path]], optional
-            The path where the run to load is.
+            The path where to load the run from.
             Default is None.
 
         Raises

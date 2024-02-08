@@ -27,7 +27,7 @@ class Trial:
         The status of the trial.
     config_id : int
         The identificator of the configuration.
-    budget : int | float
+    budget : Union[int, float]
         The budget for the trial.
     costs : List[float]
         A list of the costs of the trial.
@@ -56,12 +56,12 @@ class Trial:
 
     def get_key(self) -> Tuple[int, Union[int, float, None]]:
         """
-        Generate a key based on the configuration ID and the budget.
+        Generate a key based on the configuration id and the budget.
 
         Returns
         -------
         Tupel[int, int]
-            A Tuple representing a unique key based on the configuration ID and the budget.
+            A Tuple representing a unique key based on the configuration id and the budget.
         """
         from deepcave.runs import AbstractRun
 
@@ -69,7 +69,7 @@ class Trial:
 
     def to_json(self) -> List[Any]:
         """
-        Convert Trial Object to JSON-compatible representation.
+        Convert trial object to JSON-compatible representation.
 
         Returns
         -------

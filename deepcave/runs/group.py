@@ -246,34 +246,34 @@ class Group(AbstractRun):
 
     def get_original_run(self, config_id: int) -> AbstractRun:
         """
-        Get the original abstract run.
+        Get the original run.
 
         Parameters
         ----------
         config_id : int
-            The identificator of a configuration.
+            The identificator of the configuration.
 
         Returns
         -------
         AbstractRun
-            The original abstract run.
+            The original run.
         """
         run_id = self._original_config_mapping[config_id][0]
         return self.runs[run_id]
 
     def get_model(self, config_id: int) -> Optional[Any]:
         """
-        Get the model of the runs.
+        Get the model given the configuration id.
 
         Parameters
         ----------
         config_id : int
-            The identificator of a configuration.
+            The identificator of the configuration.
 
         Returns
         -------
         Optional[Any]
-            The model of the runs.
+            The model.
         """
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
@@ -281,22 +281,29 @@ class Group(AbstractRun):
     # Types dont match superclass
     def get_trajectory(self, *args, **kwargs):  # type: ignore
         """
-        Get the trajectory of the group.
+        Calculate the trajectory of the given objective and budget.
 
         This includes the times, the mean costs, and the standard deviation of the costs.
 
         Parameters
         ----------
         *args
-            The arguments for the trajectory of a run.
-            Should be an objective.
+            Should be the objective to calculate the trajectory from.
         **kwargs
-            Keyword arguments for the trajectory of a run.
-            Should bean int, float or None, representing the budget.
+            Should be the budget to calculate the trajectory for.
 
         Returns
         -------
-        The trajectory of the grouped runs.
+        times : List[float]
+            Times of the trajectory.
+        costs_mean : List[float]
+            Costs of the trajectory.
+        costs_std : List[float]
+            Standard deviation of the costs of the trajectory.
+        ids : List[int]
+            The "global" ids of the selected trial.
+        config_ids : List[int]
+            The configuration ids of the selected trials.
         """
         # Cache costs
         run_costs = []

@@ -25,9 +25,9 @@ class Objective:
 
     Properties
     ----------
-    lower : int | float | None
+    lower : Optional[Union[int, float]]
         The lower bound of the objective.
-    upper : int | float | None
+    upper : Optional[Union[int, float]]
         The upper bound of the objective.
     optimize : str
         Define whether to optimize lower or upper.
@@ -76,12 +76,12 @@ class Objective:
 
     def to_json(self) -> Dict[str, Any]:
         """
-        Convert objectives attributes to a JSON format.
+        Convert objectives attributes to a dictionary in a JSON friendly format.
 
         Returns
         -------
         Dict[str, Any]
-            A dictionary with the objects attributes in a JSON format.
+            A dictionary in a JSON friendly format with the objects attributes.
         """
         return {
             "name": self.name,
@@ -95,7 +95,7 @@ class Objective:
     @staticmethod
     def from_json(d: Dict[str, Any]) -> "Objective":
         """
-        Create an objective from a JSON format.
+        Create an objective from a JSON friendly dictionary format.
 
         Parameters
         ----------
@@ -105,7 +105,7 @@ class Objective:
         Returns
         -------
         Objective
-            An objective created from the provided JSON data.
+            An objective created from the provided data.
         """
         objective = Objective(
             name=d["name"],
@@ -121,7 +121,7 @@ class Objective:
 
     def __eq__(self, other: Any) -> bool:
         """
-        Compare if two instances are qual based on their attributes.
+        Compare if two instances are equal based on their attributes.
 
         Parameters
         ----------
@@ -142,9 +142,7 @@ class Objective:
 
     def merge(self, other: Any) -> None:
         """
-        Merge two Objectives with its attributes.
-
-        Fit the attributes of self to the attributes of the other Objective.
+        Merge two Objectives over their attributes.
 
         Parameters
         ----------

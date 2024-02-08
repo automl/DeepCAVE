@@ -30,7 +30,7 @@ class Status(IntEnum):
     Properties
     ----------
     name : str
-        The designation of the status.
+        The status name.
     """
 
     SUCCESS = 1
