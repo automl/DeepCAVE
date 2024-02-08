@@ -2,7 +2,7 @@
 """
 # Server
 
-This module starts the dash web server.
+This module starts the server.
 """
 
 from deepcave import app, config

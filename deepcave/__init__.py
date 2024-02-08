@@ -36,7 +36,7 @@ ROOT_DIR = Path(__file__).parent
 
 def get_app(title: str) -> Any:
     """
-    Create the Dash application.
+    Get the Dash Proxy.
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def get_app(title: str) -> Any:
     Returns
     -------
     DashProxy
-        The dash application.
+        The dash proxy.
     """
     import dash_bootstrap_components as dbc
     from dash_extensions.enrich import (
@@ -180,8 +180,7 @@ def interactive(func: F) -> F:
         Returns
         -------
         Any
-            If _api_mode is True, return immediately.
-            Otherwise return the result of the function.
+            The result of the function.
         """
         if _api_mode:
             return

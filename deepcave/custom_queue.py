@@ -81,7 +81,14 @@ class Queue:
         raise ValueError("Worker not found.")
 
     def get_workers(self) -> List[Worker]:
-        """Get the workers in the queue."""
+        """
+        Get the workers in the queue.
+        
+        Returns
+        -------
+        List[Worker]
+            A list of the queued workers.
+        """
         return Worker.all(queue=self._queue)
 
     def is_processed(self, job_id: str) -> bool:
@@ -93,7 +100,7 @@ class Queue:
         Parameters
         ----------
         job_id : str
-            The ID of the job being checked.
+            The id of the job being checked.
 
         Returns
         -------
@@ -113,7 +120,7 @@ class Queue:
         Parameters
         ----------
         job_id : str
-            The ID of the job being checked.
+            The id of the job being checked.
 
         Returns
         -------
@@ -134,7 +141,7 @@ class Queue:
         Parameters
         ----------
         job_id : str
-            The ID of the job being checked.
+            The id of the job being checked.
 
         Returns
         -------
@@ -155,7 +162,7 @@ class Queue:
         Parameters
         ----------
         job_id : str
-            The ID of the job being checked.
+            The id of the job being checked.
 
         Returns
         -------
@@ -176,7 +183,7 @@ class Queue:
         Parameters
         ----------
         job_id : str
-            The ID of the job being checked.
+            The id of the job being checked.
 
         Returns
         -------
@@ -192,12 +199,12 @@ class Queue:
 
     def get_job(self, job_id: str) -> Job:
         """
-        Get the job fitting the given job ID.
+        Get the job fitting the given job id.
 
         Parameters
         ----------
         job_id : str
-            The ID of the job.
+            The id of the job.
 
         Returns
         -------
@@ -245,20 +252,41 @@ class Queue:
         return results
 
     def get_running_jobs(self) -> List[Job]:
-        """Get the running jobs in the registry."""
+        """
+        Get the running jobs in the registry.
+        
+        Returns
+        -------
+        List[Job]
+            The list with the corresponding jobs.
+        """
         return self.get_jobs(registry="running")
 
     def get_pending_jobs(self) -> List[Job]:
-        """Get the pending jobs in the registry."""
+        """
+        Get the pending jobs in the registry.
+        
+        Returns
+        -------
+        List[Job]
+            The list with the corresponding jobs.
+        """
         return self.get_jobs(registry="pending")
 
     def get_finished_jobs(self) -> List[Job]:
-        """Get the finished jobs in the registry."""
+        """
+        Get the finished jobs in the registry.
+        
+        Returns
+        -------
+        List[Job]
+            The list with the corresponding jobs.
+        """
         return self.get_jobs(registry="finished")
 
     def delete_job(self, job_id: Optional[str] = None) -> None:
         """
-        Delete a job from the queue. If no job_id is given, delete all jobs.
+        Delete a job from the queue. If no job id is given, delete all jobs.
 
         Parameters
         ----------
@@ -268,7 +296,7 @@ class Queue:
 
         def remove_jobs(registry: BaseRegistry, job_id: Optional[str] = None) -> None:
             """
-            Remove a job from the registry. If no job_id is given, remove all.
+            Remove a job from the registry. If no job id is given, remove all.
 
             Parameters
             ----------
@@ -342,7 +370,7 @@ class Queue:
         """
         Add a job for processing to the queue.
 
-        Logs a debug message if the job ID is already in use.
+        Logs a debug message if the job id is already in use.
 
         Parameters
         ----------

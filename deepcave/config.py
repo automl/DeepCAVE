@@ -20,7 +20,7 @@ class Config:
     """
     Describe the config object.
 
-    It also defines the constants of the config object.
+    Also define the constants of the config object.
     Includes multiple constants for directories, the server name, available plugins and converters.
 
     Constants
