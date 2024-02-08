@@ -41,7 +41,7 @@ def save_image(figure: go.Figure, name: str) -> None:
     figure : go.Figure
         Plotly figure.
     name : str
-        Name of the image with extension. 
+        Name of the image with extension.
         Will be automatically saved to the cache.
     """
     from deepcave import config
@@ -204,7 +204,8 @@ def get_discrete_heatmap(
 
 def prettify_label(label: Union[str, float, int]) -> str:
     """
-    Take a label and prettifies it. 
+    Take a label and prettifies it.
+
     E.g. floats are shortened.
 
     Parameters

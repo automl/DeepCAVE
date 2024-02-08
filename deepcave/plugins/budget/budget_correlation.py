@@ -95,7 +95,7 @@ class BudgetCorrelation(DynamicPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Dict[str, Any]]:
         """
-        Same as 'load_inputs' but called after inputs have changed.
+        Work like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
@@ -139,7 +139,7 @@ class BudgetCorrelation(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differ 
+        The passed inputs are cleaned and therefore differ
         compared to 'load_inputs' or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
@@ -153,7 +153,7 @@ class BudgetCorrelation(DynamicPlugin):
         Returns
         -------
         Dict[str, Any]
-            Serialized dictionary with the correlations 
+            Serialized dictionary with the correlations
             as well as the correlations symmetric.
         """
         objective_id = inputs["objective_id"]
@@ -238,7 +238,7 @@ class BudgetCorrelation(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differ 
+        The passed inputs are cleaned and therefore differ
         compared to 'load_inputs' or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 

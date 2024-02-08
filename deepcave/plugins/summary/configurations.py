@@ -98,8 +98,9 @@ class Configurations(DynamicPlugin):
 
     def load_inputs(self) -> Dict[str, Any]:
         """
-        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
-        This method is necessary to pre-load contents for the inputs. 
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
         So, if the plugin is called for the first time or there are no results in the cache,
         the plugin gets its content from this method.
 
@@ -117,11 +118,12 @@ class Configurations(DynamicPlugin):
         self, run, previous_inputs: Dict[str, Any], inputs: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Same as 'load_inputs' but called after inputs have changed. 
+        Work like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
-        Only the changes have to be returned. The returned dictionary will be merged with the inputs.
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
 
         Parameters
         ----------
@@ -164,7 +166,8 @@ class Configurations(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -458,7 +461,8 @@ class Configurations(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters

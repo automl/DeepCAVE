@@ -41,8 +41,8 @@ from deepcave.utils.logs import get_logger
 
 class AbstractRun(ABC):
     """
-    Create a new run. 
-    
+    Create a new run.
+
     Provide functions to get information of the run, as well as the used objectives.
 
     Properties
@@ -176,7 +176,7 @@ class AbstractRun(ABC):
     ) -> Tuple[int, Union[int, float, None]]:
         """
         Get the trial key.
-        
+
         It is obtained through the assembly of configuration and budget.
 
         Parameters
@@ -352,7 +352,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         objectives : Optional[List[Objective]]
-            A list of the objectives. 
+            A list of the objectives.
             By default, None.
 
         Returns
@@ -393,7 +393,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         budget : Optiona[Union[int, float]]
-            Considered budget. 
+            Considered budget.
             By default, None (all configurations are included).
 
         Returns
@@ -487,10 +487,10 @@ class AbstractRun(ABC):
         Parameters
         ----------
         id : Union[int, str]
-            The id of the wanted budget. 
+            The id of the wanted budget.
             If id is a string, it is converted to an integer.
         human : bool, optional
-            Make the output more readable. 
+            Make the output more readable.
             By default False.
 
         Returns
@@ -536,7 +536,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         human : bool, optional
-            Make the output more readable. 
+            Make the output more readable.
             By default False.
         include_combined : bool, optional
             If True, include the combined budget.
@@ -574,7 +574,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         config_id : Optional[int]
-            The config id for which the highest budget is returned. 
+            The config id for which the highest budget is returned.
 
         Returns
         -------
@@ -600,7 +600,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         costs : List[float]
-            Costs, which should be processed. 
+            Costs, which should be processed.
             Must be the same length as the number of objectives.
 
         Returns
@@ -1001,7 +1001,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         config : Union[int, Dict[Any, Any], Configuration]
-            Either the configuration id, as configuration as dict, 
+            Either the configuration id, as configuration as dict,
             or a Configuration itself.
         specific : bool
             Use specific encoding for fanova tree, by default False.

@@ -83,7 +83,7 @@ class Queue:
     def get_workers(self) -> List[Worker]:
         """
         Get the workers in the queue.
-        
+
         Returns
         -------
         List[Worker]
@@ -254,7 +254,7 @@ class Queue:
     def get_running_jobs(self) -> List[Job]:
         """
         Get the running jobs in the registry.
-        
+
         Returns
         -------
         List[Job]
@@ -265,7 +265,7 @@ class Queue:
     def get_pending_jobs(self) -> List[Job]:
         """
         Get the pending jobs in the registry.
-        
+
         Returns
         -------
         List[Job]
@@ -276,7 +276,7 @@ class Queue:
     def get_finished_jobs(self) -> List[Job]:
         """
         Get the finished jobs in the registry.
-        
+
         Returns
         -------
         List[Job]

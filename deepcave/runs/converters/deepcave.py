@@ -32,9 +32,9 @@ class DeepCAVERun(Run):
     @property
     def hash(self) -> str:
         """
-        Hash of the current run. 
-        
-        If the hash changes, the cache has to be cleared. 
+        Hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
         This ensures that the cache always holds the latest results of the run.
 
         Returns

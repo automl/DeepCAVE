@@ -285,7 +285,7 @@ class StaticPlugin(Plugin, ABC):
         def plugin_check_blocked(_: Any, data: Any) -> Any:
             """
             Check if blocked.
-            
+
             Raises
             ------
             PreventUpdate
@@ -381,8 +381,8 @@ class StaticPlugin(Plugin, ABC):
     # Return type does not match the superclass
     def __call__(self) -> List[Component]:
         """
-        Return the components for the plugin. 
-        
+        Return the components for the plugin.
+
         Basically, all blocks and elements of the plugin are stacked-up here.
 
         Returns

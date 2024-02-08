@@ -43,7 +43,7 @@ class Notification:
     def get_latest(self) -> Optional[Tuple[str, str]]:
         """
         Retrieve the latest notification and reset.
-        
+
         Returns
         -------
         Optional[Tuple[str, str]]

@@ -182,8 +182,9 @@ class PartialDependencies(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the content for the defined inputs in 'get_input_layout'
-        and 'get_filter_layout'. This method is necessary to pre-load contents for the inputs.
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
         If the plugin is called for the first time, or there are no results in the cache,
         the plugin gets its content from this method.
 
@@ -200,7 +201,7 @@ class PartialDependencies(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
         """
-        Same as 'load_inputs' but called after inputs have changed.
+        Work like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
@@ -263,7 +264,7 @@ class PartialDependencies(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differ 
+        The passed inputs are cleaned and therefore differ
         compared to 'load_inputs' or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
@@ -369,7 +370,7 @@ class PartialDependencies(StaticPlugin):
     # Types dont match superclass
     def load_outputs(run, inputs, outputs) -> go.Figure:
         """
-        Read the raw data and prepare it for the layout. 
+        Read the raw data and prepare it for the layout.
 
         Note
         ----

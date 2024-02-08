@@ -107,10 +107,11 @@ class Overview(DynamicPlugin):
     def load_outputs(run, *_: Any) -> List[Any]:
         """
         Read in the raw data and prepare them for the layout.
-        
+
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters

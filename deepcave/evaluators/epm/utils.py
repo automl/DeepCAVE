@@ -2,7 +2,7 @@
 """
 # Utils
 
-This module provides a utility to get the types 
+This module provides a utility to get the types
 as well as the bounds of the Hyperparameters.
 """
 

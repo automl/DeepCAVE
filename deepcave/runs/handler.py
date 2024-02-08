@@ -205,8 +205,8 @@ class RunHandler:
 
     def add_run(self, run_path: str) -> bool:
         """
-        Add a run path to the cache. 
-        
+        Add a run path to the cache.
+
         If run path is already in cache, do nothing.
 
         Parameters
@@ -231,8 +231,8 @@ class RunHandler:
 
     def remove_run(self, run_path: str) -> None:
         """
-        Remove a run path from the cache. 
-        
+        Remove a run path from the cache.
+
         If run path is not in cache, do nothing.
 
         Parameters

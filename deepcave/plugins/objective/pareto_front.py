@@ -50,8 +50,9 @@ class ParetoFront(DynamicPlugin):
         """
         Check if the runs are compatible.
 
-        This function is needed if all selected runs need something in common (e.g. budget or objective). 
-        Since this function is called before the layout is created, 
+        This function is needed if all selected runs need something in common
+        (e.g. budget or objective).
+        Since this function is called before the layout is created,
         it can be also used to set common values for the plugin.
 
         Parameters
@@ -201,9 +202,10 @@ class ParetoFront(DynamicPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
-        This method is necessary to pre-load contents for the inputs. 
-        So, if the plugin is called for the first time or there are no results in the cache, 
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
         the plugin gets its content from this method.
 
         Returns
@@ -241,7 +243,8 @@ class ParetoFront(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -336,7 +339,8 @@ class ParetoFront(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -473,7 +477,8 @@ class ParetoFront(DynamicPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters

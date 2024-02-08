@@ -41,9 +41,9 @@ class SMAC3v1Run(Run):
     @property
     def hash(self) -> str:
         """
-        Hash of the current run. 
-        
-        If the hash changes, the cache has to be cleared. 
+        Hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
         This ensures that the cache always holds the latest results of the run.
 
         Returns
@@ -61,7 +61,7 @@ class SMAC3v1Run(Run):
     def latest_change(self) -> Union[float, int]:
         """
         Get the timestamp of the latest change.
-        
+
         Returns
         -------
         Union[float, int]

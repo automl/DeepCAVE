@@ -11,6 +11,6 @@ random_forest
 random_forest_surrogate
     This module provides a RandomForest Surrogate model.
 utils
-    This module provides a utility to get the types 
+    This module provides a utility to get the types
     as well as the bounds of the Hyperparameters.
 """

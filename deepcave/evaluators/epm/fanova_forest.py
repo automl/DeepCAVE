@@ -170,7 +170,7 @@ class FanovaForest(RandomForest):
         Parameters
         ----------
         hp_ids: Union[List[int], Tuple[int, ...]]
-            Contains the indices of the configspace for the selected Hyperparameters 
+            Contains the indices of the configspace for the selected Hyperparameters
             (starts with 0).
         depth: int
             The depth of the marginalization.

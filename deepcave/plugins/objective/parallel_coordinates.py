@@ -9,7 +9,7 @@ This module provides utilities for visualizing the parallel coordinates.
     - ParallelCoordinates : Can be used for visualizing the parallel coordinates.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List
 
 from collections import defaultdict
 
@@ -44,7 +44,7 @@ class ParallelCoordinates(StaticPlugin):
     @staticmethod
     def get_input_layout(register: Callable) -> List[Any]:
         """
-       Get the layout for the input block.
+        Get the layout for the input block.
 
         Parameters
         ----------
@@ -165,9 +165,10 @@ class ParallelCoordinates(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'. 
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
         This method is necessary to pre-load contents for the inputs.
-        So, if the plugin is called for the first time or there are no results in the cache, 
+        So, if the plugin is called for the first time or there are no results in the cache,
         the plugin gets its content from this method.
 
         Returns
@@ -186,11 +187,11 @@ class ParallelCoordinates(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:
         """
-        Same as 'load_inputs' but called after inputs have changed.
+        Work like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
-        Only the changes have to be returned. 
+        Only the changes have to be returned.
         The returned dictionary will be merged with the inputs.
 
         Parameters
@@ -273,7 +274,8 @@ class ParallelCoordinates(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -330,7 +332,8 @@ class ParallelCoordinates(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters

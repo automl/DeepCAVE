@@ -110,12 +110,12 @@ class Run(AbstractRun, ABC):
     def from_path(cls, path: Path) -> "Run":
         """
         Based on a path, return a new Run object.
-        
+
         Parameters
         ----------
         path : Path
             The path to get the run from.
-        
+
         Returns
         -------
         "Run"
@@ -127,7 +127,7 @@ class Run(AbstractRun, ABC):
     def id(self) -> str:
         """
         Get a hash as id.
-        
+
         Returns
         -------
         str
@@ -139,7 +139,7 @@ class Run(AbstractRun, ABC):
     def path(self) -> Optional[Path]:
         """
         Return the path of the run if it exists.
-        
+
         Returns
         -------
         Optional[Path]

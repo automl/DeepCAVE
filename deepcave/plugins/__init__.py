@@ -796,7 +796,7 @@ class Plugin(Layout, ABC):
     def runs(self) -> List[AbstractRun]:
         """
         Get the runs as a list.
-        
+
         Returns
         -------
         List[AbstractRun]
@@ -811,7 +811,7 @@ class Plugin(Layout, ABC):
     def groups(self) -> List[Group]:
         """
         Get the groups as a list.
-        
+
         Returns
         -------
         List[Group]
@@ -826,7 +826,7 @@ class Plugin(Layout, ABC):
     def all_runs(self) -> List[AbstractRun]:
         """
         Get all runs and include the groups as a list.
-        
+
         Returns
         -------
         List[AbstractRun]
@@ -963,18 +963,19 @@ class Plugin(Layout, ABC):
             Note
             ----
             For more information, see 'register_input'.
-            
+
             Parameters
             ----------
             a : str
                 Specifies the id of the input.
             b : Union[List[str], str]
                 Attributes which should be passed to the (dash) component, by default ("value",).
-            
+
             Returns
             -------
             str
-                Unique id for the input and plugin. This is necessary because ids are defined globally. 
+                Unique id for the input and plugin.
+                This is necessary because ids are defined globally.
             """
             return self.register_input(a, b, filter=True)
 
@@ -1002,7 +1003,7 @@ class Plugin(Layout, ABC):
         def register_out(a: str, b: Union[List[str], str]) -> str:
             """
             Register the output.
-            
+
             Note
             ----
             For more information, see 'register_output'
@@ -1013,11 +1014,12 @@ class Plugin(Layout, ABC):
                 Specifies the id of the output.
             b : Union[List[str], str]
                 Attribute.
-            
+
             Returns
             -------
             str
-                Unique id for the output and plugin. This is necessary because ids are defined globally.
+                Unique id for the output and plugin.
+                This is necessary because ids are defined globally.
             """
             return self.register_output(a, b, mpl=True)
 

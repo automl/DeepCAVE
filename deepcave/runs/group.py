@@ -136,7 +136,7 @@ class Group(AbstractRun):
     @property
     def hash(self) -> str:
         """
-        Sorted hashes of the group. 
+        Sorted hashes of the group.
 
         Returns
         -------
@@ -155,6 +155,7 @@ class Group(AbstractRun):
     def id(self) -> str:
         """
         Get the hash as id of the group.
+
         In contrast to hash, this hash should not be changed throughout the run.
 
         Returns
@@ -191,7 +192,7 @@ class Group(AbstractRun):
     def run_names(self) -> List[str]:
         """
         Get the names of the runs in the group.
-        
+
         Returns
         -------
         List[str]
@@ -202,7 +203,7 @@ class Group(AbstractRun):
     def get_runs(self) -> List[AbstractRun]:
         """
         Get the runs in the group.
-        
+
         Returns
         -------
         List[AbstractRun]

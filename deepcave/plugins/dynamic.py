@@ -50,10 +50,12 @@ class DynamicPlugin(Plugin, ABC):
     @interactive
     def register_callbacks(self) -> None:
         """
-        Register basic callbacks for the plugin. 
-        Following callbacks are registered: 
-        - If inputs changes, the changes are pasted back. This is in particular interest if input dependencies are used. 
-        - Raw data dialog to display raw data. 
+        Register basic callbacks for the plugin.
+
+        Following callbacks are registered:
+        - If inputs changes, the changes are pasted back.
+          This is in particular interest if input dependencies are used.
+        - Raw data dialog to display raw data.
         - Callback to be redirected to the config if clicked on it.
         """
         super().register_callbacks()
@@ -119,8 +121,8 @@ class DynamicPlugin(Plugin, ABC):
     # Return type does not match the superclass
     def __call__(self) -> List[Component]:
         """
-        Return the components for the plugin. 
-        
+        Return the components for the plugin.
+
         Basically, all blocks and elements of the plugin are stacked-up here.
 
         Returns

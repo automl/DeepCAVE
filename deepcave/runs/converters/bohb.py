@@ -28,16 +28,16 @@ class BOHBRun(Run):
     path : Path
         The path to the run.
     """
-    
+
     prefix = "BOHB"
     _initial_order = 2
 
     @property
     def hash(self) -> str:
         """
-        Get the hash of the current run. 
-        
-        If the hash changes, the cache has to be cleared. 
+        Get the hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
         This ensures that the cache always holds the latest results of the run.
 
         Returns
@@ -55,7 +55,7 @@ class BOHBRun(Run):
     def latest_change(self) -> Union[float, int]:
         """
         Get the timestamp of the latest change.
-        
+
         Returns
         -------
         Union[float, int]

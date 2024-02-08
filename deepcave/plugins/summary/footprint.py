@@ -10,7 +10,7 @@ The module contains a static plugin class for defining the footprint.
     - FootPrint: A static plugin for the footprint of a configuration.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List
 
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
@@ -154,8 +154,9 @@ class FootPrint(StaticPlugin):
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
         Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
-        This method is necessary to pre-load contents for the inputs. 
-        So, if the plugin is called for the first time or there are no results in the cache, 
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
         the plugin gets its content from this method.
 
         Returns
@@ -172,11 +173,12 @@ class FootPrint(StaticPlugin):
     # Types dont match superclass
     def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:
         """
-        Same as 'load_inputs' but called after inputs have changed.
+        Work like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
-        Only the changes have to be returned. The returned dictionary will be merged with the inputs.
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
 
         Parameters
         ----------
@@ -234,7 +236,8 @@ class FootPrint(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'. 
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -314,7 +317,8 @@ class FootPrint(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters
@@ -457,7 +461,8 @@ class FootPrint(StaticPlugin):
 
         Note
         ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs' or 'load_dependency_inputs'.
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
         Please see '_clean_inputs' for more information.
 
         Parameters

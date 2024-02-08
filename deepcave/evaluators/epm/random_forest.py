@@ -402,7 +402,7 @@ class RandomForest:
 
         Parameters
         ----------
-        X : np.ndarray 
+        X : np.ndarray
             [n_samples, n_features (config + instance features)]
 
         Returns
