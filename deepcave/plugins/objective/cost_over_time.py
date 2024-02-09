@@ -32,12 +32,14 @@ class CostOverTime(DynamicPlugin):
             if run_inequality == RunInequality.INEQ_BUDGET:
                 notification.update("The budgets of the runs are not equal.", color="warning")
             elif run_inequality == RunInequality.INEQ_CONFIGSPACE:
-                notification.update("The configuration spaces of the runs are not equal.", color="warning")
+                notification.update(
+                    "The configuration spaces of the runs are not equal.", color="warning"
+                )
             elif run_inequality == RunInequality.INEQ_META:
                 notification.update("The meta data of the runs is not equal.", color="warning")
             elif run_inequality == RunInequality.INEQ_OBJECTIVE:
                 notification.update("The objectives of the runs are not equal.", color="warning")
-        
+
         # Set some attributes here
         run = runs[0]
 

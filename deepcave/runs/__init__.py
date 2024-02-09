@@ -939,7 +939,9 @@ def check_equality(
                     continue
 
                 if k not in m2 or m2[k] != v:
-                    raise NotMergeableError("Meta data of runs are not equal.", RunInequality.INEQ_META)
+                    raise NotMergeableError(
+                        "Meta data of runs are not equal.", RunInequality.INEQ_META
+                    )
 
         result["meta"] = m1
 
@@ -951,7 +953,9 @@ def check_equality(
         for run in runs:
             cs2 = run.configspace
             if cs1 != cs2:
-                raise NotMergeableError("Configspace of runs are not equal.", RunInequality.INEQ_CONFIGSPACE)
+                raise NotMergeableError(
+                    "Configspace of runs are not equal.", RunInequality.INEQ_CONFIGSPACE
+                )
 
         result["configspace"] = cs1
 
@@ -978,7 +982,9 @@ def check_equality(
                 continue
 
             if len(o1) != len(o2):
-                raise NotMergeableError("Objectives of runs are not equal.", RunInequality.INEQ_OBJECTIVE)
+                raise NotMergeableError(
+                    "Objectives of runs are not equal.", RunInequality.INEQ_OBJECTIVE
+                )
 
             for o1_, o2_ in zip(o1, o2):
                 o1_.merge(o2_)

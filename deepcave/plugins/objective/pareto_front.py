@@ -32,7 +32,9 @@ class ParetoFront(DynamicPlugin):
             if run_inequality == RunInequality.INEQ_BUDGET:
                 notification.update("The budgets of the runs are not equal.", color="warning")
             elif run_inequality == RunInequality.INEQ_CONFIGSPACE:
-                notification.update("The configuration spaces of the runs are not equal.", color="warning")
+                notification.update(
+                    "The configuration spaces of the runs are not equal.", color="warning"
+                )
             elif run_inequality == RunInequality.INEQ_META:
                 notification.update("The meta data of the runs is not equal.", color="warning")
             elif run_inequality == RunInequality.INEQ_OBJECTIVE:
@@ -186,7 +188,6 @@ class ParetoFront(DynamicPlugin):
 
         is_front: Union[List, np.ndarray] = np.ones(points.shape[0], dtype=bool)
         for point_idx, costs in enumerate(points):
-
             if is_front[point_idx]:
                 # Keep any point with a lower/upper cost
                 # This loop is a little bit complicated than
