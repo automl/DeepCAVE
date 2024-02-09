@@ -10,6 +10,7 @@
 - Fix api examples (#68).
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
+- For fANOVA, remove constant hyperparameters from configspace (#9).
 
 # Version 1.1.3
 
