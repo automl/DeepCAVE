@@ -428,7 +428,7 @@ class RandomForest:
                 third_dimension = max(max_num_leaf_data, third_dimension)
 
             # Transform list of 2d arrays into a 3d array
-            num_trees = self._model_options.num_trees
+            num_trees = self._model.options.num_trees
             shape = (X.shape[0], num_trees, third_dimension)
             preds_as_array = np.zeros(shape) * np.NaN
             for i, preds_per_tree in enumerate(all_preds):
@@ -485,11 +485,11 @@ class RandomForest:
         X = self._impute_inactive(X)
 
         # marginalized predictions for each tree
-        dat_ = np.zeros((X.shape[0], self._model_options.num_trees))
+        dat_ = np.zeros((X.shape[0], self._model.options.num_trees))
         for i, x in enumerate(X):
             # marginalize over instances
             # 1. get all leaf values for each tree
-            preds_trees: List[List[float]] = [[] for i in range(self._model_options.num_trees)]
+            preds_trees: List[List[float]] = [[] for i in range(self._model.options.num_trees)]
 
             for feat in self.instance_features:
                 x_ = np.concatenate([x, feat])
@@ -499,10 +499,10 @@ class RandomForest:
 
             # 2. average in each tree
             if self.log_y:
-                for tree_id in range(self._model_options.num_trees):
+                for tree_id in range(self._model.options.num_trees):
                     dat_[i, tree_id] = np.log(np.exp(np.array(preds_trees[tree_id])).mean())
             else:
-                for tree_id in range(self._model_options.num_trees):
+                for tree_id in range(self._model.options.num_trees):
                     dat_[i, tree_id] = np.array(preds_trees[tree_id]).mean()
 
         # 3. compute statistics across trees
