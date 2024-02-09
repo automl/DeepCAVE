@@ -15,7 +15,6 @@
 - Fix api examples (#68).
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
-- Fix varying configspace index order in PDP and symbolic explanations.
 
 # Version 1.1.3
 
