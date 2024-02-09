@@ -5,9 +5,10 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave import config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import Status, check_equality
+from deepcave.runs.exceptions import NotMergeableError, RunInequality
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import (
@@ -24,7 +25,18 @@ class ParetoFront(DynamicPlugin):
     help = "docs/plugins/pareto_front.rst"
 
     def check_runs_compatibility(self, runs):
-        check_equality(runs, objectives=True, budgets=True)
+        try:
+            check_equality(runs, objectives=True, budgets=True)
+        except NotMergeableError as e:
+            run_inequality = e.args[1]
+            if run_inequality == RunInequality.INEQ_BUDGET:
+                notification.update("The budgets of the runs are not equal.", color="warning")
+            elif run_inequality == RunInequality.INEQ_CONFIGSPACE:
+                notification.update("The configuration spaces of the runs are not equal.", color="warning")
+            elif run_inequality == RunInequality.INEQ_META:
+                notification.update("The meta data of the runs is not equal.", color="warning")
+            elif run_inequality == RunInequality.INEQ_OBJECTIVE:
+                notification.update("The objectives of the runs are not equal.", color="warning")
 
         # Set some attributes here
         run = runs[0]
