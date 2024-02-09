@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
-import pandas as pd
 import numpy as np
+import pandas as pd
 import plotly.graph_objs as go
 from dash import dcc, html
 
@@ -121,7 +121,11 @@ class Configurations(DynamicPlugin):
                 cost = []
                 for seed in seeds:
                     try:
-                        cost.append(run.get_costs(selected_config_id, budget, seed)[objective_id])
+                        cost.append(
+                            run.get_costs(config_id=selected_config_id, budget=budget, seed=seed)[
+                                seed
+                            ][objective_id]
+                        )
                         seeds_evaluated += 1
                     except Exception:
                         continue
@@ -132,9 +136,11 @@ class Configurations(DynamicPlugin):
                 if seeds_evaluated > 0:
                     performances[objective.name][budget] = cost
                     if len(seeds) > 1:
-                        performances_table_data[f"{objective.name}"] += [f"{np.mean(cost)} (\u00B1 {np.std(cost)})"]
+                        performances_table_data[objective.name] += [
+                            f"{np.mean(cost)} (\u00B1 {np.std(cost)})"
+                        ]
                     else:
-                        performances_table_data[f"{objective.name}"] += [np.mean(cost)]
+                        performances_table_data[objective.name] += [cost]
                 else:
                     performances[objective.name][budget] = None
                     if len(seeds) > 1:
@@ -230,7 +236,11 @@ class Configurations(DynamicPlugin):
             trace_kwargs = {
                 "x": list(values.keys()),
                 "y": np.mean(np.array(list(values.values())), axis=1),
-                "error_y": dict(type='data', symmetric=True, array=np.std(np.array(list(values.values())), axis=1)),
+                "error_y": dict(
+                    type="data",
+                    symmetric=True,
+                    array=np.std(np.array(list(values.values())), axis=1),
+                ),
                 "name": metric,
                 "fill": "tozeroy",
             }

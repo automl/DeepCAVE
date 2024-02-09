@@ -16,8 +16,8 @@ from ConfigSpace import (
 
 from deepcave.constants import (
     COMBINED_BUDGET,
-    COMBINED_SEED,
     COMBINED_COST_NAME,
+    COMBINED_SEED,
     CONSTANT_VALUE,
     NAN_VALUE,
 )
@@ -47,7 +47,9 @@ class AbstractRun(ABC):
         self.models: Dict[int, Optional[Union[str, "torch.nn.Module"]]] = {}
 
         self.history: List[Trial] = []
-        self.trial_keys: Dict[Tuple[int, Union[int, float], int], int] = {}  # (config_id, budget, seed) -> trial_id
+        self.trial_keys: Dict[
+            Tuple[int, Union[int, float], int], int
+        ] = {}  # (config_id, budget, seed) -> trial_id
 
         # Cached data
         self._highest_budget: Dict[int, Union[int, float]] = {}  # config_id -> budget
@@ -203,7 +205,9 @@ class AbstractRun(ABC):
     def get_objective_names(self) -> List[str]:
         return [obj.name for obj in self.get_objectives()]
 
-    def get_configs(self, budget: Union[int, float] = None, seed: int = None) -> Dict[int, Configuration]:
+    def get_configs(
+        self, budget: Union[int, float] = None, seed: int = None
+    ) -> Dict[int, Configuration]:
         """
         Get configurations of the run. Optionally, only configurations which were evaluated
         on the passed budget are considered.
@@ -401,8 +405,9 @@ class AbstractRun(ABC):
 
         return new_costs
 
-    def get_costs(self, config_id: int, budget: Optional[Union[int, float]] = None,
-                  seed: Optional[int] = None) -> List[float]:
+    def get_costs(
+        self, config_id: int, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None
+    ) -> Dict[int, List[float]]:
         """
         Returns the costs of a configuration. In case of multi-objective, multiple costs are
         returned.
@@ -427,27 +432,30 @@ class AbstractRun(ABC):
 
         Returns
         -------
-        List[float]
-            List of costs from the associated configuration.
+        Dict[int, List[float]]
+            Costs with their seeds.
         """
         if budget is None:
             budget = self.get_highest_budget()
 
         if config_id not in self.configs:
             raise ValueError("Configuration id was not found.")
-
-        costs = self.get_all_costs(budget, seed)
+        costs = self.get_all_costs(budget=budget, seed=seed)
         if config_id not in costs:
-            raise RuntimeError(f"Budget {budget} was not evaluated for config id {config_id}.")
-
+            if seed is not None:
+                raise RuntimeError(
+                    f"Budget {budget} with seed {seed} was not evaluated for config id {config_id}."
+                )
+            else:
+                raise RuntimeError(f"Budget {budget} was not evaluated for config id {config_id}.")
         return costs[config_id]
 
     def get_all_costs(
         self,
         budget: Optional[Union[int, float]] = None,
-        seed: Optional[int] = None,
         statuses: Optional[Union[Status, List[Status]]] = None,
-    ) -> Dict[int, List[float]]:
+        seed: Optional[int] = None,
+    ) -> Dict[int, Dict[int, List[float]]]:
         """
         Get all costs in the history with their config ids. Only configs from the given budget, seed,
         and statuses are returned.
@@ -457,17 +465,17 @@ class AbstractRun(ABC):
         budget : Optional[Union[int, float]], optional
             Budget to select the costs. If no budget is given, the highest budget is chosen.
             By default None.
-        seed : Optional[int], optional
-            Seed to select the costs. If no seed is given, all seeds are considered.
-            By default None.
         statuses : Optional[Union[Status, List[Status]]], optional
             Only selected stati are considered. If no status is given, all stati are considered.
+            By default None.
+        seed : Optional[int], optional
+            Seed to select the costs. If no seed is given, all seeds are considered.
             By default None.
 
         Returns
         -------
-        Dict[int, List[float]]
-            Costs with their config ids.
+        Dict[int, Dict[int, List[float]]]
+            Costs with their config ids and seeds.
         """
         if budget is None:
             budget = self.get_highest_budget()
@@ -477,6 +485,9 @@ class AbstractRun(ABC):
 
         results = {}
         for trial in self.history:
+            if trial.config_id not in results:
+                results[trial.config_id] = {}
+
             if statuses is not None:
                 if isinstance(statuses, Status):
                     statuses = [statuses]
@@ -495,17 +506,23 @@ class AbstractRun(ABC):
                 latest_budget = highest_evaluated_budget[trial.config_id]
                 # We only keep the highest budget
                 if trial.budget >= latest_budget:
-                    results[trial.config_id] = trial.costs
+                    results[trial.config_id][trial.seed] = trial.costs
             else:
                 if trial.budget is not None:
                     if trial.budget != budget:
                         continue
 
-                results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
-
+                results[trial.config_id][
+                    trial.seed
+                ] = trial.costs  # self._process_costs(trial.costs)
         return results
 
-    def get_status(self, config_id: int, seed: int, budget: Optional[Union[int, float]] = None,) -> Status:
+    def get_status(
+        self,
+        config_id: int,
+        seed: int,
+        budget: Optional[Union[int, float]] = None,
+    ) -> Status:
         """
         Returns the status of a configuration.
 
@@ -561,7 +578,7 @@ class AbstractRun(ABC):
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.
         seed : Optional[int], optional
@@ -583,8 +600,27 @@ class AbstractRun(ABC):
         best_config_id = None
 
         results = self.get_all_costs(budget, statuses, seed)
+
+        seed_count = {}
         for config_id, costs in results.items():
-            cost = self.merge_costs(costs, objectives)
+            seed_count[config_id] = len(costs.values())
+        max_seed_count = max(seed_count.values())
+
+        for config_id, costs in results.items():
+            if max_seed_count > 1:
+                if len(costs.values()) < max_seed_count:
+                    continue
+
+                # Get mean over all seeds
+                config_costs = np.zeros([max_seed_count, len(self.get_objectives())])
+
+                for i, (_, cost) in enumerate(costs.items()):
+                    config_costs[i] = cost
+                avg_cost = np.mean(config_costs, axis=0)
+            else:
+                avg_cost = costs
+
+            cost = self.merge_costs(avg_cost, objectives)
 
             if cost < min_cost:
                 min_cost = cost
@@ -683,7 +719,10 @@ class AbstractRun(ABC):
         return torch.load(filename)
 
     def get_trajectory(
-        self, objective: Objective, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None,
+        self,
+        objective: Objective,
+        budget: Optional[Union[int, float]] = None,
+        seed: Optional[int] = None,
     ) -> Tuple[List[float], List[float], List[float], List[int], List[int]]:
         """
         Calculates the trajectory of the given objective, budget, and seed.
@@ -835,7 +874,7 @@ class AbstractRun(ABC):
         specific: bool = False,
         include_config_ids: bool = False,
         include_combined_cost: bool = False,
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    ) -> pd.DataFrame:
         """
         Encodes configurations to process them further. After the configurations are encoded,
         they can be used in model prediction.
@@ -887,23 +926,24 @@ class AbstractRun(ABC):
         config_ids = []
 
         results = self.get_all_costs(budget, statuses, seed)
-        for config_id, costs in results.items():
+        for config_id, config_costs in results.items():
             config = self.configs[config_id]
-            x = self.encode_config(config, specific=specific)
-            y = []
+            for seed, costs in config_costs.items():
+                x = self.encode_config(config, specific=specific)
+                y = []
 
-            # Add all objectives
-            for objective in objectives:
-                objective_id = self.get_objective_id(objective)
-                y += [costs[objective_id]]
+                # Add all objectives
+                for objective in objectives:
+                    objective_id = self.get_objective_id(objective)
+                    y += [costs[objective_id]]
 
-            # Add combined cost
-            if include_combined_cost:
-                y += [self.merge_costs(costs, objectives)]
+                # Add combined cost
+                if include_combined_cost:
+                    y += [self.merge_costs(costs, objectives)]
 
-            X.append(x)
-            Y.append(y)
-            config_ids.append(config_id)
+                X.append(x)
+                Y.append(y)
+                config_ids.append(config_id)
 
         X = np.array(X)  # type: ignore
         Y = np.array(Y)  # type: ignore

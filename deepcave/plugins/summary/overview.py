@@ -1,6 +1,7 @@
+import itertools
+
 import dash_bootstrap_components as dbc
 import numpy as np
-import itertools
 import plotly.graph_objs as go
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -73,7 +74,7 @@ class Overview(DynamicPlugin):
 
     @staticmethod
     def load_outputs(run, *_):
-        # Get best cost across all objectives, seeds, highest budget
+        # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()
         config_id = run.get_config_id(incumbent)
         objective_names = run.get_objective_names()
@@ -85,8 +86,12 @@ class Overview(DynamicPlugin):
         except Exception:
             costs = [None for _ in range(len(objective_names))]
 
-        for idx, cost in enumerate(costs):
-            best_performance[objective_names[idx]] = cost
+        for idx in range(len(objective_names)):
+            cost = []
+            for _, seed_cost in costs.items():
+                cost.append(seed_cost[idx])
+            avg_cost = np.mean(cost)
+            best_performance[objective_names[idx]] = avg_cost
 
         best_performances = []
         for name, value in best_performance.items():
@@ -179,7 +184,13 @@ class Overview(DynamicPlugin):
                     status_statistics[budget][s] = 0
 
         # Setup details dict for to collect information on failed trials
-        status_details = {"Configuration ID": [], "Budget": [], "Seed": [], "Status": [], "Error": []}
+        status_details = {
+            "Configuration ID": [],
+            "Budget": [],
+            "Seed": [],
+            "Status": [],
+            "Error": [],
+        }
 
         status_count = {}
         budget_count = {}
@@ -305,7 +316,6 @@ class Overview(DynamicPlugin):
         }
 
         for hp_name, hp in run.configspace.get_hyperparameters_dict().items():
-
             log = False
             value = None
             if (

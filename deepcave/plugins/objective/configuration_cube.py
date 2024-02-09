@@ -134,10 +134,10 @@ class ConfigurationCube(DynamicPlugin):
         budget = run.get_budget(budget_value)
         configs = run.get_configs(budget=budget)
         if n_configs_value == 0:
-            n_configs_value = len(configs) - 1
+            n_configs_value = len(configs)
         else:
-            if n_configs_value > len(configs) - 1:
-                n_configs_value = len(configs) - 1
+            if n_configs_value > len(configs):
+                n_configs_value = len(configs)
 
         # Restrict to three hyperparameters
         selected_hps = inputs["hyperparameter_names"]["value"]
@@ -156,8 +156,8 @@ class ConfigurationCube(DynamicPlugin):
             },
             "n_configs": {
                 "min": 0,
-                "max": len(configs) - 1,
-                "marks": get_slider_marks(list(range(len(configs)))),
+                "max": len(configs),
+                "marks": get_slider_marks(list(range(0, len(configs) + 1))),
                 "value": n_configs_value,
             },
             "hyperparameter_names": {
@@ -187,6 +187,8 @@ class ConfigurationCube(DynamicPlugin):
         n_configs = inputs["n_configs"]
         objective_id = inputs["objective_id"]
         objective = run.get_objective(objective_id)
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df.index = df.index.astype("str")
 
         # Limit to n_configs
         idx = [str(i) for i in range(n_configs, len(df))]
