@@ -10,8 +10,8 @@ If you decide to display groups (which are combined runs), you will see the mean
 deviation too.
 
 .. note:: 
-    The configuration spaces of the selected runs have to be equal. Otherwise, a good comparison
-    is not possible.
+    The configuration spaces of the selected runs should be equal. Otherwise, a good comparison
+    is not possible. They can ,however, still be displayed in the same graph.
 
 This plugin is capable of answering following questions:
 
