@@ -692,6 +692,7 @@
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">Constant</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span> <span class="k">as</span> <span class="n">GlobalEvaluator</span>
@@ -881,6 +882,26 @@
 
         <span class="k">if</span> <span class="n">n_trees</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Please specify the number of trees.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr and pyrfr cannot be applied</span>
+        <span class="c1"># to constant hyperparameters (see https://github.com/automl/fanova/issues/81), as a workaround we remove</span>
+        <span class="c1"># constant hyperparameters before calculation.</span>
+        <span class="c1"># Note: This will break if there are conditions or forbiddens including constant hyperparameters.</span>
+        <span class="n">hp_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="n">Constant</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
+            <span class="n">hp_dict_wo_const</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Constant</span><span class="p">}</span>
+            <span class="n">configspace_wo_const</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hp_dict_wo_const</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">configspace_wo_const</span><span class="o">.</span><span class="n">add_hyperparameter</span><span class="p">(</span><span class="n">hp_dict_wo_const</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="n">configspace_wo_const</span><span class="o">.</span><span class="n">add_conditions</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_conditions</span><span class="p">())</span>
+            <span class="n">configspace_wo_const</span><span class="o">.</span><span class="n">add_forbidden_clauses</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_forbiddens</span><span class="p">())</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">configspace_wo_const</span>
+
+            <span class="n">configs_wo_const</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configs</span><span class="p">)):</span>
+                <span class="n">configs_wo_const</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hp_dict_wo_const</span><span class="o">.</span><span class="n">keys</span><span class="p">()})</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">configs_wo_const</span>
 
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

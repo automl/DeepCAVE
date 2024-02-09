@@ -716,6 +716,12 @@ This plugin is capable of answering following questions:</p>
 <p>This page is under construction.</p>
 </div>
 <img alt="../_images/importances.png" src="../_images/importances.png" />
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>As the fANOVA implementation relies on pyrfr and pyrfr cannot be applied to constant hyperparameters,
+as a workaround we remove constant hyperparameters before calculation.
+This will break if there are conditions or forbiddens including constant hyperparameters.</p>
+</div>
 </section>
 
 
