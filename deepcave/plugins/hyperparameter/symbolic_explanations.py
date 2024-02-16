@@ -8,7 +8,7 @@ Provided utilities include getting input and output layout,
 processing the data and loading the outputs.
 
 ## Classes
-    - SymbolicExplanations: Leverage Symbolic Explanations to obtain a formula an plot it.
+    - SymbolicExplanations: Leverage Symbolic Explanations to obtain a formula and plot it.
 
 ## Constants
     GRID_POINTS_PER_AXIS : int
@@ -226,7 +226,7 @@ class SymbolicExplanations(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+        Load the content for the defined inputs in 'get_input_layout'.
 
         This method is necessary to pre-load contents for the inputs.
         If the plugin is called for the first time, or there are no results in the cache,
