@@ -394,15 +394,8 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
     # It's also nice to see the metrics
     objectives = run.get_objectives()
     budget = run.get_highest_budget(config_id)
-    costs = run.get_costs(config_id, budget)
 
-    avg_costs = []
-    for idx in range(len(objectives)):
-        cost = []
-        for _, seed_cost in costs.items():
-            if seed_cost[idx] is not None:
-                cost.append(seed_cost[idx])
-        avg_costs.append(np.mean(cost))
+    avg_costs = run.get_avg_costs(config_id)
 
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
     for objective, cost in zip(objectives, avg_costs):

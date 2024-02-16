@@ -405,6 +405,23 @@ class AbstractRun(ABC):
 
         return new_costs
 
+    def get_avg_costs(
+        self, config_id: int, budget: Optional[Union[int, float]] = None
+    ) -> List[float]:
+        objectives = self.get_objectives()
+
+        # Budget might not be evaluated
+        try:
+            config_costs = self.get_costs(config_id, budget)
+        except RuntimeError:
+            config_costs = [None for _ in range(len(objectives))]
+
+        avg_costs = []
+        for idx in range(len(objectives)):
+            costs = [values[idx] for values in config_costs.values() if values[idx] is not None]
+            avg_costs.append(float(np.mean(costs)))
+        return avg_costs
+
     def get_costs(
         self, config_id: int, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None
     ) -> Dict[int, List[float]]:

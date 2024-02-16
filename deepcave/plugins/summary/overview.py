@@ -80,19 +80,11 @@ class Overview(DynamicPlugin):
         objective_names = run.get_objective_names()
 
         best_performance = {}
-        # Budget might not be evaluated
-        try:
-            costs = run.get_costs(config_id)
-        except Exception:
-            costs = [None for _ in range(len(objective_names))]
+
+        avg_costs = run.get_avg_costs(config_id)
 
         for idx in range(len(objective_names)):
-            cost = []
-            for _, seed_cost in costs.items():
-                if seed_cost[idx] is not None:
-                    cost.append(seed_cost[idx])
-            avg_cost = np.mean(cost)
-            best_performance[objective_names[idx]] = avg_cost
+            best_performance[objective_names[idx]] = avg_costs[idx]
 
         best_performances = []
         for name, value in best_performance.items():
