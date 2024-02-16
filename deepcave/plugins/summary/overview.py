@@ -89,7 +89,8 @@ class Overview(DynamicPlugin):
         for idx in range(len(objective_names)):
             cost = []
             for _, seed_cost in costs.items():
-                cost.append(seed_cost[idx])
+                if seed_cost[idx] is not None:
+                    cost.append(seed_cost[idx])
             avg_cost = np.mean(cost)
             best_performance[objective_names[idx]] = avg_cost
 

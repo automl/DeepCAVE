@@ -400,7 +400,8 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
     for idx in range(len(objectives)):
         cost = []
         for _, seed_cost in costs.items():
-            cost.append(seed_cost[idx])
+            if seed_cost[idx] is not None:
+                cost.append(seed_cost[idx])
         avg_costs.append(np.mean(cost))
 
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
