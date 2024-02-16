@@ -396,8 +396,15 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
     budget = run.get_highest_budget(config_id)
     costs = run.get_costs(config_id, budget)
 
+    avg_costs = []
+    for idx in range(len(objectives)):
+        cost = []
+        for _, seed_cost in costs.items():
+            cost.append(seed_cost[idx])
+        avg_costs.append(np.mean(cost))
+
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
-    for objective, cost in zip(objectives, costs):
+    for objective, cost in zip(objectives, avg_costs):
         string += f"{objective.name}: {cost}<br>"
 
     string += "<br><b>Hyperparameters</b>:<br>"

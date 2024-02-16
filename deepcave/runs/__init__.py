@@ -420,8 +420,8 @@ class AbstractRun(ABC):
             Budget to get the costs from the configuration id for. By default None. If budget is
             None, the highest budget is chosen.
         seed : Optional[int], optional
-            Seed to get the costs from the configuration id for. By default None. If no seed is given,
-            all seeds are considered.
+            Seed to get the costs from the configuration id for. By default None. If no seed is
+            given, all seeds are considered.
 
         Raises
         ------
@@ -455,10 +455,11 @@ class AbstractRun(ABC):
         budget: Optional[Union[int, float]] = None,
         statuses: Optional[Union[Status, List[Status]]] = None,
         seed: Optional[int] = None,
+        selected_ids: Optional[List[int]] = None,
     ) -> Dict[int, Dict[int, List[float]]]:
         """
-        Get all costs in the history with their config ids. Only configs from the given budget, seed,
-        and statuses are returned.
+        Get all costs in the history with their config ids and seeds. If set, only configs from
+        the given budget, seed, and statuses are returned.
 
         Parameters
         ----------
@@ -471,6 +472,8 @@ class AbstractRun(ABC):
         seed : Optional[int], optional
             Seed to select the costs. If no seed is given, all seeds are considered.
             By default None.
+        selected_ids: Optional[List[int]], optional
+            If set, only history ids in the list will be considered. By default None.
 
         Returns
         -------
@@ -484,7 +487,11 @@ class AbstractRun(ABC):
         highest_evaluated_budget = {}
 
         results = {}
-        for trial in self.history:
+        if selected_ids is not None:
+            history = [self.history[i] for i in selected_ids]
+        else:
+            history = self.history
+        for trial in history:
             if trial.config_id not in results:
                 results[trial.config_id] = {}
 
@@ -512,9 +519,7 @@ class AbstractRun(ABC):
                     if trial.budget != budget:
                         continue
 
-                results[trial.config_id][
-                    trial.seed
-                ] = trial.costs  # self._process_costs(trial.costs)
+                results[trial.config_id][trial.seed] = trial.costs
         return results
 
     def get_status(
@@ -571,6 +576,7 @@ class AbstractRun(ABC):
         budget: Optional[Union[int, float]] = None,
         seed: Optional[int] = None,
         statuses: Optional[Union[Status, List[Status]]] = None,
+        selected_ids: Optional[List[int]] = None,
     ) -> Tuple[Configuration, float]:
         """
         Returns the incumbent with its normalized cost.
@@ -585,6 +591,9 @@ class AbstractRun(ABC):
             Considered seed. By default None. If no seed is given, all seeds are considered.
         statuses : Optional[Union[Status, List[Status]]], optional
             Considered statuses. By default None. If None, all stati are considered.
+        selected_ids: Optional[List[int]], optional
+            If set, only history ids in the list will be considered. This can for example be
+            useful if only ids up to a certain end-time shall be considered. By default None.
 
         Returns
         -------
@@ -599,7 +608,7 @@ class AbstractRun(ABC):
         min_cost = np.inf
         best_config_id = None
 
-        results = self.get_all_costs(budget, statuses, seed)
+        results = self.get_all_costs(budget, statuses, seed, selected_ids)
 
         seed_count = {}
         for config_id, costs in results.items():
@@ -607,20 +616,28 @@ class AbstractRun(ABC):
         max_seed_count = max(seed_count.values())
 
         for config_id, costs in results.items():
+            # If there are multiple seeds, only configurations evaluated on all seeds are
+            # considered. From these configurations, the one with the highest average cost
+            # over the seeds is considered as the incumbent.
             if max_seed_count > 1:
                 if len(costs.values()) < max_seed_count:
                     continue
 
-                # Get mean over all seeds
+                # Get average over all seeds
                 config_costs = np.zeros([max_seed_count, len(self.get_objectives())])
-
                 for i, (_, cost) in enumerate(costs.items()):
                     config_costs[i] = cost
                 avg_cost = np.mean(config_costs, axis=0)
-            else:
-                avg_cost = costs
 
-            cost = self.merge_costs(avg_cost, objectives)
+            # If there is only one seed, the costs can be used directly
+            else:
+                avg_cost = [*costs.values()][0]
+
+            # If there are multiple objectives, the costs are merged to one cost value
+            if isinstance(objectives, list) and len(objectives) > 1:
+                cost = self.merge_costs(avg_cost, objectives)
+            else:
+                cost = avg_cost[0]
 
             if cost < min_cost:
                 min_cost = cost
@@ -735,8 +752,8 @@ class AbstractRun(ABC):
             Budget to calculate the trajectory for. If no budget is given, then the highest budget
             is chosen. By default None.
         seed : Optional[int], optional
-            Seed to calculate the trajectory for. If no seed is given, then all seeds are considered.
-            By default None.
+            Seed to calculate the trajectory for. If no seed is given, then all seeds are
+            considered. By default None.
 
         Returns
         -------
@@ -755,8 +772,6 @@ class AbstractRun(ABC):
         if budget is None:
             budget = self.get_highest_budget()
 
-        objective_id = self.get_objective_id(objective)
-
         costs_mean = []
         costs_std = []
         ids = []
@@ -764,10 +779,10 @@ class AbstractRun(ABC):
         times = []
 
         order = []
-        # Sort self.history by end_time
+
+        # Sort self.history by end-time
         for id, trial in enumerate(self.history):
             order.append((id, trial.end_time))
-
         order.sort(key=lambda tup: tup[1])
 
         # Important: Objective can be minimized or maximized
@@ -776,7 +791,8 @@ class AbstractRun(ABC):
         else:
             current_cost = -np.inf
 
-        for id, _ in order:
+        # Iterate over the history ordered by end-time and calculate the current incumbent
+        for i, (id, _) in enumerate(order):
             trial = self.history[id]
 
             # We want to use all budgets
@@ -789,7 +805,10 @@ class AbstractRun(ABC):
                 if trial.seed != seed:
                     continue
 
-            cost = trial.costs[objective_id]
+            # Get the incumbent over all trials up to this point
+            _, cost = self.get_incumbent(
+                objective, budget, selected_ids=[selected_id for selected_id, _ in order[: i + 1]]
+            )
             if cost is None:
                 continue
 
