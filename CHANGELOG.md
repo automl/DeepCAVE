@@ -1,4 +1,4 @@
-# Version 1.1.4
+# Version 1.2
 
 ## Plugins
 - Add symbolic explanations plugin (#46).

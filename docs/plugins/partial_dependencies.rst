@@ -3,12 +3,12 @@ Partial Dependencies
 
 This plugin is capable of answering following questions:
 
-* How does the objective change wrt one or two hyperparameters? For example, does the accuracy
-  increase if the learning rate decreases?
+* How does the objective change with respect to one or two hyperparameters? For example, does the
+  accuracy increase if the learning rate decreases?
 * Do multiple trials show similar behavior?
 
 
-.. warning:: 
+.. warning::
     This page is under construction.
 
 

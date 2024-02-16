@@ -1,21 +1,51 @@
+#  noqa: D400
+"""
+# Symbolic Regression
+
+This module provides utilities for running symbolic regression with gplearn.
+"""
+
+from typing import List, Union
+
 import numpy as np
 import sympy
 from gplearn import functions
-from gplearn.functions import make_function
+from gplearn.functions import _Function, make_function
+from gplearn.genetic import SymbolicRegressor
 
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
 
 
-# Create a safe exp function which does not cause problems
 def exp(x):
+    """
+    Get a safe exp function with a maximum value of 100000 to avoid overflow.
+
+    Parameters
+    ----------
+    x : float
+        The value to calculate the exponential of.
+
+    Returns
+    -------
+    float
+        The safe exponential of x.
+    """
     with np.errstate(all="ignore"):
         max_value = np.full(shape=x.shape, fill_value=100000)
         return np.minimum(np.exp(x), max_value)
 
 
-def get_function_set():
+def get_function_set() -> List[Union[str, _Function]]:
+    """
+    Get a function set for symbolic regression with gplearn.
+
+    Returns
+    -------
+    List[Union[str, _Function]]
+        List of functions to use in symbolic regression.
+    """
     exp_func = make_function(function=exp, arity=1, name="exp")
 
     function_set = ["add", "sub", "mul", "div", "sqrt", "log", "sin", "cos", "abs", exp_func]
@@ -23,23 +53,30 @@ def get_function_set():
     return function_set
 
 
-def convert_symb(symb, n_decimals: int = None, hp_names: list = None) -> sympy.core.expr:
+def convert_symb(
+    symb: SymbolicRegressor, n_decimals: int = None, hp_names: list = None
+) -> sympy.core.expr:
     """
-    Convert a fitted symbolic regression to a simplified and potentially rounded mathematical expression.
+    Convert a fitted symbolic regression to a simplified and potentially rounded mathematical
+    expression.
+
     Warning: eval is used in this function, thus it should not be used on unsanitized input (see
     https://docs.sympy.org/latest/modules/core.html?highlight=eval#module-sympy.core.sympify).
 
     Parameters
     ----------
-    symb: Fitted symbolic regressor to find a simplified expression for.
-    n_decimals: If set, round floats in the expression to this number of decimals.
-    hp_names: If set, replace X0 and X1 in the expression by the names given.
+    symb: SymbolicRegressor
+        Fitted symbolic regressor to find a simplified expression for.
+    n_decimals: Optional[int]
+        If set, round floats in the expression to this number of decimals.
+    hp_names: Optional[List[str]]
+        If set, replace X0 and X1 in the expression by the names given.
 
     Returns
     -------
-    symb_conv: Converted mathematical expression.
+    SymbolicRegressor
+        Converted mathematical expression.
     """
-
     # sqrt is protected function in gplearn, always returning sqrt(abs(x))
     sqrt_pos = []
     prev_sqrt_inserts = 0
@@ -97,7 +134,11 @@ def convert_symb(symb, n_decimals: int = None, hp_names: list = None) -> sympy.c
     try:
         # Simplification can fail in some cases. If so, use the unsimplified version.
         symb_simpl = sympy.simplify(symb_conv)
-    except:
+    except Exception as e:
+        logger.debug(
+            f"Simplification of symbolic regression failed, use unsimplified expression "
+            f"instead: {e}"
+        )
         symb_simpl = symb_conv
 
     # Round floats to n_decimals
