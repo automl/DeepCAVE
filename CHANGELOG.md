@@ -6,6 +6,7 @@
 - Do not disable existing loggers.
 
 ## Bug-Fixes
+- Fix missing objective specification in LPI evaluator (#71).
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).
 - Fix api examples (#68).
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
