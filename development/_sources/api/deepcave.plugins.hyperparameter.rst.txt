@@ -29,4 +29,5 @@ deepcave.plugins.hyperparameter
 
    deepcave.plugins.hyperparameter.importances
    deepcave.plugins.hyperparameter.pdp
+   deepcave.plugins.hyperparameter.symbolic_explanations
 

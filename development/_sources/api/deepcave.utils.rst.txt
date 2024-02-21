@@ -43,6 +43,7 @@
    deepcave.utils.run_caches
    deepcave.utils.styled_plot
    deepcave.utils.styled_plotty
+   deepcave.utils.symbolic_regression
    deepcave.utils.url
    deepcave.utils.util
 
