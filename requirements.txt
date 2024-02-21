@@ -8,6 +8,9 @@ matplotlib>=3.5.1
 seaborn>=0.13.0
 pyyaml>=6.0.1
 kaleido>=0.2.1
+gplearn>=0.4.2
+sympy>=1.12
+kaleido>=0.2.1
 
 # AutoML packages
 ConfigSpace==0.6.1

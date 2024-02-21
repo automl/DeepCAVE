@@ -1,9 +1,16 @@
-# Version 1.1.4
+# Version 1.2
+
+## Plugins
+- Add symbolic explanations plugin (#46).
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
 - Allow to load multi-objective SMAC3v2 and add example (#69)
 - Do not disable existing loggers.
+- Update author email.
+- Add exit button which first deletes running jobs and then terminates DeepCave.
+- Nicer handling of Keyboard Interrupt.
+- Disable debug mode.
 
 ## Bug-Fixes
 - Don't convert BOHB runs with status 'running' (consistent with SMAC).

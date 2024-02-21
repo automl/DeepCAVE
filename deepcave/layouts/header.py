@@ -1,15 +1,22 @@
+import os
+import time
+
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from deepcave import app, c
+from deepcave import app, c, queue
 from deepcave.layouts import Layout
 
 
 class HeaderLayout(Layout):
     def register_callbacks(self) -> None:
         super().register_callbacks()
+        self._callback_update_matplotlib_mode()
+        self._callback_delete_jobs()
+        self._callback_terminate_deepcave()
 
+    def _callback_update_matplotlib_mode(self) -> None:
         outputs = [
             Output("matplotlib-mode-toggle", "color"),
             Output("matplotlib-mode-badge", "children"),
@@ -21,7 +28,7 @@ class HeaderLayout(Layout):
         ]
 
         @app.callback(outputs, inputs)
-        def update_matplotlib_mode(n_clicks, pathname):
+        def callback(n_clicks, pathname):
             update = None
             mode = c.get("matplotlib-mode")
             if mode is None:
@@ -36,6 +43,34 @@ class HeaderLayout(Layout):
                 return "primary", "on", update
             else:
                 return "secondary", "off", update
+
+    def _callback_delete_jobs(self) -> None:
+        inputs = [Input("exit-deepcave", "n_clicks")]
+        outputs = [
+            Output("exit-deepcave", "color"),
+            Output("exit-deepcave", "children"),
+            Output("exit-deepcave", "disabled"),
+        ]
+
+        @app.callback(inputs, outputs)
+        def callback(n_clicks):
+            # When clicking the Exit button, we first want to delete existing jobs and update the button
+            if n_clicks is not None:
+                queue.delete_jobs()
+                return "danger", "Terminated DeepCAVE", True
+            else:
+                return "primary", "Exit", False
+
+    def _callback_terminate_deepcave(self) -> None:
+        inputs = [Input("exit-deepcave", "n_clicks")]
+        outputs = []
+
+        @app.callback(inputs, outputs)
+        def callback(n_clicks):
+            # Then we want to terminate DeepCAVE
+            if n_clicks is not None:
+                time.sleep(1)
+                os._exit(130)
 
     def __call__(self) -> html.Header:
         return html.Header(
@@ -58,6 +93,9 @@ class HeaderLayout(Layout):
                     color="secondary",
                     className="me-2",
                     id="matplotlib-mode-toggle",
+                ),
+                dbc.Button(
+                    "Exit", color="secondary", className="me-2", id="exit-deepcave", disabled=False
                 ),
             ],
         )

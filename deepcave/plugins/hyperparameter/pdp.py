@@ -20,7 +20,7 @@ MAX_SHOWN_SAMPLES = 100
 class PartialDependencies(StaticPlugin):
     id = "pdp"
     name = "Partial Dependencies"
-    icon = "far fa-grip-lines"
+    icon = "fas fa-grip-lines"
     help = "docs/plugins/partial_dependencies.rst"
     activate_run_selection = True
 
@@ -149,9 +149,7 @@ class PartialDependencies(StaticPlugin):
 
         if objective_value is None:
             objective_value = objective_ids[0]
-        if budget_value is None:
             budget_value = budget_ids[-1]
-        if hp1_value is None:
             hp1_value = hp_names[0]
 
         return {
@@ -163,7 +161,6 @@ class PartialDependencies(StaticPlugin):
             },
             "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
-                "value": hp2_value,
             },
         }
 
@@ -237,7 +234,7 @@ class PartialDependencies(StaticPlugin):
         return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def get_pdp_figure(run, inputs, outputs, show_confidence, show_ice, title=None):
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
@@ -249,9 +246,6 @@ class PartialDependencies(StaticPlugin):
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
             hp2 = run.configspace.get_hyperparameter(hp2_name)
-
-        show_confidence = inputs["show_confidence"]
-        show_ice = inputs["show_ice"]
 
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
@@ -323,6 +317,7 @@ class PartialDependencies(StaticPlugin):
                     "yaxis": {
                         "title": objective_name,
                     },
+                    "title": title
                 }
             )
         else:
@@ -349,10 +344,20 @@ class PartialDependencies(StaticPlugin):
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=Config.FIGURE_MARGIN,
+                    title=title
                 )
             )
 
         figure = go.Figure(data=traces, layout=layout)
         save_image(figure, "pdp.pdf")
+
+        return figure
+
+    @staticmethod
+    def load_outputs(run, inputs, outputs):
+        show_confidence = inputs["show_confidence"]
+        show_ice = inputs["show_ice"]
+
+        figure = PartialDependencies.get_pdp_figure(run, inputs, outputs, show_confidence, show_ice)
 
         return figure
