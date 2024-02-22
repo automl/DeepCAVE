@@ -1,12 +1,12 @@
-# -*- encoding: utf-8 -*-
+from __future__ import annotations
+
 import setuptools
 from deepcave import version
 
 
 def read_file(file_name):
     with open(file_name, encoding="utf-8") as fh:
-        text = fh.read()
-    return text
+        return fh.read()
 
 
 extras_require = {
@@ -50,7 +50,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
     include_package_data=True,
-    python_requires=">=3.9, <=3.11",
+    python_requires=">=3.9, <3.12",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
