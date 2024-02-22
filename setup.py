@@ -60,6 +60,8 @@ setuptools.setup(
     platforms=["Linux"],
     classifiers=[
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
         "Environment :: Console",
