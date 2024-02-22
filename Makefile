@@ -2,7 +2,7 @@
 # are usually completed in github actions.
 
 SHELL := /bin/bash
-VERSION := 1.1.3
+VERSION := 1.2
 
 NAME := DeepCAVE
 PACKAGE_NAME := deepcave
@@ -42,7 +42,7 @@ MYPY ?= mypy
 PRECOMMIT ?= pre-commit
 FLAKE8 ?= flake8
 
-install: 
+install:
 	$(PIP) install -e .
 
 install-dev:
@@ -118,7 +118,7 @@ build:
 # This is done to prevent accidental publishing but provide the same conveniences
 publish: clean build
 	read -p "Did you update the version number in Makefile and deepcave/__init__.py?"
-	
+
 	$(PIP) install twine
 	$(PYTHON) -m twine upload --repository testpypi ${DIST}/*
 	@echo

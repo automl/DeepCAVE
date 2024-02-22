@@ -20,7 +20,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.plugins.static import StaticPlugin
@@ -131,7 +131,7 @@ class ParallelCoordinates(StaticPlugin):
                             dbc.Label("Limit Hyperparameters"),
                             help_button(
                                 "Shows either the n most important hyperparameters (if show "
-                                "importance hyperparameters is true) or the first n selected "
+                                "important hyperparameters is true) or the first n selected "
                                 "hyperparameters."
                             ),
                             dbc.Input(id=register("n_hps", "value"), type="number"),
@@ -239,7 +239,6 @@ class ParallelCoordinates(StaticPlugin):
             objective_value = objective_ids[0]
             budget_value = budget_ids[-1]
             hp_value = hp_names
-            n_hps = len(hp_names)
 
         if n_hps == 0:
             n_hps = len(hp_names)
@@ -320,7 +319,7 @@ class ParallelCoordinates(StaticPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore

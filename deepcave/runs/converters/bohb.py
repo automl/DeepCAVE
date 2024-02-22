@@ -135,7 +135,7 @@ class BOHBRun(Run):
             elif (
                 "RUNNING" in status_string or "QUEUED" in status_string or "REVIEW" in status_string
             ):
-                status = Status.RUNNING  # type: ignore
+                status = status_string  # type: ignore
             else:
                 status = Status.CRASHED
 

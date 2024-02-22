@@ -103,7 +103,9 @@ class LPI:
         self.rs = np.random.RandomState(seed)
 
         # Get data
-        df = self.run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
+        df = self.run.get_encoded_data(
+            objectives=objectives, budget=budget, specific=True, include_combined_cost=True
+        )
         X = df[self.hp_names].to_numpy()
         Y = df[COMBINED_COST_NAME].to_numpy()
 

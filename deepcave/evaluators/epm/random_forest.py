@@ -231,7 +231,7 @@ class RandomForest:
 
     def _check_dimensions(self, X: np.ndarray, Y: Optional[np.ndarray] = None) -> None:
         """
-        Check if the dimensions of X and Y are correct wrt features.
+        Check if the dimensions of X and Y are correct with respect to features.
 
         Parameters
         ----------

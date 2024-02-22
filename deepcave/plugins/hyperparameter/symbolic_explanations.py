@@ -1,14 +1,14 @@
 #  noqa: D400
 """
-# PartialDependencies
+# SymbolicExplanations
 
-This module provides utilities for generating Partial Dependency Plots (PDP).
+This module provides utilities for generating Symbolic Explanations.
 
-Provided utilities include getting input and output layout (filtered or non-filtered),
+Provided utilities include getting input and output layout,
 processing the data and loading the outputs.
 
 ## Classes
-    - PartialDependencies: Generate a Partial Dependency Plot (PDP).
+    - SymbolicExplanations: Leverage Symbolic Explanations to obtain a formula and plot it.
 
 ## Constants
     GRID_POINTS_PER_AXIS : int
@@ -17,43 +17,47 @@ processing the data and loading the outputs.
     MAX_SHOWN_SAMPLES : int
 """
 
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
+from ConfigSpace.hyperparameters import CategoricalHyperparameter
 from dash import dcc, html
+from gplearn.genetic import SymbolicRegressor
 from pyPDP.algorithms.pdp import PDP
 
 from deepcave.config import Config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
+from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, get_hyperparameter_ticks, save_image
+from deepcave.utils.symbolic_regression import convert_symb, get_function_set
 
-GRID_POINTS_PER_AXIS = 20
+SR_TRAIN_POINTS_PER_AXIS = 20
 SAMPLES_PER_HP = 10
 MAX_SAMPLES = 10000
 MAX_SHOWN_SAMPLES = 100
 
 
-class PartialDependencies(StaticPlugin):
+class SymbolicExplanations(StaticPlugin):
     """
-    Generate Partial Dependency Plots (PDP).
+    Generate Symbolic Explanations.
 
-    Provided utilities include getting input and output layout (filtered or non-filtered),
+    Provided utilities include getting input and output layout,
     processing the data and loading the outputs.
     """
 
-    id = "pdp"
-    name = "Partial Dependencies"
-    icon = "fas fa-grip-lines"
-    help = "docs/plugins/partial_dependencies.rst"
+    id = "symbolic_explanations"
+    name = "Symbolic Explanations"
+    icon = "fas fa-subscript"
+    help = "docs/plugins/symbolic_explanations.rst"
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register: Callable) -> List[dbc.Row]:
+    def get_input_layout(register: Callable) -> List[Union[dbc.Row, html.Details]]:
         """
         Get the layout for the input block.
 
@@ -65,7 +69,7 @@ class PartialDependencies(StaticPlugin):
 
         Returns
         -------
-        List[dbc.Row]
+        List[Union[dbc.Row, html.Details]
             The layout for the input block.
         """
         return [
@@ -125,64 +129,104 @@ class PartialDependencies(StaticPlugin):
                         md=6,
                     ),
                 ],
+                className="mb-3",
             ),
-        ]
-
-    @staticmethod
-    def get_filter_layout(register: Callable) -> List[Any]:
-        """
-        Get the layout for the filter block.
-
-        Parameters
-        ----------
-        register : Callable
-            Method to register (user) variables.
-            The register_input function is located in the Plugin superclass.
-
-        Returns
-        -------
-        List[Any]
-            The layout for the filter block.
-        """
-        return [
             dbc.Row(
                 [
                     dbc.Col(
                         [
                             html.Div(
                                 [
-                                    dbc.Label("Show confidence"),
-                                    help_button("Displays the confidence bands."),
-                                    dbc.Select(
-                                        id=register("show_confidence", ["value", "options"])
-                                    ),
-                                ]
-                            )
-                        ],
-                        md=6,
-                    ),
-                    dbc.Col(
-                        [
-                            html.Div(
-                                [
-                                    dbc.Label("Show ICE curves"),
+                                    dbc.Label("Parsimony coefficient"),
                                     help_button(
-                                        "Displays the ICE curves from which the PDP curve is "
-                                        "derivied."
+                                        "Penalizes the complexity of the resulting formulas. The "
+                                        "higher the value, the higher the penalty on the "
+                                        "complexity will be, resulting in simpler formulas."
                                     ),
-                                    dbc.Select(id=register("show_ice", ["value", "options"])),
-                                ]
+                                    dcc.Slider(
+                                        id=register("parsimony", "value", type=int),
+                                        marks=dict((i, str(10**i)) for i in range(-8, 1)),
+                                        min=-8,
+                                        max=0,
+                                        step=1,
+                                        updatemode="drag",
+                                    ),
+                                ],
                             )
                         ],
-                        md=6,
-                    ),
+                    )
                 ],
+                className="mb-3",
+            ),
+            html.Details(
+                [
+                    html.Summary("Additional options for symbolic regression configuration"),
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                [
+                                    dbc.Label("Generations"),
+                                    help_button("The number of generations to evolve."),
+                                    dbc.Input(
+                                        id=register("generations", type=int),
+                                        type="number",
+                                        min=1,
+                                    ),
+                                ],
+                                md=6,
+                            ),
+                            dbc.Col(
+                                [
+                                    dbc.Label("Population Size"),
+                                    help_button(
+                                        "The number of formulas competing in each generation."
+                                    ),
+                                    dbc.Input(
+                                        id=register("population_size", type=int),
+                                        type="number",
+                                        min=1,
+                                    ),
+                                ],
+                                md=6,
+                            ),
+                        ],
+                        className="mb-3",
+                        style={"marginTop": "0.8em"},
+                    ),
+                    dbc.Row(
+                        [
+                            dbc.Col(
+                                [
+                                    dbc.Label("Random seed"),
+                                    help_button(
+                                        "The random seed to be used in the symbolic regression."
+                                    ),
+                                    dbc.Input(
+                                        id=register("random_seed", type=int), type="number", min=0
+                                    ),
+                                ],
+                                md=6,
+                            ),
+                            dbc.Col(
+                                [
+                                    dbc.Label("Metric"),
+                                    help_button(
+                                        "The metric to evaluate the fitness of the formulas."
+                                    ),
+                                    dbc.Select(id=register("metric", ["value", "options"])),
+                                ],
+                                md=6,
+                            ),
+                        ],
+                        className="mb-3",
+                    ),
+                ]
             ),
         ]
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """
-        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+        Load the content for the defined inputs in 'get_input_layout'.
 
         This method is necessary to pre-load contents for the inputs.
         If the plugin is called for the first time, or there are no results in the cache,
@@ -194,8 +238,14 @@ class PartialDependencies(StaticPlugin):
             Content to be filled.
         """
         return {
-            "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
-            "show_ice": {"options": get_select_options(binary=True), "value": "true"},
+            "parsimony": {"value": "-4"},
+            "generations": {"value": "10"},
+            "population_size": {"value": "5000"},
+            "random_seed": {"value": "0"},
+            "metric": {
+                "options": get_select_options(values=["rmse", "mse", "mean absolute error"]),
+                "value": "rmse",
+            },
         }
 
     def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
@@ -230,16 +280,24 @@ class PartialDependencies(StaticPlugin):
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_dict = run.configspace.get_hyperparameters_dict()
+        hp_names_numerical = []
+        for k, v in hp_dict.items():
+            if not isinstance(v, CategoricalHyperparameter):
+                hp_names_numerical.append(k)
+        hp_names = hp_names_numerical
 
         # Get selected values
         objective_value = inputs["objective_id"]["value"]
         budget_value = inputs["budget_id"]["value"]
         hp1_value = inputs["hyperparameter_name_1"]["value"]
+        hp2_value = inputs["hyperparameter_name_2"]["value"]
 
         if objective_value is None:
             objective_value = objective_ids[0]
+        if budget_value is None:
             budget_value = budget_ids[-1]
+        if hp1_value is None:
             hp1_value = hp_names[0]
 
         return {
@@ -251,6 +309,7 @@ class PartialDependencies(StaticPlugin):
             },
             "hyperparameter_name_2": {
                 "options": get_checklist_options([None] + hp_names),
+                "value": hp2_value,
             },
         }
 
@@ -286,12 +345,16 @@ class PartialDependencies(StaticPlugin):
         RuntimeError
             If the objective is None.
         """
-        # Surrogate
         hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
         hp2 = inputs["hyperparameter_name_2"]
+        parsimony = 10 ** inputs["parsimony"]
+        generations = inputs["generations"]
+        population_size = inputs["population_size"]
+        random_seed = inputs["random_seed"]
+        metric = inputs["metric"]
 
         if objective is None:
             raise RuntimeError("Objective not found.")
@@ -313,8 +376,12 @@ class PartialDependencies(StaticPlugin):
 
         # Prepare the hyperparameters
         selected_hyperparameters = [hp1]
+        idx1 = run.configspace.get_idx_by_hyperparameter_name(hp1)
+        idxs = [idx1]
         if hp2 is not None and hp2 != "":
             selected_hyperparameters += [hp2]
+            idx2 = run.configspace.get_idx_by_hyperparameter_name(hp2)
+            idxs += [idx2]
 
         num_samples = SAMPLES_PER_HP * len(X)
         # The samples are limited to max 10k
@@ -326,31 +393,88 @@ class PartialDependencies(StaticPlugin):
             surrogate_model,
             selected_hyperparameter=selected_hyperparameters,
             seed=0,
-            num_grid_points_per_axis=GRID_POINTS_PER_AXIS,
+            num_grid_points_per_axis=SR_TRAIN_POINTS_PER_AXIS,
             num_samples=num_samples,
         )
 
-        x = pdp.x_pdp.tolist()
-        y = pdp.y_pdp.tolist()
+        x_pdp = pdp.x_pdp
+        y_pdp = pdp.y_pdp.tolist()
+        pdp_variances = pdp.y_variances.tolist()
 
-        # The ICE curves have to be cut because it's too much data
         x_ice = pdp._ice.x_ice.tolist()
         y_ice = pdp._ice.y_ice.tolist()
 
+        # The ICE curves have to be cut because it's too much data
         if len(x_ice) > MAX_SHOWN_SAMPLES:
             x_ice = x_ice[:MAX_SHOWN_SAMPLES]
             y_ice = y_ice[:MAX_SHOWN_SAMPLES]
 
+        if len(selected_hyperparameters) < len(hp_names):
+            # If number of hyperparameters to explain is smaller than number of hyperparameters
+            # optimizes, use PDP to train the symbolic explanation
+            x_symbolic = x_pdp
+            y_train = y_pdp
+        else:
+            # Else, use random samples evaluated with the surrogate model to train the symbolic
+            # explanation
+            cs = surrogate_model.config_space
+            random_samples = np.asarray(
+                [
+                    config.get_array()
+                    for config in cs.sample_configuration(
+                        SR_TRAIN_POINTS_PER_AXIS ** len(selected_hyperparameters)
+                    )
+                ]
+            )
+            x_symbolic = random_samples
+            y_train = surrogate_model.predict(random_samples)[0]
+
+        symb_params = dict(
+            population_size=population_size,
+            generations=generations,
+            function_set=get_function_set(),
+            metric=metric,
+            parsimony_coefficient=parsimony,
+            random_state=random_seed,
+            verbose=1,
+        )
+
+        # run SR on samples
+        symb_model = SymbolicRegressor(**symb_params)
+        symb_model.fit(x_symbolic[:, idxs], y_train)
+
+        try:
+            conv_expr = (
+                f"{objective.name} = "
+                f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
+            )
+        except Exception as e:
+            conv_expr = (
+                "Conversion of the expression failed. Please try another seed or increase "
+                f"the parsimony hyperparameter: {e}"
+            )
+
+        if len(conv_expr) > 150:
+            conv_expr = (
+                "Expression is too long to display. Please try another seed or increase "
+                "the parsimony hyperparameter."
+            )
+
+        y_symbolic = symb_model.predict(x_symbolic[:, idxs]).tolist()
+
         return {
-            "x": x,
-            "y": y,
-            "variances": pdp.y_variances.tolist(),
+            "x": x_pdp.tolist(),
+            "x_symbolic": x_symbolic.tolist(),
+            "y": y_pdp,
+            "y_symbolic": y_symbolic,
+            "expr": conv_expr,
+            "variances": pdp_variances,
             "x_ice": x_ice,
             "y_ice": y_ice,
         }
 
     @staticmethod
-    def get_output_layout(register: Callable) -> dcc.Graph:
+    def get_output_layout(register: Callable) -> List[dcc.Graph]:
         """
         Get the layout for the output block.
 
@@ -362,158 +486,16 @@ class PartialDependencies(StaticPlugin):
 
         Returns
         -------
-        dcc.Graph
+        List[dcc.Graph]
             Layout for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return [
+            dcc.Graph(register("symb_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
+            dcc.Graph(register("pdp_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
+        ]
 
     @staticmethod
-    def get_pdp_figure(  # type: ignore
-        run, inputs, outputs, show_confidence, show_ice, title=None
-    ) -> go.Figure:
-        """
-        Create a figure of the Partial Dependency Plot (PDP).
-
-        Parameters
-        ----------
-        run
-            The selected run.
-        inputs
-            Input and filter values from the user.
-        outputs
-            Raw output from the run.
-        show_confidence
-            Whether to show confidence in the plot.
-        show_ice
-            Whether to show ice curves in the plot.
-        title
-            Title of the plot.
-
-        Returns
-        -------
-        go.Figure
-            The figure of the Partial Dependency Plot (PDP).
-        """
-        # Parse inputs
-        hp1_name = inputs["hyperparameter_name_1"]
-        hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        hp1 = run.configspace.get_hyperparameter(hp1_name)
-
-        hp2_name = inputs["hyperparameter_name_2"]
-        hp2_idx = None
-        hp2 = None
-        if hp2_name is not None and hp2_name != "":
-            hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-            hp2 = run.configspace.get_hyperparameter(hp2_name)
-
-        objective = run.get_objective(inputs["objective_id"])
-        objective_name = objective.name
-
-        # Parse outputs
-        x = np.asarray(outputs["x"])
-        y = np.asarray(outputs["y"])
-        sigmas = np.sqrt(np.asarray(outputs["variances"]))
-
-        x_ice = np.asarray(outputs["x_ice"])
-        y_ice = np.asarray(outputs["y_ice"])
-
-        traces = []
-        if hp2_idx is None:  # 1D
-            # Add ICE curves
-            if show_ice:
-                for x_, y_ in zip(x_ice, y_ice):
-                    traces += [
-                        go.Scatter(
-                            x=x_[:, hp1_idx],
-                            y=y_,
-                            line=dict(color=get_color(1, 0.1)),
-                            hoverinfo="skip",
-                            showlegend=False,
-                        )
-                    ]
-
-            if show_confidence:
-                traces += [
-                    go.Scatter(
-                        x=x[:, hp1_idx],
-                        y=y + sigmas,
-                        line=dict(color=get_color(0, 0.1)),
-                        hoverinfo="skip",
-                        showlegend=False,
-                    )
-                ]
-
-                traces += [
-                    go.Scatter(
-                        x=x[:, hp1_idx],
-                        y=y - sigmas,
-                        fill="tonexty",
-                        fillcolor=get_color(0, 0.2),
-                        line=dict(color=get_color(0, 0.1)),
-                        hoverinfo="skip",
-                        showlegend=False,
-                    )
-                ]
-
-            traces += [
-                go.Scatter(
-                    x=x[:, hp1_idx],
-                    y=y,
-                    line=dict(color=get_color(0, 1)),
-                    hoverinfo="skip",
-                    showlegend=False,
-                )
-            ]
-
-            tickvals, ticktext = get_hyperparameter_ticks(hp1)
-            layout = go.Layout(
-                {
-                    "xaxis": {
-                        "tickvals": tickvals,
-                        "ticktext": ticktext,
-                        "title": hp1_name,
-                    },
-                    "yaxis": {
-                        "title": objective_name,
-                    },
-                    "title": title,
-                }
-            )
-        else:
-            z = y
-            if show_confidence:
-                z = sigmas
-            traces += [
-                go.Contour(
-                    z=z,
-                    x=x[:, hp1_idx],
-                    y=x[:, hp2_idx],
-                    colorbar=dict(
-                        title=objective_name if not show_confidence else "Confidence (1-Sigma)",
-                    ),
-                    hoverinfo="skip",
-                )
-            ]
-
-            x_tickvals, x_ticktext = get_hyperparameter_ticks(hp1)
-            y_tickvals, y_ticktext = get_hyperparameter_ticks(hp2)
-
-            layout = go.Layout(
-                dict(
-                    xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
-                    yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
-                    title=title,
-                )
-            )
-
-        figure = go.Figure(data=traces, layout=layout)
-        save_image(figure, "pdp.pdf")
-
-        return figure
-
-    @staticmethod
-    def load_outputs(run, inputs, outputs):  # type: ignore
+    def load_outputs(run, inputs, outputs) -> List[go.Figure]:  # type: ignore
         """
         Read the raw data and prepare it for the layout.
 
@@ -534,12 +516,96 @@ class PartialDependencies(StaticPlugin):
 
         Returns
         -------
-        go.Figure
-            The figure of the Partial Dependency Plot (PDP).
+        List[go.Figure]
+            The figure of the Symbolic Explanation and the Partial Dependency Plot (PDP) leveraged
+            for training in the case that the number of hyperparameters to be explained is smaller
+            than the number of hyperparameters that was optimized, else, a Partial Dependency Plot
+            (PDP) for comparison.
         """
-        show_confidence = inputs["show_confidence"]
-        show_ice = inputs["show_ice"]
+        hp1_name = inputs["hyperparameter_name_1"]
+        hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
+        hp1 = run.configspace.get_hyperparameter(hp1_name)
+        selected_hyperparameters = [hp1]
 
-        figure = PartialDependencies.get_pdp_figure(run, inputs, outputs, show_confidence, show_ice)
+        hp2_name = inputs["hyperparameter_name_2"]
+        hp2_idx = None
+        hp2 = None
+        if hp2_name is not None and hp2_name != "":
+            hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
+            hp2 = run.configspace.get_hyperparameter(hp2_name)
+            selected_hyperparameters += [hp2]
 
-        return figure
+        hp_names = run.configspace.get_hyperparameter_names()
+        objective = run.get_objective(inputs["objective_id"])
+        objective_name = objective.name
+
+        # Parse outputs
+        x_symbolic = np.asarray(outputs["x_symbolic"])
+        y_symbolic = np.asarray(outputs["y_symbolic"])
+        expr = outputs["expr"]
+
+        traces1 = []
+        if hp2 is None:  # 1D
+            traces1 += [
+                go.Scatter(
+                    x=x_symbolic[:, hp1_idx],
+                    y=y_symbolic,
+                    line=dict(color=get_color(0, 1)),
+                    hoverinfo="skip",
+                    showlegend=False,
+                )
+            ]
+
+            tickvals, ticktext = get_hyperparameter_ticks(hp1)
+            layout1 = go.Layout(
+                {
+                    "xaxis": {
+                        "tickvals": tickvals,
+                        "ticktext": ticktext,
+                        "title": hp1_name,
+                    },
+                    "yaxis": {
+                        "title": objective_name,
+                    },
+                    "title": expr,
+                }
+            )
+        else:
+            z = y_symbolic
+            traces1 += [
+                go.Contour(
+                    z=z,
+                    x=x_symbolic[:, hp1_idx],
+                    y=x_symbolic[:, hp2_idx],
+                    colorbar=dict(
+                        title=objective_name,
+                    ),
+                    hoverinfo="skip",
+                )
+            ]
+
+            x_tickvals, x_ticktext = get_hyperparameter_ticks(hp1)
+            y_tickvals, y_ticktext = get_hyperparameter_ticks(hp2)
+
+            layout1 = go.Layout(
+                dict(
+                    xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
+                    yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
+                    margin=Config.FIGURE_MARGIN,
+                    title=expr,
+                )
+            )
+
+        figure1 = go.Figure(data=traces1, layout=layout1)
+        save_image(figure1, "symbolic_explanation.pdf")
+
+        if len(selected_hyperparameters) < len(hp_names):
+            pdp_title = "Partial Dependency leveraged for training of Symbolic Explanation:"
+        else:
+            pdp_title = "Partial Dependency for comparison:"
+
+        figure2 = PartialDependencies.get_pdp_figure(
+            run, inputs, outputs, show_confidence=False, show_ice=False, title=pdp_title
+        )
+
+        return [figure1, figure2]

@@ -60,4 +60,7 @@ def execute(_: Any) -> None:
 
 def main() -> None:
     """Call the execute function."""
-    app.run(execute)
+    try:
+        app.run(execute)
+    except KeyboardInterrupt:
+        exit("KeyboardInterrupt.")

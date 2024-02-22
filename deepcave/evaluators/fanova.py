@@ -59,7 +59,7 @@ class fANOVA:
         seed: int = 0,
     ) -> None:
         """
-        Get the data wrt budget and train the forest on the encoded data.
+        Get the data with respect to budget and train the forest on the encoded data.
 
         Note
         ----

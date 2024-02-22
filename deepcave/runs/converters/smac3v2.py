@@ -103,10 +103,17 @@ class SMAC3v2Run(Run):
             configspace = cs_json.read(f.read())
 
         # Read objectives
-        # It has to be defined here, because the type of the objective is not knwon
-        # Only lock lower
-        objective1 = Objective("Cost", lower=0)
-        objective2 = Objective("Time", lower=0)
+        with (path / "scenario.json").open() as json_file:
+            all_data = json.load(json_file)
+            objectives = all_data["objectives"]
+
+        obj_list = list()
+        if not isinstance(objectives, list):
+            objectives = [objectives]
+        for obj in objectives:
+            obj_list.append(Objective(obj))
+        # Only lock lower for time
+        obj_list.append(Objective("Time"))
 
         # Read meta
         with (path / "scenario.json").open() as json_file:
@@ -114,9 +121,7 @@ class SMAC3v2Run(Run):
             meta["run_objectives"] = meta.pop("objectives")
 
         # Let's create a new run object
-        run = SMAC3v2Run(
-            name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
-        )
+        run = SMAC3v2Run(name=path.stem, configspace=configspace, objectives=obj_list, meta=meta)
 
         # The path has to be set manually
         run._path = path
@@ -179,7 +184,7 @@ class SMAC3v2Run(Run):
 
             if status != Status.SUCCESS:
                 # Costs which failed, should not be included
-                cost = None
+                cost = [None] * len(cost) if isinstance(cost, list) else None
                 time = None
             else:
                 time = endtime - starttime
@@ -195,7 +200,7 @@ class SMAC3v2Run(Run):
                 origin = config_origins[config_id]
 
             run.add(
-                costs=[cost, time],
+                costs=cost + [time] if isinstance(cost, list) else [cost, time],
                 config=config,
                 budget=budget,
                 start_time=starttime,

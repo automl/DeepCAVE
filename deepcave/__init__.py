@@ -18,7 +18,7 @@ from pathlib import Path
 name = "DeepCAVE"
 package_name = "deepcave"
 author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
-author_email = "sass@tnt.uni-hannover.de"
+author_email = "s.segel@ai.uni-hannover.de"
 description = "An interactive framework to visualize and analyze your AutoML process in real-time."
 url = "automl.org"
 project_urls = {
@@ -26,7 +26,7 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, {author}"
-version = "1.1.3"
+version = "1.2"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]

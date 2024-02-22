@@ -16,10 +16,11 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
+from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -220,7 +221,6 @@ class Importances(StaticPlugin):
         # Pre-set values
         if objective_value is None:
             objective_value = objective_ids[0]
-            n_hps = len(hp_names)
 
         if n_hps == 0:
             n_hps = len(hp_names)
@@ -292,6 +292,29 @@ class Importances(StaticPlugin):
         if n_trees is None:
             raise RuntimeError("Please specify the number of trees.")
 
+        # Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr
+        # and pyrfr cannot be applied to constant hyperparameters
+        # (see https://github.com/automl/fanova/issues/81), as a workaround constant
+        # hyperparameters are removed before calculation.
+        # Note: This will break if there are conditions or forbiddens including
+        # constant hyperparameters.
+        hp_dict = run.configspace.get_hyperparameters_dict()
+        if method == "global" and any([type(v) == Constant for v in hp_dict.values()]):
+            hp_dict_wo_const = {k: v for k, v in hp_dict.items() if type(v) != Constant}
+            configspace_wo_const = ConfigurationSpace()
+            for k in hp_dict_wo_const.keys():
+                configspace_wo_const.add_hyperparameter(hp_dict_wo_const[k])
+            configspace_wo_const.add_conditions(run.configspace.get_conditions())
+            configspace_wo_const.add_forbidden_clauses(run.configspace.get_forbiddens())
+            run.configspace = configspace_wo_const
+
+            configs_wo_const = []
+            for n in range(len(run.configs)):
+                configs_wo_const.append(
+                    {k: v for k, v in run.configs[n].items() if k in hp_dict_wo_const.keys()}
+                )
+            run.configs = dict(enumerate(configs_wo_const))
+
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets(include_combined=True)
 
@@ -331,7 +354,7 @@ class Importances(StaticPlugin):
         dcc.Graph
             Layout for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
@@ -426,7 +449,7 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=config.FIGURE_MARGIN,
+            margin=Config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
         )
         save_image(figure, "importances.pdf")
