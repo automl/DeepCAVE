@@ -31,8 +31,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
-        os: ["ubuntu-latest", "macos-latest", "windows-latest"]  # Try all, TODO Remove failing ones
+        python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+        os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
 
     steps:
       - uses: actions/checkout@v4
