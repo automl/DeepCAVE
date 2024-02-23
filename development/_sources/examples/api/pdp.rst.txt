@@ -57,7 +57,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
         figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
         figure.write_image("examples/api/pdp.png")
-        #figure.show()
+        # figure.show()
 
 
 .. _sphx_glr_download_examples_api_pdp.py:

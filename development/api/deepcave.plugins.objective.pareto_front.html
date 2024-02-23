@@ -817,11 +817,20 @@
                 
   <section id="module-deepcave.plugins.objective.pareto_front">
 <span id="deepcave-plugins-objective-pareto-front"></span><h1>deepcave.plugins.objective.pareto_front<a class="headerlink" href="#module-deepcave.plugins.objective.pareto_front" title="Link to this heading">¶</a></h1>
+<p># ParetoFront</p>
+<p>This module provides utilities for creating a visualization of the Pareto Front.</p>
+<p>It includes the corresponding Pareto Front plugin.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>ParetoFront: Generate an interactive Pareto Front visualization.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.objective.pareto_front.ParetoFront" title="deepcave.plugins.objective.pareto_front.ParetoFront"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParetoFront</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Generate an interactive Pareto Front visualization.</p></td>
 </tr>
 </tbody>
 </table>
@@ -829,18 +838,35 @@
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.objective.pareto_front.</span></span><span class="sig-name descname"><span class="pre">ParetoFront</span></span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin" title="deepcave.plugins.dynamic.DynamicPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicPlugin</span></code></a></p>
+<p>Generate an interactive Pareto Front visualization.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>objective_options<span class="classifier">List[Dict[str, Any]]</span></dt><dd><p>A list of the objective options.</p>
+</dd>
+<dt>budget_options<span class="classifier">List[Dict[str, Any]]</span></dt><dd><p>A list of the budget options.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.check_runs_compatibility">
 <span class="sig-name descname"><span class="pre">check_runs_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.check_runs_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.check_runs_compatibility" title="Link to this definition">¶</a></dt>
-<dd><p>This function is needed if all selected runs need something in common
-(e.g. budget or objective). Since this function is called before the layout is created,
+<dd><p>Check if the runs are compatible.</p>
+<p>This function is needed if all selected runs need something in common
+(e.g. budget or objective).
+Since this function is called before the layout is created,
 it can be also used to set common values for the plugin.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>runs</strong> (<em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – Selected runs.</p>
+<dd class="field-odd"><p><strong>runs</strong> (<em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – A list containing the selected runs.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs are not compatible, an error is thrown.</p>
+<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If the meta data of the runs are not equal.
+    If the configuration spaces of the runs are not equal.
+    If the budgets of the runs are not equal.
+    If the objective of the runs are not equal.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -848,16 +874,17 @@ it can be also used to set common values for the plugin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.get_filter_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.get_filter_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the filter block.</p>
+<dd><p>Get the layout for the filter block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register (user) variables.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the filter block.</p>
+<dd class="field-even"><p>The layouts for the filter block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -865,16 +892,17 @@ it can be also used to set common values for the plugin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.get_input_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.get_input_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the input block.</p>
+<dd><p>Get layout for the input block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register (user) variables.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the input block.</p>
+<dd class="field-even"><p>The layouts for the input block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -882,16 +910,17 @@ it can be also used to set common values for the plugin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.get_mpl_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_mpl_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.get_mpl_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.get_mpl_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the matplotlib output block.</p>
+<dd><p>Get the layout for the matplotlib output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
+The register_output function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layout for the matplotlib output block.</p>
+<dd class="field-even"><p>The layout for the matplotlib output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>html.Img</p>
 </dd>
 </dl>
 </dd></dl>
@@ -899,16 +928,17 @@ it can be also used to set common values for the plugin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.get_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.get_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the output block.</p>
+<dd><p>Get the layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
+The register_output function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the output block.</p>
+<dd class="field-even"><p>The layout for the output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>dcc.Graph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -916,16 +946,16 @@ it can be also used to set common values for the plugin.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.load_inputs">
 <span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.load_inputs" title="Link to this definition">¶</a></dt>
-<dd><p>Load the content for the defined inputs in <cite>get_input_layout</cite> and <cite>get_filter_layout</cite>.
-This method is necessary to pre-load contents for the inputs. So, if the plugin is
-called for the first time or there are no results in the cache, the plugin gets its
-content from this method.</p>
+<dd><p>Load the content for the defined inputs in ‘get_input_layout’ and ‘get_filter_layout’.</p>
+<p>This method is necessary to pre-load contents for the inputs.
+So, if the plugin is called for the first time or there are no results in the cache,
+the plugin gets its content from this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Content to be filled.</p>
+<dd class="field-odd"><p>The content to be filled.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, Any]</p>
+<dd class="field-even"><p>Dict[str, Dict[str, Any]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -933,27 +963,23 @@ content from this method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.load_mpl_outputs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.load_mpl_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dd><p>Read in the raw data and prepare them for the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differs compared to ‘load_inputs’
+or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
+<li><p><strong>runs</strong> – The selected runs.</p></li>
+<li><p><strong>inputs</strong> – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> – Raw outputs from the runs.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered matplotlib figure.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -961,27 +987,26 @@ a Dict[str, str] is returned.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.load_outputs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.load_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dd><p>Read in the raw data and prepare them for the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differs compared to ‘load_inputs’
+or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
+<li><p><strong>runs</strong> – The selected runs.</p></li>
+<li><p><strong>inputs</strong> – The input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> – Raw outputs from the runs.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+<dd class="field-even"><p>The output figure.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>go.Figure</p>
 </dd>
 </dl>
 </dd></dl>
@@ -989,25 +1014,26 @@ a Dict[str, str] is returned.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.objective.pareto_front.ParetoFront.process">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/pareto_front.html#ParetoFront.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.pareto_front.ParetoFront.process" title="Link to this definition">¶</a></dt>
-<dd><p>Returns raw data based on a run and input data.</p>
+<dd><p>Return raw data based on a run and input data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The returned data must be JSON serializable.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differs compared to ‘load_inputs’
+or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The input data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Serialized dictionary.</p>
+<dd class="field-even"><p>The serialized dictionary.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[str, Any]</p>
@@ -1015,6 +1041,7 @@ a Dict[str, str] is returned.</p></li>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>

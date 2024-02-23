@@ -720,6 +720,78 @@
      </code>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.boxplot">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.boxplot()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.figure">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.figure()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.get_color">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.get_color()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.legend">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.legend()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.render">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.render()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.save_figure">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.save_figure()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.xlim">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.xlim()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.utils.styled_plot.StyledPlot.ylim">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       StyledPlot.ylim()
+      </span>
+     </code>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -745,6 +817,18 @@
                 
   <section id="module-deepcave.utils.styled_plot">
 <span id="deepcave-utils-styled-plot"></span><h1>deepcave.utils.styled_plot<a class="headerlink" href="#module-deepcave.utils.styled_plot" title="Link to this heading">¶</a></h1>
+<p># StyledPlot</p>
+<p>This module provides utilities to customize functions from the matplotlib.
+Plots can be created and different parameters of the plots can be defined.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>StyledPlot: Overwrites default settings from matplotlib.pyplot.</p></li>
+</ul>
+</dd>
+<dt>## Constants</dt><dd><p>FIG_WIDTH: float
+FIG_HEIGHT: float</p>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -757,14 +841,176 @@
 <dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plot.</span></span><span class="sig-name descname"><span class="pre">StyledPlot</span></span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Overwrites default settings from matplotlib.pyplot.
-If a function is not overwritten, the default function will be used.</p>
+<p>Overwrites default settings from matplotlib.pyplot.</p>
+<p>If a function is not overwritten, the default function will be used.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>plt<span class="classifier">Module(“matplotlib.pyplot”)</span></dt><dd><p>The matplotlib plot.
+The style used is seaborn.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.__getattr__">
 <span class="sig-name descname"><span class="pre">__getattr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.__getattr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.__getattr__" title="Link to this definition">¶</a></dt>
-<dd><p>Make sure we access self.plt directly.</p>
+<dd><p>Make sure self.plt is accessed directly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.boxplot">
+<span class="sig-name descname"><span class="pre">boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.boxplot" title="Link to this definition">¶</a></dt>
+<dd><p>Create a boxplot on a matplotlib plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>np.ndarray</em>) – Values to create the boxplot.</p></li>
+<li><p><strong>positions</strong> (<em>ArrayLike</em>) – The position of the boxplot.</p></li>
+<li><p><strong>color</strong> (<em>str</em>) – The color of the boxes as well as other elements in the plot.</p></li>
+<li><p><strong>widths</strong> (<em>float</em><em>, </em><em>optional</em>) – The width of the boxes.
+Default is 0.5.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.figure">
+<span class="sig-name descname"><span class="pre">figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.figure" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new figure using the input values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cols</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of the columns.
+Default is 1.</p></li>
+<li><p><strong>rows</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of the rows.
+Default is 1.</p></li>
+<li><p><strong>dpi</strong> (<em>int</em><em>, </em><em>optional</em>) – The dots per inches (dpi).
+Default is 200.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The figure created with the input information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>plt.Figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.get_color">
+<span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.get_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.get_color" title="Link to this definition">¶</a></dt>
+<dd><p>Get the color from color palette based on the given id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – id for retrieving a specific color.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The color from the color palette.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.legend">
+<span class="sig-name descname"><span class="pre">legend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.legend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.legend" title="Link to this definition">¶</a></dt>
+<dd><p>Customize and add a legend to a matplot plot.</p>
+<p>Customize the placement and appearance of the legend.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cols</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of the columns.
+Default is 1</p></li>
+<li><p><strong>loc</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The location of the legend.
+Default is None.</p></li>
+<li><p><strong>title</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – The title for the legend.
+Default is None.</p></li>
+<li><p><strong>outside</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines if a legend is placed outside of plot area.
+Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.render" title="Link to this definition">¶</a></dt>
+<dd><p>Render the Styled Plot for displaying.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rendered plot.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.save_figure">
+<span class="sig-name descname"><span class="pre">save_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.save_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.save_figure" title="Link to this definition">¶</a></dt>
+<dd><p>Save the figure/plot at the given filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Path</em><em>]</em>) – The name of the file the plot will be saved at.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.xlim">
+<span class="sig-name descname"><span class="pre">xlim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.xlim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.xlim" title="Link to this definition">¶</a></dt>
+<dd><p>Set the x-axis limits with a margin of a matplotlib plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xmin</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – The lower x-axis limit.</p></li>
+<li><p><strong>xmax</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – The upper x-axis limit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plot.StyledPlot.ylim">
+<span class="sig-name descname"><span class="pre">ylim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plot.html#StyledPlot.ylim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plot.StyledPlot.ylim" title="Link to this definition">¶</a></dt>
+<dd><p>Set the y-axis limit of a matplotlib plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ymin</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – The lower y-axis limit.</p></li>
+<li><p><strong>ymax</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em>) – The upper y-axis limit.</p></li>
+<li><p><strong>margin</strong> (<em>bool</em><em>, </em><em>optional</em>) – Determines whether a margin should be added to the limits.
+Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

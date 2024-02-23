@@ -696,9 +696,23 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.files.make_dirs">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     make_dirs()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -720,14 +734,34 @@
                 
   <section id="module-deepcave.utils.files">
 <span id="deepcave-utils-files"></span><h1>deepcave.utils.files<a class="headerlink" href="#module-deepcave.utils.files" title="Link to this heading">¶</a></h1>
+<p># Files</p>
+<p>This module provides a utility to create directories from a filename.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dirs</span></code>(filename[, parents])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.files.make_dirs" title="deepcave.utils.files.make_dirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dirs</span></code></a>(filename[, parents])</p></td>
+<td><p>Create a directory.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.files.make_dirs">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.files.</span></span><span class="sig-name descname"><span class="pre">make_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/files.html#make_dirs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.files.make_dirs" title="Link to this definition">¶</a></dt>
+<dd><p>Create a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>Path</em><em>]</em>) – The name and path of the file.</p></li>
+<li><p><strong>parents</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether intermediate directories should be created.
+Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

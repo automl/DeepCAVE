@@ -743,11 +743,22 @@
                 
   <section id="module-deepcave.runs.exceptions">
 <span id="deepcave-runs-exceptions"></span><h1>deepcave.runs.exceptions<a class="headerlink" href="#module-deepcave.runs.exceptions" title="Link to this heading">¶</a></h1>
+<p># Exceptions</p>
+<p>This module provides utilities for different errors concerning the runs.</p>
+<p>Exceptions will be raised, if a directory is not a valid run,
+as well as if runs are not mergeable.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>NotValidRunError: Raised if directory is not a valid run.</p></li>
+<li><p>NotMergeableError: Raised if two or more runs are not mergeable.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Exceptions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotMergeableError</span></code></a></p></td>
-<td><p>Raised if two or more runs are not mergeable</p></td>
+<td><p>Raised if two or more runs are not mergeable.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.runs.exceptions.NotValidRunError" title="deepcave.runs.exceptions.NotValidRunError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotValidRunError</span></code></a></p></td>
 <td><p>Raised if directory is not a valid run.</p></td>
@@ -758,7 +769,7 @@
 <dt class="sig sig-object py" id="deepcave.runs.exceptions.NotMergeableError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotMergeableError</span></span><a class="reference internal" href="../_modules/deepcave/runs/exceptions.html#NotMergeableError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.exceptions.NotMergeableError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Raised if two or more runs are not mergeable</p>
+<p>Raised if two or more runs are not mergeable.</p>
 </dd></dl>
 
 <dl class="py exception">

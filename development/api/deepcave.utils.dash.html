@@ -703,6 +703,15 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.dash.alert">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     alert()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.dash.flash">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -734,11 +743,13 @@
                 
   <section id="module-deepcave.utils.dash">
 <span id="deepcave-utils-dash"></span><h1>deepcave.utils.dash<a class="headerlink" href="#module-deepcave.utils.dash" title="Link to this heading">¶</a></h1>
+<p># Dash</p>
+<p>This module provides utilities to return and flash alerts.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">alert</span></code>(message)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.dash.alert" title="deepcave.utils.dash.alert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alert</span></code></a>(message)</p></td>
+<td><p>Return an alert message.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.dash.flash" title="deepcave.utils.dash.flash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flash</span></code></a>(message[, category])</p></td>
 <td><p>Flask style flash-message with Alerts.</p></td>
@@ -746,9 +757,41 @@
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.dash.alert">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.dash.</span></span><span class="sig-name descname"><span class="pre">alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/dash.html#alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.dash.alert" title="Link to this definition">¶</a></dt>
+<dd><p>Return an alert message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – The message of the alert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The alert object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dbc.Alert</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.dash.flash">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.dash.</span></span><span class="sig-name descname"><span class="pre">flash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/dash.html#flash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.dash.flash" title="Link to this definition">¶</a></dt>
 <dd><p>Flask style flash-message with Alerts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – The message to be displayed.</p></li>
+<li><p><strong>category</strong> (<em>str</em><em>, </em><em>optional</em>) – The category of the alert.
+Default is “info”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The alert object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dbc.Alert</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

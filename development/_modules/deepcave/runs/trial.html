@@ -702,7 +702,18 @@
               <div>
                 
   <h1>Source code for deepcave.runs.trial</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Trial</span>
+
+<span class="sd">This module provides the trial object.</span>
+<span class="sd">Utilities for handling the trial are provided.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Trial: This class provides the trial object itself and multiple handling utilities.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
@@ -713,6 +724,27 @@
 <a class="viewcode-back" href="../../../api/deepcave.runs.trial.html#deepcave.runs.trial.Trial">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Trial</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide the trial object itself and multiple handling utilities.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    status : Status</span>
+<span class="sd">        The status of the trial.</span>
+<span class="sd">    config_id : int</span>
+<span class="sd">        The identificator of the configuration.</span>
+<span class="sd">    budget : Union[int, float]</span>
+<span class="sd">        The budget for the trial.</span>
+<span class="sd">    costs : List[float]</span>
+<span class="sd">        A list of the costs of the trial.</span>
+<span class="sd">    start_time : float</span>
+<span class="sd">        The start time of the trial.</span>
+<span class="sd">    end_time : float</span>
+<span class="sd">        The end time of the trial.</span>
+<span class="sd">    additional : Dict[str, Any]</span>
+<span class="sd">        A dictionary of additional information of the trial.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
     <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
@@ -721,18 +753,43 @@
     <span class="n">status</span><span class="p">:</span> <span class="n">Status</span>
     <span class="n">additional</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
+<div class="viewcode-block" id="Trial.__post_init__">
+<a class="viewcode-back" href="../../../api/deepcave.runs.trial.html#deepcave.runs.trial.Trial.__post_init__">[docs]</a>
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the status.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">Status</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">Status</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Trial.get_key">
+<a class="viewcode-back" href="../../../api/deepcave.runs.trial.html#deepcave.runs.trial.Trial.get_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a key based on the configuration id and the budget.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tupel[int, int]</span>
+<span class="sd">            A Tuple representing a unique key based on the configuration id and the budget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 
-        <span class="k">return</span> <span class="n">AbstractRun</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">budget</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">AbstractRun</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">budget</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Trial.to_json">
+<a class="viewcode-back" href="../../../api/deepcave.runs.trial.html#deepcave.runs.trial.Trial.to_json">[docs]</a>
     <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert trial object to JSON-compatible representation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            A JSON-compatible list with the Trials attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">budget</span><span class="p">,</span>
@@ -742,6 +799,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">additional</span><span class="p">,</span>
         <span class="p">]</span></div>
+</div>
 
 </pre></div>
 

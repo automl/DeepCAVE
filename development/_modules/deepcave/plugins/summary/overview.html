@@ -702,7 +702,23 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.summary.overview</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="c1"># noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Overview</span>
+
+<span class="sd">This module provides utilities for visualizing an overview of the selected runs.</span>
+
+<span class="sd">It holds the most important information, e.g. meta data, objectives and statistics.</span>
+
+<span class="sd">The module includes a dynamic plugin for the overview.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Overview: Visualize an overall overview of the selected run.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
@@ -729,6 +745,8 @@
 <div class="viewcode-block" id="Overview">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview">[docs]</a>
 <span class="k">class</span> <span class="nc">Overview</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize an overall overview of the selected run.&quot;&quot;&quot;</span>
+
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;overview&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Overview&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-search&quot;</span>
@@ -739,7 +757,21 @@
 <div class="viewcode-block" id="Overview.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register the outputs.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            The layouts for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;card&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">),</span>
@@ -782,7 +814,26 @@
 <div class="viewcode-block" id="Overview.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the raw data and prepare them for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            A list of the created tables of the overview.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get best cost across all objectives, highest budget</span>
         <span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">()</span>
         <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">incumbent</span><span class="p">)</span>
@@ -853,7 +904,7 @@
         <span class="p">)</span>
 
         <span class="c1"># Meta</span>
-        <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Attribute&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Attribute&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;objectives&quot;</span><span class="p">:</span>
                 <span class="k">continue</span>
@@ -865,7 +916,7 @@
             <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
         <span class="c1"># Objectives</span>
-        <span class="n">objectives</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Bounds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="n">objectives</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Name&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Bounds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="k">for</span> <span class="n">objective</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">():</span>
             <span class="n">objectives</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
             <span class="n">objectives</span><span class="p">[</span><span class="s2">&quot;Bounds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">lower</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">upper</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
@@ -874,8 +925,13 @@
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># Statistics</span>
-        <span class="n">status_statistics</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">status_details</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Configuration ID&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Budget&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;Error&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="n">status_statistics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">status_details</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Configuration ID&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Budget&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Error&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
         <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_statistics</span><span class="p">:</span>
@@ -952,8 +1008,8 @@
             <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">count</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">]</span>
         <span class="n">status_budget_values_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status_budget_values</span><span class="p">)</span>
-        <span class="n">status_budget_keys_text</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-        <span class="n">status_budget_keys_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status_budget_keys_text</span><span class="p">)</span>
+        <span class="n">status_budget_keys_text_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">status_budget_keys_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status_budget_keys_text_list</span><span class="p">)</span>
 
         <span class="n">status_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        Taking all evaluated trials into account, </span><span class="si">{</span><span class="n">successful_trials_rate</span><span class="si">}</span><span class="s2">% have been successful.</span>
@@ -994,7 +1050,7 @@
         <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;Z_labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_labels</span>
 
         <span class="c1"># Prepare configspace table</span>
-        <span class="n">configspace</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">configspace</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;Hyperparameter&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;Possible Values&quot;</span><span class="p">:</span> <span class="p">[],</span>
             <span class="s2">&quot;Default&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1002,7 +1058,6 @@
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
             <span class="n">log</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">if</span> <span class="p">(</span>
@@ -1021,12 +1076,12 @@
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
             <span class="n">default</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span>
-            <span class="n">log</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+            <span class="n">log_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
 
             <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Hyperparameter&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
             <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Possible Values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">default</span><span class="p">)</span>
-            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Log&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+            <span class="n">configspace</span><span class="p">[</span><span class="s2">&quot;Log&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_str</span><span class="p">)</span>
 
         <span class="n">stats_data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">budget</span><span class="p">,</span> <span class="n">stats</span> <span class="ow">in</span> <span class="n">status_statistics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

@@ -702,14 +702,21 @@
               <div>
                 
   <h1>Source code for deepcave.utils.data_structures</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Data Structures</span>
+
+<span class="sd">This module can be used for updating one dictionary with another dictionary inplace.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
 
 <div class="viewcode-block" id="update_dict">
 <a class="viewcode-back" href="../../../api/deepcave.utils.data_structures.html#deepcave.utils.data_structures.update_dict">[docs]</a>
 <span class="k">def</span> <span class="nf">update_dict</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Updates dictionary a with dictionary b inplace.</span>
+<span class="sd">    Update dictionary a with dictionary b inplace.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

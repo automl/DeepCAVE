@@ -745,6 +745,15 @@
                 
   <section id="module-deepcave.evaluators.epm.random_forest_surrogate">
 <span id="deepcave-evaluators-epm-random-forest-surrogate"></span><h1>deepcave.evaluators.epm.random_forest_surrogate<a class="headerlink" href="#module-deepcave.evaluators.epm.random_forest_surrogate" title="Link to this heading">¶</a></h1>
+<p># RandomForest Surrogate</p>
+<p>This module provides a RandomForest Surrogate model.</p>
+<p>Mean and standard deviation values can be predicted for a given input with this module.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>RandomForestSurrogate: Random forest surrogate for the pyPDP package.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -758,19 +767,20 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.epm.random_forest_surrogate.</span></span><span class="sig-name descname"><span class="pre">RandomForestSurrogate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/random_forest_surrogate.html#RandomForestSurrogate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SurrogateModel</span></code></p>
 <p>Random forest surrogate for the pyPDP package.</p>
+<p>Predict deviations and fit the model.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/random_forest_surrogate.html#RandomForestSurrogate.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.predict" title="Link to this definition">¶</a></dt>
-<dd><p>Calculate mean and sigma of predictions</p>
+<dd><p>Predict the deviations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></span>) – input data shaped [NxK] for N samples and K parameters</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>np.ndarray</em>) – The data points on which to predict.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>]</span></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The means and standard deviation.</p>
 </dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>means, stds</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[np.ndarray, np.ndarray]</p>
 </dd>
 </dl>
 </dd></dl>

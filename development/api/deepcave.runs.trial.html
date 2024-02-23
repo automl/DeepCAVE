@@ -710,6 +710,35 @@
     </span>
    </code>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.trial.Trial.__post_init__">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Trial.__post_init__()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.trial.Trial.get_key">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Trial.get_key()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.trial.Trial.to_json">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Trial.to_json()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -734,11 +763,20 @@
                 
   <section id="module-deepcave.runs.trial">
 <span id="deepcave-runs-trial"></span><h1>deepcave.runs.trial<a class="headerlink" href="#module-deepcave.runs.trial" title="Link to this heading">¶</a></h1>
+<p># Trial</p>
+<p>This module provides the trial object.
+Utilities for handling the trial are provided.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Trial: This class provides the trial object itself and multiple handling utilities.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.trial.Trial" title="deepcave.runs.trial.Trial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trial</span></code></a>(config_id, budget, costs, start_time, ...)</p></td>
-<td><p></p></td>
+<td><p>Provide the trial object itself and multiple handling utilities.</p></td>
 </tr>
 </tbody>
 </table>
@@ -746,6 +784,65 @@
 <dt class="sig sig-object py" id="deepcave.runs.trial.Trial">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.trial.</span></span><span class="sig-name descname"><span class="pre">Trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provide the trial object itself and multiple handling utilities.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>status<span class="classifier">Status</span></dt><dd><p>The status of the trial.</p>
+</dd>
+<dt>config_id<span class="classifier">int</span></dt><dd><p>The identificator of the configuration.</p>
+</dd>
+<dt>budget<span class="classifier">Union[int, float]</span></dt><dd><p>The budget for the trial.</p>
+</dd>
+<dt>costs<span class="classifier">List[float]</span></dt><dd><p>A list of the costs of the trial.</p>
+</dd>
+<dt>start_time<span class="classifier">float</span></dt><dd><p>The start time of the trial.</p>
+</dd>
+<dt>end_time<span class="classifier">float</span></dt><dd><p>The end time of the trial.</p>
+</dd>
+<dt>additional<span class="classifier">Dict[str, Any]</span></dt><dd><p>A dictionary of additional information of the trial.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.trial.Trial.__post_init__">
+<span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial.__post_init__" title="Link to this definition">¶</a></dt>
+<dd><p>Set the status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.trial.Trial.get_key">
+<span class="sig-name descname"><span class="pre">get_key</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial.get_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial.get_key" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a key based on the configuration id and the budget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A Tuple representing a unique key based on the configuration id and the budget.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tupel[int, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.trial.Trial.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial.to_json" title="Link to this definition">¶</a></dt>
+<dd><p>Convert trial object to JSON-compatible representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A JSON-compatible list with the Trials attributes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

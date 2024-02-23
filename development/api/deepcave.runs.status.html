@@ -710,6 +710,17 @@
     </span>
    </code>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.status.Status.to_text">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Status.to_text()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -734,11 +745,27 @@
                 
   <section id="module-deepcave.runs.status">
 <span id="deepcave-runs-status"></span><h1>deepcave.runs.status<a class="headerlink" href="#module-deepcave.runs.status" title="Link to this heading">¶</a></h1>
+<p># Status</p>
+<p>This module provides the information about the status of a run.</p>
+<p>A utility to convert a string text to a simpler, lower case text format is provided.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Status: Represent the status of a run as an Enum.</p></li>
+</ul>
+</dd>
+<dt>## Constants</dt><dd><p>SUCCESS: int
+TIMEOUT: int
+MEMORYOUT: int
+CRASHED: int
+ABORTED: int
+NOT_EVALUATED: int</p>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Status</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
+<td><p>Represent the status of a run as an Enum.</p></td>
 </tr>
 </tbody>
 </table>
@@ -746,7 +773,29 @@
 <dt class="sig sig-object py" id="deepcave.runs.status.Status">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.status.</span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/status.html#Status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.status.Status" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
-<p>An enumeration.</p>
+<p>Represent the status of a run as an Enum.</p>
+<p>A utility to convert a string text to a simpler, lower case text format is provided.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>The status name.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.status.Status.to_text">
+<span class="sig-name descname"><span class="pre">to_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/status.html#Status.to_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.status.Status.to_text" title="Link to this definition">¶</a></dt>
+<dd><p>Convert name to simpler, lower case text format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The converted name in lower case with spaces added</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

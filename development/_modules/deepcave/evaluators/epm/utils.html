@@ -702,7 +702,15 @@
               <div>
                 
   <h1>Source code for deepcave.evaluators.epm.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">typing</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Utils</span>
+
+<span class="sd">This module provides a utility to get the types</span>
+<span class="sd">as well as the bounds of the Hyperparameters.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">typing</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
@@ -725,8 +733,30 @@
     <span class="n">config_space</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">,</span>
     <span class="n">instance_features</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the types of the hyperparameters and the bounds of the</span>
-<span class="sd">    hyperparameters and instance features.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the types of the Hyperparameters.</span>
+
+<span class="sd">    Also return the bounds of the Hyperparameters and instance features.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_space : ConfigurationSpace</span>
+<span class="sd">        The configuration space.</span>
+<span class="sd">    instance_features : Optional[np.ndarray], optional</span>
+<span class="sd">        The instance features.</span>
+<span class="sd">        Default is None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tuple[typing.List[int], List[Tuple[float, float]]]</span>
+<span class="sd">        The types of the Hyperparameters, as well as the bounds and instance features.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Inactive parameters not supported for Beta and Normal Hyperparameters.</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the Hyperparameter Type is unknown.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Extract types vector for rf from config space and the bounds</span>
     <span class="n">types</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">config_space</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">())</span>
@@ -753,7 +783,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_cats</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
-            <span class="c1"># for constants we simply set types to 0 which makes it a numerical</span>
+            <span class="c1"># for constants types are simply set to 0 which makes it a numerical</span>
             <span class="c1"># parameter</span>
             <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
                 <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
@@ -761,7 +791,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
                 <span class="n">types</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="c1"># and we leave the bounds to be 0 for now</span>
+            <span class="c1"># and the bounds are left to be 0 for now</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">UniformFloatHyperparameter</span><span class="p">):</span>
             <span class="c1"># Are sampled on the unit hypercube thus the bounds</span>
             <span class="c1"># are always 0.0, 1.0</span>

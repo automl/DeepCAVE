@@ -766,6 +766,15 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.handler.RunHandler.get_selected_groups">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RunHandler.get_selected_groups()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.runs.handler.RunHandler.get_selected_run_names">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -871,11 +880,21 @@
                 
   <section id="module-deepcave.runs.handler">
 <span id="deepcave-runs-handler"></span><h1>deepcave.runs.handler<a class="headerlink" href="#module-deepcave.runs.handler" title="Link to this heading">¶</a></h1>
+<p># Handler</p>
+<p>This module provides utilities to handle a run.</p>
+<p>It can retrieve working directories, run paths, run names, as well as groups of runs.
+It provides utilities to update and remove runs as well as groups of runs.</p>
+<dl class="simple">
+<dt># Classes</dt><dd><ul class="simple">
+<li><p>RunHandler: Handle the runs.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.handler.RunHandler" title="deepcave.runs.handler.RunHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunHandler</span></code></a>(config, cache, run_cache)</p></td>
-<td><p>Handles the runs.</p></td>
+<td><p>Handle the runs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -883,12 +902,34 @@
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.handler.</span></span><span class="sig-name descname"><span class="pre">RunHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_cache</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Handles the runs. Based on the meta data in the cache, automatically selects the right converter
+<p>Handle the runs.</p>
+<p>Based on the meta data in the cache, automatically selects the right converter
 and switches to the right (plugin) cache.</p>
+<p>Provides utilities to retrieve working directories, run paths, run names, and groups of runs.
+Also update and remove runs as well a groups of runs.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>c<span class="classifier">Cache</span></dt><dd><p>The cache containing information about a run(s).</p>
+</dd>
+<dt>rc<span class="classifier">RunCaches</span></dt><dd><p>The caches for the selected runs.</p>
+</dd>
+<dt>logger<span class="classifier">Logger</span></dt><dd><p>The logger for the run handler.</p>
+</dd>
+<dt>available_run_yfes<span class="classifier">List[Type[Run]]</span></dt><dd><p>A list of the available converters.</p>
+</dd>
+<dt>runs<span class="classifier">Dict[str, AbstractRun]</span></dt><dd><p>A dictionary of runs with their path as key.</p>
+</dd>
+<dt>groups<span class="classifier">Dict[str, Group]</span></dt><dd><p>A dictionary of the groups.</p>
+</dd>
+<dt>available_run_classes<span class="classifier">List[Type[Run]]</span></dt><dd><p>Contains the available run classes.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.add_run">
 <span class="sig-name descname"><span class="pre">add_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.add_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.add_run" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a run path to the cache. If run path is already in cache, do nothing.</p>
+<dd><p>Add a run path to the cache.</p>
+<p>If run path is already in cache, do nothing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>run_path</strong> (<em>str</em>) – Path of a run.</p>
@@ -905,13 +946,19 @@ and switches to the right (plugin) cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_available_run_paths">
 <span class="sig-name descname"><span class="pre">get_available_run_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_available_run_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_available_run_paths" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the available run paths from the current directory.</p>
+<dd><p>Return the available run paths from the current directory.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Run path as key and run name as value.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, str]</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>Dict[str, str]</em> – Run path as key and run name as value.</p></li>
+<li><p><em>Exceptions</em></p></li>
+<li><p><em>———-</em></p></li>
+<li><p><em>FileNotFoundError</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -919,7 +966,7 @@ and switches to the right (plugin) cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_groups">
 <span class="sig-name descname"><span class="pre">get_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_groups" title="Link to this definition">¶</a></dt>
-<dd><p>Returns instantiated grouped runs.</p>
+<dd><p>Return instantiated grouped runs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Instances of grouped runs.</p>
@@ -933,13 +980,13 @@ and switches to the right (plugin) cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_run">
 <span class="sig-name descname"><span class="pre">get_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_run" title="Link to this definition">¶</a></dt>
-<dd><p>Looks inside <cite>self.runs</cite> and <cite>self.groups</cite> and if the run id is found, returns the run.</p>
+<dd><p>Look inside <cite>self.runs</cite> and <cite>self.groups</cite> and if the run id is found, returns the run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>run_id</strong> (<em>str</em>) – Internal id of the run. Referred to <cite>run.id</cite>.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Run</p>
+<dd class="field-even"><p>Run.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun">AbstractRun</a></p>
@@ -953,7 +1000,7 @@ and switches to the right (plugin) cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_run_name">
 <span class="sig-name descname"><span class="pre">get_run_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_run_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_run_name" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the stem of the path.</p>
+<dd><p>Return the stem of the path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>run_path</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>str</em><em>]</em>) – Path, which should be converted to a name.</p>
@@ -970,11 +1017,12 @@ and switches to the right (plugin) cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_runs">
 <span class="sig-name descname"><span class="pre">get_runs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_runs" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the runs from the internal cache. The runs are already loaded and ready to use.
+<dd><p>Return the runs from the internal cache.</p>
+<p>The runs are already loaded and ready to use.
 Optional, if <cite>include_groups</cite> is set to True, the groups are also included.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>include_groups</strong> (<em>bool</em><em>, </em><em>optional</em>) – Includes the groups, by default False</p>
+<dd class="field-odd"><p><strong>include_groups</strong> (<em>bool</em><em>, </em><em>optional</em>) – Includes the groups, by default False.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Instances of runs.</p>
@@ -986,9 +1034,26 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_selected_groups">
+<span class="sig-name descname"><span class="pre">get_selected_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_selected_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_selected_groups" title="Link to this definition">¶</a></dt>
+<dd><p>Get the selected groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary with the selected groups.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, List[str]]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If groups in cache is not a dictionary, an error is thrown.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_selected_run_names">
 <span class="sig-name descname"><span class="pre">get_selected_run_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_selected_run_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_selected_run_names" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the run names of the selected runs.</p>
+<dd><p>Return the run names of the selected runs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>List of run names of the selected runs.</p>
@@ -1002,13 +1067,16 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_selected_run_paths">
 <span class="sig-name descname"><span class="pre">get_selected_run_paths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_selected_run_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_selected_run_paths" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the selected run paths from the cache.</p>
+<dd><p>Return the selected run paths from the cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Run paths as a list.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, str]</p>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError.</strong> – If the selected run paths are not a list, an error is thrown.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1016,7 +1084,7 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.get_working_directory">
 <span class="sig-name descname"><span class="pre">get_working_directory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.get_working_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.get_working_directory" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the current working directory in the cache.</p>
+<dd><p>Return the current working directory in the cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Path of the working directory.</p>
@@ -1024,19 +1092,26 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Path</p>
 </dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>AssertionError</strong> – If the working directory is not a string or a Path, an error is thrown.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.remove_run">
 <span class="sig-name descname"><span class="pre">remove_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.remove_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.remove_run" title="Link to this definition">¶</a></dt>
-<dd><p>Removes a run path from the cache. If run path is not in cache, do nothing.</p>
+<dd><p>Remove a run path from the cache.</p>
+<p>If run path is not in cache, do nothing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>run_path</strong> (<em>str</em>) – Path of a run.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If <cite>selected_run_paths</cite> or <cite>groups</cite> is None, an error is thrown.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1044,7 +1119,7 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.set_working_directory">
 <span class="sig-name descname"><span class="pre">set_working_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">working_directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.set_working_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.set_working_directory" title="Link to this definition">¶</a></dt>
-<dd><p>Sets the working directoy to the meta cache.</p>
+<dd><p>Set the working directory to the meta cache.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>working_directory</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>str</em><em>]</em>) – Directory to be set.</p>
@@ -1058,7 +1133,7 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.update" title="Link to this definition">¶</a></dt>
-<dd><p>Updates the internal run and group instances but only if a hash changed.</p>
+<dd><p>Update the internal run and group instances but only if a hash changed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
@@ -1069,14 +1144,22 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.update_groups">
 <span class="sig-name descname"><span class="pre">update_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.update_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.update_groups" title="Link to this definition">¶</a></dt>
-<dd><p>Loads chosen groups. If <cite>groups</cite> is passed, it is used to instantiate the groups and
+<dd><p>Load chosen groups.</p>
+<p>If <cite>groups</cite> is passed, it is used to instantiate the groups and
 saved to the cache. Otherwise, <cite>groups</cite> is loaded from the cache.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs can not be merged, an error is thrown.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>groups</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – A dictionary with the groups.
+Default is None.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs can not be merged, an error is thrown.</p></li>
+<li><p><strong>TypeError</strong> – If <cite>groups</cite> is None, an error is thrown.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1084,13 +1167,23 @@ saved to the cache. Otherwise, <cite>groups</cite> is loaded from the cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.update_run">
 <span class="sig-name descname"><span class="pre">update_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_hint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.update_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.update_run" title="Link to this definition">¶</a></dt>
-<dd><p>Loads the run from <cite>self.runs</cite> or creates a new one.</p>
+<dd><p>Load the run from <cite>self.runs</cite> or create a new one.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotValidRunError" title="deepcave.runs.exceptions.NotValidRunError"><strong>NotValidRunError</strong></a> – If directory can not be transformed into a run, an error is thrown.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_path</strong> (<em>str</em>) – The path of the run.</p></li>
+<li><p><strong>class_hint</strong> (<em>Optional</em><em>[</em><em>Type</em><em>[</em><a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><em>Run</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – A hint/suggestion of what the Type of the Run is.
+Default is None.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRun</span></code></a>]</span></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Run added to the cache.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun">AbstractRun</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotValidRunError" title="deepcave.runs.exceptions.NotValidRunError"><strong>NotValidRunError</strong></a> – If directory can not be transformed into a run, an error is thrown.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1098,20 +1191,21 @@ saved to the cache. Otherwise, <cite>groups</cite> is loaded from the cache.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.update_runs">
 <span class="sig-name descname"><span class="pre">update_runs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.update_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.update_runs" title="Link to this definition">¶</a></dt>
-<dd><p>Loads selected runs and update cache if files changed.</p>
+<dd><p>Load selected runs and update cache if files changed.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if all selected runs could be loaded, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotValidRunError" title="deepcave.runs.exceptions.NotValidRunError"><strong>NotValidRunError</strong></a> – If directory can not be transformed into a run, an error is thrown.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if all selected runs could be loaded, False otherwise.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>

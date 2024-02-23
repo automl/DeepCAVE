@@ -702,7 +702,21 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.summary.footprint</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="c1"># noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># FootPrint</span>
+
+<span class="sd">This module provides utilities to visualize a configuration footprint.</span>
+
+<span class="sd">The module contains a static plugin class for defining the footprint.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - FootPrint: A static plugin for the footprint of a configuration.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
@@ -721,6 +735,12 @@
 <div class="viewcode-block" id="FootPrint">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint">[docs]</a>
 <span class="k">class</span> <span class="nc">FootPrint</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Visualize the footprint of a configuration.</span>
+
+<span class="sd">    A static plugin for the footprint.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;footprint&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Configuration Footprint&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-shoe-prints&quot;</span>
@@ -730,7 +750,21 @@
 <div class="viewcode-block" id="FootPrint.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.get_input_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            The layouts for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -786,8 +820,22 @@
 <div class="viewcode-block" id="FootPrint.get_filter_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.get_filter_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">(</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get layout for the filter block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[dbc.Row]</span>
+<span class="sd">            The layouts for the filter block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
@@ -810,14 +858,26 @@
                         <span class="p">],</span>
                         <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
-                <span class="p">],</span>
-            <span class="p">),</span>
-        <span class="p">)</span></div>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="FootPrint.load_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
+
+<span class="sd">        This method is necessary to pre-load contents for the inputs.</span>
+<span class="sd">        So, if the plugin is called for the first time or there are no results in the cache,</span>
+<span class="sd">        the plugin gets its content from this method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, Any]]</span>
+<span class="sd">            The content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;details&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
             <span class="s2">&quot;show_borders&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
@@ -827,8 +887,31 @@
 
 <div class="viewcode-block" id="FootPrint.load_dependency_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_dependency_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
-        <span class="c1"># Prepare objetives</span>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: E501</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Work like &#39;load_inputs&#39; but called after inputs have changed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Only the changes have to be returned.</span>
+<span class="sd">        The returned dictionary will be merged with the inputs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run :</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        previous_inputs :</span>
+<span class="sd">            Previous content of the inputs.</span>
+<span class="sd">            Not used in this specific function.</span>
+<span class="sd">        inputs :</span>
+<span class="sd">            Current content of the inputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The dictionary with the changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prepare objectives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
         <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">)</span>
@@ -862,7 +945,32 @@
 <div class="viewcode-block" id="FootPrint.process">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.process">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return raw data based on a run and input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            The input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A serialized dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">details</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;details&quot;</span><span class="p">]</span>
@@ -891,7 +999,21 @@
 <div class="viewcode-block" id="FootPrint.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method for registering outputs.</span>
+<span class="sd">            The register_output function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dbc.Tabs</span>
+<span class="sd">            The layout for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
@@ -913,7 +1035,30 @@
 <div class="viewcode-block" id="FootPrint.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the raw data and prepare them for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            The plotly figure of the footprint performance and area.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">show_borders</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_borders&quot;</span><span class="p">]</span>
         <span class="n">show_supports</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_supports&quot;</span><span class="p">]</span>
@@ -1005,7 +1150,21 @@
 <div class="viewcode-block" id="FootPrint.get_mpl_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.get_mpl_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the matplotlib output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register the outputs.</span>
+<span class="sd">            The register_output function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[dbc.Tabs]</span>
+<span class="sd">            The layout for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Tabs</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -1025,7 +1184,29 @@
 <div class="viewcode-block" id="FootPrint.load_mpl_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_mpl_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the raw data and prepare them for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw outputs from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The rendered matplotlib figure of the footprint</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">show_borders</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_borders&quot;</span><span class="p">]</span>
         <span class="n">show_supports</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_supports&quot;</span><span class="p">]</span>
@@ -1070,13 +1251,13 @@
                     <span class="n">size</span> <span class="o">=</span> <span class="mi">10</span>
                     <span class="n">marker_symbol</span> <span class="o">=</span> <span class="s2">&quot;^&quot;</span>
 
-                <span class="n">color</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_color</span><span class="p">(</span><span class="n">color_id</span><span class="p">)</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_color</span><span class="p">(</span><span class="n">color_id</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
                 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker_symbol</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
 
             <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
 
-            <span class="n">images</span> <span class="o">+=</span> <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">render</span><span class="p">()]</span>
+            <span class="n">images</span> <span class="o">+=</span> <span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">render</span><span class="p">()]</span>  <span class="c1"># type: ignore</span>
 
         <span class="k">return</span> <span class="n">images</span></div>
 </div>

@@ -696,9 +696,32 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.hash.file_to_hash">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     file_to_hash()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.hash.string_to_hash">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     string_to_hash()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -720,27 +743,53 @@
                 
   <section id="module-deepcave.utils.hash">
 <span id="deepcave-utils-hash"></span><h1>deepcave.utils.hash<a class="headerlink" href="#module-deepcave.utils.hash" title="Link to this heading">¶</a></h1>
+<p># Hash</p>
+<p>This module provides utilities to convert strings and files to hash.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_to_hash</span></code>(filename)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.hash.file_to_hash" title="deepcave.utils.hash.file_to_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">file_to_hash</span></code></a>(filename)</p></td>
+<td><p>Convert a file to a hash.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">string_to_hash</span></code>(string)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.hash.string_to_hash" title="deepcave.utils.hash.string_to_hash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">string_to_hash</span></code></a>(string)</p></td>
+<td><p>Convert a string to a hash.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.hash.file_to_hash">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.hash.</span></span><span class="sig-name descname"><span class="pre">file_to_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/hash.html#file_to_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.hash.file_to_hash" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a file to a hash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>Path</em>) – The path to the file to be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The hash object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.hash.string_to_hash">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.hash.</span></span><span class="sig-name descname"><span class="pre">string_to_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/hash.html#string_to_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.hash.string_to_hash" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a string to a hash.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – The string to be converted to hash.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The hash object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

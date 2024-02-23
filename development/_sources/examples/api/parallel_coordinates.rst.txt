@@ -57,7 +57,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # Finally, you can load the figure. Here, the filter variables play a role.
         # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
         figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
-        figure.write_image("examples/api/parallel_coordinates.png", scale=2.)
+        figure.write_image("examples/api/parallel_coordinates.png", scale=2.0)
         # figure.show()
 
 

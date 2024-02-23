@@ -729,6 +729,15 @@
      </code>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.deepcave.DeepCAVERun.latest_change">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DeepCAVERun.latest_change
+      </span>
+     </code>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -754,11 +763,19 @@
                 
   <section id="module-deepcave.runs.converters.deepcave">
 <span id="deepcave-runs-converters-deepcave"></span><h1>deepcave.runs.converters.deepcave<a class="headerlink" href="#module-deepcave.runs.converters.deepcave" title="Link to this heading">¶</a></h1>
+<p># DeepCAVE</p>
+<p>This module defines the DeepCAVE run object.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>DeepCAVERun: Create a DeepCAVE run and provide handling utilities.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.converters.deepcave.DeepCAVERun" title="deepcave.runs.converters.deepcave.DeepCAVERun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeepCAVERun</span></code></a>(name[, configspace, objectives, ...])</p></td>
-<td><p></p></td>
+<td><p>Create a DeepCAVE run and provide handling utilities.</p></td>
 </tr>
 </tbody>
 </table>
@@ -766,20 +783,36 @@
 <dt class="sig sig-object py" id="deepcave.runs.converters.deepcave.DeepCAVERun">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.converters.deepcave.</span></span><span class="sig-name descname"><span class="pre">DeepCAVERun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/deepcave.html#DeepCAVERun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.deepcave.DeepCAVERun" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-class docutils literal notranslate"><span class="pre">Run</span></code></a></p>
+<p>Create a DeepCAVE run and provide handling utilities.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>path<span class="classifier">Path</span></dt><dd><p>The path the run.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.converters.deepcave.DeepCAVERun.from_path">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/deepcave.html#DeepCAVERun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.deepcave.DeepCAVERun.from_path" title="Link to this definition">¶</a></dt>
-<dd><p>Based on a path, return a new Run object.</p>
+<dd><p>Get a DeepCAVE run from a given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path to base the run on.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>The DeepCAVE run.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.converters.deepcave.DeepCAVERun.hash">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><a class="headerlink" href="#deepcave.runs.converters.deepcave.DeepCAVERun.hash" title="Link to this definition">¶</a></dt>
-<dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
-the cache always holds the latest results of the run.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.deepcave.DeepCAVERun.hash" title="Link to this definition">¶</a></dt>
+<dd><p>Hash of the current run.</p>
+<p>If the hash changes, the cache has to be cleared.
+This ensures that the cache always holds the latest results of the run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hash</strong> – Hash of the run.</p>
+<dd class="field-odd"><p>The hash of the run.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
@@ -787,6 +820,21 @@ the cache always holds the latest results of the run.</p>
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.converters.deepcave.DeepCAVERun.latest_change">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">latest_change</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#deepcave.runs.converters.deepcave.DeepCAVERun.latest_change" title="Link to this definition">¶</a></dt>
+<dd><p>Get the timestamp of the latest change.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The latest change.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Union[float, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

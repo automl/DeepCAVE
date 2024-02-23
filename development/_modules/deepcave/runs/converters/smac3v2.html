@@ -702,7 +702,22 @@
               <div>
                 
   <h1>Source code for deepcave.runs.converters.smac3v2</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># SMAC3v2Run</span>
+
+<span class="sd">This module provides utilities to create a SMAC3v2</span>
+<span class="sd">(Sequential Model-based Algorithm Configuration) run.</span>
+
+<span class="sd">Version 2.0.0 is used.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - SMAC3v2Run: Define a SMAC3v2 run object.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -716,11 +731,33 @@
 <div class="viewcode-block" id="SMAC3v2Run">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run">[docs]</a>
 <span class="k">class</span> <span class="nc">SMAC3v2Run</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define a SMAC3v2 (Sequential Model-based Algorithm Configuration) run object.</span>
+
+<span class="sd">    Version 2.0.0 is used.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Path</span>
+<span class="sd">        The path to the run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;SMAC3v2&quot;</span>
     <span class="n">_initial_order</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Hash of the current run.</span>
+
+<span class="sd">        If the hash changes, the cache has to be cleared.</span>
+<span class="sd">        This ensures that the cache always holds the latest results of the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The hash of the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
@@ -728,7 +765,15 @@
         <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the timestamp of the latest change.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[float, int]</span>
+<span class="sd">            The latest change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
@@ -737,9 +782,25 @@
 <div class="viewcode-block" id="SMAC3v2Run.from_path">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;SMAC3v2Run&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Based on working_dir/run_name/*, return a new trials object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Union[Path, str]</span>
+<span class="sd">            The path to base the trial object on.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The SMAC3v2 run.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            Instances are not supported.</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            Multiple Seeds are not supported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
@@ -768,11 +829,9 @@
             <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;run_objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;objectives&quot;</span><span class="p">)</span>
 
         <span class="c1"># Let&#39;s create a new run object</span>
-        <span class="n">run</span> <span class="o">=</span> <span class="n">SMAC3v2Run</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span>
-        <span class="p">)</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">SMAC3v2Run</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">)</span>
 
-        <span class="c1"># We have to set the path manually</span>
+        <span class="c1"># The path has to be set manually</span>
         <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
 
         <span class="c1"># Iterate over the runhistory</span>
@@ -832,7 +891,7 @@
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
 
             <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
-                <span class="c1"># We don&#39;t want cost included which are failed</span>
+                <span class="c1"># Costs which failed, should not be included</span>
                 <span class="n">cost</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>

@@ -702,8 +702,20 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.dynamic</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Dynamic</span>
+
+<span class="sd">This module provides a plugin class for a dynamic plugin.</span>
+
+<span class="sd">Register and handle callbacks.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - DynamicPlugin: This class provides a dynamic plugin object.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">from</span> <span class="nn">dash.dependencies</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span>
 <span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
@@ -715,6 +727,27 @@
 <div class="viewcode-block" id="DynamicPlugin">
 <a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin">[docs]</a>
 <span class="k">class</span> <span class="nc">DynamicPlugin</span><span class="p">(</span><span class="n">Plugin</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide a dynamic plugin object.</span>
+
+<span class="sd">    Register and handle callbacks.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    outputs : List[Tuple[str, str, bool]]</span>
+<span class="sd">        The registered outputs.</span>
+<span class="sd">    inputs : List[Tuple[str, str, bool, Any]]</span>
+<span class="sd">        The registered inputs.</span>
+<span class="sd">    id : str</span>
+<span class="sd">        The identifier of the Plugin.</span>
+<span class="sd">    logger : Logger</span>
+<span class="sd">        The logger for debugging information.</span>
+<span class="sd">    use_cache : bool</span>
+<span class="sd">        Defines whether to use the cache.</span>
+<span class="sd">    raw_outputs : Dict[str, Any]</span>
+<span class="sd">        A dictionary of the raw outputs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">use_cache</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -724,6 +757,15 @@
 <a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.register_callbacks">[docs]</a>
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register basic callbacks for the plugin.</span>
+
+<span class="sd">        Following callbacks are registered:</span>
+<span class="sd">        - If inputs changes, the changes are pasted back.</span>
+<span class="sd">          This is in particular interest if input dependencies are used.</span>
+<span class="sd">        - Raw data dialog to display raw data.</span>
+<span class="sd">        - Callback to be redirected to the config if clicked on it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">register_callbacks</span><span class="p">()</span>
         <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">rc</span>
 
@@ -736,15 +778,26 @@
             <span class="n">inputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_input_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
         <span class="c1"># Register updates from inputs</span>
-        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">plugin_output_update</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+        <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">def</span> <span class="nf">plugin_output_update</span><span class="p">(</span><span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs_list</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            Parameters:</span>
-<span class="sd">                *inputs_list: Values from user.</span>
+<span class="sd">            Update the outputs.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            *inputs_list</span>
+<span class="sd">                Input values from user.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            Any</span>
+<span class="sd">                The raw outputs.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
             <span class="c1"># Map the list `inputs_list` to a dict s.t.</span>
             <span class="c1"># it&#39;s easier to access them.</span>
-            <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_list_to_dict</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">inputs_list</span><span class="p">),</span> <span class="nb">input</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># The Optional[str] would need tobe changed to a str as return type annotation</span>
+            <span class="c1"># of the function _dict_as_key.</span>
             <span class="n">inputs_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict_as_key</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">remove_filters</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">cleaned_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_inputs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
             <span class="n">runs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_selected_runs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
@@ -777,6 +830,16 @@
 <a class="viewcode-back" href="../../../api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.__call__">[docs]</a>
     <span class="nd">@interactive</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the components for the plugin.</span>
+
+<span class="sd">        Basically, all blocks and elements of the plugin are stacked-up here.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Component]</span>
+<span class="sd">            Layout as list of components.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
 </div>
 

@@ -853,7 +853,7 @@
                                     <span class="p">),</span>
                                     <span class="n">dcc</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span>
                                         <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;parsimony&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
-                                        <span class="n">marks</span><span class="o">=</span><span class="nb">dict</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                                        <span class="n">marks</span><span class="o">=</span><span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
                                         <span class="nb">min</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
                                         <span class="nb">max</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                                         <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -1165,10 +1165,10 @@
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> = &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">convert_symb</span><span class="p">(</span><span class="n">symb_model</span><span class="p">,</span><span class="w"> </span><span class="n">n_decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">hp_names</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">conv_expr</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;Conversion of the expression failed. Please try another seed or increase &quot;</span>
-                <span class="s2">&quot;the parsimony hyperparameter.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the parsimony hyperparameter: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conv_expr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">150</span><span class="p">:</span>

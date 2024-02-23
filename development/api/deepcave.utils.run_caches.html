@@ -781,11 +781,20 @@
                 
   <section id="module-deepcave.utils.run_caches">
 <span id="deepcave-utils-run-caches"></span><h1>deepcave.utils.run_caches<a class="headerlink" href="#module-deepcave.utils.run_caches" title="Link to this heading">¶</a></h1>
+<p># RunCaches</p>
+<p>This module defines a class for holding the caches for selected runs.</p>
+<p>Utilities provided include updating, getting, setting and clearing.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>RunCaches: Hold the caches for the selected runs.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.run_caches.RunCaches" title="deepcave.utils.run_caches.RunCaches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunCaches</span></code></a>(config)</p></td>
-<td><p>Holds the caches for the selected runs.</p></td>
+<td><p>Hold the caches for the selected runs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -793,14 +802,23 @@
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.utils.run_caches.</span></span><span class="sig-name descname"><span class="pre">RunCaches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Holds the caches for the selected runs. The caches are used for the plugins to store the
+<p>Hold the caches for the selected runs.</p>
+<p>The caches are used for the plugins to store the
 raw outputs so that raw outputs must not be calculated again.</p>
 <p>Each input has its own cache. This change was necessary because it ensures that not all data
-are loaded if they are not needed.</p>
+is loaded if not needed.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>cache_dir<span class="classifier">Path</span></dt><dd><p>The path to the cache directory of the run.</p>
+</dd>
+<dt>logger<span class="classifier">Logger</span></dt><dd><p>The logger for the run cache.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches.clear">
 <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches.clear" title="Link to this definition">¶</a></dt>
-<dd><p>Removes all caches.</p>
+<dd><p>Remove all caches.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
@@ -811,7 +829,7 @@ are loaded if they are not needed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches.clear_run">
 <span class="sig-name descname"><span class="pre">clear_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches.clear_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches.clear_run" title="Link to this definition">¶</a></dt>
-<dd><p>Removes all caches for the given run.</p>
+<dd><p>Remove all caches for the given run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
@@ -822,7 +840,7 @@ are loaded if they are not needed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plugin_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches.get" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the raw outputs for the given run, plugin and inputs key.</p>
+<dd><p>Return the raw outputs for the given run, plugin and inputs key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -835,7 +853,10 @@ are loaded if they are not needed.</p>
 <dd class="field-even"><p>Raw outputs for the given run, plugin and inputs key.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str, Any]</p>
+<dd class="field-odd"><p>Optional[Dict[str, Any]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the outputs of the cache are not a dict.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -843,8 +864,8 @@ are loaded if they are not needed.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches.set">
 <span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plugin_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches.set" title="Link to this definition">¶</a></dt>
-<dd><p>Sets the value for the given run, plugin and inputs key.
-Since each input key has it’s own cache, only necessary data are loaded.</p>
+<dd><p>Set the value for the given run, plugin and inputs key.</p>
+<p>Since each input key has it’s own cache, only necessary data are loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -863,8 +884,8 @@ Since each input key has it’s own cache, only necessary data are loaded.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.run_caches.RunCaches.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/run_caches.html#RunCaches.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.run_caches.RunCaches.update" title="Link to this definition">¶</a></dt>
-<dd><p>Updates the cache for the given run. If the cache does not exists it will be created.
-If the run hash is different from the saved variant the cache will be reset.</p>
+<dd><p>Update the cache for the given run. If the cache does not exists it will be created.</p>
+<p>If the run hash is different from the saved variant the cache will be reset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run which should be updated.</p>
@@ -878,6 +899,7 @@ If the run hash is different from the saved variant the cache will be reset.</p>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>

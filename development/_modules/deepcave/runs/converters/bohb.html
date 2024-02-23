@@ -702,7 +702,20 @@
               <div>
                 
   <h1>Source code for deepcave.runs.converters.bohb</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span></span><span class="c1"># noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># BOHBRun</span>
+
+<span class="sd">This module provides utilities for managing and processing data concerning a BOHB</span>
+<span class="sd">(Bayesian Optimization and Hyperparameter Bandits) run.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - BOHBRun: Create a BOHB Run.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
@@ -713,11 +726,31 @@
 <div class="viewcode-block" id="BOHBRun">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun">[docs]</a>
 <span class="k">class</span> <span class="nc">BOHBRun</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a BOHB (Bayesian Optimization and Hyperparameter Bandits) run.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : Path</span>
+<span class="sd">        The path to the run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;BOHB&quot;</span>
     <span class="n">_initial_order</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the hash of the current run.</span>
+
+<span class="sd">        If the hash changes, the cache has to be cleared.</span>
+<span class="sd">        This ensures that the cache always holds the latest results of the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The hash of the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
@@ -725,7 +758,15 @@
         <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;results.json&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the timestamp of the latest change.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[float, int]</span>
+<span class="sd">            The latest change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
@@ -734,7 +775,19 @@
 <div class="viewcode-block" id="BOHBRun.from_path">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;BOHBRun&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new BOHB run from a given path and add a new trial to it.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Union[Path, str]</span>
+<span class="sd">            The pathname to base the run on.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The BOHB run</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
         <span class="c1"># Read configspace</span>
@@ -743,7 +796,7 @@
         <span class="n">configspace</span> <span class="o">=</span> <span class="n">cs_json</span><span class="o">.</span><span class="n">read</span><span class="p">((</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;configspace.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
 
         <span class="c1"># Read objectives</span>
-        <span class="c1"># We have to define it ourselves, because we don&#39;t know the type of the objective</span>
+        <span class="c1"># It has to be defined here, because the type of the objective is not known</span>
         <span class="c1"># Only lock lower</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Cost&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -771,25 +824,31 @@
             <span class="n">budget</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">budget</span>
 
             <span class="k">if</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;CRASHED&quot;</span>
+                <span class="n">status_string</span> <span class="o">=</span> <span class="s2">&quot;CRASHED&quot;</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span>
+                <span class="n">status_string</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span>
 
             <span class="n">config</span> <span class="o">=</span> <span class="n">config_mapping</span><span class="p">[</span><span class="n">bohb_run</span><span class="o">.</span><span class="n">config_id</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]</span>
 
-            <span class="n">origin</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">additional</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">additional</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">status</span><span class="p">:</span> <span class="n">Status</span>
 
             <span class="c1"># QUEUED, RUNNING, CRASHED, REVIEW, TERMINATED, COMPLETED, SUCCESS</span>
-            <span class="k">if</span> <span class="s2">&quot;SUCCESS&quot;</span> <span class="ow">in</span> <span class="n">status</span> <span class="ow">or</span> <span class="s2">&quot;TERMINATED&quot;</span> <span class="ow">in</span> <span class="n">status</span> <span class="ow">or</span> <span class="s2">&quot;COMPLETED&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="s2">&quot;SUCCESS&quot;</span> <span class="ow">in</span> <span class="n">status_string</span>
+                <span class="ow">or</span> <span class="s2">&quot;TERMINATED&quot;</span> <span class="ow">in</span> <span class="n">status_string</span>
+                <span class="ow">or</span> <span class="s2">&quot;COMPLETED&quot;</span> <span class="ow">in</span> <span class="n">status_string</span>
+            <span class="p">):</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span>
-            <span class="k">elif</span> <span class="s2">&quot;RUNNING&quot;</span> <span class="ow">in</span> <span class="n">status</span> <span class="ow">or</span> <span class="s2">&quot;QUEUED&quot;</span> <span class="ow">in</span> <span class="n">status</span> <span class="ow">or</span> <span class="s2">&quot;REVIEW&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
-                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="s2">&quot;RUNNING&quot;</span> <span class="ow">in</span> <span class="n">status_string</span> <span class="ow">or</span> <span class="s2">&quot;QUEUED&quot;</span> <span class="ow">in</span> <span class="n">status_string</span> <span class="ow">or</span> <span class="s2">&quot;REVIEW&quot;</span> <span class="ow">in</span> <span class="n">status_string</span>
+            <span class="p">):</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">status_string</span>  <span class="c1"># type: ignore</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
 
             <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
-                <span class="c1"># We don&#39;t want cost included which are failed</span>
+                <span class="c1"># Costs which failed, should not be included</span>
                 <span class="n">cost</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -799,7 +858,6 @@
                 <span class="n">start_time</span><span class="o">=</span><span class="n">starttime</span><span class="p">,</span>
                 <span class="n">end_time</span><span class="o">=</span><span class="n">endtime</span><span class="p">,</span>
                 <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
-                <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
                 <span class="n">additional</span><span class="o">=</span><span class="n">additional</span><span class="p">,</span>
             <span class="p">)</span>
 

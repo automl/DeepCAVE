@@ -702,7 +702,18 @@
               <div>
                 
   <h1>Source code for deepcave.runs.objective</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Objective</span>
+
+<span class="sd">This module provides utilities to convert and create objectives.</span>
+<span class="sd">It also provides functions for merging and comparing objectives.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Objective: Convert and create objectives.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 
@@ -715,6 +726,25 @@
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Objective</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert, create and merge objectives.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lower : Optional[Union[int, float]]</span>
+<span class="sd">        The lower bound of the objective.</span>
+<span class="sd">    upper : Optional[Union[int, float]]</span>
+<span class="sd">        The upper bound of the objective.</span>
+<span class="sd">    optimize : str</span>
+<span class="sd">        Define whether to optimize lower or upper.</span>
+<span class="sd">    lock_lower : bool</span>
+<span class="sd">        Whether to lock the lower bound.</span>
+<span class="sd">    lock_upper : bool</span>
+<span class="sd">        Whether to lock the upper bound.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the objective.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">lower</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">upper</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -724,6 +754,8 @@
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__post_init__">[docs]</a>
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if bounds should be locked.</span>
+
 <span class="sd">        Lock the lower bound if lower is not None.</span>
 <span class="sd">        Lock the upper bound if upper is not None.</span>
 
@@ -751,7 +783,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">=</span> <span class="n">lock_upper</span></div>
 
 
+<div class="viewcode-block" id="Objective.to_json">
+<a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.to_json">[docs]</a>
     <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert objectives attributes to a dictionary in a JSON friendly format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A dictionary in a JSON friendly format with the objects attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span>
@@ -759,10 +801,26 @@
             <span class="s2">&quot;lock_lower&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">,</span>
             <span class="s2">&quot;lock_upper&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">,</span>
             <span class="s2">&quot;optimize&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="p">}</span></div>
 
+
+<div class="viewcode-block" id="Objective.from_json">
+<a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.from_json">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Objective&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an objective from a JSON friendly dictionary format.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        d : Dict[str, Any]</span>
+<span class="sd">            A dictionary in a JSON friendly format containing the attributes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Objective</span>
+<span class="sd">            An objective created from the provided data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
             <span class="n">lower</span><span class="o">=</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;lower&quot;</span><span class="p">],</span>
@@ -773,44 +831,96 @@
         <span class="n">objective</span><span class="o">.</span><span class="n">lock_lower</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;lock_lower&quot;</span><span class="p">]</span>
         <span class="n">objective</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;lock_upper&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">objective</span>
+        <span class="k">return</span> <span class="n">objective</span></div>
 
+
+<div class="viewcode-block" id="Objective.__eq__">
+<a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__eq__">[docs]</a>
     <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compare if two instances are equal based on their attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : Any</span>
+<span class="sd">            The other instance to compare.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if equal, else False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_lower&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_upper&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
                 <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
+
+<div class="viewcode-block" id="Objective.merge">
+<a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.merge">[docs]</a>
     <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Merge two Objectives over their attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : Any</span>
+<span class="sd">            The other Objective to merge.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotMergeableError</span>
+<span class="sd">            If parts of the two Objectives are not mergeable.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the lower bound of one Objective is None.</span>
+<span class="sd">            If the upper bound of one Objective is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Objective</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Objective can only be merged with another Objective.&quot;</span><span class="p">)</span>
 
         <span class="n">attributes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_lower&quot;</span><span class="p">,</span> <span class="s2">&quot;lock_upper&quot;</span><span class="p">,</span> <span class="s2">&quot;optimize&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">attributes</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">attribute</span><span class="si">}</span><span class="s2"> is not mergeable.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">attribute</span><span class="si">}</span><span class="s2"> can not be merged.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The lower bound of one Objective is None.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The upper bound of one Objective is None.&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_lower</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s lower bound is not mergeable.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s lower bound can not be merged.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">&gt;</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">lower</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock_upper</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s upper bound is not mergeable.&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Objective </span><span class="si">{</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;s upper bound can not be merged.&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">&lt;</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">upper</span></div>
 
-    <span class="k">def</span> <span class="nf">get_worst_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Objective.get_worst_value">
+<a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.get_worst_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_worst_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the worst value based on the optimization setting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The worst value based on the optimization setting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;lower&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>  <span class="c1"># type: ignore</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>  <span class="c1"># type: ignore</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span></div>
+</div>
 
 </pre></div>
 

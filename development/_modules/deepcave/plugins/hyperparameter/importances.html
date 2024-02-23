@@ -702,17 +702,33 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.hyperparameter.importances</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Importances</span>
+
+<span class="sd">This module provides a plugin for the visualization of the importances.</span>
+
+<span class="sd">Provided utilities include getting input and output layout (filtered or non-filtered),</span>
+<span class="sd">processing the data and loading the outputs. Also provides a matplotlib version.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Importances: This class provides a plugin for the visualization of the importances.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">Constant</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span><span class="p">,</span> <span class="n">Constant</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span> <span class="k">as</span> <span class="n">GlobalEvaluator</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.lpi</span> <span class="kn">import</span> <span class="n">LPI</span> <span class="k">as</span> <span class="n">LocalEvaluator</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.cast</span> <span class="kn">import</span> <span class="n">optional_int</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plot</span> <span class="kn">import</span> <span class="n">plt</span>
@@ -722,6 +738,13 @@
 <div class="viewcode-block" id="Importances">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances">[docs]</a>
 <span class="k">class</span> <span class="nc">Importances</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide a plugin for the visualization of the importances.</span>
+
+<span class="sd">    Provided utilities include getting input/output layout, data processing</span>
+<span class="sd">    and loading outputs. Also provides a matplotlib version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;importances&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Importances&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;far fa-star&quot;</span>
@@ -731,7 +754,21 @@
 <div class="viewcode-block" id="Importances.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            Layout for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -782,7 +819,21 @@
 <div class="viewcode-block" id="Importances.get_filter_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the filter block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[html.Div]</span>
+<span class="sd">            Layout for the filter block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -816,7 +867,19 @@
 
 <div class="viewcode-block" id="Importances.load_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
+
+<span class="sd">        This method is necessary to pre-load contents for the inputs.</span>
+<span class="sd">        If the plugin is called for the first time, or there are no results in the cache,</span>
+<span class="sd">        the plugin gets its content from this method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, Any]]</span>
+<span class="sd">            Content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">method_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Local Parameter Importance (local)&quot;</span><span class="p">,</span> <span class="s2">&quot;fANOVA (global)&quot;</span><span class="p">]</span>
         <span class="n">method_values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;global&quot;</span><span class="p">]</span>
 
@@ -834,8 +897,28 @@
 
 <div class="viewcode-block" id="Importances.load_dependency_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
-        <span class="c1"># Prepare objetives</span>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: E501</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Work like &#39;load_inputs&#39; but called after inputs have changed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Only the changes have to be returned.</span>
+<span class="sd">        The returned dictionary will be merged with the inputs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            Current content of the inputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A dictionary with the changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prepare objectives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
         <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">)</span>
@@ -890,7 +973,38 @@
 <div class="viewcode-block" id="Importances.process">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return raw data based on the run and input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differ</span>
+<span class="sd">        compared to &#39;load_inputs&#39; or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run : AbstractRun</span>
+<span class="sd">            The run to process.</span>
+<span class="sd">        inputs :  Dict[str, Any]</span>
+<span class="sd">            The input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A serialzied dictionary.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the number of trees is not specified.</span>
+<span class="sd">            If the method is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
         <span class="n">n_trees</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_trees&quot;</span><span class="p">]</span>
@@ -898,14 +1012,15 @@
         <span class="k">if</span> <span class="n">n_trees</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Please specify the number of trees.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr and pyrfr cannot be applied</span>
-        <span class="c1"># to constant hyperparameters (see https://github.com/automl/fanova/issues/81), as a workaround we remove</span>
-        <span class="c1"># constant hyperparameters before calculation.</span>
-        <span class="c1"># Note: This will break if there are conditions or forbiddens including constant hyperparameters.</span>
+        <span class="c1"># Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr</span>
+        <span class="c1"># and pyrfr cannot be applied to constant hyperparameters</span>
+        <span class="c1"># (see https://github.com/automl/fanova/issues/81), as a workaround constant</span>
+        <span class="c1"># hyperparameters are removed before calculation.</span>
+        <span class="c1"># Note: This will break if there are conditions or forbiddens including</span>
+        <span class="c1"># constant hyperparameters.</span>
         <span class="n">hp_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="n">Constant</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
-            <span class="n">hp_dict_wo_const</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Constant</span><span class="p">}</span>
+            <span class="n">hp_dict_wo_const</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Constant</span><span class="p">}</span>
             <span class="n">configspace_wo_const</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hp_dict_wo_const</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">configspace_wo_const</span><span class="o">.</span><span class="n">add_hyperparameter</span><span class="p">(</span><span class="n">hp_dict_wo_const</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -915,14 +1030,17 @@
 
             <span class="n">configs_wo_const</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configs</span><span class="p">)):</span>
-                <span class="n">configs_wo_const</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hp_dict_wo_const</span><span class="o">.</span><span class="n">keys</span><span class="p">()})</span>
-            <span class="n">run</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">configs_wo_const</span>
+                <span class="n">configs_wo_const</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hp_dict_wo_const</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+                <span class="p">)</span>
+            <span class="n">run</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">configs_wo_const</span><span class="p">))</span>
 
         <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+        <span class="n">evaluator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">LocalEvaluator</span><span class="p">,</span> <span class="n">GlobalEvaluator</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;local&quot;</span><span class="p">:</span>
-            <span class="c1"># Intiatize the evaluator</span>
+            <span class="c1"># Initialize the evaluator</span>
             <span class="n">evaluator</span> <span class="o">=</span> <span class="n">LocalEvaluator</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;global&quot;</span><span class="p">:</span>
             <span class="n">evaluator</span> <span class="o">=</span> <span class="n">GlobalEvaluator</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
@@ -932,25 +1050,63 @@
         <span class="c1"># Collect data</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">budgets</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
             <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="n">n_trees</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
             <span class="n">importances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">importances</span>
 
-        <span class="k">return</span> <span class="n">data</span></div>
+        <span class="k">return</span> <span class="n">data</span>  <span class="c1"># type: ignore</span></div>
 
 
 <div class="viewcode-block" id="Importances.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register outputs.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dcc.Graph</span>
+<span class="sd">            Layout for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="Importances.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in raw data and prepare for layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differ</span>
+<span class="sd">        compared to &#39;load_inputs&#39; or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        go.figure</span>
+<span class="sd">            The figure of the importances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># First selected, should always be shown first</span>
         <span class="n">selected_hp_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">]</span>
         <span class="n">selected_budget_ids</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_ids&quot;</span><span class="p">]</span>
@@ -1030,7 +1186,21 @@
 <div class="viewcode-block" id="Importances.get_mpl_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_mpl_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">html</span><span class="o">.</span><span class="n">Img</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the matplotlib output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register outputs.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        html.Img</span>
+<span class="sd">            The layout for the matplotlib output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Img</span><span class="p">(</span>
             <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;src&quot;</span><span class="p">),</span>
             <span class="n">className</span><span class="o">=</span><span class="s2">&quot;img-fluid&quot;</span><span class="p">,</span>
@@ -1040,7 +1210,23 @@
 <div class="viewcode-block" id="Importances.load_mpl_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_mpl_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">outputs</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the raw data and prepare it for the layout.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The rendered matplotlib figure of the importances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># First selected, should always be shown first</span>
         <span class="n">selected_hp_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">]</span>
         <span class="n">selected_budget_ids</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_ids&quot;</span><span class="p">]</span>
@@ -1086,7 +1272,7 @@
                 <span class="n">hp_name</span> <span class="o">=</span> <span class="s2">&quot;...&quot;</span> <span class="o">+</span> <span class="n">hp_name</span><span class="p">[</span><span class="o">-</span><span class="mi">18</span><span class="p">:]</span>
 
             <span class="n">x_labels</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_labels</span><span class="p">))</span>
+        <span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_labels</span><span class="p">))</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -1098,10 +1284,10 @@
 
             <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span>
+                <span class="n">x_values</span><span class="p">,</span>
                 <span class="n">y</span><span class="p">,</span>
                 <span class="n">yerr</span><span class="o">=</span><span class="n">y_err</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_color</span><span class="p">(</span><span class="n">budget_id</span><span class="p">),</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_color</span><span class="p">(</span><span class="n">budget_id</span><span class="p">),</span>  <span class="c1"># type: ignore</span>
                 <span class="n">label</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
                 <span class="n">error_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">capthick</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
             <span class="p">)</span>
@@ -1109,10 +1295,10 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budgets&quot;</span><span class="p">)</span>
 
         <span class="c1"># Rotate x ticks</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x_labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">x_labels</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Importance&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">render</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">plt</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>  <span class="c1"># type: ignore</span></div>
 </div>
 
 </pre></div>

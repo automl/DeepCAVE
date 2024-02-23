@@ -703,10 +703,55 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.layout.create_table">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     create_table()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.layout.get_checklist_options">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_checklist_options()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.layout.get_radio_options">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_radio_options()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.layout.get_select_options">
    <code class="docutils literal notranslate">
     <span class="pre">
      get_select_options()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.layout.get_slider_marks">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_slider_marks()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.layout.help_button">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     help_button()
     </span>
    </code>
   </a>
@@ -734,50 +779,202 @@
                 
   <section id="module-deepcave.utils.layout">
 <span id="deepcave-utils-layout"></span><h1>deepcave.utils.layout<a class="headerlink" href="#module-deepcave.utils.layout" title="Link to this heading">¶</a></h1>
+<p># Layout</p>
+<p>This module provides utilities to customize the layout.</p>
+<p>This includes a help button, slider marks, select/checklist/radio options.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_table</span></code>(output[, fixed, head, striped, mb])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Table</span></code></span></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.layout.create_table" title="deepcave.utils.layout.create_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_table</span></code></a>(output[, fixed, head, striped, mb])</p></td>
+<td><p>Create a table from the given data.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checklist_options</span></code>([labels, values, binary])</p></td>
-<td><p></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.layout.get_checklist_options" title="deepcave.utils.layout.get_checklist_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_checklist_options</span></code></a>([labels, values, binary])</p></td>
+<td><p>Get a list of dictionaries of checklist options.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_radio_options</span></code>([labels, values, binary])</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.layout.get_radio_options" title="deepcave.utils.layout.get_radio_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_radio_options</span></code></a>([labels, values, binary])</p></td>
+<td><p>Get a list of dictionaries of radio options.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.layout.get_select_options" title="deepcave.utils.layout.get_select_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_select_options</span></code></a>([labels, values, ...])</p></td>
-<td><p>If values are none use labels as values.</p></td>
+<td><p>Get dictionaries of the selected options.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_slider_marks</span></code>([strings, steps, access_all])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.layout.get_slider_marks" title="deepcave.utils.layout.get_slider_marks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_slider_marks</span></code></a>([strings, steps, access_all])</p></td>
+<td><p>Generate a dictionary containing slider marks.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.layout.help_button" title="deepcave.utils.layout.help_button"><code class="xref py py-obj docutils literal notranslate"><span class="pre">help_button</span></code></a>(text[, placement])</p></td>
+<td><p>Generate button with help icon.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_table</span></code>(df)</p></td>
 <td><p><dl class="field-list simple">
 <dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">help_button</span></code>(text[, placement])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">render_table</span></code>(df)</p></td>
-<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.layout.create_table">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">create_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">striped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#create_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.create_table" title="Link to this definition">¶</a></dt>
+<dd><p>Create a table from the given data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Containing the information for the table.</p></li>
+<li><p><strong>fixed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether the table has a fixed layout.
+Default is False.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether the head will be included.
+Default is True.</p></li>
+<li><p><strong>striped</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether the rows will be striped.
+Default is True.</p></li>
+<li><p><strong>mb</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether the table has a margin.
+Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created dash bootstrap component (DBC) table.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dbc.Table</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.layout.get_checklist_options">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">get_checklist_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#get_checklist_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.get_checklist_options" title="Link to this definition">¶</a></dt>
+<dd><p>Get a list of dictionaries of checklist options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>labels</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the labels of the options.
+If labels are None, use values als labels.
+Default is None.</p></li>
+<li><p><strong>values</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the values corresponding to the options.
+If values are None, use labels as values.
+Default is None</p></li>
+<li><p><strong>binary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Define whether to return two dictionaries with binary choices.
+Only when both values and labels are None.
+Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries of the checklist options.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the labels and values do not have the same length.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.layout.get_radio_options">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">get_radio_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#get_radio_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.get_radio_options" title="Link to this definition">¶</a></dt>
+<dd><p>Get a list of dictionaries of radio options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>labels</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the labels of the options.
+If labels are None, use values als labels.
+Default is None.</p></li>
+<li><p><strong>values</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the values corresponding to the options.
+If values are None, use labels as values.
+Default is None</p></li>
+<li><p><strong>binary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Define whether to return two dictionaries with binary choices.
+Only when both values and labels are None.
+Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries of the radio options.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the labels and values do not have the same length.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.layout.get_select_options">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">get_select_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#get_select_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.get_select_options" title="Link to this definition">¶</a></dt>
-<dd><p>If values are none use labels as values.
-If both are none return empty list.</p>
+<dd><p>Get dictionaries of the selected options.</p>
+<p>If values are none use labels as values. If both are none return empty list.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>labels</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the labels of the options.
+If labels are None, use values als labels.
+Default is None.</p></li>
+<li><p><strong>values</strong> (<em>Any</em><em>, </em><em>optional</em>) – To specify the values corresponding to the options.
+If values are None, use labels as values.
+Default is None</p></li>
+<li><p><strong>disabled</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>Bool</em><em>]</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – A list containing information whether each option should be disabled or not.
+Default is None.</p></li>
+<li><p><strong>binary</strong> (<em>bool</em><em>, </em><em>optional</em>) – Define whether to return two dictionaries with binary choices.
+Only when both values and labels are None.
+Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries of the selected options.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]</span></p>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the labels and values do not have the same length.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.layout.get_slider_marks">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">get_slider_marks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#get_slider_marks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.get_slider_marks" title="Link to this definition">¶</a></dt>
+<dd><p>Generate a dictionary containing slider marks.</p>
+<p>The slider marks are based on the provided list of dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strings</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of dictionaries containing information about the marks.
+Default value is None.</p></li>
+<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of steps or marks on the slider.
+Default is 10.</p></li>
+<li><p><strong>access_all</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates whether to create marks for all items.
+Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Contains information about the positions and labels of the marks.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[int, Dict[str, str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.layout.help_button">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.layout.</span></span><span class="sig-name descname"><span class="pre">help_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/layout.html#help_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.layout.help_button" title="Link to this definition">¶</a></dt>
+<dd><p>Generate button with help icon.</p>
+<p>Displays popover when hovered over that contains the provided text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – The text that will be displayed in the popover.</p></li>
+<li><p><strong>placement</strong> (<em>str</em><em>, </em><em>optional</em>) – The placement of the button, default is Top.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An html structure, that wraps the icon and the popover.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>html.Span</p>
 </dd>
 </dl>
 </dd></dl>

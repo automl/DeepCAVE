@@ -758,7 +758,7 @@
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.symbolic_regression.convert_symb" title="deepcave.utils.symbolic_regression.convert_symb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_symb</span></code></a>(symb[, n_decimals, hp_names])</p></td>
-<td><p>Convert a fitted symbolic regression to a simplified and potentially rounded mathematical expression.</p></td>
+<td><p>Convert a fitted symbolic regression to a simplified and rounded mathematical expression.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.symbolic_regression.exp" title="deepcave.utils.symbolic_regression.exp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exp</span></code></a>(x)</p></td>
 <td><p>Get a safe exp function with a maximum value of 100000 to avoid overflow.</p></td>
@@ -771,8 +771,7 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.symbolic_regression.convert_symb">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.symbolic_regression.</span></span><span class="sig-name descname"><span class="pre">convert_symb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">symb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hp_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/symbolic_regression.html#convert_symb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.symbolic_regression.convert_symb" title="Link to this definition">¶</a></dt>
-<dd><p>Convert a fitted symbolic regression to a simplified and potentially rounded mathematical
-expression.</p>
+<dd><p>Convert a fitted symbolic regression to a simplified and rounded mathematical expression.</p>
 <p>Warning: eval is used in this function, thus it should not be used on unsanitized input (see
 <a class="reference external" href="https://docs.sympy.org/latest/modules/core.html?highlight=eval#module-sympy.core.sympify">https://docs.sympy.org/latest/modules/core.html?highlight=eval#module-sympy.core.sympify</a>).</p>
 <dl class="field-list simple">
@@ -787,7 +786,7 @@ expression.</p>
 <dd class="field-even"><p>Converted mathematical expression.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SymbolicRegressor</p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -798,13 +797,13 @@ expression.</p>
 <dd><p>Get a safe exp function with a maximum value of 100000 to avoid overflow.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>float</em>) – The value to calculate the exponential of.</p>
+<dd class="field-odd"><p><strong>x</strong> (<em>Union</em><em>[</em><em>float</em><em>, </em><em>np.ndarray</em><em>]</em>) – The value to calculate the exponential of.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The safe exponential of x.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
+<dd class="field-odd"><p>Union[float, np.ndarray]</p>
 </dd>
 </dl>
 </dd></dl>

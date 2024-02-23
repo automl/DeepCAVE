@@ -702,16 +702,35 @@
               <div>
                 
   <h1>Source code for deepcave.utils.dash</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Dash</span>
+
+<span class="sd">This module provides utilities to return and flash alerts.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 
 
 <div class="viewcode-block" id="flash">
 <a class="viewcode-back" href="../../../api/deepcave.utils.dash.html#deepcave.utils.dash.flash">[docs]</a>
-<span class="k">def</span> <span class="nf">flash</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">flash</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Alert</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Flask style flash-message with Alerts.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    message : str</span>
+<span class="sd">        The message to be displayed.</span>
+<span class="sd">    category : str, optional</span>
+<span class="sd">        The category of the alert.</span>
+<span class="sd">        Default is &quot;info&quot;.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dbc.Alert</span>
+<span class="sd">        The alert object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Alert</span><span class="p">(</span>
         <span class="n">message</span><span class="p">,</span>
         <span class="nb">id</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;alert_</span><span class="si">{</span><span class="nb">hash</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -723,8 +742,24 @@
 
 
 
-<span class="k">def</span> <span class="nf">alert</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">flash</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="alert">
+<a class="viewcode-back" href="../../../api/deepcave.utils.dash.html#deepcave.utils.dash.alert">[docs]</a>
+<span class="k">def</span> <span class="nf">alert</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Alert</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return an alert message.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    message : str</span>
+<span class="sd">        The message of the alert.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dbc.Alert</span>
+<span class="sd">        The alert object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">flash</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="s2">&quot;danger&quot;</span><span class="p">)</span></div>
+
 </pre></div>
 
               </div>

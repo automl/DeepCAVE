@@ -24,7 +24,7 @@ Importances
 This example shows how to use the plugin Importances.
 Note that other plugins use the same interfaces and can be used in the same fashion.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-38
+.. GENERATED FROM PYTHON SOURCE LINES 8-39
 
 .. code-block:: Python
 
@@ -49,7 +49,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
             budget_ids=budget_ids,
             method="global",
             n_hps=3,
-            n_trees=10
+            n_trees=10,
         )
         # Note: Filter variables are not considered.
         outputs = plugin.generate_outputs(run, inputs)
@@ -57,8 +57,9 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # Finally, you can load the figure. Here, the filter variables play a role.
         # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
         figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
-        figure.write_image("examples/api/importances.png", scale=2.)
+        figure.write_image("examples/api/importances.png", scale=2.0)
         # figure.show()
+
 
 .. _sphx_glr_download_examples_api_importances.py:
 

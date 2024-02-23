@@ -702,12 +702,43 @@
               <div>
                 
   <h1>Source code for deepcave.runs.status</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+<span></span><span class="c1"># noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Status</span>
+
+<span class="sd">This module provides the information about the status of a run.</span>
+
+<span class="sd">A utility to convert a string text to a simpler, lower case text format is provided.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Status: Represent the status of a run as an Enum.</span>
+
+<span class="sd">## Constants</span>
+<span class="sd">    SUCCESS: int</span>
+<span class="sd">    TIMEOUT: int</span>
+<span class="sd">    MEMORYOUT: int</span>
+<span class="sd">    CRASHED: int</span>
+<span class="sd">    ABORTED: int</span>
+<span class="sd">    NOT_EVALUATED: int</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
 
 
 <div class="viewcode-block" id="Status">
 <a class="viewcode-back" href="../../../api/deepcave.runs.status.html#deepcave.runs.status.Status">[docs]</a>
 <span class="k">class</span> <span class="nc">Status</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represent the status of a run as an Enum.</span>
+
+<span class="sd">    A utility to convert a string text to a simpler, lower case text format is provided.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The status name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">TIMEOUT</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">MEMORYOUT</span> <span class="o">=</span> <span class="mi">3</span>
@@ -715,8 +746,19 @@
     <span class="n">ABORTED</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">NOT_EVALUATED</span> <span class="o">=</span> <span class="mi">6</span>
 
+<div class="viewcode-block" id="Status.to_text">
+<a class="viewcode-back" href="../../../api/deepcave.runs.status.html#deepcave.runs.status.Status.to_text">[docs]</a>
     <span class="k">def</span> <span class="nf">to_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert name to simpler, lower case text format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The converted name in lower case with spaces added</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 

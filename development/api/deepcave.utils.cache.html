@@ -799,6 +799,16 @@
                 
   <section id="module-deepcave.utils.cache">
 <span id="deepcave-utils-cache"></span><h1>deepcave.utils.cache<a class="headerlink" href="#module-deepcave.utils.cache" title="Link to this heading">¶</a></h1>
+<p># Cache</p>
+<p>This module provides utilities to handle the cache.</p>
+<p>This includes reading, writing, set and get utilities, as well as clearing the cache.
+The cache handles a json file.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Cache: Cache handles a json file.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -811,15 +821,19 @@
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.utils.cache.</span></span><span class="sig-name descname"><span class="pre">Cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Cache handles a json file. Decided not to use flask_caching
-since code is easier to change to our needs.</p>
+<p>Cache handles a json file.</p>
+<p>Decided not to use flask_caching since code is easier to change to our needs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.clear">
 <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">write_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.clear" title="Link to this definition">¶</a></dt>
-<dd><p>Clear all cache and reset to defaults</p>
+<dd><p>Clear all cache and reset to defaults.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>write_file</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write the constant of the cache into a file.
+Default is True.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -827,10 +841,16 @@ since code is easier to change to our needs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.get">
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.get" title="Link to this definition">¶</a></dt>
-<dd><p>Retrieve value for a specific key</p>
+<dd><p>Retrieve value for a specific key.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*keys</strong> (<em>str</em>) – The key to retrieve the value from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the key.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]</span></p>
+<dd class="field-odd"><p>Optional[Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -838,10 +858,16 @@ since code is easier to change to our needs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.has">
 <span class="sig-name descname"><span class="pre">has</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.has"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.has" title="Link to this definition">¶</a></dt>
-<dd><p>Check whether cache has specific key</p>
+<dd><p>Check whether cache has specific key.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*keys</strong> (<em>str</em>) – The key to check for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether cache has specific key.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,7 +875,7 @@ since code is easier to change to our needs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.read">
 <span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.read" title="Link to this definition">¶</a></dt>
-<dd><p>Reads content from a file and load into cache as dictionary.</p>
+<dd><p>Read content from a file and load into cache as dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
@@ -860,10 +886,21 @@ since code is easier to change to our needs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.set">
 <span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.set" title="Link to this definition">¶</a></dt>
-<dd><p>Set a value from a chain of keys.
-E.g. set(“a”, “b”, “c”, value=4) creates following dictionary:
+<dd><p>Set a value from a chain of keys.</p>
+<p>E.g. set(“a”, “b”, “c”, value=4) creates following dictionary:
 {“a”: {“b”: {“c”: 4}}}</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*keys</strong> (<em>str</em>) – The keys to set the value from.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to be set.</p></li>
+<li><p><strong>write_file</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write the constant of the cache into a file.
+Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the type of the key is not a string.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
@@ -873,10 +910,17 @@ E.g. set(“a”, “b”, “c”, value=4) creates following dictionary:
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.utils.cache.Cache.set_dict">
 <span class="sig-name descname"><span class="pre">set_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/cache.html#Cache.set_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.cache.Cache.set_dict" title="Link to this definition">¶</a></dt>
-<dd><p>Updates cache to a specific value</p>
+<dd><p>Update cache to a specific value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<em>Dict</em>) – The dictionary to be set.</p></li>
+<li><p><strong>write_file</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to write the constant of the cache into a file.
+Default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

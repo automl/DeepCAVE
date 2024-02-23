@@ -702,7 +702,20 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.objective.parallel_coordinates</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span></span><span class="c1">#  noqa: D400</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># ParallelCoordinates</span>
+
+<span class="sd">This module provides utilities for visualizing the parallel coordinates.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - ParallelCoordinates : Can be used for visualizing the parallel coordinates.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -726,6 +739,8 @@
 <div class="viewcode-block" id="ParallelCoordinates">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates">[docs]</a>
 <span class="k">class</span> <span class="nc">ParallelCoordinates</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Can be used for visualizing the parallel coordinates.&quot;&quot;&quot;</span>
+
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;parallel_coordinates&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Parallel Coordinates&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;far fa-map&quot;</span>
@@ -735,7 +750,21 @@
 <div class="viewcode-block" id="ParallelCoordinates.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_input_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to regsiter (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            The layouts for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -790,7 +819,21 @@
 <div class="viewcode-block" id="ParallelCoordinates.get_filter_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_filter_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the filter block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            The layouts for the filter block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -834,7 +877,19 @@
 
 <div class="viewcode-block" id="ParallelCoordinates.load_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
+
+<span class="sd">        This method is necessary to pre-load contents for the inputs.</span>
+<span class="sd">        So, if the plugin is called for the first time or there are no results in the cache,</span>
+<span class="sd">        the plugin gets its content from this method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, Any]]</span>
+<span class="sd">            Content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;show_important_only&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">},</span>
             <span class="s2">&quot;show_unsuccessful&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">},</span>
@@ -846,8 +901,28 @@
 
 <div class="viewcode-block" id="ParallelCoordinates.load_dependency_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
-        <span class="c1"># Prepare objetives</span>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Work like &#39;load_inputs&#39; but called after inputs have changed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Only the changes have to be returned.</span>
+<span class="sd">        The returned dictionary will be merged with the inputs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Current content of the inputs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The dictionary with the changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Prepare objectives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
         <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">)</span>
@@ -906,18 +981,43 @@
 <div class="viewcode-block" id="ParallelCoordinates.process">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.process">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return raw data based on a run and input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run : AbstractRun</span>
+<span class="sd">            The run to process.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            The input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The serialized dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">serialize</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">))</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">}</span>
+        <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">df</span><span class="p">}</span>
 
         <span class="k">if</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">]:</span>
             <span class="c1"># Let&#39;s run a quick fANOVA here</span>
             <span class="n">evaluator</span> <span class="o">=</span> <span class="n">fANOVA</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
             <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">importances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
-            <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="n">importances_dict</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
+            <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importances_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
             <span class="n">important_hp_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">importances</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;important_hp_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">important_hp_names</span>
 
@@ -927,14 +1027,51 @@
 <div class="viewcode-block" id="ParallelCoordinates.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register outputs.</span>
+<span class="sd">            The register_output function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dcc.Graph</span>
+<span class="sd">            The layouts for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="ParallelCoordinates.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the raw data and prepare them for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            The inputs and filter values fromt the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        go.Figure</span>
+<span class="sd">            The output figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span>
 
@@ -964,7 +1101,7 @@
             <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
                 <span class="n">objective_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">defaultdict</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">hp_v</span><span class="p">,</span> <span class="n">objective_v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">objective_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>

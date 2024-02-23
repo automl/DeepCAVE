@@ -817,11 +817,21 @@
                 
   <section id="module-deepcave.plugins.hyperparameter.importances">
 <span id="deepcave-plugins-hyperparameter-importances"></span><h1>deepcave.plugins.hyperparameter.importances<a class="headerlink" href="#module-deepcave.plugins.hyperparameter.importances" title="Link to this heading">¶</a></h1>
+<p># Importances</p>
+<p>This module provides a plugin for the visualization of the importances.</p>
+<p>Provided utilities include getting input and output layout (filtered or non-filtered),
+processing the data and loading the outputs. Also provides a matplotlib version.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Importances: This class provides a plugin for the visualization of the importances.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.hyperparameter.importances.Importances" title="deepcave.plugins.hyperparameter.importances.Importances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Importances</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Provide a plugin for the visualization of the importances.</p></td>
 </tr>
 </tbody>
 </table>
@@ -829,19 +839,23 @@
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.hyperparameter.importances.</span></span><span class="sig-name descname"><span class="pre">Importances</span></span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin" title="deepcave.plugins.static.StaticPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">StaticPlugin</span></code></a></p>
+<p>Provide a plugin for the visualization of the importances.</p>
+<p>Provided utilities include getting input/output layout, data processing
+and loading outputs. Also provides a matplotlib version.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the filter block.</p>
+<dd><p>Get the layout for the filter block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register (user) variables.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the filter block.</p>
+<dd class="field-even"><p>Layout for the filter block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[html.Div]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,16 +863,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the input block.</p>
+<dd><p>Get the layout for the input block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register (user) variables.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the input block.</p>
+<dd class="field-even"><p>Layout for the input block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -866,16 +881,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_mpl_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_mpl_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the matplotlib output block.</p>
+<dd><p>Get the layout for the matplotlib output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layout for the matplotlib output block.</p>
+<dd class="field-even"><p>The layout for the matplotlib output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>html.Img</p>
 </dd>
 </dl>
 </dd></dl>
@@ -883,16 +899,17 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the output block.</p>
+<dd><p>Get the layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the output block.</p>
+<dd class="field-even"><p>Layout for the output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>dcc.Graph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -900,23 +917,21 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">
 <span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs" title="Link to this definition">¶</a></dt>
-<dd><p>Same as <cite>load_inputs</cite> but called after inputs have changed. Provides a lot of flexibility.</p>
+<dd><p>Work like ‘load_inputs’ but called after inputs have changed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Only the changes have to be returned. The returned dictionary will be merged with the
-inputs.</p>
+<p>Only the changes have to be returned.
+The returned dictionary will be merged with the inputs.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>selected_run</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The selected run from the user. In case of <cite>activate_run_selection</cite>, only one run
-is passed. Defaults to None.</p></li>
-<li><p><strong>previous_inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Previous content of the inputs.</p></li>
+<li><p><strong>run</strong> – The selected run.</p></li>
 <li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Current content of the inputs.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with the changes.</p>
+<dd class="field-even"><p>A dictionary with the changes.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[str, Any]</p>
@@ -927,16 +942,16 @@ is passed. Defaults to None.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.load_inputs">
 <span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.load_inputs" title="Link to this definition">¶</a></dt>
-<dd><p>Load the content for the defined inputs in <cite>get_input_layout</cite> and <cite>get_filter_layout</cite>.
-This method is necessary to pre-load contents for the inputs. So, if the plugin is
-called for the first time or there are no results in the cache, the plugin gets its
-content from this method.</p>
+<dd><p>Load the content for the defined inputs in ‘get_input_layout’ and ‘get_filter_layout’.</p>
+<p>This method is necessary to pre-load contents for the inputs.
+If the plugin is called for the first time, or there are no results in the cache,
+the plugin gets its content from this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Content to be filled.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, Any]</p>
+<dd class="field-even"><p>Dict[str, Dict[str, Any]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -944,27 +959,17 @@ content from this method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
-</div>
+<dd><p>Read the raw data and prepare it for the layout.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
+<li><p><strong>run</strong> – The selected run.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> – Raw output from the run.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered matplotlib figure of the importances.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -972,27 +977,26 @@ a Dict[str, str] is returned.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.load_outputs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.load_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dd><p>Read in raw data and prepare for layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differ
+compared to ‘load_inputs’ or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
+<li><p><strong>run</strong> – The selected run.</p></li>
+<li><p><strong>inputs</strong> – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> – Raw output from the run.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+<dd class="field-even"><p>The figure of the importances.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>go.figure</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1000,28 +1004,33 @@ a Dict[str, str] is returned.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.process">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.process" title="Link to this definition">¶</a></dt>
-<dd><p>Returns raw data based on a run and input data.</p>
+<dd><p>Return raw data based on the run and input data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The returned data must be JSON serializable.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differ
+compared to ‘load_inputs’ or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
+<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The input data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Serialized dictionary.</p>
+<dd class="field-even"><p>A serialzied dictionary.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the number of trees is not specified.
+    If the method is not found.</p>
 </dd>
 </dl>
 </dd></dl>

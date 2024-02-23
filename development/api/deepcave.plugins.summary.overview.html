@@ -754,11 +754,21 @@
                 
   <section id="module-deepcave.plugins.summary.overview">
 <span id="deepcave-plugins-summary-overview"></span><h1>deepcave.plugins.summary.overview<a class="headerlink" href="#module-deepcave.plugins.summary.overview" title="Link to this heading">¶</a></h1>
+<p># Overview</p>
+<p>This module provides utilities for visualizing an overview of the selected runs.</p>
+<p>It holds the most important information, e.g. meta data, objectives and statistics.</p>
+<p>The module includes a dynamic plugin for the overview.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Overview: Visualize an overall overview of the selected run.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.summary.overview.Overview" title="deepcave.plugins.summary.overview.Overview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Overview</span></code></a>()</p></td>
-<td><p></p></td>
+<td><p>Visualize an overall overview of the selected run.</p></td>
 </tr>
 </tbody>
 </table>
@@ -766,19 +776,21 @@
 <dt class="sig sig-object py" id="deepcave.plugins.summary.overview.Overview">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.summary.overview.</span></span><span class="sig-name descname"><span class="pre">Overview</span></span><a class="reference internal" href="../_modules/deepcave/plugins/summary/overview.html#Overview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.summary.overview.Overview" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin" title="deepcave.plugins.dynamic.DynamicPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicPlugin</span></code></a></p>
+<p>Visualize an overall overview of the selected run.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.summary.overview.Overview.get_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/summary/overview.html#Overview.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.summary.overview.Overview.get_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the output block.</p>
+<dd><p>Get the layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register the outputs.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the output block.</p>
+<dd class="field-even"><p>The layouts for the output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>List[Any]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -786,27 +798,22 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.summary.overview.Overview.load_outputs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/summary/overview.html#Overview.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.summary.overview.Overview.load_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dd><p>Read in the raw data and prepare them for the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differs compared to ‘load_inputs’
+or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>run</strong> – The selected run.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+<dd class="field-even"><p>A list of the created tables of the overview.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>List[Any]</p>
 </dd>
 </dl>
 </dd></dl>

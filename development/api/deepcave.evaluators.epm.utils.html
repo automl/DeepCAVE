@@ -734,22 +734,41 @@
                 
   <section id="module-deepcave.evaluators.epm.utils">
 <span id="deepcave-evaluators-epm-utils"></span><h1>deepcave.evaluators.epm.utils<a class="headerlink" href="#module-deepcave.evaluators.epm.utils" title="Link to this heading">¶</a></h1>
+<p># Utils</p>
+<p>This module provides a utility to get the types
+as well as the bounds of the Hyperparameters.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.evaluators.epm.utils.get_types" title="deepcave.evaluators.epm.utils.get_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_types</span></code></a>(config_space[, instance_features])</p></td>
-<td><p>Return the types of the hyperparameters and the bounds of the hyperparameters and instance features.</p></td>
+<td><p>Return the types of the Hyperparameters.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.evaluators.epm.utils.get_types">
 <span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.epm.utils.</span></span><span class="sig-name descname"><span class="pre">get_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_space</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/utils.html#get_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.utils.get_types" title="Link to this definition">¶</a></dt>
-<dd><p>Return the types of the hyperparameters and the bounds of the
-hyperparameters and instance features.</p>
+<dd><p>Return the types of the Hyperparameters.</p>
+<p>Also return the bounds of the Hyperparameters and instance features.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_space</strong> (<em>ConfigurationSpace</em>) – The configuration space.</p></li>
+<li><p><strong>instance_features</strong> (<em>Optional</em><em>[</em><em>np.ndarray</em><em>]</em><em>, </em><em>optional</em>) – The instance features.
+Default is None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The types of the Hyperparameters, as well as the bounds and instance features.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]]</span></p>
+<dd class="field-odd"><p>Tuple[<em>List</em>[int], List[Tuple[float, float]]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – Inactive parameters not supported for Beta and Normal Hyperparameters.</p></li>
+<li><p><strong>TypeError</strong> – If the Hyperparameter Type is unknown.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

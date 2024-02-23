@@ -696,9 +696,52 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.evaluators.footprint.Footprint">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     Footprint
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.footprint.Footprint.calculate">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Footprint.calculate()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.footprint.Footprint.get_points">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Footprint.get_points()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.footprint.Footprint.get_surface">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Footprint.get_surface()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -720,14 +763,122 @@
                 
   <section id="module-deepcave.evaluators.footprint">
 <span id="deepcave-evaluators-footprint"></span><h1>deepcave.evaluators.footprint<a class="headerlink" href="#module-deepcave.evaluators.footprint" title="Link to this heading">¶</a></h1>
+<p># Footprint</p>
+<p>This module provides utilities for creating a footprint of a run.
+It uses multidimensional scaling (MDS).
+It also provides utilities to get the surface and the points of the plot.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Footprint: Can train and create a footprint of a run.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Footprint</span></code>(run)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.evaluators.footprint.Footprint" title="deepcave.evaluators.footprint.Footprint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Footprint</span></code></a>(run)</p></td>
+<td><p>Can train and create a footprint of a run.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepcave.evaluators.footprint.Footprint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.footprint.</span></span><span class="sig-name descname"><span class="pre">Footprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/footprint.html#Footprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.footprint.Footprint" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Can train and create a footprint of a run.</p>
+<p>It uses multidimensional scaling (MDS).
+Provides utilities to get the surface and the points of the plot.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>run<span class="classifier">AbstractRun</span></dt><dd><p>The AbstractRun used for the calculation of the footprint.</p>
+</dd>
+<dt>cs<span class="classifier">ConfigurationSpace</span></dt><dd><p>The configuration space of the run.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.footprint.Footprint.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">support_discretization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rejection_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_configs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/footprint.html#Footprint.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.footprint.Footprint.calculate" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the distances and train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objective</strong> (<a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a>) – Objective and color to show.</p></li>
+<li><p><strong>budget</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – All configurations with this budget are considered.</p></li>
+<li><p><strong>support_discretization</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Discretization steps for integer and float hyperparameter (HP) values.
+Default is set to 10.</p></li>
+<li><p><strong>rejection_rate</strong> (<em>float</em><em>, </em><em>optional</em>) – Rejection rate whether a configuration should be rejected or not. Internally,
+the max distance is calculated and if a configuration has a distance smaller than
+max distance * rejection_rate, the configuration is rejected.
+Default is set to 0.01.</p></li>
+<li><p><strong>retries</strong> (<em>int</em><em>, </em><em>optional</em>) – How many times to retry adding a new configuration.
+Default is set to 3.</p></li>
+<li><p><strong>exclude_configs</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the configurations from the run should be excluded
+in the multidimensional scaling (MDS).
+This is particularly interesting if only the search space should be plotted.
+Default is set to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.footprint.Footprint.get_points">
+<span class="sig-name descname"><span class="pre">get_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'configs'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/footprint.html#Footprint.get_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.footprint.Footprint.get_points" title="Link to this definition">¶</a></dt>
+<dd><p>Return the points of the multidimensional scaling (MDS) plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>category</strong> (<em>str</em><em>, </em><em>optional</em>) – Points of a specific category. Chose between <cite>configs</cite>, <cite>borders</cite>, <cite>supports</cite>
+or <cite>incumbents</cite>. By default <cite>configs</cite>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>X, Y and config_ids as lists.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[List[float], List[float], List[int]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If category is not supported.</p></li>
+<li><p><strong>RuntimeError</strong> – If calculated wasn’t called before.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.footprint.Footprint.get_surface">
+<span class="sig-name descname"><span class="pre">get_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">details</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/footprint.html#Footprint.get_surface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.footprint.Footprint.get_surface" title="Link to this definition">¶</a></dt>
+<dd><p>Get surface of the multidimensional scaling (MDS) plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>details</strong> (<em>float</em><em>, </em><em>optional</em>) – Steps to create the meshgrid. By default 0.5.</p></li>
+<li><p><strong>performance</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to get the surface from the performance or the valid areas.
+Default is set to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>x (1D), y (1D) and z (2D) arrays for heatmap.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[List, List, List]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If <cite>calculate</cite> was not called before.</p></li>
+<li><p><strong>RuntimeError</strong> – If evaluated configs weren’t included.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
 </section>
 
 

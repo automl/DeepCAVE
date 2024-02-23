@@ -709,7 +709,7 @@
 <span class="sd">This module provides utilities for running symbolic regression with gplearn.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">sympy</span>
@@ -724,22 +724,26 @@
 
 <div class="viewcode-block" id="exp">
 <a class="viewcode-back" href="../../../api/deepcave.utils.symbolic_regression.html#deepcave.utils.symbolic_regression.exp">[docs]</a>
-<span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get a safe exp function with a maximum value of 100000 to avoid overflow.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : float</span>
+<span class="sd">    x : Union[float, np.ndarray]</span>
 <span class="sd">        The value to calculate the exponential of.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    float</span>
+<span class="sd">    Union[float, np.ndarray]</span>
 <span class="sd">        The safe exponential of x.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">):</span>
-        <span class="n">max_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+        <span class="n">max_value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">max_value</span> <span class="o">=</span> <span class="mf">100000.0</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">max_value</span><span class="p">)</span></div>
 
 
@@ -766,11 +770,10 @@
 <div class="viewcode-block" id="convert_symb">
 <a class="viewcode-back" href="../../../api/deepcave.utils.symbolic_regression.html#deepcave.utils.symbolic_regression.convert_symb">[docs]</a>
 <span class="k">def</span> <span class="nf">convert_symb</span><span class="p">(</span>
-    <span class="n">symb</span><span class="p">:</span> <span class="n">SymbolicRegressor</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hp_names</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">sympy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">expr</span><span class="p">:</span>
+    <span class="n">symb</span><span class="p">:</span> <span class="n">SymbolicRegressor</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">hp_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convert a fitted symbolic regression to a simplified and potentially rounded mathematical</span>
-<span class="sd">    expression.</span>
+<span class="sd">    Convert a fitted symbolic regression to a simplified and rounded mathematical expression.</span>
 
 <span class="sd">    Warning: eval is used in this function, thus it should not be used on unsanitized input (see</span>
 <span class="sd">    https://docs.sympy.org/latest/modules/core.html?highlight=eval#module-sympy.core.sympify).</span>
@@ -786,7 +789,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    SymbolicRegressor</span>
+<span class="sd">    str</span>
 <span class="sd">        Converted mathematical expression.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># sqrt is protected function in gplearn, always returning sqrt(abs(x))</span>
@@ -838,8 +841,8 @@
             <span class="n">symb_conv</span> <span class="o">=</span> <span class="n">symb_conv</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X1</span><span class="p">,</span> <span class="n">hp1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Numer of hyperparameters to be explained by symbolic explanations must not &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;be larger than 2&quot;</span>
+                <span class="s2">&quot;Numer of hyperparameters to be explained by symbolic explanations must not &quot;</span>
+                <span class="s2">&quot;be larger than 2&quot;</span>
             <span class="p">)</span>
 
     <span class="c1"># Simplify the formula</span>
@@ -860,7 +863,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">sympy</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">numbers</span><span class="o">.</span><span class="n">Float</span><span class="p">):</span>
                 <span class="n">symb_simpl</span> <span class="o">=</span> <span class="n">symb_simpl</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n_decimals</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">symb_simpl</span></div>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">symb_simpl</span><span class="p">)</span></div>
 
 </pre></div>
 

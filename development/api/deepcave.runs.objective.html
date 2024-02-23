@@ -712,10 +712,55 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.__eq__">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Objective.__eq__()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.__post_init__">
      <code class="docutils literal notranslate">
       <span class="pre">
        Objective.__post_init__()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.from_json">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Objective.from_json()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.get_worst_value">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Objective.get_worst_value()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.merge">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Objective.merge()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.objective.Objective.to_json">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Objective.to_json()
       </span>
      </code>
     </a>
@@ -745,11 +790,20 @@
                 
   <section id="module-deepcave.runs.objective">
 <span id="deepcave-runs-objective"></span><h1>deepcave.runs.objective<a class="headerlink" href="#module-deepcave.runs.objective" title="Link to this heading">¶</a></h1>
+<p># Objective</p>
+<p>This module provides utilities to convert and create objectives.
+It also provides functions for merging and comparing objectives.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Objective: Convert and create objectives.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Objective</span></code></a>(name[, lower, upper, optimize])</p></td>
-<td><p></p></td>
+<td><p>Convert, create and merge objectives.</p></td>
 </tr>
 </tbody>
 </table>
@@ -757,10 +811,45 @@
 <dt class="sig sig-object py" id="deepcave.runs.objective.Objective">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.objective.</span></span><span class="sig-name descname"><span class="pre">Objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lower'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Convert, create and merge objectives.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>lower<span class="classifier">Optional[Union[int, float]]</span></dt><dd><p>The lower bound of the objective.</p>
+</dd>
+<dt>upper<span class="classifier">Optional[Union[int, float]]</span></dt><dd><p>The upper bound of the objective.</p>
+</dd>
+<dt>optimize<span class="classifier">str</span></dt><dd><p>Define whether to optimize lower or upper.</p>
+</dd>
+<dt>lock_lower<span class="classifier">bool</span></dt><dd><p>Whether to lock the lower bound.</p>
+</dd>
+<dt>lock_upper<span class="classifier">bool</span></dt><dd><p>Whether to lock the upper bound.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the objective.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.objective.Objective.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Compare if two instances are equal based on their attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>Any</em>) – The other instance to compare.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if equal, else False.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.objective.Objective.__post_init__">
 <span class="sig-name descname"><span class="pre">__post_init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.__post_init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.__post_init__" title="Link to this definition">¶</a></dt>
-<dd><p>Lock the lower bound if lower is not None.
+<dd><p>Check if bounds should be locked.</p>
+<p>Lock the lower bound if lower is not None.
 Lock the upper bound if upper is not None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
@@ -772,6 +861,73 @@ Lock the upper bound if upper is not None.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.objective.Objective.from_json">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.from_json" title="Link to this definition">¶</a></dt>
+<dd><p>Create an objective from a JSON friendly dictionary format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>d</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – A dictionary in a JSON friendly format containing the attributes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An objective created from the provided data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective">Objective</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.objective.Objective.get_worst_value">
+<span class="sig-name descname"><span class="pre">get_worst_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.get_worst_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.get_worst_value" title="Link to this definition">¶</a></dt>
+<dd><p>Get the worst value based on the optimization setting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The worst value based on the optimization setting.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.objective.Objective.merge">
+<span class="sig-name descname"><span class="pre">merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.merge" title="Link to this definition">¶</a></dt>
+<dd><p>Merge two Objectives over their attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<em>Any</em>) – The other Objective to merge.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If parts of the two Objectives are not mergeable.</p></li>
+<li><p><strong>ValueError</strong> – If the lower bound of one Objective is None.
+    If the upper bound of one Objective is None.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.objective.Objective.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/objective.html#Objective.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.objective.Objective.to_json" title="Link to this definition">¶</a></dt>
+<dd><p>Convert objectives attributes to a dictionary in a JSON friendly format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary in a JSON friendly format with the objects attributes.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

@@ -712,6 +712,60 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.__iter__">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.__iter__()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_model">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.get_model()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_new_config_id">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.get_new_config_id()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_original_config_id">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.get_original_config_id()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_original_run">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.get_original_run()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_runs">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.get_runs()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.runs.group.Group.get_trajectory">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -734,6 +788,33 @@
      <code class="docutils literal notranslate">
       <span class="pre">
        Group.id
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.latest_change">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.latest_change
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.run_names">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.run_names
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.group.Group.run_paths">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Group.run_paths
       </span>
      </code>
     </a>
@@ -763,11 +844,20 @@
                 
   <section id="module-deepcave.runs.group">
 <span id="deepcave-runs-group"></span><h1>deepcave.runs.group<a class="headerlink" href="#module-deepcave.runs.group" title="Link to this heading">¶</a></h1>
+<p># Group</p>
+<p>This module provides utilities for grouping and managing a group of runs.
+Utilities include getting attributes of the grouped runs, as well as the group itself.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Group: Can group and manage a group of runs.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.group.Group" title="deepcave.runs.group.Group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Group</span></code></a>(name, runs)</p></td>
-<td><p></p></td>
+<td><p>Can group and manage a group of runs.</p></td>
 </tr>
 </tbody>
 </table>
@@ -775,26 +865,149 @@
 <dt class="sig sig-object py" id="deepcave.runs.group.Group">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.group.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRun</span></code></a></p>
+<p>Can group and manage a group of runs.</p>
+<p>Utilities include getting attributes of the grouped runs, as well as the group itself.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>runs<span class="classifier">List[AbstractRun]</span></dt><dd><p>A list of the runs.</p>
+</dd>
+<dt>meta<span class="classifier">Dict[str, Any]</span></dt><dd><p>Contains budgets, objectives and their attributes.</p>
+</dd>
+<dt>configspace<span class="classifier">ConfigurationSpace</span></dt><dd><p>The configuration space of the runs.</p>
+</dd>
+<dt>objectives<span class="classifier">Objective</span></dt><dd><p>The objectives of the runs.</p>
+</dd>
+<dt>budgets<span class="classifier">List[Union[int, float]]</span></dt><dd><p>The budgets of the runs.</p>
+</dd>
+<dt>configs<span class="classifier">Dict[int, Any]</span></dt><dd><p>A dictionary of the configurations and their ids as key.</p>
+</dd>
+<dt>origins<span class="classifier">Dict[int, str]</span></dt><dd><p>The origins of the configurations and their ids as key.</p>
+</dd>
+<dt>trial_keys<span class="classifier">Dict[Tuple[str, int], int]</span></dt><dd><p>The keys of the trial.</p>
+</dd>
+<dt>history<span class="classifier">List[Trial]</span></dt><dd><p>The trial history.</p>
+</dd>
+<dt>prefix<span class="classifier">str</span></dt><dd><p>The prefix for the id of the group.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name for the id of the group.</p>
+</dd>
+</dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_trajectory">
-<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_trajectory" title="Link to this definition">¶</a></dt>
-<dd><p>Calculates the trajectory of the given objective and budget.</p>
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.__iter__" title="Link to this definition">¶</a></dt>
+<dd><p>Allow to iterate over the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_model">
+<span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_model" title="Link to this definition">¶</a></dt>
+<dd><p>Get the model given the configuration id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config_id</strong> (<em>int</em>) – The identificator of the configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_new_config_id">
+<span class="sig-name descname"><span class="pre">get_new_config_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_config_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_new_config_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_new_config_id" title="Link to this definition">¶</a></dt>
+<dd><p>Get a new identificator for a configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objective</strong> (<a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a>) – Objective to calculate the trajectory for.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Budget to calculate the trajectory for. If no budget is given, then the highest budget
-is chosen. By default None.</p></li>
+<li><p><strong>run_id</strong> (<em>int</em>) – The id of the run.</p></li>
+<li><p><strong>original_config_id</strong> (<em>int</em>) – The original identificator of a configuration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new identificator of a configuration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_original_config_id">
+<span class="sig-name descname"><span class="pre">get_original_config_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_original_config_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_original_config_id" title="Link to this definition">¶</a></dt>
+<dd><p>Get the original identificator of a configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config_id</strong> (<em>int</em>) – The identificator of a configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The original identificator of a configuration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_original_run">
+<span class="sig-name descname"><span class="pre">get_original_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_original_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_original_run" title="Link to this definition">¶</a></dt>
+<dd><p>Get the original run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config_id</strong> (<em>int</em>) – The identificator of the configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The original run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun">AbstractRun</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_runs">
+<span class="sig-name descname"><span class="pre">get_runs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_runs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_runs" title="Link to this definition">¶</a></dt>
+<dd><p>Get the runs in the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of the grouped runs.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun">AbstractRun</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.get_trajectory">
+<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/group.html#Group.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.group.Group.get_trajectory" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the trajectory of the given objective and budget.</p>
+<p>This includes the times, the mean costs, and the standard deviation of the costs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*args</strong> – Should be the objective to calculate the trajectory from.</p></li>
+<li><p><strong>**kwargs</strong> – Should be the budget to calculate the trajectory for.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>times</strong> (<em>List[float]</em>) – Times of the trajectory.</p></li>
 <li><p><strong>costs_mean</strong> (<em>List[float]</em>) – Costs of the trajectory.</p></li>
-<li><p><strong>costs_std</strong> (<em>List[float]</em>) – Standard deviation of the costs of the trajectory. This is particularly useful for
-grouped runs.</p></li>
-<li><p><strong>ids</strong> (<em>List[int]</em>) – The “global” ids of the selected trials.</p></li>
-<li><p><strong>config_ids</strong> (<em>List[int]</em>) – Config ids of the selected trials.</p></li>
+<li><p><strong>costs_std</strong> (<em>List[float]</em>) – Standard deviation of the costs of the trajectory.</p></li>
+<li><p><strong>ids</strong> (<em>List[int]</em>) – The “global” ids of the selected trial.</p></li>
+<li><p><strong>config_ids</strong> (<em>List[int]</em>) – The configuration ids of the selected trials.</p></li>
 </ul>
 </p>
 </dd>
@@ -804,11 +1017,10 @@ grouped runs.</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.group.Group.hash">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.group.Group.hash" title="Link to this definition">¶</a></dt>
-<dd><p>Hash of the current run. If hash changes, cache has to be cleared. This ensures that
-the cache always holds the latest results of the run.</p>
+<dd><p>Sorted hashes of the group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hash</strong> – Hash of the run.</p>
+<dd class="field-odd"><p>The sorted hash of the group.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
@@ -819,11 +1031,11 @@ the cache always holds the latest results of the run.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.group.Group.id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.group.Group.id" title="Link to this definition">¶</a></dt>
-<dd><p>Hash of the file. This is used to identify the file.
-In contrast to <cite>hash</cite>, this hash should not be changed throughout the run.</p>
+<dd><p>Get the hash as id of the group.</p>
+<p>In contrast to hash, this hash should not be changed throughout the run.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Hash of the run.</p>
+<dd class="field-odd"><p>The hash of the group.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
@@ -831,6 +1043,41 @@ In contrast to <cite>hash</cite>, this hash should not be changed throughout the
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.latest_change">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">latest_change</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#deepcave.runs.group.Group.latest_change" title="Link to this definition">¶</a></dt>
+<dd><p>Get the latest change made to the grouped runs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The latest change.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.run_names">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#deepcave.runs.group.Group.run_names" title="Link to this definition">¶</a></dt>
+<dd><p>Get the names of the runs in the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of the names of the runs in the group.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.group.Group.run_paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_paths</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#deepcave.runs.group.Group.run_paths" title="Link to this definition">¶</a></dt>
+<dd><p>Get the path of the runs in the group.</p>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

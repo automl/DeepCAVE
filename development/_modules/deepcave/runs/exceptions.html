@@ -702,9 +702,24 @@
               <div>
                 
   <h1>Source code for deepcave.runs.exceptions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Exceptions</span>
+
+<span class="sd">This module provides utilities for different errors concerning the runs.</span>
+
+<span class="sd">Exceptions will be raised, if a directory is not a valid run,</span>
+<span class="sd">as well as if runs are not mergeable.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - NotValidRunError: Raised if directory is not a valid run.</span>
+<span class="sd">    - NotMergeableError: Raised if two or more runs are not mergeable.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
 <div class="viewcode-block" id="NotValidRunError">
 <a class="viewcode-back" href="../../../api/deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotValidRunError">[docs]</a>
-<span></span><span class="k">class</span> <span class="nc">NotValidRunError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">NotValidRunError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised if directory is not a valid run.&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
@@ -714,7 +729,7 @@
 <div class="viewcode-block" id="NotMergeableError">
 <a class="viewcode-back" href="../../../api/deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError">[docs]</a>
 <span class="k">class</span> <span class="nc">NotMergeableError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised if two or more runs are not mergeable&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Raised if two or more runs are not mergeable.&quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
 

@@ -702,7 +702,18 @@
               <div>
                 
   <h1>Source code for deepcave.runs.group</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Group</span>
+
+<span class="sd">This module provides utilities for grouping and managing a group of runs.</span>
+<span class="sd">Utilities include getting attributes of the grouped runs, as well as the group itself.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Group: Can group and manage a group of runs.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
@@ -715,6 +726,37 @@
 <div class="viewcode-block" id="Group">
 <a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group">[docs]</a>
 <span class="k">class</span> <span class="nc">Group</span><span class="p">(</span><span class="n">AbstractRun</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Can group and manage a group of runs.</span>
+
+<span class="sd">    Utilities include getting attributes of the grouped runs, as well as the group itself.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    runs : List[AbstractRun]</span>
+<span class="sd">        A list of the runs.</span>
+<span class="sd">    meta : Dict[str, Any]</span>
+<span class="sd">        Contains budgets, objectives and their attributes.</span>
+<span class="sd">    configspace : ConfigurationSpace</span>
+<span class="sd">        The configuration space of the runs.</span>
+<span class="sd">    objectives : Objective</span>
+<span class="sd">        The objectives of the runs.</span>
+<span class="sd">    budgets : List[Union[int, float]]</span>
+<span class="sd">        The budgets of the runs.</span>
+<span class="sd">    configs : Dict[int, Any]</span>
+<span class="sd">        A dictionary of the configurations and their ids as key.</span>
+<span class="sd">    origins : Dict[int, str]</span>
+<span class="sd">        The origins of the configurations and their ids as key.</span>
+<span class="sd">    trial_keys : Dict[Tuple[str, int], int]</span>
+<span class="sd">        The keys of the trial.</span>
+<span class="sd">    history : List[Trial]</span>
+<span class="sd">        The trial history.</span>
+<span class="sd">    prefix : str</span>
+<span class="sd">        The prefix for the id of the group.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name for the id of the group.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;group&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]):</span>
@@ -733,7 +775,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">budgets</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span>
 
-            <span class="c1"># We need new config ids</span>
+            <span class="c1"># New config ids are needed</span>
             <span class="n">current_config_id</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="c1"># Key: new_config_id; Value: (run_id, config_id)</span>
@@ -775,7 +817,7 @@
                     <span class="c1"># Update config id</span>
                     <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span> <span class="o">=</span> <span class="n">new_config_id</span>
 
-                    <span class="c1"># Now we add it to the history</span>
+                    <span class="c1"># Now it is added to the history</span>
                     <span class="n">trial_key</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">trial_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>
@@ -792,28 +834,58 @@
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Runs can not be merged: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Group.__iter__">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.__iter__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Group&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Allow to iterate over the object.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">run</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">yield</span> <span class="n">run</span><span class="o">.</span><span class="n">name</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sorted hashes of the group.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The sorted hash of the group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hashes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
             <span class="n">hashes</span> <span class="o">+=</span> <span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">hash</span><span class="p">]</span>
 
-        <span class="c1"># We sort hashes now because we don&#39;t want to be dependent on the order</span>
+        <span class="c1"># Hashes are sorted now, so there is no dependence on the order</span>
         <span class="n">hashes</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">hashes</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hashes</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="c1"># Groups do not have a path, therefore we use the name.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the hash as id of the group.</span>
+
+<span class="sd">        In contrast to hash, this hash should not be changed throughout the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The hash of the group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Groups do not have a path, therefore the name is used.</span>
         <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="n">latest_change</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the latest change made to the grouped runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The latest change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">latest_change</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">run</span><span class="o">.</span><span class="n">latest_change</span> <span class="o">&gt;</span> <span class="n">latest_change</span><span class="p">:</span>
                 <span class="n">latest_change</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">latest_change</span>
@@ -822,48 +894,160 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">run_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the path of the runs in the group.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">run_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the names of the runs in the group.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            A list of the names of the runs in the group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">]</span>
 
+<div class="viewcode-block" id="Group.get_runs">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_runs">[docs]</a>
     <span class="k">def</span> <span class="nf">get_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the runs in the group.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[AbstractRun]</span>
+<span class="sd">            A list of the grouped runs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span></div>
+
+
+<div class="viewcode-block" id="Group.get_new_config_id">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_new_config_id">[docs]</a>
     <span class="k">def</span> <span class="nf">get_new_config_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">original_config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_config_mapping</span><span class="p">[(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">original_config_id</span><span class="p">)]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a new identificator for a configuration.</span>
 
-    <span class="k">def</span> <span class="nf">get_original_config_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">id</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run_id : int</span>
+<span class="sd">            The id of the run.</span>
+<span class="sd">        original_config_id : int</span>
+<span class="sd">            The original identificator of a configuration.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The new identificator of a configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new_config_mapping</span><span class="p">[(</span><span class="n">run_id</span><span class="p">,</span> <span class="n">original_config_id</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="Group.get_original_config_id">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_original_config_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_original_config_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the original identificator of a configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of a configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The original identificator of a configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Group.get_original_run">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_original_run">[docs]</a>
     <span class="k">def</span> <span class="nf">get_original_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractRun</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the original run.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of the configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        AbstractRun</span>
+<span class="sd">            The original run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">run_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Group.get_model">
+<a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the model given the configuration id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of the configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Any]</span>
+<span class="sd">            The model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">run_id</span><span class="p">,</span> <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">[</span><span class="n">run_id</span><span class="p">]</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span></div>
 
+
+    <span class="c1"># Types dont match superclass</span>
 <div class="viewcode-block" id="Group.get_trajectory">
 <a class="viewcode-back" href="../../../api/deepcave.runs.group.html#deepcave.runs.group.Group.get_trajectory">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the trajectory of the given objective and budget.</span>
+
+<span class="sd">        This includes the times, the mean costs, and the standard deviation of the costs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args</span>
+<span class="sd">            Should be the objective to calculate the trajectory from.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Should be the budget to calculate the trajectory for.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        times : List[float]</span>
+<span class="sd">            Times of the trajectory.</span>
+<span class="sd">        costs_mean : List[float]</span>
+<span class="sd">            Costs of the trajectory.</span>
+<span class="sd">        costs_std : List[float]</span>
+<span class="sd">            Standard deviation of the costs of the trajectory.</span>
+<span class="sd">        ids : List[int]</span>
+<span class="sd">            The &quot;global&quot; ids of the selected trial.</span>
+<span class="sd">        config_ids : List[int]</span>
+<span class="sd">            The configuration ids of the selected trials.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Cache costs</span>
         <span class="n">run_costs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">run_times</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># All x values on which we need y values</span>
+        <span class="c1"># All x values on which y values are needed</span>
         <span class="n">all_times</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">):</span>
             <span class="n">times</span><span class="p">,</span> <span class="n">costs_mean</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trajectory</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-            <span class="c1"># Cache s.t. we don&#39;t calculate it multiple times</span>
+            <span class="c1"># Cache s.t. calculate it is not calculated multiple times</span>
             <span class="n">run_costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">costs_mean</span><span class="p">)</span>
             <span class="n">run_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
 
             <span class="c1"># Add all times</span>
-            <span class="c1"># We want to calculate standard deviation on all times</span>
+            <span class="c1"># Standard deviation needs to be calculated on all times</span>
             <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">time</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_times</span><span class="p">:</span>
                     <span class="n">all_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
@@ -885,11 +1069,11 @@
             <span class="n">all_costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
         <span class="c1"># Make numpy arrays</span>
-        <span class="n">all_costs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_costs</span><span class="p">)</span>
+        <span class="n">all_costs_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_costs</span><span class="p">)</span>
 
         <span class="n">times</span> <span class="o">=</span> <span class="n">all_times</span>
-        <span class="n">costs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_costs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">costs_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">all_costs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">costs_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_costs_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">costs_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">all_costs_array</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_mean</span><span class="p">),</span> <span class="nb">list</span><span class="p">(</span><span class="n">costs_std</span><span class="p">),</span> <span class="p">[],</span> <span class="p">[]</span></div>
 </div>

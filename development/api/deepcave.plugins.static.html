@@ -763,14 +763,24 @@
                 
   <section id="module-deepcave.plugins.static">
 <span id="deepcave-plugins-static"></span><h1>deepcave.plugins.static<a class="headerlink" href="#module-deepcave.plugins.static" title="Link to this heading">¶</a></h1>
+<p># Static</p>
+<p>This module provides a plugin class for a static plugin.</p>
+<p>It provides an Enum used for the plugin state.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>PluginState: An Enum to define the state of the Plugin.</p></li>
+<li><p>StaticPlugin: This class provides a static plugin object.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.static.PluginState" title="deepcave.plugins.static.PluginState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PluginState</span></code></a>(value)</p></td>
-<td><p>An enumeration.</p></td>
+<td><p>An Enum to define the state of the Plugin.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.plugins.static.StaticPlugin" title="deepcave.plugins.static.StaticPlugin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StaticPlugin</span></code></a>()</p></td>
-<td><p>Calculation with queue.</p></td>
+<td><p>Provide a static plugin object.</p></td>
 </tr>
 </tbody>
 </table>
@@ -778,19 +788,41 @@
 <dt class="sig sig-object py" id="deepcave.plugins.static.PluginState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.static.</span></span><span class="sig-name descname"><span class="pre">PluginState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static.html#PluginState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static.PluginState" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
+<p>An Enum to define the state of the Plugin.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="deepcave.plugins.static.StaticPlugin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.static.</span></span><span class="sig-name descname"><span class="pre">StaticPlugin</span></span><a class="reference internal" href="../_modules/deepcave/plugins/static.html#StaticPlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static.StaticPlugin" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.html#deepcave.plugins.Plugin" title="deepcave.plugins.Plugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">Plugin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Calculation with queue. Made for time-consuming tasks.</p>
+<p>Provide a static plugin object.</p>
+<p>Calculation with queue. Made for time-consuming tasks.
+Register and handle callbacks.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>outputs<span class="classifier">List[Tuple[str, str, bool]]</span></dt><dd><p>The plugin specific outputs.</p>
+</dd>
+<dt>inputs<span class="classifier">List[Tuple[str, str, bool, Any]]</span></dt><dd><p>The plugin specific inputs.</p>
+</dd>
+<dt>id<span class="classifier">str</span></dt><dd><p>The plugin id.</p>
+</dd>
+<dt>raw_outputs<span class="classifier">dict[str, Any]</span></dt><dd><p>The raw outputs of a run.</p>
+</dd>
+<dt>logger<span class="classifier">Logger</span></dt><dd><p>The logger for the plugin.</p>
+</dd>
+<dt>name<span class="classifier">str</span></dt><dd><p>The name of the plugin.</p>
+</dd>
+<dt>process<span class="classifier">Callable</span></dt><dd><p>Return raw data based on a run and input data.</p>
+</dd>
+<dt>button_caption<span class="classifier">str</span></dt><dd><p>The caption for the button.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.static.StaticPlugin.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static.html#StaticPlugin.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static.StaticPlugin.__call__" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the components for the plugin. Basically, all blocks and elements of the plugin
-are stacked-up here</p>
+<dd><p>Return the components for the plugin.</p>
+<p>Basically, all blocks and elements of the plugin are stacked-up here.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Layout as list of components.</p>
@@ -804,21 +836,15 @@ are stacked-up here</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.static.StaticPlugin.register_callbacks">
 <span class="sig-name descname"><span class="pre">register_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/static.html#StaticPlugin.register_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.static.StaticPlugin.register_callbacks" title="Link to this definition">¶</a></dt>
-<dd><p>Registers basic callbacks for the plugin. Following callbacks are registered:
-- If inputs changes, the changes are pasted back. This is in particular
-interest if input dependencies are used.
-- Raw data dialog to display raw data.
-- Callback to be redirected to the config if clicked on it.</p>
+<dd><p>Register different callbacks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – _description_</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>

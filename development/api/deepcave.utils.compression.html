@@ -743,6 +743,20 @@
                 
   <section id="module-deepcave.utils.compression">
 <span id="deepcave-utils-compression"></span><h1>deepcave.utils.compression<a class="headerlink" href="#module-deepcave.utils.compression" title="Link to this heading">¶</a></h1>
+<p># Compression</p>
+<p>This module provides utilities for serializing and deserializing a dataframe from/to a string.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Encoder: This class defines a custom JSON Encoder.</p></li>
+</ul>
+</dd>
+<dt>## Constants</dt><dd><ul class="simple">
+<li><p>JSON_DENSE_SEPARATORS: Tuple(str, str)</p></li>
+<li><p>JSON_DEFAULT_SEPARATORS: Tuple(str, str)</p></li>
+<li><p>TYPE: TypeVar</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -759,8 +773,18 @@
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.compression.</span></span><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'pandas.core.frame.DataFrame'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/compression.html#deserialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.compression.deserialize" title="Link to this definition">¶</a></dt>
 <dd><p>Deserialize a dataframe from a string.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>str</em>) – The string to be deserialized.</p></li>
+<li><p><strong>dtype</strong> (<em>TYPE</em><em>, </em><em>optional</em>) – The type of the object.
+Default is pd.DataFrame.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized object.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeVar</span></code>(<code class="docutils literal notranslate"><span class="pre">TYPE</span></code>)</span></p>
+<dd class="field-odd"><p>TYPE</p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,8 +794,14 @@
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.compression.</span></span><span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/compression.html#serialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.compression.serialize" title="Link to this definition">¶</a></dt>
 <dd><p>Serialize a dataframe to a string.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>List</em><em>, </em><em>pd.DataFrame</em><em>]</em>) – The dataframe to be serialized.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The serialized object as a JSON formatted string.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>

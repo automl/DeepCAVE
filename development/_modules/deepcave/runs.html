@@ -702,7 +702,19 @@
               <div>
                 
   <h1>Source code for deepcave.runs</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># AbstractRun</span>
+
+<span class="sd">This module provides utilities to create and handle an abstract run.</span>
+
+<span class="sd">It provides functions to get information of the run, as well as the used objectives.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - AbstractRun: Create a new run.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -734,6 +746,37 @@
 <div class="viewcode-block" id="AbstractRun">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun">[docs]</a>
 <span class="k">class</span> <span class="nc">AbstractRun</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new run.</span>
+
+<span class="sd">    Provide functions to get information of the run, as well as the used objectives.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the run.</span>
+<span class="sd">    path : Optional[Path]</span>
+<span class="sd">        The path to the run.</span>
+<span class="sd">    logger : Logger</span>
+<span class="sd">        The logger for the run.</span>
+<span class="sd">    meta: Dict[str, Any]</span>
+<span class="sd">        Contains the run&#39;s meta information.</span>
+<span class="sd">    configspace: ConfigSpace.ConfigurationSpace</span>
+<span class="sd">        The configuration space of the run.</span>
+<span class="sd">    configs: Dict[int, Configuration]</span>
+<span class="sd">        Contains the configurations.</span>
+<span class="sd">    origins: Dict[int, str]</span>
+<span class="sd">        The origin of the configuration.</span>
+<span class="sd">    models: Dict[int, Optional[Union[str, &quot;torch.nn.Module&quot;]]]</span>
+<span class="sd">        Contains the modules.</span>
+<span class="sd">    history: List[Trial]</span>
+<span class="sd">        The history of Trials.</span>
+<span class="sd">    trial_keys: Dict[Tuple[str, int], int]</span>
+<span class="sd">        Contains config_id, budget and the corresponding trial_id.</span>
+<span class="sd">    models_dir : Path</span>
+<span class="sd">        The directory of the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -744,22 +787,46 @@
         <span class="c1"># objects created by reset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
+<div class="viewcode-block" id="AbstractRun.reset">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.reset">[docs]</a>
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset the run to default values / empties.</span>
+
+<span class="sd">        Clear the initial data and configurations of the object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigSpace</span><span class="o">.</span><span class="n">ConfigurationSpace</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span>  <span class="c1"># type: ignore</span>
+            <span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]]</span>  <span class="c1"># noqa: F821</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Trial</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (config_id, budget) -&gt; trial_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span> <span class="nb">int</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (config_id, budget) -&gt; trial_id</span>
 
         <span class="c1"># Cached data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># config_id -&gt; budget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># config_id -&gt; budget</span></div>
+
 
     <span class="k">def</span> <span class="nf">_update_highest_budget</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">status</span><span class="p">:</span> <span class="n">Status</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the highest budget.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of the configuration.</span>
+<span class="sd">        budget : Union[int, float]</span>
+<span class="sd">            The new highest budget.</span>
+<span class="sd">        status : Status</span>
+<span class="sd">            The status of the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
             <span class="c1"># Update highest budget</span>
             <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span>
@@ -772,7 +839,9 @@
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Hash of the current run. If hash changes, cache has to be cleared. This ensures that</span>
+<span class="sd">        Hash of the current run.</span>
+
+<span class="sd">        If hash changes, cache has to be cleared. This ensures that</span>
 <span class="sd">        the cache always holds the latest results of the run.</span>
 
 <span class="sd">        Returns</span>
@@ -786,7 +855,9 @@
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Hash of the file. This is used to identify the file.</span>
+<span class="sd">        Hash of the file.</span>
+
+<span class="sd">        This is used to identify the file.</span>
 <span class="sd">        In contrast to `hash`, this hash should not be changed throughout the run.</span>
 
 <span class="sd">        Returns</span>
@@ -798,42 +869,149 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the latest change.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The latest change.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">0</span>
 
+<div class="viewcode-block" id="AbstractRun.get_trial_key">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trial_key">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">get_trial_key</span><span class="p">(</span>
+        <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the trial key.</span>
 
-    <span class="k">def</span> <span class="nf">get_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial_key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Trial</span><span class="p">]:</span>
+<span class="sd">        It is obtained through the assembly of configuration and budget.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of the configuration.</span>
+<span class="sd">        budget : Union[int, float, None]</span>
+<span class="sd">            The budget of the Trial.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[int, Union[int, float, None]]</span>
+<span class="sd">            Tuple representing the trial key, consisting of configuration id and the budget.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractRun.get_trial">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trial">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial_key</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Trial</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the trial with the responding key if existing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trial_key : Tuple[int, int]</span>
+<span class="sd">            The key for the desired trial.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Trial]</span>
+<span class="sd">            The trial object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">trial_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">[</span><span class="n">trial_key</span><span class="p">]]</span></div>
 
+
+<div class="viewcode-block" id="AbstractRun.get_trials">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trials">[docs]</a>
     <span class="k">def</span> <span class="nf">get_trials</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Trial</span><span class="p">]:</span>
-        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterator of all stored trials.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Iterator[Trial]</span>
+<span class="sd">            An iterator over all stored trials.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span></div>
+
+
+<div class="viewcode-block" id="AbstractRun.get_meta">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_meta">[docs]</a>
     <span class="k">def</span> <span class="nf">get_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a shallow copy of the meta information.</span>
 
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A shallow copy of the meta information dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AbstractRun.empty">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.empty">[docs]</a>
     <span class="k">def</span> <span class="nf">empty</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the run&#39;s history is empty.</span>
 
-    <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if run history is empty, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="AbstractRun.get_origin">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_origin">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_origin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the origin, given a config id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The identificator of the configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[str]</span>
+<span class="sd">            An origin string corresponding to the given configuration id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="AbstractRun.get_objectives">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objectives">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objectives</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of all objectives corresponding to the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Objective]</span>
+<span class="sd">            A list containing all objectives associated with the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objectives</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
             <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
             <span class="n">objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">objectives</span>
+        <span class="k">return</span> <span class="n">objectives</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_objective">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Objective</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the objective based on the id or the name.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the objective based on the id or the name.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -842,10 +1020,9 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Objective</span>
-<span class="sd">            The objective object.</span>
+<span class="sd">        Optional[Objective]</span>
+<span class="sd">            The objective.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">objectives</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
@@ -862,7 +1039,7 @@
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_id">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objective_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the id of the objective if it is found.</span>
+<span class="sd">        Return the id of the objective if it is found.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -891,17 +1068,40 @@
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Objective was not found.&quot;</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.get_objective_ids">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_ids">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objective_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">())))</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the ids of the objectives.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[int]</span>
+<span class="sd">            A list of the ids of the objectives.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">())))</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_objective_name">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_name">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objective_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the cost name of given objective names.</span>
-<span class="sd">        Returns &quot;Combined Cost&quot; if multiple objective names were involved.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
+<span class="sd">        Returns &quot;Combined Cost&quot; if multiple objective names were involved.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        objectives : Optional[List[Objective]]</span>
+<span class="sd">            A list of the objectives.</span>
+<span class="sd">            By default, None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The name of the objective.</span>
+<span class="sd">            Returns &quot;Combined Cost&quot; if multiple objective names were involved.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">available_objective_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -914,27 +1114,41 @@
         <span class="k">return</span> <span class="n">COMBINED_COST_NAME</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.get_objective_names">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_objective_names">[docs]</a>
     <span class="k">def</span> <span class="nf">get_objective_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the names of the objectives.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            A list containing the names of the objectives.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()]</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_configs">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_configs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get configurations of the run. Optionally, only configurations which were evaluated</span>
+<span class="sd">        Get configurations of the run.</span>
+
+<span class="sd">        Optionally, only configurations which were evaluated</span>
 <span class="sd">        on the passed budget are considered.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        budget : Union[int, float], optional</span>
-<span class="sd">            Considered budget. By default None (all configurations are included).</span>
+<span class="sd">        budget : Optiona[Union[int, float]]</span>
+<span class="sd">            Considered budget.</span>
+<span class="sd">            By default, None (all configurations are included).</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Dict[int, Configuration]</span>
 <span class="sd">            Configuration id and the configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Include all configs if we have combined budget</span>
+        <span class="c1"># Include all configs if budget is a combined budget</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -954,11 +1168,42 @@
         <span class="k">return</span> <span class="n">configs</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.get_config">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_config">[docs]</a>
     <span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Configuration</span><span class="p">:</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">config</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the configuration with the corresponding id.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        id : int</span>
+<span class="sd">            The id of the configuration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Configuration</span>
+<span class="sd">            The corresponding Configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="AbstractRun.get_config_id">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_config_id">[docs]</a>
     <span class="k">def</span> <span class="nf">get_config_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="n">Dict</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the id of the configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : Union[Configuration, Dict]</span>
+<span class="sd">            The configuration for which to find the id.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[int]</span>
+<span class="sd">            The configuration id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
 
@@ -967,62 +1212,112 @@
             <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">config</span><span class="p">:</span>
                 <span class="k">return</span> <span class="nb">id</span>
 
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
-    <span class="k">def</span> <span class="nf">get_num_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">))</span>
+
+<div class="viewcode-block" id="AbstractRun.get_num_configs">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_num_configs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_num_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Count the number of configurations stored in this run with a specific budget.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
+<span class="sd">            The budget for which to count the configurations.</span>
+<span class="sd">            If not provided, counts all configurations.</span>
+<span class="sd">            Default is None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of all configurations with a given budget.</span>
+<span class="sd">            If budget is None, counts all configurations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">))</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_budget">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budget">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">human</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the budget given an id.</span>
+<span class="sd">        Get the budget given an id.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        id : Union[int, str]</span>
-<span class="sd">            Id of the wanted budget. If id is a string, it is converted to an integer.</span>
+<span class="sd">            The id of the wanted budget.</span>
+<span class="sd">            If id is a string, it is converted to an integer.</span>
+<span class="sd">        human : bool, optional</span>
+<span class="sd">            Make the output more readable.</span>
+<span class="sd">            By default False.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        float</span>
-<span class="sd">            Budget.</span>
+<span class="sd">        float, int</span>
+<span class="sd">            The budget.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the budget with this id is invalid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="n">human</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">budgets</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">id</span><span class="p">)]</span></div>
+        <span class="k">return</span> <span class="n">budgets</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">id</span><span class="p">)]</span>  <span class="c1"># type: ignore</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.get_budget_ids">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budget_ids">[docs]</a>
     <span class="k">def</span> <span class="nf">get_budget_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_combined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the corresponding ids for the budgets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        include_combined : bool, optional</span>
+<span class="sd">            If False, cut last id of budget ids.</span>
+<span class="sd">            By default True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[int]</span>
+<span class="sd">            A list of the budget ids.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budget_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">())))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">include_combined</span><span class="p">:</span>
             <span class="n">budget_ids</span> <span class="o">=</span> <span class="n">budget_ids</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">budget_ids</span>
+        <span class="k">return</span> <span class="n">budget_ids</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_budgets">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_budgets">[docs]</a>
     <span class="k">def</span> <span class="nf">get_budgets</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">include_combined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the budgets from the meta data.</span>
+<span class="sd">        Return the budgets from the meta data.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        human : bool, optional</span>
-<span class="sd">            Make the output better readable. By default False.</span>
+<span class="sd">            Make the output more readable.</span>
+<span class="sd">            By default False.</span>
+<span class="sd">        include_combined : bool, optional</span>
+<span class="sd">            If True, include the combined budget.</span>
+<span class="sd">            By default True.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[Union[int, float]]</span>
-<span class="sd">            List of budgets.</span>
+<span class="sd">        List[Union[int, float, str]]</span>
+<span class="sd">            List of budgets. In a readable form, if human is True.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">include_combined</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">COMBINED_BUDGET</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
             <span class="n">budgets</span> <span class="o">+=</span> <span class="p">[</span><span class="n">COMBINED_BUDGET</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">human</span><span class="p">:</span>
-            <span class="n">readable_budgets</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">readable_budgets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
                     <span class="n">readable_budgets</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Combined&quot;</span><span class="p">]</span>
@@ -1038,9 +1333,16 @@
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_highest_budget">[docs]</a>
     <span class="k">def</span> <span class="nf">get_highest_budget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the highest found budget for a config id. If no config id is specified then</span>
+<span class="sd">        Return the highest found budget for a config id.</span>
+
+<span class="sd">        If no config id is specified then</span>
 <span class="sd">        the highest available budget is returned.</span>
 <span class="sd">        Moreover, if no budget is available None is returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : Optional[int]</span>
+<span class="sd">            The config id for which the highest budget is returned.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1059,13 +1361,16 @@
 
     <span class="k">def</span> <span class="nf">_process_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Processes the costs to get rid of NaNs. NaNs are replaced by the worst value of the</span>
+<span class="sd">        Process the costs to get rid of NaNs.</span>
+
+<span class="sd">        NaNs are replaced by the worst value of the</span>
 <span class="sd">        objective.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        costs : List[float]</span>
-<span class="sd">            Costs, which should be processed. Must be the same length as the number of objectives.</span>
+<span class="sd">            Costs, which should be processed.</span>
+<span class="sd">            Must be the same length as the number of objectives.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1085,16 +1390,23 @@
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>
     <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the costs of a configuration. In case of multi-objective, multiple costs are</span>
+<span class="sd">        Return the costs of a configuration.</span>
+
+<span class="sd">        In case of multi-objective, multiple costs are</span>
 <span class="sd">        returned.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config_id : int</span>
 <span class="sd">            Configuration id to get the costs for.</span>
-<span class="sd">        budget : Optional[Union[int, float]], optional</span>
-<span class="sd">            Budget to get the costs from the configuration id for. By default None. If budget is</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
+<span class="sd">            Budget to get the costs from the configuration id for. By default, None. If budget is</span>
 <span class="sd">            None, the highest budget is chosen.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[float]</span>
+<span class="sd">            List of costs from the associated configuration.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -1102,11 +1414,6 @@
 <span class="sd">            If the configuration id is not found.</span>
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If the budget was not evaluated for the passed config id.</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        List[float]</span>
-<span class="sd">            List of costs from the associated configuration.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
@@ -1129,15 +1436,17 @@
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get all costs in the history with their config ids. Only configs from the given budget</span>
+<span class="sd">        Get all costs in the history with their config ids.</span>
+
+<span class="sd">        Only configs from the given budget</span>
 <span class="sd">        and statuses are returned.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        budget : Optional[Union[int, float]], optional</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            Budget to select the costs. If no budget is given, the highest budget is chosen.</span>
-<span class="sd">            By default None.</span>
-<span class="sd">        statuses : Optional[Union[Status, List[Status]]], optional</span>
+<span class="sd">            By default, None.</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
 <span class="sd">            Only selected stati are considered. If no status is given, all stati are considered.</span>
 <span class="sd">            By default None.</span>
 
@@ -1149,7 +1458,7 @@
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
 
-        <span class="c1"># In case of COMBINED_BUDGET, we only keep the costs of the highest found budget</span>
+        <span class="c1"># In case of COMBINED_BUDGET, only the costs of the highest found budget are kept</span>
         <span class="n">highest_evaluated_budget</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1166,7 +1475,7 @@
                     <span class="n">highest_evaluated_budget</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span>
 
                 <span class="n">latest_budget</span> <span class="o">=</span> <span class="n">highest_evaluated_budget</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span>
-                <span class="c1"># We only keep the highest budget</span>
+                <span class="c1"># Only the highest budget is kept</span>
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">&gt;=</span> <span class="n">latest_budget</span><span class="p">:</span>
                     <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1183,25 +1492,25 @@
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_status">[docs]</a>
     <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the status of a configuration.</span>
+<span class="sd">        Return the status of a configuration.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config_id : int</span>
 <span class="sd">            Configuration id to get the status for.</span>
-<span class="sd">        budget : Optional[Union[int, float]], optional</span>
-<span class="sd">            Budget to get the status from the configuration id for. By default None. If budget is</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
+<span class="sd">            Budget to get the status from the configuration id for. By default, None. If budget is</span>
 <span class="sd">            None, the highest budget is chosen.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the configuration id is not found.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Status</span>
 <span class="sd">            Status of the configuration.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the configuration id is not found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Status</span><span class="o">.</span><span class="n">NOT_EVALUATED</span>
@@ -1214,7 +1523,7 @@
 
         <span class="n">trial_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
 
-        <span class="c1"># Unfortunately, we have to iterate through the history to find the status</span>
+        <span class="c1"># Unfortunately, it is necessary to iterate through the history to find the status</span>
         <span class="c1"># TODO: Cache the stati</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">trial_key</span> <span class="o">==</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">():</span>
@@ -1232,16 +1541,16 @@
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the incumbent with its normalized cost.</span>
+<span class="sd">        Return the incumbent with its normalized cost.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]], optional</span>
-<span class="sd">            Considerd objectives. By default None. If None, all objectives are considered.</span>
-<span class="sd">        budget : Optional[Union[int, float]], optional</span>
-<span class="sd">            Considered budget. By default None. If None, the highest budget is chosen.</span>
-<span class="sd">        statuses : Optional[Union[Status, List[Status]]], optional</span>
-<span class="sd">            Considered statuses. By default None. If None, all stati are considered.</span>
+<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]]</span>
+<span class="sd">            Considered objectives. By default, None. If None, all objectives are considered.</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
+<span class="sd">            Considered budget. By default, None. If None, the highest budget is chosen.</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
+<span class="sd">            Considered statuses. By default, None. If None, all stati are considered.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1280,16 +1589,18 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculates one cost value from multiple costs.</span>
-<span class="sd">        Normalizes the costs first and weight every cost the same.</span>
+<span class="sd">        Calculate one cost value from multiple costs.</span>
+
+<span class="sd">        Normalizes the costs first and weigh every cost the same.</span>
 <span class="sd">        The lower the normalized cost, the better.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        costs : List[float]</span>
-<span class="sd">            The costs, which should be merged. Must be the same length as the original number of objectives.</span>
-<span class="sd">        objectives : Optional[List[Objective]], optional</span>
-<span class="sd">            The considered objectives to the costs. By default None.</span>
+<span class="sd">            The costs, which should be merged. Must be the same length as the original number of</span>
+<span class="sd">            objectives.</span>
+<span class="sd">        objectives : Optional[List[Objective]]</span>
+<span class="sd">            The considered objectives to the costs. By default, None.</span>
 <span class="sd">            If None, all objectives are considered. The passed objectives can differ from the</span>
 <span class="sd">            original number objectives.</span>
 
@@ -1297,6 +1608,12 @@
 <span class="sd">        -------</span>
 <span class="sd">        float</span>
 <span class="sd">            Merged costs.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the number of costs is different from the original number of objectives.</span>
+<span class="sd">            If the objective was not found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get rid of NaN values</span>
         <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">)</span>
@@ -1334,8 +1651,8 @@
             <span class="n">b</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">objective</span><span class="o">.</span><span class="n">lower</span>
             <span class="n">normalized_cost</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
 
-            <span class="c1"># We optimize the lower</span>
-            <span class="c1"># So we need to flip the normalized cost</span>
+            <span class="c1"># The lower is optimized</span>
+            <span class="c1"># So the normalized cost needs to be flipped</span>
             <span class="k">if</span> <span class="n">objective</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
                 <span class="n">normalized_cost</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">normalized_cost</span>
 
@@ -1351,14 +1668,30 @@
         <span class="k">return</span> <span class="n">cost</span></div>
 
 
-    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]:</span>
+<div class="viewcode-block" id="AbstractRun.get_model">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_model">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: F821</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a model associated with the configuration id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config_id : int</span>
+<span class="sd">            The configuration id.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[&quot;torch.nn.Module]</span>
+<span class="sd">            A model for the provided configuration id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">torch</span>
 
-        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">.pth&quot;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">models_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span><span class="si">}</span><span class="s2">.pth&quot;</span>  <span class="c1"># type: ignore</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_trajectory">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trajectory">[docs]</a>
@@ -1366,29 +1699,30 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculates the trajectory of the given objective and budget.</span>
+<span class="sd">        Calculate the trajectory of the given objective and budget.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        objective : Objective</span>
 <span class="sd">            Objective to calculate the trajectory for.</span>
-<span class="sd">        budget : Optional[Union[int, float]], optional</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            Budget to calculate the trajectory for. If no budget is given, then the highest budget</span>
 <span class="sd">            is chosen. By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        times : List[float]</span>
-<span class="sd">            Times of the trajectory.</span>
-<span class="sd">        costs_mean : List[float]</span>
-<span class="sd">            Costs of the trajectory.</span>
-<span class="sd">        costs_std : List[float]</span>
-<span class="sd">            Standard deviation of the costs of the trajectory. This is particularly useful for</span>
-<span class="sd">            grouped runs.</span>
-<span class="sd">        ids : List[int]</span>
-<span class="sd">            The &quot;global&quot; ids of the selected trials.</span>
-<span class="sd">        config_ids : List[int]</span>
-<span class="sd">            Config ids of the selected trials.</span>
+<span class="sd">        Tuple[List[float], List[float], List[float], List[int], List[int]]</span>
+<span class="sd">            times : List[float]</span>
+<span class="sd">                Times of the trajectory.</span>
+<span class="sd">            costs_mean : List[float]</span>
+<span class="sd">                Costs of the trajectory.</span>
+<span class="sd">            costs_std : List[float]</span>
+<span class="sd">                Standard deviation of the costs of the trajectory. This is particularly useful for</span>
+<span class="sd">                grouped runs.</span>
+<span class="sd">            ids : List[int]</span>
+<span class="sd">                The &quot;global&quot; ids of the selected trials.</span>
+<span class="sd">            config_ids : List[int]</span>
+<span class="sd">                Config ids of the selected trials.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
@@ -1417,7 +1751,7 @@
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
             <span class="n">trial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
-            <span class="c1"># We want to use all budgets</span>
+            <span class="c1"># All budgets should should be used</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="o">!=</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
                 <span class="c1"># Only consider selected/last budget</span>
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
@@ -1437,7 +1771,7 @@
                 <span class="n">current_cost</span> <span class="o">=</span> <span class="n">cost</span>
 
                 <span class="n">costs_mean</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
-                <span class="n">costs_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">costs_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
                 <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">end_time</span><span class="p">)</span>
                 <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
                 <span class="n">config_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">)</span>
@@ -1451,14 +1785,16 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">Configuration</span><span class="p">],</span> <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Encodes a given config (id) to a normalized list.</span>
-<span class="sd">        If a config is passed, no look-up has to be done.</span>
+<span class="sd">        Encode a given configuration (id) to a normalized list.</span>
+
+<span class="sd">        If a configuration is passed, no look-up has to be done.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config : Union[int, Dict[Any, Any], Configuration]</span>
-<span class="sd">            Either the config id, config as dict, or Configuration itself.</span>
-<span class="sd">        specific : bool, optional</span>
+<span class="sd">            Either the configuration id, as configuration as dict,</span>
+<span class="sd">            or a Configuration itself.</span>
+<span class="sd">        specific : bool</span>
 <span class="sd">            Use specific encoding for fanova tree, by default False.</span>
 
 <span class="sd">        Returns</span>
@@ -1495,13 +1831,29 @@
         <span class="k">return</span> <span class="n">x</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.encode_configs">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.encode_configs">[docs]</a>
     <span class="k">def</span> <span class="nf">encode_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Configuration</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encode a list of configurations into a corresponding numpy array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        configs : List[Configuration]</span>
+<span class="sd">            A list containing the configurations to be encoded.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            A numpy array with the encoded configurations.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_set</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-            <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">x_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_set</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="AbstractRun.get_encoded_data">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_data">[docs]</a>
@@ -1513,30 +1865,30 @@
         <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">include_config_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">include_combined_cost</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Encodes configurations to process them further. After the configurations are encoded,</span>
+<span class="sd">        Encode configurations to process them further.</span>
+
+<span class="sd">        After the configurations are encoded,</span>
 <span class="sd">        they can be used in model prediction.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]], optional</span>
+<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]]</span>
 <span class="sd">            Which objectives should be considered. If None, all objectives are</span>
-<span class="sd">            considered. By default None.</span>
-<span class="sd">        budget : Optional[List[Status]], optional</span>
-<span class="sd">            Which budget should be considered. By default None. If None, only the highest budget</span>
+<span class="sd">            considered. By default, None.</span>
+<span class="sd">        budget : Optional[List[Status]]</span>
+<span class="sd">            Which budget should be considered. By default, None. If None, only the highest budget</span>
 <span class="sd">            is considered.</span>
-<span class="sd">        statuses : Optional[Union[Status, List[Status]]], optional</span>
-<span class="sd">            Which statuses should be considered. By default None. If None, all statuses are</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
+<span class="sd">            Which statuses should be considered. By default, None. If None, all statuses are</span>
 <span class="sd">            considered.</span>
-<span class="sd">        encode_y : bool, optional</span>
-<span class="sd">            Whether y should be normalized too. By default False.</span>
-<span class="sd">        specific : bool, optional</span>
+<span class="sd">        specific : bool</span>
 <span class="sd">            Whether a specific encoding should be used. This encoding is compatible with pyrfr.</span>
 <span class="sd">            A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.</span>
 <span class="sd">            By default False.</span>
-<span class="sd">        include_config_ids : bool, optional</span>
-<span class="sd">            Whether to include config ids. By default False.</span>
+<span class="sd">        include_config_ids : bool</span>
+<span class="sd">            Whether to include configuration ids. By default, False.</span>
 <span class="sd">        include_combined_cost : bool, optional</span>
 <span class="sd">            Whether to include combined cost. Note that the combined cost is calculated by the</span>
 <span class="sd">            passed objectives only. By default False.</span>
@@ -1550,16 +1902,15 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If a hyperparameter is not supported.</span>
+<span class="sd">            If a hyperparameter (HP) is not supported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">Objective</span><span class="p">):</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">objectives</span><span class="p">]</span>
 
-        <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">x_set</span><span class="p">,</span> <span class="n">y_set</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="n">config_ids</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
@@ -1577,17 +1928,17 @@
             <span class="k">if</span> <span class="n">include_combined_cost</span><span class="p">:</span>
                 <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)]</span>
 
-            <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">x_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">y_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
             <span class="n">config_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
 
-        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-        <span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-        <span class="n">config_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config_ids</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">x_set_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_set</span><span class="p">)</span>
+        <span class="n">y_set_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_set</span><span class="p">)</span>
+        <span class="n">config_ids_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config_ids</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Imputation: Easiest case is to replace all nans with -1</span>
-        <span class="c1"># However, since Stefan used different values for inactives</span>
-        <span class="c1"># we also have to use different inactives to be compatible</span>
+        <span class="c1"># However, since Stefan used different values for inactive hyperparameters,</span>
+        <span class="c1"># Also different inactive hyperparameters have to be used, to be compatible</span>
         <span class="c1"># with the random forests.</span>
         <span class="c1"># https://github.com/automl/SMAC3/blob/a0c89502f240c1205f83983c8f7c904902ba416d/smac/epm/base_rf.py#L45</span>
         <span class="k">if</span> <span class="n">specific</span><span class="p">:</span>
@@ -1614,10 +1965,10 @@
                             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Hyperparameter not supported.&quot;</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">conditional</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="n">nonfinite_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">])</span>
-                    <span class="n">X</span><span class="p">[</span><span class="n">nonfinite_mask</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">impute_values</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                    <span class="n">non_finite_mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">x_set_array</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">])</span>
+                    <span class="n">x_set_array</span><span class="p">[</span><span class="n">non_finite_mask</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">impute_values</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
-        <span class="c1"># Now we create dataframes for both values and labels</span>
+        <span class="c1"># Now dataframes are created for both values and labels</span>
         <span class="c1"># [CONFIG_ID, HP1, HP2, ..., HPn, OBJ1, OBJ2, ..., OBJm, COMBINED_COST]</span>
         <span class="k">if</span> <span class="n">include_config_ids</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;config_id&quot;</span><span class="p">]</span>
@@ -1631,9 +1982,9 @@
             <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="n">COMBINED_COST_NAME</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">include_config_ids</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">config_ids</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">config_ids_array</span><span class="p">,</span> <span class="n">x_set_array</span><span class="p">,</span> <span class="n">y_set_array</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x_set_array</span><span class="p">,</span> <span class="n">y_set_array</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
 
@@ -1652,28 +2003,37 @@
     <span class="n">budgets</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Checks the passed runs on equality based on the selected runs and returns the requested</span>
-<span class="sd">    attributes.</span>
+<span class="sd">    Check the passed runs on equality based on the selected runs.</span>
+
+<span class="sd">    Return the requested attributes.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    runs : list[AbstractRun]</span>
 <span class="sd">        Runs to check for equality.</span>
 <span class="sd">    meta : bool, optional</span>
-<span class="sd">        Meta-Data excluding objectives and budgets, by default True</span>
+<span class="sd">        Meta-Data excluding objectives and budgets, by default True.</span>
 <span class="sd">    configspace : bool, optional</span>
-<span class="sd">        ConfigSpace, by default True</span>
+<span class="sd">        Wheter to include the configuration space, by default True.</span>
 <span class="sd">    objectives : bool, optional</span>
-<span class="sd">        Objectives, by default True</span>
+<span class="sd">        Wheter to include the objectives, by default True.</span>
 <span class="sd">    budgets : bool, optional</span>
-<span class="sd">        Budgets, by default True</span>
+<span class="sd">        Whether to include the budgets, by default True.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    Dict[str, Any]</span>
 <span class="sd">        Dictionary containing the checked attributes.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NotMergeableError</span>
+<span class="sd">        If the meta data of the runs are not equal.</span>
+<span class="sd">        If the configuration spaces of the runs are not equal.</span>
+<span class="sd">        If the budgets of the runs are not equal.</span>
+<span class="sd">        If the objective of the runs are not equal.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">result</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">result</span>
@@ -1736,6 +2096,7 @@
             <span class="k">for</span> <span class="n">o1_</span><span class="p">,</span> <span class="n">o2_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">):</span>
                 <span class="n">o1_</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">o2_</span><span class="p">)</span>
 
+        <span class="k">assert</span> <span class="n">o1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">serialized_objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">o1</span><span class="p">]</span>
         <span class="n">result</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialized_objectives</span>
         <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>

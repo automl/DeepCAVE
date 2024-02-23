@@ -720,6 +720,15 @@
      </code>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.layouts.sidebar.SidebarLayout.register_callbacks">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SidebarLayout.register_callbacks()
+      </span>
+     </code>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -745,11 +754,20 @@
                 
   <section id="module-deepcave.layouts.sidebar">
 <span id="deepcave-layouts-sidebar"></span><h1>deepcave.layouts.sidebar<a class="headerlink" href="#module-deepcave.layouts.sidebar" title="Link to this heading">¶</a></h1>
+<p># SidebarLayout</p>
+<p>This module defines layout for the sidebar.</p>
+<p>Callbacks are registered and handled.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>SidebarLayout: Customize the Sidebar Layout.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.layouts.sidebar.SidebarLayout" title="deepcave.layouts.sidebar.SidebarLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SidebarLayout</span></code></a>(categorized_plugins)</p></td>
-<td><p></p></td>
+<td><p>Customize the Sidebar Layout.</p></td>
 </tr>
 </tbody>
 </table>
@@ -757,6 +775,16 @@
 <dt class="sig sig-object py" id="deepcave.layouts.sidebar.SidebarLayout">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.layouts.sidebar.</span></span><span class="sig-name descname"><span class="pre">SidebarLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categorized_plugins</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/layouts/sidebar.html#SidebarLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.layouts.sidebar.SidebarLayout" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.layouts.html#deepcave.layouts.Layout" title="deepcave.layouts.Layout"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layout</span></code></a></p>
+<p>Customize the Sidebar Layout.</p>
+<p>Callbacks are registered and handled.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>plugins<span class="classifier">Dict[str, List[Plugin]]</span></dt><dd><p>A dictionary of all categorized plugins.</p>
+</dd>
+<dt>nav_points<span class="classifier">Dict[str, List[Tuple[str, str, str]]]</span></dt><dd><p>A dictionary with plugins attributes corresponding to their category.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.layouts.sidebar.SidebarLayout.__call__">
 <span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/layouts/sidebar.html#SidebarLayout.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.layouts.sidebar.SidebarLayout.__call__" title="Link to this definition">¶</a></dt>
@@ -768,6 +796,18 @@
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.layouts.sidebar.SidebarLayout.register_callbacks">
+<span class="sig-name descname"><span class="pre">register_callbacks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/layouts/sidebar.html#SidebarLayout.register_callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.layouts.sidebar.SidebarLayout.register_callbacks" title="Link to this definition">¶</a></dt>
+<dd><p>Register the callbacks for the sidebar layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>

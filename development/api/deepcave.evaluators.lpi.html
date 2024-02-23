@@ -703,13 +703,33 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deepcave.evaluators.lpi.random">
+  <a class="reference internal nav-link" href="#deepcave.evaluators.lpi.LPI">
    <code class="docutils literal notranslate">
     <span class="pre">
-     random()
+     LPI
     </span>
    </code>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.lpi.LPI.calculate">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       LPI.calculate()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.lpi.LPI.get_importances">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       LPI.get_importances()
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -734,18 +754,97 @@
                 
   <section id="module-deepcave.evaluators.lpi">
 <span id="deepcave-evaluators-lpi"></span><h1>deepcave.evaluators.lpi<a class="headerlink" href="#module-deepcave.evaluators.lpi" title="Link to this heading">¶</a></h1>
+<p># LPI</p>
+<p>This module provides utilities to calculate the local parameter importance (LPI).</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>LPI: This class calculates the local parameter importance (LPI).</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">LPI</span></code>(run)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.evaluators.lpi.LPI" title="deepcave.evaluators.lpi.LPI"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LPI</span></code></a>(run)</p></td>
+<td><p>Calculate the local parameter importance (LPI).</p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="deepcave.evaluators.lpi.random">
-<span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.lpi.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">interval</span> <span class="pre">[0,</span> <span class="pre">1).</span></span></span><a class="headerlink" href="#deepcave.evaluators.lpi.random" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepcave.evaluators.lpi.LPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.lpi.</span></span><span class="sig-name descname"><span class="pre">LPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/lpi.html#LPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.lpi.LPI" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Calculate the local parameter importance (LPI).</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>run<span class="classifier">AbstractRun</span></dt><dd><p>The AbstractRun to get the importance from.</p>
+</dd>
+<dt>cs<span class="classifier">ConfigurationSpace</span></dt><dd><p>The configuration space of the run.</p>
+</dd>
+<dt>hp_names<span class="classifier">List[str]</span></dt><dd><p>The names of the Hyperparameters.</p>
+</dd>
+<dt>variances<span class="classifier">Dict[Any, list]</span></dt><dd><p>The overall variances per tree.</p>
+</dd>
+<dt>importances<span class="classifier">dict</span></dt><dd><p>The importances of the Hyperparameters.</p>
+</dd>
+<dt>continuous_neighbors<span class="classifier">int</span></dt><dd><p>The number of neighbors chosen for continuous Hyperparameters.</p>
+</dd>
+<dt>incumbent<span class="classifier">Configuration</span></dt><dd><p>The incumbent of the run.</p>
+</dd>
+<dt>default<span class="classifier">Configuration</span></dt><dd><p>A configuration containing Hyperparameters with default values.</p>
+</dd>
+<dt>incumbent_array<span class="classifier">numpy.ndarray</span></dt><dd><p>The internal vector representation of the incumbent.</p>
+</dd>
+<dt>seed<span class="classifier">int</span></dt><dd><p>The seed. If not provided it will be random.</p>
+</dd>
+<dt>rs<span class="classifier">RandomState</span></dt><dd><p>A random state with a given seed value.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.lpi.LPI.calculate">
+<span class="sig-name descname"><span class="pre">calculate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">continous_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/lpi.html#LPI.calculate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.lpi.LPI.calculate" title="Link to this definition">¶</a></dt>
+<dd><p>Prepare the data and train a RandomForest model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered objectives. By default, None. If None, all objectives are considered.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. By default, None. If None, the highest budget is chosen.</p></li>
+<li><p><strong>continuous_neighbors</strong> (<em>int</em><em>, </em><em>optional</em>) – How many neighbors should be chosen for continuous hyperparameters (HPs).
+By default, 500.</p></li>
+<li><p><strong>n_trees</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of trees for the fanova forest.
+Default is 10.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The seed. By default None. If None, a random seed is chosen.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.lpi.LPI.get_importances">
+<span class="sig-name descname"><span class="pre">get_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp_names</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/lpi.html#LPI.get_importances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.lpi.LPI.get_importances" title="Link to this definition">¶</a></dt>
+<dd><p>Return the importances.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hp_names</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Selected Hyperparameter names to get the importance scores from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>importances</strong> – Hyperparameter name and mean+var importance.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Tuple[float, float]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the important scores are not calculated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
 
 </section>
 

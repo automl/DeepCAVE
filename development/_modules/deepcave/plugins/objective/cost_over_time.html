@@ -702,7 +702,20 @@
               <div>
                 
   <h1>Source code for deepcave.plugins.objective.cost_over_time</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># CostOverTime</span>
+
+<span class="sd">This module provides utilities for visualizing the cost over time.</span>
+
+<span class="sd">Visualized changes can be regarding to number of configurations or time.</span>
+<span class="sd">It includes a corresponding plugin class.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - CostOverTime: A plugin to provide a visualization for the cost over time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -724,6 +737,17 @@
 <div class="viewcode-block" id="CostOverTime">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime">[docs]</a>
 <span class="k">class</span> <span class="nc">CostOverTime</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A plugin to provide a visualization for the cost over time.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    objective_options : List[Dict[str, Any]]</span>
+<span class="sd">        A list of dictionaries of the objective options.</span>
+<span class="sd">    budget_options : List[Dict[str, Any]]</span>
+<span class="sd">        A list of dictionaries of the budget options.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;cost_over_time&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Cost Over Time&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-chart-line&quot;</span>
@@ -732,6 +756,27 @@
 <div class="viewcode-block" id="CostOverTime.check_runs_compatibility">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.check_runs_compatibility">[docs]</a>
     <span class="k">def</span> <span class="nf">check_runs_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the runs are compatible.</span>
+
+<span class="sd">        This function is needed if all selected runs need something in common</span>
+<span class="sd">        (e.g. budget or objective).</span>
+<span class="sd">        Since this function is called before the layout is created,</span>
+<span class="sd">        it can be also used to set common values for the plugin.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        runs : List[AbstractRun]</span>
+<span class="sd">            A list containing the selected runs.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotMergeableError</span>
+<span class="sd">            If the meta data of the runs are not equal.</span>
+<span class="sd">            If the configuration spaces of the runs are not equal.</span>
+<span class="sd">            If the budgets of the runs are not equal.</span>
+<span class="sd">            If the objective of the runs are not equal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_equality</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">budgets</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Set some attributes here</span>
@@ -749,7 +794,21 @@
 <div class="viewcode-block" id="CostOverTime.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.get_input_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[dbc.Row]</span>
+<span class="sd">            Layouts for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -785,7 +844,21 @@
 <div class="viewcode-block" id="CostOverTime.get_filter_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.get_filter_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the filter block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Any]</span>
+<span class="sd">            Layouts for the filter block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="p">[</span>
@@ -826,7 +899,19 @@
 
 <div class="viewcode-block" id="CostOverTime.load_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.load_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
+
+<span class="sd">        This method is necessary to pre-load contents for the inputs.</span>
+<span class="sd">        So, if the plugin is called for the first time or there are no results in the cache,</span>
+<span class="sd">        the plugin gets its content from this method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            The content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">&quot;objective_id&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_options</span><span class="p">,</span>
@@ -852,7 +937,32 @@
 <div class="viewcode-block" id="CostOverTime.process">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.process">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return raw data based on a run and input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run : AbstractRun</span>
+<span class="sd">            The selected run to process.</span>
+<span class="sd">        inputs : Dict[str, Any]</span>
+<span class="sd">            The input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A serialized dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
 
@@ -872,14 +982,51 @@
 <div class="viewcode-block" id="CostOverTime.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register outputs.</span>
+<span class="sd">            The register_output function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dcc.Graph</span>
+<span class="sd">            The layouts for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="CostOverTime.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.objective.cost_over_time.html#deepcave.plugins.objective.cost_over_time.CostOverTime.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read in the raw data and prepare them for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differs compared to &#39;load_inputs&#39;</span>
+<span class="sd">        or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        runs :</span>
+<span class="sd">            The selected runs.</span>
+<span class="sd">        inputs :</span>
+<span class="sd">            The input and filter values from the user.</span>
+<span class="sd">        outputs :</span>
+<span class="sd">            The raw outputs from the runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        go.Figure</span>
+<span class="sd">            The output figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">show_runs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_runs&quot;</span><span class="p">]</span>
         <span class="n">show_groups</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_groups&quot;</span><span class="p">]</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="kc">None</span>
@@ -905,9 +1052,9 @@
             <span class="n">y_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;costs_std&quot;</span><span class="p">])</span>
             <span class="n">y_upper</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">y_err</span><span class="p">)</span>
             <span class="n">y_lower</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_err</span><span class="p">)</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+            <span class="n">y_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
-            <span class="n">hovertext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">hovertext</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">hoverinfo</span> <span class="o">=</span> <span class="s2">&quot;skip&quot;</span>
             <span class="n">symbol</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;lines&quot;</span>
@@ -920,7 +1067,7 @@
             <span class="n">traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
-                    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y_list</span><span class="p">,</span>
                     <span class="n">name</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
                     <span class="n">line_shape</span><span class="o">=</span><span class="s2">&quot;hv&quot;</span><span class="p">,</span>
                     <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="n">idx</span><span class="p">)),</span>
