@@ -1,7 +1,7 @@
 """
 # Worker.
 
-This module can create an redis queue worker.
+This module can create a redis queue worker.
 """
 
 from rq import Connection, Worker

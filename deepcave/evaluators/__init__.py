@@ -9,5 +9,5 @@ fanova
 footprint
     This module provides utilities for creating a footprint of a run.
 lpi
-    This module provides utilties to calculate the local parameter importance (LPM).
+    This module provides utilities to calculate the local parameter importance (LPI).
 """

@@ -47,7 +47,7 @@ class BOHBRun(Run):
         """
         if self.path is None:
             return ""
-        print(self.path)
+
         # Use hash of results.json as id
         return file_to_hash(self.path / "results.json")
 
