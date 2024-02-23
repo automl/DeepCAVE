@@ -1,4 +1,17 @@
-from typing import List
+#  noqa: D400
+"""
+# CostOverTime
+
+This module provides utilities for visualizing the cost over time.
+
+Visualized changes can be regarding to number of configurations or time.
+It includes a corresponding plugin class.
+
+## Classes
+    - CostOverTime: A plugin to provide a visualization for the cost over time.
+"""
+
+from typing import Any, Callable, Dict, List
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -18,12 +31,44 @@ from deepcave.utils.styled_plotty import (
 
 
 class CostOverTime(DynamicPlugin):
+    """
+    A plugin to provide a visualization for the cost over time.
+
+    Properties
+    ----------
+    objective_options : List[Dict[str, Any]]
+        A list of dictionaries of the objective options.
+    budget_options : List[Dict[str, Any]]
+        A list of dictionaries of the budget options.
+    """
+
     id = "cost_over_time"
     name = "Cost Over Time"
     icon = "fas fa-chart-line"
     help = "docs/plugins/cost_over_time.rst"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
+        """
+        Check if the runs are compatible.
+
+        This function is needed if all selected runs need something in common
+        (e.g. budget or objective).
+        Since this function is called before the layout is created,
+        it can be also used to set common values for the plugin.
+
+        Parameters
+        ----------
+        runs : List[AbstractRun]
+            A list containing the selected runs.
+
+        Raises
+        ------
+        NotMergeableError
+            If the meta data of the runs are not equal.
+            If the configuration spaces of the runs are not equal.
+            If the budgets of the runs are not equal.
+            If the objective of the runs are not equal.
+        """
         check_equality(runs, objectives=True, budgets=True)
 
         # Set some attributes here
@@ -38,7 +83,21 @@ class CostOverTime(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dbc.Row]
+            Layouts for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -71,7 +130,21 @@ class CostOverTime(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            Layouts for the filter block.
+        """
         return [
             html.Div(
                 [
@@ -109,7 +182,19 @@ class CostOverTime(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Any]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The content to be filled.
+        """
         return {
             "objective_id": {
                 "options": self.objective_options,
@@ -132,7 +217,32 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The selected run to process.
+        inputs : Dict[str, Any]
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A serialized dictionary.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
 
@@ -149,11 +259,48 @@ class CostOverTime(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            The layouts for the output block.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs):
+    def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        runs :
+            The selected runs.
+        inputs :
+            The input and filter values from the user.
+        outputs :
+            The raw outputs from the runs.
+
+        Returns
+        -------
+        go.Figure
+            The output figure.
+        """
         show_runs = inputs["show_runs"]
         show_groups = inputs["show_groups"]
         objective = None
@@ -179,9 +326,9 @@ class CostOverTime(DynamicPlugin):
             y_err = np.array(outputs[run.id]["costs_std"])
             y_upper = list(y + y_err)
             y_lower = list(y - y_err)
-            y = list(y)
+            y_list = list(y)
 
-            hovertext = ""
+            hovertext = None
             hoverinfo = "skip"
             symbol = None
             mode = "lines"
@@ -194,7 +341,7 @@ class CostOverTime(DynamicPlugin):
             traces.append(
                 go.Scatter(
                     x=x,
-                    y=y,
+                    y=y_list,
                     name=run.name,
                     line_shape="hv",
                     line=dict(color=get_color(idx)),

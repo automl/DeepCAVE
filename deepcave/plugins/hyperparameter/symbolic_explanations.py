@@ -145,7 +145,7 @@ class SymbolicExplanations(StaticPlugin):
                                     ),
                                     dcc.Slider(
                                         id=register("parsimony", "value", type=int),
-                                        marks=dict([i, str(10**i)] for i in range(-8, 1)),
+                                        marks=dict((i, str(10**i)) for i in range(-8, 1)),
                                         min=-8,
                                         max=0,
                                         step=1,
@@ -448,10 +448,10 @@ class SymbolicExplanations(StaticPlugin):
                 f"{objective.name} = "
                 f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
             )
-        except:
+        except Exception as e:
             conv_expr = (
                 "Conversion of the expression failed. Please try another seed or increase "
-                "the parsimony hyperparameter."
+                f"the parsimony hyperparameter: {e}"
             )
 
         if len(conv_expr) > 150:

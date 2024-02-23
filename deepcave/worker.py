@@ -1,3 +1,9 @@
+"""
+# Worker.
+
+This module can create a redis queue worker.
+"""
+
 from rq import Connection, Worker
 
 from deepcave import queue

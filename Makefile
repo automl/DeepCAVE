@@ -48,7 +48,10 @@ install:
 install-dev:
 	$(PIP) install -e ".[dev]"
 	pre-commit install
-
+	
+install-examples:
+	$(PIP) install -e ".[examples]"
+	
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :
 	$(BLACK) ${EXAMPLES_DIR} --check || :
@@ -62,7 +65,7 @@ check-pydocstyle:
 	$(PYDOCSTYLE) ${SOURCE_DIR} || :
 
 check-mypy:
-	$(MYPY) ${SOURCE_DIR} || :
+	$(MYPY) --check-untyped-defs --install-types --non-interactive --ignore-missing-imports ${SOURCE_DIR} || :
 
 check-flake8:
 	$(FLAKE8) ${SOURCE_DIR} || :

@@ -5,7 +5,7 @@
 This module provides utilities for running symbolic regression with gplearn.
 """
 
-from typing import List, Union
+from typing import List, Optional, Union
 
 import numpy as np
 import sympy
@@ -18,22 +18,26 @@ from deepcave.utils.logs import get_logger
 logger = get_logger(__name__)
 
 
-def exp(x):
+def exp(x: Union[float, np.ndarray]) -> Union[float, np.ndarray]:
     """
     Get a safe exp function with a maximum value of 100000 to avoid overflow.
 
     Parameters
     ----------
-    x : float
+    x : Union[float, np.ndarray]
         The value to calculate the exponential of.
 
     Returns
     -------
-    float
+    Union[float, np.ndarray]
         The safe exponential of x.
     """
     with np.errstate(all="ignore"):
-        max_value = np.full(shape=x.shape, fill_value=100000)
+        max_value: Union[float, np.ndarray]
+        if isinstance(x, np.ndarray):
+            max_value = np.full(shape=x.shape, fill_value=100000)
+        else:
+            max_value = 100000.0
         return np.minimum(np.exp(x), max_value)
 
 
@@ -54,11 +58,10 @@ def get_function_set() -> List[Union[str, _Function]]:
 
 
 def convert_symb(
-    symb: SymbolicRegressor, n_decimals: int = None, hp_names: list = None
-) -> sympy.core.expr:
+    symb: SymbolicRegressor, n_decimals: Optional[int] = None, hp_names: Optional[List[str]] = None
+) -> str:
     """
-    Convert a fitted symbolic regression to a simplified and potentially rounded mathematical
-    expression.
+    Convert a fitted symbolic regression to a simplified and rounded mathematical expression.
 
     Warning: eval is used in this function, thus it should not be used on unsanitized input (see
     https://docs.sympy.org/latest/modules/core.html?highlight=eval#module-sympy.core.sympify).
@@ -74,7 +77,7 @@ def convert_symb(
 
     Returns
     -------
-    SymbolicRegressor
+    str
         Converted mathematical expression.
     """
     # sqrt is protected function in gplearn, always returning sqrt(abs(x))
@@ -126,8 +129,8 @@ def convert_symb(
             symb_conv = symb_conv.subs(X1, hp1)
         else:
             raise ValueError(
-                f"Numer of hyperparameters to be explained by symbolic explanations must not "
-                f"be larger than 2"
+                "Numer of hyperparameters to be explained by symbolic explanations must not "
+                "be larger than 2"
             )
 
     # Simplify the formula
@@ -148,4 +151,4 @@ def convert_symb(
             if isinstance(a, sympy.core.numbers.Float):
                 symb_simpl = symb_simpl.subs(a, round(a, n_decimals))
 
-    return symb_simpl
+    return str(symb_simpl)

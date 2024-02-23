@@ -1,7 +1,11 @@
-from typing import Generator, Iterator, List, Optional
+#  noqa: D400
+"""
+# ConfigSpace
 
-import random
-from itertools import islice, product
+This module samples random as well as border configurations.
+"""
+
+from typing import Iterator, Optional
 
 import numpy as np
 from ConfigSpace.configuration_space import Configuration, ConfigurationSpace
@@ -16,12 +20,12 @@ from ConfigSpace.util import deactivate_inactive_hyperparameters
 
 def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configuration]:
     """
-    Generates border configurations from the configuration space.
+    Generate border configurations from the configuration space.
 
     Parameters
     ----------
     configspace : ConfigurationSpace
-        The configspace from which the hyperparameters are drawn from.
+        The configuration space from which the hyperparameters are drawn from.
 
     Yields
     ------
@@ -50,19 +54,19 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
             config[hp_name] = value
 
         try:
-            config = deactivate_inactive_hyperparameters(config, configspace)
-            config.is_valid_configuration()
+            configuration = deactivate_inactive_hyperparameters(config, configspace)
+            configuration.is_valid_configuration()
         except Exception:
             continue
 
-        yield config
+        yield configuration
 
 
 def sample_random_config(
     configspace: ConfigurationSpace, d: Optional[int] = None
 ) -> Iterator[Configuration]:
     """
-    Generates random configurations from the configuration space.
+    Generate random configurations from the configuration space.
 
     Parameters
     ----------
@@ -70,8 +74,8 @@ def sample_random_config(
         The configspace from which the hyperparameters are drawn from.
     d : Optional[int], optional
         The possible hyperparameter values can be reduced by this argument as the range gets
-        discretized. For example, an integer or float hyperparameter has only four possible values
-        if d=4. By default None (no discretization is done).
+        discretized. For example, an integer or float hyperparameter has only four possible
+        values if d=4. By default, None (no discretization is done).
 
     Yields
     ------
@@ -87,7 +91,7 @@ def sample_random_config(
     rng = np.random.RandomState(0)
 
     while True:
-        config = {}
+        config_dict = {}
 
         # Iterates over the hyperparameters to get considered values
         for hp_name, hp in zip(
@@ -117,12 +121,12 @@ def sample_random_config(
 
             # Get a random choice
             value = rng.choice(values)
-            config[hp_name] = value
+            config_dict[hp_name] = value
 
         try:
-            config = deactivate_inactive_hyperparameters(config, configspace)
-            config.is_valid_configuration()
+            configuration = deactivate_inactive_hyperparameters(config_dict, configspace)
+            configuration.is_valid_configuration()
         except Exception:
             continue
 
-        yield config
+        yield configuration

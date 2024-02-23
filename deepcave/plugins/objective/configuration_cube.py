@@ -1,4 +1,16 @@
-from typing import Dict, Tuple
+#  noqa: D400
+"""
+# ConfigurationCube
+
+This module provides utilities for visualizing and creating a configuration cube.
+
+The configuration cube displays configurations and their score on the objective.
+
+## Classes
+    - ConfigurationCube: A plugin for visualizing a configuration cube.
+"""
+
+from typing import Any, Callable, Dict, List, Tuple
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -9,7 +21,7 @@ from dash.exceptions import PreventUpdate
 
 from deepcave.config import Config
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import Status
+from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import (
     get_checklist_options,
@@ -28,6 +40,8 @@ logger = get_logger(__name__)
 
 
 class ConfigurationCube(DynamicPlugin):
+    """A plugin for visualizing a configuration cube."""
+
     id = "ccube"
     name = "Configuration Cube"
     icon = "fas fa-cube"
@@ -35,7 +49,21 @@ class ConfigurationCube(DynamicPlugin):
     help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dbc.Row]
+            Layouts for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -72,7 +100,21 @@ class ConfigurationCube(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[html.Div]:
+        """
+        Get the layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[html.Div]
+            Layouts for the filter block.
+        """
         return [
             html.Div(
                 [
@@ -98,14 +140,48 @@ class ConfigurationCube(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Any]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The content to be filled.
+        """
         return {
             "n_configs": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
             "hyperparameter_names": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
-        # Prepare objetives
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Work like 'load_inputs' but called after inputs have changed.
+
+        It is restricted to three Hyperparameters.
+
+        Note
+        ----
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Current content of the inputs.
+
+        Returns
+        -------
+        Dict[str, Any]
+           The dictionary with the changes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -167,7 +243,32 @@ class ConfigurationCube(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, str]:
+        """
+        Return raw data based on the run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The selected run.
+        inputs : Dict[str, Any]
+            The input data.
+
+        Returns
+        -------
+        Dict[str, str]
+            The serialized dictionary.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
 
@@ -177,11 +278,48 @@ class ConfigurationCube(DynamicPlugin):
         return {"df": serialize(df)}
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> Tuple[dcc.Graph,]:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register output.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        Tuple[dcc.Graph,]
+            Layout for the output block.
+        """
         return (dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),)
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
+        """
+        Read in the raw data and prepares them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        go.Figure
+            The output figure.
+        """
         df = deserialize(outputs["df"], dtype=pd.DataFrame)
         hp_names = inputs["hyperparameter_names"]
         n_configs = inputs["n_configs"]
@@ -217,7 +355,7 @@ class ConfigurationCube(DynamicPlugin):
         # Transforms data to values
         values = np.transpose(np.array(data)).tolist()
 
-        # Now we want to filter duplicates
+        # Now the duplicates are filtered
         filtered_data: Dict[Tuple[int, float], Tuple] = {}
         for config_id, cost, v in zip(config_ids, costs, values):
             v = tuple(v)  # Make hashable
@@ -235,7 +373,7 @@ class ConfigurationCube(DynamicPlugin):
                     if old_cost > cost:
                         continue
 
-                # Otherwise we have to replace
+                # Otherwise it is replaced
                 del filtered_data[old_key]
 
             filtered_data[key] = v

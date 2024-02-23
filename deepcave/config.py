@@ -1,9 +1,50 @@
+#  noqa: D400
+"""
+# Config
+
+This module defines the config object and its constants.
+Also defines multiple constants for directories, the server name, available plugins and converters.
+
+## Classes
+    - Config: Describe the config object.
+"""
+
 from typing import Any, Dict, List, Type
 
 from pathlib import Path
 
+from deepcave.runs.run import Run
+
 
 class Config:
+    """
+    Describe the config object.
+
+    Also define the constants of the config object.
+    Includes multiple constants for directories, the server name, available plugins and converters.
+
+    Constants
+    ---------
+    TITLE : str
+    DEBUG: bool
+    REFRESH_RATE: int
+    SAVE_IMAGES: bool
+    FIGURE_MARGIN: Dict
+    FIGURE_HEIGHT: str
+    REDIS_PORT: int
+    REDIS_ADDRESS: str
+    DASH_PORT: int
+    DASH_ADDRESS: str
+    META_DEFAULT: Dict
+
+    Properties
+    ----------
+    DASH_ADRESS : str
+        The address of the server name.
+    DASH_PORT : int
+        The port of the server name.
+    """
+
     # General config
     TITLE: str = "DeepCAVE"
     DEBUG: bool = False
@@ -34,18 +75,22 @@ class Config:
 
     @property
     def DEFAULT_WORKING_DIRECTORY(self) -> Path:
+        """Specifies the default working directory."""
         return Path.cwd() / "logs"
 
     @property
     def CACHE_DIR(self) -> Path:
+        """Specifies the default cache directory."""
         return Path(__file__).parent / "cache"
 
     @property
     def SERVER_NAME(self) -> str:
+        """Specifies the server name, consisting of address and port."""
         return f"http://{self.DASH_ADDRESS}:{self.DASH_PORT}"
 
     @property
-    def PLUGINS(self) -> Dict[str, List["Plugin"]]:
+    def PLUGINS(self) -> Dict[str, List[Any]]:
+        """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
         from deepcave.plugins.hyperparameter.importances import Importances
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
@@ -60,6 +105,7 @@ class Config:
         from deepcave.plugins.summary.footprint import FootPrint
         from deepcave.plugins.summary.overview import Overview
 
+        plugins: Dict[str, List[Any]] = {}
         plugins = {
             "Summary": [
                 Overview(),
@@ -85,6 +131,7 @@ class Config:
 
     @property
     def CONVERTERS(self) -> List[Type["Run"]]:
+        """Get a list of available run converters."""
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run

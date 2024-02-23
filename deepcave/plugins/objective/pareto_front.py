@@ -1,4 +1,16 @@
-from typing import List, Union
+#  noqa: D400
+"""
+# ParetoFront
+
+This module provides utilities for creating a visualization of the Pareto Front.
+
+It includes the corresponding Pareto Front plugin.
+
+## Classes
+    - ParetoFront: Generate an interactive Pareto Front visualization.
+"""
+
+from typing import Any, Callable, Dict, List, Literal, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -7,7 +19,7 @@ from dash import dcc, html
 
 from deepcave.config import Config
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import Status, check_equality
+from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import (
@@ -18,12 +30,44 @@ from deepcave.utils.styled_plotty import (
 
 
 class ParetoFront(DynamicPlugin):
+    """
+    Generate an interactive Pareto Front visualization.
+
+    Properties
+    ----------
+    objective_options : List[Dict[str, Any]]
+        A list of the objective options.
+    budget_options : List[Dict[str, Any]]
+        A list of the budget options.
+    """
+
     id = "pareto_front"
     name = "Pareto Front"
     icon = "fas fa-wind"
     help = "docs/plugins/pareto_front.rst"
 
-    def check_runs_compatibility(self, runs):
+    def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
+        """
+        Check if the runs are compatible.
+
+        This function is needed if all selected runs need something in common
+        (e.g. budget or objective).
+        Since this function is called before the layout is created,
+        it can be also used to set common values for the plugin.
+
+        Parameters
+        ----------
+        runs : List[AbstractRun]
+            A list containing the selected runs.
+
+        Raises
+        ------
+        NotMergeableError
+            If the meta data of the runs are not equal.
+            If the configuration spaces of the runs are not equal.
+            If the budgets of the runs are not equal.
+            If the objective of the runs are not equal.
+        """
         check_equality(runs, objectives=True, budgets=True)
 
         # Set some attributes here
@@ -38,7 +82,21 @@ class ParetoFront(DynamicPlugin):
         self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Any]:
+        """
+        Get layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -85,7 +143,21 @@ class ParetoFront(DynamicPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the filter block.
+        """
         return [
             html.Div(
                 [
@@ -128,7 +200,19 @@ class ParetoFront(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            The content to be filled.
+        """
         return {
             "objective_id_1": {
                 "options": self.objective_options,
@@ -148,7 +232,32 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs : Dict[str, Any]
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The serialized dictionary.
+        """
         # Get budget
         budget = run.get_budget(inputs["budget_id"])
 
@@ -172,15 +281,14 @@ class ParetoFront(DynamicPlugin):
         points = points[sorted_idx]
         config_ids = config_ids[sorted_idx]
 
-        is_front: Union[List, np.ndarray] = np.ones(points.shape[0], dtype=bool)
+        is_front: np.ndarray = np.ones(points.shape[0], dtype=bool)
         for point_idx, costs in enumerate(points):
-
             if is_front[point_idx]:
                 # Keep any point with a lower/upper cost
                 # This loop is a little bit complicated than
                 # is_front[is_front] = np.any(points[is_front] < c, axis=1)
                 # because objectives can be optimized in different directions.
-                # We therefore have to check for each objective separately.
+                # Therefore it has to be checked for each objective separately.
                 select = None
                 for idx, (objective, cost) in enumerate(zip([objective_1, objective_2], costs)):
                     if objective.optimize == "upper":
@@ -205,11 +313,48 @@ class ParetoFront(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dcc.Graph:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            The layout for the output block.
+        """
         return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
 
     @staticmethod
-    def load_outputs(runs, inputs, outputs):
+    def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        runs :
+            The selected runs.
+        inputs :
+            The input and filter values from the user.
+        outputs :
+            Raw outputs from the runs.
+
+        Returns
+        -------
+        go.Figure
+            The output figure.
+        """
         show_all = inputs["show_all"]
 
         traces = []
@@ -256,7 +401,7 @@ class ParetoFront(DynamicPlugin):
                     )
                 )
 
-            # Check if we need hv or vh
+            # Check if hv or vh is needed
             objective_1 = run.get_objective(inputs["objective_id_1"])
             objective_2 = run.get_objective(inputs["objective_id_2"])
             optimize1 = objective_1.optimize
@@ -302,14 +447,50 @@ class ParetoFront(DynamicPlugin):
         return figure
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable) -> html.Img:
+        """
+        Get the layout for the matplotlib output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        html.Img
+            The layout for the matplotlib output block.
+        """
         return html.Img(
             id=register("graph", "src"),
             className="img-fluid",
         )
 
     @staticmethod
-    def load_mpl_outputs(runs, inputs, outputs):
+    def load_mpl_outputs(runs, inputs, outputs):  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        runs :
+            The selected runs.
+        inputs :
+            Input and filter values from the user.
+        outputs :
+            Raw outputs from the runs.
+
+        Returns
+        -------
+        The rendered matplotlib figure.
+        """
         show_all = inputs["show_all"] == "true"
 
         plt.figure()
@@ -337,18 +518,20 @@ class ParetoFront(DynamicPlugin):
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
 
-            color = plt.get_color(idx)  # , alpha=0.1)
-            color_pareto = plt.get_color(idx)
+            # , alpha=0.1)
+            color = plt.get_color(idx)  # type: ignore
+            color_pareto = plt.get_color(idx)  # type: ignore
 
             if show_all:
                 plt.scatter(x, y, color=color, marker="o", alpha=0.1, s=3)
 
-            # Check if we need hv or vh
+            # Check if hv or vh is needed
             objective_1 = run.get_objective(inputs["objective_id_1"])
             objective_2 = run.get_objective(inputs["objective_id_2"])
             optimize1 = objective_1.optimize
             optimize2 = objective_2.optimize
 
+            line_shape: Union[Literal["post"], Literal["pre"], Literal["mid"]]
             if optimize1 == optimize2:
                 if objective_1.optimize == "lower":
                     line_shape = "post"
@@ -372,4 +555,4 @@ class ParetoFront(DynamicPlugin):
 
         plt.legend()
 
-        return plt.render()
+        return plt.render()  # type: ignore

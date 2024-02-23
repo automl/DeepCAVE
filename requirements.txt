@@ -1,3 +1,5 @@
+# If something is changed here, change it in the pre-commit-hook under mypy additonal dependencies as well
+# otherwise mypy wont check the dependencies
 wheel>=0.41.2
 setuptools==68.2.2
 absl-py>=1.0.0
@@ -10,7 +12,6 @@ pyyaml>=6.0.1
 kaleido>=0.2.1
 gplearn>=0.4.2
 sympy>=1.12
-kaleido>=0.2.1
 
 # AutoML packages
 ConfigSpace==0.6.1
