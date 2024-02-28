@@ -750,7 +750,7 @@ class Plugin(Layout, ABC):
             Layout as list of components.
         """
         from deepcave import c, notification
-        print(self.__class__)
+
         # Reset runtime variables
         self.previous_inputs = {}
         self.raw_outputs = None
@@ -800,7 +800,6 @@ class Plugin(Layout, ABC):
             ]
         else:
             components += [html.H1(self.name)]
-
         try:
             self.check_runs_compatibility(self.all_runs)
         except NotMergeableError as message:

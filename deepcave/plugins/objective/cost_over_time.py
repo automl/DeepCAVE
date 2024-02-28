@@ -25,7 +25,6 @@ class CostOverTime(DynamicPlugin):
     help = "docs/plugins/cost_over_time.rst"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
-        print("check_runs_compatibility in CoT has been called.")
         try:
             check_equality(runs, objectives=True, budgets=True)
         except NotMergeableError as e:
