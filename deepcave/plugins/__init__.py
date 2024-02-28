@@ -750,7 +750,7 @@ class Plugin(Layout, ABC):
             Layout as list of components.
         """
         from deepcave import c, notification
-
+        print(self.__class__)
         # Reset runtime variables
         self.previous_inputs = {}
         self.raw_outputs = None

@@ -41,15 +41,21 @@ class ParetoFront(DynamicPlugin):
                 notification.update("The objectives of the runs are not equal.", color="warning")
 
         # Set some attributes here
-        run = runs[0]
+        # It is necessary to get the run with the smallest budget as
+        # first comparative value, else there is gonna be an index problem
+        objective_options = []
+        budget_options = []
+        for run in runs:
+            objective_names = run.get_objective_names()
+            objective_ids = run.get_objective_ids()
+            objective_options.append(get_select_options(objective_names, objective_ids))
 
-        objective_names = run.get_objective_names()
-        objective_ids = run.get_objective_ids()
-        self.objective_options = get_select_options(objective_names, objective_ids)
+            budgets = run.get_budgets(human=True)
+            budget_ids = run.get_budget_ids()
+            budget_options.append(get_select_options(budgets, budget_ids))
+        self.objective_options = min(objective_options, key=len)
+        self.budget_options = min(budget_options, key=len)
 
-        budgets = run.get_budgets(human=True)
-        budget_ids = run.get_budget_ids()
-        self.budget_options = get_select_options(budgets, budget_ids)
 
     @staticmethod
     def get_input_layout(register):
