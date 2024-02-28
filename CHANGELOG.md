@@ -1,7 +1,14 @@
 # Version 1.1.4
 
+## General
+- It is now possible to view multiple unequal runs at once.
+- Added an enum for displaying according warning messages.
+- Updated the Cost over Time documentation accordingly.
+
 ## Bug-Fixes
--
+- When getting budget, attributes etc from multiple runs in Cost over Time and Pareto Front:
+    - Instead of taking the first run as comparative value,
+    - take the one with the lowest budget, else the index for the budgets could be out of bounds.
 
 # Version 1.1.3
 
@@ -29,7 +36,7 @@
 - SMAC 2.0
 
 ## Dependencies
-- Remove SMAC dependency by adding required function directly
+- Remove SMAC dependency by adding required function directly.
 
 # Version 1.0.1
 

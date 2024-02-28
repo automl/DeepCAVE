@@ -9,7 +9,7 @@ configurations for two given objectives.
 
 .. note::
     You can enable or disable specific runs if you click on the name right to the plot.
-    If you click on a configuration you a redirected to the configuration plugin to see 
+    If you click on a configuration you are redirected to the configuration plugin to see 
     the configuration in detail.
 
 This plugin is capable of answering following questions:
