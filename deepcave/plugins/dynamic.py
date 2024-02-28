@@ -42,6 +42,7 @@ class DynamicPlugin(Plugin, ABC):
             runs = self.get_selected_runs(inputs)
 
             raw_outputs = {}
+            rc.clear()
             for run in runs:
                 run_outputs = rc.get(run, self.id, inputs_key)
                 if run_outputs is None:
