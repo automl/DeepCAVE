@@ -166,7 +166,6 @@ class PartialDependencies(StaticPlugin):
     @staticmethod
     def process(run, inputs):
         # Surrogate
-        print("Process PDP has been called.")
         hp_names = run.configspace.get_hyperparameter_names()
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
