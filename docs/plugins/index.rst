@@ -1,5 +1,5 @@
-Plugins
-=======
+Displaying Data with Plugins
+============================
 
 .. toctree::
    :hidden:

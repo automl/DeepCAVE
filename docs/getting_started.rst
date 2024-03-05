@@ -40,7 +40,7 @@ to see the dashboard in action:
 
 
 Displaying the data is done via plugins. You can select the plugins you want to use in the menu on the left.
-This is further explained in the :ref:`plugins<Plugins>` section.
+This is further explained in the :ref:`plugins<Displaying Data with Plugins>` section.
 
 DeepCAVE uses runs to interprete data. A run is a collection of trials
 (a configuration with associated costs). Once valid runs (see :ref:`converter<Converters>`) are
