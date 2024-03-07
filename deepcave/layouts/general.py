@@ -292,25 +292,23 @@ class GeneralLayout(Layout):
                 raise PreventUpdate()
 
             # For the default group names, if no name was entered
-            if "group_counter" not in globals():
-                globals()["group_counter"] = 0
+            group_counter = 0
 
             groups = {}
             for group_name, run_paths in zip(group_names, all_run_paths):
                 if group_name is None or group_name == "":
                     # Set the default group name with a counter,
                     # so the groups dont overwrite themselves
-                    group_counter = globals().get("group_counter")
                     group_name_unavailable = True
 
+                    # Check to see that no group name that already exists
+                    # gets picked
                     while group_name_unavailable:
                         group_name = f"Group {group_counter}"
                         if group_name not in c.get("groups").keys():
                             group_name_unavailable = False
                         else:
                             group_counter += 1
-                    
-                    globals()["group_counter"] = group_counter
             
                 if run_paths is None or len(run_paths) == 0:
                     continue
@@ -325,16 +323,20 @@ class GeneralLayout(Layout):
 
                 groups[group_name] = valid_run_paths
 
+            # Sort the groups alphabetically, so when added
+            # they appear ordered
+            sorted_groups = dict(sorted(groups.items()))
+
             try:
                 # Now save it
-                run_handler.update_groups(groups)
+                run_handler.update_groups(sorted_groups)
             except NotMergeableError:
                 notification.update("The selected runs are not mergeable.")
 
                 # This will automatically trigger the group display s.t. the selection is redo.
                 return i + 1
 
-            self.logger.debug(f"Groups: {groups}")
+            self.logger.debug(f"Groups: {sorted_groups}")
 
             raise PreventUpdate()
 
