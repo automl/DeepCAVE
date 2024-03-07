@@ -25,6 +25,8 @@ class ParetoFront(DynamicPlugin):
     help = "docs/plugins/pareto_front.rst"
 
     def check_runs_compatibility(self, runs):
+        # If the runs are not mergeable, they still should be displayed
+        # but with a corresponding warning message
         try:
             check_equality(runs, objectives=True, budgets=True)
         except NotMergeableError as e:
@@ -41,8 +43,8 @@ class ParetoFront(DynamicPlugin):
                 notification.update("The objectives of the runs are not equal.", color="warning")
 
         # Set some attributes here
-        # It is necessary to get the run with the smallest budget as
-        # first comparative value, else there is gonna be an index problem
+        # It is necessary to get the run with the smallest budget and objective options
+        # as first comparative value, else there is gonna be an index problem
         objective_options = []
         budget_options = []
         for run in runs:
@@ -55,7 +57,6 @@ class ParetoFront(DynamicPlugin):
             budget_options.append(get_select_options(budgets, budget_ids))
         self.objective_options = min(objective_options, key=len)
         self.budget_options = min(budget_options, key=len)
-
 
     @staticmethod
     def get_input_layout(register):

@@ -6,7 +6,7 @@
 - Updated the Cost over Time documentation accordingly.
 
 ## Bug-Fixes
-- When getting budget, attributes etc from multiple runs in Cost over Time and Pareto Front:
+- When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
     - Instead of taking the first run as comparative value,
     - take the one with the lowest budget, else the index for the budgets could be out of bounds.
 
