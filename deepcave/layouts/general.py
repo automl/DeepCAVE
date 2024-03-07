@@ -262,6 +262,7 @@ class GeneralLayout(Layout):
 
             # Load from cache if page is loaded
             children = []
+            print(groups)
             for name, paths in groups.items():
                 if name is None:
                     continue
@@ -290,12 +291,28 @@ class GeneralLayout(Layout):
                 self._refresh_groups = False
                 raise PreventUpdate()
 
+            # For the default group names, if no name was entered
+            if "group_counter" not in globals():
+                globals()["group_counter"] = 0
+
             groups = {}
             for group_name, run_paths in zip(group_names, all_run_paths):
                 if group_name is None or group_name == "":
-                    continue
+                    # Set the default group name with a counter,
+                    # so the groups dont overwrite themselves
+                    group_name = f"Group {globals().get('group_counter')}"
 
+                    group_counter = globals().get("group_counter")
+                    group_counter += 1
+                    globals()["group_counter"] = group_counter
+            
                 if run_paths is None or len(run_paths) == 0:
+                    # If the path is none, the group counter should not go up
+                    # since there will be no new group
+                    group_counter = globals().get("group_counter")
+                    group_counter -= 1
+                    globals()["group_counter"] = group_counter
+
                     continue
 
                 valid_run_paths = []
