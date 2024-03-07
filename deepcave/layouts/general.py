@@ -300,19 +300,19 @@ class GeneralLayout(Layout):
                 if group_name is None or group_name == "":
                     # Set the default group name with a counter,
                     # so the groups dont overwrite themselves
-                    group_name = f"Group {globals().get('group_counter')}"
-
                     group_counter = globals().get("group_counter")
-                    group_counter += 1
+                    group_name_unavailable = True
+
+                    while group_name_unavailable:
+                        group_name = f"Group {group_counter}"
+                        if group_name not in c.get("groups").keys():
+                            group_name_unavailable = False
+                        else:
+                            group_counter += 1
+                    
                     globals()["group_counter"] = group_counter
             
                 if run_paths is None or len(run_paths) == 0:
-                    # If the path is none, the group counter should not go up
-                    # since there will be no new group
-                    group_counter = globals().get("group_counter")
-                    group_counter -= 1
-                    globals()["group_counter"] = group_counter
-
                     continue
 
                 valid_run_paths = []
