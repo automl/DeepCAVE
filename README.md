@@ -1,3 +1,5 @@
+<img src="docs/images/DeepCAVE_Logo_wide.png" alt="Logo"/> 
+
 # DeepCAVE
 
 DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem

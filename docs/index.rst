@@ -1,3 +1,7 @@
+.. image:: ./images/DeepCAVE_Logo_wide.png
+   :alt: DeepCAVE Logo
+|
+
 Home
 ====
 
@@ -13,7 +17,6 @@ Home
    api
    glossary
    faq
-
 
 DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem
 hyperparameter optimization) runs. The framework is programmed on top of Dash and therefore
