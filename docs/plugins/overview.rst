@@ -23,7 +23,7 @@ This plugin is capable of answering following questions:
 * Is the configuration space as expected?
 * How many trials have been successful/unsuccessful?
 * Why did certain trials crash?
-* On which budgets were the configurations evaluated?
+* On which Multi Fidelity budgets were the configurations evaluated?
 
 
 Quick Information
@@ -36,7 +36,9 @@ the runs were last updated and a handy quick link to the best **Configuration**.
 Meta
 ----
 Next we show some meta information regarding your runs. Notably, you can see information such as the
-possible **budget** allocations that were considered during the run.
+possible **budget** allocations that were considered during the run. The **budget** is the amount of
+resources that were allocated to a configuration as it was beeing evaluated using a Multi-Fidelity 
+Approach.
 
 
 Objectives
