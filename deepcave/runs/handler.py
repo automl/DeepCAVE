@@ -1,6 +1,18 @@
+#  noqa: D400
+"""
+# Handler
+
+This module provides utilities to handle a run.
+
+It can retrieve working directories, run paths, run names, as well as groups of runs.
+It provides utilities to update and remove runs as well as groups of runs.
+
+# Classes
+    - RunHandler: Handle the runs.
+"""
+
 from typing import Dict, List, Optional, Type, Union
 
-import logging
 import time
 from pathlib import Path
 
@@ -8,13 +20,37 @@ from deepcave.config import Config
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group
 from deepcave.runs.run import Run
+from deepcave.utils.cache import Cache
 from deepcave.utils.logs import get_logger
+from deepcave.utils.run_caches import RunCaches
 
 
 class RunHandler:
     """
-    Handles the runs. Based on the meta data in the cache, automatically selects the right converter
+    Handle the runs.
+
+    Based on the meta data in the cache, automatically selects the right converter
     and switches to the right (plugin) cache.
+
+    Provides utilities to retrieve working directories, run paths, run names, and groups of runs.
+    Also update and remove runs as well a groups of runs.
+
+    Properties
+    ----------
+    c : Cache
+        The cache containing information about a run(s).
+    rc : RunCaches
+        The caches for the selected runs.
+    logger : Logger
+        The logger for the run handler.
+    available_run_yfes : List[Type[Run]]
+        A list of the available converters.
+    runs : Dict[str, AbstractRun]
+        A dictionary of runs with their path as key.
+    groups : Dict[str, Group]
+        A dictionary of the groups.
+    available_run_classes : List[Type[Run]]
+        Contains the available run classes.
     """
 
     def __init__(self, config: Config, cache: "Cache", run_cache: "RunCaches") -> None:
@@ -37,7 +73,7 @@ class RunHandler:
 
     def set_working_directory(self, working_directory: Union[Path, str]) -> None:
         """
-        Sets the working directoy to the meta cache.
+        Set the working directory to the meta cache.
 
         Parameters
         ----------
@@ -48,23 +84,36 @@ class RunHandler:
 
     def get_working_directory(self) -> Path:
         """
-        Returns the current working directory in the cache.
+        Return the current working directory in the cache.
 
         Returns
         -------
         Path
             Path of the working directory.
+
+        Raises
+        ------
+        AssertionError
+            If the working directory is not a string or a Path, an error is thrown.
         """
-        return Path(self.c.get("working_dir"))
+        working_dir = self.c.get("working_dir")
+        assert isinstance(
+            working_dir, (str, Path)
+        ), "Working directory of cache must be a string or a Path like."
+        return Path(working_dir)
 
     def get_available_run_paths(self) -> Dict[str, str]:
         """
-        Returns the available run paths from the current directory.
+        Return the available run paths from the current directory.
 
         Returns
         -------
         Dict[str, str]
             Run path as key and run name as value.
+
+        Exceptions
+        ----------
+        FileNotFoundError
         """
         runs = {}
         working_dir = self.get_working_directory()
@@ -89,18 +138,27 @@ class RunHandler:
 
     def get_selected_run_paths(self) -> List[str]:
         """
-        Returns the selected run paths from the cache.
+        Return the selected run paths from the cache.
 
         Returns
         -------
-        Dict[str, str]
+        List[str]
             Run paths as a list.
+
+        Raises
+        ------
+        AssertionError.
+            If the selected run paths are not a list, an error is thrown.
         """
-        return self.c.get("selected_run_paths")
+        selected_run_paths = self.c.get("selected_run_paths")
+        assert isinstance(
+            selected_run_paths, list
+        ), "The selected run paths of the cache must be a list."
+        return selected_run_paths
 
     def get_selected_run_names(self) -> List[str]:
         """
-        Returns the run names of the selected runs.
+        Return the run names of the selected runs.
 
         Returns
         -------
@@ -111,7 +169,7 @@ class RunHandler:
 
     def get_run_name(self, run_path: Union[Path, str]) -> str:
         """
-        Returns the stem of the path.
+        Return the stem of the path.
 
         Parameters
         ----------
@@ -126,11 +184,30 @@ class RunHandler:
         return Path(run_path).stem
 
     def get_selected_groups(self) -> Dict[str, List[str]]:
-        return self.c.get("groups")
+        """
+        Get the selected groups.
+
+        Returns
+        -------
+        Dict[str, List[str]]
+            Dictionary with the selected groups.
+
+        Raises
+        ------
+        AssertionError
+            If groups in cache is not a dictionary, an error is thrown.
+        """
+        selected_groups = self.c.get("groups")
+        assert isinstance(
+            selected_groups, dict
+        ), "The groups aquired from the cache must be a dictionary."
+        return selected_groups
 
     def add_run(self, run_path: str) -> bool:
         """
-        Adds a run path to the cache. If run path is already in cache, do nothing.
+        Add a run path to the cache.
+
+        If run path is already in cache, do nothing.
 
         Parameters
         ----------
@@ -153,36 +230,49 @@ class RunHandler:
         return True
 
     def remove_run(self, run_path: str) -> None:
-        """Removes a run path from the cache. If run path is not in cache, do nothing.
+        """
+        Remove a run path from the cache.
+
+        If run path is not in cache, do nothing.
 
         Parameters
         ----------
         run_path : str
             Path of a run.
+
+        Raises
+        ------
+        TypeError
+            If `selected_run_paths` or `groups` is None, an error is thrown.
         """
         selected_run_paths = self.c.get("selected_run_paths")
+
+        if selected_run_paths is None:
+            raise TypeError("Selected run paths can not be None.")
 
         if run_path in selected_run_paths:
             selected_run_paths.remove(run_path)
             self.c.set("selected_run_paths", value=selected_run_paths)
 
-            # We have to check the groups here because the removed run_path may
+            # The groups have to be checked here because the removed run_path may
             # still be included
             groups = {}
-            for group_name, run_paths in self.c.get("groups").items():
+            group_it = self.c.get("groups")
+            if group_it is None:
+                raise TypeError("Groups can not be None.")
+            for group_name, run_paths in group_it.items():
                 if run_path in run_paths:
                     run_paths.remove(run_path)
                 groups[group_name] = run_paths
 
             self.c.set("groups", value=groups)
 
-            # We also remove last inputs here
+            # Last inputs are also removed here
             self.c.set("last_inputs", value={})
             self.update_runs()
 
     def update(self) -> None:
-        """Updates the internal run and group instances but only if a hash changed."""
-
+        """Update the internal run and group instances but only if a hash changed."""
         update_required = False
         for run_path in list(self.runs.keys()):
             run = self.runs[run_path]
@@ -201,17 +291,17 @@ class RunHandler:
 
     def update_runs(self) -> bool:
         """
-        Loads selected runs and update cache if files changed.
-
-        Raises
-        ------
-        NotValidRunError
-            If directory can not be transformed into a run, an error is thrown.
+        Load selected runs and update cache if files changed.
 
         Returns
         -------
         bool
             True if all selected runs could be loaded, False otherwise.
+
+        Raises
+        ------
+        NotValidRunError
+            If directory can not be transformed into a run, an error is thrown.
         """
         runs: Dict[str, AbstractRun] = {}  # run_path: Run
         success = True
@@ -240,15 +330,26 @@ class RunHandler:
         self, run_path: str, class_hint: Optional[Type[Run]] = None
     ) -> Optional[AbstractRun]:
         """
-        Loads the run from `self.runs` or creates a new one.
+        Load the run from `self.runs` or create a new one.
+
+        Parameters
+        ----------
+        run_path : str
+            The path of the run.
+        class_hint : Optional[Type[Run]], optional
+            A hint/suggestion of what the Type of the Run is.
+            Default is None.
+
+        Returns
+        -------
+        Optional[AbstractRun]
+            The Run added to the cache.
 
         Raises
         ------
         NotValidRunError
             If directory can not be transformed into a run, an error is thrown.
-
         """
-
         # Try to get run from current runs
         if run_path in self.runs:
             run = self.runs[run_path]
@@ -274,7 +375,8 @@ class RunHandler:
                 run = run_class.from_path(Path(run_path))
                 t2 = time.perf_counter()
                 self.logger.debug(
-                    f'Run "{Path(run_path).stem}" was successfully loaded (took {round(t2 - t1, 2)} seconds).'
+                    f'Run "{Path(run_path).stem}" was successfully loaded (took {round(t2 - t1, 2)}'
+                    f" seconds)."
                 )
             except KeyboardInterrupt:
                 # Pass KeyboardInterrupt through try-except, so it can actually interrupt.
@@ -295,21 +397,32 @@ class RunHandler:
 
         return run
 
-    def update_groups(self, groups: Optional[Dict[str, str]] = None) -> None:
+    def update_groups(self, groups: Optional[Dict[str, List[str]]] = None) -> None:
         """
-        Loads chosen groups. If `groups` is passed, it is used to instantiate the groups and
+        Load chosen groups.
+
+        If `groups` is passed, it is used to instantiate the groups and
         saved to the cache. Otherwise, `groups` is loaded from the cache.
+
+        Parameters
+        ----------
+        groups : Optional[Dict[str, str]], optional
+            A dictionary with the groups.
+            Default is None.
 
         Raises
         ------
         NotMergeableError
             If runs can not be merged, an error is thrown.
-
+        TypeError
+            If `groups` is None, an error is thrown.
         """
         instantiated_groups = {}
         if groups is None:
             groups = self.c.get("groups")
-
+        # This check is necessary because groups could still be None
+        if groups is None:
+            raise TypeError("Groups can not be None.")
         # Add grouped runs
         for group_name, run_paths in groups.items():
             runs = []
@@ -336,7 +449,7 @@ class RunHandler:
 
     def get_run(self, run_id: str) -> AbstractRun:
         """
-        Looks inside `self.runs` and `self.groups` and if the run id is found, returns the run.
+        Look inside `self.runs` and `self.groups` and if the run id is found, returns the run.
 
         Parameters
         ----------
@@ -346,7 +459,7 @@ class RunHandler:
         Returns
         -------
         AbstractRun
-            Run
+            Run.
 
         Raises
         ------
@@ -362,7 +475,7 @@ class RunHandler:
 
     def get_groups(self) -> List[Group]:
         """
-        Returns instantiated grouped runs.
+        Return instantiated grouped runs.
 
         Returns
         -------
@@ -372,15 +485,17 @@ class RunHandler:
         self.update()
         return list(self.groups.values())
 
-    def get_runs(self, include_groups=False) -> List[AbstractRun]:
+    def get_runs(self, include_groups: bool = False) -> List[AbstractRun]:
         """
-        Returns the runs from the internal cache. The runs are already loaded and ready to use.
+        Return the runs from the internal cache.
+
+        The runs are already loaded and ready to use.
         Optional, if `include_groups` is set to True, the groups are also included.
 
         Parameters
         ----------
         include_groups : bool, optional
-            Includes the groups, by default False
+            Includes the groups, by default False.
 
         Returns
         -------

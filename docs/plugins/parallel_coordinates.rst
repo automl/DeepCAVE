@@ -1,7 +1,7 @@
 Parallel Coordinates
 ====================
 
-With parallel coordinates, you can see configurations plotted as a line through their hyperparamter
+With parallel coordinates, you can see configurations plotted as a line through their hyperparameter
 values and to which final score they reach.
 You can use this to identify trends in hyperparamter value ranges that achieve certain scores.
 For example, you may find that high performing configurations may all share the same value for a

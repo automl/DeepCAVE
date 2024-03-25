@@ -9,4 +9,4 @@ extend-ignore =
     # No whitespace before ':' in [x : y]
     E203,
     # No lambdas — too strict
-    E731,  
+    E731,

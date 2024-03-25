@@ -63,7 +63,7 @@ class MNISTModel(pl.LightningModule):
             ]
         )
 
-        self.accuracy = Accuracy()
+        self.accuracy = Accuracy(task="multiclass", num_classes=self.num_classes)
 
     def prepare_data(self):
         # download
@@ -256,10 +256,9 @@ if __name__ == "__main__":
 
                     # The model weights are trained
                     trainer = pl.Trainer(
-                        accelerator="gpu",
+                        accelerator="cpu",
                         devices=1,
                         num_sanity_val_steps=0,  # No validation sanity
-                        auto_scale_batch_size="power",
                         deterministic=True,
                         min_epochs=epochs,
                         max_epochs=epochs,
