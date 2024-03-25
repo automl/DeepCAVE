@@ -1,8 +1,22 @@
+# noqa: D400
+"""
+# FootPrint
+
+This module provides utilities to visualize a configuration footprint.
+
+The module contains a static plugin class for defining the footprint.
+
+## Classes
+    - FootPrint: A static plugin for the footprint of a configuration.
+"""
+
+from typing import Any, Callable, Dict, List
+
 import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave import config
+from deepcave.config import Config
 from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.layout import get_select_options, help_button
@@ -15,6 +29,12 @@ from deepcave.utils.styled_plotty import (
 
 
 class FootPrint(StaticPlugin):
+    """
+    Visualize the footprint of a configuration.
+
+    A static plugin for the footprint.
+    """
+
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
@@ -22,7 +42,21 @@ class FootPrint(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -75,8 +109,22 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
-        return (
+    def get_filter_layout(register: Callable) -> List[dbc.Row]:
+        """
+        Get layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dbc.Row]
+            The layouts for the filter block.
+        """
+        return [
             dbc.Row(
                 [
                     dbc.Col(
@@ -99,19 +147,54 @@ class FootPrint(StaticPlugin):
                         ],
                         md=6,
                     ),
-                ],
-            ),
-        )
+                ]
+            )
+        ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            The content to be filled.
+        """
         return {
             "details": {"value": 0.5},
             "show_borders": {"options": get_select_options(binary=True), "value": "true"},
             "show_supports": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
-        # Prepare objetives
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
+        """
+        Work like 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
+
+        Parameters
+        ----------
+        run :
+            The selected run.
+        previous_inputs :
+            Previous content of the inputs.
+            Not used in this specific function.
+        inputs :
+            Current content of the inputs.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The dictionary with the changes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -142,7 +225,32 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A serialized dictionary.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
         details = inputs["details"]
@@ -168,18 +276,32 @@ class FootPrint(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> dbc.Tabs:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method for registering outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dbc.Tabs
+            The layout for the output block.
+        """
         return dbc.Tabs(
             [
                 dbc.Tab(
                     dcc.Graph(
-                        id=register("performance", "figure"), style={"height": config.FIGURE_HEIGHT}
+                        id=register("performance", "figure"), style={"height": Config.FIGURE_HEIGHT}
                     ),
                     label="Performance",
                 ),
                 dbc.Tab(
                     dcc.Graph(
-                        id=register("area", "figure"), style={"height": config.FIGURE_HEIGHT}
+                        id=register("area", "figure"), style={"height": Config.FIGURE_HEIGHT}
                     ),
                     label="Coverage",
                 ),
@@ -187,7 +309,30 @@ class FootPrint(StaticPlugin):
         )
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> List[Any]:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        List[Any]
+            The plotly figure of the footprint performance and area.
+        """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
@@ -264,7 +409,7 @@ class FootPrint(StaticPlugin):
         layout = go.Layout(
             xaxis=dict(title=None, tickvals=[]),
             yaxis=dict(title=None, tickvals=[]),
-            margin=config.FIGURE_MARGIN,
+            margin=Config.FIGURE_MARGIN,
         )
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)
@@ -276,7 +421,21 @@ class FootPrint(StaticPlugin):
         return [performance, area]
 
     @staticmethod
-    def get_mpl_output_layout(register):
+    def get_mpl_output_layout(register: Callable) -> List[dbc.Tabs]:
+        """
+        Get the layout for the matplotlib output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register the outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dbc.Tabs]
+            The layout for the output block.
+        """
         return [
             dbc.Tabs(
                 [
@@ -293,7 +452,29 @@ class FootPrint(StaticPlugin):
         ]
 
     @staticmethod
-    def load_mpl_outputs(run, inputs, outputs):
+    def load_mpl_outputs(run, inputs, outputs):  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw outputs from the run.
+
+        Returns
+        -------
+        The rendered matplotlib figure of the footprint
+        """
         objective = run.get_objective(inputs["objective_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
@@ -338,12 +519,12 @@ class FootPrint(StaticPlugin):
                     size = 10
                     marker_symbol = "^"
 
-                color = plt.get_color(color_id)
+                color = plt.get_color(color_id)  # type: ignore
                 plt.scatter(x, y, marker=marker_symbol, s=size, label=name, c=color)
 
             plt.axis("off")
             plt.legend(loc="lower right")
 
-            images += [plt.render()]
+            images += [plt.render()]  # type: ignore
 
         return images

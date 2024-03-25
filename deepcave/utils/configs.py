@@ -1,3 +1,10 @@
+#  noqa: D400
+"""
+# Configs
+
+This module provides a utility for parsing the configurations from a filename.
+"""
+
 from typing import Optional
 
 import importlib
@@ -10,7 +17,9 @@ from deepcave.config import Config
 
 def parse_config(filename: Optional[str] = None) -> Config:
     """
-    Parses the config given the filename. Both relative and absolute paths are possible.
+    Parse the config given the filename.
+
+    Both relative and absolute paths are possible.
 
     Parameters
     ----------
@@ -49,7 +58,7 @@ def parse_config(filename: Optional[str] = None) -> Config:
             script_dir = path.stem  # That's the path without the script name
             module_name = p.stem  # That's the script name without the extension
 
-            # Now we add to sys path
+            # Now it is added to sys path
             sys.path.append(str(path))
 
             module = importlib.import_module(f"{script_dir}.{module_name}")

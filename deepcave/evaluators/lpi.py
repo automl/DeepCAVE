@@ -1,6 +1,14 @@
-from typing import Dict, List, Optional, Tuple, Union
+#  noqa: D400
+"""
+# LPI
 
-from random import random
+This module provides utilities to calculate the local parameter importance (LPI).
+
+## Classes
+    - LPI: This class calculates the local parameter importance (LPI).
+"""
+
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from ConfigSpace import Configuration
@@ -17,12 +25,41 @@ from deepcave.runs.objective import Objective
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
 class LPI:
+    """
+    Calculate the local parameter importance (LPI).
+
+    Properties
+    ----------
+    run : AbstractRun
+        The AbstractRun to get the importance from.
+    cs : ConfigurationSpace
+        The configuration space of the run.
+    hp_names : List[str]
+        The names of the Hyperparameters.
+    variances : Dict[Any, list]
+        The overall variances per tree.
+    importances : dict
+        The importances of the Hyperparameters.
+    continuous_neighbors : int
+        The number of neighbors chosen for continuous Hyperparameters.
+    incumbent : Configuration
+        The incumbent of the run.
+    default : Configuration
+        A configuration containing Hyperparameters with default values.
+    incumbent_array : numpy.ndarray
+        The internal vector representation of the incumbent.
+    seed : int
+        The seed. If not provided it will be random.
+    rs : RandomState
+        A random state with a given seed value.
+    """
+
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
-        self.variances = None
-        self.importances = None
+        self.variances: Optional[Dict[Any, List[Any]]] = None
+        self.importances: Optional[Dict[Any, Any]] = None
 
     def calculate(
         self,
@@ -33,22 +70,28 @@ class LPI:
         seed: int = 0,
     ) -> None:
         """
-        Prepares the data and trains a RandomForest model.
+        Prepare the data and train a RandomForest model.
 
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default, None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
-            Considered budget. By default None. If None, the highest budget is chosen.
-        continous_neighbors : int, optional
-            How many neighbors should be chosen for continous hyperparameters. By default 500.
+            Considered budget. By default, None. If None, the highest budget is chosen.
+        continuous_neighbors : int, optional
+            How many neighbors should be chosen for continuous hyperparameters (HPs).
+            By default, 500.
+        n_trees : int, optional
+            The number of trees for the fanova forest.
+            Default is 10.
+        seed : Optional[int], optional
+            The seed. By default None. If None, a random seed is chosen.
         """
         if objectives is None:
             objectives = self.run.get_objectives()
 
         if budget is None:
-            budget = self.get_highest_budget()
+            budget = self.run.get_highest_budget()
 
         # Set variables
         self.continous_neighbors = continous_neighbors
@@ -60,7 +103,9 @@ class LPI:
         self.rs = np.random.RandomState(seed)
 
         # Get data
-        df = self.run.get_encoded_data(budget=budget, specific=True, include_combined_cost=True)
+        df = self.run.get_encoded_data(
+            objectives=objectives, budget=budget, specific=True, include_combined_cost=True
+        )
         X = df[self.hp_names].to_numpy()
         Y = df[COMBINED_COST_NAME].to_numpy()
 
@@ -72,21 +117,21 @@ class LPI:
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()
 
-        # We need the delta performance from the default configuration and the incumbent
+        # The delta performance is needed from the default configuration and the incumbent
         def_perf, def_var = self._predict_mean_var(self.default)
         inc_perf, inc_var = self._predict_mean_var(self.incumbent)
         delta = def_perf - inc_perf
 
         # These are used for plotting and hold the predictions for each neighbor of each parameter.
         # That means performances holds the mean, variances the variance of the forest.
-        performances = {}
-        variances = {}
-        # This are used for importance and hold the corresponding importance/variance over
+        performances: Dict[str, List[np.ndarray]] = {}
+        variances: Dict[str, List[np.ndarray]] = {}
+        # These are used for importance and hold the corresponding importance/variance over
         # neighbors. Only import if NOT quantifying importance via performance-variance across
-        # neighbours.
+        # neighbors.
         importances = {}
         # Nested list of values per tree in random forest.
-        predictions = {}
+        predictions: Dict[str, List[List[np.ndarray]]] = {}
 
         # Iterate over parameters
         for hp_idx, hp_name in enumerate(self.incumbent.keys()):
@@ -178,29 +223,32 @@ class LPI:
             p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
             for p, trees in overall_var_per_tree.items()
         }
-
         self.variances = overall_var_per_tree
         self.importances = importances
 
     def get_importances(self, hp_names: List[str]) -> Dict[str, Tuple[float, float]]:
         """
-        Returns the importances.
+        Return the importances.
 
         Parameters
         ----------
         hp_names : List[str]
-            Selected hyperparameter names to get the importance scores from.
+            Selected Hyperparameter names to get the importance scores from.
 
         Returns
         -------
         importances : Dict[str, Tuple[float, float]]
             Hyperparameter name and mean+var importance.
-        """
 
+        Raises
+        ------
+        RuntimeError
+            If the important scores are not calculated.
+        """
         if self.importances is None or self.variances is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        importances = {}
+        importances: Dict[str, Tuple[float, float]] = {}
         for hp_name in hp_names:
             mean = 0
             std = 0
@@ -222,15 +270,21 @@ class LPI:
 
         return importances
 
-    def _get_neighborhood(self):
+    def _get_neighborhood(self) -> Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]:
         """
-        Slight modification of ConfigSpace's get_one_exchange neighborhood. This orders the
-        parameter values and samples more neighbors in one go. Further we need to rigorously
-        check each and every neighbor if it is forbidden or not.
+        Slight modification of ConfigSpace's get_one_exchange neighborhood.
+
+        This orders the parameter values and samples more neighbors in one go.
+        Further each and every neighbor needs to be rigorously checked if it is forbidden or not.
+
+        Returns
+        -------
+        neighborhood : Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]
+            The neighborhood.
         """
         hp_names = self.cs.get_hyperparameter_names()
 
-        neighborhood = {}
+        neighborhood: Dict[str, List[Union[np.ndarray, List[np.ndarray]]]] = {}
         for hp_idx, hp_name in enumerate(hp_names):
             # Check if hyperparameter is active
             if not np.isfinite(self.incumbent_array[hp_idx]):
@@ -249,7 +303,7 @@ class LPI:
                     base = np.e
                     log_lower = np.log(hp.lower) / np.log(base)
                     log_upper = np.log(hp.upper) / np.log(base)
-                    neighbors = np.logspace(
+                    neighbors_range = np.logspace(
                         start=log_lower,
                         stop=log_upper,
                         num=self.continous_neighbors,
@@ -257,8 +311,8 @@ class LPI:
                         base=base,
                     )
                 else:
-                    neighbors = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
-                neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors))
+                    neighbors_range = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
+                neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors_range))
             else:
                 neighbors = hp.get_neighbors(self.incumbent_array[hp_idx], self.rs)
 
@@ -284,40 +338,42 @@ class LPI:
                 map(lambda x: x[0], sorted(enumerate(checked_neighbors), key=lambda y: y[1]))
             )
             if isinstance(self.cs.get_hyperparameter(hp_name), CategoricalHyperparameter):
-                checked_neighbors_non_unit_cube = list(
+                checked_neighbors_non_unit_cube_categorical = list(
                     np.array(checked_neighbors_non_unit_cube)[sort_idx]
                 )
-            else:
-                checked_neighbors_non_unit_cube = np.array(checked_neighbors_non_unit_cube)[
-                    sort_idx
+                neighborhood[hp_name] = [
+                    np.array(checked_neighbors)[sort_idx],
+                    checked_neighbors_non_unit_cube_categorical,
                 ]
-
-            neighborhood[hp_name] = [
-                np.array(checked_neighbors)[sort_idx],
-                checked_neighbors_non_unit_cube,
-            ]
+            else:
+                checked_neighbors_non_unit_cube_non_categorical = np.array(
+                    checked_neighbors_non_unit_cube
+                )[sort_idx]
+                neighborhood[hp_name] = [
+                    np.array(checked_neighbors)[sort_idx],
+                    checked_neighbors_non_unit_cube_non_categorical,
+                ]
 
         return neighborhood
 
-    def _predict_mean_var(self, config):
+    def _predict_mean_var(self, config: Configuration) -> Tuple[np.ndarray, np.ndarray]:
         """
         Small wrapper to predict marginalized over instances.
 
         Parameter
         ---------
         config:Configuration
-            The self.incumbent of wich the performance across the whole instance set is to be
+            The self.incumbent of which the performance across the whole instance set is to be
             estimated.
 
         Returns
         -------
-        mean
+        mean: np.ndarray
             The mean performance over the instance set.
-        var
+        var: np.ndarray
             The variance over the instance set. If logged values are used, the variance might not
             be able to be used.
         """
-
         config = impute_inactive_values(config)
         array = np.array([config.get_array()])
         mean, var = self._model.predict_marginalized(array)

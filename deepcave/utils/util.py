@@ -1,45 +1,95 @@
-from typing import Any, Dict, Optional, Tuple, Union
+#  noqa: D400
+"""
+# Util
 
-import base64
+This module provides utilities for string generation and shortening.
+It also provides a function to get the difference between now and a given timestamp.
+"""
+from typing import Any
+
 import datetime
 import random
 import string
-from io import BytesIO
-
-import pandas as pd
-from ConfigSpace import ConfigurationSpace
-from ConfigSpace.hyperparameters import (
-    CategoricalHyperparameter,
-    FloatHyperparameter,
-    IntegerHyperparameter,
-    OrdinalHyperparameter,
-)
-from dash import html
-from matplotlib import pyplot as plt
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 
 
 def get_random_string(length: int) -> str:
+    """
+    Get a random string with a specific length.
+
+    Parameters
+    ----------
+    length : int
+        The length of the string.
+
+    Returns
+    -------
+    str
+        The random string with the given length.
+
+    Raises
+    ------
+    ValueError
+        If the length is smaller 0.
+    """
     if length < 0:
         raise ValueError("Length has to be greater than 0")
     letters = string.ascii_lowercase
-    return "".join(random.choice(letters) for i in range(length))
+    return "".join(random.choice(letters) for _ in range(length))
 
 
-def short_string(value: Any, length: int = 30, *, mode="prefix") -> str:
+def short_string(value: Any, length: int = 30, *, mode: str = "prefix") -> str:
+    """
+    Shorten the given string.
+
+    Cut either at prefix or at suffix if necessary.
+
+    Parameters
+    ----------
+    value : Any
+        The value or string to shorten.
+    length : int, optional
+        The length of the returned string.
+        Default is 30.
+    mode : str, optional
+        Define how to shorten the string.
+        Default is "prefix".
+
+    Returns
+    -------
+    str
+        The shortened string.
+
+    Raises
+    ------
+    ValueError
+        If the given mode is unknown.
+    """
     value = str(value)
     if len(value) <= length:
         return value
 
-    cutlength = length - 3  # For 3 dots (...)
+    cut_length = length - 3  # For 3 dots (...)
     if mode == "prefix":
-        return f"...{value[-cutlength:]}"
+        return f"...{value[-cut_length:]}"
     elif mode == "suffix":
-        return f"{value[:cutlength]}..."
+        return f"{value[:cut_length]}..."
     raise ValueError(f"Unknown mode '{mode}'")
 
 
 def get_latest_change(st_mtime: int) -> str:
+    """
+    Get the difference between now and a given timestamp.
+
+    Parameters
+    ----------
+    st_mtime : int
+        A timestamp to calculate the difference from.
+
+    Returns
+    -------
+    str
+        A string containing the passed time.
+    """
     t = datetime.datetime.fromtimestamp(st_mtime)
     s_diff = (datetime.datetime.now() - t).seconds
     d_diff = (datetime.datetime.now() - t).days

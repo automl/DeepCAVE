@@ -1,7 +1,18 @@
+#  noqa: D400
+"""
+# Cache
+
+This module provides utilities to handle the cache.
+
+This includes reading, writing, set and get utilities, as well as clearing the cache.
+The cache handles a json file.
+
+## Classes
+    - Cache: Cache handles a json file.
+"""
 from typing import Any, Dict, Optional
 
 import json
-import logging
 from copy import deepcopy
 from pathlib import Path
 
@@ -14,14 +25,15 @@ logger = get_logger(__name__)
 
 class Cache:
     """
-    Cache handles a json file. Decided not to use flask_caching
-    since code is easier to change to our needs.
+    Cache handles a json file.
+
+    Decided not to use flask_caching since code is easier to change to our needs.
     """
 
     def __init__(
         self,
         filename: Optional[Path] = None,
-        defaults: Dict = None,
+        defaults: Optional[Dict] = None,
         debug: bool = False,
         write_file: bool = True,
     ) -> None:
@@ -36,6 +48,17 @@ class Cache:
         self._setup(filename, write_file)
 
     def _setup(self, filename: Optional[Path], write_file: bool = True) -> None:
+        """
+        Initialize the setup.
+
+        Parameters
+        ----------
+        filename : Optional[Path]
+            The filename to be set.
+        write_file : bool, optional
+            Define whether do write the content of cache into a file.
+            Default is True.
+        """
         self._data = {}
         self._filename = filename
 
@@ -45,7 +68,7 @@ class Cache:
             self.read()
 
     def read(self) -> None:
-        """Reads content from a file and load into cache as dictionary."""
+        """Read content from a file and load into cache as dictionary."""
         if self._filename is None or not self._filename.exists():
             return
 
@@ -65,11 +88,27 @@ class Cache:
             else:
                 json.dump(self._data, f, separators=JSON_DENSE_SEPARATORS)
 
-    def set(self, *keys, value: Any, write_file: bool = True) -> None:
+    def set(self, *keys: str, value: Any, write_file: bool = True) -> None:
         """
         Set a value from a chain of keys.
+
         E.g. set("a", "b", "c", value=4) creates following dictionary:
         {"a": {"b": {"c": 4}}}
+
+        Parameters
+        ----------
+        *keys : str
+            The keys to set the value from.
+        value : Any
+            The value to be set.
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+
+        Raises
+        ------
+        RuntimeError
+            If the type of the key is not a string.
         """
         name = "(empty)"
         if self._filename is not None:
@@ -93,14 +132,36 @@ class Cache:
             self.write()
 
     def set_dict(self, d: Dict, write_file: bool = True) -> None:
-        """Updates cache to a specific value"""
+        """
+        Update cache to a specific value.
+
+        Parameters
+        ----------
+        d : Dict
+            The dictionary to be set.
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+        """
         self._data.update(d)
 
         if write_file:
             self.write()
 
-    def get(self, *keys) -> Optional[Any]:
-        """Retrieve value for a specific key"""
+    def get(self, *keys: str) -> Optional[Any]:
+        """
+        Retrieve value for a specific key.
+
+        Parameters
+        ----------
+        *keys : str
+            The key to retrieve the value from.
+
+        Returns
+        -------
+        Optional[Any]
+            The value of the key.
+        """
         d = deepcopy(self._data)
         for key in keys:
             if key not in d:
@@ -110,8 +171,20 @@ class Cache:
 
         return d
 
-    def has(self, *keys) -> bool:
-        """Check whether cache has specific key"""
+    def has(self, *keys: str) -> bool:
+        """
+        Check whether cache has specific key.
+
+        Parameters
+        ----------
+        *keys : str
+            The key to check for.
+
+        Returns
+        -------
+        bool
+            Whether cache has specific key.
+        """
         d = self._data
         for key in keys:
             if key not in d:
@@ -121,10 +194,19 @@ class Cache:
         return True
 
     def clear(self, write_file: bool = True) -> None:
-        """Clear all cache and reset to defaults"""
+        """
+        Clear all cache and reset to defaults.
+
+        Parameters
+        ----------
+        write_file : bool, optional
+            Whether to write the constant of the cache into a file.
+            Default is True.
+        """
         filename = self._filename
 
-        if filename is not None and filename.exists():
-            self._filename.unlink()
+        if self._filename is not None:
+            if self._filename.exists():
+                self._filename.unlink()
 
         self._setup(filename, write_file=write_file)

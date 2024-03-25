@@ -1,8 +1,46 @@
-# Version 1.1.4
+# Version 1.2
+
+## Plugins
+- Add symbolic explanations plugin (#46).
+
+## Enhancements
+- Fix lower bounds of dependency versions.
+- Allow to load multi-objective SMAC3v2 and add example (#69)
+- Do not disable existing loggers.
+- Update author email.
+- Add exit button which first deletes running jobs and then terminates DeepCave.
+- Nicer handling of Keyboard Interrupt.
+- Disable debug mode.
+
+## Bug-Fixes
+- Fix missing objective specification in LPI evaluator (#71).
+- Don't convert BOHB runs with status 'running' (consistent with SMAC).
+- Fix api examples (#68).
+- Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
+- Fix errors due to changing inputs before runselection (#64).
+- For fANOVA, remove constant hyperparameters from configspace (#9).
+
+## Version-Updates
+- Black version from 23.1.0 to 23.3.0
+- Mypy from 0.930 to 1.5.1
+
+## Mypy
+- Updated args so there are no missing imports
+- Updated additional dependencies, so mypy can check all types
+- Note: If the installs in requirements change, it has to be adapted in additional dependencies
+- Added many type annotations
+- In some cases internal refactoring for variables, due to typing
+
+## Pydocstyle and Linter
+- Major overhaul of docstrings in various files
+- Removed unused imports and variables
 
 ## Groups
 - Groups now get a default name, if no name was entered by the user.
 - Groups get sorted alphabetically to appear more ordered.
+
+## Additional Changes
+- Added a "make install examples" in Makefile
 
 # Version 1.1.3
 
