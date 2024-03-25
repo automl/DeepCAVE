@@ -1,25 +1,50 @@
 name: tests
-on: [ push ]
+
+# Cancel previous tests for this branch if a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+on:
+  # Allow manual trigger of workflow
+  workflow_dispatch:
+
+  # Run tests on push/merge to main
+  push:
+    branches:
+      - main
+
+  # Run tests on anything that has a pull request to main/development
+  pull_request:
+    branches:
+      - main
+      - development
+
 jobs:
   pytest:
-    name: PyTest
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Add conda to system path
-        run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          echo $CONDA/bin >> $GITHUB_PATH
+    name: Test ${{ matrix.python-version }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash # Default to using bash on all
 
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+        os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
+
+    steps:
+      - uses: actions/checkout@v4
       - name: Setup Python 3.9
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.9
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
-          conda install -c anaconda swig
-          make install-dev
-          
-      - name: Run pytest 
+          pip install swig
+          python -m pip install ".[dev]"
+
+      - name: Run pytest
         run: pytest tests

@@ -1,5 +1,9 @@
 name: docs
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 on:
   # Trigger manually
   workflow_dispatch:
@@ -22,19 +26,22 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash # Default to using bash on all
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
 
     - name: Install dependencies
       run: |
         pip install .
-        pip install .[dev]
+        pip install ".[dev]"
 
     - name: Make docs
       run: |
