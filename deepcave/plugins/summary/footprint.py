@@ -295,13 +295,17 @@ class FootPrint(StaticPlugin):
             [
                 dbc.Tab(
                     dcc.Graph(
-                        id=register("performance", "figure"), style={"height": Config.FIGURE_HEIGHT}
+                        id=register("performance", "figure"),
+                        style={"height": Config.FIGURE_HEIGHT},
+                        config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
                     ),
                     label="Performance",
                 ),
                 dbc.Tab(
                     dcc.Graph(
-                        id=register("area", "figure"), style={"height": Config.FIGURE_HEIGHT}
+                        id=register("area", "figure"),
+                        style={"height": Config.FIGURE_HEIGHT},
+                        config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
                     ),
                     label="Coverage",
                 ),

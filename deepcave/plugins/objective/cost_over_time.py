@@ -274,7 +274,11 @@ class CostOverTime(DynamicPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": Config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
     def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
