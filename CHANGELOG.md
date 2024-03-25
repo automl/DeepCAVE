@@ -3,6 +3,7 @@
 ## Plugins
 - Add symbolic explanations plugin (#46).
 - It is now possible to view multiple unequal runs at once in Cost over Time and Pareto (#93).
+- Runs with unequal objectives cannot be displayed together.
 - Added an enum for displaying according warning messages.
 
 ## Enhancements

@@ -1236,6 +1236,61 @@ def check_equality(
     if len(runs) == 0:
         return result
 
+    # Check if objectives are mergeable
+    if objectives:
+        o1 = None
+        for run in runs:
+            o2 = run.get_objectives()
+
+            if o1 is None:
+                o1 = o2
+                continue
+
+            if len(o1) != len(o2):
+                raise NotMergeableError(
+                    "Objectives of runs are not equal.", RunInequality.INEQ_OBJECTIVE
+                )
+
+            for o1_, o2_ in zip(o1, o2):
+                try:
+                    o1_.merge(o2_)
+                except NotMergeableError:
+                    raise NotMergeableError(
+                        "Objectives of runs are not equal.", RunInequality.INEQ_OBJECTIVE
+                    )
+
+        assert o1 is not None
+        serialized_objectives = [o.to_json() for o in o1]
+        result["objectives"] = serialized_objectives
+        if meta:
+            result["meta"]["objectives"] = serialized_objectives
+
+    # Also check if budgets are the same
+    if budgets:
+        b1 = runs[0].get_budgets(include_combined=False)
+        for run in runs:
+            b2 = run.get_budgets(include_combined=False)
+            if b1 != b2:
+                raise NotMergeableError("Budgets of runs are not equal.", RunInequality.INEQ_BUDGET)
+
+        result["budgets"] = b1
+        if meta:
+            result["meta"]["budgets"] = b1
+
+    # Make sure the same configspace is used
+    # Otherwise it does not make sense to merge
+    # the histories
+    if configspace:
+        cs1 = runs[0].configspace
+        for run in runs:
+            cs2 = run.configspace
+            if cs1 != cs2:
+                raise NotMergeableError(
+                    "Configspace of runs are not equal.", RunInequality.INEQ_CONFIGSPACE
+                )
+
+        result["configspace"] = cs1
+
     # Check meta
     if meta:
         ignore = ["objectives", "budgets", "wallclock_limit"]
@@ -1255,55 +1310,5 @@ def check_equality(
                     )
 
         result["meta"] = m1
-
-    # Make sure the same configspace is used
-    # Otherwise it does not make sense to merge
-    # the histories
-    if configspace:
-        cs1 = runs[0].configspace
-        for run in runs:
-            cs2 = run.configspace
-            if cs1 != cs2:
-                raise NotMergeableError(
-                    "Configspace of runs are not equal.", RunInequality.INEQ_CONFIGSPACE
-                )
-
-        result["configspace"] = cs1
-
-    # Also check if budgets are the same
-    if budgets:
-        b1 = runs[0].get_budgets(include_combined=False)
-        for run in runs:
-            b2 = run.get_budgets(include_combined=False)
-            if b1 != b2:
-                raise NotMergeableError("Budgets of runs are not equal.", RunInequality.INEQ_BUDGET)
-
-        result["budgets"] = b1
-        if meta:
-            result["meta"]["budgets"] = b1
-
-    # And if objectives are the same
-    if objectives:
-        o1 = None
-        for run in runs:
-            o2 = run.get_objectives()
-
-            if o1 is None:
-                o1 = o2
-                continue
-
-            if len(o1) != len(o2):
-                raise NotMergeableError(
-                    "Objectives of runs are not equal.", RunInequality.INEQ_OBJECTIVE
-                )
-
-            for o1_, o2_ in zip(o1, o2):
-                o1_.merge(o2_)
-
-        assert o1 is not None
-        serialized_objectives = [o.to_json() for o in o1]
-        result["objectives"] = serialized_objectives
-        if meta:
-            result["meta"]["objectives"] = serialized_objectives
 
     return result
