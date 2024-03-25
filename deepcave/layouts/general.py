@@ -262,7 +262,7 @@ class GeneralLayout(Layout):
 
             # Load from cache if page is loaded
             children = []
-            print(groups)
+
             for name, paths in groups.items():
                 if name is None:
                     continue
