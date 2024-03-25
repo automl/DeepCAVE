@@ -50,7 +50,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
     include_package_data=True,
-    python_requires=">=3.9, <3.12",
+    python_requires=">=3.9, <3.11",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
@@ -61,7 +61,6 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
         "Development Status :: 3 - Alpha",
         "Natural Language :: English",
         "Environment :: Console",
