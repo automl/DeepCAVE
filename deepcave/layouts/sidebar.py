@@ -43,7 +43,7 @@ class SidebarLayout(Layout):
                 ]
 
                 point_layouts = []
-                for (id, name, icon) in points:
+                for id, name, icon in points:
                     href = f"/plugins/{id}"
                     point_layouts += [
                         html.Li(
@@ -106,7 +106,6 @@ class SidebarLayout(Layout):
 
                 collect = []
                 for jobs, status in zip(all_jobs, job_stati):
-
                     for job in jobs:
                         name = job.meta["display_name"]
                         job_id = job.id

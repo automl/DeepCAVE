@@ -1,3 +1,9 @@
+# Version 1.1.4
+
+## Groups
+- Groups now get a default name, if no name was entered by the user.
+- Groups get sorted alphabetically to appear more ordered.
+
 # Version 1.1.3
 
 ## Bug-Fixes
