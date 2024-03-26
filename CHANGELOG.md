@@ -21,6 +21,8 @@
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
 - For PCP, show hyperparameters with highest importance closest to the cost (i.e. right).
+- Add init files to all test directories.
+- Correct LPI importance tests.
 
 ## Version-Updates
 - Black version from 23.1.0 to 23.3.0
