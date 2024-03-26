@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Configurations" href="configurations.html" />
-    <link rel="prev" title="Plugins" href="index.html" />
+    <link rel="prev" title="Displaying Data with Plugins" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -206,7 +206,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -274,6 +274,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -772,7 +777,7 @@ about the meta data, objectives and statistics of the selected run.</p>
 <li><p>Is the configuration space as expected?</p></li>
 <li><p>How many trials have been successful/unsuccessful?</p></li>
 <li><p>Why did certain trials crash?</p></li>
-<li><p>On which budgets were the configurations evaluated?</p></li>
+<li><p>On which multi-fidelity budgets were the configurations evaluated?</p></li>
 </ul>
 <section id="quick-information">
 <h2>Quick Information<a class="headerlink" href="#quick-information" title="Link to this heading">¶</a></h2>
@@ -783,7 +788,9 @@ the runs were last updated and a handy quick link to the best <strong>Configurat
 <section id="meta">
 <h2>Meta<a class="headerlink" href="#meta" title="Link to this heading">¶</a></h2>
 <p>Next we show some meta information regarding your runs. Notably, you can see information such as the
-possible <strong>budget</strong> allocations that were considered during the run.</p>
+possible <strong>budget</strong> allocations that were considered during the run. The <strong>budget</strong> is the amount of
+resources that were allocated to a configuration as it was being evaluated using a multi-fidelity
+approach.</p>
 </section>
 <section id="objectives">
 <h2>Objectives<a class="headerlink" href="#objectives" title="Link to this heading">¶</a></h2>
@@ -793,9 +800,9 @@ information about it’s name and the bounds they were in.</p>
 <section id="statuses">
 <h2>Statuses<a class="headerlink" href="#statuses" title="Link to this heading">¶</a></h2>
 <p>To get a nice overview of the optimization run, we provide a barplot that details how the end status
-of the many trials that occured. You can also view these as a heatmap or get more information from
+of the many trials that occurred. You can also view these as a heatmap or get more information from
 the <strong>Details</strong> tab.</p>
-<p>The barplot shows which trial recieved which status and under which budget allocation. These are
+<p>The barplot shows which trial received which status and under which budget allocation. These are
 grouped according to the status and coloured based on the status it exited with.</p>
 <p>To see details on how these configurations faired as they progressed in budget, you can refer to
 the <strong>Heatmap</strong> tab. Here you’ll see the budget allocation along the x-axis with the configuration
@@ -804,9 +811,9 @@ across the entire plot, with some <strong>NOT_EVALUATED</strong> lines indicatin
 to try. However if you faced many crashes at high budgets for example, you’ll see <strong>CRASHED</strong> bars
 from the highest budget onwards. In general, you can use this to understand how often your optimizer
 balances out between low budget evaluations and full budget evaluations.</p>
-<p>In the <strong>Details</strong> tab, you’ll recieve an overview of configurations that were not successful.
-Here you’ll get some breif information about the config id number, the budget it was evaluated under
-and the status it recieved. If there is an associated error we can provide, such as when it recieved
+<p>In the <strong>Details</strong> tab, you’ll receive an overview of configurations that were not successful.
+Here you’ll get some brief information about the config id number, the budget it was evaluated under
+and the status it received. If there is an associated error we can provide, such as when it received
 the <strong>CRASHED</strong> status, we will display it in the error column.</p>
 </section>
 <section id="configuration-space">
@@ -828,7 +835,7 @@ default value and whether it was optimized on a log-scale vs a linear one.</p>
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Plugins</p>
+            <p class="prev-next-title">Displaying Data with Plugins</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="configurations.html" title="next page">
