@@ -74,6 +74,7 @@ class FootPrint(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
+                                "Budget refers to the Multi-Fidelity budget."
                                 "Combined budget means that the trial on the highest"
                                 " evaluated budget is used.\n\n"
                                 "Note: Selecting combined budget might be misleading if"
