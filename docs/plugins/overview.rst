@@ -23,7 +23,7 @@ This plugin is capable of answering following questions:
 * Is the configuration space as expected?
 * How many trials have been successful/unsuccessful?
 * Why did certain trials crash?
-* On which Multi Fidelity budgets were the configurations evaluated?
+* On which multi-fidelity budgets were the configurations evaluated?
 
 
 Quick Information
@@ -37,8 +37,8 @@ Meta
 ----
 Next we show some meta information regarding your runs. Notably, you can see information such as the
 possible **budget** allocations that were considered during the run. The **budget** is the amount of
-resources that were allocated to a configuration as it was beeing evaluated using a Multi-Fidelity 
-Approach.
+resources that were allocated to a configuration as it was being evaluated using a multi-fidelity
+approach.
 
 
 Objectives
@@ -50,10 +50,10 @@ information about it's name and the bounds they were in.
 Statuses
 --------
 To get a nice overview of the optimization run, we provide a barplot that details how the end status
-of the many trials that occured. You can also view these as a heatmap or get more information from
+of the many trials that occurred. You can also view these as a heatmap or get more information from
 the **Details** tab.
 
-The barplot shows which trial recieved which status and under which budget allocation. These are
+The barplot shows which trial received which status and under which budget allocation. These are
 grouped according to the status and coloured based on the status it exited with.
 
 To see details on how these configurations faired as they progressed in budget, you can refer to
@@ -64,9 +64,9 @@ to try. However if you faced many crashes at high budgets for example, you'll se
 from the highest budget onwards. In general, you can use this to understand how often your optimizer
 balances out between low budget evaluations and full budget evaluations.
 
-In the **Details** tab, you'll recieve an overview of configurations that were not successful.
-Here you'll get some breif information about the config id number, the budget it was evaluated under
-and the status it recieved. If there is an associated error we can provide, such as when it recieved
+In the **Details** tab, you'll receive an overview of configurations that were not successful.
+Here you'll get some brief information about the config id number, the budget it was evaluated under
+and the status it received. If there is an associated error we can provide, such as when it received
 the **CRASHED** status, we will display it in the error column.
 
 

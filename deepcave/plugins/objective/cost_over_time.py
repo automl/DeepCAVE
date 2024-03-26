@@ -115,6 +115,7 @@ class CostOverTime(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
+                                "Budget refers to the multi-fidelity budget. "
                                 "Combined budget means that the trial on the highest evaluated "
                                 "budget is used."
                             ),

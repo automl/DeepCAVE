@@ -20,6 +20,10 @@
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
 
+## Documentation
+- Add How to Contribute section.
+- Expand documentation for partial dependence plugin.
+
 ## Version-Updates
 - Black version from 23.1.0 to 23.3.0
 - Mypy from 0.930 to 1.5.1
