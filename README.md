@@ -16,7 +16,7 @@ Following features are provided:
 - A large collection of plugins to explore multiple areas like performance, hyperparameter and
 budget analysis.
 - Save your runs using DeepCAVE's native recorder.
-- Support for many optimizers using converter (e.g., DeepCAVE, SMAC and BOHB).
+- Support for many optimizers using converters (e.g., DeepCAVE, SMAC and BOHB).
 - Select runs directly from a working directory in the interface.
 - Select groups of runs for combined analysis.
 - Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
@@ -43,6 +43,7 @@ pip install DeepCAVE
 If you want to contribute to DeepCAVE use the following steps instead:
 ```bash
 git clone https://github.com/automl/DeepCAVE.git
+cd DeepCAVE
 conda create -n DeepCAVE python=3.9
 conda activate DeepCAVE
 conda install -c anaconda swig

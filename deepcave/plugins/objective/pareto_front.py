@@ -127,8 +127,9 @@ class ParetoFront(DynamicPlugin):
                 [
                     dbc.Label("Budget"),
                     help_button(
-                        "Combined budget means that the trial on the highest evaluated budget is "
-                        "used.\n\n"
+                        "Budget refers to the multi-fidelity budget. "
+                        "Combined budget means that the trial on the highest"
+                        " evaluated budget is used.  \n "
                         "Note: Selecting combined budget might be misleading if a time objective "
                         "is used. Often, higher budget take longer to evaluate, which might "
                         "negatively influence the results."

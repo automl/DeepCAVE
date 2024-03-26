@@ -14,6 +14,7 @@ Home
    examples/index
    plugins/index
    converters
+   how_to_contribute
    api
    glossary
    faq
