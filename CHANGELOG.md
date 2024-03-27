@@ -2,6 +2,9 @@
 
 ## Plugins
 - Add symbolic explanations plugin (#46).
+- It is now possible to view multiple unequal runs at once in Cost over Time and Pareto (#93).
+- Runs with unequal objectives cannot be displayed together.
+- Added an enum for displaying according warning messages.
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
@@ -19,6 +22,9 @@
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
+- When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
+    - Instead of taking the first run as comparative value,
+    - take the one with the lowest budget, else the index for the budgets could be out of bounds.
 
 ## Documentation
 - Add How to Contribute section.
@@ -68,7 +74,7 @@
 - SMAC 2.0
 
 ## Dependencies
-- Remove SMAC dependency by adding required function directly
+- Remove SMAC dependency by adding required function directly.
 
 # Version 1.0.1
 
