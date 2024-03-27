@@ -435,18 +435,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -742,7 +732,7 @@
     <span class="n">CONSTANT_VALUE</span><span class="p">,</span>
     <span class="n">NAN_VALUE</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.exceptions</span> <span class="kn">import</span> <span class="n">NotMergeableError</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs.exceptions</span> <span class="kn">import</span> <span class="n">NotMergeableError</span><span class="p">,</span> <span class="n">RunInequality</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.trial</span> <span class="kn">import</span> <span class="n">Trial</span>
@@ -2044,6 +2034,61 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">result</span>
 
+    <span class="c1"># Check if objectives are mergeable</span>
+    <span class="k">if</span> <span class="n">objectives</span><span class="p">:</span>
+        <span class="n">o1</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+            <span class="n">o2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">o1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">o1</span> <span class="o">=</span> <span class="n">o2</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">o2</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
+                    <span class="s2">&quot;Objectives of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_OBJECTIVE</span>
+                <span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">o1_</span><span class="p">,</span> <span class="n">o2_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">o1_</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">o2_</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">NotMergeableError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
+                        <span class="s2">&quot;Objectives of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_OBJECTIVE</span>
+                    <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">o1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">serialized_objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">o1</span><span class="p">]</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialized_objectives</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialized_objectives</span>
+
+    <span class="c1"># Also check if budgets are the same</span>
+    <span class="k">if</span> <span class="n">budgets</span><span class="p">:</span>
+        <span class="n">b1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+            <span class="n">b2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b1</span> <span class="o">!=</span> <span class="n">b2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Budgets of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_BUDGET</span><span class="p">)</span>
+
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b1</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b1</span>
+
+    <span class="c1"># Make sure the same configspace is used</span>
+    <span class="c1"># Otherwise it does not make sense to merge</span>
+    <span class="c1"># the histories</span>
+    <span class="k">if</span> <span class="n">configspace</span><span class="p">:</span>
+        <span class="n">cs1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">configspace</span>
+        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+            <span class="n">cs2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span>
+            <span class="k">if</span> <span class="n">cs1</span> <span class="o">!=</span> <span class="n">cs2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
+                    <span class="s2">&quot;Configspace of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_CONFIGSPACE</span>
+                <span class="p">)</span>
+
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;configspace&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cs1</span>
+
     <span class="c1"># Check meta</span>
     <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
         <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">,</span> <span class="s2">&quot;wallclock_limit&quot;</span><span class="p">]</span>
@@ -2058,55 +2103,11 @@
                     <span class="k">continue</span>
 
                 <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">m2</span> <span class="ow">or</span> <span class="n">m2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="n">v</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Meta data of runs are not equal.&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span>
+                        <span class="s2">&quot;Meta data of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_META</span>
+                    <span class="p">)</span>
 
         <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span>
-
-    <span class="c1"># Make sure the same configspace is used</span>
-    <span class="c1"># Otherwise it does not make sense to merge</span>
-    <span class="c1"># the histories</span>
-    <span class="k">if</span> <span class="n">configspace</span><span class="p">:</span>
-        <span class="n">cs1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">configspace</span>
-        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="n">cs2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span>
-            <span class="k">if</span> <span class="n">cs1</span> <span class="o">!=</span> <span class="n">cs2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Configspace of runs are not equal.&quot;</span><span class="p">)</span>
-
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;configspace&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cs1</span>
-
-    <span class="c1"># Also check if budgets are the same</span>
-    <span class="k">if</span> <span class="n">budgets</span><span class="p">:</span>
-        <span class="n">b1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="n">b2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">b1</span> <span class="o">!=</span> <span class="n">b2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Budgets of runs are not equal.&quot;</span><span class="p">)</span>
-
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b1</span>
-        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">b1</span>
-
-    <span class="c1"># And if objectives are the same</span>
-    <span class="k">if</span> <span class="n">objectives</span><span class="p">:</span>
-        <span class="n">o1</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
-            <span class="n">o2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
-
-            <span class="k">if</span> <span class="n">o1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">o1</span> <span class="o">=</span> <span class="n">o2</span>
-                <span class="k">continue</span>
-
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">o2</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Objectives of runs are not equal.&quot;</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">o1_</span><span class="p">,</span> <span class="n">o2_</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">o1</span><span class="p">,</span> <span class="n">o2</span><span class="p">):</span>
-                <span class="n">o1_</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">o2_</span><span class="p">)</span>
-
-        <span class="k">assert</span> <span class="n">o1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-        <span class="n">serialized_objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">o1</span><span class="p">]</span>
-        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialized_objectives</span>
-        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
-            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">serialized_objectives</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
 

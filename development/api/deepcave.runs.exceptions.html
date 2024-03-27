@@ -438,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -726,6 +716,15 @@
    </code>
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.runs.exceptions.RunInequality">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     RunInequality
+    </span>
+   </code>
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -760,6 +759,14 @@ as well as if runs are not mergeable.</p>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.exceptions.RunInequality" title="deepcave.runs.exceptions.RunInequality"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RunInequality</span></code></a>(value)</p></td>
+<td><p>Check why runs were not compatible.</p></td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">Exceptions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
@@ -783,6 +790,13 @@ as well as if runs are not mergeable.</p>
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotValidRunError</span></span><a class="reference internal" href="../_modules/deepcave/runs/exceptions.html#NotValidRunError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.exceptions.NotValidRunError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Raised if directory is not a valid run.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="deepcave.runs.exceptions.RunInequality">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.exceptions.</span></span><span class="sig-name descname"><span class="pre">RunInequality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/exceptions.html#RunInequality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.exceptions.RunInequality" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Check why runs were not compatible.</p>
 </dd></dl>
 
 </section>

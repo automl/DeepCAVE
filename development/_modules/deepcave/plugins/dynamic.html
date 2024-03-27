@@ -435,18 +435,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -809,6 +799,7 @@
             <span class="n">runs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_selected_runs</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 
             <span class="n">raw_outputs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">rc</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
                 <span class="n">run_outputs</span> <span class="o">=</span> <span class="n">rc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">inputs_key</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">run_outputs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
