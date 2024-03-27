@@ -491,8 +491,16 @@ class SymbolicExplanations(StaticPlugin):
             Layout for the output block.
         """
         return [
-            dcc.Graph(register("symb_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
-            dcc.Graph(register("pdp_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
+            dcc.Graph(
+                register("symb_graph", "figure"),
+                style={"height": Config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            ),
+            dcc.Graph(
+                register("pdp_graph", "figure"),
+                style={"height": Config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            ),
         ]
 
     @staticmethod

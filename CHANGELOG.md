@@ -11,6 +11,7 @@
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
+- Save plotly plots in higher resolution upon download.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).
@@ -19,6 +20,9 @@
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
+- For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
+- Add init files to all test directories.
+- Correct LPI importance tests.
 
 ## Documentation
 - Add How to Contribute section.

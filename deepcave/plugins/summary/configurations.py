@@ -287,6 +287,9 @@ class Configurations(DynamicPlugin):
                         dcc.Graph(
                             id=register("performance_graph", "figure"),
                             style={"height": Config.FIGURE_HEIGHT},
+                            config={
+                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                            },
                         ),
                         label="Graph",
                     ),
@@ -301,6 +304,9 @@ class Configurations(DynamicPlugin):
                         dcc.Graph(
                             id=register("configspace_graph", "figure"),
                             style={"height": Config.FIGURE_HEIGHT},
+                            config={
+                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                            },
                         ),
                         label="Graph",
                     ),
