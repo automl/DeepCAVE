@@ -45,6 +45,10 @@
 - Major overhaul of docstrings in various files
 - Removed unused imports and variables
 
+## Groups
+- Groups now get a default name, if no name was entered by the user.
+- Groups get sorted alphabetically to appear more ordered.
+
 ## Additional Changes
 - Added a "make install examples" in Makefile
 
