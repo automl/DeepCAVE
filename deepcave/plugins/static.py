@@ -389,12 +389,12 @@ class StaticPlugin(Plugin, ABC):
         List[Component]
             Layout as list of components.
         """
-        from deepcave.config import Config
+        from deepcave import config
 
         self._setup()
 
         components = [
-            dcc.Interval(id=self.get_internal_id("update-interval"), interval=Config.REFRESH_RATE),
+            dcc.Interval(id=self.get_internal_id("update-interval"), interval=config.REFRESH_RATE),
             dcc.Store(id=self.get_internal_id("update-interval-output"), data=0),
         ]
         components += super().__call__(True)

@@ -17,7 +17,7 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.utils.layout import get_select_options, help_button
@@ -329,7 +329,7 @@ class ParetoFront(DynamicPlugin):
         dcc.Graph
             The layout for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
 
     @staticmethod
     def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
@@ -437,7 +437,7 @@ class ParetoFront(DynamicPlugin):
             layout = go.Layout(
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
-                margin=Config.FIGURE_MARGIN,
+                margin=config.FIGURE_MARGIN,
             )
         else:
             layout = None

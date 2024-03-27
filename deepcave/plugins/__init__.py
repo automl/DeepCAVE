@@ -115,9 +115,9 @@ class Plugin(Layout, ABC):
         str
             Url for the plugin as string.
         """
-        from deepcave.config import Config
+        from deepcave import config
 
-        return f"http://{Config.DASH_ADDRESS}:{Config.DASH_PORT}/plugins/{cls.id}"
+        return f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{cls.id}"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
