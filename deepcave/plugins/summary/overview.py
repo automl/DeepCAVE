@@ -1,3 +1,19 @@
+# noqa: D400
+"""
+# Overview
+
+This module provides utilities for visualizing an overview of the selected runs.
+
+It holds the most important information, e.g. meta data, objectives and statistics.
+
+The module includes a dynamic plugin for the overview.
+
+## Classes
+    - Overview: Visualize an overall overview of the selected run.
+"""
+
+from typing import Any, Callable, Dict, List
+
 import itertools
 
 import dash_bootstrap_components as dbc
@@ -25,6 +41,8 @@ from deepcave.utils.util import get_latest_change
 
 
 class Overview(DynamicPlugin):
+    """Visualize an overall overview of the selected run."""
+
     id = "overview"
     name = "Overview"
     icon = "fas fa-search"
@@ -33,7 +51,21 @@ class Overview(DynamicPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register the outputs.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the output block.
+        """
         return [
             html.Div(
                 id=register("card", "children"),
@@ -73,7 +105,26 @@ class Overview(DynamicPlugin):
         ]
 
     @staticmethod
-    def load_outputs(run, *_):
+    def load_outputs(run, *_: Any) -> List[Any]:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+
+        Returns
+        -------
+        List[Any]
+            A list of the created tables of the overview.
+        """
         # Get best cost across all objectives, highest budget
         incumbent, _ = run.get_incumbent()
         config_id = run.get_config_id(incumbent)
@@ -141,7 +192,7 @@ class Overview(DynamicPlugin):
         )
 
         # Meta
-        meta = {"Attribute": [], "Value": []}
+        meta: Dict[str, List[str]] = {"Attribute": [], "Value": []}
         for k, v in run.get_meta().items():
             if k == "objectives":
                 continue
@@ -153,7 +204,7 @@ class Overview(DynamicPlugin):
             meta["Value"].append(str(v))
 
         # Objectives
-        objectives = {"Name": [], "Bounds": []}
+        objectives: Dict[str, List[str]] = {"Name": [], "Bounds": []}
         for objective in run.get_objectives():
             objectives["Name"].append(objective.name)
             objectives["Bounds"].append(f"[{objective.lower}, {objective.upper}]")
@@ -168,16 +219,18 @@ class Overview(DynamicPlugin):
         budget_seed_combinations = list(itertools.product(budgets, seeds))
 
         # Setup statistics dict for bar plot
-        status_statistics = {}
+        status_statistics: Dict[float, Dict[Status, int]] = {}
+
         for budget in budgets:
             budget = round(budget, 2)
             if budget not in status_statistics:
                 status_statistics[budget] = {}
+
                 for s in Status:
                     status_statistics[budget][s] = 0
 
         # Setup details dict for to collect information on failed trials
-        status_details = {
+        status_details: Dict[str, List[Any]] = {
             "Configuration ID": [],
             "Budget": [],
             "Seed": [],
@@ -209,7 +262,7 @@ class Overview(DynamicPlugin):
             else:
                 budget_count[budget] += 1
 
-            # Add failed trials information to details dict
+            # Add to table data
             if trial.status != Status.SUCCESS:
                 link = Configurations.get_link(run, trial.config_id)
 
@@ -259,8 +312,8 @@ class Overview(DynamicPlugin):
             str(round(count / len_trials * 100, 2)) + "%" for count in budget_count.values()
         ]
         budget_rate_text = "/".join(budget_rate)
-        budget_keys_text = [str(key) for key in budget_count.keys()]
-        budget_keys_text = "/".join(budget_keys_text)
+        budget_keys_text_list = [str(key) for key in budget_count.keys()]
+        budget_keys_text = "/".join(budget_keys_text_list)
 
         # Text information
         status_text = f"""
@@ -301,7 +354,7 @@ class Overview(DynamicPlugin):
         config_statistics["Z_labels"] = z_labels
 
         # Prepare configspace table
-        configspace = {
+        configspace: Dict[str, List] = {
             "Hyperparameter": [],
             "Possible Values": [],
             "Default": [],
@@ -327,12 +380,12 @@ class Overview(DynamicPlugin):
                 value = str(hp.value)
 
             default = str(hp.default_value)
-            log = str(log)
+            log_str = str(log)
 
             configspace["Hyperparameter"].append(hp_name)
             configspace["Possible Values"].append(value)
             configspace["Default"].append(default)
-            configspace["Log"].append(log)
+            configspace["Log"].append(log_str)
 
         stats_data = []
         for budget, stats in status_statistics.items():

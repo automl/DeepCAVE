@@ -1,4 +1,17 @@
-from typing import List, Optional, Tuple
+# noqa: D400
+"""
+# FanovaForest
+
+The module provides utilities for creating a fANOVA forest.
+
+It includes a FanovaForest wrapper for pyrfr.
+fANOVA can be used for analyzing the importances of Hyperparameters.
+
+## Classes
+    - FanovaForest: A fANOVA forest wrapper for pyrfr.
+"""
+
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import itertools as it
 
@@ -13,7 +26,32 @@ from deepcave.evaluators.epm.random_forest import RandomForest
 
 class FanovaForest(RandomForest):
     """
-    A fanova forest wrapper for pyrfr.
+    A fANOVA forest wrapper for pyrfr.
+
+    Properties
+    ----------
+    cutoffs : Tuple[float, float]
+        The cutoffs of the model.
+    percentiles : NDArray[floating]
+        The percentiles of the data points Y.
+    all_midpoints : List
+        All midpoints tree wise for the whole forest.
+    all_sizes : List
+        All interval sizes tree wise for the whole forest.
+    bounds : List[Tuple[float, float]
+        Stores feature bounds.
+    trees_total_variances : List
+        The total variances of the trees.
+    trees_total_variance : Any
+        The total variance of a tree.
+    trees_variance_fractions : Dict
+        The variance fractions of the trees.
+    V_U_total : Dict[Tuple[int, ...], List[Any]]
+        Store variance-related information across all trees.
+    V_U_individual : Dict[Tuple[int, ...], List[Any]]
+        Store variance-related information for individual subsets.
+    n_params : int
+        The number of Hyperparameters to sample.
     """
 
     def __init__(
@@ -52,7 +90,7 @@ class FanovaForest(RandomForest):
 
     def _get_model(self) -> regression.base_tree:
         """
-        Returns the internal model.
+        Return the internal model.
 
         Returns
         -------
@@ -63,7 +101,7 @@ class FanovaForest(RandomForest):
 
     def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
-        Trains the random forest on X and Y.
+        Train the Random Forest on X and Y.
 
         Parameters
         ----------
@@ -75,7 +113,7 @@ class FanovaForest(RandomForest):
         super()._train(X, Y)
         self.percentiles = np.percentile(Y, range(0, 100))
 
-        # all midpoints and interval sizes treewise for the whole forest
+        # all midpoints and interval sizes tree wise for the whole forest
         self.all_midpoints = []
         self.all_sizes = []
 
@@ -84,8 +122,8 @@ class FanovaForest(RandomForest):
 
         # compute midpoints and interval sizes for variables in each tree
         for tree_split_values in forest_split_values:
-            sizes = []
-            midpoints = []
+            sizes: List = []
+            midpoints: List = []
             for i, split_vals in enumerate(tree_split_values):
                 if np.isnan(self.bounds[i][1]):  # categorical parameter
                     # check if the tree actually splits on this parameter
@@ -108,14 +146,14 @@ class FanovaForest(RandomForest):
             self.all_sizes.append(sizes)
 
         # capital V in the paper
-        self.trees_total_variances = []
+        self.trees_total_variances: list = []
 
         # dict of lists where the keys are tuples of the dimensions
         # and the value list contains \hat{f}_U for the individual trees
         # reset all the variance fractions computed
-        self.trees_variance_fractions = {}
-        self.V_U_total = {}
-        self.V_U_individual = {}
+        self.trees_variance_fractions: dict = {}
+        self.V_U_total: Dict[Tuple[int, ...], List[Any]] = {}
+        self.V_U_individual: Dict[Tuple[int, ...], List[Any]] = {}
 
         # Set cut-off
         self._model.set_cutoffs(self.cutoffs[0], self.cutoffs[1])
@@ -123,16 +161,29 @@ class FanovaForest(RandomForest):
         # recompute the trees' total variance
         self.trees_total_variance = self._model.get_trees_total_variances()
 
-    def compute_marginals(self, hp_ids: List[int], depth=1):
+    def compute_marginals(
+        self, hp_ids: Union[List[int], Tuple[int, ...]], depth: int = 1
+    ) -> Tuple[Dict[Tuple[int, ...], List[Any]], Dict[Tuple[int, ...], List[Any]],]:
         """
-        Returns the marginal of selected parameters.
+        Return the marginal of selected Hyperparameters.
 
         Parameters
         ----------
-        hp_ids: List[int]
-            Contains the indices of the configspace for the selected parameters (starts with 0).
+        hp_ids: Union[List[int], Tuple[int, ...]]
+            Contains the indices of the configspace for the selected Hyperparameters
+            (starts with 0).
+        depth: int
+            The depth of the marginalization.
+            Default value is 1.
+
+        Returns
+        -------
+        Tuple[Dict[Tuple[int, ...], List[Any]],
+        Dict[Tuple[int, ...], List[Any]],
+            The marginal of selected Hyperparameters.
         """
-        hp_ids = tuple(hp_ids)
+        if not isinstance(hp_ids, tuple):
+            hp_ids = tuple(hp_ids)
 
         # check if values has been previously computed
         if hp_ids in self.V_U_individual:
@@ -164,7 +215,7 @@ class FanovaForest(RandomForest):
             prod_midpoints = it.product(*midpoints)
             prod_sizes = it.product(*sizes)
 
-            sample = np.full(self.n_params, np.nan, dtype=float)
+            sample: np.ndarray = np.full(self.n_params, np.nan, dtype=float)
 
             # make prediction for all midpoints and weigh them by the corresponding size
             for i, (m, s) in enumerate(zip(prod_midpoints, prod_sizes)):
@@ -178,7 +229,7 @@ class FanovaForest(RandomForest):
             # line 10 in algorithm 2
             # note that V_U^2 can be computed by var(\hat a)^2 - \sum_{subU} var(f_subU)^2
             # which is why, \hat{f} is never computed in the code, but
-            # appears in the pseudocode
+            # appears in the pseudo code
             V_U_total = np.nan
             V_U_individual = np.nan
 

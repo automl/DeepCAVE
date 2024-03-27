@@ -34,4 +34,4 @@ if __name__ == "__main__":
     # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
     figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
     figure.write_image("examples/api/pdp.png")
-    #figure.show()
+    # figure.show()

@@ -1,4 +1,19 @@
-from typing import Dict, List, TypeVar, Union
+#  noqa: D400
+"""
+# Compression
+
+This module provides utilities for serializing and deserializing a dataframe from/to a string.
+
+## Classes
+    - Encoder: This class defines a custom JSON Encoder.
+
+## Constants
+    - JSON_DENSE_SEPARATORS: Tuple(str, str)
+    - JSON_DEFAULT_SEPARATORS: Tuple(str, str)
+    - TYPE: TypeVar
+"""
+
+from typing import Any, Dict, List, TypeVar, Union
 
 import json
 
@@ -13,10 +28,35 @@ TYPE = TypeVar("TYPE")
 def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """
     Serialize a dataframe to a string.
+
+    Parameters
+    ----------
+    data : Union[Dict, List, pd.DataFrame]
+        The dataframe to be serialized.
+
+    Returns
+    -------
+    str
+        The serialized object as a JSON formatted string.
     """
 
     class Encoder(json.JSONEncoder):
-        def default(self, obj):
+        """Define a custom JSON Encoder."""
+
+        def default(self, obj: Any) -> Any:
+            """
+            Return the object as list if np.ndarray.
+
+            Parameters
+            ----------
+            obj : Any
+                The object to be converted.
+
+            Returns
+            -------
+            Any
+                The converted object.
+            """
             if isinstance(obj, np.ndarray):
                 return obj.tolist()
             return json.JSONEncoder.default(self, obj)
@@ -31,6 +71,19 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
 def deserialize(string: str, dtype: TYPE = pd.DataFrame) -> TYPE:
     """
     Deserialize a dataframe from a string.
+
+    Parameters
+    ----------
+    string : str
+        The string to be deserialized.
+    dtype : TYPE, optional
+        The type of the object.
+        Default is pd.DataFrame.
+
+    Returns
+    -------
+    TYPE
+        The deserialized object.
     """
     if dtype == pd.DataFrame:
         return pd.DataFrame.from_dict(json.loads(string))

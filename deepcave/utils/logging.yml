@@ -5,12 +5,12 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
-    level: DEBUG
+    level: INFO
     formatter: simple
     stream: ext://sys.stdout
 loggers:
   src.plugins:
-    level: DEBUG
+    level: INFO
     handlers: [ console ]
     propagate: no
   matplotlib:
@@ -22,6 +22,6 @@ loggers:
     handlers: [ console ]
     propagate: no
 root:
-  level: DEBUG
+  level: INFO
   handlers: [console]
-disable_existing_loggers: false
+disable_existing_loggers: true

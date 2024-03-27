@@ -1,5 +1,18 @@
+#  noqa: D400
+"""
+# Static
+
+This module provides a plugin class for a static plugin.
+
+It provides an Enum used for the plugin state.
+
+## Classes
+    - PluginState: An Enum to define the state of the Plugin.
+    - StaticPlugin: This class provides a static plugin object.
+"""
+
 from abc import ABC
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import traceback
 from enum import Enum
@@ -18,6 +31,8 @@ from deepcave.utils.url import create_url
 
 
 class PluginState(Enum):
+    """An Enum to define the state of the Plugin."""
+
     UNSET = -1
     READY = 0
     NEEDS_PROCESSING = 1
@@ -27,7 +42,26 @@ class PluginState(Enum):
 
 def _process(
     process: Callable[[AbstractRun, Any], None], run: AbstractRun, inputs: Dict[str, Any]
-) -> Any:
+) -> None:
+    """
+    Process the run with the input data if possible.
+
+    Return raw data based on a run and input data.
+
+    Parameters
+    ----------
+    process : Callable[[AbstractRun, Any], None]
+        The process function.
+    run : AbstractRun
+        The run.
+    inputs : Dict[str, Any]
+        The inputs as a dictionary.
+
+    Raises
+    ------
+    Exception
+        If the process function fails.
+    """
     try:
         return process(run, inputs)
     except Exception:
@@ -37,7 +71,29 @@ def _process(
 
 class StaticPlugin(Plugin, ABC):
     """
+    Provide a static plugin object.
+
     Calculation with queue. Made for time-consuming tasks.
+    Register and handle callbacks.
+
+    Properties
+    ----------
+    outputs : List[Tuple[str, str, bool]]
+        The plugin specific outputs.
+    inputs : List[Tuple[str, str, bool, Any]]
+        The plugin specific inputs.
+    id : str
+        The plugin id.
+    raw_outputs : dict[str, Any]
+        The raw outputs of a run.
+    logger : Logger
+        The logger for the plugin.
+    name : str
+        The name of the plugin.
+    process : Callable
+        Return raw data based on a run and input data.
+    button_caption : str
+        The caption for the button.
     """
 
     def __init__(self) -> None:
@@ -45,14 +101,16 @@ class StaticPlugin(Plugin, ABC):
         self._setup()
 
     def _setup(self) -> None:
+        """Set up the plugin."""
         self._state = PluginState.UNSET  # Set in the main loop to track what's going on right now
-        self._previous_state = None  # Used for updating status
+        self._previous_state: Optional[PluginState] = None  # Used for updating status
         self._refresh_required = True
         self._reset_button = False
         self._blocked = False
 
     @interactive
     def register_callbacks(self) -> None:
+        """Register different callbacks."""
         super().register_callbacks()
         self._callback_inputs_changed()
         self._callback_loop_update_status_label()
@@ -60,6 +118,7 @@ class StaticPlugin(Plugin, ABC):
 
     @interactive
     def _callback_inputs_changed(self) -> None:
+        """Handle callback if the inputs changed."""
         from deepcave import app, c, queue, rc, run_handler
 
         # Plugin specific outputs
@@ -77,13 +136,13 @@ class StaticPlugin(Plugin, ABC):
             inputs.append(Input(self.get_internal_input_id(id), attribute))
 
         # Register updates from inputs
-        @app.callback(outputs, inputs)
-        def plugin_process(n_clicks, _, *inputs_list):  # type: ignore
+        @app.callback(outputs, inputs)  # type: ignore
+        def plugin_process(n_clicks: int, _: Any, *inputs_list: str) -> Optional[Any]:
+            """Register updates from inputs."""
             self._blocked = True
-
             # Map the list `inputs_list` to a dict s.t.
             # it's easier to access them.
-            inputs = self._list_to_dict(inputs_list, input=True)
+            inputs = self._list_to_dict(list(inputs_list), input=True)
             inputs_key = self._dict_as_key(inputs, remove_filters=True)
             cleaned_inputs = self._clean_inputs(inputs)
             last_inputs = c.get("last_inputs", self.id)
@@ -98,7 +157,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
+                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)  # same problem
 
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False
@@ -125,11 +184,11 @@ class StaticPlugin(Plugin, ABC):
                 if button_pressed and self._state != PluginState.PROCESSING:
                     self.logger.debug("Button pressed.")
 
-                    # Check if we need to process
+                    # Check if processing is needed
                     for run in runs:
-                        job_id = self._get_job_id(run.id, inputs_key)
+                        job_id = self._get_job_id(run.id, inputs_key)  # same problem
 
-                        # We already got our results or it was already processed
+                        # Results are already achieved or it was already processed
                         if raw_outputs[run.id] is not None or queue.is_processed(job_id):
                             continue
 
@@ -170,6 +229,7 @@ class StaticPlugin(Plugin, ABC):
                             run = run_handler.get_run(job_run_id)
 
                             # Save results in cache
+                            # Same optional string problem
                             rc.set(run, job_plugin_id, job_inputs_key, job_run_outputs)
                             self.logger.debug(f"Job {job_id} cached.")
 
@@ -221,8 +281,16 @@ class StaticPlugin(Plugin, ABC):
         # Interval should not always run the main callback the whole time
         # Especially not if it's blocked because PreventUpdate
         # prevent output updates from previous callback calls.
-        @app.callback(output, inputs)
-        def plugin_check_blocked(_, data):  # type: ignore
+        @app.callback(output, inputs)  # type: ignore
+        def plugin_check_blocked(_: Any, data: Any) -> Any:
+            """
+            Check if blocked.
+
+            Raises
+            ------
+            PreventUpdate
+                If '_blocked' is True.
+            """
             if self._blocked:
                 raise PreventUpdate
 
@@ -242,15 +310,16 @@ class StaticPlugin(Plugin, ABC):
 
         # Update status label
         # Register updates from inputs
-        @app.callback(output, input)
-        def plugin_update_status(_):  # type: ignore
+        @app.callback(output, input)  # type: ignore
+        def plugin_update_status(_: Any) -> Tuple[List[Any], Optional[Any], bool]:
+            """Update the status of the plugin."""
             button_text = [html.Span(self.button_caption)]
 
             if self._state == PluginState.UNSET:
                 # Disable and reset button
                 return button_text, None, True
 
-            # Important so we don't update the button every time (would result in an ugly spinner)
+            # Important so the button is not updated every time (would result in an ugly spinner)
             if self._previous_state == self._state:
                 raise PreventUpdate
 
@@ -261,8 +330,8 @@ class StaticPlugin(Plugin, ABC):
                 self._previous_state == PluginState.PROCESSING
                 and self._state == PluginState.NEEDS_PROCESSING
             ):
-                # However: We have to unset the previous state so if we really change the inputs
-                # the visualizes will be updated.
+                # However: The previous state has to be unset, so if the inputs are really changed
+                # the visualizer will be updated.
                 self._previous_state = PluginState.UNSET
                 raise PreventUpdate
 
@@ -291,10 +360,35 @@ class StaticPlugin(Plugin, ABC):
             return button_text, button, disabled
 
     def _get_job_id(self, run_name: str, inputs_key: str) -> str:
+        """
+        Get the job id.
+
+        Parameters
+        ----------
+        run_name : str
+            The name of the run.
+        inputs_key : str
+            The inputs key.
+
+        Returns
+        -------
+        str
+            The job id.
+        """
         return f"{run_name}-{inputs_key}"
 
     @interactive
     def __call__(self) -> List[Component]:  # type: ignore
+        """
+        Return the components for the plugin.
+
+        Basically, all blocks and elements of the plugin are stacked-up here.
+
+        Returns
+        -------
+        List[Component]
+            Layout as list of components.
+        """
         from deepcave.config import Config
 
         self._setup()

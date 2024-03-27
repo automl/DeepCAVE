@@ -1,14 +1,34 @@
-from distutils.spawn import find_executable
+#  noqa: D400
+"""
+# StyledPlot
 
-import matplotlib
+This module provides utilities to customize functions from the matplotlib.
+Plots can be created and different parameters of the plots can be defined.
 
-matplotlib.use("Agg")
+## Classes
+    - StyledPlot: Overwrites default settings from matplotlib.pyplot.
+
+## Constants
+    FIG_WIDTH: float
+    FIG_HEIGHT: float
+"""
+
+from typing import Any, Dict, Optional, Union
+
 import base64
 import io
+from distutils.spawn import find_executable
+from pathlib import Path
 
+import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+from numpy.typing import ArrayLike
 
 from deepcave.utils.logs import get_logger
+
+matplotlib.use("Agg")
+
 
 # IEEETrans double column standard
 FIG_WIDTH = 252.0 / 72.27  # 1pt is 1/72.27 inches
@@ -21,10 +41,17 @@ logger = get_logger(__name__)
 class StyledPlot:
     """
     Overwrites default settings from matplotlib.pyplot.
+
     If a function is not overwritten, the default function will be used.
+
+    Properties
+    ----------
+    plt : Module("matplotlib.pyplot")
+        The matplotlib plot.
+        The style used is seaborn.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         plt.style.use("seaborn-v0_8")
 
         # Set MatPlotLib defaults
@@ -47,7 +74,27 @@ class StyledPlot:
 
         self.plt = plt
 
-    def figure(self, cols=1, rows=1, dpi=200):
+    def figure(self, cols: int = 1, rows: int = 1, dpi: int = 200) -> plt.Figure:
+        """
+        Create a new figure using the input values.
+
+        Parameters
+        ----------
+        cols : int, optional
+            The number of the columns.
+            Default is 1.
+        rows : int, optional
+            The number of the rows.
+            Default is 1.
+        dpi : int, optional
+            The dots per inches (dpi).
+            Default is 200.
+
+        Returns
+        -------
+        plt.Figure
+            The figure created with the input information.
+        """
         # Clean all
         self.plt.cla()
         self.plt.clf()
@@ -57,12 +104,28 @@ class StyledPlot:
 
         return f
 
-    def save_figure(self, filename):
+    def save_figure(self, filename: Union[str, Path]) -> None:
+        """
+        Save the figure/plot at the given filename.
+
+        Parameters
+        ----------
+        filename : Union[str, Path]
+            The name of the file the plot will be saved at.
+        """
         self.plt.savefig(filename, dpi=400, bbox_inches="tight")
         self.plt.close()
 
-    def render(self):
-        # Ccreate a virtual file which matplotlib can use to save the figure
+    def render(self) -> str:
+        """
+        Render the Styled Plot for displaying.
+
+        Returns
+        -------
+        str
+            The rendered plot.
+        """
+        # Create a virtual file which matplotlib can use to save the figure
         buffer = io.BytesIO()
         self.plt.savefig(buffer, dpi=400, bbox_inches="tight")
         buffer.seek(0)
@@ -72,12 +135,35 @@ class StyledPlot:
         encoded_image = base64.b64encode(buffer.read())
         return "data:image/png;base64,{}".format(encoded_image.decode())
 
-    def xlim(self, xmin, xmax):
+    def xlim(self, xmin: Union[float, int], xmax: Union[float, int]) -> None:
+        """
+        Set the x-axis limits with a margin of a matplotlib plot.
+
+        Parameters
+        ----------
+        xmin : Union[float, int]
+            The lower x-axis limit.
+        xmax : Union[float, int]
+            The upper x-axis limit.
+        """
         xmin_with_margin = xmin - 0.05 * (xmax - xmin)
         xmax_with_margin = xmax + 0.05 * (xmax - xmin)
         self.plt.xlim(xmin_with_margin, xmax_with_margin)
 
-    def ylim(self, ymin, ymax, margin=True):
+    def ylim(self, ymin: Union[float, int], ymax: Union[float, int], margin: bool = True) -> None:
+        """
+        Set the y-axis limit of a matplotlib plot.
+
+        Parameters
+        ----------
+        ymin : Union[float, int]
+            The lower y-axis limit.
+        ymax : Union[float, int]
+            The upper y-axis limit.
+        margin : bool, optional
+            Determines whether a margin should be added to the limits.
+            Default is True.
+        """
         if margin:
             ymin_with_margin = ymin - 0.05 * (ymax - ymin)
             ymax_with_margin = ymax + 0.05 * (ymax - ymin)
@@ -87,9 +173,27 @@ class StyledPlot:
 
     # def grid(self):
     #    pass
-    #    #self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0, alpha=0.5)
+    #    # self.plt.grid(b=True, color='black', linestyle='--', linewidth=0.5, axis='y', zorder=0,
+    #    # alpha=0.5)
 
-    def boxplot(self, values, positions, color, widths=0.5):
+    def boxplot(
+        self, values: np.ndarray, positions: ArrayLike, color: str, widths: float = 0.5
+    ) -> None:
+        """
+        Create a boxplot on a matplotlib plot.
+
+        Parameters
+        ----------
+        values : np.ndarray
+            Values to create the boxplot.
+        positions : ArrayLike
+            The position of the boxplot.
+        color : str
+            The color of the boxes as well as other elements in the plot.
+        widths : float, optional
+            The width of the boxes.
+            Default is 0.5.
+        """
         bp = self.plt.boxplot(values, positions=positions, patch_artist=True, widths=widths)
 
         for box in bp["boxes"]:
@@ -116,8 +220,34 @@ class StyledPlot:
                 alpha=0.5,
             )
 
-    def legend(self, cols=1, loc=None, title=None, outside=False):
-        kwargs = {
+    def legend(
+        self,
+        cols: int = 1,
+        loc: Optional[str] = None,
+        title: Optional[str] = None,
+        outside: bool = False,
+    ) -> None:
+        """
+        Customize and add a legend to a matplot plot.
+
+        Customize the placement and appearance of the legend.
+
+        Parameters
+        ----------
+        cols : int, optional
+            The number of the columns.
+            Default is 1
+        loc : Optional[str], optional
+            The location of the legend.
+            Default is None.
+        title : Optional[str], optional
+            The title for the legend.
+            Default is None.
+        outside : bool, optional
+            Determines if a legend is placed outside of plot area.
+            Default is False.
+        """
+        kwargs: Dict[str, Any] = {
             "ncol": cols,
             "columnspacing": 0.8,
             "labelspacing": 0,
@@ -146,23 +276,32 @@ class StyledPlot:
             legend.get_frame().set_linewidth(0.5)
             legend.get_frame().set_edgecolor("gray")
 
-    def get_color(self, id):
+    def get_color(self, id: int) -> str:
+        """
+        Get the color from color palette based on the given id.
+
+        Parameters
+        ----------
+        id : int
+            id for retrieving a specific color.
+
+        Returns
+        -------
+        str
+            The color from the color palette.
+        """
         import seaborn as sns
 
         pal = sns.color_palette()
         hex_codes = pal.as_hex()
-
         return hex_codes[id % len(hex_codes)]
 
-    def __getattr__(self, name):
-        """
-        Make sure we access self.plt directly.
-        """
-
+    def __getattr__(self, name: str) -> Any:
+        """Make sure self.plt is accessed directly."""
         try:
             return self.__getattribute__(name)
-        except:
+        except AttributeError:
             return self.plt.__getattribute__(name)
 
 
-plt = StyledPlot()
+plot = StyledPlot()

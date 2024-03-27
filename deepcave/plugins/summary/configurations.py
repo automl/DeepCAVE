@@ -1,3 +1,17 @@
+#  noqa: D400
+"""
+# Configurations
+
+This module provides utilities to visualize the characteristics of a configuration within a run.
+
+The module provides a corresponding dynamic plugin.
+
+## Classes
+    - Configurations: Visualize the characteristics of a configuration.
+"""
+
+from typing import Any, Callable, Dict, List, Optional, Union
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -9,7 +23,7 @@ from dash import dcc, html
 from deepcave.config import Config
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun, Status
+from deepcave.runs import AbstractRun
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import create_table, get_slider_marks
 from deepcave.utils.styled_plotty import (
@@ -22,6 +36,8 @@ from deepcave.utils.url import create_url
 
 
 class Configurations(DynamicPlugin):
+    """Visualize the characteristics of a configuration."""
+
     id = "configurations"
     name = "Configurations"
     icon = "fas fa-sliders-h"
@@ -32,14 +48,14 @@ class Configurations(DynamicPlugin):
     @staticmethod
     def get_link(run: AbstractRun, config_id: int) -> str:
         """
-        Creates a link to a specific configuration.
+        Create a link to a specific configuration.
 
         Parameters
         ----------
         run : AbstractRun
-            Selected run.
+            The selected run.
         config_id : int
-            Configuration, which should be visited.
+            Configuration which should be visited.
 
         Returns
         -------
@@ -57,7 +73,21 @@ class Configurations(DynamicPlugin):
         return create_url(url, inputs)
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[html.Div]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[html.Div]
+            The layouts for the input block.
+        """
         return [
             html.Div(
                 [
@@ -67,12 +97,49 @@ class Configurations(DynamicPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Any]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The content to be filled
+        """
         return {
             "config_id": {"min": 0, "max": 0, "marks": get_slider_marks(), "value": 0},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(  # type: ignore
+        self, run, previous_inputs: Dict[str, Any], inputs: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Work like 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
+
+        Parameters
+        ----------
+        run :
+            The selected run.
+        previous_inputs :
+            Previous content of the inputs.
+            Not used in this specific function
+        inputs : Dict[str, Any]
+            The current content of the inputs.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A dictionary with the changes.
+        """
         # Get selected values
         config_id_value = inputs["config_id"]["value"]
         configs = run.get_configs()
@@ -89,7 +156,32 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run :
+            The selected run.
+        inputs :
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A serialized dictionary.
+        """
         selected_config_id = int(inputs["config_id"])
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
@@ -109,8 +201,8 @@ class Configurations(DynamicPlugin):
                 str(original_run.path) + f" (Configuration ID: {original_config_id})"
             ]
 
-        performances = {}
-        performances_table_data = {"Budget": []}
+        performances: Dict[str, Dict[Union[int, float], Optional[Union[float, List[float]]]]] = {}
+        performances_table_data: Dict[str, List[Any]] = {"Budget": []}
         for objective_id, objective in enumerate(objectives):
             if objective.name not in performances:
                 performances[objective.name] = {}
@@ -151,20 +243,20 @@ class Configurations(DynamicPlugin):
 
         # Let's start with the configspace
         X = []
-        cs_table_data = {"Hyperparameter": [], "Value": []}
-        for config_id, config in run.get_configs().items():
-            x = run.encode_config(config)
+        cs_table_data: Dict[str, List[Any]] = {"Hyperparameter": [], "Value": []}
+        for config_id, configuration in run.get_configs().items():
+            x = run.encode_config(configuration)
 
             highlight = 0
             if config_id == selected_config_id:
                 highlight = 1
 
-                for k, v in config.items():
+                for k, v in configuration.items():
                     # Add accurate data for our table here
                     cs_table_data["Hyperparameter"] += [k]
                     cs_table_data["Value"] += [v]
 
-            # We simply add highlight as a new column
+            # Highlight is simply added as a new column
             x += [highlight]
 
             # And add it to the lists
@@ -184,7 +276,23 @@ class Configurations(DynamicPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
+    def get_output_layout(
+        register: Callable,
+    ) -> List[Any]:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method used to register outputs.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the outputs.
+        """
         return [
             html.Div(id=register("overview_table", "children"), className="mb-3"),
             html.Hr(),
@@ -230,7 +338,24 @@ class Configurations(DynamicPlugin):
         ]
 
     @staticmethod
-    def _get_objective_figure(_, outputs, run):
+    def _get_objective_figure(
+        _: Any, outputs: Dict[str, Dict[str, Dict[Any, Any]]], run: AbstractRun
+    ) -> go.Figure:
+        """
+        Get the figure for the visualization of the objectives.
+
+        Parameters
+        ----------
+        outputs : Dict[str, Dict[str, Dict[Any, Any]]]
+            Raw outputs from the run.
+        run : AbstractRun
+            The selected run.
+
+        Returns
+        -------
+        go.Figure
+            The figure of the objectives.
+        """
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
             trace_kwargs = {
@@ -251,12 +376,12 @@ class Configurations(DynamicPlugin):
             trace = go.Scatter(**trace_kwargs)
             objective_data.append(trace)
 
-        layout_kwargs = {
+        layout_kwargs: Dict[str, Any] = {
             "margin": Config.FIGURE_MARGIN,
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
 
-        # We create an axis for each objective now
+        # An axis is created for each objective now
         for id, objective in enumerate(run.get_objectives()):
             yaxis = "yaxis"
             if id > 0:
@@ -287,9 +412,25 @@ class Configurations(DynamicPlugin):
         return objective_figure
 
     @staticmethod
-    def _get_configspace_figure(inputs, outputs, run):
-        df = outputs["cs_df"]
-        df = deserialize(df, dtype=pd.DataFrame)
+    def _get_configspace_figure(
+        inputs: Any, outputs: Dict[str, str], run: AbstractRun
+    ) -> go.Figure:
+        """
+        Get the figure for the visualization of the configuration space.
+
+        Parameters
+        ----------
+        outputs : Dict[str, str]
+            Raw outputs from the run.
+        run : AbstractRun
+            The selected run.
+
+        Returns
+        -------
+        go.Figure
+            The figure of the configuration space.
+        """
+        df = deserialize(outputs["cs_df"], dtype=pd.DataFrame)
 
         highlighted = df["highlighted"].values
         hp_names = run.configspace.get_hyperparameter_names()
@@ -297,7 +438,7 @@ class Configurations(DynamicPlugin):
         # Get highlighted column
         highlighted_df = df[df["highlighted"] == 1]
 
-        data = defaultdict(dict)
+        data: defaultdict = defaultdict(dict)
         for hp_name in hp_names:
             data[hp_name]["values"] = df[hp_name].values
             data[hp_name]["label"] = hp_name
@@ -333,7 +474,30 @@ class Configurations(DynamicPlugin):
         return fig
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> List[Any]:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        List[Any]
+            A list of the created tables containing output information.
+        """
         config_id = inputs["config_id"]
         config = run.get_config(config_id)
 

@@ -4,7 +4,6 @@ import string
 import unittest
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import pandas as pd
 
 from deepcave.utils.cache import Cache
@@ -303,7 +302,7 @@ class TestLogger(unittest.TestCase):
         self.assertFalse(mpl_logger.propagate)
 
         plugin_logger = get_logger("src.plugins")
-        self.assertEqual(logging.DEBUG, plugin_logger.level)
+        self.assertEqual(logging.INFO, plugin_logger.level)
         self.assertFalse(plugin_logger.propagate)
 
 

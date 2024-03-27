@@ -1,3 +1,11 @@
+# noqa: D400
+"""
+# Styled Plotty
+
+This module provides utilities for styling and customizing different plots with plotly.
+For this, it uses plotly as well as dash.
+"""
+
 from typing import Any, Callable, List, Optional, Tuple, Union
 
 import itertools
@@ -17,6 +25,7 @@ from dash.development.base_component import Component
 
 from deepcave import interactive
 from deepcave.constants import CONSTANT_VALUE, NAN_LABEL, NAN_VALUE
+from deepcave.runs import AbstractRun
 from deepcave.utils.logs import get_logger
 
 logger = get_logger(__name__)
@@ -25,24 +34,25 @@ logger = get_logger(__name__)
 @interactive
 def save_image(figure: go.Figure, name: str) -> None:
     """
-    Saves a plotly figure as an image.
+    Save a plotly figure as an image.
 
     Parameters
     ----------
-    fig : go.Figure
+    figure : go.Figure
         Plotly figure.
     name : str
-        Name of the image with extension. Will be automatically saved to the cache.
+        Name of the image with extension.
+        Will be automatically saved to the cache.
     """
-    from deepcave.config import Config
+    from deepcave import config
 
-    if not Config.SAVE_IMAGES:
+    if not config.SAVE_IMAGES:
         return
 
     ratio = 16 / 9
     width = 500
     height = int(width / ratio)
-    path = Config.CACHE_DIR / "figures" / name
+    path = config.CACHE_DIR / "figures" / name
 
     figure.write_image(path, width=width, height=height)
     logger.info(f"Saved figure {name} to {path}.")
@@ -50,10 +60,27 @@ def save_image(figure: go.Figure, name: str) -> None:
 
 def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
     """
-    Converts a hex_string to a tuple of rgb values.
+    Convert a hex_string to a tuple of rgb values.
+
     Requires format including #, e.g.:
     #000000
     #ff00ff
+
+    Parameters
+    ----------
+    hex_string : str
+        The hex string to be converted.
+
+    Returns
+    -------
+    Tuple[int, int, int]
+        A Tuple of the converted RGB values
+
+    Raises
+    ------
+    ValueError
+        If the hex string is longer than 7.
+        If there are invalid characters in the hex string.
     """
     if len(hex_string) != 7:
         raise ValueError(f"Invalid length for #{hex_string}")
@@ -69,7 +96,19 @@ def hex_to_rgb(hex_string: str) -> Tuple[int, int, int]:
 
 def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, float, float]]:
     """
-    Using Plotly palette for the first 10 ids and Alphabet palette for the next 26, currently 36 colors are possible.
+    Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors.
+
+    Parameters
+    ----------
+    id_ : int
+        ID for retrieving a specific color.
+    alpha : float, optional
+        Alpha value for the color, by default 1.
+
+    Returns
+    -------
+    Union[str, Tuple[float, float, float, float]]
+        The color from the color palette.
     """
     if id_ < 10:
         color = px.colors.qualitative.Plotly[id_]
@@ -80,19 +119,27 @@ def get_color(id_: int, alpha: float = 1) -> Union[str, Tuple[float, float, floa
     return f"rgba({r}, {g}, {b}, {alpha})"
 
 
-def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
+def get_discrete_heatmap(
+    x: List[Union[float, int]], y: List[int], values: List[Any], labels: List[Any]
+) -> go.Heatmap:
     """
     Generate a discrete colorscale from a (nested) list or numpy array of values.
 
     Parameters
     ----------
-    values : _type_
-        _description_
+    x : List[Union[float, int]]
+        List of values that present the x-axis of the heatmap.
+    y : List[int]
+         List of values that present the y-axis of the heatmap.
+    values : List[Any]
+        Contains the data values for the heatmap.
+    labels : List[Any]
+        Contains the labels corresponding to the values.
 
     Returns
     -------
-    _type_
-        _description_
+    go.Heatmap
+        A Plotly Heatmap object corresponding to the input.
     """
     flattened_values = list(itertools.chain(*values))
     flattened_labels = list(itertools.chain(*labels))
@@ -112,8 +159,8 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
         unique_sorted_values += [unique_values[idx]]
         unique_sorted_labels += [unique_labels[idx]]
 
-    # Now we give them new ids and we want to create new z values
-    # For that we need a mapping from old to new
+    # Now they are given new ids, and new z values should be created
+    # For that a mapping from old to new is needed
     mapping = {}
     v = []
     for new, old in enumerate(unique_sorted_values):
@@ -125,8 +172,11 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
         for i2, v2 in enumerate(v1):
             z[i1][i2] = mapping[v2]
 
-    n_intervals = v + [len(v)]
-    n_intervals = [(i - n_intervals[0]) / (n_intervals[-1] - n_intervals[0]) for i in n_intervals]
+    n_intervals_int = v + [len(v)]
+    n_intervals = [
+        (i - n_intervals_int[0]) / (n_intervals_int[-1] - n_intervals_int[0])
+        for i in n_intervals_int
+    ]
     colors = [get_color(i) for i in range(len(n_intervals))]
 
     discrete_colorscale = []
@@ -136,12 +186,12 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
     tickvals = [np.mean(n_intervals[k : k + 2]) for k in range(len(n_intervals) - 1)]
     ticktext = unique_sorted_labels
 
-    x = [str(i) for i in x]
-    y = [str(i) for i in y]
+    x_str = [str(i) for i in x]
+    y_str = [str(i) for i in y]
 
     return go.Heatmap(
-        x=x,
-        y=y,
+        x=x_str,
+        y=y_str,
         z=z,
         showscale=True,
         colorscale=discrete_colorscale,
@@ -154,7 +204,9 @@ def get_discrete_heatmap(x, y, values: List[Any], labels: List[Any]):
 
 def prettify_label(label: Union[str, float, int]) -> str:
     """
-    Takes a label and prettifies it. E.g. floats are shortened.
+    Take a label and prettifies it.
+
+    E.g. floats are shortened.
 
     Parameters
     ----------
@@ -191,9 +243,11 @@ def get_hyperparameter_ticks(
     include_nan: bool = True,
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both tickvals and ticktext. The background is that
-    you might have encoded data but you don't want to show all of them.
-    With this function, only 6 (default) values are shown. This behaviour is
+    Generate tick data for both tickvals and ticktext.
+
+    The background is that
+    you might have encoded data, but you don't want to show all of them.
+    With this function, only 6 (default) values are shown. This behavior is
     ignored if `hp` is categorical.
 
     Parameters
@@ -201,9 +255,9 @@ def get_hyperparameter_ticks(
     hp : Hyperparameter
         Hyperparameter to generate ticks from.
     additional_values : Optional[List], optional
-        Additional values, which are forced in addition. By default None.
+        Additional values, which are forced in addition. By default, None.
     ticks : int, optional
-        Number of ticks, by default 6
+        Number of ticks, by default 4
     include_nan : bool, optional
         Whether "nan" as tick should be included. By default True.
 
@@ -212,8 +266,8 @@ def get_hyperparameter_ticks(
     Tuple[List, List]
         tickvals and ticktext.
     """
-
     # This is basically the inverse of `encode_config`.
+    tickvals: List[Union[float, int]]
     if isinstance(hp, CategoricalHyperparameter):
         ticktext = hp.choices
         if len(ticktext) == 1:
@@ -230,7 +284,7 @@ def get_hyperparameter_ticks(
         min_v = 0
         max_v = 1
 
-        values = [min_v]
+        values: List[Union[float, int]] = [min_v]
 
         # Get values for each tick
         factors = [i / (ticks - 1) for i in range(1, ticks - 1)]
@@ -248,7 +302,7 @@ def get_hyperparameter_ticks(
         for value in values:
             inverse_values += [hp._transform_scalar(value)]
 
-        # Integers are rounded, so we map then back
+        # Integers are rounded, they are mapped
         if isinstance(hp, IntegerHyperparameter):
             for label in inverse_values:
                 value = hp._inverse_transform(label)
@@ -258,7 +312,7 @@ def get_hyperparameter_ticks(
                     ticktext += [label]
 
             if additional_values is not None:
-                # Now we add additional values
+                # Now add additional values are added
                 for value in additional_values:
                     if not (value is None or np.isnan(value) or value == NAN_VALUE):
                         label = hp._transform_scalar(value)
@@ -273,7 +327,7 @@ def get_hyperparameter_ticks(
                 ticktext += [label]
 
             if additional_values is not None:
-                # Now we add additional values
+                # Now additional values are added
                 for value in additional_values:
                     if (
                         not (value is None or np.isnan(value) or value == NAN_VALUE)
@@ -295,9 +349,11 @@ def get_hyperparameter_ticks_from_values(
     values: List, labels: List, forced: Optional[List[bool]] = None, ticks: int = 6
 ) -> Tuple[List, List]:
     """
-    Generates tick data for both values and labels. The background is that
-    you might have encoded data but you don't want to show all of them.
-    With this function, only 6 (default) values are shown. This behaviour is
+    Generate tick data for both values and labels.
+
+    The background is that
+    you might have encoded data, but you don't want to show all of them.
+    With this function, only 6 (default) values are shown. This behavior is
     ignored if `values` is a list of strings.
 
     Parameters
@@ -306,9 +362,9 @@ def get_hyperparameter_ticks_from_values(
         List of values.
     labels : List
         List of labels. Must be the same size as `values`.
-    forced : List[bool], optional
+    forced : Optional[List[bool]], optional
         List of booleans. If True, displaying the particular tick is enforced.
-        Independent from `ticks`.
+        Independent of `ticks`.
     ticks : int, optional
         Number of ticks and labels to show. By default 6.
 
@@ -316,6 +372,11 @@ def get_hyperparameter_ticks_from_values(
     -------
     Tuple[List, List]
         Returns tickvals and ticktext as list.
+
+    Raises
+    ------
+    RuntimeError
+        If values contain both strings and non-strings.
     """
     assert len(values) == len(labels)
 
@@ -337,9 +398,9 @@ def get_hyperparameter_ticks_from_values(
     tickvals = []
     ticktext = []
 
-    # If we have less than x values, we also show them
+    # If there are less than x values, they are also shown
     if return_all or len(unique_values) <= ticks:
-        # Make sure we don't have multiple (same) labels for the same value
+        # Make sure there are no multiple (same) labels for the same value
         for value, label in zip(unique_values, unique_labels):
             tickvals.append(value)
             ticktext.append(label)
@@ -349,8 +410,8 @@ def get_hyperparameter_ticks_from_values(
             tickvals.append(values[idx])
             ticktext.append(labels[idx])
 
-        # After we added min and max values, we want to add
-        # intermediate values too
+        # After min and max values are added,
+        # intermediate values should be added too
         min_v = np.min(values)
         max_v = np.max(values)
 
@@ -379,7 +440,25 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
+def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
+    """
+    Generate hover text with metrics for a configuration.
+
+    The method gets information about a given configuration, including a link, its objectives,
+    budget, costs and hyperparameters.
+
+    Parameters
+    ----------
+    run : AbstractRun
+        The run instance
+    config_id : int
+        The id of the configuration
+
+    Returns
+    -------
+    str
+        The hover text string containing the configuration information.
+    """
     if config_id < 0:
         return ""
 
@@ -397,6 +476,7 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
     avg_costs = run.get_avg_costs(config_id)
 
+    assert budget is not None
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
     for objective, cost in zip(objectives, avg_costs):
         string += f"{objective.name}: {cost}<br>"
@@ -411,6 +491,22 @@ def get_hovertext_from_config(run: "AbstractRun", config_id: int) -> str:
 
 
 def generate_config_code(register: Callable, variables: List[str]) -> List[Component]:
+    """
+    Generate HTML components to display code.
+
+    Parameters
+    ----------
+    register : Callable
+        A Callable for registering Dash components.
+        The register_input function is located in the Plugin class.
+    variables : List[str]
+        A List of variable names.
+
+    Returns
+    -------
+    List[Component]
+        A List of Dash components.
+    """
     code = """
     from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
     from ConfigSpace.read_and_write import cs_json
