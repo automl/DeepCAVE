@@ -183,20 +183,38 @@ class ParetoFront(DynamicPlugin):
             The layouts for the filter block.
         """
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Show all configurations"),
-                    help_button(
-                        "Additionally to the pareto front, also the other configurations "
-                        "are displayed. This makes it easier to see the performance "
-                        "differences."
+                    dbc.Col(
+                        [
+                            dbc.Label("Show all configurations"),
+                            help_button(
+                                "Additionally to the pareto front, also the other configurations "
+                                "are displayed. This makes it easier to see the performance "
+                                "differences."
+                            ),
+                            dbc.Select(
+                                id=register("show_all", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
                     ),
-                    dbc.Select(
-                        id=register("show_all", ["value", "options"]),
-                        placeholder="Select ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Show error bars"),
+                            help_button(
+                                "Show error bars In the case of non-deterministic runs with "
+                                "multiple seeds evaluated per configuration."
+                            ),
+                            dbc.Select(
+                                id=register("show_error", ["value", "options"]),
+                                placeholder="Select ...",
+                            ),
+                        ],
+                        md=6,
                     ),
                 ],
-                className="mb-3",
             ),
             dbc.Row(
                 [
@@ -251,6 +269,7 @@ class ParetoFront(DynamicPlugin):
                 "value": self.budget_options[-1]["value"],
             },
             "show_all": {"options": get_select_options(binary=True), "value": "false"},
+            "show_error": {"options": get_select_options(binary=True), "value": "false"},
             "show_runs": {"options": get_select_options(binary=True), "value": "true"},
             "show_groups": {"options": get_select_options(binary=True), "value": "true"},
         }
@@ -291,22 +310,29 @@ class ParetoFront(DynamicPlugin):
         objective_id_2 = inputs["objective_id_2"]
         objective_2 = run.get_objective(objective_id_2)
 
-        points: Union[List, np.ndarray] = []
-        config_ids: Union[List, np.ndarray] = []
-        for config_id, costs in run.get_all_costs(budget, statuses=[Status.SUCCESS]).items():
-            points += [[costs[objective_id_1], costs[objective_id_2]]]
-            config_ids += [config_id]
+        points_avg: Union[List, np.ndarray] = []
+        points_std: Union[List, np.ndarray] = []
+        config_ids: Union[List, np.ndarray] = list(
+            run.get_configs(budget, statuses=[Status.SUCCESS]).keys()
+        )
 
-        points = np.array(points)
+        for config_id in config_ids:
+            avg_costs, std_costs = run.get_avg_costs(config_id, budget, statuses=[Status.SUCCESS])
+            points_avg += [[avg_costs[objective_id_1], avg_costs[objective_id_2]]]
+            points_std += [[std_costs[objective_id_1], std_costs[objective_id_2]]]
+
+        points_avg = np.array(points_avg)
+        points_std = np.array(points_std)
         config_ids = np.array(config_ids)
 
         # Sort the points s.t. x axis is monotonically increasing
-        sorted_idx = np.argsort(points[:, 0])
-        points = points[sorted_idx]
+        sorted_idx = np.argsort(points_avg[:, 0])
+        points_avg = points_avg[sorted_idx]
+        points_std = points_std[sorted_idx]
         config_ids = config_ids[sorted_idx]
 
-        is_front: np.ndarray = np.ones(points.shape[0], dtype=bool)
-        for point_idx, costs in enumerate(points):
+        is_front: np.ndarray = np.ones(points_avg.shape[0], dtype=bool)
+        for point_idx, costs in enumerate(points_avg):
             if is_front[point_idx]:
                 # Keep any point with a lower/upper cost
                 # This loop is a little bit complicated than
@@ -316,9 +342,9 @@ class ParetoFront(DynamicPlugin):
                 select = None
                 for idx, (objective, cost) in enumerate(zip([objective_1, objective_2], costs)):
                     if objective.optimize == "upper":
-                        select2 = np.any(points[is_front][:, idx, np.newaxis] > [cost], axis=1)
+                        select2 = np.any(points_avg[is_front][:, idx, np.newaxis] > [cost], axis=1)
                     else:
-                        select2 = np.any(points[is_front][:, idx, np.newaxis] < [cost], axis=1)
+                        select2 = np.any(points_avg[is_front][:, idx, np.newaxis] < [cost], axis=1)
 
                     if select is None:
                         select = select2
@@ -331,7 +357,8 @@ class ParetoFront(DynamicPlugin):
                 is_front[point_idx] = True
 
         return {
-            "points": points.tolist(),
+            "points_avg": points_avg.tolist(),
+            "points_std": points_std.tolist(),
             "pareto_points": is_front.tolist(),
             "config_ids": config_ids.tolist(),
         }
@@ -380,6 +407,7 @@ class ParetoFront(DynamicPlugin):
             The output figure.
         """
         show_all = inputs["show_all"]
+        show_error = inputs["show_error"]
 
         traces = []
         for idx, run in enumerate(runs):
@@ -392,31 +420,49 @@ class ParetoFront(DynamicPlugin):
             if run.prefix != "group" and not show_runs:
                 continue
 
-            points = np.array(outputs[run.id]["points"])
+            points_avg = np.array(outputs[run.id]["points_avg"])
+            points_std = np.array(outputs[run.id]["points_std"])
             config_ids = outputs[run.id]["config_ids"]
             pareto_config_ids = []
 
-            x, y = [], []
-            x_pareto, y_pareto = [], []
+            x, y, x_std, y_std = [], [], [], []
+            x_pareto, y_pareto, x_pareto_std, y_pareto_std = [], [], [], []
 
             pareto_points = outputs[run.id]["pareto_points"]
             for point_idx, pareto in enumerate(pareto_points):
                 if pareto:
-                    x_pareto += [points[point_idx][0]]
-                    y_pareto += [points[point_idx][1]]
+                    x_pareto += [points_avg[point_idx][0]]
+                    y_pareto += [points_avg[point_idx][1]]
+                    x_pareto_std += [points_std[point_idx][0]]
+                    y_pareto_std += [points_std[point_idx][1]]
                     pareto_config_ids += [config_ids[point_idx]]
                 else:
-                    x += [points[point_idx][0]]
-                    y += [points[point_idx][1]]
+                    x += [points_avg[point_idx][0]]
+                    y += [points_avg[point_idx][1]]
+                    x_std += [points_std[point_idx][0]]
+                    y_std += [points_std[point_idx][1]]
 
             color = get_color(idx, alpha=0.1)
             color_pareto = get_color(idx)
 
             if show_all:
+                error_x = (
+                    dict(array=x_std, color="rgba(0, 0, 0, 0.3)")
+                    if show_error and not all(value == 0.0 for value in x_std)
+                    else None
+                )
+                error_y = (
+                    dict(array=y_std, color="rgba(0, 0, 0, 0.3)")
+                    if show_error and not all(value == 0.0 for value in y_std)
+                    else None
+                )
+
                 traces.append(
                     go.Scatter(
                         x=x,
                         y=y,
+                        error_x=error_x,
+                        error_y=error_y,
                         name=run.name,
                         mode="markers",
                         showlegend=False,
@@ -443,10 +489,23 @@ class ParetoFront(DynamicPlugin):
                 get_hovertext_from_config(run, config_id) for config_id in pareto_config_ids
             ]
 
+            error_pareto_x = (
+                dict(array=x_pareto_std, color="rgba(0, 0, 0, 0.3)")
+                if show_error and not all(value == 0.0 for value in x_pareto_std)
+                else None
+            )
+            error_pareto_y = (
+                dict(array=y_pareto_std, color="rgba(0, 0, 0, 0.3)")
+                if show_error and not all(value == 0.0 for value in y_pareto_std)
+                else None
+            )
+
             traces.append(
                 go.Scatter(
                     x=x_pareto,
                     y=y_pareto,
+                    error_x=error_pareto_x,
+                    error_y=error_pareto_y,
                     name=run.name,
                     line_shape=line_shape,
                     showlegend=True,

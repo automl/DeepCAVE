@@ -387,21 +387,29 @@ class AbstractRun(ABC):
         return [obj.name for obj in self.get_objectives()]
 
     def get_configs(
-        self, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None
+        self,
+        budget: Optional[Union[int, float]] = None,
+        seed: Optional[int] = None,
+        statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Dict[int, Configuration]:
         """
         Get configurations of the run.
 
         Optionally, only configurations which were evaluated
-        on the passed budget are considered.
+        on the passed budget, seed, and status are considered.
 
         Parameters
         ----------
         budget : Optional[Union[int, float]]
-            Considered budget.
-            By default, None (all configurations are included).
+            Budget to select the configs. If no budget is given, all seeds are considered.
+            By default None.
         seed: Optional[int]
-            Considered seed. By default None (all configurations are included).
+            Seed to select the configs. If no seed is given, all seeds are considered.
+            By default None.
+        statuses : Optional[Union[Status, List[Status]]]
+            Only selected stati are considered. If no status is given, all stati are considered.
+            By default None.
+
 
         Returns
         -------
@@ -424,6 +432,13 @@ class AbstractRun(ABC):
 
             if seed is not None:
                 if seed != trial.seed:
+                    continue
+
+            if statuses is not None:
+                if isinstance(statuses, Status):
+                    statuses = [statuses]
+
+                if trial.status not in statuses:
                     continue
 
             if (config_id := trial.config_id) not in configs:
@@ -673,8 +688,11 @@ class AbstractRun(ABC):
         return new_costs
 
     def get_avg_costs(
-        self, config_id: int, budget: Optional[Union[int, float]] = None
-    ) -> List[float]:
+        self,
+        config_id: int,
+        budget: Optional[Union[int, float]] = None,
+        statuses: Optional[Union[Status, List[Status]]] = None,
+    ) -> Tuple[List[float], List[float]]:
         """
         Get average costs over all seeds for a config and budget.
 
@@ -685,31 +703,40 @@ class AbstractRun(ABC):
         budget : Optional[Union[int, float]]
             Budget to get the costs from the configuration id for. By default, None. If budget is
             None, the highest budget is chosen.
+        statuses : Optional[Union[Status, List[Status]]]
+            Only selected stati are considered. If no status is given, all stati are considered.
+            By default None.
 
         Returns
         -------
         List[float]
             List of average cost values for the given config_id and budget.
+        List[float]
+            List of std cost values for the given config_id and budget.
         """
         objectives = self.get_objectives()
 
         # Budget might not be evaluated
-        config_costs = self.get_costs(config_id, budget)
+        config_costs = self.get_costs(config_id, budget, statuses=statuses)
 
-        avg_costs = []
+        avg_costs, std_costs = [], []
         for idx in range(len(objectives)):
             costs = [values[idx] for values in config_costs.values() if values[idx] is not None]
             avg_costs.append(float(np.mean(costs)))
-        return avg_costs
+            std_costs.append(float(np.std(costs)))
+        return avg_costs, std_costs
 
     def get_costs(
-        self, config_id: int, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None
+        self,
+        config_id: int,
+        budget: Optional[Union[int, float]] = None,
+        seed: Optional[int] = None,
+        statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Dict[int, List[float]]:
         """
         Return the costs of a configuration.
 
-        In case of multi-objective, multiple costs are
-        returned.
+        In case of multi-objective, multiple costs are returned.
 
         Parameters
         ----------
@@ -721,6 +748,9 @@ class AbstractRun(ABC):
         seed : Optional[int], optional
             Seed to get the costs from the configuration id for. By default None. If no seed is
             given, all seeds are considered.
+        statuses : Optional[Union[Status, List[Status]]]
+            Only selected stati are considered. If no status is given, all stati are considered.
+            By default None.
 
         Returns
         -------
@@ -739,7 +769,7 @@ class AbstractRun(ABC):
 
         if config_id not in self.configs:
             raise ValueError("Configuration id was not found.")
-        costs = self.get_all_costs(budget=budget, seed=seed)
+        costs = self.get_all_costs(budget=budget, seed=seed, statuses=statuses)
         if config_id not in costs:
             if seed is not None:
                 raise RuntimeError(
