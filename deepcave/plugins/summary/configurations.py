@@ -24,6 +24,7 @@ from deepcave.config import Config
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun
+from deepcave.runs.status import Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import create_table, get_slider_marks
 from deepcave.utils.styled_plotty import (
@@ -214,9 +215,12 @@ class Configurations(DynamicPlugin):
                 for seed in seeds:
                     try:
                         cost.append(
-                            run.get_costs(config_id=selected_config_id, budget=budget, seed=seed)[
-                                seed
-                            ][objective_id]
+                            run.get_costs(
+                                config_id=selected_config_id,
+                                budget=budget,
+                                seed=seed,
+                                statuses=[Status.SUCCESS],
+                            )[seed][objective_id]
                         )
                         seeds_evaluated += 1
                     except Exception:
@@ -234,7 +238,7 @@ class Configurations(DynamicPlugin):
                     else:
                         performances_table_data[objective.name] += [cost]
                 else:
-                    performances[objective.name][budget] = None
+                    performances[objective.name][budget] = np.nan
                     if len(seeds) > 1:
                         performances_table_data[f"{objective.name}"] += ["No seed evaluated"]
                     else:
@@ -358,13 +362,18 @@ class Configurations(DynamicPlugin):
         """
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
+            mean_objective_values, std_objective_values = [], []
+            for objective_values in values.values():
+                mean_objective_values.append(np.nanmean(objective_values))
+                std_objective_values.append(np.nanstd(objective_values))
+
             trace_kwargs = {
                 "x": list(values.keys()),
-                "y": np.mean(np.array(list(values.values())), axis=1),
+                "y": mean_objective_values,
                 "error_y": dict(
                     type="data",
                     symmetric=True,
-                    array=np.std(np.array(list(values.values())), axis=1),
+                    array=std_objective_values,
                 ),
                 "name": metric,
                 "fill": "tozeroy",

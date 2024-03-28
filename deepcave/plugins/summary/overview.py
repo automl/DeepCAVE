@@ -126,20 +126,17 @@ class Overview(DynamicPlugin):
             A list of the created tables of the overview.
         """
         # Get best cost across all objectives, highest budget
-        incumbent, _ = run.get_incumbent()
+        incumbent, _ = run.get_incumbent(statuses=[Status.SUCCESS])
         config_id = run.get_config_id(incumbent)
         objective_names = run.get_objective_names()
 
-        best_performance = {}
-
-        avg_costs = run.get_avg_costs(config_id)
-
-        for idx in range(len(objective_names)):
-            best_performance[objective_names[idx]] = avg_costs[idx]
+        avg_costs, std_costs = run.get_avg_costs(config_id)
 
         best_performances = []
-        for name, value in best_performance.items():
-            best_performances += [f"{round(value, 2)} ({name})"]
+        for idx in range(len(objective_names)):
+            best_performances += [
+                f"{round(avg_costs[idx], 2)} ± {round(std_costs[idx], 2)} ({objective_names[idx]})"
+            ]
 
         optimizer = run.prefix
         if isinstance(run, Group):

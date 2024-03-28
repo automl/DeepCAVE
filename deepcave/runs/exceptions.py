@@ -34,3 +34,4 @@ class RunInequality(Enum):
     INEQ_OBJECTIVE = 2
     INEQ_BUDGET = 3
     INEQ_CONFIGSPACE = 4
+    INEQ_SEED = 5

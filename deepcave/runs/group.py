@@ -103,7 +103,7 @@ class Group(AbstractRun):
                     # Deep copy trial
                     trial = deepcopy(trial)
 
-                    (config_id, budget) = trial.get_key()
+                    (config_id, budget, seed) = trial.get_key()
 
                     # Config id might have changed
                     new_config_id = config_mapping[config_id]

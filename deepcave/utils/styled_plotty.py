@@ -474,12 +474,15 @@ def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
     objectives = run.get_objectives()
     budget = run.get_highest_budget(config_id)
 
-    avg_costs = run.get_avg_costs(config_id)
+    avg_costs, std_costs = run.get_avg_costs(config_id, budget=budget)
 
     assert budget is not None
     string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
-    for objective, cost in zip(objectives, avg_costs):
-        string += f"{objective.name}: {cost}<br>"
+    for objective, cost, std_cost in zip(objectives, avg_costs, std_costs):
+        if std_cost == 0.0:
+            string += f"{objective.name}: {cost}<br>"
+        else:
+            string += f"{objective.name}: {cost} ± {std_cost}<br>"
 
     string += "<br><b>Hyperparameters</b>:<br>"
 

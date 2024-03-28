@@ -823,9 +823,6 @@ class AbstractRun(ABC):
         else:
             history = self.history
         for trial in history:
-            if trial.config_id not in results:
-                results[trial.config_id] = {}
-
             if statuses is not None:
                 if isinstance(statuses, Status):
                     statuses = [statuses]
@@ -844,12 +841,15 @@ class AbstractRun(ABC):
                 latest_budget = highest_evaluated_budget[trial.config_id]
                 # Only the highest budget is kept
                 if trial.budget >= latest_budget:
+                    if trial.config_id not in results:
+                        results[trial.config_id] = {}
                     results[trial.config_id][trial.seed] = trial.costs
             else:
                 if trial.budget is not None:
                     if trial.budget != budget:
                         continue
-
+                if trial.config_id not in results:
+                    results[trial.config_id] = {}
                 results[trial.config_id][trial.seed] = trial.costs
         return results
 
@@ -939,11 +939,13 @@ class AbstractRun(ABC):
         min_cost = np.inf
         best_config_id = None
 
-        results = self.get_all_costs(budget, statuses, seed, selected_ids)
+        results = self.get_all_costs(
+            budget=budget, statuses=statuses, seed=seed, selected_ids=selected_ids
+        )
 
         seed_count = {}
         for config_id, costs in results.items():
-            seed_count[config_id] = len(costs.values())
+            seed_count[config_id] = len(costs)
         max_seed_count = max(seed_count.values())
 
         for config_id, costs in results.items():
@@ -951,7 +953,7 @@ class AbstractRun(ABC):
             # considered. From these configurations, the one with the highest average cost
             # over the seeds is considered as the incumbent.
             if max_seed_count > 1:
-                if len(costs.values()) < max_seed_count:
+                if len(costs) < max_seed_count:
                     continue
 
                 # Get average over all seeds
@@ -1396,7 +1398,7 @@ def check_equality(
     configspace: bool = True,
     objectives: bool = True,
     budgets: bool = True,
-    seeds: bool = True,
+    seeds: bool = False,
 ) -> Dict[str, Any]:
     """
     Check the passed runs on equality based on the selected runs.
@@ -1408,7 +1410,7 @@ def check_equality(
     runs : list[AbstractRun]
         Runs to check for equality.
     meta : bool, optional
-        Meta-Data excluding objectives and budgets, by default True.
+        Meta-Data excluding objectives and budgets, by default False.
     configspace : bool, optional
         Wheter to include the configuration space, by default True.
     objectives : bool, optional
@@ -1416,7 +1418,7 @@ def check_equality(
     budgets : bool, optional
         Whether to include the budgets, by default True.
     seeds : bool, optional
-        Whether to include the seeds, by default True.
+        Whether to include the seeds, by default False.
 
     Returns
     -------
@@ -1517,7 +1519,7 @@ def check_equality(
         for run in runs:
             s2 = run.get_seeds(include_combined=False)
             if s1 != s2:
-                raise NotMergeableError("Seeds of runs are not equal.")
+                raise NotMergeableError("Seeds of runs are not equal.", RunInequality.INEQ_SEED)
 
         result["seeds"] = s1
         if meta:

@@ -171,17 +171,25 @@ class BudgetCorrelation(DynamicPlugin):
                 budget2 = run.get_budget(budget2_id)
                 budget2_readable = run.get_budget(budget2_id, human=True)
 
-                costs1 = run.get_all_costs(budget1, statuses=[Status.SUCCESS])
-                costs2 = run.get_all_costs(budget2, statuses=[Status.SUCCESS])
+                config_ids1 = run.get_configs(budget1, statuses=[Status.SUCCESS]).keys()
+                config_ids2 = run.get_configs(budget2, statuses=[Status.SUCCESS]).keys()
 
                 # Combine config ids
                 # So it is guaranteed that there is the same number of configs for each budget
-                config_ids = set(costs1.keys()) & set(costs2.keys())
+                config_ids = set(config_ids1) & set(config_ids2)
 
                 c1, c2 = [], []
                 for config_id in config_ids:
-                    c1 += [costs1[config_id][objective_id]]
-                    c2 += [costs2[config_id][objective_id]]
+                    c1 += [
+                        run.get_avg_costs(config_id, budget1, statuses=[Status.SUCCESS])[0][
+                            objective_id
+                        ]
+                    ]
+                    c2 += [
+                        run.get_avg_costs(config_id, budget2, statuses=[Status.SUCCESS])[0][
+                            objective_id
+                        ]
+                    ]
 
                 correlation = round(stats.spearmanr(c1, c2).correlation, 2)
                 correlations_symmetric["Budget"][budget2_readable] = budget2_readable  # type: ignore # noqa: E501
