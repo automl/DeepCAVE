@@ -972,6 +972,9 @@ class AbstractRun(ABC):
             else:
                 cost = avg_cost[0]
 
+            if cost is None:
+                continue
+
             if cost < min_cost:
                 min_cost = cost
                 best_config_id = config_id

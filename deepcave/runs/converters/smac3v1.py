@@ -163,9 +163,6 @@ class SMAC3v1Run(Run):
             if seed not in seeds:
                 seeds.append(seed)
 
-            if len(seeds) > 1:
-                raise RuntimeError("Multiple seeds are not supported.")
-
             if first_starttime is None:
                 first_starttime = starttime
 
@@ -205,6 +202,7 @@ class SMAC3v1Run(Run):
                 costs=[cost, time],
                 config=config,
                 budget=budget,
+                seed=seed,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
