@@ -71,7 +71,7 @@ class Cache:
         """Read content from a file and load into cache as dictionary."""
         if self._filename is None or not self._filename.exists():
             return
-
+        print(self._filename)
         with self._filename.open("r") as f:
             self._data = self._defaults.copy()
             self._data.update(json.load(f))

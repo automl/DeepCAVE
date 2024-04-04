@@ -21,6 +21,7 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
 from deepcave.config import Config
+from deepcave.evaluators.ablation_importances import AblationImportances
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -77,7 +78,7 @@ class Importances(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Method"),
-                            help_button(
+                            help_button(  # TODO: Add help text for ablation importances
                                 "Local Parameter Importance: Quantify importance by changing the "
                                 "neighborhood of a configuration. Uses default and incumbent "
                                 "configuration as reference. \n\n"
@@ -169,8 +170,12 @@ class Importances(StaticPlugin):
         Dict[str, Dict[str, Any]]
             Content to be filled.
         """
-        method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
-        method_values = ["local", "global"]
+        method_labels = [
+            "Local Parameter Importance (local)",
+            "Ablation Importances (local)",
+            "fANOVA (global)",
+        ]
+        method_values = ["local", "abli", "global"]
 
         return {
             "method": {
@@ -321,12 +326,14 @@ class Importances(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets(include_combined=True)
 
-        evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
+        evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator, AblationImportances]] = None
         if method == "local":
             # Initialize the evaluator
             evaluator = LocalEvaluator(run)
         elif method == "global":
             evaluator = GlobalEvaluator(run)
+        elif method == "abli":
+            evaluator = AblationImportances(run)
         else:
             raise RuntimeError("Method was not found.")
 
@@ -399,6 +406,7 @@ class Importances(StaticPlugin):
 
         # Collect data
         data = {}
+        print(outputs)
         for budget_id, importances in outputs.items():
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)

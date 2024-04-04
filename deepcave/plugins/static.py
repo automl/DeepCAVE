@@ -157,7 +157,8 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)  # same problem
+                print(run, self.id, inputs_key)
+                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
 
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False

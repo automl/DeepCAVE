@@ -688,6 +688,7 @@ class AbstractRun(ABC):
         highest_evaluated_budget = {}
 
         results = {}
+
         for trial in self.history:
             if statuses is not None:
                 if isinstance(statuses, Status):
@@ -710,7 +711,6 @@ class AbstractRun(ABC):
                         continue
 
                 results[trial.config_id] = trial.costs  # self._process_costs(trial.costs)
-
         return results
 
     def get_status(self, config_id: int, budget: Optional[Union[int, float]] = None) -> Status:
@@ -1116,6 +1116,7 @@ class AbstractRun(ABC):
         config_ids = []
 
         results = self.get_all_costs(budget, statuses)
+
         for config_id, costs in results.items():
             config = self.configs[config_id]
             x = self.encode_config(config, specific=specific)
