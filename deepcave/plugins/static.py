@@ -157,9 +157,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                print(run, self.id, inputs_key)
                 raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
-
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False
 
@@ -222,6 +220,7 @@ class StaticPlugin(Plugin, ABC):
                         try:
                             job_run_outputs = job.result
                             job_meta = job.meta
+                            print("JOB META: ", job_meta)
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
                             job_plugin_id = job_meta["plugin_id"]

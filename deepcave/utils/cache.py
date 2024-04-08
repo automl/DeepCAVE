@@ -71,7 +71,6 @@ class Cache:
         """Read content from a file and load into cache as dictionary."""
         if self._filename is None or not self._filename.exists():
             return
-        print(self._filename)
         with self._filename.open("r") as f:
             self._data = self._defaults.copy()
             self._data.update(json.load(f))
@@ -82,7 +81,9 @@ class Cache:
             return
 
         self._filename.parent.mkdir(exist_ok=True, parents=True)
+
         with self._filename.open("w") as f:
+            print(self._debug)
             if self._debug:
                 json.dump(self._data, f, indent=4)
             else:
@@ -118,16 +119,19 @@ class Cache:
             f"{name}: Set \"{','.join(keys)}\" to \"{short_string(value, 60, mode='suffix')}\"."
         )
         d = self._data
+        print("KEYS: ", keys)
         for key in keys[:-1]:
+            print("KEY: ", key)
             if type(key) != str:
                 raise RuntimeError("Key must be a string. Ints/floats are not supported by JSON.")
 
             if key not in d:
                 d[key] = {}
-
+            print("D: ", d)
             d = d[key]
 
         d[keys[-1]] = value
+
         if write_file:
             self.write()
 

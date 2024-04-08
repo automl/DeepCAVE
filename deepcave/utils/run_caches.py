@@ -132,7 +132,6 @@ class RunCaches:
             If the outputs of the cache are not a dict.
         """
         filename = self.cache_dir / run.id / plugin_id / f"{inputs_key}.json"
-        print(filename)
         if not filename.exists():
             return None
 

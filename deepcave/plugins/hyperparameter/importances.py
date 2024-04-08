@@ -406,7 +406,6 @@ class Importances(StaticPlugin):
 
         # Collect data
         data = {}
-        print(outputs)
         for budget_id, importances in outputs.items():
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)

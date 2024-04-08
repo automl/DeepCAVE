@@ -32,6 +32,7 @@ class AblationImportances:
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
+        print("INIRT HPS: ", self.hp_names)
         self.importances: Optional[Dict[Any, Any]] = None
 
     def calculate(  # TODO: Change head
@@ -48,21 +49,27 @@ class AblationImportances:
             incumbent_config,
         ) = self._train_surrogate()  # TODO: Does it make sense to train on only one cs?
         res_default = self._model.predict([self.default])
+        print(self.default)
 
         print("Default performance:", 1 - res_default)
         print("Incumbent performance:", 1 - self._model.predict([self.incumbent]))
 
         importances = {}
-        for i in range(len(self.hp_names)):
-            continue_ablation, max_hp, max_hp_performance = self._ablation(
-                incumbent_config, res_default
+        print("HP NAMES ", self.hp_names)
+        hp_it = self.hp_names.copy()
+        for i in range(len(hp_it)):
+            continue_ablation, max_hp, max_hp_performance, max_error = self._ablation(
+                incumbent_config, res_default, hp_it
             )
             if not continue_ablation:
                 print("end ablation")
                 break
             print("Hyperparameter with max MSE", max_hp, "New performance:", max_hp_performance)
-            self.hp_names.remove(max_hp)
-            importances[max_hp] = max_hp_performance
+            print("HP IT: ", hp_it)
+            hp_it.remove(max_hp)
+            print("HP NAMES AFTER", self.hp_names)
+            print("MAX PERGOR: ", max_hp_performance)
+            importances[max_hp] = (max_hp_performance[0], max_error)
 
         self.importances = importances
 
@@ -70,12 +77,18 @@ class AblationImportances:
         """I am a placeholder."""
         if self.importances is None:
             raise RuntimeError("Importance scores must be calculated first.")
-        return self.importances
+        print("ABLI IMPOR: ", self.importances)
+        importances = {key: value for key, value in sorted(self.importances.items())}
+        print(importances)
+        return importances
 
-    def _ablation(self, incumbent_config: Any, res_default: Any) -> Tuple[Any, Any, Any]:
+    def _ablation(
+        self, incumbent_config: Any, res_default: Any, hp_it: List[str]
+    ) -> Tuple[Any, Any, Any, Any]:
         max_hp = ""
         max_hp_error = 0
-        for hp in self.hp_names:
+        for hp in hp_it:
+            print("HPS: ", hp)
             if incumbent_config[hp] is not None and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
@@ -86,12 +99,14 @@ class AblationImportances:
                     max_hp_error = mse
             else:
                 continue
+            print("MAX HP: ", max_hp, "MAX HP ERROR: ", max_hp_error)
         if max_hp != "":
             self.default_config[max_hp] = incumbent_config[max_hp]
             max_hp_performance = self._model.predict([self.run.encode_config(self.default_config)])
-            return True, max_hp, 1 - max_hp_performance
+            return True, max_hp, 1 - max_hp_performance, max_hp_error
         else:
-            return False, None, None
+            print("No hyperparameter to ablate: ", max_hp, max_hp_error)
+            return False, None, None, None
 
     def _train_surrogate(self) -> Tuple[Any, Any]:
         objectives = self.run.get_objectives()
@@ -108,8 +123,9 @@ class AblationImportances:
         self.incumbent = self.run.encode_config(incumbent_config)
 
         default_config = (
-            self.run.configspace.sample_configuration()
+            self.cs.get_default_configuration()
         )  # TODO: Find a better fit than a random sample
+        print("ABLI DEFAULT CONFIG ", default_config)
         self.default = self.run.encode_config(default_config)
 
         self._model = RandomForestRegressor(max_depth=100, random_state=0)
