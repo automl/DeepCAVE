@@ -29,6 +29,8 @@ class Trial:
         The identificator of the configuration.
     budget : Union[int, float]
         The budget for the trial.
+    seed: int
+        The seed for the trial.
     costs : List[float]
         A list of the costs of the trial.
     start_time : float

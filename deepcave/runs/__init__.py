@@ -396,7 +396,7 @@ class AbstractRun(ABC):
         Get configurations of the run.
 
         Optionally, only configurations which were evaluated on the passed budget, seed,
-        and statuses are considered.
+        and stati are considered.
 
         Parameters
         ----------
@@ -696,8 +696,10 @@ class AbstractRun(ABC):
         """
         Get average costs over all seeds for a config.
 
-        Optionally, only configurations which were evaluated on the passed budget and statuses
+        Optionally, only configurations which were evaluated on the passed budget and stati
         are considered.
+
+        In case of multi-objective, multiple costs are returned in the form of a list.
 
         Parameters
         ----------
@@ -739,7 +741,10 @@ class AbstractRun(ABC):
         """
         Return the costs of a configuration.
 
-        In case of multi-objective, multiple costs are returned.
+        Optionally, only configurations which were evaluated on the passed budget, seed, and stati
+        are considered.
+
+        In case of multi-objective, multiple costs are returned in the form of a list.
 
         Parameters
         ----------
@@ -792,8 +797,10 @@ class AbstractRun(ABC):
         """
         Get all costs in the history with their config ids and seeds.
 
-        If set, only configs from the given budget, seed,
-        and statuses are returned.
+        Optionally, only configurations which were evaluated on the passed budget, seed, and stati
+        are considered.
+
+        In case of multi-objective, multiple costs are returned in the form of a list.
 
         Parameters
         ----------
@@ -863,7 +870,7 @@ class AbstractRun(ABC):
         budget: Optional[Union[int, float]] = None,
     ) -> Status:
         """
-        Return the status of a configuration.
+        Return the status of a trial (i.e. configuration, budget and seed).
 
         Parameters
         ----------
@@ -913,7 +920,12 @@ class AbstractRun(ABC):
         selected_ids: Optional[List[int]] = None,
     ) -> Tuple[Configuration, float]:
         """
-        Return the incumbent with its normalized cost.
+        Return the incumbent with its normalized objective value.
+
+        The incumbent is the configuration with the lowest normalized objective value.
+
+        Optionally, only configurations which were evaluated on the passed budget, seed,
+        and stati are considered.
 
         Parameters
         ----------
@@ -924,9 +936,9 @@ class AbstractRun(ABC):
         seed : Optional[int], optional
             Considered seed. If no seed is given, all seeds are considered. By default None.
         statuses : Optional[Union[Status, List[Status]]], optional
-            Considered statuses. If None, all stati are considered. By default None.
+            Considered stati. If None, all stati are considered. By default None.
         selected_ids: Optional[List[int]], optional
-            If set, only history ids in the list will be considered. This can for example be
+            If set, only ids in selected_ids will be considered. This can for example be
             useful if only ids up to a certain end-time shall be considered. By default None.
 
         Returns
@@ -953,8 +965,8 @@ class AbstractRun(ABC):
 
         for config_id, costs in results.items():
             # If there are multiple seeds, only configurations evaluated on all seeds are
-            # considered. From these configurations, the one with the highest average cost
-            # over the seeds is considered as the incumbent.
+            # considered. From these configurations, the one with the highest average objective
+            # value over the seeds is considered as the incumbent.
             if max_seed_count > 1:
                 if len(costs) < max_seed_count:
                     continue
@@ -1288,7 +1300,7 @@ class AbstractRun(ABC):
             Which seed should be considered. If None, all seeds are considered.
             By default None.
         statuses : Optional[Union[Status, List[Status]]]
-            Which statuses should be considered. If None, all statuses are considered.
+            Which stati should be considered. If None, all stati are considered.
             By default None.
         specific : bool
             Whether a specific encoding should be used. This encoding is compatible with pyrfr.
