@@ -356,7 +356,7 @@ class AbstractRun(ABC):
         ----------
         objectives : Optional[List[Objective]]
             A list of the objectives.
-            By default, None.
+            By default None.
 
         Returns
         -------
@@ -395,8 +395,8 @@ class AbstractRun(ABC):
         """
         Get configurations of the run.
 
-        Optionally, only configurations which were evaluated
-        on the passed budget, seed, and status are considered.
+        Optionally, only configurations which were evaluated on the passed budget, seed,
+        and statuses are considered.
 
         Parameters
         ----------
@@ -694,15 +694,18 @@ class AbstractRun(ABC):
         statuses: Optional[Union[Status, List[Status]]] = None,
     ) -> Tuple[List[float], List[float]]:
         """
-        Get average costs over all seeds for a config and budget.
+        Get average costs over all seeds for a config.
+
+        Optionally, only configurations which were evaluated on the passed budget and statuses
+        are considered.
 
         Parameters
         ----------
         config_id : int
             Configuration id to get the costs for.
         budget : Optional[Union[int, float]]
-            Budget to get the costs from the configuration id for. By default, None. If budget is
-            None, the highest budget is chosen.
+            Budget to get the costs from the configuration id for. If budget is
+            None, the highest budget is chosen. By default None.
         statuses : Optional[Union[Status, List[Status]]]
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
@@ -743,11 +746,11 @@ class AbstractRun(ABC):
         config_id : int
             Configuration id to get the costs for.
         budget : Optional[Union[int, float]]
-            Budget to get the costs from the configuration id for. By default, None. If budget is
-            None, the highest budget is chosen.
+            Budget to get the costs from the configuration id for. If budget is
+            None, the highest budget is chosen. By default None.
         seed : Optional[int], optional
-            Seed to get the costs from the configuration id for. By default None. If no seed is
-            given, all seeds are considered.
+            Seed to get the costs from the configuration id for. If no seed is
+            given, all seeds are considered. By default None.
         statuses : Optional[Union[Status, List[Status]]]
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
@@ -796,7 +799,7 @@ class AbstractRun(ABC):
         ----------
         budget : Optional[Union[int, float]]
             Budget to select the costs. If no budget is given, the highest budget is chosen.
-            By default, None.
+            By default None.
         statuses : Optional[Union[Status, List[Status]]]
             Only selected stati are considered. If no status is given, all stati are considered.
             By default None.
@@ -869,8 +872,8 @@ class AbstractRun(ABC):
         seed : Optional[int]
             Seed to get the status from the configuration id for.
         budget : Optional[Union[int, float]]
-            Budget to get the status from the configuration id for. By default, None. If budget is
-            None, the highest budget is chosen.
+            Budget to get the status from the configuration id for. If budget is
+            None, the highest budget is chosen. By default None.
 
         Returns
         -------
@@ -915,13 +918,13 @@ class AbstractRun(ABC):
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considered objectives. By default, None. If None, all objectives are considered.
+            Considered objectives. If None, all objectives are considered. By default None.
         budget : Optional[Union[int, float]], optional
-            Considered budget. By default, None. If None, the highest budget is chosen.
+            Considered budget. If None, the highest budget is chosen. By default None.
         seed : Optional[int], optional
-            Considered seed. By default None. If no seed is given, all seeds are considered.
+            Considered seed. If no seed is given, all seeds are considered. By default None.
         statuses : Optional[Union[Status, List[Status]]], optional
-            Considered statuses. By default, None. If None, all stati are considered.
+            Considered statuses. If None, all stati are considered. By default None.
         selected_ids: Optional[List[int]], optional
             If set, only history ids in the list will be considered. This can for example be
             useful if only ids up to a certain end-time shall be considered. By default None.
@@ -1003,7 +1006,7 @@ class AbstractRun(ABC):
             The costs, which should be merged. Must be the same length as the original number of
             objectives.
         objectives : Optional[List[Objective]]
-            The considered objectives to the costs. By default, None.
+            The considered objectives to the costs. By default None.
             If None, all objectives are considered. The passed objectives can differ from the
             original number objectives.
 
@@ -1276,22 +1279,23 @@ class AbstractRun(ABC):
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]]
-            Which objectives should be considered. If None, all objectives are
-            considered. By default, None.
+            Which objectives should be considered. If None, all objectives are considered.
+            By default None.
         budget : Optional[List[Status]]
-            Which budget should be considered. By default, None. If None, only the highest budget
-            is considered.
+            Which budget should be considered. If None, only the highest budget is considered.
+            By default None.
         seed: Optional[int]
-            Which seed should be considered. By default, None. If None, all seeds are considered.
+            Which seed should be considered. If None, all seeds are considered.
+            By default None.
         statuses : Optional[Union[Status, List[Status]]]
-            Which statuses should be considered. By default, None. If None, all statuses are
-            considered.
+            Which statuses should be considered. If None, all statuses are considered.
+            By default None.
         specific : bool
             Whether a specific encoding should be used. This encoding is compatible with pyrfr.
             A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.
             By default False.
         include_config_ids : bool
-            Whether to include configuration ids. By default, False.
+            Whether to include configuration ids. By default False.
         include_combined_cost : bool, optional
             Whether to include combined cost. Note that the combined cost is calculated by the
             passed objectives only. By default False.
