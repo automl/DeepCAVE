@@ -62,17 +62,19 @@ class Group(AbstractRun):
             return
 
         try:
-            attributes = check_equality(self.runs, seeds=True)
+            attributes = check_equality(self.runs)
             # abstract run requires meta to contain budgets / objectives
             self.meta = {
                 "budgets": attributes["budgets"],
                 "objectives": attributes["objectives"],
-                "seeds": attributes["seeds"],
             }
+            self.meta["seeds"] = list(
+                set([seed for run in self.runs for seed in run.meta["seeds"].copy()])
+            )
             self.configspace = attributes["configspace"]
             self.objectives = attributes["objectives"]
             self.budgets = attributes["budgets"]
-            self.seeds = attributes["seeds"]
+            self.seeds = self.meta["seeds"]
 
             # New config ids are needed
             current_config_id = 0
