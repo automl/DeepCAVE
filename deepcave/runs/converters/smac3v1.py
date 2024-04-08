@@ -90,8 +90,6 @@ class SMAC3v1Run(Run):
         ------
         RuntimeError
             Instances are not supported.
-        RuntimeError
-            Multiple Seeds are not supported.
         """
         path = Path(path)
 
@@ -142,7 +140,6 @@ class SMAC3v1Run(Run):
         instance_ids = []
 
         first_starttime = None
-        seeds = []
         for (config_id, instance_id, seed, budget), (
             cost,
             time,
@@ -159,9 +156,6 @@ class SMAC3v1Run(Run):
 
             config_id = str(config_id)
             config = configs[config_id]
-
-            if seed not in seeds:
-                seeds.append(seed)
 
             if first_starttime is None:
                 first_starttime = starttime
