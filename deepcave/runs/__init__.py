@@ -951,7 +951,17 @@ class AbstractRun(ABC):
         RuntimeError
             If no incumbent was found.
         """
-        min_cost = np.inf
+        if isinstance(objectives, Objective):
+            single_objective = objectives
+        elif isinstance(objectives, list) and len(objectives) == 1:
+            single_objective = objectives[0]
+        else:
+            single_objective = None
+
+        if single_objective is not None and single_objective.optimize == "upper":
+            best_cost = -np.inf
+        else:
+            best_cost = np.inf
         best_config_id = None
 
         results = self.get_all_costs(
@@ -959,30 +969,30 @@ class AbstractRun(ABC):
         )
 
         seed_count = {}
-        for config_id, costs in results.items():
-            seed_count[config_id] = len(costs)
+        for config_id, seed_costs_dict in results.items():
+            seed_count[config_id] = len(seed_costs_dict)
         max_seed_count = max(seed_count.values())
 
-        for config_id, costs in results.items():
+        for config_id, seed_costs_dict in results.items():
             # If there are multiple seeds, only configurations evaluated on all seeds are
             # considered. From these configurations, the one with the highest average objective
             # value over the seeds is considered as the incumbent.
             if max_seed_count > 1:
-                if len(costs) < max_seed_count:
+                if len(seed_costs_dict) < max_seed_count:
                     continue
 
                 # Get average over all seeds
                 config_costs = np.zeros([max_seed_count, len(self.get_objectives())])
-                for i, (_, seed_cost) in enumerate(costs.items()):
-                    config_costs[i] = seed_cost
+                for i, (_, seed_costs) in enumerate(seed_costs_dict.items()):
+                    config_costs[i] = seed_costs
                 avg_cost = np.mean(config_costs, axis=0)
 
             # If there is only one seed, the costs can be used directly
             else:
-                avg_cost = [*costs.values()][0]
+                avg_cost = [*seed_costs_dict.values()][0]
 
             # If there are multiple objectives, the costs are merged to one cost value
-            if isinstance(objectives, list) and len(objectives) > 1:
+            if single_objective is None:
                 cost = self.merge_costs(avg_cost, objectives)
             else:
                 cost = avg_cost[0]
@@ -990,16 +1000,21 @@ class AbstractRun(ABC):
             if cost is None:
                 continue
 
-            if cost < min_cost:
-                min_cost = cost
-                best_config_id = config_id
+            if single_objective is not None and single_objective.optimize == "upper":
+                if cost > best_cost:
+                    best_cost = cost
+                    best_config_id = config_id
+            else:
+                if cost < best_cost:
+                    best_cost = cost
+                    best_config_id = config_id
 
         if best_config_id is None:
             raise RuntimeError("No incumbent found.")
 
         config = self.get_config(best_config_id)
         config = Configuration(self.configspace, config)
-        normalized_cost = min_cost
+        normalized_cost = best_cost
 
         return config, normalized_cost
 
@@ -1168,19 +1183,12 @@ class AbstractRun(ABC):
         for i, (id, _) in enumerate(order):
             trial = self.history[id]
 
-            # All budgets should should be used
-            if budget != COMBINED_BUDGET:
-                # Only consider selected/last budget
-                if trial.budget != budget:
-                    continue
-
-            if seed is not None:
-                if trial.seed != seed:
-                    continue
-
             # Get the incumbent over all trials up to this point
             _, cost = self.get_incumbent(
-                objective, budget, selected_ids=[selected_id for selected_id, _ in order[: i + 1]]
+                objectives=objective,
+                budget=budget,
+                seed=seed,
+                selected_ids=[selected_id for selected_id, _ in order[: i + 1]],
             )
             if cost is None:
                 continue
