@@ -11,6 +11,7 @@
 - Allow to load multi-objective SMAC3v2 and add example (#69).
 - Allow to load runs with multiple seeds and add examples (#70).
 - Correct incumbent calculation when single objective should be maximized.
+- Correct range of configuration cube slider for number of configs.
 - Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.

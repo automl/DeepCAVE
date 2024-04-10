@@ -722,7 +722,7 @@ class AbstractRun(ABC):
         objectives = self.get_objectives()
 
         # Budget might not be evaluated
-        config_costs = self.get_costs(config_id, budget, statuses=statuses)
+        config_costs = self.get_all_costs(budget=budget, statuses=statuses)[config_id]
 
         avg_costs, std_costs = [], []
         for idx in range(len(objectives)):
@@ -730,62 +730,6 @@ class AbstractRun(ABC):
             avg_costs.append(float(np.mean(costs)))
             std_costs.append(float(np.std(costs)))
         return avg_costs, std_costs
-
-    def get_costs(
-        self,
-        config_id: int,
-        budget: Optional[Union[int, float]] = None,
-        seed: Optional[int] = None,
-        statuses: Optional[Union[Status, List[Status]]] = None,
-    ) -> Dict[int, List[float]]:
-        """
-        Return the costs of a configuration.
-
-        Optionally, only configurations which were evaluated on the passed budget, seed, and stati
-        are considered.
-
-        In case of multi-objective, multiple costs are returned in the form of a list.
-
-        Parameters
-        ----------
-        config_id : int
-            Configuration id to get the costs for.
-        budget : Optional[Union[int, float]]
-            Budget to get the costs from the configuration id for. If budget is
-            None, the highest budget is chosen. By default None.
-        seed : Optional[int], optional
-            Seed to get the costs from the configuration id for. If no seed is
-            given, all seeds are considered. By default None.
-        statuses : Optional[Union[Status, List[Status]]]
-            Only selected stati are considered. If no status is given, all stati are considered.
-            By default None.
-
-        Returns
-        -------
-        Dict[int, List[float]]
-            Seeds with their corresponding list of costs for the associated configuration.
-
-        Raises
-        ------
-        ValueError
-            If the configuration id is not found.
-        RuntimeError
-            If the budget was not evaluated for the passed config id.
-        """
-        if budget is None:
-            budget = self.get_highest_budget()
-
-        if config_id not in self.configs:
-            raise ValueError("Configuration id was not found.")
-        costs = self.get_all_costs(budget=budget, seed=seed, statuses=statuses)
-        if config_id not in costs:
-            if seed is not None:
-                raise RuntimeError(
-                    f"Budget {budget} with seed {seed} was not evaluated for config id {config_id}."
-                )
-            else:
-                raise RuntimeError(f"Budget {budget} was not evaluated for config id {config_id}.")
-        return costs[config_id]
 
     def get_all_costs(
         self,

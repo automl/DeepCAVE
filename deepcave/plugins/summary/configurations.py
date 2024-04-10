@@ -213,17 +213,15 @@ class Configurations(DynamicPlugin):
                 seeds_evaluated = 0
                 cost = []
                 for seed in seeds:
-                    try:
-                        cost.append(
-                            run.get_costs(
-                                config_id=selected_config_id,
-                                budget=budget,
-                                seed=seed,
-                                statuses=[Status.SUCCESS],
-                            )[seed][objective_id]
-                        )
+                    all_costs = run.get_all_costs(
+                        budget=budget,
+                        seed=seed,
+                        statuses=[Status.SUCCESS],
+                    )
+                    if selected_config_id in all_costs:
+                        cost.append(all_costs[selected_config_id][seed][objective_id])
                         seeds_evaluated += 1
-                    except Exception:
+                    else:
                         continue
 
                 # Add table data
