@@ -220,7 +220,6 @@ class StaticPlugin(Plugin, ABC):
                         try:
                             job_run_outputs = job.result
                             job_meta = job.meta
-                            print("JOB META: ", job_meta)
                             job_inputs_key = job_meta["inputs_key"]
                             job_run_id = job_meta["run_id"]
                             job_plugin_id = job_meta["plugin_id"]

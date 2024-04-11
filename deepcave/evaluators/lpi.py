@@ -97,7 +97,6 @@ class LPI:
         self.continous_neighbors = continous_neighbors
         self.incumbent, _ = self.run.get_incumbent(budget=budget)
         self.default = self.cs.get_default_configuration()
-        print("LPI DEFAULT: ", self.default)
         self.incumbent_array = self.incumbent.get_array()
 
         self.seed = seed
@@ -108,6 +107,7 @@ class LPI:
             objectives=objectives, budget=budget, specific=True, include_combined_cost=True
         )
         X = df[self.hp_names].to_numpy()
+
         Y = df[COMBINED_COST_NAME].to_numpy()
 
         # Get model and train it
@@ -224,7 +224,6 @@ class LPI:
             p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
             for p, trees in overall_var_per_tree.items()
         }
-        print("LPI GETS CALLED")
         self.variances = overall_var_per_tree
         self.importances = importances
 
@@ -269,7 +268,6 @@ class LPI:
                 std = 0
 
             importances[hp_name] = (mean, std)
-        print("LPI IMPORT: ", importances)
         return importances
 
     def _get_neighborhood(self) -> Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]:

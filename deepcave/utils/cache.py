@@ -83,7 +83,6 @@ class Cache:
         self._filename.parent.mkdir(exist_ok=True, parents=True)
 
         with self._filename.open("w") as f:
-            print(self._debug)
             if self._debug:
                 json.dump(self._data, f, indent=4)
             else:
@@ -119,15 +118,12 @@ class Cache:
             f"{name}: Set \"{','.join(keys)}\" to \"{short_string(value, 60, mode='suffix')}\"."
         )
         d = self._data
-        print("KEYS: ", keys)
         for key in keys[:-1]:
-            print("KEY: ", key)
             if type(key) != str:
                 raise RuntimeError("Key must be a string. Ints/floats are not supported by JSON.")
 
             if key not in d:
                 d[key] = {}
-            print("D: ", d)
             d = d[key]
 
         d[keys[-1]] = value
