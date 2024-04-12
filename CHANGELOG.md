@@ -17,6 +17,7 @@
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
+- Get hovertext per budget in Footprint, Config Cube, Cost over Time, and Pareto Front.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).

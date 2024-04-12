@@ -722,7 +722,11 @@ class AbstractRun(ABC):
         objectives = self.get_objectives()
 
         # Budget might not be evaluated
-        config_costs = self.get_all_costs(budget=budget, statuses=statuses)[config_id]
+        all_costs = self.get_all_costs(budget=budget, statuses=statuses)
+        if config_id in all_costs:
+            config_costs = all_costs[config_id]
+        else:
+            raise ValueError(f"No costs available for config_id {config_id}.")
 
         avg_costs, std_costs = [], []
         for idx in range(len(objectives)):
@@ -911,6 +915,9 @@ class AbstractRun(ABC):
         results = self.get_all_costs(
             budget=budget, statuses=statuses, seed=seed, selected_ids=selected_ids
         )
+
+        if len(results) == 0:
+            raise RuntimeError("No data available, thus no incumbent found.")
 
         seed_count = {}
         for config_id, seed_costs_dict in results.items():
@@ -1128,13 +1135,14 @@ class AbstractRun(ABC):
             trial = self.history[id]
 
             # Get the incumbent over all trials up to this point
-            _, cost = self.get_incumbent(
-                objectives=objective,
-                budget=budget,
-                seed=seed,
-                selected_ids=[selected_id for selected_id, _ in order[: i + 1]],
-            )
-            if cost is None:
+            try:
+                _, cost = self.get_incumbent(
+                    objectives=objective,
+                    budget=budget,
+                    seed=seed,
+                    selected_ids=[selected_id for selected_id, _ in order[: i + 1]],
+                )
+            except RuntimeError:
                 continue
 
             # Now it's important to check whether the cost was minimized or maximized

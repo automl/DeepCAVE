@@ -423,6 +423,7 @@ class ParetoFront(DynamicPlugin):
             points_avg = np.array(outputs[run.id]["points_avg"])
             points_std = np.array(outputs[run.id]["points_std"])
             config_ids = outputs[run.id]["config_ids"]
+            budget = run.get_budget(inputs["budget_id"])
             pareto_config_ids = []
 
             x, y, x_std, y_std = [], [], [], []
@@ -486,7 +487,7 @@ class ParetoFront(DynamicPlugin):
                 line_shape = "hv"
 
             hovertext = [
-                get_hovertext_from_config(run, config_id) for config_id in pareto_config_ids
+                get_hovertext_from_config(run, config_id, budget) for config_id in pareto_config_ids
             ]
 
             error_pareto_x = (

@@ -326,6 +326,7 @@ class ConfigurationCube(DynamicPlugin):
         n_configs = inputs["n_configs"]
         objective_id = inputs["objective_id"]
         objective = run.get_objective(objective_id)
+        budget = run.get_budget(inputs["budget_id"])
         df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
         df.index = df.index.astype("str")
 
@@ -393,7 +394,9 @@ class ConfigurationCube(DynamicPlugin):
                 "color": costs,
                 "colorbar": {"thickness": 30, "title": objective.name},
             },
-            "hovertext": [get_hovertext_from_config(run, config_id) for config_id in config_ids],
+            "hovertext": [
+                get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+            ],
             "meta": {"colorbar": costs},
             "hoverinfo": "text",
         }
