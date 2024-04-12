@@ -28,6 +28,7 @@
 - When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
     - Instead of taking the first run as comparative value,
     - take the one with the lowest budget, else the index for the budgets could be out of bounds.
+- Free port when exiting via the exit button (#52).
 
 ## Documentation
 - Add How to Contribute section.

@@ -17,10 +17,11 @@ import os
 import time
 
 import dash_bootstrap_components as dbc
+import requests
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from deepcave import app, c, queue
+from deepcave import app, c, config, queue
 from deepcave.layouts import Layout
 
 
@@ -114,6 +115,7 @@ class HeaderLayout(Layout):
             # Then we want to terminate DeepCAVE
             if n_clicks is not None:
                 time.sleep(1)
+                requests.post(f"http://localhost:{config.DASH_PORT}/shutdown")
                 os._exit(130)
 
     def __call__(self) -> html.Header:  # noqa: D102
