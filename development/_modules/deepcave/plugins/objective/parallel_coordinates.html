@@ -31,7 +31,7 @@
   <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
     <script src="../../../../_static/documentation_options.js?v=5f474de7"></script>
-    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -1015,7 +1015,9 @@
             <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">importances_dict</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
             <span class="n">importances</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">importances_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-            <span class="n">important_hp_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">importances</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">important_hp_names</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="n">importances</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">key</span><span class="p">:</span> <span class="n">importances</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;important_hp_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">important_hp_names</span>
 
         <span class="k">return</span> <span class="n">result</span></div>
@@ -1039,7 +1041,11 @@
 <span class="sd">        dcc.Graph</span>
 <span class="sd">            The layouts for the output block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">})</span></div>
+        <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
+            <span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ParallelCoordinates.load_outputs">
@@ -1170,7 +1176,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
