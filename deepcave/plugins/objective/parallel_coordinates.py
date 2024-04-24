@@ -299,7 +299,9 @@ class ParallelCoordinates(StaticPlugin):
             evaluator.calculate(objective, budget, n_trees=10, seed=0)
             importances_dict = evaluator.get_importances()
             importances = {u: v[0] for u, v in importances_dict.items()}
-            important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
+            important_hp_names = sorted(
+                importances, key=lambda key: importances[key], reverse=False
+            )
             result["important_hp_names"] = important_hp_names
 
         return result
@@ -320,7 +322,11 @@ class ParallelCoordinates(StaticPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": Config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
     def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore

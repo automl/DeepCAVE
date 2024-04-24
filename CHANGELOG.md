@@ -14,6 +14,7 @@
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
+- Save plotly plots in higher resolution upon download.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).
@@ -25,6 +26,9 @@
 - When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
     - Instead of taking the first run as comparative value,
     - take the one with the lowest budget, else the index for the budgets could be out of bounds.
+- For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
+- Add init files to all test directories.
+- Correct LPI importance tests.
 
 ## Documentation
 - Add How to Contribute section.
