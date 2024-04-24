@@ -345,7 +345,6 @@ class Importances(StaticPlugin):
 
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances
-
         return data  # type: ignore
 
     @staticmethod

@@ -81,7 +81,6 @@ class Cache:
             return
 
         self._filename.parent.mkdir(exist_ok=True, parents=True)
-
         with self._filename.open("w") as f:
             if self._debug:
                 json.dump(self._data, f, indent=4)
@@ -127,7 +126,6 @@ class Cache:
             d = d[key]
 
         d[keys[-1]] = value
-
         if write_file:
             self.write()
 

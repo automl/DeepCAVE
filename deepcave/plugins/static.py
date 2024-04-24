@@ -171,7 +171,6 @@ class StaticPlugin(Plugin, ABC):
 
                     # Save for modal
                     self.raw_outputs = raw_outputs
-
                     outputs = self._process_raw_outputs(inputs, raw_outputs)
                     self._refresh_required = False
 
@@ -229,6 +228,8 @@ class StaticPlugin(Plugin, ABC):
 
                             # Save results in cache
                             # Same optional string problem
+                            # TODO: REMOVE WHEN DONE
+
                             rc.set(run, job_plugin_id, job_inputs_key, job_run_outputs)
                             self.logger.debug(f"Job {job_id} cached.")
 

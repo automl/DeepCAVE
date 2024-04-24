@@ -60,7 +60,6 @@ class RunCaches:
             True if the run cache was updated.
         """
         filename = self.cache_dir / run.id / "index.json"
-
         # Reads the cache.
         cache = Cache(filename, debug=self._debug, write_file=False)
 
@@ -85,7 +84,6 @@ class RunCaches:
             self._reset(run, cache)
             self.logger.info(f"Hash for {run.name} has changed.")
             return True
-
         return False
 
     def _reset(self, run: AbstractRun, cache: Cache) -> None:
