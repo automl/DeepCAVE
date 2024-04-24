@@ -917,7 +917,6 @@ class Plugin(Layout, ABC):
             ]
         else:
             components += [html.H1(self.name)]
-
         try:
             self.check_runs_compatibility(self.all_runs)
         except NotMergeableError as message:

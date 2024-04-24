@@ -2,6 +2,9 @@
 
 ## Plugins
 - Add symbolic explanations plugin (#46).
+- It is now possible to view multiple unequal runs at once in Cost over Time and Pareto (#93).
+- Runs with unequal objectives cannot be displayed together.
+- Added an enum for displaying according warning messages.
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
@@ -20,9 +23,16 @@
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
+- When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
+    - Instead of taking the first run as comparative value,
+    - take the one with the lowest budget, else the index for the budgets could be out of bounds.
 - For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
 - Add init files to all test directories.
 - Correct LPI importance tests.
+
+## Documentation
+- Add How to Contribute section.
+- Expand documentation for partial dependence plugin.
 
 ## Version-Updates
 - Black version from 23.1.0 to 23.3.0
@@ -38,6 +48,10 @@
 ## Pydocstyle and Linter
 - Major overhaul of docstrings in various files
 - Removed unused imports and variables
+
+## Groups
+- Groups now get a default name, if no name was entered by the user.
+- Groups get sorted alphabetically to appear more ordered.
 
 ## Additional Changes
 - Added a "make install examples" in Makefile
@@ -68,7 +82,7 @@
 - SMAC 2.0
 
 ## Dependencies
-- Remove SMAC dependency by adding required function directly
+- Remove SMAC dependency by adding required function directly.
 
 # Version 1.0.1
 

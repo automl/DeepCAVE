@@ -147,7 +147,10 @@ class Importances(StaticPlugin):
             html.Div(
                 [
                     dbc.Label("Budgets"),
-                    help_button("The hyperparameters are sorted by the highest budget."),
+                    help_button(
+                        "Budget refers to the multi-fidelity budget. "
+                        "The hyperparameters are sorted by the highest budget."
+                    ),
                     dbc.Checklist(id=register("budget_ids", ["value", "options"]), inline=True),
                 ]
             ),
