@@ -51,6 +51,10 @@ class Objective:
         Lock the lower bound if lower is not None.
         Lock the upper bound if upper is not None.
 
+        Additionally, sets self.lower to np.inf if it is None and self.upper to -np.inf if it is None,
+        resulting in an empty bound.
+        Therefore the values will be updated as soon as configurations are added
+
         Raises
         ------
         RuntimeError

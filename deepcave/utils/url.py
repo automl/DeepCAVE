@@ -10,6 +10,8 @@ from typing import Any, Dict, Optional
 import json
 import urllib
 
+from deepcave.utils.compression import Encoder
+
 
 def create_url(pathname: str, inputs: Dict[str, Any]) -> str:
     """
@@ -28,7 +30,7 @@ def create_url(pathname: str, inputs: Dict[str, Any]) -> str:
         The URL.
 
     """
-    string = json.dumps(inputs)
+    string = json.dumps(inputs, cls=Encoder)
     converted_string = urllib.parse.quote(string)
 
     return f"{pathname}/?inputs={converted_string}"

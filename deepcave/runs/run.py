@@ -22,6 +22,7 @@ from ConfigSpace.read_and_write import json as cs_json
 
 from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
+from deepcave.utils.compression import Encoder
 from deepcave.utils.files import make_dirs
 from deepcave.utils.hash import string_to_hash
 
@@ -37,7 +38,8 @@ class Run(AbstractRun, ABC):
     configspace : ConfigurationSpace
         The configuration space of the run.
     path : Optional[Union[str, Path]]
-        The path of a run to be loaded.
+        The path of a run to be loaded. If path is not None, the given parameters are used.
+        If path is None, the run is created from the given parameters.
     meta : Dict[str, Any]
         Contains serialized objectives and budgets.
     prefix : str
@@ -72,7 +74,6 @@ class Run(AbstractRun, ABC):
         path: Optional[Path] = None,
     ) -> None:
         super(Run, self).__init__(name)
-
         if objectives is None:
             objectives = []
         if meta is None:
@@ -341,9 +342,9 @@ class Run(AbstractRun, ABC):
         self.configspace_fn.write_text(cs_json.write(self.configspace))
 
         # Save meta data (could be changed)
-        self.meta_fn.write_text(json.dumps(self.meta, indent=4))
-        self.configs_fn.write_text(json.dumps(self.configs, indent=4))
-        self.origins_fn.write_text(json.dumps(self.origins, indent=4))
+        self.meta_fn.write_text(json.dumps(self.meta, cls=Encoder, indent=4))
+        self.configs_fn.write_text(json.dumps(self.configs, cls=Encoder, indent=4))
+        self.origins_fn.write_text(json.dumps(self.origins, cls=Encoder, indent=4))
 
         # Save history
         with jsonlines.open(self.history_fn, mode="w") as f:
