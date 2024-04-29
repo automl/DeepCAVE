@@ -1,3 +1,4 @@
+#  noqa: D400
 """
 # DeepCave
 
@@ -9,7 +10,7 @@ Version x.x is used.
     - DataFrameRun: Define a Run object based on a DataFrame representation.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
 import copy
 import os
@@ -49,10 +50,6 @@ class DataFrameRun(Run):
         meta: Optional[dict[str, Any]] = None,
         path: Optional[Path] = None,
     ) -> None:
-        """
-        Initialize a Run object.
-        """
-
         super(Run, self).__init__(name)
         if objectives is None:
             objectives = []
@@ -69,7 +66,9 @@ class DataFrameRun(Run):
             # Without the return from the superclass
 
         if configspace is None and path is None:
-            raise RuntimeError("Please provide a configspace or specify a path to load existing trials.")
+            raise RuntimeError(
+                "Please provide a configspace or specify a path to load existing trials."
+            )
 
         # Objectives
         if not isinstance(objectives, List):
@@ -109,13 +108,19 @@ class DataFrameRun(Run):
         run.load_trials(path, configspace)
         return run
 
-    def load(self) -> "DataFrameRun":
-        """
-        Do nothing. This method is only here, to overwrite the abstract method in Run.
-        """
+    def load(self, path: Optional[Union[str, Path]] = None) -> None:
+        """Do nothing. This method is only here, to overwrite the abstract method in Run."""
 
     @property
     def hash(self) -> str:
+        """
+        Get a hash as id.
+
+        Returns
+        -------
+        str
+            The hashed id.
+        """
         if self.path is None:
             return ""
 
@@ -123,7 +128,7 @@ class DataFrameRun(Run):
         return file_to_hash(self.path / "metadata.csv")
 
     @staticmethod
-    def load_metadata(path: Path) -> Dict[str, Any]:
+    def load_metadata(path: Path) -> tuple[Dict[str, Any], list[Objective]]:
         """
         Load the metadata of the run.
 
@@ -147,7 +152,7 @@ class DataFrameRun(Run):
         return metadata, objectives
 
     @staticmethod
-    def load_configspace(path) -> ConfigSpace.ConfigurationSpace:
+    def load_configspace(path: Path) -> ConfigSpace.ConfigurationSpace:
         """
         Load the configspace of the run.
 
@@ -213,7 +218,9 @@ class DataFrameRun(Run):
         return configspace
 
     @staticmethod
-    def _extract_numeric_distribution(df: pd.DataFrame, row_number: int, path: str):
+    def _extract_numeric_distribution(
+        df: pd.DataFrame, row_number: int, path: Path
+    ) -> ConfigSpace.Distribution:
         if df["type"][row_number] == "float" or type(df["type"][row_number]) == "integer":
             if "distribution" in df.columns and df["distribution"][row_number] is not None:
                 if df["distribution"][row_number] == "normal":
@@ -231,7 +238,8 @@ class DataFrameRun(Run):
                 else:
                     raise ValueError(
                         (
-                            f"In {os.path.join(path, 'configspace.csv')}, the distribution must be `normal`, `beta` or `uniform`"
+                            f"In {os.path.join(path, 'configspace.csv')}, the "
+                            f"distribution must be `normal`, `beta` or `uniform`"
                             f" but {df['distribution']} was given."
                         )
                     )
@@ -246,10 +254,14 @@ class DataFrameRun(Run):
     @staticmethod
     def _extract_items(df: pd.DataFrame, row_number: int) -> List[str]:
         relevant_columns = [column for column in df.columns if column.startswith("item_")]
-        entries = [str(df[column][row_number]) for column in relevant_columns if df[column][row_number] is not None]
+        entries = [
+            str(df[column][row_number])
+            for column in relevant_columns
+            if df[column][row_number] is not None
+        ]
         return entries
 
-    def load_trials(self, path: str, configspace: ConfigSpace) -> pd.DataFrame:
+    def load_trials(self, path: Path, configspace: ConfigSpace) -> pd.DataFrame:
         """
         Load the trials of the run.
 
@@ -277,13 +289,15 @@ class DataFrameRun(Run):
             )
 
     @staticmethod
-    def _extract_config(data: pd.Series, configspace: ConfigSpace.ConfigurationSpace) -> ConfigSpace.Configuration:
+    def _extract_config(
+        data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
+    ) -> ConfigSpace.Configuration:
         hyperparameter_names = configspace.get_hyperparameter_names()
         hyperparameters = dict(zip(hyperparameter_names, data[hyperparameter_names]))
         return ConfigSpace.Configuration(configspace, values=hyperparameters)
 
     @staticmethod
-    def _extract_costs(data: pd.Series) -> Tuple[List[float], List[str]]:
+    def _extract_costs(data: pd.Series) -> Union[List[float], float]:
         costs_metrics = [index for index in data.index if index.startswith("cost_")]
         return list([float(x) for x in data[costs_metrics]])
 
