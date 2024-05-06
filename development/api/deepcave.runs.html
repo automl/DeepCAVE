@@ -744,6 +744,15 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.AbstractRun.get_avg_costs">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AbstractRun.get_avg_costs()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.runs.AbstractRun.get_budget">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -793,15 +802,6 @@
      <code class="docutils literal notranslate">
       <span class="pre">
        AbstractRun.get_configs()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.runs.AbstractRun.get_costs">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       AbstractRun.get_costs()
       </span>
      </code>
     </a>
@@ -919,6 +919,15 @@
      <code class="docutils literal notranslate">
       <span class="pre">
        AbstractRun.get_origin()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.AbstractRun.get_seeds">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AbstractRun.get_seeds()
       </span>
      </code>
     </a>
@@ -1159,24 +1168,58 @@ or a Configuration itself.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_all_costs">
-<span class="sig-name descname"><span class="pre">get_all_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_all_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_all_costs" title="Link to this definition">¶</a></dt>
-<dd><p>Get all costs in the history with their config ids.</p>
-<p>Only configs from the given budget
-and statuses are returned.</p>
+<span class="sig-name descname"><span class="pre">get_all_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_all_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_all_costs" title="Link to this definition">¶</a></dt>
+<dd><p>Get all costs in the history with their config ids and seeds.</p>
+<p>Optionally, only configurations which were evaluated on the passed budget, seed, and stati
+are considered.</p>
+<p>In case of multi-objective, multiple costs are returned in the form of a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to select the costs. If no budget is given, the highest budget is chosen.
-By default, None.</p></li>
+By default None.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Only selected stati are considered. If no status is given, all stati are considered.
+By default None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Seed to select the costs. If no seed is given, all seeds are considered.
+By default None.</p></li>
+<li><p><strong>selected_ids</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – If set, only history ids in the list will be considered. By default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Config ids and seeds with their corresponding list of costs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[int, Dict[int, List[float]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_avg_costs">
+<span class="sig-name descname"><span class="pre">get_avg_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_avg_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_avg_costs" title="Link to this definition">¶</a></dt>
+<dd><p>Get average costs over all seeds for a config.</p>
+<p>Optionally, only configurations which were evaluated on the passed budget and stati
+are considered.</p>
+<p>In case of multi-objective, multiple costs are returned in the form of a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_id</strong> (<em>int</em>) – Configuration id to get the costs for.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the costs from the configuration id for. If budget is
+None, the highest budget is chosen. By default None.</p></li>
 <li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Only selected stati are considered. If no status is given, all stati are considered.
 By default None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Costs with their config ids.</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</span></p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[int, List[float]]</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>List[float]</em> – List of average cost values for the given config_id and budget.</p></li>
+<li><p><em>List[float]</em> – List of std cost values for the given config_id and budget.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1282,14 +1325,20 @@ By default True.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_configs">
-<span class="sig-name descname"><span class="pre">get_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_configs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_configs" title="Link to this definition">¶</a></dt>
 <dd><p>Get configurations of the run.</p>
-<p>Optionally, only configurations which were evaluated
-on the passed budget are considered.</p>
+<p>Optionally, only configurations which were evaluated on the passed budget, seed,
+and stati are considered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>budget</strong> (<em>Optiona</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Considered budget.
-By default, None (all configurations are included).</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to select the configs. If no budget is given, all seeds are considered.
+By default None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Seed to select the configs. If no seed is given, all seeds are considered.
+By default None.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Only selected stati are considered. If no status is given, all stati are considered.
+By default None.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Configuration id and the configuration.</p>
@@ -1301,53 +1350,26 @@ By default, None (all configurations are included).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_costs">
-<span class="sig-name descname"><span class="pre">get_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_costs" title="Link to this definition">¶</a></dt>
-<dd><p>Return the costs of a configuration.</p>
-<p>In case of multi-objective, multiple costs are
-returned.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>config_id</strong> (<em>int</em>) – Configuration id to get the costs for.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the costs from the configuration id for. By default, None. If budget is
-None, the highest budget is chosen.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of costs from the associated configuration.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[float]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>ValueError</strong> – If the configuration id is not found.</p></li>
-<li><p><strong>RuntimeError</strong> – If the budget was not evaluated for the passed config id.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_encoded_data">
-<span class="sig-name descname"><span class="pre">get_encoded_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_config_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_combined_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_data" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_encoded_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">specific</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_config_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_combined_cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_encoded_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_encoded_data" title="Link to this definition">¶</a></dt>
 <dd><p>Encode configurations to process them further.</p>
 <p>After the configurations are encoded,
 they can be used in model prediction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em>) – Which objectives should be considered. If None, all objectives are
-considered. By default, None.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em>) – Which budget should be considered. By default, None. If None, only the highest budget
-is considered.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Which statuses should be considered. By default, None. If None, all statuses are
-considered.</p></li>
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em>) – Which objectives should be considered. If None, all objectives are considered.
+By default None.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em>) – Which budget should be considered. If None, only the highest budget is considered.
+By default None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Which seed should be considered. If None, all seeds are considered.
+By default None.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Which stati should be considered. If None, all stati are considered.
+By default None.</p></li>
 <li><p><strong>specific</strong> (<em>bool</em>) – Whether a specific encoding should be used. This encoding is compatible with pyrfr.
 A wrapper for pyrfr is implemented in <code class="docutils literal notranslate"><span class="pre">deepcave.evaluators.epm</span></code>.
 By default False.</p></li>
-<li><p><strong>include_config_ids</strong> (<em>bool</em>) – Whether to include configuration ids. By default, False.</p></li>
+<li><p><strong>include_config_ids</strong> (<em>bool</em>) – Whether to include configuration ids. By default False.</p></li>
 <li><p><strong>include_combined_cost</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include combined cost. Note that the combined cost is calculated by the
 passed objectives only. By default False.</p></li>
 </ul>
@@ -1387,14 +1409,20 @@ Moreover, if no budget is available None is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_incumbent">
-<span class="sig-name descname"><span class="pre">get_incumbent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_incumbent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_incumbent" title="Link to this definition">¶</a></dt>
-<dd><p>Return the incumbent with its normalized cost.</p>
+<span class="sig-name descname"><span class="pre">get_incumbent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_incumbent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_incumbent" title="Link to this definition">¶</a></dt>
+<dd><p>Return the incumbent with its normalized objective value.</p>
+<p>The incumbent is the configuration with the lowest normalized objective value.</p>
+<p>Optionally, only configurations which were evaluated on the passed budget, seed,
+and stati are considered.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em>) – Considered objectives. By default, None. If None, all objectives are considered.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Considered budget. By default, None. If None, the highest budget is chosen.</p></li>
-<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em>) – Considered statuses. By default, None. If None, all stati are considered.</p></li>
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered objectives. If None, all objectives are considered. By default None.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered budget. If None, the highest budget is chosen. By default None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Considered seed. If no seed is given, all seeds are considered. By default None.</p></li>
+<li><p><strong>statuses</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>]</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – Considered stati. If None, all stati are considered. By default None.</p></li>
+<li><p><strong>selected_ids</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – If set, only ids in selected_ids will be considered. This can for example be
+useful if only ids up to a certain end-time shall be considered. By default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1442,13 +1470,18 @@ Moreover, if no budget is available None is returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_num_configs">
-<span class="sig-name descname"><span class="pre">get_num_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_num_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_num_configs" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_num_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_num_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_num_configs" title="Link to this definition">¶</a></dt>
 <dd><p>Count the number of configurations stored in this run with a specific budget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – The budget for which to count the configurations.
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – The budget for which to count the configurations.
 If not provided, counts all configurations.
-Default is None.</p>
+Default is None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The seed for which to count the configurations.
+If not provided, counts all configurations.
+Default is None.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The number of all configurations with a given budget.
@@ -1519,7 +1552,7 @@ If budget is None, counts all configurations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em>) – A list of the objectives.
-By default, None.</p>
+By default None.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The name of the objective.
@@ -1577,15 +1610,36 @@ Returns “Combined Cost” if multiple objective names were involved.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_seeds">
+<span class="sig-name descname"><span class="pre">get_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">human</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_combined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_seeds" title="Link to this definition">¶</a></dt>
+<dd><p>Return the seeds from the meta data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>human</strong> (<em>bool</em><em>, </em><em>optional</em>) – Make the output better readable. By default False.</p></li>
+<li><p><strong>include_combined</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, return combined seed as well. By default True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of seeds.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Union[int, str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_status">
-<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_status" title="Link to this definition">¶</a></dt>
-<dd><p>Return the status of a configuration.</p>
+<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_status" title="Link to this definition">¶</a></dt>
+<dd><p>Return the status of a trial (i.e. configuration, budget and seed).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>config_id</strong> (<em>int</em>) – Configuration id to get the status for.</p></li>
-<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the status from the configuration id for. By default, None. If budget is
-None, the highest budget is chosen.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Seed to get the status from the configuration id for.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the status from the configuration id for. If budget is
+None, the highest budget is chosen. By default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1602,14 +1656,16 @@ None, the highest budget is chosen.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_trajectory">
-<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_trajectory" title="Link to this definition">¶</a></dt>
-<dd><p>Calculate the trajectory of the given objective and budget.</p>
+<span class="sig-name descname"><span class="pre">get_trajectory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_trajectory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_trajectory" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the trajectory of the given objective, budget, and seed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>objective</strong> (<a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a>) – Objective to calculate the trajectory for.</p></li>
 <li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to calculate the trajectory for. If no budget is given, then the highest budget
 is chosen. By default None.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Seed to calculate the trajectory for. If no seed is given, then all seeds are
+considered. By default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1640,7 +1696,7 @@ grouped runs.</p>
 <dd><p>Get the trial with the responding key if existing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>trial_key</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – The key for the desired trial.</p>
+<dd class="field-odd"><p><strong>trial_key</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>, </em><em>int</em><em>]</em>) – The key for the desired trial.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The trial object.</p>
@@ -1653,21 +1709,22 @@ grouped runs.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_trial_key">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_trial_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_trial_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_trial_key" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_trial_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_trial_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_trial_key" title="Link to this definition">¶</a></dt>
 <dd><p>Get the trial key.</p>
 <p>It is obtained through the assembly of configuration and budget.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>config_id</strong> (<em>int</em>) – The identificator of the configuration.</p></li>
-<li><p><strong>budget</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>None</em><em>]</em>) – The budget of the Trial.</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – The budget of the Trial.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The seed used for the Trial.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple representing the trial key, consisting of configuration id and the budget.</p>
+<dd class="field-even"><p>Tuple representing the trial key, consisting of configuration id, budget, and seed.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[int, Union[int, float, None]]</p>
+<dd class="field-odd"><p>Tuple[int, Optional[Union[int, float]], Optional[int]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1743,7 +1800,7 @@ The lower the normalized cost, the better.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>costs</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) – The costs, which should be merged. Must be the same length as the original number of
 objectives.</p></li>
-<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em>) – The considered objectives to the costs. By default, None.
+<li><p><strong>objectives</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em>) – The considered objectives to the costs. By default None.
 If None, all objectives are considered. The passed objectives can differ from the
 original number objectives.</p></li>
 </ul>
@@ -1778,17 +1835,18 @@ original number objectives.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.runs.check_equality">
-<span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">check_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budgets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#check_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.check_equality" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">deepcave.runs.</span></span><span class="sig-name descname"><span class="pre">check_equality</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budgets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#check_equality"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.check_equality" title="Link to this definition">¶</a></dt>
 <dd><p>Check the passed runs on equality based on the selected runs.</p>
 <p>Return the requested attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>runs</strong> (<em>list</em><em>[</em><a class="reference internal" href="#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – Runs to check for equality.</p></li>
-<li><p><strong>meta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Meta-Data excluding objectives and budgets, by default True.</p></li>
+<li><p><strong>meta</strong> (<em>bool</em><em>, </em><em>optional</em>) – Meta-Data excluding objectives and budgets, by default False.</p></li>
 <li><p><strong>configspace</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wheter to include the configuration space, by default True.</p></li>
 <li><p><strong>objectives</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wheter to include the objectives, by default True.</p></li>
 <li><p><strong>budgets</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the budgets, by default True.</p></li>
+<li><p><strong>seeds</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to include the seeds, by default False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

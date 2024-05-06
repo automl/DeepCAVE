@@ -729,6 +729,7 @@
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">COMBINED_BUDGET</span><span class="p">,</span>
     <span class="n">COMBINED_COST_NAME</span><span class="p">,</span>
+    <span class="n">COMBINED_SEED</span><span class="p">,</span>
     <span class="n">CONSTANT_VALUE</span><span class="p">,</span>
     <span class="n">NAN_VALUE</span><span class="p">,</span>
 <span class="p">)</span>
@@ -801,8 +802,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Trial</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trial_keys</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span>
-            <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span> <span class="nb">int</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (config_id, budget) -&gt; trial_id</span>
+            <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="nb">int</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># (config_id, budget, seed) -&gt; trial_id</span>
 
         <span class="c1"># Cached data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># config_id -&gt; budget</span></div>
@@ -879,8 +880,8 @@
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trial_key">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">get_trial_key</span><span class="p">(</span>
-        <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]:</span>
+        <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the trial key.</span>
 
@@ -890,26 +891,28 @@
 <span class="sd">        ----------</span>
 <span class="sd">        config_id : int</span>
 <span class="sd">            The identificator of the configuration.</span>
-<span class="sd">        budget : Union[int, float, None]</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            The budget of the Trial.</span>
+<span class="sd">        seed: Optional[int]</span>
+<span class="sd">            The seed used for the Trial.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Tuple[int, Union[int, float, None]]</span>
-<span class="sd">            Tuple representing the trial key, consisting of configuration id and the budget.</span>
+<span class="sd">        Tuple[int, Optional[Union[int, float]], Optional[int]]</span>
+<span class="sd">            Tuple representing the trial key, consisting of configuration id, budget, and seed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AbstractRun.get_trial">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trial">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial_key</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Trial</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial_key</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Trial</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the trial with the responding key if existing.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        trial_key : Tuple[int, int]</span>
+<span class="sd">        trial_key : Tuple[int, Union[int, float], int]</span>
 <span class="sd">            The key for the desired trial.</span>
 
 <span class="sd">        Returns</span>
@@ -1090,7 +1093,7 @@
 <span class="sd">        ----------</span>
 <span class="sd">        objectives : Optional[List[Objective]]</span>
 <span class="sd">            A list of the objectives.</span>
-<span class="sd">            By default, None.</span>
+<span class="sd">            By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1126,18 +1129,30 @@
 
 <div class="viewcode-block" id="AbstractRun.get_configs">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_configs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_configs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get configurations of the run.</span>
 
-<span class="sd">        Optionally, only configurations which were evaluated</span>
-<span class="sd">        on the passed budget are considered.</span>
+<span class="sd">        Optionally, only configurations which were evaluated on the passed budget, seed,</span>
+<span class="sd">        and stati are considered.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        budget : Optiona[Union[int, float]]</span>
-<span class="sd">            Considered budget.</span>
-<span class="sd">            By default, None (all configurations are included).</span>
+<span class="sd">        budget : Optional[Union[int, float]]</span>
+<span class="sd">            Budget to select the configs. If no budget is given, all seeds are considered.</span>
+<span class="sd">            By default None.</span>
+<span class="sd">        seed: Optional[int]</span>
+<span class="sd">            Seed to select the configs. If no seed is given, all seeds are considered.</span>
+<span class="sd">            By default None.</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
+<span class="sd">            Only selected stati are considered. If no status is given, all stati are considered.</span>
+<span class="sd">            By default None.</span>
+
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1148,10 +1163,25 @@
         <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="kc">None</span>
 
+        <span class="c1"># Include all configs if we have combined seed</span>
+        <span class="k">if</span> <span class="n">seed</span> <span class="o">==</span> <span class="n">COMBINED_SEED</span><span class="p">:</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">budget</span> <span class="o">!=</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">seed</span> <span class="o">!=</span> <span class="n">trial</span><span class="o">.</span><span class="n">seed</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">statuses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statuses</span><span class="p">,</span> <span class="n">Status</span><span class="p">):</span>
+                    <span class="n">statuses</span> <span class="o">=</span> <span class="p">[</span><span class="n">statuses</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">statuses</span><span class="p">:</span>
                     <span class="k">continue</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="n">config_id</span> <span class="o">:=</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
@@ -1213,7 +1243,9 @@
 
 <div class="viewcode-block" id="AbstractRun.get_num_configs">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_num_configs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_num_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_num_configs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Count the number of configurations stored in this run with a specific budget.</span>
 
@@ -1223,6 +1255,10 @@
 <span class="sd">            The budget for which to count the configurations.</span>
 <span class="sd">            If not provided, counts all configurations.</span>
 <span class="sd">            Default is None.</span>
+<span class="sd">        seed : Optional[int]</span>
+<span class="sd">            The seed for which to count the configurations.</span>
+<span class="sd">            If not provided, counts all configurations.</span>
+<span class="sd">            Default is None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1230,7 +1266,7 @@
 <span class="sd">            The number of all configurations with a given budget.</span>
 <span class="sd">            If budget is None, counts all configurations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="AbstractRun.get_budget">
@@ -1355,6 +1391,43 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_highest_budget</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
 
 
+<div class="viewcode-block" id="AbstractRun.get_seeds">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_seeds">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_seeds</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">human</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">include_combined</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the seeds from the meta data.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        human : bool, optional</span>
+<span class="sd">            Make the output better readable. By default False.</span>
+<span class="sd">        include_combined : bool, optional</span>
+<span class="sd">            If true, return combined seed as well. By default True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Union[int, str]]</span>
+<span class="sd">            List of seeds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">include_combined</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">COMBINED_SEED</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+            <span class="n">seeds</span> <span class="o">+=</span> <span class="p">[</span><span class="n">COMBINED_SEED</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">human</span><span class="p">:</span>
+            <span class="n">readable_seeds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">COMBINED_SEED</span><span class="p">:</span>
+                    <span class="n">readable_seeds</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Combined&quot;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">readable_seeds</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span>
+
+            <span class="k">return</span> <span class="n">readable_seeds</span>
+
+        <span class="k">return</span> <span class="n">seeds</span></div>
+
+
     <span class="k">def</span> <span class="nf">_process_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Process the costs to get rid of NaNs.</span>
@@ -1382,46 +1455,55 @@
 
         <span class="k">return</span> <span class="n">new_costs</span>
 
-<div class="viewcode-block" id="AbstractRun.get_costs">
-<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_costs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_costs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<div class="viewcode-block" id="AbstractRun.get_avg_costs">
+<a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_avg_costs">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_avg_costs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the costs of a configuration.</span>
+<span class="sd">        Get average costs over all seeds for a config.</span>
 
-<span class="sd">        In case of multi-objective, multiple costs are</span>
-<span class="sd">        returned.</span>
+<span class="sd">        Optionally, only configurations which were evaluated on the passed budget and stati</span>
+<span class="sd">        are considered.</span>
+
+<span class="sd">        In case of multi-objective, multiple costs are returned in the form of a list.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config_id : int</span>
 <span class="sd">            Configuration id to get the costs for.</span>
 <span class="sd">        budget : Optional[Union[int, float]]</span>
-<span class="sd">            Budget to get the costs from the configuration id for. By default, None. If budget is</span>
-<span class="sd">            None, the highest budget is chosen.</span>
+<span class="sd">            Budget to get the costs from the configuration id for. If budget is</span>
+<span class="sd">            None, the highest budget is chosen. By default None.</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
+<span class="sd">            Only selected stati are considered. If no status is given, all stati are considered.</span>
+<span class="sd">            By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        List[float]</span>
-<span class="sd">            List of costs from the associated configuration.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        ValueError</span>
-<span class="sd">            If the configuration id is not found.</span>
-<span class="sd">        RuntimeError</span>
-<span class="sd">            If the budget was not evaluated for the passed config id.</span>
+<span class="sd">            List of average cost values for the given config_id and budget.</span>
+<span class="sd">        List[float]</span>
+<span class="sd">            List of std cost values for the given config_id and budget.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+        <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Configuration id was not found.&quot;</span><span class="p">)</span>
+        <span class="c1"># Budget might not be evaluated</span>
+        <span class="n">all_costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="n">statuses</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">all_costs</span><span class="p">:</span>
+            <span class="n">config_costs</span> <span class="o">=</span> <span class="n">all_costs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No costs available for config_id </span><span class="si">{</span><span class="n">config_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 
-        <span class="n">costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">costs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2"> was not evaluated for config id </span><span class="si">{</span><span class="n">config_id</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">costs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
+        <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">)):</span>
+            <span class="n">costs</span> <span class="o">=</span> <span class="p">[</span><span class="n">values</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">config_costs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">avg_costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">costs</span><span class="p">)))</span>
+            <span class="n">std_costs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">costs</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span></div>
 
 
 <div class="viewcode-block" id="AbstractRun.get_all_costs">
@@ -1430,26 +1512,35 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">selected_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get all costs in the history with their config ids.</span>
+<span class="sd">        Get all costs in the history with their config ids and seeds.</span>
 
-<span class="sd">        Only configs from the given budget</span>
-<span class="sd">        and statuses are returned.</span>
+<span class="sd">        Optionally, only configurations which were evaluated on the passed budget, seed, and stati</span>
+<span class="sd">        are considered.</span>
+
+<span class="sd">        In case of multi-objective, multiple costs are returned in the form of a list.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            Budget to select the costs. If no budget is given, the highest budget is chosen.</span>
-<span class="sd">            By default, None.</span>
+<span class="sd">            By default None.</span>
 <span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
 <span class="sd">            Only selected stati are considered. If no status is given, all stati are considered.</span>
 <span class="sd">            By default None.</span>
+<span class="sd">        seed : Optional[int], optional</span>
+<span class="sd">            Seed to select the costs. If no seed is given, all seeds are considered.</span>
+<span class="sd">            By default None.</span>
+<span class="sd">        selected_ids: Optional[List[int]], optional</span>
+<span class="sd">            If set, only history ids in the list will be considered. By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        Dict[int, List[float]]</span>
-<span class="sd">            Costs with their config ids.</span>
+<span class="sd">        Dict[int, Dict[int, List[float]]]</span>
+<span class="sd">            Config ids and seeds with their corresponding list of costs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
@@ -1457,13 +1548,21 @@
         <span class="c1"># In case of COMBINED_BUDGET, only the costs of the highest found budget are kept</span>
         <span class="n">highest_evaluated_budget</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+        <span class="n">results</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">selected_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">history</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_ids</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">history</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span>
+        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">history</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">statuses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statuses</span><span class="p">,</span> <span class="n">Status</span><span class="p">):</span>
                     <span class="n">statuses</span> <span class="o">=</span> <span class="p">[</span><span class="n">statuses</span><span class="p">]</span>
 
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">statuses</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">seed</span> <span class="o">!=</span> <span class="n">seed</span><span class="p">:</span>
                     <span class="k">continue</span>
 
             <span class="k">if</span> <span class="n">budget</span> <span class="o">==</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
@@ -1473,30 +1572,39 @@
                 <span class="n">latest_budget</span> <span class="o">=</span> <span class="n">highest_evaluated_budget</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span>
                 <span class="c1"># Only the highest budget is kept</span>
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">&gt;=</span> <span class="n">latest_budget</span><span class="p">:</span>
-                    <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>
+                    <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                        <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">][</span><span class="n">trial</span><span class="o">.</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
                         <span class="k">continue</span>
-
-                <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>  <span class="c1"># self._process_costs(trial.costs)</span>
-
+                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">][</span><span class="n">trial</span><span class="o">.</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span>
         <span class="k">return</span> <span class="n">results</span></div>
 
 
 <div class="viewcode-block" id="AbstractRun.get_status">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_status">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">get_status</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Status</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the status of a configuration.</span>
+<span class="sd">        Return the status of a trial (i.e. configuration, budget and seed).</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        config_id : int</span>
 <span class="sd">            Configuration id to get the status for.</span>
+<span class="sd">        seed : Optional[int]</span>
+<span class="sd">            Seed to get the status from the configuration id for.</span>
 <span class="sd">        budget : Optional[Union[int, float]]</span>
-<span class="sd">            Budget to get the status from the configuration id for. By default, None. If budget is</span>
-<span class="sd">            None, the highest budget is chosen.</span>
+<span class="sd">            Budget to get the status from the configuration id for. If budget is</span>
+<span class="sd">            None, the highest budget is chosen. By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1517,7 +1625,7 @@
         <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Configuration id was not found.&quot;</span><span class="p">)</span>
 
-        <span class="n">trial_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+        <span class="n">trial_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
 
         <span class="c1"># Unfortunately, it is necessary to iterate through the history to find the status</span>
         <span class="c1"># TODO: Cache the stati</span>
@@ -1534,19 +1642,31 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">selected_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the incumbent with its normalized cost.</span>
+<span class="sd">        Return the incumbent with its normalized objective value.</span>
+
+<span class="sd">        The incumbent is the configuration with the lowest normalized objective value.</span>
+
+<span class="sd">        Optionally, only configurations which were evaluated on the passed budget, seed,</span>
+<span class="sd">        and stati are considered.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]]</span>
-<span class="sd">            Considered objectives. By default, None. If None, all objectives are considered.</span>
-<span class="sd">        budget : Optional[Union[int, float]]</span>
-<span class="sd">            Considered budget. By default, None. If None, the highest budget is chosen.</span>
-<span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
-<span class="sd">            Considered statuses. By default, None. If None, all stati are considered.</span>
+<span class="sd">        objectives : Optional[Union[Objective, List[Objective]]], optional</span>
+<span class="sd">            Considered objectives. If None, all objectives are considered. By default None.</span>
+<span class="sd">        budget : Optional[Union[int, float]], optional</span>
+<span class="sd">            Considered budget. If None, the highest budget is chosen. By default None.</span>
+<span class="sd">        seed : Optional[int], optional</span>
+<span class="sd">            Considered seed. If no seed is given, all seeds are considered. By default None.</span>
+<span class="sd">        statuses : Optional[Union[Status, List[Status]]], optional</span>
+<span class="sd">            Considered stati. If None, all stati are considered. By default None.</span>
+<span class="sd">        selected_ids: Optional[List[int]], optional</span>
+<span class="sd">            If set, only ids in selected_ids will be considered. This can for example be</span>
+<span class="sd">            useful if only ids up to a certain end-time shall be considered. By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1558,23 +1678,73 @@
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If no incumbent was found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">min_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">Objective</span><span class="p">):</span>
+            <span class="n">single_objective</span> <span class="o">=</span> <span class="n">objectives</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">single_objective</span> <span class="o">=</span> <span class="n">objectives</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">single_objective</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">single_objective</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">single_objective</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
+            <span class="n">best_cost</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">best_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
         <span class="n">best_config_id</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span>
+            <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="n">statuses</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">selected_ids</span><span class="o">=</span><span class="n">selected_ids</span>
+        <span class="p">)</span>
 
-            <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">min_cost</span><span class="p">:</span>
-                <span class="n">min_cost</span> <span class="o">=</span> <span class="n">cost</span>
-                <span class="n">best_config_id</span> <span class="o">=</span> <span class="n">config_id</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No data available, thus no incumbent found.&quot;</span><span class="p">)</span>
+
+        <span class="n">seed_count</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">seed_costs_dict</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">seed_count</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seed_costs_dict</span><span class="p">)</span>
+        <span class="n">max_seed_count</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">seed_count</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">seed_costs_dict</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># If there are multiple seeds, only configurations evaluated on all seeds are</span>
+            <span class="c1"># considered. From these configurations, the one with the highest average objective</span>
+            <span class="c1"># value over the seeds is considered as the incumbent.</span>
+            <span class="k">if</span> <span class="n">max_seed_count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seed_costs_dict</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_seed_count</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Get average over all seeds</span>
+                <span class="n">config_costs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">max_seed_count</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">())])</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">seed_costs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seed_costs_dict</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                    <span class="n">config_costs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">seed_costs</span>
+                <span class="n">avg_cost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">config_costs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># If there is only one seed, the costs can be used directly</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">avg_cost</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">seed_costs_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()][</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># If there are multiple objectives, the costs are merged to one cost value</span>
+            <span class="k">if</span> <span class="n">single_objective</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">avg_cost</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="n">avg_cost</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_objective_id</span><span class="p">(</span><span class="n">single_objective</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">single_objective</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">single_objective</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">best_cost</span><span class="p">:</span>
+                    <span class="n">best_cost</span> <span class="o">=</span> <span class="n">cost</span>
+                    <span class="n">best_config_id</span> <span class="o">=</span> <span class="n">config_id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">best_cost</span><span class="p">:</span>
+                    <span class="n">best_cost</span> <span class="o">=</span> <span class="n">cost</span>
+                    <span class="n">best_config_id</span> <span class="o">=</span> <span class="n">config_id</span>
 
         <span class="k">if</span> <span class="n">best_config_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No incumbent found.&quot;</span><span class="p">)</span>
 
         <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config</span><span class="p">(</span><span class="n">best_config_id</span><span class="p">)</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-        <span class="n">normalized_cost</span> <span class="o">=</span> <span class="n">min_cost</span>
+        <span class="n">normalized_cost</span> <span class="o">=</span> <span class="n">best_cost</span>
 
         <span class="k">return</span> <span class="n">config</span><span class="p">,</span> <span class="n">normalized_cost</span></div>
 
@@ -1596,7 +1766,7 @@
 <span class="sd">            The costs, which should be merged. Must be the same length as the original number of</span>
 <span class="sd">            objectives.</span>
 <span class="sd">        objectives : Optional[List[Objective]]</span>
-<span class="sd">            The considered objectives to the costs. By default, None.</span>
+<span class="sd">            The considered objectives to the costs. By default None.</span>
 <span class="sd">            If None, all objectives are considered. The passed objectives can differ from the</span>
 <span class="sd">            original number objectives.</span>
 
@@ -1692,10 +1862,13 @@
 <div class="viewcode-block" id="AbstractRun.get_trajectory">
 <a class="viewcode-back" href="../../api/deepcave.runs.html#deepcave.runs.AbstractRun.get_trajectory">[docs]</a>
     <span class="k">def</span> <span class="nf">get_trajectory</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">objective</span><span class="p">:</span> <span class="n">Objective</span><span class="p">,</span>
+        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the trajectory of the given objective and budget.</span>
+<span class="sd">        Calculate the trajectory of the given objective, budget, and seed.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1704,6 +1877,9 @@
 <span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            Budget to calculate the trajectory for. If no budget is given, then the highest budget</span>
 <span class="sd">            is chosen. By default None.</span>
+<span class="sd">        seed : Optional[int], optional</span>
+<span class="sd">            Seed to calculate the trajectory for. If no seed is given, then all seeds are</span>
+<span class="sd">            considered. By default None.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1723,8 +1899,6 @@
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
 
-        <span class="n">objective_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objective_id</span><span class="p">(</span><span class="n">objective</span><span class="p">)</span>
-
         <span class="n">costs_mean</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">costs_std</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1732,10 +1906,10 @@
         <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="n">order</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># Sort self.history by end_time</span>
+
+        <span class="c1"># Sort self.history by end-time</span>
         <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">):</span>
             <span class="n">order</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">id</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">end_time</span><span class="p">))</span>
-
         <span class="n">order</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">tup</span><span class="p">:</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># Important: Objective can be minimized or maximized</span>
@@ -1744,17 +1918,19 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">current_cost</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+        <span class="c1"># Iterate over the history ordered by end-time and calculate the current incumbent</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">order</span><span class="p">):</span>
             <span class="n">trial</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
 
-            <span class="c1"># All budgets should should be used</span>
-            <span class="k">if</span> <span class="n">budget</span> <span class="o">!=</span> <span class="n">COMBINED_BUDGET</span><span class="p">:</span>
-                <span class="c1"># Only consider selected/last budget</span>
-                <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span> <span class="o">!=</span> <span class="n">budget</span><span class="p">:</span>
-                    <span class="k">continue</span>
-
-            <span class="n">cost</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Get the incumbent over all trials up to this point</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span>
+                    <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span>
+                    <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+                    <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                    <span class="n">selected_ids</span><span class="o">=</span><span class="p">[</span><span class="n">selected_id</span> <span class="k">for</span> <span class="n">selected_id</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">order</span><span class="p">[:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]],</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
                 <span class="k">continue</span>
 
             <span class="c1"># Now it&#39;s important to check whether the cost was minimized or maximized</span>
@@ -1857,6 +2033,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">statuses</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Status</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">specific</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">include_config_ids</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1871,20 +2048,23 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        objectives : Optional[Union[Objective, List[Objective]]]</span>
-<span class="sd">            Which objectives should be considered. If None, all objectives are</span>
-<span class="sd">            considered. By default, None.</span>
+<span class="sd">            Which objectives should be considered. If None, all objectives are considered.</span>
+<span class="sd">            By default None.</span>
 <span class="sd">        budget : Optional[List[Status]]</span>
-<span class="sd">            Which budget should be considered. By default, None. If None, only the highest budget</span>
-<span class="sd">            is considered.</span>
+<span class="sd">            Which budget should be considered. If None, only the highest budget is considered.</span>
+<span class="sd">            By default None.</span>
+<span class="sd">        seed: Optional[int]</span>
+<span class="sd">            Which seed should be considered. If None, all seeds are considered.</span>
+<span class="sd">            By default None.</span>
 <span class="sd">        statuses : Optional[Union[Status, List[Status]]]</span>
-<span class="sd">            Which statuses should be considered. By default, None. If None, all statuses are</span>
-<span class="sd">            considered.</span>
+<span class="sd">            Which stati should be considered. If None, all stati are considered.</span>
+<span class="sd">            By default None.</span>
 <span class="sd">        specific : bool</span>
 <span class="sd">            Whether a specific encoding should be used. This encoding is compatible with pyrfr.</span>
 <span class="sd">            A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.</span>
 <span class="sd">            By default False.</span>
 <span class="sd">        include_config_ids : bool</span>
-<span class="sd">            Whether to include configuration ids. By default, False.</span>
+<span class="sd">            Whether to include configuration ids. By default False.</span>
 <span class="sd">        include_combined_cost : bool, optional</span>
 <span class="sd">            Whether to include combined cost. Note that the combined cost is calculated by the</span>
 <span class="sd">            passed objectives only. By default False.</span>
@@ -1909,24 +2089,25 @@
         <span class="n">x_set</span><span class="p">,</span> <span class="n">y_set</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="n">config_ids</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config_costs</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="n">specific</span><span class="p">)</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">seed</span><span class="p">,</span> <span class="n">costs</span> <span class="ow">in</span> <span class="n">config_costs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="n">specific</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="c1"># Add all objectives</span>
-            <span class="k">for</span> <span class="n">objective</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">:</span>
-                <span class="n">objective_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objective_id</span><span class="p">(</span><span class="n">objective</span><span class="p">)</span>
-                <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]]</span>
+                <span class="c1"># Add all objectives</span>
+                <span class="k">for</span> <span class="n">objective</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">:</span>
+                    <span class="n">objective_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_objective_id</span><span class="p">(</span><span class="n">objective</span><span class="p">)</span>
+                    <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">costs</span><span class="p">[</span><span class="n">objective_id</span><span class="p">]]</span>
 
-            <span class="c1"># Add combined cost</span>
-            <span class="k">if</span> <span class="n">include_combined_cost</span><span class="p">:</span>
-                <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)]</span>
+                <span class="c1"># Add combined cost</span>
+                <span class="k">if</span> <span class="n">include_combined_cost</span><span class="p">:</span>
+                    <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">merge_costs</span><span class="p">(</span><span class="n">costs</span><span class="p">,</span> <span class="n">objectives</span><span class="p">)]</span>
 
-            <span class="n">x_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-            <span class="n">y_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-            <span class="n">config_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+                <span class="n">x_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">y_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">config_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
 
         <span class="n">x_set_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_set</span><span class="p">)</span>
         <span class="n">y_set_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_set</span><span class="p">)</span>
@@ -1997,6 +2178,7 @@
     <span class="n">configspace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">objectives</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">budgets</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">seeds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Check the passed runs on equality based on the selected runs.</span>
@@ -2008,13 +2190,15 @@
 <span class="sd">    runs : list[AbstractRun]</span>
 <span class="sd">        Runs to check for equality.</span>
 <span class="sd">    meta : bool, optional</span>
-<span class="sd">        Meta-Data excluding objectives and budgets, by default True.</span>
+<span class="sd">        Meta-Data excluding objectives and budgets, by default False.</span>
 <span class="sd">    configspace : bool, optional</span>
 <span class="sd">        Wheter to include the configuration space, by default True.</span>
 <span class="sd">    objectives : bool, optional</span>
 <span class="sd">        Wheter to include the objectives, by default True.</span>
 <span class="sd">    budgets : bool, optional</span>
 <span class="sd">        Whether to include the budgets, by default True.</span>
+<span class="sd">    seeds : bool, optional</span>
+<span class="sd">        Whether to include the seeds, by default False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -2108,6 +2292,18 @@
                     <span class="p">)</span>
 
         <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span>
+
+    <span class="c1"># Check if seeds are the same</span>
+    <span class="k">if</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="n">runs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_seeds</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+            <span class="n">s2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_seeds</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">s1</span> <span class="o">!=</span> <span class="n">s2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotMergeableError</span><span class="p">(</span><span class="s2">&quot;Seeds of runs are not equal.&quot;</span><span class="p">,</span> <span class="n">RunInequality</span><span class="o">.</span><span class="n">INEQ_SEED</span><span class="p">)</span>
+
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;meta&quot;</span><span class="p">][</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
 

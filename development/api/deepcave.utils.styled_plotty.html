@@ -817,7 +817,7 @@ For this, it uses plotly as well as dash.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_discrete_heatmap" title="deepcave.utils.styled_plotty.get_discrete_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_discrete_heatmap</span></code></a>(x, y, values, labels)</p></td>
 <td><p>Generate a discrete colorscale from a (nested) list or numpy array of values.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="deepcave.utils.styled_plotty.get_hovertext_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hovertext_from_config</span></code></a>(run, config_id)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="deepcave.utils.styled_plotty.get_hovertext_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hovertext_from_config</span></code></a>(run, config_id[, ...])</p></td>
 <td><p>Generate hover text with metrics for a configuration.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hyperparameter_ticks" title="deepcave.utils.styled_plotty.get_hyperparameter_ticks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hyperparameter_ticks</span></code></a>(hp[, ...])</p></td>
@@ -902,7 +902,7 @@ The register_input function is located in the Plugin class.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.get_hovertext_from_config">
-<span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_hovertext_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_hovertext_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_hovertext_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_hovertext_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="Link to this definition">¶</a></dt>
 <dd><p>Generate hover text with metrics for a configuration.</p>
 <p>The method gets information about a given configuration, including a link, its objectives,
 budget, costs and hyperparameters.</p>
@@ -911,6 +911,8 @@ budget, costs and hyperparameters.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run instance</p></li>
 <li><p><strong>config_id</strong> (<em>int</em>) – The id of the configuration</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the hovertext for. If no budget is given, the highest budget is chosen.
+By default None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

@@ -714,6 +714,8 @@
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
+<span class="kn">import</span> <span class="nn">itertools</span>
+
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
@@ -837,23 +839,17 @@
 <span class="sd">            A list of the created tables of the overview.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Get best cost across all objectives, highest budget</span>
-        <span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">()</span>
+        <span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">])</span>
         <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">incumbent</span><span class="p">)</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
 
-        <span class="n">best_performance</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="c1"># Budget might not be evaluated</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="n">costs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objective_names</span><span class="p">))]</span>
-
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">costs</span><span class="p">):</span>
-            <span class="n">best_performance</span><span class="p">[</span><span class="n">objective_names</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="n">cost</span>
+        <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_avg_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
 
         <span class="n">best_performances</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">best_performance</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">best_performances</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)):</span>
+            <span class="n">best_performances</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">avg_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">std_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">objective_names</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">]</span>
 
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">prefix</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">Group</span><span class="p">):</span>
@@ -926,14 +922,15 @@
         <span class="c1"># Budgets</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="c1"># Statistics</span>
+        <span class="c1"># Seeds</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_seeds</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Budget-seed combinations</span>
+        <span class="n">budget_seed_combinations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="n">seeds</span><span class="p">))</span>
+
+        <span class="c1"># Setup statistics dict for bar plot</span>
         <span class="n">status_statistics</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Status</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">status_details</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;Configuration ID&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Budget&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;Error&quot;</span><span class="p">:</span> <span class="p">[],</span>
-        <span class="p">}</span>
+
         <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_statistics</span><span class="p">:</span>
@@ -942,26 +939,38 @@
                 <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">Status</span><span class="p">:</span>
                     <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">status_statistics_total</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">status_budget</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Setup details dict for to collect information on failed trials</span>
+        <span class="n">status_details</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Configuration ID&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Budget&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Seed&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Status&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">&quot;Error&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+
+        <span class="n">status_count</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">budget_count</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">len_trials</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trials</span><span class="p">():</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">seed</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">seed</span>
 
             <span class="n">len_trials</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># Status count over budget for bar plot</span>
             <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="c1"># For text information</span>
-            <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_statistics_total</span><span class="p">:</span>
-                <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c1"># Total status count for text information</span>
+            <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_count</span><span class="p">:</span>
+                <span class="n">status_count</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">status_count</span><span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="c1"># For text information</span>
-            <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="p">:</span>
-                <span class="n">status_budget</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="c1"># Total budget count for text information</span>
+            <span class="k">if</span> <span class="n">budget</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">budget_count</span><span class="p">:</span>
+                <span class="n">budget_count</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">status_budget</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">budget_count</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
             <span class="c1"># Add to table data</span>
             <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
@@ -971,6 +980,7 @@
                     <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="n">link</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;_blank&quot;</span><span class="p">)</span>
                 <span class="p">]</span>
                 <span class="n">status_details</span><span class="p">[</span><span class="s2">&quot;Budget&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">budget</span><span class="p">]</span>
+                <span class="n">status_details</span><span class="p">[</span><span class="s2">&quot;Seed&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">seed</span><span class="p">]</span>
                 <span class="n">status_details</span><span class="p">[</span><span class="s2">&quot;Status&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">to_text</span><span class="p">()]</span>
 
                 <span class="k">if</span> <span class="s2">&quot;traceback&quot;</span> <span class="ow">in</span> <span class="n">trial</span><span class="o">.</span><span class="n">additional</span><span class="p">:</span>
@@ -979,11 +989,12 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">status_details</span><span class="p">[</span><span class="s2">&quot;Error&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;No traceback available.&quot;</span><span class="p">]</span>
 
-        <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="n">status_statistics_total</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">]</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="c1"># Successful / unsuccessful trials rate for text information</span>
+        <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="n">status_count</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">]</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span>
         <span class="n">successful_trials_rate</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">successful_trials_rate</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="n">trials_rates</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">status</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">status_statistics_total</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">status</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">status_count</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -1006,47 +1017,48 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">unsuccessful_trials_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="n">status_budget_values</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">count</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="c1"># Budget rate for text information</span>
+        <span class="n">budget_rate</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">count</span> <span class="o">/</span> <span class="n">len_trials</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;%&quot;</span> <span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">budget_count</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">]</span>
-        <span class="n">status_budget_values_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status_budget_values</span><span class="p">)</span>
-        <span class="n">status_budget_keys_text_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">status_budget</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
-        <span class="n">status_budget_keys_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">status_budget_keys_text_list</span><span class="p">)</span>
+        <span class="n">budget_rate_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">budget_rate</span><span class="p">)</span>
+        <span class="n">budget_keys_text_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">budget_count</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+        <span class="n">budget_keys_text</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">budget_keys_text_list</span><span class="p">)</span>
 
+        <span class="c1"># Text information</span>
         <span class="n">status_text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        Taking all evaluated trials into account, </span><span class="si">{</span><span class="n">successful_trials_rate</span><span class="si">}</span><span class="s2">% have been successful.</span>
 <span class="s2">        </span><span class="si">{</span><span class="n">unsuccessful_trials_text</span><span class="si">}</span>
-<span class="s2">        Moreover, </span><span class="si">{</span><span class="n">status_budget_values_text</span><span class="si">}</span><span class="s2"> of the configurations were evaluated on budget</span>
-<span class="s2">        </span><span class="si">{</span><span class="n">status_budget_keys_text</span><span class="si">}</span><span class="s2">, respectively.</span>
+<span class="s2">        Moreover, </span><span class="si">{</span><span class="n">budget_rate_text</span><span class="si">}</span><span class="s2"> of the trials were evaluated on budget</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">budget_keys_text</span><span class="si">}</span><span class="s2">, respectively.</span>
 <span class="s2">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Now remove status that are not used</span>
+        <span class="c1"># Status statistics for bar plot: remove status that are not used</span>
         <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">status_statistics</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="k">for</span> <span class="n">status</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
                 <span class="k">if</span> <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">status</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="k">del</span> <span class="n">status_statistics</span><span class="p">[</span><span class="n">budget</span><span class="p">][</span><span class="n">status</span><span class="p">]</span>
 
-        <span class="c1"># It is interesting to see on which budget a configuration was evaluated</span>
+        <span class="c1"># Config statistics for heatmap showing on which budget / seed a configuration was evaluated</span>
         <span class="n">config_statistics</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">configs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">()</span>
         <span class="n">config_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-        <span class="n">z_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">config_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-        <span class="n">z_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">config_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">budgets</span><span class="p">)))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">z_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">config_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">budget_seed_combinations</span><span class="p">)))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">z_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">config_ids</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">budget_seed_combinations</span><span class="p">)))</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">budgets</span><span class="p">):</span>
-                <span class="n">trial_key</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">budget_seed_combinations</span><span class="p">):</span>
+                <span class="n">trial_key</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trial_key</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
                 <span class="n">trial</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_trial</span><span class="p">(</span><span class="n">trial_key</span><span class="p">)</span>
 
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">NOT_EVALUATED</span>
                 <span class="k">if</span> <span class="n">trial</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">status</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span>
-
                 <span class="n">z_values</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">value</span>
                 <span class="n">z_labels</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span><span class="o">.</span><span class="n">to_text</span><span class="p">()</span>
 
-        <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">budgets</span>
+        <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">budget_seed_combinations</span>
         <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config_ids</span>
         <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;Z_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_values</span>
         <span class="n">config_statistics</span><span class="p">[</span><span class="s2">&quot;Z_labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_labels</span>
@@ -1092,7 +1104,7 @@
             <span class="n">stats_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
 
         <span class="n">stats_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
-            <span class="n">legend</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget&quot;</span><span class="p">},</span>
+            <span class="n">legend</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget (Seed)&quot;</span><span class="p">},</span>
             <span class="n">barmode</span><span class="o">=</span><span class="s2">&quot;group&quot;</span><span class="p">,</span>
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Status&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of configurations&quot;</span><span class="p">),</span>
@@ -1103,7 +1115,7 @@
 
         <span class="n">config_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
             <span class="n">legend</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Status&quot;</span><span class="p">},</span>
-            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget (Seed)&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Configuration ID&quot;</span><span class="p">),</span>
             <span class="n">margin</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
         <span class="p">)</span>

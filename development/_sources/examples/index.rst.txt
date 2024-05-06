@@ -9,6 +9,9 @@ Examples
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
@@ -26,6 +29,7 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -78,6 +82,8 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
     </div>
 
 
+.. thumbnail-parent-div-close
+
 .. raw:: html
 
     </div>
@@ -95,6 +101,7 @@ AutoML runs.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -146,6 +153,8 @@ AutoML runs.
       <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via PyTorch</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

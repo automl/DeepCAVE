@@ -1163,7 +1163,9 @@
 
 <div class="viewcode-block" id="get_hovertext_from_config">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hovertext_from_config">[docs]</a>
-<span class="k">def</span> <span class="nf">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">get_hovertext_from_config</span><span class="p">(</span>
+    <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate hover text with metrics for a configuration.</span>
 
@@ -1176,6 +1178,9 @@
 <span class="sd">        The run instance</span>
 <span class="sd">    config_id : int</span>
 <span class="sd">        The id of the configuration</span>
+<span class="sd">    budget : Optional[Union[int, float]]</span>
+<span class="sd">            Budget to get the hovertext for. If no budget is given, the highest budget is chosen.</span>
+<span class="sd">            By default None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1195,13 +1200,26 @@
 
     <span class="c1"># It&#39;s also nice to see the metrics</span>
     <span class="n">objectives</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
-    <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-    <span class="n">costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">budget</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">highest_budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">highest_budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives&lt;/b&gt; (on highest found budget </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">highest_budget</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">)&lt;br&gt;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives&lt;/b&gt; (on budget </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">)&lt;br&gt;&quot;</span>
 
-    <span class="k">assert</span> <span class="n">budget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-    <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;Objectives&lt;/b&gt; (on highest found budget </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">)&lt;br&gt;&quot;</span>
-    <span class="k">for</span> <span class="n">objective</span><span class="p">,</span> <span class="n">cost</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">costs</span><span class="p">):</span>
-        <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">avg_c</span><span class="p">,</span> <span class="n">std_c</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_avg_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>
+        <span class="n">avg_costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">avg_c</span><span class="p">)</span>
+        <span class="n">std_costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">std_c</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">avg_costs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">))]</span>
+        <span class="n">std_costs</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">))]</span>
+
+    <span class="k">for</span> <span class="n">objective</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">std_cost</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">std_cost</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">string</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cost</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">std_cost</span><span class="si">}</span><span class="s2">&lt;br&gt;&quot;</span>
 
     <span class="n">string</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br&gt;&lt;b&gt;Hyperparameters&lt;/b&gt;:&lt;br&gt;&quot;</span>
 

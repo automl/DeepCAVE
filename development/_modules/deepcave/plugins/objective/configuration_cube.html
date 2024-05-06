@@ -924,10 +924,10 @@
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_value</span><span class="p">)</span>
         <span class="n">configs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_configs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n_configs_value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">n_configs_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">n_configs_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">n_configs_value</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">n_configs_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">n_configs_value</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">):</span>
+                <span class="n">n_configs_value</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span>
 
         <span class="c1"># Restrict to three hyperparameters</span>
         <span class="n">selected_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
@@ -946,8 +946,8 @@
             <span class="p">},</span>
             <span class="s2">&quot;n_configs&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="s2">&quot;marks&quot;</span><span class="p">:</span> <span class="n">get_slider_marks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)))),</span>
+                <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">),</span>
+                <span class="s2">&quot;marks&quot;</span><span class="p">:</span> <span class="n">get_slider_marks</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))),</span>
                 <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">n_configs_value</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1054,6 +1054,9 @@
         <span class="n">n_configs</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_configs&quot;</span><span class="p">]</span>
         <span class="n">objective_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">]</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">objective_id</span><span class="p">)</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">to_list</span><span class="p">(),</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;str&quot;</span><span class="p">)</span>
 
         <span class="c1"># Limit to n_configs</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_configs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))]</span>
@@ -1119,7 +1122,9 @@
                 <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">,</span>
                 <span class="s2">&quot;colorbar&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;thickness&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">},</span>
             <span class="p">},</span>
-            <span class="s2">&quot;hovertext&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span><span class="p">],</span>
+            <span class="s2">&quot;hovertext&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span>
+            <span class="p">],</span>
             <span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;colorbar&quot;</span><span class="p">:</span> <span class="n">costs</span><span class="p">},</span>
             <span class="s2">&quot;hoverinfo&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
         <span class="p">}</span>

@@ -1061,6 +1061,7 @@
 <span class="sd">            The plotly figure of the footprint performance and area.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">show_borders</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_borders&quot;</span><span class="p">]</span>
         <span class="n">show_supports</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_supports&quot;</span><span class="p">]</span>
 
@@ -1127,7 +1128,8 @@
                     <span class="n">marker_symbol</span><span class="o">=</span><span class="n">marker_symbol</span><span class="p">,</span>
                     <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">get_color</span><span class="p">(</span><span class="n">color_id</span><span class="p">)},</span>
                     <span class="n">hovertext</span><span class="o">=</span><span class="p">[</span>
-                        <span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span>
+                        <span class="n">get_hovertext_from_config</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_ids</span>
                     <span class="p">],</span>
                     <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span>
                 <span class="p">)</span>

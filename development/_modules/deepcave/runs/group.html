@@ -766,10 +766,17 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">attributes</span> <span class="o">=</span> <span class="n">check_equality</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="p">)</span>
             <span class="c1"># abstract run requires meta to contain budgets / objectives</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">],</span> <span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                <span class="nb">set</span><span class="p">([</span><span class="n">seed</span> <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">runs</span> <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">run</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()])</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;configspace&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">objectives</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">budgets</span> <span class="o">=</span> <span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;budgets&quot;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">seeds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span>
 
             <span class="c1"># New config ids are needed</span>
             <span class="n">current_config_id</span> <span class="o">=</span> <span class="mi">0</span>
@@ -805,7 +812,7 @@
                     <span class="c1"># Deep copy trial</span>
                     <span class="n">trial</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
 
-                    <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()</span>
+                    <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">get_key</span><span class="p">()</span>
 
                     <span class="c1"># Config id might have changed</span>
                     <span class="n">new_config_id</span> <span class="o">=</span> <span class="n">config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
