@@ -228,7 +228,11 @@ class BudgetCorrelation(DynamicPlugin):
                 [
                     dbc.Tab(
                         dcc.Graph(
-                            id=register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT}
+                            id=register("graph", "figure"),
+                            style={"height": Config.FIGURE_HEIGHT},
+                            config={
+                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                            },
                         ),
                         label="Graph",
                     ),
