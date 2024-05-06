@@ -339,6 +339,7 @@ class FootPrint(StaticPlugin):
             The plotly figure of the footprint performance and area.
         """
         objective = run.get_objective(inputs["objective_id"])
+        budget = run.get_budget(inputs["budget_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
 
@@ -405,7 +406,8 @@ class FootPrint(StaticPlugin):
                     marker_symbol=marker_symbol,
                     marker={"size": size, "color": get_color(color_id)},
                     hovertext=[
-                        get_hovertext_from_config(run, config_id) for config_id in config_ids
+                        get_hovertext_from_config(run, config_id, budget)
+                        for config_id in config_ids
                     ],
                     hoverinfo="text",
                 )

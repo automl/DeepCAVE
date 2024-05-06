@@ -13,6 +13,11 @@ deviation too.
     The configuration spaces of the selected runs should be equal. Otherwise, a good comparison
     is not possible. They can, however, still be displayed in the same graph.
 
+.. note::
+    For non-deterministic runs (i.e. multiple seeds evaluated per configuration), only
+    configurations evaluated on the maximum number of seeds are considered to choose the best
+    configuration at a given time from.
+
 This plugin is capable of answering following questions:
 
 * Does the optimizer converge?

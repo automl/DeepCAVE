@@ -10,11 +10,12 @@ The module provides a corresponding dynamic plugin.
     - Configurations: Visualize the characteristics of a configuration.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
+import numpy as np
 import pandas as pd
 import plotly.graph_objs as go
 from dash import dcc, html
@@ -22,7 +23,8 @@ from dash import dcc, html
 from deepcave.config import Config
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
-from deepcave.runs import AbstractRun, Status
+from deepcave.runs import AbstractRun
+from deepcave.runs.status import Status
 from deepcave.utils.compression import deserialize, serialize
 from deepcave.utils.layout import create_table, get_slider_marks
 from deepcave.utils.styled_plotty import (
@@ -185,6 +187,7 @@ class Configurations(DynamicPlugin):
         origin = run.get_origin(selected_config_id)
         objectives = run.get_objectives()
         budgets = run.get_budgets(include_combined=False)
+        seeds = run.get_seeds(include_combined=False)
 
         overview_table_data = {
             "Key": ["Selected Configuration", "Origin"],
@@ -199,31 +202,46 @@ class Configurations(DynamicPlugin):
                 str(original_run.path) + f" (Configuration ID: {original_config_id})"
             ]
 
-        performances: Dict[str, Dict[Union[int, float], float]] = {}
+        performances: Dict[str, Dict[Union[int, float], Optional[Union[float, List[float]]]]] = {}
         performances_table_data: Dict[str, List[Any]] = {"Budget": []}
         for objective_id, objective in enumerate(objectives):
             if objective.name not in performances:
                 performances[objective.name] = {}
                 performances_table_data[objective.name] = []
-
             for budget in budgets:
                 # Budget might not be evaluated
-                try:
-                    costs = run.get_costs(selected_config_id, budget)
-                except Exception:
-                    costs = [None for _ in range(len(objectives))]
+                seeds_evaluated = 0
+                cost = []
+                for seed in seeds:
+                    all_costs = run.get_all_costs(
+                        budget=budget,
+                        seed=seed,
+                        statuses=[Status.SUCCESS],
+                    )
+                    if selected_config_id in all_costs:
+                        cost.append(all_costs[selected_config_id][seed][objective_id])
+                        seeds_evaluated += 1
+                    else:
+                        continue
 
-                performances[objective.name][budget] = costs[objective_id]
-
-                # And add table data
+                # Add table data
                 if budget not in performances_table_data["Budget"]:
                     performances_table_data["Budget"] += [budget]
-
-                status = run.get_status(selected_config_id, budget)
-                if status == Status.SUCCESS:
-                    performances_table_data[objective.name] += [costs[objective_id]]
+                if seeds_evaluated > 0:
+                    performances[objective.name][budget] = cost
+                    if len(seeds) > 1:
+                        performances_table_data[objective.name] += [
+                            f"{np.mean(cost)} (\u00B1 {np.std(cost)})"
+                        ]
+                    else:
+                        performances_table_data[objective.name] += [cost]
                 else:
-                    performances_table_data[objective.name] += [status.to_text()]
+                    performances[objective.name][budget] = np.nan
+                    if len(seeds) > 1:
+                        performances_table_data[f"{objective.name}"] += ["No seed evaluated"]
+                    else:
+                        status = run.get_status(selected_config_id, seeds[0], budget)
+                        performances_table_data[objective.name] += [status.to_text()]
 
         # Let's start with the configspace
         X = []
@@ -348,9 +366,19 @@ class Configurations(DynamicPlugin):
         """
         objective_data = []
         for i, (metric, values) in enumerate(outputs["performances"].items()):
+            mean_objective_values, std_objective_values = [], []
+            for objective_values in values.values():
+                mean_objective_values.append(np.nanmean(objective_values))
+                std_objective_values.append(np.nanstd(objective_values))
+
             trace_kwargs = {
                 "x": list(values.keys()),
-                "y": list(values.values()),
+                "y": mean_objective_values,
+                "error_y": dict(
+                    type="data",
+                    symmetric=True,
+                    array=std_objective_values,
+                ),
                 "name": metric,
                 "fill": "tozeroy",
             }

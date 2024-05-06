@@ -290,7 +290,9 @@ class ParallelCoordinates(StaticPlugin):
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
-        df = serialize(run.get_encoded_data(objective, budget))
+        df = run.get_encoded_data(objective, budget)
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df = serialize(df)
         result: Dict[str, Any] = {"df": df}
 
         if inputs["show_important_only"]:

@@ -345,6 +345,7 @@ class CostOverTime(DynamicPlugin):
                 continue
 
             objective = run.get_objective(inputs["objective_id"])
+            budget = run.get_budget(inputs["budget_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "trials":
@@ -361,7 +362,9 @@ class CostOverTime(DynamicPlugin):
             symbol = None
             mode = "lines"
             if len(config_ids) > 0:
-                hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+                hovertext = [
+                    get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+                ]
                 hoverinfo = "text"
                 symbol = "circle"
                 mode = "lines+markers"

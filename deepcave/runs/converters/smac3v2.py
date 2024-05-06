@@ -91,8 +91,6 @@ class SMAC3v2Run(Run):
         ------
         RuntimeError
             Instances are not supported.
-        RuntimeError
-            Multiple Seeds are not supported.
         """
         path = Path(path)
 
@@ -119,6 +117,7 @@ class SMAC3v2Run(Run):
         with (path / "scenario.json").open() as json_file:
             meta = json.load(json_file)
             meta["run_objectives"] = meta.pop("objectives")
+            meta["optimizer_seed"] = meta.pop("seed")
 
         # Let's create a new run object
         run = SMAC3v2Run(name=path.stem, configspace=configspace, objectives=obj_list, meta=meta)
@@ -136,7 +135,6 @@ class SMAC3v2Run(Run):
         instance_ids = []
 
         first_starttime = None
-        seeds = []
         for (
             config_id,
             instance_id,
@@ -157,12 +155,6 @@ class SMAC3v2Run(Run):
 
             config_id = str(config_id)
             config = configs[config_id]
-
-            if seed not in seeds:
-                seeds.append(seed)
-
-            if len(seeds) > 1:
-                raise RuntimeError("Multiple seeds are not supported.")
 
             if first_starttime is None:
                 first_starttime = starttime
@@ -203,6 +195,7 @@ class SMAC3v2Run(Run):
                 costs=cost + [time] if isinstance(cost, list) else [cost, time],
                 config=config,
                 budget=budget,
+                seed=seed,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,

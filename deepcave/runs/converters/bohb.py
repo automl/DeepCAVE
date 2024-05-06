@@ -147,6 +147,7 @@ class BOHBRun(Run):
                 costs=[cost],  # Having only single objective here
                 config=config,
                 budget=budget,
+                seed=-1,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,

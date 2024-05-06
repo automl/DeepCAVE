@@ -8,13 +8,17 @@
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
-- Allow to load multi-objective SMAC3v2 and add example (#69)
+- Allow to load multi-objective SMAC3v2 and add example (#69).
+- Allow to load runs with multiple seeds and add examples (#70).
+- Correct incumbent calculation when single objective should be maximized.
+- Correct range of configuration cube slider for number of configs.
 - Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
 - Save plotly plots in higher resolution upon download.
+- Get hovertext per budget in Footprint, Config Cube, Cost over Time, and Pareto Front.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).
@@ -29,6 +33,7 @@
 - For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
 - Add init files to all test directories.
 - Correct LPI importance tests.
+- Free port when exiting via the exit button (#52).
 
 ## Documentation
 - Add How to Contribute section.

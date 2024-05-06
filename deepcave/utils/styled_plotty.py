@@ -440,7 +440,9 @@ def get_hyperparameter_ticks_from_values(
     return tickvals, ticktext
 
 
-def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
+def get_hovertext_from_config(
+    run: AbstractRun, config_id: int, budget: Optional[Union[int, float]] = None
+) -> str:
     """
     Generate hover text with metrics for a configuration.
 
@@ -453,6 +455,9 @@ def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
         The run instance
     config_id : int
         The id of the configuration
+    budget : Optional[Union[int, float]]
+            Budget to get the hovertext for. If no budget is given, the highest budget is chosen.
+            By default None.
 
     Returns
     -------
@@ -472,13 +477,26 @@ def get_hovertext_from_config(run: AbstractRun, config_id: int) -> str:
 
     # It's also nice to see the metrics
     objectives = run.get_objectives()
-    budget = run.get_highest_budget(config_id)
-    costs = run.get_costs(config_id, budget)
+    if budget is None or budget == -1:
+        highest_budget = run.get_highest_budget(config_id)
+        assert highest_budget is not None
+        string += f"<b>Objectives</b> (on highest found budget {round(highest_budget, 2)})<br>"
+    else:
+        string += f"<b>Objectives</b> (on budget {round(budget, 2)})<br>"
 
-    assert budget is not None
-    string += f"<b>Objectives</b> (on highest found budget {round(budget, 2)})<br>"
-    for objective, cost in zip(objectives, costs):
-        string += f"{objective.name}: {cost}<br>"
+    try:
+        avg_c, std_c = run.get_avg_costs(config_id, budget=budget)
+        avg_costs: List[Optional[float]] = list(avg_c)
+        std_costs: List[Optional[float]] = list(std_c)
+    except ValueError:
+        avg_costs = [None for _ in range(len(objectives))]
+        std_costs = [None for _ in range(len(objectives))]
+
+    for objective, cost, std_cost in zip(objectives, avg_costs, std_costs):
+        if std_cost == 0.0:
+            string += f"{objective.name}: {cost}<br>"
+        else:
+            string += f"{objective.name}: {cost} ± {std_cost}<br>"
 
     string += "<br><b>Hyperparameters</b>:<br>"
 
