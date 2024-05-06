@@ -946,7 +946,7 @@ class AbstractRun(ABC):
             if single_objective is None:
                 cost = self.merge_costs(avg_cost, objectives)
             else:
-                cost = avg_cost[0]
+                cost = avg_cost[self.get_objective_id(single_objective)]
 
             if cost is None:
                 continue
