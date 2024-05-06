@@ -366,7 +366,11 @@ class PartialDependencies(StaticPlugin):
         dcc.Graph
             Layout for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT})
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
     def get_pdp_figure(  # type: ignore

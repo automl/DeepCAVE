@@ -157,7 +157,7 @@ class StaticPlugin(Plugin, ABC):
             raw_outputs = {}
             raw_outputs_available = True
             for run in runs:
-                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)  # same problem
+                raw_outputs[run.id] = rc.get(run, self.id, inputs_key)
 
                 if raw_outputs[run.id] is None:
                     raw_outputs_available = False
@@ -186,7 +186,7 @@ class StaticPlugin(Plugin, ABC):
 
                     # Check if processing is needed
                     for run in runs:
-                        job_id = self._get_job_id(run.id, inputs_key)  # same problem
+                        job_id = self._get_job_id(run.id, inputs_key)
 
                         # Results are already achieved or it was already processed
                         if raw_outputs[run.id] is not None or queue.is_processed(job_id):

@@ -9,9 +9,9 @@ Since multiple runs are supported, you directly see which run performs best to w
 If you decide to display groups (which are combined runs), you will see the mean and standard
 deviation too.
 
-.. note:: 
-    The configuration spaces of the selected runs have to be equal. Otherwise, a good comparison
-    is not possible.
+.. note::
+    The configuration spaces of the selected runs should be equal. Otherwise, a good comparison
+    is not possible. They can, however, still be displayed in the same graph.
 
 This plugin is capable of answering following questions:
 

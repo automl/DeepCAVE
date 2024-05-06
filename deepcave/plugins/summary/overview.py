@@ -84,6 +84,9 @@ class Overview(DynamicPlugin):
                         dcc.Graph(
                             id=register("status_statistics", "figure"),
                             style={"height": config.FIGURE_HEIGHT},
+                            config={
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
+                            },
                         ),
                         label="Barplot",
                     ),
@@ -91,6 +94,9 @@ class Overview(DynamicPlugin):
                         dcc.Graph(
                             id=register("config_statistics", "figure"),
                             style={"height": config.FIGURE_HEIGHT},
+                            config={
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
+                            },
                         ),
                         label="Heatmap",
                     ),

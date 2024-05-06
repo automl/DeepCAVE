@@ -294,7 +294,13 @@ class ConfigurationCube(DynamicPlugin):
         Tuple[dcc.Graph,]
             Layout for the output block.
         """
-        return (dcc.Graph(register("graph", "figure"), style={"height": config.FIGURE_HEIGHT}),)
+        return (
+            dcc.Graph(
+                register("graph", "figure"),
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+            ),
+        )
 
     @staticmethod
     def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
