@@ -20,7 +20,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.constants import VALUE_RANGE
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun
@@ -304,9 +304,9 @@ class Configurations(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("performance_graph", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Graph",
@@ -321,9 +321,9 @@ class Configurations(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("configspace_graph", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Graph",
@@ -390,7 +390,7 @@ class Configurations(DynamicPlugin):
             objective_data.append(trace)
 
         layout_kwargs: Dict[str, Any] = {
-            "margin": Config.FIGURE_MARGIN,
+            "margin": config.FIGURE_MARGIN,
             "xaxis": {"title": "Budget", "domain": [0.05 * len(run.get_objectives()), 1]},
         }
 

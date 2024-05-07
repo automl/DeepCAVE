@@ -20,7 +20,7 @@ from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -359,8 +359,8 @@ class Importances(StaticPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -456,7 +456,7 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
         )
         save_image(figure, "importances.pdf")

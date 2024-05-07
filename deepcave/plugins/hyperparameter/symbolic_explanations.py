@@ -27,7 +27,7 @@ from dash import dcc, html
 from gplearn.genetic import SymbolicRegressor
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 from deepcave.plugins.static import StaticPlugin
@@ -493,13 +493,13 @@ class SymbolicExplanations(StaticPlugin):
         return [
             dcc.Graph(
                 register("symb_graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
             dcc.Graph(
                 register("pdp_graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
         ]
 
@@ -600,7 +600,7 @@ class SymbolicExplanations(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
+                    margin=config.FIGURE_MARGIN,
                     title=expr,
                 )
             )

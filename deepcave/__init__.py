@@ -137,14 +137,23 @@ else:
     try:
         from deepcave.runs.objective import Objective  # noqa
         from deepcave.runs.recorder import Recorder  # noqa
+        from deepcave.utils.configs import parse_config
+        from deepcave.utils.notification import Notification
 
-        __all__ = ["version", "Recorder", "Objective"]
+        config_name = None
+        if "--config" in sys.argv:
+            config_name = sys.argv[sys.argv.index("--config") + 1]
+        config = parse_config(config_name)
+
+        # Notifications
+        notification = Notification()
+
+        __all__ = ["version", "Recorder", "Objective", "notification", "config"]
     except ModuleNotFoundError:
         __all__ = ["version"]
 
 
 _api_mode = False if "app" in globals() else True
-
 
 # This TypeVar is necessary to ensure that the decorator works with arbitrary signatures.
 F = TypeVar("F", bound=Callable[..., Any])
