@@ -720,7 +720,7 @@
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
@@ -1023,9 +1023,9 @@
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
                         <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
                             <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;performance_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
-                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
                             <span class="n">config</span><span class="o">=</span><span class="p">{</span>
-                                <span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}</span>
+                                <span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}</span>
                             <span class="p">},</span>
                         <span class="p">),</span>
                         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">,</span>
@@ -1040,9 +1040,9 @@
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Tab</span><span class="p">(</span>
                         <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
                             <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;configspace_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
-                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
                             <span class="n">config</span><span class="o">=</span><span class="p">{</span>
-                                <span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}</span>
+                                <span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}</span>
                             <span class="p">},</span>
                         <span class="p">),</span>
                         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Graph&quot;</span><span class="p">,</span>
@@ -1110,7 +1110,7 @@
             <span class="n">objective_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
 
         <span class="n">layout_kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="s2">&quot;margin&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
             <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Budget&quot;</span><span class="p">,</span> <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()),</span> <span class="mi">1</span><span class="p">]},</span>
         <span class="p">}</span>
 

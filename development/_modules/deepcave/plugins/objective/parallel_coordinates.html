@@ -720,7 +720,7 @@
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.fanova</span> <span class="kn">import</span> <span class="n">fANOVA</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
@@ -1045,8 +1045,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
             <span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
-            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
-            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">Config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
         <span class="p">)</span></div>
 
 
