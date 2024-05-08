@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.utils.styled_plotty &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.utils.styled_plotty &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,12 +31,13 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.utils.url" href="deepcave.utils.url.html" />
+    <link rel="next" title="deepcave.utils.symbolic_regression" href="deepcave.utils.symbolic_regression.html" />
     <link rel="prev" title="deepcave.utils.styled_plot" href="deepcave.utils.styled_plot.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -394,6 +415,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -412,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -678,6 +699,15 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.styled_plotty.generate_config_code">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     generate_config_code()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.styled_plotty.get_color">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -691,6 +721,15 @@
    <code class="docutils literal notranslate">
     <span class="pre">
      get_discrete_heatmap()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.styled_plotty.get_hovertext_from_config">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_hovertext_from_config()
     </span>
    </code>
   </a>
@@ -763,55 +802,78 @@
                 
   <section id="module-deepcave.utils.styled_plotty">
 <span id="deepcave-utils-styled-plotty"></span><h1>deepcave.utils.styled_plotty<a class="headerlink" href="#module-deepcave.utils.styled_plotty" title="Link to this heading">¶</a></h1>
+<p># Styled Plotty</p>
+<p>This module provides utilities for styling and customizing different plots with plotly.
+For this, it uses plotly as well as dash.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_config_code</span></code>(register, variables)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Component</span></code>]</p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.generate_config_code" title="deepcave.utils.styled_plotty.generate_config_code"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_config_code</span></code></a>(register, variables)</p></td>
+<td><p>Generate HTML components to display code.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_color" title="deepcave.utils.styled_plotty.get_color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_color</span></code></a>(id_[, alpha])</p></td>
-<td><p>Using Plotly palette for the first 10 ids and Alphabet palette for the next 26, currently 36 colors are possible.</p></td>
+<td><p>Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_discrete_heatmap" title="deepcave.utils.styled_plotty.get_discrete_heatmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_discrete_heatmap</span></code></a>(x, y, values, labels)</p></td>
 <td><p>Generate a discrete colorscale from a (nested) list or numpy array of values.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hovertext_from_config</span></code>(run, config_id)</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">rtype<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
-</dd>
-</dl>
-</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="deepcave.utils.styled_plotty.get_hovertext_from_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hovertext_from_config</span></code></a>(run, config_id[, ...])</p></td>
+<td><p>Generate hover text with metrics for a configuration.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hyperparameter_ticks" title="deepcave.utils.styled_plotty.get_hyperparameter_ticks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hyperparameter_ticks</span></code></a>(hp[, ...])</p></td>
-<td><p>Generates tick data for both tickvals and ticktext.</p></td>
+<td><p>Generate tick data for both tickvals and ticktext.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values" title="deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_hyperparameter_ticks_from_values</span></code></a>(values, ...)</p></td>
-<td><p>Generates tick data for both values and labels.</p></td>
+<td><p>Generate tick data for both values and labels.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.hex_to_rgb" title="deepcave.utils.styled_plotty.hex_to_rgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hex_to_rgb</span></code></a>(hex_string)</p></td>
-<td><p>Converts a hex_string to a tuple of rgb values.</p></td>
+<td><p>Convert a hex_string to a tuple of rgb values.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.prettify_label" title="deepcave.utils.styled_plotty.prettify_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prettify_label</span></code></a>(label)</p></td>
-<td><p>Takes a label and prettifies it.</p></td>
+<td><p>Take a label and prettifies it.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.styled_plotty.save_image" title="deepcave.utils.styled_plotty.save_image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_image</span></code></a>(figure, name)</p></td>
-<td><p>Saves a plotly figure as an image.</p></td>
+<td><p>Save a plotly figure as an image.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plotty.generate_config_code">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">generate_config_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#generate_config_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.generate_config_code" title="Link to this definition">¶</a></dt>
+<dd><p>Generate HTML components to display code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>register</strong> (<em>Callable</em>) – A Callable for registering Dash components.
+The register_input function is located in the Plugin class.</p></li>
+<li><p><strong>variables</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A List of variable names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A List of Dash components.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Component]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.get_color">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_color" title="Link to this definition">¶</a></dt>
-<dd><p>Using Plotly palette for the first 10 ids and Alphabet palette for the next 26, currently 36 colors are possible.</p>
+<dd><p>Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – ID for retrieving a specific color.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em>) – Alpha value for the color, by default 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The color from the color palette.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]]</p>
+<dd class="field-odd"><p>Union[str, Tuple[float, float, float, float]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -822,13 +884,42 @@
 <dd><p>Generate a discrete colorscale from a (nested) list or numpy array of values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>values</strong> (<em>_type_</em>) – _description_</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em><em>]</em>) – List of values that present the x-axis of the heatmap.</p></li>
+<li><p><strong>y</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – List of values that present the y-axis of the heatmap.</p></li>
+<li><p><strong>values</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>) – Contains the data values for the heatmap.</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>) – Contains the labels corresponding to the values.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>_description_</p>
+<dd class="field-even"><p>A Plotly Heatmap object corresponding to the input.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_type_</p>
+<dd class="field-odd"><p>go.Heatmap</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.styled_plotty.get_hovertext_from_config">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_hovertext_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_hovertext_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_hovertext_from_config" title="Link to this definition">¶</a></dt>
+<dd><p>Generate hover text with metrics for a configuration.</p>
+<p>The method gets information about a given configuration, including a link, its objectives,
+budget, costs and hyperparameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run instance</p></li>
+<li><p><strong>config_id</strong> (<em>int</em>) – The id of the configuration</p></li>
+<li><p><strong>budget</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Budget to get the hovertext for. If no budget is given, the highest budget is chosen.
+By default None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The hover text string containing the configuration information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -836,16 +927,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.get_hyperparameter_ticks">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_hyperparameter_ticks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_hyperparameter_ticks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_hyperparameter_ticks" title="Link to this definition">¶</a></dt>
-<dd><p>Generates tick data for both tickvals and ticktext. The background is that
-you might have encoded data but you don’t want to show all of them.
-With this function, only 6 (default) values are shown. This behaviour is
+<dd><p>Generate tick data for both tickvals and ticktext.</p>
+<p>The background is that
+you might have encoded data, but you don’t want to show all of them.
+With this function, only 6 (default) values are shown. This behavior is
 ignored if <cite>hp</cite> is categorical.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>hp</strong> (<em>Hyperparameter</em>) – Hyperparameter to generate ticks from.</p></li>
-<li><p><strong>additional_values</strong> (<em>Optional</em><em>[</em><em>List</em><em>]</em><em>, </em><em>optional</em>) – Additional values, which are forced in addition. By default None.</p></li>
-<li><p><strong>ticks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of ticks, by default 6</p></li>
+<li><p><strong>additional_values</strong> (<em>Optional</em><em>[</em><em>List</em><em>]</em><em>, </em><em>optional</em>) – Additional values, which are forced in addition. By default, None.</p></li>
+<li><p><strong>ticks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of ticks, by default 4</p></li>
 <li><p><strong>include_nan</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether “nan” as tick should be included. By default True.</p></li>
 </ul>
 </dd>
@@ -861,17 +953,18 @@ ignored if <cite>hp</cite> is categorical.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">get_hyperparameter_ticks_from_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#get_hyperparameter_ticks_from_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values" title="Link to this definition">¶</a></dt>
-<dd><p>Generates tick data for both values and labels. The background is that
-you might have encoded data but you don’t want to show all of them.
-With this function, only 6 (default) values are shown. This behaviour is
+<dd><p>Generate tick data for both values and labels.</p>
+<p>The background is that
+you might have encoded data, but you don’t want to show all of them.
+With this function, only 6 (default) values are shown. This behavior is
 ignored if <cite>values</cite> is a list of strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>values</strong> (<em>List</em>) – List of values.</p></li>
 <li><p><strong>labels</strong> (<em>List</em>) – List of labels. Must be the same size as <cite>values</cite>.</p></li>
-<li><p><strong>forced</strong> (<em>List</em><em>[</em><em>bool</em><em>]</em><em>, </em><em>optional</em>) – List of booleans. If True, displaying the particular tick is enforced.
-Independent from <cite>ticks</cite>.</p></li>
+<li><p><strong>forced</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>bool</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of booleans. If True, displaying the particular tick is enforced.
+Independent of <cite>ticks</cite>.</p></li>
 <li><p><strong>ticks</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of ticks and labels to show. By default 6.</p></li>
 </ul>
 </dd>
@@ -881,19 +974,32 @@ Independent from <cite>ticks</cite>.</p></li>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[List, List]</p>
 </dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If values contain both strings and non-strings.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.hex_to_rgb">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">hex_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex_string</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#hex_to_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.hex_to_rgb" title="Link to this definition">¶</a></dt>
-<dd><p>Converts a hex_string to a tuple of rgb values.
-Requires format including #, e.g.:
+<dd><p>Convert a hex_string to a tuple of rgb values.</p>
+<p>Requires format including #, e.g.:
 #000000
 #ff00ff</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hex_string</strong> (<em>str</em>) – The hex string to be converted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Tuple of the converted RGB values</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>]</p>
+<dd class="field-odd"><p>Tuple[int, int, int]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the hex string is longer than 7.
+    If there are invalid characters in the hex string.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -901,7 +1007,8 @@ Requires format including #, e.g.:
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.prettify_label">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">prettify_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#prettify_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.prettify_label" title="Link to this definition">¶</a></dt>
-<dd><p>Takes a label and prettifies it. E.g. floats are shortened.</p>
+<dd><p>Take a label and prettifies it.</p>
+<p>E.g. floats are shortened.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>label</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>float</em><em>, </em><em>int</em><em>]</em>) – Label, which should be prettified.</p>
@@ -918,16 +1025,17 @@ Requires format including #, e.g.:
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.styled_plotty.save_image">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.styled_plotty.</span></span><span class="sig-name descname"><span class="pre">save_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/styled_plotty.html#save_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.styled_plotty.save_image" title="Link to this definition">¶</a></dt>
-<dd><p>Saves a plotly figure as an image.</p>
+<dd><p>Save a plotly figure as an image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fig</strong> (<em>go.Figure</em>) – Plotly figure.</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – Name of the image with extension. Will be automatically saved to the cache.</p></li>
+<li><p><strong>figure</strong> (<em>go.Figure</em>) – Plotly figure.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the image with extension.
+Will be automatically saved to the cache.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -947,10 +1055,10 @@ Requires format including #, e.g.:
             <p class="prev-next-title">deepcave.utils.styled_plot</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.utils.url.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.utils.symbolic_regression.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.utils.url</p>
+        <p class="prev-next-title">deepcave.utils.symbolic_regression</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -968,14 +1076,14 @@ Requires format including #, e.g.:
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.evaluators.epm.fanova_forest &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.evaluators.epm.fanova_forest &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,9 +31,10 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.evaluators.epm.random_forest" href="deepcave.evaluators.epm.random_forest.html" />
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -394,6 +415,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -412,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -720,11 +741,21 @@
                 
   <section id="module-deepcave.evaluators.epm.fanova_forest">
 <span id="deepcave-evaluators-epm-fanova-forest"></span><h1>deepcave.evaluators.epm.fanova_forest<a class="headerlink" href="#module-deepcave.evaluators.epm.fanova_forest" title="Link to this heading">¶</a></h1>
+<p># FanovaForest</p>
+<p>The module provides utilities for creating a fANOVA forest.</p>
+<p>It includes a FanovaForest wrapper for pyrfr.
+fANOVA can be used for analyzing the importances of Hyperparameters.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>FanovaForest: A fANOVA forest wrapper for pyrfr.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.evaluators.epm.fanova_forest.FanovaForest" title="deepcave.evaluators.epm.fanova_forest.FanovaForest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FanovaForest</span></code></a>(configspace[, n_trees, ...])</p></td>
-<td><p>A fanova forest wrapper for pyrfr.</p></td>
+<td><p>A fANOVA forest wrapper for pyrfr.</p></td>
 </tr>
 </tbody>
 </table>
@@ -732,18 +763,60 @@
 <dt class="sig sig-object py" id="deepcave.evaluators.epm.fanova_forest.FanovaForest">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.evaluators.epm.fanova_forest.</span></span><span class="sig-name descname"><span class="pre">FanovaForest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_trees</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1048576</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_purity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bootstrapping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pca_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-inf,</span> <span class="pre">inf)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/fanova_forest.html#FanovaForest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.fanova_forest.FanovaForest" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.evaluators.epm.random_forest.html#deepcave.evaluators.epm.random_forest.RandomForest" title="deepcave.evaluators.epm.random_forest.RandomForest"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForest</span></code></a></p>
-<p>A fanova forest wrapper for pyrfr.</p>
+<p>A fANOVA forest wrapper for pyrfr.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>cutoffs<span class="classifier">Tuple[float, float]</span></dt><dd><p>The cutoffs of the model.</p>
+</dd>
+<dt>percentiles<span class="classifier">NDArray[floating]</span></dt><dd><p>The percentiles of the data points Y.</p>
+</dd>
+<dt>all_midpoints<span class="classifier">List</span></dt><dd><p>All midpoints tree wise for the whole forest.</p>
+</dd>
+<dt>all_sizes<span class="classifier">List</span></dt><dd><p>All interval sizes tree wise for the whole forest.</p>
+</dd>
+<dt>bounds<span class="classifier">List[Tuple[float, float]</span></dt><dd><p>Stores feature bounds.</p>
+</dd>
+<dt>trees_total_variances<span class="classifier">List</span></dt><dd><p>The total variances of the trees.</p>
+</dd>
+<dt>trees_total_variance<span class="classifier">Any</span></dt><dd><p>The total variance of a tree.</p>
+</dd>
+<dt>trees_variance_fractions<span class="classifier">Dict</span></dt><dd><p>The variance fractions of the trees.</p>
+</dd>
+<dt>V_U_total<span class="classifier">Dict[Tuple[int, …], List[Any]]</span></dt><dd><p>Store variance-related information across all trees.</p>
+</dd>
+<dt>V_U_individual<span class="classifier">Dict[Tuple[int, …], List[Any]]</span></dt><dd><p>Store variance-related information for individual subsets.</p>
+</dd>
+<dt>n_params<span class="classifier">int</span></dt><dd><p>The number of Hyperparameters to sample.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.evaluators.epm.fanova_forest.FanovaForest.compute_marginals">
 <span class="sig-name descname"><span class="pre">compute_marginals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/fanova_forest.html#FanovaForest.compute_marginals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.fanova_forest.FanovaForest.compute_marginals" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the marginal of selected parameters.</p>
+<dd><p>Return the marginal of selected Hyperparameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hp_ids</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – Contains the indices of the configspace for the selected parameters (starts with 0).</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hp_ids</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>...</em><em>]</em><em>]</em>) – Contains the indices of the configspace for the selected Hyperparameters
+(starts with 0).</p></li>
+<li><p><strong>depth</strong> (<em>int</em>) – The depth of the marginalization.
+Default value is 1.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]], <code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">...</span></code>], <code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code>[<code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code>]]]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>Tuple[Dict[Tuple[int, …], List[Any]],</em></p></li>
+<li><p><em>Dict[Tuple[int, …], List[Any]],</em> – The marginal of selected Hyperparameters.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>
@@ -782,14 +855,14 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

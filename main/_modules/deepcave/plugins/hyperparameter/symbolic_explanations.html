@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>deepcave.plugins.hyperparameter.symbolic_explanations &#8212; DeepCAVE Documentation 1.2 documentation</title>
+    
+  <link href="../../../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=2eb4fb78" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    
+  <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script src="../../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../../../../index.html">
+  <!-- <p class="title">DeepCAVE Documentation</p> -->
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown mt-1">
+    <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
+        data-toggle="dropdown">
+        v1.2
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../../../../search.html" method="get" style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control btn btn-md" name="q" id="search-input"
+    placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off">
+</form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../../index.html">DeepCAVE Documentation</a></h4>
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../examples/api/index.html">
+     API
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../examples/record/index.html">
+     Record
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/minimal.html">
+       Record Minimal Run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/digits_sklearn.html">
+       Multi-Layer Perceptron via Sklearn
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/record/mnist_pytorch.html">
+       Multi-Layer Perceptron via PyTorch
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../plugins/index.html">
+   Displaying Data with Plugins
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configuration_footprint.html">
+     Configuration Footprint
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/importances.html">
+     Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/partial_dependencies.html">
+     Partial Dependencies
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../converters.html">
+   Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../how_to_contribute.html">
+   How to Contribute
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../../../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+    <label for="toctree-checkbox-6">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.runs.converters.html">
+       deepcave.runs.converters
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+      <label for="toctree-checkbox-7">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.bohb.html">
+         deepcave.runs.converters.bohb
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.deepcave.html">
+         deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.smac3v1.html">
+         deepcave.runs.converters.smac3v1
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.runs.converters.smac3v2.html">
+         deepcave.runs.converters.smac3v2
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.exceptions.html">
+       deepcave.runs.exceptions
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.group.html">
+       deepcave.runs.group
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.handler.html">
+       deepcave.runs.handler
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.objective.html">
+       deepcave.runs.objective
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.recorder.html">
+       deepcave.runs.recorder
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.run.html">
+       deepcave.runs.run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.status.html">
+       deepcave.runs.status
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.runs.trial.html">
+       deepcave.runs.trial
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+    <label for="toctree-checkbox-8">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.budget.html">
+       deepcave.plugins.budget
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.dynamic.html">
+       deepcave.plugins.dynamic
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.html">
+       deepcave.plugins.hyperparameter
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <label for="toctree-checkbox-9">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.importances.html">
+         deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.pdp.html">
+         deepcave.plugins.hyperparameter.pdp
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.objective.html">
+       deepcave.plugins.objective
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.configuration_cube.html">
+         deepcave.plugins.objective.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.objective.parallel_coordinates.html">
+         deepcave.plugins.objective.parallel_coordinates
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.static.html">
+       deepcave.plugins.static
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.plugins.summary.html">
+       deepcave.plugins.summary
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+      <label for="toctree-checkbox-11">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.configurations.html">
+         deepcave.plugins.summary.configurations
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.footprint.html">
+         deepcave.plugins.summary.footprint
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.summary.overview.html">
+         deepcave.plugins.summary.overview
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.layouts.not_found.html">
+       deepcave.layouts.not_found
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.layouts.sidebar.html">
+       deepcave.layouts.sidebar
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.html">
+       deepcave.evaluators.epm
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+      <label for="toctree-checkbox-14">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.fanova_forest.html">
+         deepcave.evaluators.epm.fanova_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.random_forest.html">
+         deepcave.evaluators.epm.random_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.random_forest_surrogate.html">
+         deepcave.evaluators.epm.random_forest_surrogate
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.utils.html">
+         deepcave.evaluators.epm.utils
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.fanova.html">
+       deepcave.evaluators.fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.footprint.html">
+       deepcave.evaluators.footprint
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.lpi.html">
+       deepcave.evaluators.lpi
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../../../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.cache.html">
+       deepcave.utils.cache
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.cast.html">
+       deepcave.utils.cast
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.compression.html">
+       deepcave.utils.compression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.configs.html">
+       deepcave.utils.configs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.configspace.html">
+       deepcave.utils.configspace
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.dash.html">
+       deepcave.utils.dash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.data_structures.html">
+       deepcave.utils.data_structures
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.docs.html">
+       deepcave.utils.docs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.files.html">
+       deepcave.utils.files
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.hash.html">
+       deepcave.utils.hash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.layout.html">
+       deepcave.utils.layout
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.logs.html">
+       deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.notification.html">
+       deepcave.utils.notification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.run_caches.html">
+       deepcave.utils.run_caches
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.styled_plot.html">
+       deepcave.utils.styled_plot
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.styled_plotty.html">
+       deepcave.utils.styled_plotty
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.url.html">
+       deepcave.utils.url
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.util.html">
+       deepcave.utils.util
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for deepcave.plugins.hyperparameter.symbolic_explanations</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># SymbolicExplanations</span>
+
+<span class="sd">This module provides utilities for generating Symbolic Explanations.</span>
+
+<span class="sd">Provided utilities include getting input and output layout,</span>
+<span class="sd">processing the data and loading the outputs.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - SymbolicExplanations: Leverage Symbolic Explanations to obtain a formula and plot it.</span>
+
+<span class="sd">## Constants</span>
+<span class="sd">    GRID_POINTS_PER_AXIS : int</span>
+<span class="sd">    SAMPLES_PER_HP : int</span>
+<span class="sd">    MAX_SAMPLES : int</span>
+<span class="sd">    MAX_SHOWN_SAMPLES : int</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">CategoricalHyperparameter</span>
+<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">gplearn.genetic</span> <span class="kn">import</span> <span class="n">SymbolicRegressor</span>
+<span class="kn">from</span> <span class="nn">pyPDP.algorithms.pdp</span> <span class="kn">import</span> <span class="n">PDP</span>
+
+<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">deepcave.evaluators.epm.random_forest_surrogate</span> <span class="kn">import</span> <span class="n">RandomForestSurrogate</span>
+<span class="kn">from</span> <span class="nn">deepcave.plugins.hyperparameter.pdp</span> <span class="kn">import</span> <span class="n">PartialDependencies</span>
+<span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
+<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">get_hyperparameter_ticks</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.symbolic_regression</span> <span class="kn">import</span> <span class="n">convert_symb</span><span class="p">,</span> <span class="n">get_function_set</span>
+
+<span class="n">SR_TRAIN_POINTS_PER_AXIS</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">SAMPLES_PER_HP</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">MAX_SAMPLES</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">MAX_SHOWN_SAMPLES</span> <span class="o">=</span> <span class="mi">100</span>
+
+
+<div class="viewcode-block" id="SymbolicExplanations">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations">[docs]</a>
+<span class="k">class</span> <span class="nc">SymbolicExplanations</span><span class="p">(</span><span class="n">StaticPlugin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate Symbolic Explanations.</span>
+
+<span class="sd">    Provided utilities include getting input and output layout,</span>
+<span class="sd">    processing the data and loading the outputs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;symbolic_explanations&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Symbolic Explanations&quot;</span>
+    <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-subscript&quot;</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;docs/plugins/symbolic_explanations.rst&quot;</span>
+    <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="SymbolicExplanations.get_input_layout">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">,</span> <span class="n">html</span><span class="o">.</span><span class="n">Details</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the input block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register (user) variables.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[Union[dbc.Row, html.Details]</span>
+<span class="sd">            The layout for the input block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budget&quot;</span><span class="p">),</span>
+                            <span class="n">help_button</span><span class="p">(</span>
+                                <span class="s2">&quot;Budget refers to the multi-fidelity budget. &quot;</span>
+                                <span class="s2">&quot;Combined budget means that the trial on the highest&quot;</span>
+                                <span class="s2">&quot; evaluated budget is used.  </span><span class="se">\n</span><span class="s2"> &quot;</span>
+                                <span class="s2">&quot;Note: Selecting combined budget might be misleading if&quot;</span>
+                                <span class="s2">&quot; a time objective is used. Often, higher budget take &quot;</span>
+                                <span class="s2">&quot; longer to evaluate, which might negatively influence &quot;</span>
+                                <span class="s2">&quot; the results.&quot;</span>
+                            <span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select budget ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameter #1&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select hyperparameter ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Hyperparameter #2&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select hyperparameter ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Parsimony coefficient&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;Penalizes the complexity of the resulting formulas. The &quot;</span>
+                                        <span class="s2">&quot;higher the value, the higher the penalty on the &quot;</span>
+                                        <span class="s2">&quot;complexity will be, resulting in simpler formulas.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dcc</span><span class="o">.</span><span class="n">Slider</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;parsimony&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                        <span class="n">marks</span><span class="o">=</span><span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                                        <span class="nb">min</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
+                                        <span class="nb">max</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                        <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                        <span class="n">updatemode</span><span class="o">=</span><span class="s2">&quot;drag&quot;</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                <span class="p">],</span>
+                            <span class="p">)</span>
+                        <span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="p">],</span>
+                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">html</span><span class="o">.</span><span class="n">Details</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">html</span><span class="o">.</span><span class="n">Summary</span><span class="p">(</span><span class="s2">&quot;Additional options for symbolic regression configuration&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Generations&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span><span class="s2">&quot;The number of generations to evolve.&quot;</span><span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;generations&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                        <span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                <span class="p">],</span>
+                                <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Population Size&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;The number of formulas competing in each generation.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;population_size&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                        <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                        <span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                    <span class="p">),</span>
+                                <span class="p">],</span>
+                                <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+                        <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;marginTop&quot;</span><span class="p">:</span> <span class="s2">&quot;0.8em&quot;</span><span class="p">},</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Random seed&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;The random seed to be used in the symbolic regression.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;random_seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span>
+                                    <span class="p">),</span>
+                                <span class="p">],</span>
+                                <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Metric&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;The metric to evaluate the fitness of the formulas.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">])),</span>
+                                <span class="p">],</span>
+                                <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SymbolicExplanations.load_inputs">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39;.</span>
+
+<span class="sd">        This method is necessary to pre-load contents for the inputs.</span>
+<span class="sd">        If the plugin is called for the first time, or there are no results in the cache,</span>
+<span class="sd">        the plugin gets its content from this method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Dict[str, Any]]</span>
+<span class="sd">            Content to be filled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;parsimony&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;-4&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;generations&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;population_size&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;5000&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;random_seed&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">},</span>
+            <span class="s2">&quot;metric&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;rmse&quot;</span><span class="p">,</span> <span class="s2">&quot;mse&quot;</span><span class="p">,</span> <span class="s2">&quot;mean absolute error&quot;</span><span class="p">]),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;rmse&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="SymbolicExplanations.load_dependency_inputs">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: E501</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Work like &#39;load_inputs&#39; but called after inputs have changed.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        Only the changes have to be returned. The returned dictionary</span>
+<span class="sd">        will be merged with the inputs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Current content of the inputs.</span>
+<span class="sd">        previous_inputs</span>
+<span class="sd">            Previous content of the inputs.</span>
+<span class="sd">            Not used in this specific function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            Dictionary with the changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
+        <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
+        <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">)</span>
+
+        <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">budget_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget_ids</span><span class="p">()</span>
+        <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="n">budget_ids</span><span class="p">)</span>
+
+        <span class="n">hp_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span>
+        <span class="n">hp_names_numerical</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
+                <span class="n">hp_names_numerical</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">hp_names_numerical</span>
+
+        <span class="c1"># Get selected values</span>
+        <span class="n">objective_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">hp2_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">objective_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">objective_value</span> <span class="o">=</span> <span class="n">objective_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">budget_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">budget_value</span> <span class="o">=</span> <span class="n">budget_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hp1_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hp1_value</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;objective_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value</span><span class="p">},</span>
+            <span class="s2">&quot;budget_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">budget_value</span><span class="p">},</span>
+            <span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">hp_names</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp1_value</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">hp_names</span><span class="p">),</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">hp2_value</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="SymbolicExplanations.process">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return raw data based on a run and the input data.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">        -------</span>
+<span class="sd">        The returned data must be JSON serializable.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differ</span>
+<span class="sd">        compared to &#39;load_inputs&#39; or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The run to process.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            The input data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[str, Any]</span>
+<span class="sd">            A serialized dictionary.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the objective is None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
+        <span class="n">hp1</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">]</span>
+        <span class="n">hp2</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">]</span>
+        <span class="n">parsimony</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;parsimony&quot;</span><span class="p">]</span>
+        <span class="n">generations</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;generations&quot;</span><span class="p">]</span>
+        <span class="n">population_size</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;population_size&quot;</span><span class="p">]</span>
+        <span class="n">random_seed</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;random_seed&quot;</span><span class="p">]</span>
+        <span class="n">metric</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;metric&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">objective</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Objective not found.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Encode data</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span>
+            <span class="n">objective</span><span class="p">,</span>
+            <span class="n">budget</span><span class="p">,</span>
+            <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">statuses</span><span class="o">=</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">hp_names</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="c1"># Let&#39;s initialize the surrogate</span>
+        <span class="n">surrogate_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">surrogate_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+        <span class="c1"># Prepare the hyperparameters</span>
+        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp1</span><span class="p">]</span>
+        <span class="n">idx1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp1</span><span class="p">)</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">hp2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp2</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">selected_hyperparameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp2</span><span class="p">]</span>
+            <span class="n">idx2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2</span><span class="p">)</span>
+            <span class="n">idxs</span> <span class="o">+=</span> <span class="p">[</span><span class="n">idx2</span><span class="p">]</span>
+
+        <span class="n">num_samples</span> <span class="o">=</span> <span class="n">SAMPLES_PER_HP</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="c1"># The samples are limited to max 10k</span>
+        <span class="k">if</span> <span class="n">num_samples</span> <span class="o">&gt;</span> <span class="n">MAX_SAMPLES</span><span class="p">:</span>
+            <span class="n">num_samples</span> <span class="o">=</span> <span class="n">MAX_SAMPLES</span>
+
+        <span class="c1"># And finally call PDP</span>
+        <span class="n">pdp</span> <span class="o">=</span> <span class="n">PDP</span><span class="o">.</span><span class="n">from_random_points</span><span class="p">(</span>
+            <span class="n">surrogate_model</span><span class="p">,</span>
+            <span class="n">selected_hyperparameter</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">num_grid_points_per_axis</span><span class="o">=</span><span class="n">SR_TRAIN_POINTS_PER_AXIS</span><span class="p">,</span>
+            <span class="n">num_samples</span><span class="o">=</span><span class="n">num_samples</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">x_pdp</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">x_pdp</span>
+        <span class="n">y_pdp</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">pdp_variances</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">y_variances</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="n">x_ice</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">_ice</span><span class="o">.</span><span class="n">x_ice</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">y_ice</span> <span class="o">=</span> <span class="n">pdp</span><span class="o">.</span><span class="n">_ice</span><span class="o">.</span><span class="n">y_ice</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># The ICE curves have to be cut because it&#39;s too much data</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_ice</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_SHOWN_SAMPLES</span><span class="p">:</span>
+            <span class="n">x_ice</span> <span class="o">=</span> <span class="n">x_ice</span><span class="p">[:</span><span class="n">MAX_SHOWN_SAMPLES</span><span class="p">]</span>
+            <span class="n">y_ice</span> <span class="o">=</span> <span class="n">y_ice</span><span class="p">[:</span><span class="n">MAX_SHOWN_SAMPLES</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">):</span>
+            <span class="c1"># If number of hyperparameters to explain is smaller than number of hyperparameters</span>
+            <span class="c1"># optimizes, use PDP to train the symbolic explanation</span>
+            <span class="n">x_symbolic</span> <span class="o">=</span> <span class="n">x_pdp</span>
+            <span class="n">y_train</span> <span class="o">=</span> <span class="n">y_pdp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Else, use random samples evaluated with the surrogate model to train the symbolic</span>
+            <span class="c1"># explanation</span>
+            <span class="n">cs</span> <span class="o">=</span> <span class="n">surrogate_model</span><span class="o">.</span><span class="n">config_space</span>
+            <span class="n">random_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">get_array</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">cs</span><span class="o">.</span><span class="n">sample_configuration</span><span class="p">(</span>
+                        <span class="n">SR_TRAIN_POINTS_PER_AXIS</span> <span class="o">**</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">x_symbolic</span> <span class="o">=</span> <span class="n">random_samples</span>
+            <span class="n">y_train</span> <span class="o">=</span> <span class="n">surrogate_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">random_samples</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">symb_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">population_size</span><span class="o">=</span><span class="n">population_size</span><span class="p">,</span>
+            <span class="n">generations</span><span class="o">=</span><span class="n">generations</span><span class="p">,</span>
+            <span class="n">function_set</span><span class="o">=</span><span class="n">get_function_set</span><span class="p">(),</span>
+            <span class="n">metric</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span>
+            <span class="n">parsimony_coefficient</span><span class="o">=</span><span class="n">parsimony</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="n">random_seed</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># run SR on samples</span>
+        <span class="n">symb_model</span> <span class="o">=</span> <span class="n">SymbolicRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">symb_params</span><span class="p">)</span>
+        <span class="n">symb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_symbolic</span><span class="p">[:,</span> <span class="n">idxs</span><span class="p">],</span> <span class="n">y_train</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">conv_expr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> = &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">convert_symb</span><span class="p">(</span><span class="n">symb_model</span><span class="p">,</span><span class="w"> </span><span class="n">n_decimals</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">hp_names</span><span class="o">=</span><span class="n">selected_hyperparameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">conv_expr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Conversion of the expression failed. Please try another seed or increase &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the parsimony hyperparameter: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conv_expr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">150</span><span class="p">:</span>
+            <span class="n">conv_expr</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Expression is too long to display. Please try another seed or increase &quot;</span>
+                <span class="s2">&quot;the parsimony hyperparameter.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">y_symbolic</span> <span class="o">=</span> <span class="n">symb_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_symbolic</span><span class="p">[:,</span> <span class="n">idxs</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x_pdp</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;x_symbolic&quot;</span><span class="p">:</span> <span class="n">x_symbolic</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y_pdp</span><span class="p">,</span>
+            <span class="s2">&quot;y_symbolic&quot;</span><span class="p">:</span> <span class="n">y_symbolic</span><span class="p">,</span>
+            <span class="s2">&quot;expr&quot;</span><span class="p">:</span> <span class="n">conv_expr</span><span class="p">,</span>
+            <span class="s2">&quot;variances&quot;</span><span class="p">:</span> <span class="n">pdp_variances</span><span class="p">,</span>
+            <span class="s2">&quot;x_ice&quot;</span><span class="p">:</span> <span class="n">x_ice</span><span class="p">,</span>
+            <span class="s2">&quot;y_ice&quot;</span><span class="p">:</span> <span class="n">y_ice</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="SymbolicExplanations.get_output_layout">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the layout for the output block.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        register : Callable</span>
+<span class="sd">            Method to register outputs.</span>
+<span class="sd">            The register_input function is located in the Plugin superclass.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[dcc.Graph]</span>
+<span class="sd">            Layout for the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
+                <span class="n">register</span><span class="p">(</span><span class="s2">&quot;symb_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+                <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+            <span class="p">),</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
+                <span class="n">register</span><span class="p">(</span><span class="s2">&quot;pdp_graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
+                <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+            <span class="p">),</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SymbolicExplanations.load_outputs">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the raw data and prepare it for the layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differ</span>
+<span class="sd">        compared to &#39;load_inputs&#39; or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[go.Figure]</span>
+<span class="sd">            The figure of the Symbolic Explanation and the Partial Dependency Plot (PDP) leveraged</span>
+<span class="sd">            for training in the case that the number of hyperparameters to be explained is smaller</span>
+<span class="sd">            than the number of hyperparameters that was optimized, else, a Partial Dependency Plot</span>
+<span class="sd">            (PDP) for comparison.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">hp1_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">]</span>
+        <span class="n">hp1_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
+        <span class="n">hp1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
+        <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp1</span><span class="p">]</span>
+
+        <span class="n">hp2_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">]</span>
+        <span class="n">hp2_idx</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">hp2</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">hp2_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp2_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">hp2_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
+            <span class="n">hp2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
+            <span class="n">selected_hyperparameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp2</span><span class="p">]</span>
+
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">objective_name</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="c1"># Parse outputs</span>
+        <span class="n">x_symbolic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;x_symbolic&quot;</span><span class="p">])</span>
+        <span class="n">y_symbolic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;y_symbolic&quot;</span><span class="p">])</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;expr&quot;</span><span class="p">]</span>
+
+        <span class="n">traces1</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">hp2</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># 1D</span>
+            <span class="n">traces1</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_symbolic</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">y_symbolic</span><span class="p">,</span>
+                    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                    <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">tickvals</span><span class="p">,</span> <span class="n">ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp1</span><span class="p">)</span>
+            <span class="n">layout1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;xaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;tickvals&quot;</span><span class="p">:</span> <span class="n">tickvals</span><span class="p">,</span>
+                        <span class="s2">&quot;ticktext&quot;</span><span class="p">:</span> <span class="n">ticktext</span><span class="p">,</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">hp1_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;yaxis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">objective_name</span><span class="p">,</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="n">expr</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">y_symbolic</span>
+            <span class="n">traces1</span> <span class="o">+=</span> <span class="p">[</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Contour</span><span class="p">(</span>
+                    <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">x_symbolic</span><span class="p">[:,</span> <span class="n">hp1_idx</span><span class="p">],</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">x_symbolic</span><span class="p">[:,</span> <span class="n">hp2_idx</span><span class="p">],</span>
+                    <span class="n">colorbar</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                        <span class="n">title</span><span class="o">=</span><span class="n">objective_name</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">x_tickvals</span><span class="p">,</span> <span class="n">x_ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp1</span><span class="p">)</span>
+            <span class="n">y_tickvals</span><span class="p">,</span> <span class="n">y_ticktext</span> <span class="o">=</span> <span class="n">get_hyperparameter_ticks</span><span class="p">(</span><span class="n">hp2</span><span class="p">)</span>
+
+            <span class="n">layout1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+                <span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickvals</span><span class="o">=</span><span class="n">x_tickvals</span><span class="p">,</span> <span class="n">ticktext</span><span class="o">=</span><span class="n">x_ticktext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">hp1_name</span><span class="p">),</span>
+                    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickvals</span><span class="o">=</span><span class="n">y_tickvals</span><span class="p">,</span> <span class="n">ticktext</span><span class="o">=</span><span class="n">y_ticktext</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">hp2_name</span><span class="p">),</span>
+                    <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">expr</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">figure1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces1</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout1</span><span class="p">)</span>
+        <span class="n">save_image</span><span class="p">(</span><span class="n">figure1</span><span class="p">,</span> <span class="s2">&quot;symbolic_explanation.pdf&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">selected_hyperparameters</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">):</span>
+            <span class="n">pdp_title</span> <span class="o">=</span> <span class="s2">&quot;Partial Dependency leveraged for training of Symbolic Explanation:&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pdp_title</span> <span class="o">=</span> <span class="s2">&quot;Partial Dependency for comparison:&quot;</span>
+
+        <span class="n">figure2</span> <span class="o">=</span> <span class="n">PartialDependencies</span><span class="o">.</span><span class="n">get_pdp_figure</span><span class="p">(</span>
+            <span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">,</span> <span class="n">show_confidence</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_ice</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">pdp_title</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">figure1</span><span class="p">,</span> <span class="n">figure2</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../../../../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+7.3.7. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.plugins.objective.cost_over_time &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.plugins.hyperparameter.symbolic_explanations &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,13 +31,14 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.plugins.objective.parallel_coordinates" href="deepcave.plugins.objective.parallel_coordinates.html" />
-    <link rel="prev" title="deepcave.plugins.objective.configuration_cube" href="deepcave.plugins.objective.configuration_cube.html" />
+    <link rel="next" title="deepcave.plugins.objective" href="deepcave.plugins.objective.html" />
+    <link rel="prev" title="deepcave.plugins.hyperparameter.pdp" href="deepcave.plugins.hyperparameter.pdp.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -374,16 +395,16 @@
        deepcave.plugins.dynamic
       </a>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3 current active has-children">
       <a class="reference internal" href="deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
       <label for="toctree-checkbox-9">
        <i class="fas fa-chevron-down">
        </i>
       </label>
-      <ul>
+      <ul class="current">
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
@@ -394,36 +415,31 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4 current active">
+        <a class="current reference internal" href="#">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
-     <li class="toctree-l3 current active has-children">
+     <li class="toctree-l3 has-children">
       <a class="reference internal" href="deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
       <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
-      <ul class="current">
+      <ul>
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.configuration_cube.html">
          deepcave.plugins.objective.configuration_cube
         </a>
        </li>
-       <li class="toctree-l4 current active">
-        <a class="current reference internal" href="#">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -678,73 +699,64 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime">
+  <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations">
    <code class="docutils literal notranslate">
     <span class="pre">
-     CostOverTime
+     SymbolicExplanations
     </span>
    </code>
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.check_runs_compatibility">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.check_runs_compatibility()
+       SymbolicExplanations.get_input_layout()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_filter_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.get_filter_layout()
+       SymbolicExplanations.get_output_layout()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_input_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.get_input_layout()
+       SymbolicExplanations.load_dependency_inputs()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_output_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.get_output_layout()
+       SymbolicExplanations.load_inputs()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.load_inputs">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.load_inputs()
+       SymbolicExplanations.load_outputs()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.load_outputs">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process">
      <code class="docutils literal notranslate">
       <span class="pre">
-       CostOverTime.load_outputs()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.process">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       CostOverTime.process()
+       SymbolicExplanations.process()
       </span>
      </code>
     </a>
@@ -772,160 +784,177 @@
               
               <div>
                 
-  <section id="module-deepcave.plugins.objective.cost_over_time">
-<span id="deepcave-plugins-objective-cost-over-time"></span><h1>deepcave.plugins.objective.cost_over_time<a class="headerlink" href="#module-deepcave.plugins.objective.cost_over_time" title="Link to this heading">¶</a></h1>
+  <section id="module-deepcave.plugins.hyperparameter.symbolic_explanations">
+<span id="deepcave-plugins-hyperparameter-symbolic-explanations"></span><h1>deepcave.plugins.hyperparameter.symbolic_explanations<a class="headerlink" href="#module-deepcave.plugins.hyperparameter.symbolic_explanations" title="Link to this heading">¶</a></h1>
+<p># SymbolicExplanations</p>
+<p>This module provides utilities for generating Symbolic Explanations.</p>
+<p>Provided utilities include getting input and output layout,
+processing the data and loading the outputs.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>SymbolicExplanations: Leverage Symbolic Explanations to obtain a formula and plot it.</p></li>
+</ul>
+</dd>
+<dt>## Constants</dt><dd><p>GRID_POINTS_PER_AXIS : int
+SAMPLES_PER_HP : int
+MAX_SAMPLES : int
+MAX_SHOWN_SAMPLES : int</p>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.objective.cost_over_time.CostOverTime" title="deepcave.plugins.objective.cost_over_time.CostOverTime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CostOverTime</span></code></a>()</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations" title="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SymbolicExplanations</span></code></a>()</p></td>
+<td><p>Generate Symbolic Explanations.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.objective.cost_over_time.</span></span><span class="sig-name descname"><span class="pre">CostOverTime</span></span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin" title="deepcave.plugins.dynamic.DynamicPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicPlugin</span></code></a></p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.hyperparameter.symbolic_explanations.</span></span><span class="sig-name descname"><span class="pre">SymbolicExplanations</span></span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin" title="deepcave.plugins.static.StaticPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">StaticPlugin</span></code></a></p>
+<p>Generate Symbolic Explanations.</p>
+<p>Provided utilities include getting input and output layout,
+processing the data and loading the outputs.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.check_runs_compatibility">
-<span class="sig-name descname"><span class="pre">check_runs_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.check_runs_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.check_runs_compatibility" title="Link to this definition">¶</a></dt>
-<dd><p>This function is needed if all selected runs need something in common
-(e.g. budget or objective). Since this function is called before the layout is created,
-it can be also used to set common values for the plugin.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout" title="Link to this definition">¶</a></dt>
+<dd><p>Get the layout for the input block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>runs</strong> (<em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em>) – Selected runs.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="deepcave.runs.exceptions.html#deepcave.runs.exceptions.NotMergeableError" title="deepcave.runs.exceptions.NotMergeableError"><strong>NotMergeableError</strong></a> – If runs are not compatible, an error is thrown.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.get_filter_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_filter_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the filter block.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register (user) variables.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the filter block.</p>
+<dd class="field-even"><p>The layout for the input block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[Union[dbc.Row, html.Details]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.get_input_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_input_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the input block.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout" title="Link to this definition">¶</a></dt>
+<dd><p>Get the layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register (user) variables.</p>
+<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
+The register_input function is located in the Plugin superclass.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the input block.</p>
+<dd class="field-even"><p>Layout for the output block.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Component]</p>
+<dd class="field-odd"><p>List[dcc.Graph]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.get_output_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.get_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Layout for the output block.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs">
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">previous_inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs" title="Link to this definition">¶</a></dt>
+<dd><p>Work like ‘load_inputs’ but called after inputs have changed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the changes have to be returned. The returned dictionary
+will be merged with the inputs.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em><em>[</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em><em>]</em><em>, </em><em>str</em><em>]</em>) – The register method to register outputs.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run</strong> – The selected run.</p></li>
+<li><p><strong>inputs</strong> – Current content of the inputs.</p></li>
+<li><p><strong>previous_inputs</strong> – Previous content of the inputs.
+Not used in this specific function.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Layouts for the output block.</p>
+<dd class="field-even"><p>Dictionary with the changes.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>Dict[str, Any]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.load_inputs">
-<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.load_inputs" title="Link to this definition">¶</a></dt>
-<dd><p>Load the content for the defined inputs in <cite>get_input_layout</cite> and <cite>get_filter_layout</cite>.
-This method is necessary to pre-load contents for the inputs. So, if the plugin is
-called for the first time or there are no results in the cache, the plugin gets its
-content from this method.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs">
+<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs" title="Link to this definition">¶</a></dt>
+<dd><p>Load the content for the defined inputs in ‘get_input_layout’.</p>
+<p>This method is necessary to pre-load contents for the inputs.
+If the plugin is called for the first time, or there are no results in the cache,
+the plugin gets its content from this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Content to be filled.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dict[str, Any]</p>
+<dd class="field-even"><p>Dict[str, Dict[str, Any]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.load_outputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.load_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Reads in the raw data and prepares them for the layout.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs" title="Link to this definition">¶</a></dt>
+<dd><p>Read the raw data and prepare it for the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differ
+compared to ‘load_inputs’ or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>runs</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a><em>]</em><em>]</em>) – All selected runs. If <cite>activate_run_selection</cite> is set, only the selected run is
-returned.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em><em>]</em>) – Raw outputs from the runs. If <cite>activate_run_selection</cite> is set,
-a Dict[str, str] is returned.</p></li>
+<li><p><strong>run</strong> – The selected run.</p></li>
+<li><p><strong>inputs</strong> – Input and filter values from the user.</p></li>
+<li><p><strong>outputs</strong> – Raw output from the run.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The components must be in the same position as defined in <cite>get_output_layout</cite>.</p>
+<dd class="field-even"><p>The figure of the Symbolic Explanation and the Partial Dependency Plot (PDP) leveraged
+for training in the case that the number of hyperparameters to be explained is smaller
+than the number of hyperparameters that was optimized, else, a Partial Dependency Plot
+(PDP) for comparison.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Union[Component, List[Component]]</p>
+<dd class="field-odd"><p>List[go.Figure]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.cost_over_time.CostOverTime.process">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/cost_over_time.html#CostOverTime.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.cost_over_time.CostOverTime.process" title="Link to this definition">¶</a></dt>
-<dd><p>Returns raw data based on a run and input data.</p>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/symbolic_explanations.html#SymbolicExplanations.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process" title="Link to this definition">¶</a></dt>
+<dd><p>Return raw data based on a run and the input data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The returned data must be JSON serializable.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The passed <cite>inputs</cite> are cleaned and therefore differs compared to <cite>load_inputs</cite> or
-<cite>load_dependency_inputs</cite>. Please see <cite>_clean_inputs</cite> for more information.</p>
+<p>The passed inputs are cleaned and therefore differ
+compared to ‘load_inputs’ or ‘load_dependency_inputs’.
+Please see ‘_clean_inputs’ for more information.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>run</strong> (<a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><em>AbstractRun</em></a>) – The run to process.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input data.</p></li>
+<li><p><strong>run</strong> – The run to process.</p></li>
+<li><p><strong>inputs</strong> – The input data.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Serialized dictionary.</p>
+<dd class="field-even"><p>A serialized dictionary.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the objective is None.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -940,17 +969,17 @@ a Dict[str, str] is returned.</p></li>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.plugins.objective.configuration_cube.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.plugins.hyperparameter.pdp.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.plugins.objective.configuration_cube</p>
+            <p class="prev-next-title">deepcave.plugins.hyperparameter.pdp</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.plugins.objective.parallel_coordinates.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.plugins.objective.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.plugins.objective.parallel_coordinates</p>
+        <p class="prev-next-title">deepcave.plugins.objective</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -968,14 +997,14 @@ a Dict[str, str] is returned.</p></li>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

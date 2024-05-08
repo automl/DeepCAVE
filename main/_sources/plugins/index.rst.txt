@@ -1,5 +1,5 @@
-Plugins
-=======
+Displaying Data with Plugins
+============================
 
 .. toctree::
    :hidden:
@@ -15,6 +15,7 @@ Plugins
    budget_correlation
    importances
    partial_dependencies
+   symbolic_explanations
 
 
 Plugins are used to display data in a specific way. There are plugins to analyse the performance,
@@ -78,6 +79,6 @@ DeepCAVE was designed so that the plugins require minimal design. We recommend u
 provided plugins as a starting point and change it to your needs.
 
 After you have created your plugin, you need to register it in your config file. If you work
-on the branch directly, you can adapt ``deepcave/config.py`` to your needs. 
+on the branch directly, you can adapt ``deepcave/config.py`` to your needs.
 We would be very happy to receive pull-requests!
 

@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.utils.dash &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.utils.dash &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,9 +31,10 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.utils.data_structures" href="deepcave.utils.data_structures.html" />
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -394,6 +415,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -412,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -678,6 +699,15 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.dash.alert">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     alert()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.dash.flash">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -709,11 +739,13 @@
                 
   <section id="module-deepcave.utils.dash">
 <span id="deepcave-utils-dash"></span><h1>deepcave.utils.dash<a class="headerlink" href="#module-deepcave.utils.dash" title="Link to this heading">¶</a></h1>
+<p># Dash</p>
+<p>This module provides utilities to return and flash alerts.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">alert</span></code>(message)</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.dash.alert" title="deepcave.utils.dash.alert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">alert</span></code></a>(message)</p></td>
+<td><p>Return an alert message.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.dash.flash" title="deepcave.utils.dash.flash"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flash</span></code></a>(message[, category])</p></td>
 <td><p>Flask style flash-message with Alerts.</p></td>
@@ -721,9 +753,41 @@
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.dash.alert">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.dash.</span></span><span class="sig-name descname"><span class="pre">alert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/dash.html#alert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.dash.alert" title="Link to this definition">¶</a></dt>
+<dd><p>Return an alert message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – The message of the alert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The alert object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dbc.Alert</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.dash.flash">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.dash.</span></span><span class="sig-name descname"><span class="pre">flash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/dash.html#flash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.dash.flash" title="Link to this definition">¶</a></dt>
 <dd><p>Flask style flash-message with Alerts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message</strong> (<em>str</em>) – The message to be displayed.</p></li>
+<li><p><strong>category</strong> (<em>str</em><em>, </em><em>optional</em>) – The category of the alert.
+Default is “info”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The alert object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dbc.Alert</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -762,14 +826,14 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

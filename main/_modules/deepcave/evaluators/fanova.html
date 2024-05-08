@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.evaluators.fanova &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.evaluators.fanova &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,9 +30,10 @@
     
   <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -92,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -121,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -154,6 +155,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../../../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -192,7 +203,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -250,11 +261,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -391,6 +412,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -409,18 +435,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -631,6 +647,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../api/deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -677,7 +698,19 @@
               <div>
                 
   <h1>Source code for deepcave.evaluators.fanova</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># fANOVA</span>
+
+<span class="sd">This module provides a tool for assessing the importance of an algorithms Hyperparameters.</span>
+
+<span class="sd">Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - fANOVA: Calculate and provide midpoints and sizes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
 
@@ -693,8 +726,22 @@
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA">[docs]</a>
 <span class="k">class</span> <span class="nc">fANOVA</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate and provide midpoints and sizes from the forest&#39;s</span>
-<span class="sd">    split values in order to get the marginals.</span>
+<span class="sd">    Calculate and provide midpoints and sizes.</span>
+
+<span class="sd">    They are generated from the forest&#39;s split values in order to get the marginals.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    run : AbstractRun</span>
+<span class="sd">        The Abstract Run used for the calculation.</span>
+<span class="sd">    cs : ConfigurationSpace</span>
+<span class="sd">        The configuration space of the run.</span>
+<span class="sd">    hps : List[Hyperparameters]</span>
+<span class="sd">        The Hyperparameters of the configuration space.</span>
+<span class="sd">    hp_names : List[str]</span>
+<span class="sd">        The corresponding names of the Hyperparameters.</span>
+<span class="sd">    n_trees : int</span>
+<span class="sd">        The number of trees.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">):</span>
@@ -716,7 +763,7 @@
         <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the data wrt budget and trains the forest on the encoded data.</span>
+<span class="sd">        Get the data with respect to budget and train the forest on the encoded data.</span>
 
 <span class="sd">        Note</span>
 <span class="sd">        ----</span>
@@ -725,7 +772,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        objectives : Optional[Union[Objective, List[Objective]]], optional</span>
-<span class="sd">            Considerd objectives. By default None. If None, all objectives are considered.</span>
+<span class="sd">            Considered objectives. By default None. If None, all objectives are considered.</span>
 <span class="sd">        budget : Optional[Union[int, float]], optional</span>
 <span class="sd">            Considered budget. By default None. If None, the highest budget is chosen.</span>
 <span class="sd">        n_trees : int, optional</span>
@@ -737,7 +784,7 @@
             <span class="n">objectives</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">budget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
+            <span class="n">budget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_highest_budget</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">n_trees</span> <span class="o">=</span> <span class="n">n_trees</span>
 
@@ -760,7 +807,7 @@
         <span class="bp">self</span><span class="p">,</span> <span class="n">hp_names</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the importance scores from the passed hyperparameter names.</span>
+<span class="sd">        Return the importance scores from the passed Hyperparameter names.</span>
 
 <span class="sd">        Warning</span>
 <span class="sd">        -------</span>
@@ -769,17 +816,17 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        hp_names : Optional[List[str]]</span>
-<span class="sd">            Selected hyperparameter names to get the importance scores from. If None, all</span>
-<span class="sd">            hyperparameters of the configspace are used.</span>
+<span class="sd">            Selected Hyperparameter names to get the importance scores from. If None, all</span>
+<span class="sd">            Hyperparameters of the configuration space are used.</span>
 <span class="sd">        depth : int, optional</span>
 <span class="sd">            How often dimensions should be combined. By default 1.</span>
 <span class="sd">        sort : bool, optional</span>
-<span class="sd">            Whether the hyperparameters should be sorted by importance. By default True.</span>
+<span class="sd">            Whether the Hyperparameters should be sorted by importance. By default True.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]</span>
-<span class="sd">            Dictionary with hyperparameter names and the corresbonding importance scores.</span>
+<span class="sd">            Dictionary with Hyperparameter names and the corresponding importance scores.</span>
 <span class="sd">            The values are tuples of the form (mean individual, var individual, mean total,</span>
 <span class="sd">            var total). Note that individual and total are the same if depth is 1.</span>
 
@@ -798,14 +845,13 @@
         <span class="c1"># Calculate the marginals</span>
         <span class="n">vu_individual</span><span class="p">,</span> <span class="n">vu_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">compute_marginals</span><span class="p">(</span><span class="n">hp_ids</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
 
-        <span class="n">importances</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">importances</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_ids</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">k</span> <span class="o">&gt;</span> <span class="n">depth</span><span class="p">:</span>
                 <span class="k">break</span>
 
             <span class="k">for</span> <span class="n">sub_hp_ids</span> <span class="ow">in</span> <span class="n">it</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">hp_ids</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
                 <span class="n">sub_hp_ids</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sub_hp_ids</span><span class="p">)</span>
-                <span class="n">importances</span><span class="p">[</span><span class="n">sub_hp_ids</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
                 <span class="c1"># clean here to catch zero variance in a trees</span>
                 <span class="n">non_zero_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span>
@@ -841,16 +887,17 @@
                 <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
             <span class="p">}</span>
 
-        <span class="c1"># We want to replace the ids with hyperparameter names again</span>
+        <span class="c1"># The ids get replaced with hyperparameter names again</span>
         <span class="n">all_hp_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
-        <span class="n">importances_</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">hp_ids</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">hp_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_hp_names</span><span class="p">[</span><span class="n">hp_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">hp_id</span> <span class="ow">in</span> <span class="n">hp_ids</span><span class="p">]</span>
+        <span class="n">importances_</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">hp_ids_importances</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">hp_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_hp_names</span><span class="p">[</span><span class="n">hp_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">hp_id</span> <span class="ow">in</span> <span class="n">hp_ids_importances</span><span class="p">]</span>
+            <span class="n">hp_names_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">hp_names</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">hp_names_key</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">hp_names</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
-            <span class="n">importances_</span><span class="p">[</span><span class="n">hp_names</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+                <span class="n">hp_names_key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
+            <span class="n">importances_</span><span class="p">[</span><span class="n">hp_names_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
 
         <span class="k">return</span> <span class="n">importances_</span></div>
 
@@ -858,7 +905,7 @@
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    def marginal_mean_variance_for_values(self, dimlist, values_to_predict):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-<span class="sd">        Returns the marginal of selected parameters for specific values</span>
+<span class="sd">        Return the marginal of selected parameters for specific values</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -881,7 +928,7 @@
 
 <span class="sd">    def get_most_important_pairwise_marginals(self, params=None, n=10):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-<span class="sd">        Returns the n most important pairwise marginals from the whole ConfigSpace.</span>
+<span class="sd">        Return the n most important pairwise marginals from the whole ConfigSpace.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -928,7 +975,7 @@
 
 <span class="sd">    def get_triple_marginals(self, params=None):</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-<span class="sd">        Returns the n most important pairwise marginals from the whole ConfigSpace</span>
+<span class="sd">        Return the n most important pairwise marginals from the whole ConfigSpace</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -998,14 +1045,14 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

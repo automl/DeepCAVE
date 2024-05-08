@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.runs.run &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.runs.run &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,9 +31,10 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.runs.status" href="deepcave.runs.status.html" />
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -394,6 +415,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -412,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -722,6 +743,33 @@
      </code>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.run.Run.load">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Run.load()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.run.Run.path">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Run.path
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.run.Run.save">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Run.save()
+      </span>
+     </code>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -747,11 +795,19 @@
                 
   <section id="module-deepcave.runs.run">
 <span id="deepcave-runs-run"></span><h1>deepcave.runs.run<a class="headerlink" href="#module-deepcave.runs.run" title="Link to this heading">¶</a></h1>
+<p># Run</p>
+<p>This module provides utilities to create a new run and get its attributes.</p>
+<dl class="simple">
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>Run: Create a new run.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Run</span></code></a>(name[, configspace, objectives, meta, path])</p></td>
-<td><p>Creates a new run.</p></td>
+<td><p>Create a new run and get its attributes.</p></td>
 </tr>
 </tbody>
 </table>
@@ -759,48 +815,67 @@
 <dt class="sig sig-object py" id="deepcave.runs.run.Run">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.run.</span></span><span class="sig-name descname"><span class="pre">Run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.html#deepcave.runs.AbstractRun" title="deepcave.runs.AbstractRun"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractRun</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Creates a new run.
-If path is given, runs are loaded from the path.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – Name of the run.</p></li>
-<li><p><strong>configspace</strong> (<em>ConfigSpace</em><em>, </em><em>optional</em>) – Configuration space of the run. Should be None if <cite>path</cite> is used. By default None.</p></li>
-<li><p><strong>objectives</strong> (<em>Union</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>, </em><em>List</em><em>[</em><a class="reference internal" href="deepcave.runs.objective.html#deepcave.runs.objective.Objective" title="deepcave.runs.objective.Objective"><em>Objective</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – Objectives of the run. Should be None if <cite>path</cite> is used. By default None</p></li>
-<li><p><strong>meta</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Meta data of the run. Should be None if <cite>path</cite> is used. By default None.</p></li>
-<li><p><strong>path</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Path</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – If a path is specified, the run is loaded from there. By default None.</p></li>
-</ul>
+<p>Create a new run and get its attributes.</p>
+<p>If path is given, runs are loaded from the path.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>configspace<span class="classifier">ConfigurationSpace</span></dt><dd><p>The configuration space of the run.</p>
 </dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If no configuration space is provided or found.</p>
+<dt>path<span class="classifier">Optional[Union[str, Path]]</span></dt><dd><p>The path of a run to be loaded.</p>
+</dd>
+<dt>meta<span class="classifier">Dict[str, Any]</span></dt><dd><p>Contains serialized objectives and budgets.</p>
+</dd>
+<dt>prefix<span class="classifier">str</span></dt><dd><p>The prefix for the id.</p>
+</dd>
+<dt>meta_fn<span class="classifier">Path</span></dt><dd><p>The path to the meta data.</p>
+</dd>
+<dt>configspace_fn<span class="classifier">Path</span></dt><dd><p>The path to the configuration space file.</p>
+</dd>
+<dt>configs_fn<span class="classifier">Path</span></dt><dd><p>The path to the configurations file.</p>
+</dd>
+<dt>origins_fn<span class="classifier">Path</span></dt><dd><p>The path to the origins file.</p>
+</dd>
+<dt>history_fn<span class="classifier">Path</span></dt><dd><p>The path to the history file.</p>
+</dd>
+<dt>models_dir<span class="classifier">Path</span></dt><dd><p>The path to the models directory.</p>
+</dd>
+<dt>configs<span class="classifier">Dict[int, Configuration]</span></dt><dd><p>Containing the configurations.</p>
+</dd>
+<dt>models<span class="classifier">Dict[int, Optional[Union[str, “torch.nn.Module”]]]</span></dt><dd><p>Contains the models.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.run.Run.add">
-<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Status.SUCCESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.add" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a trial to the run.
-If combination of config and budget already exists, it will be overwritten.
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Status.SUCCESS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.add" title="Link to this definition">¶</a></dt>
+<dd><p>Add a trial to the run.</p>
+<p>If combination of config, seed, and budget already exists, it will be overwritten.
 Not successful runs are added with <cite>None</cite> costs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>costs</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>float</em><em>]</em><em>, </em><em>float</em><em>]</em>) – Costs of the run. In case of multi-objective, a list of costs is expected.</p></li>
 <li><p><strong>config</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>Configuration</em><em>]</em>) – The corresponding configuration.</p></li>
-<li><p><strong>start_time</strong> (<em>float</em><em>, </em><em>optional</em>) – Start time. By default 0.0</p></li>
-<li><p><strong>end_time</strong> (<em>float</em><em>, </em><em>optional</em>) – End time. By default 0.0</p></li>
-<li><p><strong>status</strong> (<a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>optional</em>) – Status of the trial. By default Status.SUCCESS</p></li>
-<li><p><strong>origin</strong> (<em>str</em><em>, </em><em>optional</em>) – Origin of the trial. By default None</p></li>
-<li><p><strong>model</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>&amp;quot;torch.nn.Module&amp;quot;</em><em>]</em><em>, </em><em>optional</em>) – Model of the trial. By default None</p></li>
-<li><p><strong>additional</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em><em>, </em><em>optional</em>) – Additional information of the trial. By default None.
+<li><p><strong>seed</strong> (<em>int</em>) – Seed of the run.</p></li>
+<li><p><strong>budget</strong> (<em>float</em><em>, </em><em>optional</em>) – Budget of the run. By default np.inf</p></li>
+<li><p><strong>start_time</strong> (<em>float</em><em>, </em><em>optional</em>) – Start time. By default, 0.0</p></li>
+<li><p><strong>end_time</strong> (<em>float</em><em>, </em><em>optional</em>) – End time. By default, 0.0</p></li>
+<li><p><strong>status</strong> (<a class="reference internal" href="deepcave.runs.status.html#deepcave.runs.status.Status" title="deepcave.runs.status.Status"><em>Status</em></a><em>, </em><em>optional</em>) – Status of the trial. By default, Status.SUCCESS</p></li>
+<li><p><strong>origin</strong> (<em>str</em><em>, </em><em>optional</em>) – Origin of the trial. By default, None</p></li>
+<li><p><strong>model</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>&quot;torch.nn.Module&quot;</em><em>]</em><em>, </em><em>optional</em>) – Model of the trial. By default, None</p></li>
+<li><p><strong>additional</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em><em>, </em><em>optional</em>) – Additional information of the trial. By default, None.
 Following information is used by DeepCAVE:
 * traceback</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>RuntimeError</strong> – If number of costs does not match number of objectives.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If number of costs does not match number of objectives.</p></li>
+<li><p><strong>ValueError</strong> – If config id is None.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -808,7 +883,7 @@ Following information is used by DeepCAVE:
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.run.Run.exists">
 <span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.exists" title="Link to this definition">¶</a></dt>
-<dd><p>Checks if the run exists based on the internal path.</p>
+<dd><p>Check if the run exists based on the internal path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>If run exists.</p>
@@ -824,8 +899,14 @@ Following information is used by DeepCAVE:
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.from_path" title="Link to this definition">¶</a></dt>
 <dd><p>Based on a path, return a new Run object.</p>
 <dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path to get the run from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The run loaded from the path.</p>
+</dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-class docutils literal notranslate"><span class="pre">Run</span></code></a></p>
+<dd class="field-odd"><p>“Run”</p>
 </dd>
 </dl>
 </dd></dl>
@@ -833,11 +914,10 @@ Following information is used by DeepCAVE:
 <dl class="py property">
 <dt class="sig sig-object py" id="deepcave.runs.run.Run.id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.run.Run.id" title="Link to this definition">¶</a></dt>
-<dd><p>Hash of the file. This is used to identify the file.
-In contrast to <cite>hash</cite>, this hash should not be changed throughout the run.</p>
+<dd><p>Get a hash as id.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Hash of the run.</p>
+<dd class="field-odd"><p>The hashed id.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
@@ -845,6 +925,57 @@ In contrast to <cite>hash</cite>, this hash should not be changed throughout the
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.run.Run.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Path</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – The path where to load the run from.
+Default is None.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the path is None.
+    If the trials were not found.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.run.Run.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#deepcave.runs.run.Run.path" title="Link to this definition">¶</a></dt>
+<dd><p>Return the path of the run if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path of the run.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Optional[Path]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.run.Run.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/run.html#Run.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.run.Run.save" title="Link to this definition">¶</a></dt>
+<dd><p>Save the run and its information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Optional</em><em>[</em><em>Union</em><em>[</em><em>str</em><em>, </em><em>Path</em><em>]</em><em>]</em>) – The path in which to save the trials.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the path is not specified.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 </dd></dl>
 
 </section>
@@ -883,14 +1014,14 @@ In contrast to <cite>hash</cite>, this hash should not be changed throughout the
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

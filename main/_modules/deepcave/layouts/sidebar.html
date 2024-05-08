@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.layouts.sidebar &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.layouts.sidebar &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,9 +30,10 @@
     
   <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -92,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -121,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -154,6 +155,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../../../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -192,7 +203,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -250,11 +261,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -391,6 +412,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -409,18 +435,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -631,6 +647,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../api/deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -677,7 +698,19 @@
               <div>
                 
   <h1>Source code for deepcave.layouts.sidebar</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># SidebarLayout</span>
+
+<span class="sd">This module defines layout for the sidebar.</span>
+
+<span class="sd">Callbacks are registered and handled.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - SidebarLayout: Customize the Sidebar Layout.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">ALL</span><span class="p">,</span> <span class="n">html</span>
@@ -693,6 +726,19 @@
 <div class="viewcode-block" id="SidebarLayout">
 <a class="viewcode-back" href="../../../api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout">[docs]</a>
 <span class="k">class</span> <span class="nc">SidebarLayout</span><span class="p">(</span><span class="n">Layout</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Customize the Sidebar Layout.</span>
+
+<span class="sd">    Callbacks are registered and handled.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ----------</span>
+<span class="sd">    plugins : Dict[str, List[Plugin]]</span>
+<span class="sd">        A dictionary of all categorized plugins.</span>
+<span class="sd">    nav_points : Dict[str, List[Tuple[str, str, str]]]</span>
+<span class="sd">        A dictionary with plugins attributes corresponding to their category.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categorized_plugins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Plugin</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plugins</span> <span class="o">=</span> <span class="n">categorized_plugins</span>
@@ -706,13 +752,29 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nav_points</span> <span class="o">=</span> <span class="n">nav_points</span>
 
+<div class="viewcode-block" id="SidebarLayout.register_callbacks">
+<a class="viewcode-back" href="../../../api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.register_callbacks">[docs]</a>
     <span class="k">def</span> <span class="nf">register_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register the callbacks for the sidebar layout.&quot;&quot;&quot;</span>
         <span class="c1"># Update navigation items</span>
         <span class="n">output</span> <span class="o">=</span> <span class="n">Output</span><span class="p">(</span><span class="s2">&quot;navigation-items&quot;</span><span class="p">,</span> <span class="s2">&quot;children&quot;</span><span class="p">)</span>
         <span class="nb">input</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="s2">&quot;on-page-load&quot;</span><span class="p">,</span> <span class="s2">&quot;pathname&quot;</span><span class="p">)</span>
 
         <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">input</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-        <span class="k">def</span> <span class="nf">update_navigation_items</span><span class="p">(</span><span class="n">pathname</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+        <span class="k">def</span> <span class="nf">update_navigation_items</span><span class="p">(</span><span class="n">pathname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Update the navigation items.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            pathname : str</span>
+<span class="sd">                The pathname.</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            List[Component]</span>
+<span class="sd">                The navigation items.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">layouts</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">points</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nav_points</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">layouts</span> <span class="o">+=</span> <span class="p">[</span>
@@ -724,7 +786,7 @@
                 <span class="p">]</span>
 
                 <span class="n">point_layouts</span> <span class="o">=</span> <span class="p">[]</span>
-                <span class="k">for</span> <span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">icon</span><span class="p">)</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+                <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">icon</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
                     <span class="n">href</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;/plugins/</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="n">point_layouts</span> <span class="o">+=</span> <span class="p">[</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Li</span><span class="p">(</span>
@@ -740,8 +802,6 @@
                     <span class="p">]</span>
 
                 <span class="n">layouts</span> <span class="o">+=</span> <span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Ul</span><span class="p">(</span><span class="n">className</span><span class="o">=</span><span class="s2">&quot;nav flex-column&quot;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="n">point_layouts</span><span class="p">)]</span>
-
-            <span class="n">icon</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data-feather&quot;</span><span class="p">:</span> <span class="s2">&quot;file-text&quot;</span><span class="p">}</span>
 
             <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                 <span class="n">className</span><span class="o">=</span><span class="s2">&quot;position-sticky pt-3&quot;</span><span class="p">,</span>
@@ -767,6 +827,7 @@
             <span class="n">State</span><span class="p">({</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;cancel-job&quot;</span><span class="p">,</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">ALL</span><span class="p">},</span> <span class="s2">&quot;name&quot;</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">def</span> <span class="nf">delete_job</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Delete the job from the queue.&quot;&quot;&quot;</span>
             <span class="k">for</span> <span class="n">n_click</span><span class="p">,</span> <span class="n">job_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">n_clicks</span><span class="p">,</span> <span class="n">job_ids</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">n_click</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">queue</span><span class="o">.</span><span class="n">delete_job</span><span class="p">(</span><span class="n">job_id</span><span class="p">)</span>
@@ -776,6 +837,7 @@
 
         <span class="nd">@app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">Trigger</span><span class="p">(</span><span class="s2">&quot;global-update&quot;</span><span class="p">,</span> <span class="s2">&quot;n_intervals&quot;</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
         <span class="k">def</span> <span class="nf">update_queue_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Update the information of the queue.&quot;&quot;&quot;</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">all_jobs</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">queue</span><span class="o">.</span><span class="n">get_finished_jobs</span><span class="p">(),</span>
@@ -787,7 +849,6 @@
 
                 <span class="n">collect</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">jobs</span><span class="p">,</span> <span class="n">status</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">all_jobs</span><span class="p">,</span> <span class="n">job_stati</span><span class="p">):</span>
-
                     <span class="k">for</span> <span class="n">job</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
                         <span class="n">name</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;display_name&quot;</span><span class="p">]</span>
                         <span class="n">job_id</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">id</span>
@@ -848,11 +909,12 @@
 
                 <span class="k">return</span> <span class="p">[]</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">[]</span>
+                <span class="k">return</span> <span class="p">[]</span></div>
+
 
 <div class="viewcode-block" id="SidebarLayout.__call__">
 <a class="viewcode-back" href="../../../api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">Component</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">],</span> <span class="n">Component</span><span class="p">]:</span>  <span class="c1"># noqa: D102</span>
         <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Nav</span><span class="p">(</span>
             <span class="n">className</span><span class="o">=</span><span class="s2">&quot;col-md-3 col-lg-2 d-md-block sidebar collapse&quot;</span><span class="p">,</span>
             <span class="nb">id</span><span class="o">=</span><span class="s2">&quot;sidebarMenu&quot;</span><span class="p">,</span>
@@ -884,14 +946,14 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

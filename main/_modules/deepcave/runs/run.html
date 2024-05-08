@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.runs.run &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>deepcave.runs.run &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,9 +30,10 @@
     
   <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -92,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -121,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -154,6 +155,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../../../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -192,7 +203,7 @@
  </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../../../plugins/index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -250,11 +261,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../plugins/symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../../../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -391,6 +412,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -409,18 +435,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../../../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -631,6 +647,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../api/deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -677,7 +698,17 @@
               <div>
                 
   <h1>Source code for deepcave.runs.run</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="c1">#  noqa: D400</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd"># Run</span>
+
+<span class="sd">This module provides utilities to create a new run and get its attributes.</span>
+
+<span class="sd">## Classes</span>
+<span class="sd">    - Run: Create a new run.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
@@ -699,26 +730,36 @@
 <a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run">[docs]</a>
 <span class="k">class</span> <span class="nc">Run</span><span class="p">(</span><span class="n">AbstractRun</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a new run.</span>
+<span class="sd">    Create a new run and get its attributes.</span>
+
 <span class="sd">    If path is given, runs are loaded from the path.</span>
 
-<span class="sd">    Parameters</span>
+<span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
-<span class="sd">    name : str</span>
-<span class="sd">        Name of the run.</span>
-<span class="sd">    configspace : ConfigSpace, optional</span>
-<span class="sd">        Configuration space of the run. Should be None if `path` is used. By default None.</span>
-<span class="sd">    objectives : Union[Objective, List[Objective]], optional</span>
-<span class="sd">        Objectives of the run. Should be None if `path` is used. By default None</span>
-<span class="sd">    meta : Dict[str, Any], optional</span>
-<span class="sd">        Meta data of the run. Should be None if `path` is used. By default None.</span>
-<span class="sd">    path : Optional[Union[str, Path]], optional</span>
-<span class="sd">        If a path is specified, the run is loaded from there. By default None.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    RuntimeError</span>
-<span class="sd">        If no configuration space is provided or found.</span>
+<span class="sd">    configspace : ConfigurationSpace</span>
+<span class="sd">        The configuration space of the run.</span>
+<span class="sd">    path : Optional[Union[str, Path]]</span>
+<span class="sd">        The path of a run to be loaded.</span>
+<span class="sd">    meta : Dict[str, Any]</span>
+<span class="sd">        Contains serialized objectives and budgets.</span>
+<span class="sd">    prefix : str</span>
+<span class="sd">        The prefix for the id.</span>
+<span class="sd">    meta_fn : Path</span>
+<span class="sd">        The path to the meta data.</span>
+<span class="sd">    configspace_fn : Path</span>
+<span class="sd">        The path to the configuration space file.</span>
+<span class="sd">    configs_fn : Path</span>
+<span class="sd">        The path to the configurations file.</span>
+<span class="sd">    origins_fn : Path</span>
+<span class="sd">        The path to the origins file.</span>
+<span class="sd">    history_fn : Path</span>
+<span class="sd">        The path to the history file.</span>
+<span class="sd">    models_dir : Path</span>
+<span class="sd">        The path to the models directory.</span>
+<span class="sd">    configs : Dict[int, Configuration]</span>
+<span class="sd">        Containing the configurations.</span>
+<span class="sd">    models : Dict[int, Optional[Union[str, &quot;torch.nn.Module&quot;]]]</span>
+<span class="sd">        Contains the models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;run&quot;</span>
@@ -727,10 +768,10 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigSpace</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">objectives</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">configspace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConfigSpace</span><span class="o">.</span><span class="n">ConfigurationSpace</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">meta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Run</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
@@ -741,7 +782,8 @@
 
         <span class="c1"># Reset and load configspace/path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">configspace</span>
+        <span class="k">if</span> <span class="n">configspace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">configspace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
@@ -762,7 +804,7 @@
             <span class="n">serialized_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">to_json</span><span class="p">()]</span>
 
         <span class="c1"># Meta</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">serialized_objectives</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;objectives&quot;</span><span class="p">:</span> <span class="n">serialized_objectives</span><span class="p">,</span> <span class="s2">&quot;budgets&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;seeds&quot;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Run.from_path">
@@ -772,24 +814,54 @@
     <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Run&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Based on a path, return a new Run object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Path</span>
+<span class="sd">            The path to get the run from.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        &quot;Run&quot;</span>
+<span class="sd">            The run loaded from the path.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a hash as id.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The hashed id.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">string_to_hash</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the path of the run if it exists.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Optional[Path]</span>
+<span class="sd">            The path of the run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_path</span>
 
     <span class="nd">@path</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If path is changed, also change the filenames of all created files.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Set the paths of the run and the JSON files.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : Optional[Union[str, Path]]</span>
+<span class="sd">            The path for the directory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">return</span>
@@ -808,7 +880,7 @@
 <a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.exists">[docs]</a>
     <span class="k">def</span> <span class="nf">exists</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Checks if the run exists based on the internal path.</span>
+<span class="sd">        Check if the run exists based on the internal path.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -836,17 +908,19 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">costs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
         <span class="n">config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">],</span>
+        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span>
         <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
         <span class="n">status</span><span class="p">:</span> <span class="n">Status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span>
-        <span class="n">origin</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+        <span class="n">origin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># type: ignore # noqa: F821</span>
         <span class="n">additional</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds a trial to the run.</span>
-<span class="sd">        If combination of config and budget already exists, it will be overwritten.</span>
+<span class="sd">        Add a trial to the run.</span>
+
+<span class="sd">        If combination of config, seed, and budget already exists, it will be overwritten.</span>
 <span class="sd">        Not successful runs are added with `None` costs.</span>
 
 <span class="sd">        Parameters</span>
@@ -855,18 +929,22 @@
 <span class="sd">            Costs of the run. In case of multi-objective, a list of costs is expected.</span>
 <span class="sd">        config : Union[Dict, Configuration]</span>
 <span class="sd">            The corresponding configuration.</span>
+<span class="sd">        seed : int</span>
+<span class="sd">            Seed of the run.</span>
+<span class="sd">        budget : float, optional</span>
+<span class="sd">            Budget of the run. By default np.inf</span>
 <span class="sd">        start_time : float, optional</span>
-<span class="sd">            Start time. By default 0.0</span>
+<span class="sd">            Start time. By default, 0.0</span>
 <span class="sd">        end_time : float, optional</span>
-<span class="sd">            End time. By default 0.0</span>
+<span class="sd">            End time. By default, 0.0</span>
 <span class="sd">        status : Status, optional</span>
-<span class="sd">            Status of the trial. By default Status.SUCCESS</span>
+<span class="sd">            Status of the trial. By default, Status.SUCCESS</span>
 <span class="sd">        origin : str, optional</span>
-<span class="sd">            Origin of the trial. By default None</span>
-<span class="sd">        model : Union[str, &amp;quot;torch.nn.Module&amp;quot;], optional</span>
-<span class="sd">            Model of the trial. By default None</span>
+<span class="sd">            Origin of the trial. By default, None</span>
+<span class="sd">        model : Union[str, &quot;torch.nn.Module&quot;], optional</span>
+<span class="sd">            Model of the trial. By default, None</span>
 <span class="sd">        additional : Optional[Dict], optional</span>
-<span class="sd">            Additional information of the trial. By default None.</span>
+<span class="sd">            Additional information of the trial. By default, None.</span>
 <span class="sd">            Following information is used by DeepCAVE:</span>
 <span class="sd">            * traceback</span>
 
@@ -874,6 +952,8 @@
 <span class="sd">        ------</span>
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If number of costs does not match number of objectives.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If config id is None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">additional</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">additional</span> <span class="o">=</span> <span class="p">{}</span>
@@ -897,12 +977,12 @@
             <span class="c1"># If cost is none, replace it later with the highest cost</span>
             <span class="k">if</span> <span class="n">cost</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Update bounds here</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_lower</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_lower</span> <span class="ow">and</span> <span class="n">objective</span><span class="o">.</span><span class="n">lower</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&lt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">lower</span><span class="p">:</span>
                         <span class="n">objective</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">cost</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_upper</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">objective</span><span class="o">.</span><span class="n">lock_upper</span> <span class="ow">and</span> <span class="n">objective</span><span class="o">.</span><span class="n">upper</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">cost</span> <span class="o">&gt;</span> <span class="n">objective</span><span class="o">.</span><span class="n">upper</span><span class="p">:</span>
                         <span class="n">objective</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">cost</span>
 
             <span class="n">updated_objectives</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">to_json</span><span class="p">()]</span>
@@ -913,14 +993,18 @@
             <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">config_id</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+            <span class="n">config_id_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
 
         <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Config id is None.&quot;</span><span class="p">)</span>
+
         <span class="n">trial</span> <span class="o">=</span> <span class="n">Trial</span><span class="p">(</span>
             <span class="n">config_id</span><span class="o">=</span><span class="n">config_id</span><span class="p">,</span>
             <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
             <span class="n">costs</span><span class="o">=</span><span class="n">costs</span><span class="p">,</span>
             <span class="n">start_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
             <span class="n">end_time</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">end_time</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
@@ -943,15 +1027,35 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
 
+        <span class="c1"># Update seeds</span>
+        <span class="k">if</span> <span class="n">seed</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;seeds&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
         <span class="c1"># Update models</span>
-        <span class="c1"># Problem: We don&#39;t want to have the model in the cache.</span>
-        <span class="c1"># Therefore, we first keep the model as it is,</span>
+        <span class="c1"># Problem: The model should not be in the cache.</span>
+        <span class="c1"># Therefore, first the model is kept as it is,</span>
         <span class="c1"># but remove it from the dict and save it to the disk later on.</span>
         <span class="k">if</span> <span class="n">model</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span></div>
 
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Run.save">
+<a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save the run and its information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Optional[Union[str, Path]]</span>
+<span class="sd">            The path in which to save the trials.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the path is not specified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Please specify a path to save the trials.&quot;</span><span class="p">)</span>
 
@@ -976,7 +1080,7 @@
 
         <span class="c1"># Models</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># We import torch here because we don&#39;t want to have it as requirement.</span>
+            <span class="c1"># torch is imported here, because it is not wanted as requirement.</span>
             <span class="kn">import</span> <span class="nn">torch</span>
 
             <span class="c1"># Iterate over models and save them if they are a module.</span>
@@ -992,9 +1096,27 @@
                         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unknown model type.&quot;</span><span class="p">)</span>
 
                 <span class="c1"># Remove from dict</span>
-                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span></div>
 
+
+<div class="viewcode-block" id="Run.load">
+<a class="viewcode-back" href="../../../api/deepcave.runs.run.html#deepcave.runs.run.Run.load">[docs]</a>
     <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the run.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Optional[Union[str, Path]], optional</span>
+<span class="sd">            The path where to load the run from.</span>
+<span class="sd">            Default is None.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RuntimeError</span>
+<span class="sd">            If the path is None.</span>
+<span class="sd">            If the trials were not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1034,6 +1156,7 @@
 
                 <span class="c1"># Update highest budget</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_update_highest_budget</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">config_id</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">budget</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">status</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 
@@ -1056,14 +1179,14 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -9,6 +9,9 @@ Examples
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
@@ -26,10 +29,45 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin parallel coordinates. Note that other plugins use the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Partial Dependencies. Note that other plugins use the ...">
+
+.. only:: html
+
+  .. image:: /examples/api/images/thumb/sphx_glr_pdp_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_api_pdp.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Partial Dependencies</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Importances. Note that other plugins use the same inte...">
+
+.. only:: html
+
+  .. image:: /examples/api/images/thumb/sphx_glr_importances_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_api_importances.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Importances</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Parallel Coordinates. Note that other plugins use the ...">
 
 .. only:: html
 
@@ -43,6 +81,8 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
       <div class="sphx-glr-thumbnail-title">Parallel Coordinates</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
@@ -61,6 +101,7 @@ AutoML runs.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -112,6 +153,8 @@ AutoML runs.
       <div class="sphx-glr-thumbnail-title">Multi-Layer Perceptron via PyTorch</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

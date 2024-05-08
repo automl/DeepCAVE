@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_examples_record_mnist_pytorch.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -24,9 +24,9 @@ Multi-Layer Perceptron via PyTorch
 This more advanced example incorporates multiple objectives, budgets and statusses to
 show the strenghts of DeepCAVE's recorder.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-288
+.. GENERATED FROM PYTHON SOURCE LINES 8-286
 
-.. code-block:: default
+.. code-block:: Python
 
 
 
@@ -86,7 +86,7 @@ show the strenghts of DeepCAVE's recorder.
                 ]
             )
 
-            self.accuracy = Accuracy()
+            self.accuracy = Accuracy(task="multiclass", num_classes=self.num_classes)
 
         def prepare_data(self):
             # download
@@ -94,7 +94,6 @@ show the strenghts of DeepCAVE's recorder.
             MNIST(self.data_dir, train=False, download=True)
 
         def setup(self, stage=None):
-
             # Assign train/val datasets for use in dataloaders
             if stage == "fit" or stage is None:
                 mnist_full = MNIST(self.data_dir, train=True, transform=self.transform)
@@ -280,10 +279,9 @@ show the strenghts of DeepCAVE's recorder.
 
                         # The model weights are trained
                         trainer = pl.Trainer(
-                            accelerator="gpu",
+                            accelerator="cpu",
                             devices=1,
                             num_sanity_val_steps=0,  # No validation sanity
-                            auto_scale_batch_size="power",
                             deterministic=True,
                             min_epochs=epochs,
                             max_epochs=epochs,
@@ -310,24 +308,16 @@ show the strenghts of DeepCAVE's recorder.
                         r.end(costs=[accuracy_, loss_, elapsed_time], status=status)
 
 
-.. rst-class:: sphx-glr-timing
-
-   **Total running time of the script:** (0 minutes 0.000 seconds)
-
-
 .. _sphx_glr_download_examples_record_mnist_pytorch.py:
 
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: mnist_pytorch.ipynb <mnist_pytorch.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: mnist_pytorch.py <mnist_pytorch.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: mnist_pytorch.ipynb <mnist_pytorch.ipynb>`

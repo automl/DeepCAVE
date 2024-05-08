@@ -3,9 +3,9 @@
 <html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overview &#8212; DeepCAVE Documentation 1.1.3 documentation</title>
+    <title>Overview &#8212; DeepCAVE Documentation 1.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,13 +31,14 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=0ac1cb89"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Configurations" href="configurations.html" />
-    <link rel="prev" title="Plugins" href="index.html" />
+    <link rel="prev" title="Displaying Data with Plugins" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -95,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.1.3
+        v1.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.1.3</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
     </div>
 </div>
       </div>
@@ -124,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -157,6 +158,16 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
@@ -195,7 +206,7 @@
  </li>
  <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="index.html">
-   Plugins
+   Displaying Data with Plugins
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
@@ -253,11 +264,21 @@
      Partial Dependencies
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../converters.html">
    Converters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
   </a>
  </li>
  <li class="toctree-l1 has-children">
@@ -394,6 +415,11 @@
          deepcave.plugins.hyperparameter.pdp
         </a>
        </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
       </ul>
      </li>
      <li class="toctree-l3 has-children">
@@ -412,18 +438,8 @@
         </a>
        </li>
        <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.cost_over_time.html">
-         deepcave.plugins.objective.cost_over_time
-        </a>
-       </li>
-       <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.plugins.objective.parallel_coordinates.html">
          deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.pareto_front.html">
-         deepcave.plugins.objective.pareto_front
         </a>
        </li>
       </ul>
@@ -634,6 +650,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.utils.url.html">
        deepcave.utils.url
       </a>
@@ -746,7 +767,7 @@ about the meta data, objectives and statistics of the selected run.</p>
 <li><p>Is the configuration space as expected?</p></li>
 <li><p>How many trials have been successful/unsuccessful?</p></li>
 <li><p>Why did certain trials crash?</p></li>
-<li><p>On which budgets were the configurations evaluated?</p></li>
+<li><p>On which multi-fidelity budgets were the configurations evaluated?</p></li>
 </ul>
 <section id="quick-information">
 <h2>Quick Information<a class="headerlink" href="#quick-information" title="Link to this heading">¶</a></h2>
@@ -757,7 +778,9 @@ the runs were last updated and a handy quick link to the best <strong>Configurat
 <section id="meta">
 <h2>Meta<a class="headerlink" href="#meta" title="Link to this heading">¶</a></h2>
 <p>Next we show some meta information regarding your runs. Notably, you can see information such as the
-possible <strong>budget</strong> allocations that were considered during the run.</p>
+possible <strong>budget</strong> allocations that were considered during the run. The <strong>budget</strong> is the amount of
+resources that were allocated to a configuration as it was being evaluated using a multi-fidelity
+approach.</p>
 </section>
 <section id="objectives">
 <h2>Objectives<a class="headerlink" href="#objectives" title="Link to this heading">¶</a></h2>
@@ -767,9 +790,9 @@ information about it’s name and the bounds they were in.</p>
 <section id="statuses">
 <h2>Statuses<a class="headerlink" href="#statuses" title="Link to this heading">¶</a></h2>
 <p>To get a nice overview of the optimization run, we provide a barplot that details how the end status
-of the many trials that occured. You can also view these as a heatmap or get more information from
+of the many trials that occurred. You can also view these as a heatmap or get more information from
 the <strong>Details</strong> tab.</p>
-<p>The barplot shows which trial recieved which status and under which budget allocation. These are
+<p>The barplot shows which trial received which status and under which budget allocation. These are
 grouped according to the status and coloured based on the status it exited with.</p>
 <p>To see details on how these configurations faired as they progressed in budget, you can refer to
 the <strong>Heatmap</strong> tab. Here you’ll see the budget allocation along the x-axis with the configuration
@@ -778,9 +801,9 @@ across the entire plot, with some <strong>NOT_EVALUATED</strong> lines indicatin
 to try. However if you faced many crashes at high budgets for example, you’ll see <strong>CRASHED</strong> bars
 from the highest budget onwards. In general, you can use this to understand how often your optimizer
 balances out between low budget evaluations and full budget evaluations.</p>
-<p>In the <strong>Details</strong> tab, you’ll recieve an overview of configurations that were not successful.
-Here you’ll get some breif information about the config id number, the budget it was evaluated under
-and the status it recieved. If there is an associated error we can provide, such as when it recieved
+<p>In the <strong>Details</strong> tab, you’ll receive an overview of configurations that were not successful.
+Here you’ll get some brief information about the config id number, the budget it was evaluated under
+and the status it received. If there is an associated error we can provide, such as when it received
 the <strong>CRASHED</strong> status, we will display it in the error column.</p>
 </section>
 <section id="configuration-space">
@@ -802,7 +825,7 @@ default value and whether it was optimized on a log-scale vs a linear one.</p>
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Plugins</p>
+            <p class="prev-next-title">Displaying Data with Plugins</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="configurations.html" title="next page">
@@ -826,14 +849,14 @@ default value and whether it was optimized on a log-scale vs a linear one.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2023, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.2.6. Template is modified version of <a
+7.3.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>
