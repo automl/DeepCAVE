@@ -13,7 +13,7 @@ Since configurations are used throughout the application, you might find links a
 plugin. This plugin is capable of answering following questions:
 
 * Where is the configuration coming from?
-* How are the objective values wrt the budgets?
+* How are the objective values with respect to the budgets?
 * How is the status of a trial associated with the selected configuration?
 * Which values have been used for a certain configuration?
 * How can I access the configuration in python?
@@ -43,7 +43,7 @@ graph view gives you a nice overview, the table displays the concrete values.
 Code
 ----
 Often a configuration is selected for deployment, which makes it crucial to access it somehow.
-The code block provides you the code to access the configuration code-wise. 
+The code block provides you the code to access the configuration code-wise.
 
 
 .. image:: ../images/plugins/configurations.png

@@ -1,3 +1,16 @@
+# noqa: D400
+"""
+# BOHBRun
+
+This module provides utilities for managing and processing data concerning a BOHB
+(Bayesian Optimization and Hyperparameter Bandits) run.
+
+## Classes
+    - BOHBRun: Create a BOHB Run.
+"""
+
+from typing import Any, Dict, Union
+
 from pathlib import Path
 
 from deepcave.runs import Status
@@ -7,11 +20,31 @@ from deepcave.utils.hash import file_to_hash
 
 
 class BOHBRun(Run):
+    """
+    Create a BOHB (Bayesian Optimization and Hyperparameter Bandits) run.
+
+    Properties
+    ----------
+    path : Path
+        The path to the run.
+    """
+
     prefix = "BOHB"
     _initial_order = 2
 
     @property
-    def hash(self):
+    def hash(self) -> str:
+        """
+        Get the hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
+        This ensures that the cache always holds the latest results of the run.
+
+        Returns
+        -------
+        str
+            The hash of the run.
+        """
         if self.path is None:
             return ""
 
@@ -19,14 +52,34 @@ class BOHBRun(Run):
         return file_to_hash(self.path / "results.json")
 
     @property
-    def latest_change(self):
+    def latest_change(self) -> Union[float, int]:
+        """
+        Get the timestamp of the latest change.
+
+        Returns
+        -------
+        Union[float, int]
+            The latest change.
+        """
         if self.path is None:
             return 0
 
         return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path: Union[Path, str]) -> "BOHBRun":
+        """
+        Create a new BOHB run from a given path and add a new trial to it.
+
+        Parameters
+        ----------
+        path : Union[Path, str]
+            The pathname to base the run on.
+
+        Returns
+        -------
+        The BOHB run
+        """
         path = Path(path)
 
         # Read configspace
@@ -35,7 +88,7 @@ class BOHBRun(Run):
         configspace = cs_json.read((path / "configspace.json").read_text())
 
         # Read objectives
-        # We have to define it ourselves, because we don't know the type of the objective
+        # It has to be defined here, because the type of the objective is not known
         # Only lock lower
         objective = Objective("Cost", lower=0)
 
@@ -49,7 +102,6 @@ class BOHBRun(Run):
 
         first_starttime = None
         for bohb_run in bohb.get_all_runs():
-
             times = bohb_run.time_stamps
             starttime = times["started"]
             endtime = times["finished"]
@@ -64,35 +116,41 @@ class BOHBRun(Run):
             budget = bohb_run.budget
 
             if bohb_run.info is None:
-                status = "CRASHED"
+                status_string = "CRASHED"
             else:
-                status = bohb_run.info["state"]
+                status_string = bohb_run.info["state"]
 
             config = config_mapping[bohb_run.config_id]["config"]
 
-            origin = None
-            additional = {}
+            additional: Dict[str, Any] = {}
+            status: Status
 
             # QUEUED, RUNNING, CRASHED, REVIEW, TERMINATED, COMPLETED, SUCCESS
-            if "SUCCESS" in status or "TERMINATED" in status or "COMPLETED" in status:
+            if (
+                "SUCCESS" in status_string
+                or "TERMINATED" in status_string
+                or "COMPLETED" in status_string
+            ):
                 status = Status.SUCCESS
-            elif "RUNNING" in status or "QUEUED" in status or "REVIEW" in status:
-                status = Status.RUNNING
+            elif (
+                "RUNNING" in status_string or "QUEUED" in status_string or "REVIEW" in status_string
+            ):
+                status = status_string  # type: ignore
             else:
                 status = Status.CRASHED
 
             if status != Status.SUCCESS:
-                # We don't want cost included which are failed
+                # Costs which failed, should not be included
                 cost = None
 
             run.add(
                 costs=[cost],  # Having only single objective here
                 config=config,
                 budget=budget,
+                seed=-1,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
-                origin=origin,
                 additional=additional,
             )
 

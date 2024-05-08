@@ -1,3 +1,10 @@
+#  noqa: D400
+"""
+# Docs
+
+This module provides a function to convert reStructuredText (RST) to MarkDown (MD).
+"""
+
 from __future__ import annotations
 
 import re
@@ -5,6 +12,19 @@ from pathlib import Path
 
 
 def rst_to_md(filename: str | Path) -> str:
+    """
+    Convert a subset of reStructuredText (RST) to MarkDown (MD).
+
+    Parameters
+    ----------
+    filename : str | Path
+        The path to the reStructuredText (RST) file.
+
+    Returns
+    -------
+    str
+        The converted data in MarkDown (MD) format.
+    """
     if isinstance(filename, Path):
         filename = str(filename)
 

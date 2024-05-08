@@ -1,10 +1,4 @@
-from typing import List
-
 import unittest
-
-import numpy as np
-import pytest
-from requests import check_compatibility
 
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.runs.converters.smac3v1 import SMAC3v1Run

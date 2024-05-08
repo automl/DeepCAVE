@@ -1,3 +1,18 @@
+#  noqa: D400
+"""
+# SMAC3v2Run
+
+This module provides utilities to create a SMAC3v2
+(Sequential Model-based Algorithm Configuration) run.
+
+Version 2.0.0 is used.
+
+## Classes
+    - SMAC3v2Run: Define a SMAC3v2 run object.
+"""
+
+from typing import Union
+
 import json
 from pathlib import Path
 
@@ -10,11 +25,33 @@ from deepcave.utils.hash import file_to_hash
 
 
 class SMAC3v2Run(Run):
+    """
+    Define a SMAC3v2 (Sequential Model-based Algorithm Configuration) run object.
+
+    Version 2.0.0 is used.
+
+    Properties
+    ----------
+    path : Path
+        The path to the run.
+    """
+
     prefix = "SMAC3v2"
     _initial_order = 2
 
     @property
-    def hash(self):
+    def hash(self) -> str:
+        """
+        Hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
+        This ensures that the cache always holds the latest results of the run.
+
+        Returns
+        -------
+        str
+            The hash of the run.
+        """
         if self.path is None:
             return ""
 
@@ -22,16 +59,38 @@ class SMAC3v2Run(Run):
         return file_to_hash(self.path / "runhistory.json")
 
     @property
-    def latest_change(self):
+    def latest_change(self) -> Union[float, int]:
+        """
+        Get the timestamp of the latest change.
+
+        Returns
+        -------
+        Union[float, int]
+            The latest change.
+        """
         if self.path is None:
             return 0
 
         return Path(self.path / "runhistory.json").stat().st_mtime
 
     @classmethod
-    def from_path(cls, path):
+    def from_path(cls, path: Union[Path, str]) -> "SMAC3v2Run":
         """
         Based on working_dir/run_name/*, return a new trials object.
+
+        Parameters
+        ----------
+        path : Union[Path, str]
+            The path to base the trial object on.
+
+        Returns
+        -------
+        The SMAC3v2 run.
+
+        Raises
+        ------
+        RuntimeError
+            Instances are not supported.
         """
         path = Path(path)
 
@@ -42,22 +101,28 @@ class SMAC3v2Run(Run):
             configspace = cs_json.read(f.read())
 
         # Read objectives
-        # We have to define it ourselves, because we don't know the type of the objective
-        # Only lock lower
-        objective1 = Objective("Cost", lower=0)
-        objective2 = Objective("Time", lower=0)
+        with (path / "scenario.json").open() as json_file:
+            all_data = json.load(json_file)
+            objectives = all_data["objectives"]
+
+        obj_list = list()
+        if not isinstance(objectives, list):
+            objectives = [objectives]
+        for obj in objectives:
+            obj_list.append(Objective(obj))
+        # Only lock lower for time
+        obj_list.append(Objective("Time"))
 
         # Read meta
         with (path / "scenario.json").open() as json_file:
             meta = json.load(json_file)
             meta["run_objectives"] = meta.pop("objectives")
+            meta["optimizer_seed"] = meta.pop("seed")
 
         # Let's create a new run object
-        run = SMAC3v2Run(
-            name=path.stem, configspace=configspace, objectives=[objective1, objective2], meta=meta
-        )
+        run = SMAC3v2Run(name=path.stem, configspace=configspace, objectives=obj_list, meta=meta)
 
-        # We have to set the path manually
+        # The path has to be set manually
         run._path = path
 
         # Iterate over the runhistory
@@ -70,7 +135,6 @@ class SMAC3v2Run(Run):
         instance_ids = []
 
         first_starttime = None
-        seeds = []
         for (
             config_id,
             instance_id,
@@ -92,12 +156,6 @@ class SMAC3v2Run(Run):
             config_id = str(config_id)
             config = configs[config_id]
 
-            if seed not in seeds:
-                seeds.append(seed)
-
-            if len(seeds) > 1:
-                raise RuntimeError("Multiple seeds are not supported.")
-
             if first_starttime is None:
                 first_starttime = starttime
 
@@ -117,8 +175,8 @@ class SMAC3v2Run(Run):
                 status = Status.CRASHED
 
             if status != Status.SUCCESS:
-                # We don't want cost included which are failed
-                cost = None
+                # Costs which failed, should not be included
+                cost = [None] * len(cost) if isinstance(cost, list) else None
                 time = None
             else:
                 time = endtime - starttime
@@ -134,9 +192,10 @@ class SMAC3v2Run(Run):
                 origin = config_origins[config_id]
 
             run.add(
-                costs=[cost, time],
+                costs=cost + [time] if isinstance(cost, list) else [cost, time],
                 config=config,
                 budget=budget,
+                seed=seed,
                 start_time=starttime,
                 end_time=endtime,
                 status=status,

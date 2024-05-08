@@ -1,3 +1,12 @@
+#  noqa: D400
+"""
+# DeepCAVE
+
+This module is used to initialize and set up the configuration for the DeepCAVE framework.
+
+The Dash application gets created.
+"""
+
 from typing import Any, Callable, TypeVar, cast
 
 import datetime
@@ -9,7 +18,7 @@ from pathlib import Path
 name = "DeepCAVE"
 package_name = "deepcave"
 author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
-author_email = "sass@tnt.uni-hannover.de"
+author_email = "s.segel@ai.uni-hannover.de"
 description = "An interactive framework to visualize and analyze your AutoML process in real-time."
 url = "automl.org"
 project_urls = {
@@ -17,7 +26,7 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, {author}"
-version = "1.1.3"
+version = "1.2"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
@@ -25,7 +34,20 @@ _exec_files = ["server.py", "worker.py", "sphinx-build"]
 ROOT_DIR = Path(__file__).parent
 
 
-def get_app(title: str):
+def get_app(title: str) -> Any:
+    """
+    Get the Dash Proxy.
+
+    Parameters
+    ----------
+    title : str
+        The title of the application.
+
+    Returns
+    -------
+    DashProxy
+        The dash proxy.
+    """
     import dash_bootstrap_components as dbc
     from dash_extensions.enrich import (
         DashProxy,
@@ -61,8 +83,8 @@ def get_app(title: str):
 if any(file in _exec_file for file in _exec_files):
     from deepcave.custom_queue import Queue
     from deepcave.runs.handler import RunHandler
-    from deepcave.runs.objective import Objective  # noqa
-    from deepcave.runs.recorder import Recorder  # noqa
+    from deepcave.runs.objective import Objective
+    from deepcave.runs.recorder import Recorder
     from deepcave.utils.cache import Cache
     from deepcave.utils.configs import parse_config
     from deepcave.utils.notification import Notification
@@ -115,22 +137,60 @@ else:
     try:
         from deepcave.runs.objective import Objective  # noqa
         from deepcave.runs.recorder import Recorder  # noqa
+        from deepcave.utils.configs import parse_config
+        from deepcave.utils.notification import Notification
 
-        __all__ = ["version", "Recorder", "Objective"]
+        config_name = None
+        if "--config" in sys.argv:
+            config_name = sys.argv[sys.argv.index("--config") + 1]
+        config = parse_config(config_name)
+
+        # Notifications
+        notification = Notification()
+
+        __all__ = ["version", "Recorder", "Objective", "notification", "config"]
     except ModuleNotFoundError:
         __all__ = ["version"]
 
 
 _api_mode = False if "app" in globals() else True
 
-
 # This TypeVar is necessary to ensure that the decorator works with arbitrary signatures.
 F = TypeVar("F", bound=Callable[..., Any])
 
 
 def interactive(func: F) -> F:
+    """
+    Define the interactive decorator.
+
+    Parameters
+    ----------
+    func : F
+        The function to be decorated.
+
+    Returns
+    -------
+    F
+        The decorated function.
+    """
+
     @wraps(func)
     def inner(*args: Any, **kwargs: Any) -> Any:
+        """
+        Inner function of the decorator.
+
+        Parameters
+        ----------
+        *args : Any
+            Arguments to be passed to the wrap function.
+        **kwargs : Any
+            Keyword arguments to be passed to the wrap function.
+
+        Returns
+        -------
+        Any
+            The result of the function.
+        """
         if _api_mode:
             return
 
