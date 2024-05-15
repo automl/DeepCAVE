@@ -340,6 +340,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
+            print(budget_id)
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
