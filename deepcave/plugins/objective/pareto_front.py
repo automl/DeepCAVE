@@ -17,8 +17,7 @@ import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.runs.exceptions import NotMergeableError, RunInequality
@@ -381,8 +380,8 @@ class ParetoFront(DynamicPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -524,8 +523,8 @@ class ParetoFront(DynamicPlugin):
             layout = go.Layout(
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
-                margin=Config.FIGURE_MARGIN,
-                font=dict(size=Config.FIGURE_FONT_SIZE),
+                margin=config.FIGURE_MARGIN,
+                font=dict(size=config.FIGURE_FONT_SIZE),
             )
         else:
             layout = None

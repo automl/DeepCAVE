@@ -27,7 +27,7 @@ from dash import dcc, html
 from gplearn.genetic import SymbolicRegressor
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 from deepcave.plugins.static import StaticPlugin
@@ -146,8 +146,8 @@ class SymbolicExplanations(StaticPlugin):
                                     ),
                                     dcc.Slider(
                                         id=register("parsimony", "value", type=int),
-                                        marks=dict((i, str(10**i)) for i in range(-12, 1)),
-                                        min=-12,
+                                        marks=dict((i, str(10**i)) for i in range(-8, 1)),
+                                        min=-8,
                                         max=0,
                                         step=1,
                                         updatemode="drag",
@@ -493,13 +493,13 @@ class SymbolicExplanations(StaticPlugin):
         return [
             dcc.Graph(
                 register("symb_graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
             dcc.Graph(
                 register("pdp_graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
         ]
 
@@ -577,7 +577,7 @@ class SymbolicExplanations(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": expr,
-                    "font": dict(size=Config.FIGURE_FONT_SIZE - 4),
+                    "font": dict(size=config.FIGURE_FONT_SIZE - 4),
                 }
             )
         else:
@@ -601,9 +601,9 @@ class SymbolicExplanations(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
+                    margin=config.FIGURE_MARGIN,
                     title=expr,
-                    font=dict(size=Config.FIGURE_FONT_SIZE - 4),
+                    font=dict(size=config.FIGURE_FONT_SIZE - 4),
                 )
             )
 
@@ -622,7 +622,7 @@ class SymbolicExplanations(StaticPlugin):
             show_confidence=False,
             show_ice=False,
             title=pdp_title,
-            fontsize=Config.FIGURE_FONT_SIZE - 4,
+            fontsize=config.FIGURE_FONT_SIZE - 4,
         )
 
         return [figure1, figure2]

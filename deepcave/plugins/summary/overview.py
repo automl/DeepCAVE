@@ -30,7 +30,7 @@ from ConfigSpace.hyperparameters import (
 )
 from dash import dcc, html
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
 from deepcave.runs.group import Group
@@ -85,9 +85,9 @@ class Overview(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("status_statistics", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Barplot",
@@ -95,9 +95,9 @@ class Overview(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("config_statistics", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Heatmap",
@@ -401,8 +401,8 @@ class Overview(DynamicPlugin):
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
-            margin=Config.FIGURE_MARGIN,
-            font=dict(size=Config.FIGURE_FONT_SIZE),
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
         save_image(stats_figure, "status_bar.pdf")
@@ -411,8 +411,8 @@ class Overview(DynamicPlugin):
             legend={"title": "Status"},
             xaxis=dict(title="Budget (Seed)"),
             yaxis=dict(title="Configuration ID"),
-            margin=Config.FIGURE_MARGIN,
-            font=dict(size=Config.FIGURE_FONT_SIZE),
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(

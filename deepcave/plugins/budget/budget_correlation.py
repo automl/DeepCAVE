@@ -19,8 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from scipy import stats
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import create_table, get_select_options
@@ -229,9 +228,9 @@ class BudgetCorrelation(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("graph", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Graph",
@@ -310,9 +309,9 @@ class BudgetCorrelation(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Correlation"),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
             legend=dict(title="Budgets"),
-            font=dict(size=Config.FIGURE_FONT_SIZE),
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)

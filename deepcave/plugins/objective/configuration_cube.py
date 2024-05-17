@@ -19,7 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
@@ -297,8 +297,8 @@ class ConfigurationCube(DynamicPlugin):
         return (
             dcc.Graph(
                 register("graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
         )
 
@@ -418,7 +418,7 @@ class ConfigurationCube(DynamicPlugin):
             trace = go.Scatter3d(x=x, y=y, z=z, **scatter_kwargs)
             layout = go.Layout(
                 {"scene": {**layout_kwargs}},
-                font=dict(size=Config.FIGURE_FONT_SIZE),
+                font=dict(size=config.FIGURE_FONT_SIZE),
             )
         else:
             if len(data) == 1:
@@ -430,11 +430,11 @@ class ConfigurationCube(DynamicPlugin):
                 trace = go.Scatter(x=[], y=[])
             layout = go.Layout(
                 **layout_kwargs,
-                font=dict(size=Config.FIGURE_FONT_SIZE),
+                font=dict(size=config.FIGURE_FONT_SIZE),
             )
 
         figure = go.Figure(data=trace, layout=layout)
-        figure.update_layout(dict(margin=Config.FIGURE_MARGIN))
+        figure.update_layout(dict(margin=config.FIGURE_MARGIN))
         save_image(figure, "configuration_cube.pdf")
 
         return figure

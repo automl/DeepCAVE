@@ -19,8 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.runs.exceptions import NotMergeableError, RunInequality
@@ -300,8 +299,8 @@ class CostOverTime(DynamicPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -423,8 +422,8 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=Config.FIGURE_MARGIN,
-            font=dict(size=Config.FIGURE_FONT_SIZE),
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)
