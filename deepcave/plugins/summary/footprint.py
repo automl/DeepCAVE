@@ -16,7 +16,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objs as go
 from dash import dcc, html
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.footprint import Footprint as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.utils.layout import get_select_options, help_button
@@ -297,16 +297,16 @@ class FootPrint(StaticPlugin):
                 dbc.Tab(
                     dcc.Graph(
                         id=register("performance", "figure"),
-                        style={"height": Config.FIGURE_HEIGHT},
-                        config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                        style={"height": config.FIGURE_HEIGHT},
+                        config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
                     ),
                     label="Performance",
                 ),
                 dbc.Tab(
                     dcc.Graph(
                         id=register("area", "figure"),
-                        style={"height": Config.FIGURE_HEIGHT},
-                        config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                        style={"height": config.FIGURE_HEIGHT},
+                        config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
                     ),
                     label="Coverage",
                 ),
@@ -339,6 +339,7 @@ class FootPrint(StaticPlugin):
             The plotly figure of the footprint performance and area.
         """
         objective = run.get_objective(inputs["objective_id"])
+        budget = run.get_budget(inputs["budget_id"])
         show_borders = inputs["show_borders"]
         show_supports = inputs["show_supports"]
 
@@ -405,7 +406,8 @@ class FootPrint(StaticPlugin):
                     marker_symbol=marker_symbol,
                     marker={"size": size, "color": get_color(color_id)},
                     hovertext=[
-                        get_hovertext_from_config(run, config_id) for config_id in config_ids
+                        get_hovertext_from_config(run, config_id, budget)
+                        for config_id in config_ids
                     ],
                     hoverinfo="text",
                 )
@@ -414,7 +416,7 @@ class FootPrint(StaticPlugin):
         layout = go.Layout(
             xaxis=dict(title=None, tickvals=[]),
             yaxis=dict(title=None, tickvals=[]),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
         )
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)

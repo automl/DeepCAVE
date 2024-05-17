@@ -19,7 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.compression import deserialize, serialize
@@ -211,10 +211,10 @@ class ConfigurationCube(DynamicPlugin):
         budget = run.get_budget(budget_value)
         configs = run.get_configs(budget=budget)
         if n_configs_value == 0:
-            n_configs_value = len(configs) - 1
+            n_configs_value = len(configs)
         else:
-            if n_configs_value > len(configs) - 1:
-                n_configs_value = len(configs) - 1
+            if n_configs_value > len(configs):
+                n_configs_value = len(configs)
 
         # Restrict to three hyperparameters
         selected_hps = inputs["hyperparameter_names"]["value"]
@@ -233,8 +233,8 @@ class ConfigurationCube(DynamicPlugin):
             },
             "n_configs": {
                 "min": 0,
-                "max": len(configs) - 1,
-                "marks": get_slider_marks(list(range(len(configs)))),
+                "max": len(configs),
+                "marks": get_slider_marks(list(range(0, len(configs) + 1))),
                 "value": n_configs_value,
             },
             "hyperparameter_names": {
@@ -297,8 +297,8 @@ class ConfigurationCube(DynamicPlugin):
         return (
             dcc.Graph(
                 register("graph", "figure"),
-                style={"height": Config.FIGURE_HEIGHT},
-                config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
             ),
         )
 
@@ -332,6 +332,9 @@ class ConfigurationCube(DynamicPlugin):
         n_configs = inputs["n_configs"]
         objective_id = inputs["objective_id"]
         objective = run.get_objective(objective_id)
+        budget = run.get_budget(inputs["budget_id"])
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df.index = df.index.astype("str")
 
         # Limit to n_configs
         idx = [str(i) for i in range(n_configs, len(df))]
@@ -397,7 +400,9 @@ class ConfigurationCube(DynamicPlugin):
                 "color": costs,
                 "colorbar": {"thickness": 30, "title": objective.name},
             },
-            "hovertext": [get_hovertext_from_config(run, config_id) for config_id in config_ids],
+            "hovertext": [
+                get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+            ],
             "meta": {"colorbar": costs},
             "hoverinfo": "text",
         }
@@ -423,7 +428,7 @@ class ConfigurationCube(DynamicPlugin):
             layout = go.Layout(**layout_kwargs)
 
         figure = go.Figure(data=trace, layout=layout)
-        figure.update_layout(dict(margin=Config.FIGURE_MARGIN))
+        figure.update_layout(dict(margin=config.FIGURE_MARGIN))
         save_image(figure, "configuration_cube.pdf")
 
         return figure

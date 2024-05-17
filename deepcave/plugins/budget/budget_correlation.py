@@ -19,8 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from scipy import stats
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status
 from deepcave.utils.layout import create_table, get_select_options
@@ -171,17 +170,25 @@ class BudgetCorrelation(DynamicPlugin):
                 budget2 = run.get_budget(budget2_id)
                 budget2_readable = run.get_budget(budget2_id, human=True)
 
-                costs1 = run.get_all_costs(budget1, statuses=[Status.SUCCESS])
-                costs2 = run.get_all_costs(budget2, statuses=[Status.SUCCESS])
+                config_ids1 = run.get_configs(budget1, statuses=[Status.SUCCESS]).keys()
+                config_ids2 = run.get_configs(budget2, statuses=[Status.SUCCESS]).keys()
 
                 # Combine config ids
                 # So it is guaranteed that there is the same number of configs for each budget
-                config_ids = set(costs1.keys()) & set(costs2.keys())
+                config_ids = set(config_ids1) & set(config_ids2)
 
                 c1, c2 = [], []
                 for config_id in config_ids:
-                    c1 += [costs1[config_id][objective_id]]
-                    c2 += [costs2[config_id][objective_id]]
+                    c1 += [
+                        run.get_avg_costs(config_id, budget1, statuses=[Status.SUCCESS])[0][
+                            objective_id
+                        ]
+                    ]
+                    c2 += [
+                        run.get_avg_costs(config_id, budget2, statuses=[Status.SUCCESS])[0][
+                            objective_id
+                        ]
+                    ]
 
                 correlation = round(stats.spearmanr(c1, c2).correlation, 2)
                 correlations_symmetric["Budget"][budget2_readable] = budget2_readable  # type: ignore # noqa: E501
@@ -221,9 +228,9 @@ class BudgetCorrelation(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("graph", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Graph",
@@ -302,7 +309,7 @@ class BudgetCorrelation(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title="Budget"),
             yaxis=dict(title="Correlation"),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
             legend=dict(title="Budgets"),
         )
 

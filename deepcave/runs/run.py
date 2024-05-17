@@ -102,7 +102,7 @@ class Run(AbstractRun, ABC):
             serialized_objectives += [objective.to_json()]
 
         # Meta
-        self.meta = {"objectives": serialized_objectives, "budgets": []}
+        self.meta = {"objectives": serialized_objectives, "budgets": [], "seeds": []}
         self.meta.update(meta)
 
     @classmethod
@@ -198,6 +198,7 @@ class Run(AbstractRun, ABC):
         self,
         costs: Union[List[float], float],
         config: Union[Dict, Configuration],
+        seed: int,
         budget: float = np.inf,
         start_time: float = 0.0,
         end_time: float = 0.0,
@@ -209,7 +210,7 @@ class Run(AbstractRun, ABC):
         """
         Add a trial to the run.
 
-        If combination of config and budget already exists, it will be overwritten.
+        If combination of config, seed, and budget already exists, it will be overwritten.
         Not successful runs are added with `None` costs.
 
         Parameters
@@ -218,6 +219,10 @@ class Run(AbstractRun, ABC):
             Costs of the run. In case of multi-objective, a list of costs is expected.
         config : Union[Dict, Configuration]
             The corresponding configuration.
+        seed : int
+            Seed of the run.
+        budget : float, optional
+            Budget of the run. By default np.inf
         start_time : float, optional
             Start time. By default, 0.0
         end_time : float, optional
@@ -289,6 +294,7 @@ class Run(AbstractRun, ABC):
         trial = Trial(
             config_id=config_id,
             budget=budget,
+            seed=seed,
             costs=costs,
             start_time=np.round(start_time, 2),
             end_time=np.round(end_time, 2),
@@ -310,6 +316,11 @@ class Run(AbstractRun, ABC):
             self.meta["budgets"].sort()
 
         self._update_highest_budget(config_id, budget, status)
+
+        # Update seeds
+        if seed not in self.meta["seeds"]:
+            self.meta["seeds"].append(seed)
+            self.meta["seeds"].sort()
 
         # Update models
         # Problem: The model should not be in the cache.

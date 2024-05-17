@@ -19,8 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.runs.exceptions import NotMergeableError, RunInequality
@@ -300,8 +299,8 @@ class CostOverTime(DynamicPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -345,6 +344,7 @@ class CostOverTime(DynamicPlugin):
                 continue
 
             objective = run.get_objective(inputs["objective_id"])
+            budget = run.get_budget(inputs["budget_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "trials":
@@ -361,7 +361,9 @@ class CostOverTime(DynamicPlugin):
             symbol = None
             mode = "lines"
             if len(config_ids) > 0:
-                hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+                hovertext = [
+                    get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+                ]
                 hoverinfo = "text"
                 symbol = "circle"
                 mode = "lines+markers"
@@ -420,7 +422,7 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
         )
 
         figure = go.Figure(data=traces, layout=layout)

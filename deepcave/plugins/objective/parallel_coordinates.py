@@ -20,7 +20,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.plugins.static import StaticPlugin
@@ -290,7 +290,9 @@ class ParallelCoordinates(StaticPlugin):
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
-        df = serialize(run.get_encoded_data(objective, budget))
+        df = run.get_encoded_data(objective, budget)
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df = serialize(df)
         result: Dict[str, Any] = {"df": df}
 
         if inputs["show_important_only"]:
@@ -324,8 +326,8 @@ class ParallelCoordinates(StaticPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
