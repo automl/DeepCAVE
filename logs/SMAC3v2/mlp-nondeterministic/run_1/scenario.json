@@ -1,7 +1,7 @@
 {
     "name": "bcdb4a7cedc37b0caa608ab570d77c03",
     "deterministic": false,
-    "objectives": "1 - Accuracy",
+    "objectives": "cost",
     "crash_cost": Infinity,
     "termination_cost_threshold": Infinity,
     "walltime_limit": 60,
