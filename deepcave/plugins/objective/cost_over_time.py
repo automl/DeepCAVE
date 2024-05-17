@@ -424,6 +424,7 @@ class CostOverTime(DynamicPlugin):
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
             margin=Config.FIGURE_MARGIN,
+            font=dict(size=Config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)

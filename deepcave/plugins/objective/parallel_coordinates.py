@@ -421,7 +421,10 @@ class ParallelCoordinates(StaticPlugin):
                 dimensions=list([d for d in data.values()]),
                 labelangle=45,
             ),
-            layout=dict(margin=dict(t=150, b=50, l=100, r=0)),
+            layout=dict(
+                margin=dict(t=150, b=50, l=100, r=0),
+                font=dict(size=Config.FIGURE_FONT_SIZE),
+            ),
         )
         save_image(figure, "parallel_coordinates.pdf")
 

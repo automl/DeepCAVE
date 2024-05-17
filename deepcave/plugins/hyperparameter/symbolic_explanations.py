@@ -146,8 +146,8 @@ class SymbolicExplanations(StaticPlugin):
                                     ),
                                     dcc.Slider(
                                         id=register("parsimony", "value", type=int),
-                                        marks=dict((i, str(10**i)) for i in range(-8, 1)),
-                                        min=-8,
+                                        marks=dict((i, str(10**i)) for i in range(-12, 1)),
+                                        min=-12,
                                         max=0,
                                         step=1,
                                         updatemode="drag",
@@ -577,6 +577,7 @@ class SymbolicExplanations(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": expr,
+                    "font": dict(size=Config.FIGURE_FONT_SIZE - 4),
                 }
             )
         else:
@@ -602,6 +603,7 @@ class SymbolicExplanations(StaticPlugin):
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=Config.FIGURE_MARGIN,
                     title=expr,
+                    font=dict(size=Config.FIGURE_FONT_SIZE - 4),
                 )
             )
 
@@ -614,7 +616,13 @@ class SymbolicExplanations(StaticPlugin):
             pdp_title = "Partial Dependency for comparison:"
 
         figure2 = PartialDependencies.get_pdp_figure(
-            run, inputs, outputs, show_confidence=False, show_ice=False, title=pdp_title
+            run,
+            inputs,
+            outputs,
+            show_confidence=False,
+            show_ice=False,
+            title=pdp_title,
+            fontsize=Config.FIGURE_FONT_SIZE - 4,
         )
 
         return [figure1, figure2]

@@ -312,6 +312,7 @@ class BudgetCorrelation(DynamicPlugin):
             yaxis=dict(title="Correlation"),
             margin=Config.FIGURE_MARGIN,
             legend=dict(title="Budgets"),
+            font=dict(size=Config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)

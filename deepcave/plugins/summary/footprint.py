@@ -353,6 +353,7 @@ class FootPrint(StaticPlugin):
             zsmooth="best",
             hoverinfo="skip",
             colorbar=dict(
+                y=0.4,
                 len=0.5,
                 title=objective.name,
             ),
@@ -392,10 +393,10 @@ class FootPrint(StaticPlugin):
         # Now add the points
         for name, points, color_id in zip(point_names, point_values, point_color_ids):
             x, y, config_ids = outputs[points]
-            size = 5
+            size = 8
             marker_symbol = "x"
             if points == "incumbent_points":
-                size = 10
+                size = 14
                 marker_symbol = "triangle-up"
             traces += [
                 go.Scatter(
@@ -417,6 +418,7 @@ class FootPrint(StaticPlugin):
             xaxis=dict(title=None, tickvals=[]),
             yaxis=dict(title=None, tickvals=[]),
             margin=Config.FIGURE_MARGIN,
+            font=dict(size=Config.FIGURE_FONT_SIZE),
         )
 
         performance = go.Figure(data=[performance_data] + traces, layout=layout)
@@ -520,10 +522,10 @@ class FootPrint(StaticPlugin):
             # Now add the points
             for name, points, color_id in zip(point_names, point_values, point_color_ids):
                 x, y, _ = outputs[points]
-                size = 3
+                size = 8
                 marker_symbol = "X"
                 if points == "incumbent_points":
-                    size = 10
+                    size = 14
                     marker_symbol = "^"
 
                 color = plt.get_color(color_id)  # type: ignore

@@ -1,3 +1,8 @@
+# Version 1.2.1
+
+# Enhancements
+- Increase plot font sizes.
+
 # Version 1.2
 
 ## Plugins

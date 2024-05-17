@@ -402,6 +402,7 @@ class Overview(DynamicPlugin):
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
             margin=Config.FIGURE_MARGIN,
+            font=dict(size=Config.FIGURE_FONT_SIZE),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
         save_image(stats_figure, "status_bar.pdf")
@@ -411,6 +412,7 @@ class Overview(DynamicPlugin):
             xaxis=dict(title="Budget (Seed)"),
             yaxis=dict(title="Configuration ID"),
             margin=Config.FIGURE_MARGIN,
+            font=dict(size=Config.FIGURE_FONT_SIZE),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(
