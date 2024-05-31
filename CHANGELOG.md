@@ -1,3 +1,8 @@
+# Version 1.2.1
+
+## Quality of Life
+- Runs now get displayed witn their parent directory for better distinguishability
+
 # Version 1.2
 
 ## Plugins
