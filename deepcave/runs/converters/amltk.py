@@ -8,8 +8,9 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
     - AMLTKRun: Define an AMLTK run object.
 """
 
-from typing import List, Tuple, Union
+from typing import List, Union
 
+import re
 from pathlib import Path
 
 import ConfigSpace as ConfigSpace
@@ -96,8 +97,6 @@ class AMLTKRun(Run):
         ------
         RuntimeError
             Instances are not supported.
-        RuntimeError
-            Multiple Seeds are not supported.
         """
         path = Path(path)
 
@@ -108,10 +107,6 @@ class AMLTKRun(Run):
             configspace = cs_json.read(f.read())
 
         # Read objectives
-        import re
-
-        import pandas as pd
-
         obj_list = list()
 
         all_data = pd.read_csv(path / "history.csv")
@@ -129,6 +124,7 @@ class AMLTKRun(Run):
                 match = re.match(
                     r"metric:(\w+) \[(\d+\.\d+), (\d+\.\d+)\] \((\w+)\)", metric_string
                 )
+                assert match is not None
                 metric_name = match.group(1)
                 lower = float(match.group(2))
                 upper = float(match.group(3))
@@ -143,26 +139,13 @@ class AMLTKRun(Run):
                     )
                 )
 
-        # Only lock lower for time
-        # obj_list.append(Objective("Time"))
-
-        # Read meta
-        # with (path / "scenario.json").open() as json_file:
-        #    meta = json.load(json_file)
-        #    meta["run_objectives"] = meta.pop("objectives")
+        obj_list.append(Objective("Time"))
 
         # Let's create a new run object
         run = AMLTKRun(name=path.stem, configspace=configspace, objectives=obj_list, meta=None)
 
         # The path has to be set manually
         run._path = path
-
-        # Iterate over the runhistory
-        # with (path / "runhistory.json").open() as json_file:
-        #    all_data = json.load(json_file)
-        #    data = all_data["data"]
-        #    config_origins = all_data["config_origins"]
-        #    configs = all_data["configs"]
 
         instance_ids = []
 
@@ -179,9 +162,6 @@ class AMLTKRun(Run):
 
             if trial["seed"] not in seeds:
                 seeds.append(trial["seed"])
-
-            if len(seeds) > 1:
-                raise RuntimeError("Multiple seeds are not supported.")
 
             starttime_col = all_data.filter(
                 regex="profile:.*g:time:start", axis=1
@@ -203,14 +183,15 @@ class AMLTKRun(Run):
             else:
                 status = Status.UNKNOWN
 
-            cost = AMLTKRun._extract_costs(trial)
+            amltk_cost = AMLTKRun._extract_costs(trial)
+            cost = amltk_cost[0] if len(amltk_cost) == 1 else amltk_cost
 
             if status != Status.SUCCESS:
                 # Costs which failed, should not be included
                 cost = [None] * len(cost) if isinstance(cost, list) else None
                 time = None
             else:
-                time = None  # TODO
+                time = float(endtime - starttime)
 
             # Round budget
             if trial["budget"] != "None":
@@ -219,9 +200,10 @@ class AMLTKRun(Run):
                 budget = 0.0
 
             run.add(
-                costs=cost if isinstance(cost, list) else [cost],
+                costs=cost + [time] if isinstance(cost, list) else [cost, time],
                 config=config,
                 budget=budget,
+                seed=trial["seed"],
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
