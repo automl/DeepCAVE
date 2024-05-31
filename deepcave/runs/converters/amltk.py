@@ -200,7 +200,7 @@ class AMLTKRun(Run):
                 budget = 0.0
 
             run.add(
-                costs=cost + [time] if isinstance(cost, list) else [cost, time],
+                costs=cost + [time] if isinstance(cost, list) else [cost, time],  # type: ignore
                 config=config,
                 budget=budget,
                 seed=trial["seed"],
