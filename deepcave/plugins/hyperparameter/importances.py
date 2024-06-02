@@ -340,7 +340,7 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
-            print(budget_id)
+            print("BUDGET: ", budget)
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
@@ -416,6 +416,7 @@ class Importances(StaticPlugin):
             y = []
             error_y = []
             for hp_name, results in importances.items():
+                print("IMPORTANCES HERE: ", importances)
                 if hp_name not in selected_hp_names:
                     continue
 
