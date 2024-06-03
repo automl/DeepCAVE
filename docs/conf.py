@@ -15,6 +15,11 @@ options = {
         "examples_dirs": "../examples",
         "ignore_pattern": ".*logs$|.*__pycache__$|.*_pending$",
     },
+    "linkcheck_request_headers" : {
+        r'https://docs.github.com/': {
+            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:24.0) '
+                          'Gecko/20100101 Firefox/24.0'}
+    }
 }
 
 automl_sphinx_theme.set_options(globals(), options)
