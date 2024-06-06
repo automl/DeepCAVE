@@ -577,6 +577,7 @@ class SymbolicExplanations(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": expr,
+                    "font": dict(size=config.FIGURE_FONT_SIZE - 4),
                 }
             )
         else:
@@ -602,6 +603,7 @@ class SymbolicExplanations(StaticPlugin):
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
                     title=expr,
+                    font=dict(size=config.FIGURE_FONT_SIZE - 4),
                 )
             )
 
@@ -614,7 +616,13 @@ class SymbolicExplanations(StaticPlugin):
             pdp_title = "Partial Dependency for comparison:"
 
         figure2 = PartialDependencies.get_pdp_figure(
-            run, inputs, outputs, show_confidence=False, show_ice=False, title=pdp_title
+            run,
+            inputs,
+            outputs,
+            show_confidence=False,
+            show_ice=False,
+            title=pdp_title,
+            fontsize=config.FIGURE_FONT_SIZE - 4,
         )
 
         return [figure1, figure2]

@@ -416,7 +416,10 @@ class ConfigurationCube(DynamicPlugin):
 
         if len(data) == 3:
             trace = go.Scatter3d(x=x, y=y, z=z, **scatter_kwargs)
-            layout = go.Layout({"scene": {**layout_kwargs}})
+            layout = go.Layout(
+                {"scene": {**layout_kwargs}},
+                font=dict(size=config.FIGURE_FONT_SIZE),
+            )
         else:
             if len(data) == 1:
                 y = [0 for _ in x]
@@ -425,7 +428,10 @@ class ConfigurationCube(DynamicPlugin):
                 trace = go.Scatter(x=x, y=y, **scatter_kwargs)
             else:
                 trace = go.Scatter(x=[], y=[])
-            layout = go.Layout(**layout_kwargs)
+            layout = go.Layout(
+                **layout_kwargs,
+                font=dict(size=config.FIGURE_FONT_SIZE),
+            )
 
         figure = go.Figure(data=trace, layout=layout)
         figure.update_layout(dict(margin=config.FIGURE_MARGIN))

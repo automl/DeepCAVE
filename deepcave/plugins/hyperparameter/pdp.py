@@ -374,7 +374,7 @@ class PartialDependencies(StaticPlugin):
 
     @staticmethod
     def get_pdp_figure(  # type: ignore
-        run, inputs, outputs, show_confidence, show_ice, title=None
+        run, inputs, outputs, show_confidence, show_ice, title=None, fontsize=None
     ) -> go.Figure:
         """
         Create a figure of the Partial Dependency Plot (PDP).
@@ -393,6 +393,8 @@ class PartialDependencies(StaticPlugin):
             Whether to show ice curves in the plot.
         title
             Title of the plot.
+        fontsize
+            Fontsize of the plot.
 
         Returns
         -------
@@ -471,6 +473,9 @@ class PartialDependencies(StaticPlugin):
             ]
 
             tickvals, ticktext = get_hyperparameter_ticks(hp1)
+            # Allow to pass a fontsize (necessary when leveraging PDP in Symbolic Explanation)
+            if fontsize is None:
+                fontsize = config.FIGURE_FONT_SIZE
             layout = go.Layout(
                 {
                     "xaxis": {
@@ -482,6 +487,7 @@ class PartialDependencies(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": title,
+                    "font": dict(size=fontsize),
                 }
             )
         else:
@@ -509,6 +515,7 @@ class PartialDependencies(StaticPlugin):
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
                     margin=config.FIGURE_MARGIN,
                     title=title,
+                    font=dict(size=fontsize),
                 )
             )
 

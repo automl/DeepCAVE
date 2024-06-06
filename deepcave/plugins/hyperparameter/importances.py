@@ -458,6 +458,7 @@ class Importances(StaticPlugin):
             legend={"title": "Budget"},
             margin=config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         save_image(figure, "importances.pdf")
 

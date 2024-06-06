@@ -418,7 +418,10 @@ class Configurations(DynamicPlugin):
                     }
                 )
 
-        objective_layout = go.Layout(**layout_kwargs)
+        objective_layout = go.Layout(
+            **layout_kwargs,
+            font=dict(size=config.FIGURE_FONT_SIZE),
+        )
         objective_figure = go.Figure(data=objective_data, layout=objective_layout)
         save_image(objective_figure, "configure.pdf")
 
@@ -480,7 +483,8 @@ class Configurations(DynamicPlugin):
                 margin=dict(
                     t=150,
                     b=50,
-                )
+                ),
+                font=dict(size=config.FIGURE_FONT_SIZE),
             ),
         )
 
