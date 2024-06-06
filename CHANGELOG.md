@@ -1,6 +1,7 @@
 # Version 1.2.1
 
-# Enhancements
+## Quality of Life
+- Runs now get displayed with their parent directory for better distinguishability
 - Increase plot font sizes.
 
 # Version 1.2

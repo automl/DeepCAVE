@@ -1145,8 +1145,12 @@ class Plugin(Layout, ABC):
         for run in runs:
             if check_run_compatibility(run):
                 try:
+                    run_path = run.path
+                    if run_path is not None:
+                        run_name = run_path.parent.name + "/" + run.name
+
                     values.append(run.id)
-                    labels.append(run.name)
+                    labels.append(run_name)
                     disabled.append(False)
                 except Exception:
                     pass
