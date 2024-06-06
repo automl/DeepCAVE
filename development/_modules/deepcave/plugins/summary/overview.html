@@ -1109,6 +1109,7 @@
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Status&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of configurations&quot;</span><span class="p">),</span>
             <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">stats_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stats_data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">stats_layout</span><span class="p">)</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">stats_figure</span><span class="p">,</span> <span class="s2">&quot;status_bar.pdf&quot;</span><span class="p">)</span>
@@ -1118,6 +1119,7 @@
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget (Seed)&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Configuration ID&quot;</span><span class="p">),</span>
             <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">config_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">get_discrete_heatmap</span><span class="p">(</span>

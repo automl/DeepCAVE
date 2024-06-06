@@ -1138,7 +1138,10 @@
                     <span class="p">}</span>
                 <span class="p">)</span>
 
-        <span class="n">objective_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="o">**</span><span class="n">layout_kwargs</span><span class="p">)</span>
+        <span class="n">objective_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="o">**</span><span class="n">layout_kwargs</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
+        <span class="p">)</span>
         <span class="n">objective_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">objective_data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">objective_layout</span><span class="p">)</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">objective_figure</span><span class="p">,</span> <span class="s2">&quot;configure.pdf&quot;</span><span class="p">)</span>
 
@@ -1200,7 +1203,8 @@
                 <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
                     <span class="n">t</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
                     <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                <span class="p">)</span>
+                <span class="p">),</span>
+                <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
