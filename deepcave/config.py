@@ -56,6 +56,8 @@ class Config:
     SAVE_IMAGES = False  # The figure will be saved to the cache directory.
     FIGURE_MARGIN = dict(t=30, b=0, l=0, r=0)
     FIGURE_HEIGHT = "40vh"
+    FIGURE_DOWNLOAD_SCALE = 4.0
+    FIGURE_FONT_SIZE = 20
 
     # Redis settings
     REDIS_PORT: int = 6379

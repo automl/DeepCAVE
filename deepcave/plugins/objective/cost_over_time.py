@@ -19,9 +19,10 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
+from deepcave.runs.exceptions import NotMergeableError, RunInequality
 from deepcave.utils.layout import get_select_options, help_button
 from deepcave.utils.styled_plotty import (
     get_color,
@@ -56,6 +57,9 @@ class CostOverTime(DynamicPlugin):
         Since this function is called before the layout is created,
         it can be also used to set common values for the plugin.
 
+        If the runs are not mergeable, they still should be displayed
+        but with a corresponding warning message.
+
         Parameters
         ----------
         runs : List[AbstractRun]
@@ -69,18 +73,36 @@ class CostOverTime(DynamicPlugin):
             If the budgets of the runs are not equal.
             If the objective of the runs are not equal.
         """
-        check_equality(runs, objectives=True, budgets=True)
+        try:
+            check_equality(runs, objectives=True, budgets=True)
+        except NotMergeableError as e:
+            run_inequality = e.args[1]
+            if run_inequality == RunInequality.INEQ_BUDGET:
+                notification.update("The budgets of the runs are not equal.", color="warning")
+            elif run_inequality == RunInequality.INEQ_CONFIGSPACE:
+                notification.update(
+                    "The configuration spaces of the runs are not equal.", color="warning"
+                )
+            elif run_inequality == RunInequality.INEQ_META:
+                notification.update("The meta data of the runs is not equal.", color="warning")
+            elif run_inequality == RunInequality.INEQ_OBJECTIVE:
+                raise NotMergeableError("The objectives of th πe selected runs cannot be merged.")
 
         # Set some attributes here
-        run = runs[0]
+        # It is necessary to get the run with the smallest budget and objective options
+        # as first comparative value, else there is gonna be an index problem
+        objective_options = []
+        budget_options = []
+        for run in runs:
+            objective_names = run.get_objective_names()
+            objective_ids = run.get_objective_ids()
+            objective_options.append(get_select_options(objective_names, objective_ids))
 
-        objective_names = run.get_objective_names()
-        objective_ids = run.get_objective_ids()
-        self.objective_options = get_select_options(objective_names, objective_ids)
-
-        budgets = run.get_budgets(human=True)
-        budget_ids = run.get_budget_ids()
-        self.budget_options = get_select_options(budgets, budget_ids)
+            budgets = run.get_budgets(human=True)
+            budget_ids = run.get_budget_ids()
+            budget_options.append(get_select_options(budgets, budget_ids))
+        self.objective_options = min(objective_options, key=len)
+        self.budget_options = min(budget_options, key=len)
 
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
@@ -275,7 +297,11 @@ class CostOverTime(DynamicPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
     def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
@@ -318,6 +344,7 @@ class CostOverTime(DynamicPlugin):
                 continue
 
             objective = run.get_objective(inputs["objective_id"])
+            budget = run.get_budget(inputs["budget_id"])
             config_ids = outputs[run.id]["config_ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "trials":
@@ -334,7 +361,9 @@ class CostOverTime(DynamicPlugin):
             symbol = None
             mode = "lines"
             if len(config_ids) > 0:
-                hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+                hovertext = [
+                    get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+                ]
                 hoverinfo = "text"
                 symbol = "circle"
                 mode = "lines+markers"
@@ -393,7 +422,8 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)

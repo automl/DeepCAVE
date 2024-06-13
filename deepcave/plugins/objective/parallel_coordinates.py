@@ -20,7 +20,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.plugins.static import StaticPlugin
@@ -290,7 +290,9 @@ class ParallelCoordinates(StaticPlugin):
         """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
-        df = serialize(run.get_encoded_data(objective, budget))
+        df = run.get_encoded_data(objective, budget)
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df = serialize(df)
         result: Dict[str, Any] = {"df": df}
 
         if inputs["show_important_only"]:
@@ -299,7 +301,9 @@ class ParallelCoordinates(StaticPlugin):
             evaluator.calculate(objective, budget, n_trees=10, seed=0)
             importances_dict = evaluator.get_importances()
             importances = {u: v[0] for u, v in importances_dict.items()}
-            important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
+            important_hp_names = sorted(
+                importances, key=lambda key: importances[key], reverse=False
+            )
             result["important_hp_names"] = important_hp_names
 
         return result
@@ -320,7 +324,11 @@ class ParallelCoordinates(StaticPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
     def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
@@ -413,7 +421,10 @@ class ParallelCoordinates(StaticPlugin):
                 dimensions=list([d for d in data.values()]),
                 labelangle=45,
             ),
-            layout=dict(margin=dict(t=150, b=50, l=100, r=0)),
+            layout=dict(
+                margin=dict(t=150, b=50, l=100, r=0),
+                font=dict(size=config.FIGURE_FONT_SIZE),
+            ),
         )
         save_image(figure, "parallel_coordinates.pdf")
 

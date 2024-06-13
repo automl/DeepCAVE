@@ -7,6 +7,6 @@ extend-exclude =
     build
 extend-ignore =
     # No whitespace before ':' in [x : y]
-    E203
+    E203,
     # No lambdas — too strict
-    E731
+    E731,

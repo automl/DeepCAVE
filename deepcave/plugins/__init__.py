@@ -115,9 +115,9 @@ class Plugin(Layout, ABC):
         str
             Url for the plugin as string.
         """
-        from deepcave.config import Config
+        from deepcave import config
 
-        return f"http://{Config.DASH_ADDRESS}:{Config.DASH_PORT}/plugins/{cls.id}"
+        return f"http://{config.DASH_ADDRESS}:{config.DASH_PORT}/plugins/{cls.id}"
 
     @staticmethod
     def check_run_compatibility(run: AbstractRun) -> bool:
@@ -917,7 +917,6 @@ class Plugin(Layout, ABC):
             ]
         else:
             components += [html.H1(self.name)]
-
         try:
             self.check_runs_compatibility(self.all_runs)
         except NotMergeableError as message:
@@ -1146,8 +1145,12 @@ class Plugin(Layout, ABC):
         for run in runs:
             if check_run_compatibility(run):
                 try:
+                    run_path = run.path
+                    if run_path is not None:
+                        run_name = run_path.parent.name + "/" + run.name
+
                     values.append(run.id)
-                    labels.append(run.name)
+                    labels.append(run_name)
                     disabled.append(False)
                 except Exception:
                     pass

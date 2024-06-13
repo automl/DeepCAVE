@@ -10,12 +10,12 @@ mode.
     sudo apt-get install redis-server  # Linux
 
 
-.. note:: 
+.. note::
 
     If you have problems see next section for extened instructions.
 
 
-.. warning:: 
+.. warning::
 
     DeepCAVE is tested on Linux and Mac only. Since a bash script is used to start the services
     (redis, workers and webserver), it is not possible to run DeepCAVE on Windows.
@@ -23,7 +23,7 @@ mode.
 
 The following commands install DeepCAVE. We recommend using anaconda as `swig` can be installed
 directly. If you use a different environment, make sure
-`swig <https://www.dev2qa.com/how-to-install-swig-on-macos-linux-and-windows/>`_ is installed.
+`swig <https://www.swig.org/index.html>`_ is installed.
 
 .. code:: bash
 

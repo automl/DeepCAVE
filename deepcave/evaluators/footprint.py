@@ -241,7 +241,7 @@ class Footprint:
             Steps to create the meshgrid. By default 0.5.
         performance : bool, optional
             Whether to get the surface from the performance or the valid areas.
-            Default is set to True.
+            Default is set to True (i.e. from performance).
 
         Returns
         -------

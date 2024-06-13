@@ -9,7 +9,7 @@ Utilities for handling the trial are provided.
     - Trial: This class provides the trial object itself and multiple handling utilities.
 """
 
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from dataclasses import dataclass
 
@@ -29,6 +29,8 @@ class Trial:
         The identificator of the configuration.
     budget : Union[int, float]
         The budget for the trial.
+    seed: int
+        The seed for the trial.
     costs : List[float]
         A list of the costs of the trial.
     start_time : float
@@ -41,6 +43,7 @@ class Trial:
 
     config_id: int
     budget: Union[int, float]
+    seed: int
     costs: List[float]
     start_time: float
     end_time: float
@@ -54,18 +57,18 @@ class Trial:
 
         assert isinstance(self.status, Status)
 
-    def get_key(self) -> Tuple[int, Union[int, float, None]]:
+    def get_key(self) -> Tuple[int, Optional[Union[int, float]], Optional[int]]:
         """
         Generate a key based on the configuration id and the budget.
 
         Returns
         -------
-        Tupel[int, int]
-            A Tuple representing a unique key based on the configuration id and the budget.
+        Tuple[int, Optional[Union[int, float]], Optional[int]]
+            A Tuple representing a unique key based on the configuration id, budget, and seed.
         """
         from deepcave.runs import AbstractRun
 
-        return AbstractRun.get_trial_key(self.config_id, self.budget)
+        return AbstractRun.get_trial_key(self.config_id, self.budget, self.seed)
 
     def to_json(self) -> List[Any]:
         """
@@ -79,6 +82,7 @@ class Trial:
         return [
             self.config_id,
             self.budget,
+            self.seed,
             self.costs,
             self.start_time,
             self.end_time,
