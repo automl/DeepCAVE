@@ -3,6 +3,10 @@
 ## Quality of Life
 - Runs now get displayed with their parent directory for better distinguishability
 - Increase plot font sizes.
+- Add a simple loading bar functionality for longer runs.
+
+## General
+- Seed is now required in the Recorder.
 
 # Version 1.2
 
