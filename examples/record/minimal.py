@@ -27,6 +27,7 @@ with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as 
             r.start(config, budget)
 
             # Your code goes here
-            accuracy = np.random.uniform(low=0.0, high=1.0, size=None)
+            accuracy = np.random.uniform(low=0.0, high=1.0)
+            time = np.random.uniform(low=0.0, high=1.0)
 
-            r.end(costs=[accuracy, None])
+            r.end(costs=[accuracy, time], seed=0)

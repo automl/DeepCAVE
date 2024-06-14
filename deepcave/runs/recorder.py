@@ -86,7 +86,7 @@ class Recorder:
 
         # Set variables
         self.last_trial_id: Optional[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], int]
         ] = None
         self.start_time = time.time()
         self.start_times: Dict[
@@ -158,7 +158,7 @@ class Recorder:
         self,
         config: Configuration,
         budget: Optional[float] = None,
-        seed: Optional[int] = None,
+        seed: int = -1,
         model: Optional[Any] = None,
         origin: Optional[str] = None,
         additional: Optional[dict] = None,
@@ -174,9 +174,9 @@ class Recorder:
         budget : Optional[float], optional
             The budget.
             Default is None.
-        seed : Optional[int], optional
+        seed : int
             The seed.
-            Default is None.
+            Default is -1.
         model : Optional[Any], optional
             The model used.
             Default is None.
@@ -193,7 +193,7 @@ class Recorder:
         if additional is None:
             additional = {}
 
-        id: Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]] = (
+        id: Tuple[Union[Dict[Any, Any], Configuration], Optional[float], int] = (
             config,
             budget,
             seed,
@@ -216,7 +216,7 @@ class Recorder:
         status: Status = Status.SUCCESS,
         config: Optional[Union[dict, Configuration]] = None,
         budget: Optional[float] = np.inf,
-        seed: Optional[int] = -1,
+        seed: int = -1,
         additional: Optional[dict] = None,
         end_time: Optional[float] = None,
     ) -> None:
@@ -241,7 +241,7 @@ class Recorder:
         budget : float, optional
             The budget.
             Default is np.inf.
-        seed : int, optional
+        seed : int
             The seed.
             Default is -1.
         additional : Optional[dict], optional

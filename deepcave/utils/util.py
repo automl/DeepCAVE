@@ -104,3 +104,44 @@ def get_latest_change(st_mtime: int) -> str:
         return f"{d_diff} days ago"
     else:
         return t.strftime("%Y/%m/%d")
+
+
+def print_progress_bar(
+    total: int,
+    iteration: int,
+    prefix: str = "",
+    suffix: str = "",
+    decimals: int = 1,
+    length: int = 100,
+    fill: str = "█",
+    print_end: str = "",
+) -> None:
+    """
+    Print a simple progress bar.
+
+    Parameters
+    ----------
+    total : int
+        The total number of iterations.
+    iteration
+        The current iteration (usually, index+1).
+    prefix
+        String to print before the progress bar.
+    suffix
+        String to print after the progress bar.
+    decimals
+        Number of decimals in the percentage.
+    length
+        The length of the progress bar.
+    fill
+        The character to fill the progress bar with.
+    print_end
+        The character to print at the end of the line.
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    bar = fill * filled_length + "-" * (length - filled_length)
+    print(f"\r{prefix} |{bar}| {percent}% {suffix}", end=print_end)
+
+    if iteration == total:
+        print()
