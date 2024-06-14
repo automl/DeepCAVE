@@ -220,7 +220,10 @@ class LPI:
 
         # Normalize
         overall_var_per_tree = {
-            p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
+            p: [
+                t / sum_var_per_tree[idx] if sum_var_per_tree[idx] != 0.0 else np.nan
+                for idx, t in enumerate(trees)
+            ]
             for p, trees in overall_var_per_tree.items()
         }
         self.variances = overall_var_per_tree
