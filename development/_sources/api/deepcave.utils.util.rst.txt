@@ -15,6 +15,7 @@ deepcave.utils.util
    
       get_latest_change
       get_random_string
+      print_progress_bar
       short_string
    
    

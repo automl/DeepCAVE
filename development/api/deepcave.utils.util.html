@@ -717,6 +717,15 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.util.print_progress_bar">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     print_progress_bar()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.util.short_string">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -760,7 +769,10 @@ It also provides a function to get the difference between now and a given timest
 <tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.get_random_string" title="deepcave.utils.util.get_random_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_string</span></code></a>(length)</p></td>
 <td><p>Get a random string with a specific length.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.short_string" title="deepcave.utils.util.short_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">short_string</span></code></a>(value[, length, mode])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.print_progress_bar" title="deepcave.utils.util.print_progress_bar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_progress_bar</span></code></a>(total, iteration[, ...])</p></td>
+<td><p>Print a simple progress bar.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.short_string" title="deepcave.utils.util.short_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">short_string</span></code></a>(value[, length, mode])</p></td>
 <td><p>Shorten the given string.</p></td>
 </tr>
 </tbody>
@@ -798,6 +810,29 @@ It also provides a function to get the difference between now and a given timest
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the length is smaller 0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.util.print_progress_bar">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.util.</span></span><span class="sig-name descname"><span class="pre">print_progress_bar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">total</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iteration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'█'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/util.html#print_progress_bar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.util.print_progress_bar" title="Link to this definition">¶</a></dt>
+<dd><p>Print a simple progress bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>total</strong> (<em>int</em>) – The total number of iterations.</p></li>
+<li><p><strong>iteration</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – The current iteration (usually, index+1).</p></li>
+<li><p><strong>prefix</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – String to print before the progress bar.</p></li>
+<li><p><strong>suffix</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – String to print after the progress bar.</p></li>
+<li><p><strong>decimals</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Number of decimals in the percentage.</p></li>
+<li><p><strong>length</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – The length of the progress bar.</p></li>
+<li><p><strong>fill</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The character to fill the progress bar with.</p></li>
+<li><p><strong>print_end</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The character to print at the end of the line.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

@@ -23,7 +23,7 @@ Record Minimal Run
 
 This example shows how DeepCAVE can be used to record a minimal run.
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-33
+.. GENERATED FROM PYTHON SOURCE LINES 7-34
 
 .. code-block:: Python
 
@@ -50,9 +50,10 @@ This example shows how DeepCAVE can be used to record a minimal run.
                 r.start(config, budget)
 
                 # Your code goes here
-                accuracy = np.random.uniform(low=0.0, high=1.0, size=None)
+                accuracy = np.random.uniform(low=0.0, high=1.0)
+                time = np.random.uniform(low=0.0, high=1.0)
 
-                r.end(costs=[accuracy, None])
+                r.end(costs=[accuracy, time], seed=0)
 
 
 .. _sphx_glr_download_examples_record_minimal.py:
