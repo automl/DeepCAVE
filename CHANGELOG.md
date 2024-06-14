@@ -5,7 +5,7 @@
 - Increase plot font sizes.
 
 ## Bug-Fixes
-- Quantify LPI importance via variance instead of importance over mean (#152)
+- Use normalized LPI importance via variance instead of importance over mean (#152)
 - Return nan as importance values if variance is 0. for a hyperparameter / budget (#152)
 
 # Version 1.2
