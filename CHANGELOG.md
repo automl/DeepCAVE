@@ -4,6 +4,10 @@
 - Runs now get displayed with their parent directory for better distinguishability
 - Increase plot font sizes.
 
+## Bug-Fixes
+- Quantify LPI importance via variance instead of importance over mean (not normalized to 1)
+- Return nan as importance values if variance is 0. for a hyperparameter / budget
+
 # Version 1.2
 
 ## Plugins
