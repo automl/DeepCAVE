@@ -8,6 +8,10 @@
 ## General
 - Seed is now required in the Recorder.
 
+## Bug-Fixes
+- Use normalized LPI importance via variance instead of importance over mean (#152)
+- Return nan as importance values if variance is 0. for a hyperparameter / budget (#152)
+
 # Version 1.2
 
 ## Plugins

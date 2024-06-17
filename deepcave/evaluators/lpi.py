@@ -220,7 +220,10 @@ class LPI:
 
         # Normalize
         overall_var_per_tree = {
-            p: [t / sum_var_per_tree[idx] for idx, t in enumerate(trees)]
+            p: [
+                t / sum_var_per_tree[idx] if sum_var_per_tree[idx] != 0.0 else np.nan
+                for idx, t in enumerate(trees)
+            ]
             for p, trees in overall_var_per_tree.items()
         }
         self.variances = overall_var_per_tree
@@ -254,11 +257,11 @@ class LPI:
             std = 0
 
             if hp_name in self.importances:
-                mean = self.importances[hp_name][0]
+                mean = np.mean(self.variances[hp_name])
                 std = np.var(self.variances[hp_name])
 
-            # Use this to quantify importance via variance
-            # mean = np.mean(overall_var_per_tree[hp_name])
+            # Use this to quantify importance via importance over mean value (not normalized to 1)
+            # mean = self.importances[hp_name][0]
 
             # Sometimes there is an ugly effect if default is better than
             # incumbent.
