@@ -727,8 +727,11 @@
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.cast</span> <span class="kn">import</span> <span class="n">optional_int</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">get_checklist_options</span><span class="p">,</span> <span class="n">get_select_options</span><span class="p">,</span> <span class="n">help_button</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plot</span> <span class="kn">import</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_color</span><span class="p">,</span> <span class="n">save_image</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Importances">
@@ -1053,6 +1056,8 @@
             <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="n">n_trees</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
             <span class="n">importances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nan encountered in importance values for budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">importances</span>
 
         <span class="k">return</span> <span class="n">data</span>  <span class="c1"># type: ignore</span></div>

@@ -720,6 +720,7 @@
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.epm.fanova_forest</span> <span class="kn">import</span> <span class="n">FanovaForest</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
 
 
 <div class="viewcode-block" id="fANOVA">
@@ -752,6 +753,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hp_names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="fANOVA.calculate">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA.calculate">[docs]</a>
@@ -859,7 +861,14 @@
                 <span class="p">)</span>
 
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_zero_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Encountered zero total variance in all trees.&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Encountered zero total variance in all trees.&quot;</span><span class="p">)</span>
+                    <span class="n">importances</span><span class="p">[</span><span class="n">sub_hp_ids</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">continue</span>
 
                 <span class="n">fractions_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                     <span class="p">[</span>
