@@ -5,7 +5,6 @@
 - Increase plot font sizes.
 - Add a simple loading bar functionality for longer runs.
 - Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
-- Adapt trajectory calculation for Group to be able to display hoover-text for the actual budget of a trial in Cost over Time.
 - Use highest budget as default budget for Cost over Time instead of Combined.
 
 ## General

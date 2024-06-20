@@ -9,14 +9,13 @@ Utilities include getting attributes of the grouped runs, as well as the group i
     - Group: Can group and manage a group of runs.
 """
 
-from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 from copy import deepcopy
 
 import numpy as np
 
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
-from deepcave.runs.objective import Objective
 from deepcave.utils.hash import string_to_hash
 
 
@@ -287,91 +286,74 @@ class Group(AbstractRun):
         run_id, config_id = self._original_config_mapping[config_id]
         return self.runs[run_id].get_model(config_id)
 
-    def get_trajectory(
-        self,
-        objective: Objective,
-        budget: Optional[Union[int, float]] = None,
-        seed: Optional[int] = None,
-    ) -> Tuple[List[float], List[float], List[float], List[int], List[int]]:
+    # Types dont match superclass
+    def get_trajectory(self, *args, **kwargs):  # type: ignore
         """
-        Calculate the trajectory of the given objective, budget, and seed.
+        Calculate the trajectory of the given objective and budget.
+
+        This includes the times, the mean costs, and the standard deviation of the costs.
 
         Parameters
         ----------
-        objective : Objective
-            Objective to calculate the trajectory for.
-        budget : Optional[Union[int, float]]
-            Budget to calculate the trajectory for. If no budget is given, then the highest budget
-            is chosen. By default None.
-        seed : Optional[int], optional
-            Seed to calculate the trajectory for. If no seed is given, then all seeds are
-            considered. By default None.
+        *args
+            Should be the objective to calculate the trajectory from.
+        **kwargs
+            Should be the budget to calculate the trajectory for.
 
         Returns
         -------
-        Tuple[List[float], List[float], List[float], List[int], List[int]]
-            times : List[float]
-                Times of the trajectory.
-            costs_mean : List[float]
-                Costs of the trajectory.
-            costs_std : List[float]
-                Standard deviation of the costs of the trajectory. This is particularly useful for
-                grouped runs.
-            ids : List[int]
-                The "global" ids of the selected trials.
-            config_ids : List[int]
-                Config ids of the selected trials.
+        times : List[float]
+            Times of the trajectory.
+        costs_mean : List[float]
+            Costs of the trajectory.
+        costs_std : List[float]
+            Standard deviation of the costs of the trajectory.
+        ids : List[int]
+            The "global" ids of the selected trial.
+        config_ids : List[int]
+            The configuration ids of the selected trials.
         """
-        if budget is None:
-            budget = self.get_highest_budget()
+        # Cache costs
+        run_costs = []
+        run_times = []
 
-        costs_mean = []
-        costs_std = []
-        ids = []
-        config_ids = []
-        times = []
+        # All x values on which y values are needed
+        all_times = []
 
-        order = []
+        for _, run in enumerate(self.runs):
+            times, costs_mean, _, _, _ = run.get_trajectory(*args, **kwargs)
 
-        # Sort self.history by end-time
-        for id, trial in enumerate(self.history):
-            order.append((id, trial.end_time))
-        order.sort(key=lambda tup: tup[1])
+            # Cache s.t. calculate it is not calculated multiple times
+            run_costs.append(costs_mean)
+            run_times.append(times)
 
-        # Important: Objective can be minimized or maximized
-        if objective.optimize == "lower":
-            current_cost = np.inf
-        else:
-            current_cost = -np.inf
+            # Add all times
+            # Standard deviation needs to be calculated on all times
+            for time in times:
+                if time not in all_times:
+                    all_times.append(time)
 
-        # Iterate over the history ordered by end-time and calculate the current incumbent
-        for i, (id, _) in enumerate(order):
-            trial = self.history[id]
+        all_times.sort()
 
-            # Get the incumbent over all trials up to this point
-            try:
-                _, cost = self.get_incumbent(
-                    objectives=objective,
-                    budget=budget,
-                    seed=seed,
-                    selected_ids=[selected_id for selected_id, _ in order[: i + 1]],
-                )
-            except RuntimeError:
-                continue
+        # Now look for corresponding y values
+        all_costs = []
 
-            # Now it's important to check whether the cost was minimized or maximized
-            if objective.optimize == "lower":
-                improvement = cost < current_cost
-            else:
-                improvement = cost > current_cost
+        for time in all_times:
+            y = []
 
-            if improvement:
-                current_cost = cost
+            # Iterate over all runs
+            for costs, times in zip(run_costs, run_times):
+                # Find closest x value
+                idx = min(range(len(times)), key=lambda i: abs(times[i] - time))
+                y.append(costs[idx])
 
-                costs_mean.append(cost)
-                costs_std.append(0.0)
-                times.append(trial.end_time)
-                ids.append(id)
-                config_ids.append(trial.config_id)
+            all_costs.append(y)
 
-        return times, costs_mean, costs_std, ids, config_ids
+        # Make numpy arrays
+        all_costs_array = np.array(all_costs)
+
+        times = all_times
+        costs_mean = np.mean(all_costs_array, axis=1)
+        costs_std = np.std(all_costs_array, axis=1)
+
+        return times, list(costs_mean), list(costs_std), [], []
