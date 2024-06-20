@@ -37,7 +37,7 @@ from deepcave.runs.group import Group
 from deepcave.runs.status import Status
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap, save_image
-from deepcave.utils.util import get_latest_change
+from deepcave.utils.util import custom_round, get_latest_change
 
 
 class Overview(DynamicPlugin):
@@ -131,22 +131,38 @@ class Overview(DynamicPlugin):
         List[Any]
             A list of the created tables of the overview.
         """
-        # Get best cost across all objectives, highest budget
-        incumbent, _ = run.get_incumbent(statuses=[Status.SUCCESS])
-        config_id = run.get_config_id(incumbent)
-        objective_names = run.get_objective_names()
-
-        avg_costs, std_costs = run.get_avg_costs(config_id)
-
-        best_performances = []
-        for idx in range(len(objective_names)):
-            best_performances += [
-                f"{round(avg_costs[idx], 2)} ± {round(std_costs[idx], 2)} ({objective_names[idx]})"
-            ]
-
         optimizer = run.prefix
         if isinstance(run, Group):
             optimizer = run.get_runs()[0].prefix
+
+        performance_outputs = []
+        for idx, obj in enumerate(run.get_objectives()):
+            # Get best cost for the objective, highest budget
+            incumbent, _ = run.get_incumbent(objectives=obj, statuses=[Status.SUCCESS])
+            config_id = run.get_config_id(incumbent)
+            avg_costs, std_costs = run.get_avg_costs(config_id)
+
+            if len(run.get_seeds(include_combined=False)) > 1:
+                best_performance = (
+                    f"{custom_round(avg_costs[idx])} "
+                    f"± {custom_round(std_costs[idx])} ({obj.name})"
+                )
+            else:
+                best_performance = f"{custom_round(avg_costs[idx])} ({obj.name})"
+
+            performance_outputs.append(
+                html.Div(
+                    [
+                        html.Span(f"Best {obj.name}: {best_performance} "),
+                        html.A(
+                            "(See Configuration)",
+                            href=Configurations.get_link(run, config_id),
+                            style={"color": "white"},
+                        ),
+                    ],
+                    className="card-text",
+                ),
+            )
 
         # Design card for quick information here
         card = dbc.Card(
@@ -162,19 +178,7 @@ class Overview(DynamicPlugin):
                             f"Latest change: {get_latest_change(run.latest_change)}",
                             className="card-text",
                         ),
-                        html.Div(
-                            [
-                                html.Span(
-                                    f"Best average performance: {', '.join(best_performances)} "
-                                ),
-                                html.A(
-                                    "(See Configuration)",
-                                    href=Configurations.get_link(run, config_id),
-                                    style={"color": "white"},
-                                ),
-                            ],
-                            className="card-text",
-                        ),
+                        *performance_outputs,
                         html.Div(
                             [
                                 html.Span(f"Total configurations: {run.get_num_configs()}"),

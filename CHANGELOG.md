@@ -4,8 +4,6 @@
 - Runs now get displayed with their parent directory for better distinguishability.
 - Increase plot font sizes.
 - Add a simple loading bar functionality for longer runs.
-- Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
-- Use highest budget as default budget for Cost over Time instead of Combined.
 
 ## General
 - Seed is now required in the Recorder.
@@ -13,6 +11,11 @@
 ## Bug-Fixes
 - Use normalized LPI importance via variance instead of importance over mean (#152)
 - Return nan as importance values if variance is 0. for a hyperparameter / budget (#152)
+
+## Plugins
+- Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
+- Use highest budget as default budget for Cost over Time instead of Combined.
+- Show best value / config for each objective instead of merged objective in Overview (#159)
 
 # Version 1.2
 
