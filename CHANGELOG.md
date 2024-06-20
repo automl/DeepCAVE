@@ -1,9 +1,11 @@
 # Version 1.2.1
 
 ## Quality of Life
-- Runs now get displayed with their parent directory for better distinguishability
+- Runs now get displayed with their parent directory for better distinguishability.
 - Increase plot font sizes.
 - Add a simple loading bar functionality for longer runs.
+- Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
+- Use highest budget as default budget for Cost over Time instead of Combined.
 
 ## General
 - Seed is now required in the Recorder.
