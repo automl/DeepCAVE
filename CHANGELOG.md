@@ -15,7 +15,8 @@
 ## Plugins
 - Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
 - Use highest budget as default budget for Cost over Time instead of Combined.
-- Show best value / config for each objective instead of merged objective in Overview (#159)
+- Show best value / config for each objective instead of merged objective in Overview (#159).
+- Use chosen objective instead of merged objective to get the incumbent for the calculation of LPI importance (#159).
 
 # Version 1.2
 
