@@ -163,6 +163,11 @@ class Overview(DynamicPlugin):
                 ),
             )
 
+        if isinstance(run, Group):
+            runtime_str = "Maximum runtime"
+        else:
+            runtime_str = "Total runtime"
+
         # Design card for quick information here
         card = dbc.Card(
             [
@@ -181,7 +186,7 @@ class Overview(DynamicPlugin):
                         html.Div(
                             [
                                 html.Span(
-                                    f"Total runtime [s]: "
+                                    f"{runtime_str} [s]: "
                                     f"{max(trial.end_time for trial in run.history)}"
                                 ),
                             ],
