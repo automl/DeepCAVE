@@ -2,7 +2,7 @@
 """
 # PartialDependencies
 
-This module provides utilities for generating Partial Dependency Plots (PDP).
+This module provides utilities for generating Partial Dependency Plots (PDPs).
 
 Provided utilities include getting input and output layout (filtered or non-filtered),
 processing the data and loading the outputs.

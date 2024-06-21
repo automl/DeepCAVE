@@ -16,7 +16,7 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
-from deepcave.utils.compression import JSON_DENSE_SEPARATORS
+from deepcave.utils.compression import JSON_DENSE_SEPARATORS, Encoder
 from deepcave.utils.logs import get_logger
 from deepcave.utils.util import short_string
 
@@ -84,9 +84,9 @@ class Cache:
         self._filename.parent.mkdir(exist_ok=True, parents=True)
         with self._filename.open("w") as f:
             if self._debug:
-                json.dump(self._data, f, indent=4)
+                json.dump(self._data, f, cls=Encoder, indent=4)
             else:
-                json.dump(self._data, f, separators=JSON_DENSE_SEPARATORS)
+                json.dump(self._data, f, cls=Encoder, separators=JSON_DENSE_SEPARATORS)
 
     def set(self, *keys: str, value: Any, write_file: bool = True) -> None:
         """

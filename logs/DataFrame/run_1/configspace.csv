@@ -1,0 +1,5 @@
+name,type,log,lower,upper,default,distribution,q,item_0,item_1,ordered,distribution_mu,distribution_sigma,distribution_alpha,distribution_beta
+alpha,float,True,1e-08,1.0,0.001,uniform,,,,,,,,
+batch_size,integer,True,4.0,256.0,32.0,uniform,,,,,,,,
+depth,integer,False,1.0,3.0,3.0,uniform,,,,,,,,
+learning_rate_init,float,True,1e-05,1.0,0.001,uniform,,,,,,,,
