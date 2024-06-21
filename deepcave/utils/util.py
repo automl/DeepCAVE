@@ -145,3 +145,25 @@ def print_progress_bar(
 
     if iteration == total:
         print()
+
+
+def custom_round(number: float, min_decimals: int = 3, max_decimals: int = 10) -> float:
+    """
+    Round a number to the nearest decimal.
+
+    Parameters
+    ----------
+    number : float
+        The number to round.
+    min_decimals : int
+        The minimum number of decimals.
+        Default is 2.
+    max_decimals : int
+        The maximum number of decimals.
+        Default is 10.
+    """
+    for i in range(min_decimals, max_decimals + 1):
+        rounded = round(number, i)
+        if rounded != round(number, i - 1):
+            return rounded
+    return round(number, max_decimals)

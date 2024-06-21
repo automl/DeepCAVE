@@ -95,7 +95,7 @@ class LPI:
 
         # Set variables
         self.continous_neighbors = continous_neighbors
-        self.incumbent, _ = self.run.get_incumbent(budget=budget)
+        self.incumbent, _ = self.run.get_incumbent(budget=budget, objectives=objectives)
         self.default = self.cs.get_default_configuration()
         self.incumbent_array = self.incumbent.get_array()
 
