@@ -857,6 +857,31 @@
     <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span> <span class="n">total</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">()</span></div>
 
+
+
+<div class="viewcode-block" id="custom_round">
+<a class="viewcode-back" href="../../../api/deepcave.utils.util.html#deepcave.utils.util.custom_round">[docs]</a>
+<span class="k">def</span> <span class="nf">custom_round</span><span class="p">(</span><span class="n">number</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">min_decimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">max_decimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Round a number to the nearest decimal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    number : float</span>
+<span class="sd">        The number to round.</span>
+<span class="sd">    min_decimals : int</span>
+<span class="sd">        The minimum number of decimals.</span>
+<span class="sd">        Default is 2.</span>
+<span class="sd">    max_decimals : int</span>
+<span class="sd">        The maximum number of decimals.</span>
+<span class="sd">        Default is 10.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_decimals</span><span class="p">,</span> <span class="n">max_decimals</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">rounded</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rounded</span> <span class="o">!=</span> <span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">rounded</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">max_decimals</span><span class="p">)</span></div>
+
 </pre></div>
 
               </div>
