@@ -144,11 +144,10 @@ class Overview(DynamicPlugin):
 
             if len(run.get_seeds(include_combined=False)) > 1:
                 best_performance = (
-                    f"{custom_round(avg_costs[idx])} "
-                    f"± {custom_round(std_costs[idx])} ({obj.name})"
+                    f"{custom_round(avg_costs[idx])} " f"± {custom_round(std_costs[idx])}"
                 )
             else:
-                best_performance = f"{custom_round(avg_costs[idx])} ({obj.name})"
+                best_performance = f"{custom_round(avg_costs[idx])}"
 
             performance_outputs.append(
                 html.Div(

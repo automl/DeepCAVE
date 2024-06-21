@@ -147,7 +147,7 @@ def print_progress_bar(
         print()
 
 
-def custom_round(number: float, min_decimals: int = 2, max_decimals: int = 10) -> float:
+def custom_round(number: float, min_decimals: int = 3, max_decimals: int = 10) -> float:
     """
     Round a number to the nearest decimal.
 
