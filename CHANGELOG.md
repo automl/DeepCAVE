@@ -17,6 +17,7 @@
 - Use highest budget as default budget for Cost over Time instead of Combined.
 - Show best value / config for each objective instead of merged objective in Overview (#159).
 - Use chosen objective instead of merged objective to get the incumbent for the calculation of LPI importance (#159).
+- Add total runtime in overview (#155).
 
 # Version 1.2
 

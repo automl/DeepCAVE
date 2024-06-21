@@ -180,6 +180,15 @@ class Overview(DynamicPlugin):
                         *performance_outputs,
                         html.Div(
                             [
+                                html.Span(
+                                    f"Total runtime [s]: "
+                                    f"{max(trial.end_time for trial in run.history)}"
+                                ),
+                            ],
+                            className="card-text",
+                        ),
+                        html.Div(
+                            [
                                 html.Span(f"Total configurations: {run.get_num_configs()}"),
                             ],
                             className="card-text",
