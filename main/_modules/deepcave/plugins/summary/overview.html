@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.summary.overview &#8212; DeepCAVE Documentation 1.2 documentation</title>
+    <title>deepcave.plugins.summary.overview &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
   <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../../_static/documentation_options.js?v=2e6055c8"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../../../_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2
+        v1.2.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -737,7 +737,7 @@
 <span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">help_button</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_discrete_heatmap</span><span class="p">,</span> <span class="n">save_image</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">get_latest_change</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">custom_round</span><span class="p">,</span> <span class="n">get_latest_change</span>
 
 
 <div class="viewcode-block" id="Overview">
@@ -838,22 +838,42 @@
 <span class="sd">        List[Any]</span>
 <span class="sd">            A list of the created tables of the overview.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Get best cost across all objectives, highest budget</span>
-        <span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">])</span>
-        <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">incumbent</span><span class="p">)</span>
-        <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
-
-        <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_avg_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-
-        <span class="n">best_performances</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objective_names</span><span class="p">)):</span>
-            <span class="n">best_performances</span> <span class="o">+=</span> <span class="p">[</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">avg_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="n">std_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">objective_names</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span>
-            <span class="p">]</span>
-
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">prefix</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">Group</span><span class="p">):</span>
             <span class="n">optimizer</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_runs</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">prefix</span>
+
+        <span class="n">performance_outputs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_objectives</span><span class="p">()):</span>
+            <span class="c1"># Get best cost for the objective, highest budget</span>
+            <span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">objectives</span><span class="o">=</span><span class="n">obj</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="p">[</span><span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">])</span>
+            <span class="n">config_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">incumbent</span><span class="p">)</span>
+            <span class="n">avg_costs</span><span class="p">,</span> <span class="n">std_costs</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_avg_costs</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_seeds</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">best_performance</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">custom_round</span><span class="p">(</span><span class="n">avg_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="sa">f</span><span class="s2">&quot;± </span><span class="si">{</span><span class="n">custom_round</span><span class="p">(</span><span class="n">std_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">best_performance</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">custom_round</span><span class="p">(</span><span class="n">avg_costs</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="n">performance_outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Best </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">best_performance</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">),</span>
+                        <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span>
+                            <span class="s2">&quot;(See Configuration)&quot;</span><span class="p">,</span>
+                            <span class="n">href</span><span class="o">=</span><span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">),</span>
+                            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">},</span>
+                        <span class="p">),</span>
+                    <span class="p">],</span>
+                    <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-text&quot;</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">Group</span><span class="p">):</span>
+            <span class="n">runtime_str</span> <span class="o">=</span> <span class="s2">&quot;Maximum runtime&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">runtime_str</span> <span class="o">=</span> <span class="s2">&quot;Total runtime&quot;</span>
 
         <span class="c1"># Design card for quick information here</span>
         <span class="n">card</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">Card</span><span class="p">(</span>
@@ -869,15 +889,12 @@
                             <span class="sa">f</span><span class="s2">&quot;Latest change: </span><span class="si">{</span><span class="n">get_latest_change</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">latest_change</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                             <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-text&quot;</span><span class="p">,</span>
                         <span class="p">),</span>
+                        <span class="o">*</span><span class="n">performance_outputs</span><span class="p">,</span>
                         <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
                             <span class="p">[</span>
                                 <span class="n">html</span><span class="o">.</span><span class="n">Span</span><span class="p">(</span>
-                                    <span class="sa">f</span><span class="s2">&quot;Best average performance: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">best_performances</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
-                                <span class="p">),</span>
-                                <span class="n">html</span><span class="o">.</span><span class="n">A</span><span class="p">(</span>
-                                    <span class="s2">&quot;(See Configuration)&quot;</span><span class="p">,</span>
-                                    <span class="n">href</span><span class="o">=</span><span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">),</span>
-                                    <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">},</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">runtime_str</span><span class="si">}</span><span class="s2"> [s]: &quot;</span>
+                                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">end_time</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">trial</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">run</span><span class="o">.</span><span class="n">history</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                                 <span class="p">),</span>
                             <span class="p">],</span>
                             <span class="n">className</span><span class="o">=</span><span class="s2">&quot;card-text&quot;</span><span class="p">,</span>
@@ -1109,6 +1126,7 @@
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Status&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of configurations&quot;</span><span class="p">),</span>
             <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">stats_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">stats_data</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="n">stats_layout</span><span class="p">)</span>
         <span class="n">save_image</span><span class="p">(</span><span class="n">stats_figure</span><span class="p">,</span> <span class="s2">&quot;status_bar.pdf&quot;</span><span class="p">)</span>
@@ -1118,6 +1136,7 @@
             <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Budget (Seed)&quot;</span><span class="p">),</span>
             <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Configuration ID&quot;</span><span class="p">),</span>
             <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">config_figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">get_discrete_heatmap</span><span class="p">(</span>

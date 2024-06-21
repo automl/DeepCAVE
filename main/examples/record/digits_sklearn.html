@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Multi-Layer Perceptron via Sklearn &#8212; DeepCAVE Documentation 1.2 documentation</title>
+    <title>Multi-Layer Perceptron via Sklearn &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,7 +31,7 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../_static/documentation_options.js?v=2e6055c8"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../_static/favicon.ico"/>
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2
+        v1.2.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -723,7 +723,10 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-record-digits-sklearn-py"></span><h1>Multi-Layer Perceptron via Sklearn<a class="headerlink" href="#multi-layer-perceptron-via-sklearn" title="Link to this heading">¶</a></h1>
 <p>This more advanced example shows how sklearn can be used to record an optimization
 process in DeepCAVE format.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="kn">import</span> <span class="n">ConvergenceWarning</span>
+<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
@@ -733,6 +736,8 @@ process in DeepCAVE format.</p>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_digits</span>
+
+<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">print_progress_bar</span>
 
 
 <span class="k">def</span> <span class="nf">get_dataset</span><span class="p">():</span>
@@ -769,7 +774,35 @@ process in DeepCAVE format.</p>
     <span class="k">return</span> <span class="n">configspace</span>
 
 
+<span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;█&quot;</span><span class="p">,</span> <span class="n">printEnd</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call in a loop to create terminal progress bar</span>
+<span class="sd">    @params:</span>
+<span class="sd">        iterable    - Required  : iterable object (Iterable)</span>
+<span class="sd">        prefix      - Optional  : prefix string (Str)</span>
+<span class="sd">        suffix      - Optional  : suffix string (Str)</span>
+<span class="sd">        decimals    - Optional  : positive number of decimals in percent complete (Int)</span>
+<span class="sd">        length      - Optional  : character length of bar (Int)</span>
+<span class="sd">        fill        - Optional  : bar fill character (Str)</span>
+<span class="sd">        printEnd    - Optional  : end character (e.g. &quot;\r&quot;, &quot;\r\n&quot;) (Str)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+
+    <span class="c1"># Progress Bar Printing Function</span>
+
+    <span class="c1"># Initial Call</span>
+    <span class="n">print_progress_bar</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># Update Progress Bar</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+        <span class="k">yield</span> <span class="n">item</span>
+        <span class="n">print_progress_bar</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># Print New Line on Complete</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ConvergenceWarning</span><span class="p">)</span>
+
     <span class="c1"># Get dataset</span>
     <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">()</span>
 
@@ -778,36 +811,42 @@ process in DeepCAVE format.</p>
     <span class="n">time</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimize</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
 
     <span class="c1"># Define budgets</span>
-    <span class="n">budgets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+    <span class="n">budgets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
 
     <span class="c1"># Others</span>
-    <span class="n">num_configs</span> <span class="o">=</span> <span class="mi">200</span>
-    <span class="n">num_runs</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">num_configs</span> <span class="o">=</span> <span class="mi">20</span>
     <span class="n">save_path</span> <span class="o">=</span> <span class="s2">&quot;logs/DeepCAVE/digits_sklearn&quot;</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="mi">42</span>
 
-    <span class="k">for</span> <span class="n">run_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_runs</span><span class="p">):</span>
-        <span class="n">configspace</span> <span class="o">=</span> <span class="n">get_configspace</span><span class="p">(</span><span class="n">run_id</span><span class="p">)</span>
+    <span class="n">configspace</span> <span class="o">=</span> <span class="n">get_configspace</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
 
-        <span class="k">with</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configspace</span><span class="o">.</span><span class="n">sample_configuration</span><span class="p">(</span><span class="n">num_configs</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
-                    <span class="n">r</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
-                    <span class="n">clf</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">(</span>
-                        <span class="n">random_state</span><span class="o">=</span><span class="n">run_id</span><span class="p">,</span>
-                        <span class="n">max_iter</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
-                        <span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span>
-                            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_neurons_layer1&quot;</span><span class="p">],</span>
-                            <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_neurons_layer2&quot;</span><span class="p">],</span>
-                        <span class="p">),</span>
-                        <span class="n">activation</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;activation&quot;</span><span class="p">],</span>
-                        <span class="n">solver</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">],</span>
-                        <span class="n">batch_size</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">],</span>
-                        <span class="n">learning_rate_init</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">],</span>
-                    <span class="p">)</span>
-                    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-                    <span class="n">score</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Recorder</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span> <span class="n">save_path</span><span class="o">=</span><span class="n">save_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">r</span><span class="p">:</span>
+        <span class="n">configs</span> <span class="o">=</span> <span class="n">configspace</span><span class="o">.</span><span class="n">sample_configuration</span><span class="p">(</span><span class="n">num_configs</span><span class="p">)</span>
+        <span class="n">print_progress_bar</span><span class="p">(</span><span class="n">num_configs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">config_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">configs</span><span class="p">)):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">configs</span><span class="p">[</span><span class="n">config_i</span><span class="p">]</span>
 
-                    <span class="n">r</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">score</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">budget</span> <span class="ow">in</span> <span class="n">budgets</span><span class="p">:</span>
+                <span class="n">r</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">budget</span><span class="p">)</span>
+                <span class="n">clf</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">(</span>
+                    <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                    <span class="n">max_iter</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
+                    <span class="n">hidden_layer_sizes</span><span class="o">=</span><span class="p">(</span>
+                        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_neurons_layer1&quot;</span><span class="p">],</span>
+                        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_neurons_layer2&quot;</span><span class="p">],</span>
+                    <span class="p">),</span>
+                    <span class="n">activation</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;activation&quot;</span><span class="p">],</span>
+                    <span class="n">solver</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;solver&quot;</span><span class="p">],</span>
+                    <span class="n">batch_size</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;batch_size&quot;</span><span class="p">],</span>
+                    <span class="n">learning_rate_init</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;learning_rate&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+                <span class="n">score</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+
+                <span class="n">r</span><span class="o">.</span><span class="n">end</span><span class="p">(</span><span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">score</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+
+            <span class="c1"># print(f&quot;Config {config_i + 1}/{num_configs}&quot;)</span>
+            <span class="n">print_progress_bar</span><span class="p">(</span><span class="n">num_configs</span><span class="p">,</span> <span class="n">config_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;Training Progress&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-record-digits-sklearn-py">

@@ -13,8 +13,10 @@ deepcave.utils.util
 
    .. autosummary::
    
+      custom_round
       get_latest_change
       get_random_string
+      print_progress_bar
       short_string
    
    

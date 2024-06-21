@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.evaluators.lpi &#8212; DeepCAVE Documentation 1.2 documentation</title>
+    <title>deepcave.evaluators.lpi &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
     
   <link href="../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
   <link rel="preload" as="script" href="../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../_static/documentation_options.js?v=5f474de7"></script>
+    <script src="../../../_static/documentation_options.js?v=2e6055c8"></script>
     <script src="../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../../_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2
+        v1.2.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -799,7 +799,7 @@
 
         <span class="c1"># Set variables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">continous_neighbors</span> <span class="o">=</span> <span class="n">continous_neighbors</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">incumbent</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objectives</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_default_configuration</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">incumbent_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incumbent</span><span class="o">.</span><span class="n">get_array</span><span class="p">()</span>
 
@@ -924,7 +924,10 @@
 
         <span class="c1"># Normalize</span>
         <span class="n">overall_var_per_tree</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">p</span><span class="p">:</span> <span class="p">[</span><span class="n">t</span> <span class="o">/</span> <span class="n">sum_var_per_tree</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">)]</span>
+            <span class="n">p</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">t</span> <span class="o">/</span> <span class="n">sum_var_per_tree</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">sum_var_per_tree</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trees</span><span class="p">)</span>
+            <span class="p">]</span>
             <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">trees</span> <span class="ow">in</span> <span class="n">overall_var_per_tree</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
         <span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variances</span> <span class="o">=</span> <span class="n">overall_var_per_tree</span>
@@ -961,11 +964,11 @@
             <span class="n">std</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">importances</span><span class="p">:</span>
-                <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">importances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
                 <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
 
-            <span class="c1"># Use this to quantify importance via variance</span>
-            <span class="c1"># mean = np.mean(overall_var_per_tree[hp_name])</span>
+            <span class="c1"># Use this to quantify importance via importance over mean value (not normalized to 1)</span>
+            <span class="c1"># mean = self.importances[hp_name][0]</span>
 
             <span class="c1"># Sometimes there is an ugly effect if default is better than</span>
             <span class="c1"># incumbent.</span>
