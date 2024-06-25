@@ -8,19 +8,19 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
     - AMLTKRun: Define an AMLTK run object.
 """
 
-from typing import List, Optional, Union
+from typing import Union
 
 import pickle
 import re
 from pathlib import Path
 
-import ConfigSpace as ConfigSpace
 import numpy as np
 import pandas as pd
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
+from deepcave.utils.converters import extract_config, extract_costs, extract_value
 from deepcave.utils.hash import file_to_hash
 
 
@@ -104,17 +104,10 @@ class AMLTKRun(Run):
 
         all_data = pd.read_csv(path / "history.csv")
 
-        groupby_columns = [f"config:{name}" for name in configspace.get_hyperparameter_names()]
-        all_data["config_id"] = all_data.groupby(groupby_columns).ngroup()
-
         all_data["budget"] = all_data["name"].apply(
-            lambda x: float(value)
-            if (value := AMLTKRun._extract_value(x, "budget")) is not None
-            else None
+            lambda x: float(value) if (value := extract_value(x, "budget")) is not None else None
         )
-        all_data["instance"] = all_data["name"].apply(
-            lambda x: AMLTKRun._extract_value(x, "instance")
-        )
+        all_data["instance"] = all_data["name"].apply(lambda x: extract_value(x, "instance"))
 
         for metric_string in all_data.columns:
             if metric_string.startswith("metric:"):
@@ -155,7 +148,7 @@ class AMLTKRun(Run):
             if len(instance_ids) > 1:
                 raise RuntimeError("Instances are not supported.")
 
-            config = AMLTKRun._extract_config(trial, configspace)
+            config = extract_config(trial, configspace)
 
             if trial["trial_seed"] not in seeds:
                 seeds.append(trial["trial_seed"])
@@ -186,7 +179,7 @@ class AMLTKRun(Run):
             else:
                 status = Status.UNKNOWN
 
-            amltk_cost = AMLTKRun._extract_costs(trial)
+            amltk_cost = extract_costs(trial)
             cost = amltk_cost[0] if len(amltk_cost) == 1 else amltk_cost
 
             if status != Status.SUCCESS:
@@ -220,27 +213,3 @@ class AMLTKRun(Run):
             )
 
         return run
-
-    @staticmethod
-    def _extract_config(
-        data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
-    ) -> ConfigSpace.Configuration:
-        hyperparameter_names = configspace.get_hyperparameter_names()
-        hyperparameter_names_prefixed = [f"config:{name}" for name in hyperparameter_names]
-        hyperparameters = dict(zip(hyperparameter_names, data[hyperparameter_names_prefixed]))
-        return ConfigSpace.Configuration(configspace, values=hyperparameters)
-
-    @staticmethod
-    def _extract_costs(data: pd.Series) -> List[float]:
-        costs_metrics = [index for index in data.index if index.startswith("metric:")]
-        return list(data[costs_metrics])
-
-    @staticmethod
-    def _extract_value(name_string: str, field: str) -> Optional[str]:
-        pattern = rf"{field}=([\d\.]+|None)"
-        match = re.search(pattern, name_string)
-        if match:
-            value = match.group(1)
-            if value != "None":
-                return value
-        return None
