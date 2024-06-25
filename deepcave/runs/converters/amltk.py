@@ -206,12 +206,12 @@ class AMLTKRun(Run):
                 time = float(endtime - starttime)
 
             # Round budget
-            if trial["budget"] != "None":
+            if trial["budget"] is not None:
                 budget = np.round(trial["budget"], 2)
             else:
                 budget = 0.0
 
-            if trial["traceback"] != "None":
+            if trial["traceback"] is not None:
                 additional_info = {"traceback": trial["traceback"]}
             else:
                 additional_info = None
