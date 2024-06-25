@@ -8,8 +8,9 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
     - AMLTKRun: Define an AMLTK run object.
 """
 
-from typing import List, Union
+from typing import List, Optional, Union
 
+import pickle
 import re
 from pathlib import Path
 
@@ -103,21 +104,26 @@ class AMLTKRun(Run):
         # Read configspace
         from ConfigSpace.read_and_write import json as cs_json
 
-        with (path / "configspace.json").open("r") as f:
-            configspace = cs_json.read(f.read())
+        with open(path / "configspace.json", "rb") as f:
+            json_string = pickle.load(f)
+        configspace = cs_json.read(json_string)
 
         # Read objectives
         obj_list = list()
 
         all_data = pd.read_csv(path / "history.csv")
 
-        all_data[["config_id", "seed", "budget", "instance"]] = (
-            all_data["name"].str.split("_", expand=True).iloc[:, 1:]
+        groupby_columns = [f"config:{name}" for name in configspace.get_hyperparameter_names()]
+        all_data["config_id"] = all_data.groupby(groupby_columns).ngroup()
+
+        all_data["budget"] = all_data["name"].apply(
+            lambda x: float(value)
+            if (value := AMLTKRun._extract_value(x, "budget")) is not None
+            else None
         )
-        all_data["config_id"] = all_data["config_id"].str.split("=", expand=True)[1]
-        all_data["seed"] = all_data["seed"].str.split("=", expand=True)[1]
-        all_data["budget"] = all_data["budget"].str.split("=", expand=True)[1]
-        all_data["instance"] = all_data["instance"].str.split("=", expand=True)[1]
+        all_data["instance"] = all_data["name"].apply(
+            lambda x: AMLTKRun._extract_value(x, "instance")
+        )
 
         for metric_string in all_data.columns:
             if metric_string.startswith("metric:"):
@@ -160,13 +166,19 @@ class AMLTKRun(Run):
 
             config = AMLTKRun._extract_config(trial, configspace)
 
-            if trial["seed"] not in seeds:
-                seeds.append(trial["seed"])
+            if trial["trial_seed"] not in seeds:
+                seeds.append(trial["trial_seed"])
 
-            starttime_col = all_data.filter(
-                regex="profile:.*g:time:start", axis=1
-            ).columns.tolist()[0]
-            endtime_col = all_data.filter(regex="profile:.*g:time:end", axis=1).columns.tolist()[-1]
+            starttime_col = "deepcave:time:start"
+            endtime_col = "deepcave:time:end"
+            if starttime_col not in all_data.columns:
+                raise ValueError(
+                    f"Missing DeepCAVE start time column '{starttime_col}' in history.csv."
+                )
+            if endtime_col not in all_data.columns:
+                raise ValueError(
+                    f"Missing DeepCAVE end time column '{endtime_col}' in history.csv."
+                )
 
             if first_starttime is None:
                 first_starttime = trial[starttime_col]
@@ -199,16 +211,21 @@ class AMLTKRun(Run):
             else:
                 budget = 0.0
 
+            if trial["traceback"] != "None":
+                additional_info = {"traceback": trial["traceback"]}
+            else:
+                additional_info = None
+
             run.add(
                 costs=cost + [time] if isinstance(cost, list) else [cost, time],  # type: ignore
                 config=config,
                 budget=budget,
-                seed=trial["seed"],
+                seed=trial["trial_seed"],
                 start_time=starttime,
                 end_time=endtime,
                 status=status,
                 origin=None,
-                additional=None,
+                additional=additional_info,
             )
 
         return run
@@ -217,3 +234,13 @@ class AMLTKRun(Run):
     def _extract_costs(data: pd.Series) -> List[float]:
         costs_metrics = [index for index in data.index if index.startswith("metric:")]
         return list(data[costs_metrics])
+
+    @staticmethod
+    def _extract_value(name_string: str, field: str) -> Optional[str]:
+        pattern = rf"{field}=([\d\.]+|None)"
+        match = re.search(pattern, name_string)
+        if match:
+            value = match.group(1)
+            if value != "None":
+                return value
+        return None
