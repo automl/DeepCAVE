@@ -36,6 +36,8 @@ class Importances(StaticPlugin):
     """
     Provide a plugin for the visualization of the importances.
 
+    Evaluators are fANOVA, LPI (local parameter importance) and ablation importance.
+
     Provided utilities include getting input/output layout, data processing
     and loading outputs. Also provides a matplotlib version.
     """
@@ -340,12 +342,12 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, budget in enumerate(budgets):
-            print("BUDGET: ", budget)
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances
+        print("Data: ", data)
         return data  # type: ignore
 
     @staticmethod
@@ -413,6 +415,7 @@ class Importances(StaticPlugin):
         for budget_id, importances in outputs.items():
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
+
             if budget_id not in selected_budget_ids:
                 continue
 
@@ -420,20 +423,26 @@ class Importances(StaticPlugin):
             y = []
             error_y = []
             for hp_name, results in importances.items():
-                print("IMPORTANCES HERE: ", importances)
                 if hp_name not in selected_hp_names:
                     continue
-
+                print("Results: ", results)
                 x += [hp_name]
                 y += [results[0]]
                 error_y += [results[1]]
 
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
-        # Sort by last fidelity now
-        selected_budget_id = max(selected_budget_ids)
-        idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
-        idx = idx[:n_hps]
+        # Check whether the chosen evaluator needs a special sorting
+        # As for now this i only the case for ablation importance
+        if "sort" in importances:
+            idx_list = [i for i in range(n_hps)]
+            idx = np.array(idx_list)
+            del importances["sort"]
+        # Sort by last fidelity
+        else:
+            selected_budget_id = max(selected_budget_ids)
+            idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
+            idx = idx[:n_hps]
 
         bar_data = []
         for budget_id, values in data.items():
