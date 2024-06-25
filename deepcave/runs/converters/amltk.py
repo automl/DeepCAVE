@@ -99,17 +99,16 @@ class AMLTKRun(Run):
             json_string = pickle.load(f)
         configspace = cs_json.read(json_string)
 
-        # Read objectives
-        obj_list = list()
+        history = pd.read_csv(path / "history.csv")
 
-        all_data = pd.read_csv(path / "history.csv")
-
-        all_data["budget"] = all_data["name"].apply(
+        history["budget"] = history["name"].apply(
             lambda x: float(value) if (value := extract_value(x, "budget")) is not None else None
         )
-        all_data["instance"] = all_data["name"].apply(lambda x: extract_value(x, "instance"))
+        history["instance"] = history["name"].apply(lambda x: extract_value(x, "instance"))
 
-        for metric_string in all_data.columns:
+        # Extract the objectives from the dataframe
+        obj_list = list()
+        for metric_string in history.columns:
             if metric_string.startswith("metric:"):
                 match = re.match(
                     r"metric:(\w+) \[(\d+\.\d+), (\d+\.\d+)\] \((\w+)\)", metric_string
@@ -141,7 +140,7 @@ class AMLTKRun(Run):
 
         first_starttime = None
         seeds = []
-        for _, trial in all_data.iterrows():
+        for _, trial in history.iterrows():
             if trial["instance"] not in instance_ids:
                 instance_ids += [trial["instance"]]
 
@@ -153,13 +152,15 @@ class AMLTKRun(Run):
             if trial["trial_seed"] not in seeds:
                 seeds.append(trial["trial_seed"])
 
+            # Start and end time of the trial need to be given via a deepcave:time:start and
+            # deepcave:time:end column
             starttime_col = "deepcave:time:start"
             endtime_col = "deepcave:time:end"
-            if starttime_col not in all_data.columns:
+            if starttime_col not in history.columns:
                 raise ValueError(
                     f"Missing DeepCAVE start time column '{starttime_col}' in history.csv."
                 )
-            if endtime_col not in all_data.columns:
+            if endtime_col not in history.columns:
                 raise ValueError(
                     f"Missing DeepCAVE end time column '{endtime_col}' in history.csv."
                 )
