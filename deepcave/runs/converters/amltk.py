@@ -71,15 +71,6 @@ class AMLTKRun(Run):
 
         return Path(self.path / "history.csv").stat().st_mtime
 
-    @staticmethod
-    def _extract_config(
-        data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
-    ) -> ConfigSpace.Configuration:
-        hyperparameter_names = configspace.get_hyperparameter_names()
-        hyperparameter_names_prefixed = [f"config:{name}" for name in hyperparameter_names]
-        hyperparameters = dict(zip(hyperparameter_names, data[hyperparameter_names_prefixed]))
-        return ConfigSpace.Configuration(configspace, values=hyperparameters)
-
     @classmethod
     def from_path(cls, path: Union[Path, str]) -> "AMLTKRun":
         """
@@ -229,6 +220,15 @@ class AMLTKRun(Run):
             )
 
         return run
+
+    @staticmethod
+    def _extract_config(
+        data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
+    ) -> ConfigSpace.Configuration:
+        hyperparameter_names = configspace.get_hyperparameter_names()
+        hyperparameter_names_prefixed = [f"config:{name}" for name in hyperparameter_names]
+        hyperparameters = dict(zip(hyperparameter_names, data[hyperparameter_names_prefixed]))
+        return ConfigSpace.Configuration(configspace, values=hyperparameters)
 
     @staticmethod
     def _extract_costs(data: pd.Series) -> List[float]:
