@@ -446,7 +446,7 @@ class ParetoFront(DynamicPlugin):
                     x_std += [points_std[point_idx][0]]
                     y_std += [points_std[point_idx][1]]
 
-            color = get_color(idx, alpha=0.1)
+            color = get_color(idx, alpha=0.5)
             color_pareto = get_color(idx)
 
             if show_all:
@@ -524,6 +524,7 @@ class ParetoFront(DynamicPlugin):
                 xaxis=dict(title=objective_1.name),
                 yaxis=dict(title=objective_2.name),
                 margin=config.FIGURE_MARGIN,
+                font=dict(size=config.FIGURE_FONT_SIZE),
             )
         else:
             layout = None
@@ -605,12 +606,11 @@ class ParetoFront(DynamicPlugin):
                     x += [points[point_idx][0]]
                     y += [points[point_idx][1]]
 
-            # , alpha=0.1)
             color = plt.get_color(idx)  # type: ignore
             color_pareto = plt.get_color(idx)  # type: ignore
 
             if show_all:
-                plt.scatter(x, y, color=color, marker="o", alpha=0.1, s=3)
+                plt.scatter(x, y, color=color, marker="o", s=3)
 
             # Check if hv or vh is needed
             objective_1 = run.get_objective(inputs["objective_id_1"])
