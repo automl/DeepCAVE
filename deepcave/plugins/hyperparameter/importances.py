@@ -21,6 +21,7 @@ from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
 from deepcave import config
+from deepcave.evaluators.ablation_importances import AblationImportances
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
@@ -37,6 +38,8 @@ logger = get_logger(__name__)
 class Importances(StaticPlugin):
     """
     Provide a plugin for the visualization of the importances.
+
+    Evaluators are fANOVA, LPI (local parameter importance) and ablation importance.
 
     Provided utilities include getting input/output layout, data processing
     and loading outputs. Also provides a matplotlib version.
@@ -84,7 +87,10 @@ class Importances(StaticPlugin):
                                 "Local Parameter Importance: Quantify importance by changing the "
                                 "neighborhood of a configuration. Uses default and incumbent "
                                 "configuration as reference. \n\n"
-                                "fANOVA: Quantify importance globally."
+                                "fANOVA: Quantify importance globally.\n\n"
+                                "Ablation Importance: Quantify importance by transforming the "
+                                "default configuration step by step into the "
+                                "incumbent configuration."
                             ),
                             dbc.Select(
                                 id=register("method", ["value", "options"]),
@@ -172,8 +178,12 @@ class Importances(StaticPlugin):
         Dict[str, Dict[str, Any]]
             Content to be filled.
         """
-        method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
-        method_values = ["local", "global"]
+        method_labels = [
+            "Local Parameter Importance (local)",
+            "Ablation Importance (local)",
+            "fANOVA (global)",
+        ]
+        method_values = ["local", "abli", "global"]
 
         return {
             "method": {
@@ -324,12 +334,14 @@ class Importances(StaticPlugin):
         hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets(include_combined=True)
 
-        evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
+        evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator, AblationImportances]] = None
         if method == "local":
             # Initialize the evaluator
             evaluator = LocalEvaluator(run)
         elif method == "global":
             evaluator = GlobalEvaluator(run)
+        elif method == "abli":
+            evaluator = AblationImportances(run)
         else:
             raise RuntimeError("Method was not found.")
 
@@ -343,7 +355,6 @@ class Importances(StaticPlugin):
             if any(np.isnan(val) for value in importances.values() for val in value):
                 logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances
-
         return data  # type: ignore
 
     @staticmethod
@@ -420,17 +431,22 @@ class Importances(StaticPlugin):
             for hp_name, results in importances.items():
                 if hp_name not in selected_hp_names:
                     continue
-
                 x += [hp_name]
                 y += [results[0]]
                 error_y += [results[1]]
 
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
-        # Sort by last fidelity now
-        selected_budget_id = max(selected_budget_ids)
-        idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
-        idx = idx[:n_hps]
+        # Check whether the chosen evaluator needs a special sorting
+        if "sort" in importances:
+            idx_list = [i for i in range(n_hps)]
+            idx = np.array(idx_list)
+            del importances["sort"]
+        # Sort by last fidelity
+        else:
+            selected_budget_id = max(selected_budget_ids)
+            idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
+            idx = idx[:n_hps]
 
         bar_data = []
         for budget_id, values in data.items():

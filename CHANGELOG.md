@@ -1,3 +1,10 @@
+# Version 1.2.2
+
+## Ablation Importance
+- Added ablation importance as evaluator for the importances plugin.
+- Added tests as well as documentation.
+- Modified the help buttons for importances to also display information about ablation importance.
+
 # Version 1.2.1
 
 ## Quality of Life

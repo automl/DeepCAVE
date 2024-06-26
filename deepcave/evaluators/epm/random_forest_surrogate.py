@@ -30,9 +30,10 @@ class RandomForestSurrogate(SurrogateModel):
         self,
         configspace: CS.ConfigurationSpace,
         seed: Optional[int] = None,
+        n_trees: int = 16,
     ):
         super().__init__(configspace, seed=seed)
-        self._model = RandomForest(configspace=configspace, seed=seed)
+        self._model = RandomForest(configspace=configspace, seed=seed, n_trees=n_trees)
 
     def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
