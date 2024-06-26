@@ -24,7 +24,27 @@ from deepcave.runs.objective import Objective
 
 
 class AblationImportances:
-    """Provide an evaluator of the ablation importances."""
+    """
+    Provide an evaluator of the ablation importances.
+
+    Properties
+    ----------
+    run : AbstractRun
+        The run(s) to analyze.
+    cs : ConfigurationSpace
+        The configuration space of the run(s).
+    hp_names : List[str]
+        A list of the hyperparameter names.
+    importances : Optional[Dict[Any, Any]]
+        A dictionary containing the importances for each HP.
+    objectives : Optional[Union[Objective, List[Objective]]]
+        The objective(s) of the run(s).
+    default_encode : List
+        An encoding of the default configuration.
+    default_config : Configurations
+        The default configuration of this configuration space.
+        Gets changed step by step to the incumbent.
+    """
 
     def __init__(self, run: AbstractRun):
         self.run = run
@@ -37,17 +57,37 @@ class AblationImportances:
         objectives: Optional[Union[Objective, List[Objective]]] = None,  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
         continous_neighbors: int = 500,  # noqa
-        n_trees: int = 10,  # noqa
+        n_trees: int = 50,  # noqa
         seed: int = 0,  # noqa
     ) -> None:
-        """Prepare the data for processing and train a Random Forest surrogate model."""
+        """
+        Prepare the data for processing and train a Random Forest surrogate model.
+
+        Parameters
+        ----------
+        objectives : Optional[Union[Objective, List[Objective]]]
+            The objective(s) of the run(s).
+            Default is None.
+        budget : Optional[Union[int, float]]
+            The budget of the run(s).
+            Default is None
+        n_trees : int
+            The number of trees for the surrogate model.
+            Default is 50.
+        seed : int
+            The seed for the surrogate model.
+            Default is 0.
+
+        Note
+        ----
+        continous_neighbors will not be used.
+        """
         self.objectives = objectives
 
-        # random_seed = random.randint(0, 100)  # TODO: 100 ok? Random ok?
         importances = dict()
 
         # A Random Forest Regressor is used as surrogate
-        (incumbent_config, incumbent_encode) = self._train_surrogate(seed, budget)
+        (incumbent_config, incumbent_encode) = self._train_surrogate(seed, budget, n_trees)
 
         cost_mean_def, _ = self._model.predict(np.array([self.default_encode]))
         cost_mean_inc, _ = self._model.predict(np.array([incumbent_encode]))
@@ -55,14 +95,18 @@ class AblationImportances:
         def_performance = 1 - cost_mean_def
         inc_performance = 1 - cost_mean_inc
 
-        print("Default performance:", def_performance)
-        print("Incumbent performance:", inc_performance)
+        # This is for sorting purposes in the 'importance' plugin
+        importances["sort"] = (0, 0)
 
         if inc_performance < def_performance:
-            print("Inc is smaller than default for budget: ", budget)
+            print(
+                "The predicted incumbent performance is smaller than the predicted "
+                "default performance for budget: ",
+                budget,
+                ". This could mean that the configuration space which with the surrogate "
+                "model was trained is too small.",
+            )
             importances = {hp_name: (0, 0) for hp_name in self.hp_names}
-            # TODO: Display warning here
-
         else:
             # Copy the hps names as to not remove objects from the original list
             hp_it = self.hp_names.copy()
@@ -76,84 +120,127 @@ class AblationImportances:
                     print("end ablation")
                     break
 
-                print(
-                    "Hyperparameter with max impact", max_hp, "New performance:", max_hp_performance
-                )
-                # TODO: Change the variance
                 importances[max_hp] = (max_hp_performance[0] - def_performance[0], max_hp_var[0])
-                # New the 'default' performance
+                # New 'default' performance
                 def_performance = max_hp_performance
                 # Remove the current max hp for keeping the order right
                 hp_it.remove(max_hp)
 
-        importances["sort"] = (-1, -1)
         self.importances = importances
 
     def get_importances(self, hp_names: List[str]) -> Optional[Dict[Any, Any]]:
-        """I am a placeholder."""
+        """
+        Get the importances.
+
+        Parameters
+        ----------
+        hp_names : List[str]
+            A list of the hp names.
+
+        Returns
+        -------
+        Optional[Dict[Any, Any]]
+            A dictionary containing the importance.
+
+        Raises
+        ------
+        RuntimeError
+            If the importance score have not been calculated.
+        """
         if self.importances is None:
             raise RuntimeError("Importance scores must be calculated first.")
-        # The ranks aka the order of the hps have to be determined
-        # importances = dict(sorted(self.importances.items(), key=lambda x: x[1][1]))
-        # self.importances = {key: value for key, value in sorted(self.importances.items())}
+        self.importances = {
+            key: self.importances[key]
+            for key in hp_names
+            if key in self.importances or key == "sort"
+        }
         return self.importances
 
     def _ablation(
         self, incumbent_config: Any, def_performance: Any, hp_it: List[str]
     ) -> Tuple[Any, Any, Any, Any]:
+        """
+        Calculate the ablation importance for each hyperparameter.
+
+        Parameters
+        ----------
+        incumbent_config: Any
+            The incumbent configuration.
+        def_performance: Any
+            The current performance.
+        hp_it: List[str]
+            A list of the HPs that still have to be looked at.
+
+        Returns
+        -------
+        Tuple[Any, Any, Any, Any]
+            continue_ablation, max_hp, max_hp_performance, max_hp_var
+        """
         max_hp = ""
         max_hp_difference = -1
 
         for hp in hp_it:
-            if (
-                incumbent_config[hp] is not None and hp in self.default_config.keys()
-            ):  # Why should it not be in default keys though?
+            if incumbent_config[hp] is not None and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
                 cost_mean_new, _ = self._model.predict(
                     np.array([self.run.encode_config(config_copy)])
-                )  # TODO: Change the variable names
+                )
                 difference = def_performance - cost_mean_new
-                if difference > max_hp_difference:
+                # Check for the maximum difference hyperparameter in this round
+                if difference >= max_hp_difference:
                     max_hp = hp
                     max_hp_difference = difference
             else:
                 continue
-                # TODO: Maybe raise an error here? Does not seem ideal
         if max_hp != "":
+            # Switch the maximum impact hyperparameter with its default parameter
             self.default_config[max_hp] = incumbent_config[max_hp]
             max_hp_mean, max_hp_var = self._model.predict(
                 np.array([self.run.encode_config(self.default_config)])
             )
             return True, max_hp, 1 - max_hp_mean, max_hp_var
         else:
-            print(
-                "No hyperparameter to ablate: ", max_hp, max_hp_difference
-            )  # TODO: This needs to be more clear what the problem is
+            print("No maximum impact hyperparameter found: ", max_hp, max_hp_difference)
             return False, None, None, None
 
-    def _train_surrogate(self, seed: int, budget: Union[int, float, None]) -> Tuple[Any, Any]:
+    def _train_surrogate(
+        self, seed: int, budget: Union[int, float, None], n_trees: int
+    ) -> Tuple[Any, Any]:
+        """
+        Get the data points from the cs and train the surrogate.
+
+        Parameters
+        ----------
+        seed: int
+            The seed for the model.
+        budget: Union[int, float, None]
+            The budget of the run(s).
+        n_trees: int
+            The number of trees for the Random Forest.
+
+        Returns
+        -------
+        Tuple[Any, Any]
+            incumbent_config, incumbent_encode
+        """
         # Collect the runs attributes for training the surrogate
         df = self.run.get_encoded_data(
             self.objectives, budget, specific=True, include_combined_cost=True
         )
 
         X = df[self.run.configspace.get_hyperparameter_names()].to_numpy()
-        # Combined cost name includes the cost of all selected objectives (the normalized cost)
+        # Combined cost name includes the cost of all selected objectives
         Y = df[COMBINED_COST_NAME].to_numpy()
 
-        print("Budget: ", budget)
-        print("Max and min performances of this cs: ", max(Y), min(Y))
-        print("Objectives that are passed: ", self.objectives)
         # Only get first entry, the normalized cost is not needed
         incumbent_config = self.run.get_incumbent(budget=budget, objectives=self.objectives)[0]
         incumbent_encode = self.run.encode_config(incumbent_config)
 
-        # If there is no default config, create one fitting to the cs
         self.default_config = self.cs.get_default_configuration()
         self.default_encode = self.run.encode_config(self.default_config)
 
-        self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=50)
+        self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
         self._model._fit(X, Y)
 
         return incumbent_config, incumbent_encode

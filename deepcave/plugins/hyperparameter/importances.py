@@ -80,11 +80,14 @@ class Importances(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Method"),
-                            help_button(  # TODO: Add help text for ablation importances
+                            help_button(
                                 "Local Parameter Importance: Quantify importance by changing the "
                                 "neighborhood of a configuration. Uses default and incumbent "
                                 "configuration as reference. \n\n"
-                                "fANOVA: Quantify importance globally."
+                                "fANOVA: Quantify importance globally.\n\n"
+                                "Ablation Importance: Quantify importance by transforming the "
+                                "default configuration step by step into the "
+                                "incumbent configuration."
                             ),
                             dbc.Select(
                                 id=register("method", ["value", "options"]),
@@ -174,7 +177,7 @@ class Importances(StaticPlugin):
         """
         method_labels = [
             "Local Parameter Importance (local)",
-            "Ablation Importances (local)",
+            "Ablation Importance (local)",
             "fANOVA (global)",
         ]
         method_values = ["local", "abli", "global"]
@@ -347,7 +350,6 @@ class Importances(StaticPlugin):
 
             importances = evaluator.get_importances(hp_names)
             data[budget_id] = importances
-        print("Data: ", data)
         return data  # type: ignore
 
     @staticmethod
@@ -415,7 +417,6 @@ class Importances(StaticPlugin):
         for budget_id, importances in outputs.items():
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
-
             if budget_id not in selected_budget_ids:
                 continue
 
@@ -425,7 +426,6 @@ class Importances(StaticPlugin):
             for hp_name, results in importances.items():
                 if hp_name not in selected_hp_names:
                     continue
-                print("Results: ", results)
                 x += [hp_name]
                 y += [results[0]]
                 error_y += [results[1]]
@@ -433,7 +433,6 @@ class Importances(StaticPlugin):
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
         # Check whether the chosen evaluator needs a special sorting
-        # As for now this i only the case for ablation importance
         if "sort" in importances:
             idx_list = [i for i in range(n_hps)]
             idx = np.array(idx_list)
