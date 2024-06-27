@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Converters &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
+    <title>Converters &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,7 +31,7 @@
     
   <link rel="preload" as="script" href="_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="_static/documentation_options.js?v=2e6055c8"></script>
+    <script src="_static/documentation_options.js?v=f6073981"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="_static/favicon.ico"/>
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2.1
+        v1.3
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -311,6 +311,11 @@
        </i>
       </label>
       <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
@@ -595,6 +600,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="api/deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
@@ -699,6 +709,11 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#amltk-converter">
+   AMLTK Converter
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#custom-converter">
    Custom Converter
   </a>
@@ -736,6 +751,7 @@ sure that folders are put into the right format so that the files can be interpr
 <li><p>BOHB</p></li>
 <li><p>Auto-Sklearn</p></li>
 <li><p>Auto-PyTorch</p></li>
+<li><p>AMLTK</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -743,6 +759,45 @@ sure that folders are put into the right format so that the files can be interpr
 finished processes and running processes that regularly write new results to disk as long as a
 converter is available.</p>
 </div>
+<section id="amltk-converter">
+<h2>AMLTK Converter<a class="headerlink" href="#amltk-converter" title="Link to this heading">¶</a></h2>
+<p>To be able to load your AMLTK run into DeepCave, there are a few points to
+consider when running AMLTK:</p>
+<ol class="arabic">
+<li><p>Save the <code class="docutils literal notranslate"><span class="pre">trial_history</span></code> as a Parquet file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">history_df</span> <span class="o">=</span> <span class="n">trial_history</span><span class="o">.</span><span class="n">df</span><span class="p">()</span>
+<span class="n">bucket</span><span class="o">.</span><span class="n">store</span><span class="p">({</span><span class="s2">&quot;history.parquet&quot;</span><span class="p">:</span> <span class="n">history_df</span><span class="p">})</span>
+</pre></div>
+</div>
+</li>
+<li><p>Save the configuration space as a ConfigSpace JSON file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ConfigSpace.read_and_write</span> <span class="kn">import</span> <span class="n">json</span> <span class="k">as</span> <span class="n">cs_json</span>
+<span class="n">space</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">search_space</span><span class="p">(</span><span class="n">parser</span><span class="o">=</span><span class="s2">&quot;configspace&quot;</span><span class="p">)</span>
+<span class="n">bucket</span><span class="o">.</span><span class="n">store</span><span class="p">({</span><span class="s2">&quot;configspace.json&quot;</span><span class="p">:</span> <span class="n">cs_json</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">space</span><span class="p">)})</span>
+</pre></div>
+</div>
+</li>
+<li><p>Define the start and end times for your trials:</p>
+<ul>
+<li><p>DeepCAVE needs to know which columns to use as the trial start end end times.
+Ensure the start and end times are named in the format <code class="docutils literal notranslate"><span class="pre">&quot;deepcave:time:start&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;deepcave:time:end&quot;</span></code> in the <code class="docutils literal notranslate"><span class="pre">history.parquet</span></code>.</p></li>
+<li><p>You can define these times during the AMLTK run setup. For example, assuming you have a
+data-loading and a scoring step and tracked their times via the profiler, to use the start time
+from data-loading and the end time of scoring as DeepCAVE start end end time, you can add the
+following lines before calling <code class="docutils literal notranslate"><span class="pre">bucket.store()</span></code> in step 1:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">history_df</span><span class="p">[</span><span class="s2">&quot;deepcave:time:start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">history_df</span><span class="p">[</span><span class="s2">&quot;profile:data-loading:time:start&quot;</span><span class="p">]</span>
+<span class="n">history_df</span><span class="p">[</span><span class="s2">&quot;deepcave:time:end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">history_df</span><span class="p">[</span><span class="s2">&quot;profile:scoring:time:start&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Alternatively, you can still manually add the DeepCave time columns to <code class="docutils literal notranslate"><span class="pre">history.parquet</span></code>
+after the AMLTK run has finished by loading it into a Pandas Dataframe, manipulating it, and
+writing it back to the <code class="docutils literal notranslate"><span class="pre">history.parquet</span></code> file.</p></li>
+</ul>
+</li>
+</ol>
+</section>
 <section id="custom-converter">
 <h2>Custom Converter<a class="headerlink" href="#custom-converter" title="Link to this heading">¶</a></h2>
 <p>To support a new converter, you need to create a new class that inherits from
