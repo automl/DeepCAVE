@@ -29,5 +29,7 @@ rq>=1.10.1
 # Pinned due to https://github.com/plotly/dash/issues/1992
 # Pinning might be removed for dash>2.3.0
 werkzeug==2.0.3
+pyarrow==16.1.0
+fastparquet==2024.5.0
 
 pyPDPPartitioner>=0.1.8

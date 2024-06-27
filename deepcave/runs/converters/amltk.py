@@ -54,7 +54,7 @@ class AMLTKRun(Run):
             return ""
 
         # Use hash of history.csv as id
-        return file_to_hash(self.path / "history.csv")
+        return file_to_hash(self.path / "history.parquet")
 
     @property
     def latest_change(self) -> Union[float, int]:
@@ -69,7 +69,7 @@ class AMLTKRun(Run):
         if self.path is None:
             return 0
 
-        return Path(self.path / "history.csv").stat().st_mtime
+        return Path(self.path / "history.parquet").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Union[Path, str]) -> "AMLTKRun":
@@ -99,19 +99,19 @@ class AMLTKRun(Run):
             json_string = pickle.load(f)
         configspace = cs_json.read(json_string)
 
-        history = pd.read_csv(path / "history.csv")
+        history = pd.read_parquet(path / "history.parquet")
 
-        history["budget"] = history["name"].apply(
+        history["budget"] = history.index.map(
             lambda x: float(value) if (value := extract_value(x, "budget")) is not None else None
         )
-        history["instance"] = history["name"].apply(lambda x: extract_value(x, "instance"))
 
         # Extract the objectives from the dataframe
         obj_list = list()
         for metric_string in history.columns:
             if metric_string.startswith("metric:"):
                 match = re.match(
-                    r"metric:(\w+) \[(\d+\.\d+), (\d+\.\d+)\] \((\w+)\)", metric_string
+                    r"metric:(\w+) \[(-?\d+\.?\d*|[-+]inf), (-?\d+\.?\d*|[-+]inf)\] \((\w+)\)",
+                    metric_string,
                 )
                 assert match is not None
                 metric_name = match.group(1)
@@ -136,17 +136,9 @@ class AMLTKRun(Run):
         # The path has to be set manually
         run._path = path
 
-        instance_ids = []
-
         first_starttime = None
         seeds = []
         for _, trial in history.iterrows():
-            if trial["instance"] not in instance_ids:
-                instance_ids += [trial["instance"]]
-
-            if len(instance_ids) > 1:
-                raise RuntimeError("Instances are not supported.")
-
             config = extract_config(trial, configspace)
 
             if trial["trial_seed"] not in seeds:
