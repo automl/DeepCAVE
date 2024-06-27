@@ -1,3 +1,8 @@
+# Version 1.3
+
+## Converters
+- Add support for AMLTK.
+
 # Version 1.2.1
 
 ## Quality of Life

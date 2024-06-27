@@ -134,9 +134,10 @@ class Config:
     @property
     def CONVERTERS(self) -> List[Type["Run"]]:
         """Get a list of available run converters."""
+        from deepcave.runs.converters.amltk import AMLTKRun
         from deepcave.runs.converters.bohb import BOHBRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run
         from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
-        return [DeepCAVERun, BOHBRun, SMAC3v1Run, SMAC3v2Run]
+        return [DeepCAVERun, BOHBRun, SMAC3v1Run, SMAC3v2Run, AMLTKRun]
