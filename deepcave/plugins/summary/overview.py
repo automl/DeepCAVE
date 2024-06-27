@@ -14,6 +14,8 @@ The module includes a dynamic plugin for the overview.
 
 from typing import Any, Callable, Dict, List
 
+import itertools
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
@@ -28,14 +30,14 @@ from ConfigSpace.hyperparameters import (
 )
 from dash import dcc, html
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.plugins.summary.configurations import Configurations
 from deepcave.runs.group import Group
 from deepcave.runs.status import Status
 from deepcave.utils.layout import create_table, help_button
 from deepcave.utils.styled_plotty import get_discrete_heatmap, save_image
-from deepcave.utils.util import get_latest_change
+from deepcave.utils.util import custom_round, get_latest_change
 
 
 class Overview(DynamicPlugin):
@@ -83,9 +85,9 @@ class Overview(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("status_statistics", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Barplot",
@@ -93,9 +95,9 @@ class Overview(DynamicPlugin):
                     dbc.Tab(
                         dcc.Graph(
                             id=register("config_statistics", "figure"),
-                            style={"height": Config.FIGURE_HEIGHT},
+                            style={"height": config.FIGURE_HEIGHT},
                             config={
-                                "toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}
+                                "toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}
                             },
                         ),
                         label="Heatmap",
@@ -129,28 +131,42 @@ class Overview(DynamicPlugin):
         List[Any]
             A list of the created tables of the overview.
         """
-        # Get best cost across all objectives, highest budget
-        incumbent, _ = run.get_incumbent()
-        config_id = run.get_config_id(incumbent)
-        objective_names = run.get_objective_names()
-
-        best_performance = {}
-        # Budget might not be evaluated
-        try:
-            costs = run.get_costs(config_id)
-        except Exception:
-            costs = [None for _ in range(len(objective_names))]
-
-        for idx, cost in enumerate(costs):
-            best_performance[objective_names[idx]] = cost
-
-        best_performances = []
-        for name, value in best_performance.items():
-            best_performances += [f"{round(value, 2)} ({name})"]
-
         optimizer = run.prefix
         if isinstance(run, Group):
             optimizer = run.get_runs()[0].prefix
+
+        performance_outputs = []
+        for idx, obj in enumerate(run.get_objectives()):
+            # Get best cost for the objective, highest budget
+            incumbent, _ = run.get_incumbent(objectives=obj, statuses=[Status.SUCCESS])
+            config_id = run.get_config_id(incumbent)
+            avg_costs, std_costs = run.get_avg_costs(config_id)
+
+            if len(run.get_seeds(include_combined=False)) > 1:
+                best_performance = (
+                    f"{custom_round(avg_costs[idx])} " f"± {custom_round(std_costs[idx])}"
+                )
+            else:
+                best_performance = f"{custom_round(avg_costs[idx])}"
+
+            performance_outputs.append(
+                html.Div(
+                    [
+                        html.Span(f"Best {obj.name}: {best_performance} "),
+                        html.A(
+                            "(See Configuration)",
+                            href=Configurations.get_link(run, config_id),
+                            style={"color": "white"},
+                        ),
+                    ],
+                    className="card-text",
+                ),
+            )
+
+        if isinstance(run, Group):
+            runtime_str = "Maximum runtime"
+        else:
+            runtime_str = "Total runtime"
 
         # Design card for quick information here
         card = dbc.Card(
@@ -166,15 +182,12 @@ class Overview(DynamicPlugin):
                             f"Latest change: {get_latest_change(run.latest_change)}",
                             className="card-text",
                         ),
+                        *performance_outputs,
                         html.Div(
                             [
                                 html.Span(
-                                    f"Best average performance: {', '.join(best_performances)} "
-                                ),
-                                html.A(
-                                    "(See Configuration)",
-                                    href=Configurations.get_link(run, config_id),
-                                    style={"color": "white"},
+                                    f"{runtime_str} [s]: "
+                                    f"{max(trial.end_time for trial in run.history)}"
                                 ),
                             ],
                             className="card-text",
@@ -219,14 +232,15 @@ class Overview(DynamicPlugin):
         # Budgets
         budgets = run.get_budgets(include_combined=False)
 
-        # Statistics
+        # Seeds
+        seeds = run.get_seeds(include_combined=False)
+
+        # Budget-seed combinations
+        budget_seed_combinations = list(itertools.product(budgets, seeds))
+
+        # Setup statistics dict for bar plot
         status_statistics: Dict[float, Dict[Status, int]] = {}
-        status_details: Dict[str, List[Any]] = {
-            "Configuration ID": [],
-            "Budget": [],
-            "Status": [],
-            "Error": [],
-        }
+
         for budget in budgets:
             budget = round(budget, 2)
             if budget not in status_statistics:
@@ -235,26 +249,38 @@ class Overview(DynamicPlugin):
                 for s in Status:
                     status_statistics[budget][s] = 0
 
-        status_statistics_total = {}
-        status_budget = {}
+        # Setup details dict for to collect information on failed trials
+        status_details: Dict[str, List[Any]] = {
+            "Configuration ID": [],
+            "Budget": [],
+            "Seed": [],
+            "Status": [],
+            "Error": [],
+        }
+
+        status_count = {}
+        budget_count = {}
         len_trials = 0
         for trial in run.get_trials():
             budget = round(trial.budget, 2)
+            seed = trial.seed
 
             len_trials += 1
+
+            # Status count over budget for bar plot
             status_statistics[budget][trial.status] += 1
 
-            # For text information
-            if trial.status not in status_statistics_total:
-                status_statistics_total[trial.status] = 1
+            # Total status count for text information
+            if trial.status not in status_count:
+                status_count[trial.status] = 1
             else:
-                status_statistics_total[trial.status] += 1
+                status_count[trial.status] += 1
 
-            # For text information
-            if budget not in status_budget:
-                status_budget[budget] = 1
+            # Total budget count for text information
+            if budget not in budget_count:
+                budget_count[budget] = 1
             else:
-                status_budget[budget] += 1
+                budget_count[budget] += 1
 
             # Add to table data
             if trial.status != Status.SUCCESS:
@@ -264,6 +290,7 @@ class Overview(DynamicPlugin):
                     html.A(trial.config_id, href=link, target="_blank")
                 ]
                 status_details["Budget"] += [budget]
+                status_details["Seed"] += [seed]
                 status_details["Status"] += [trial.status.to_text()]
 
                 if "traceback" in trial.additional:
@@ -272,11 +299,12 @@ class Overview(DynamicPlugin):
                 else:
                     status_details["Error"] += ["No traceback available."]
 
-        successful_trials_rate = status_statistics_total[Status.SUCCESS] / len_trials * 100
+        # Successful / unsuccessful trials rate for text information
+        successful_trials_rate = status_count[Status.SUCCESS] / len_trials * 100
         successful_trials_rate = round(successful_trials_rate, 2)
 
         trials_rates = []
-        for status, count in status_statistics_total.items():
+        for status, count in status_count.items():
             if status == Status.SUCCESS:
                 continue
 
@@ -299,47 +327,48 @@ class Overview(DynamicPlugin):
         else:
             unsuccessful_trials_text = ""
 
-        status_budget_values = [
-            str(round(count / len_trials * 100, 2)) + "%" for count in status_budget.values()
+        # Budget rate for text information
+        budget_rate = [
+            str(round(count / len_trials * 100, 2)) + "%" for count in budget_count.values()
         ]
-        status_budget_values_text = "/".join(status_budget_values)
-        status_budget_keys_text_list = [str(key) for key in status_budget.keys()]
-        status_budget_keys_text = "/".join(status_budget_keys_text_list)
+        budget_rate_text = "/".join(budget_rate)
+        budget_keys_text_list = [str(key) for key in budget_count.keys()]
+        budget_keys_text = "/".join(budget_keys_text_list)
 
+        # Text information
         status_text = f"""
         Taking all evaluated trials into account, {successful_trials_rate}% have been successful.
         {unsuccessful_trials_text}
-        Moreover, {status_budget_values_text} of the configurations were evaluated on budget
-        {status_budget_keys_text}, respectively.
+        Moreover, {budget_rate_text} of the trials were evaluated on budget
+        {budget_keys_text}, respectively.
         """
 
-        # Now remove status that are not used
+        # Status statistics for bar plot: remove status that are not used
         for budget in list(status_statistics.keys()):
             for status in list(status_statistics[budget].keys()):
                 if status_statistics[budget][status] == 0:
                     del status_statistics[budget][status]
 
-        # It is interesting to see on which budget a configuration was evaluated
+        # Config statistics for heatmap showing on which budget / seed a configuration was evaluated
         config_statistics = {}
         configs = run.get_configs()
         config_ids = list(configs.keys())
 
-        z_values = np.zeros((len(config_ids), len(budgets))).tolist()
-        z_labels = np.zeros((len(config_ids), len(budgets))).tolist()
+        z_values = np.zeros((len(config_ids), len(budget_seed_combinations))).tolist()
+        z_labels = np.zeros((len(config_ids), len(budget_seed_combinations))).tolist()
 
         for i, config_id in enumerate(configs.keys()):
-            for j, budget in enumerate(budgets):
-                trial_key = run.get_trial_key(config_id, budget)
+            for j, (b, s) in enumerate(budget_seed_combinations):
+                trial_key = run.get_trial_key(config_id, b, s)
                 trial = run.get_trial(trial_key)
 
                 status = Status.NOT_EVALUATED
                 if trial is not None:
                     status = trial.status
-
                 z_values[i][j] = status.value
                 z_labels[i][j] = status.to_text()
 
-        config_statistics["X"] = budgets
+        config_statistics["X"] = budget_seed_combinations
         config_statistics["Y"] = config_ids
         config_statistics["Z_values"] = z_values
         config_statistics["Z_labels"] = z_labels
@@ -385,20 +414,22 @@ class Overview(DynamicPlugin):
             stats_data.append(trace)
 
         stats_layout = go.Layout(
-            legend={"title": "Budget"},
+            legend={"title": "Budget (Seed)"},
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         stats_figure = go.Figure(data=stats_data, layout=stats_layout)
         save_image(stats_figure, "status_bar.pdf")
 
         config_layout = go.Layout(
             legend={"title": "Status"},
-            xaxis=dict(title="Budget"),
+            xaxis=dict(title="Budget (Seed)"),
             yaxis=dict(title="Configuration ID"),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         config_figure = go.Figure(
             data=get_discrete_heatmap(

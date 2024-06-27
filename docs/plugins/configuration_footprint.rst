@@ -41,7 +41,9 @@ Performance plot
 ----------------
 Perhaps the most useful plot of the two is to see how much we know about which configuration will
 achieve which **objective** score. To view this, mousing over the **Incumbent** will tell you the
-best configuration found for the given *objective* and *budget*. The **Evaluated Configuration**
+best configuration found for the given *objective* and *budget*. For non-deterministic runs (i.e.
+multiple seeds evaluated per configuration), only configurations evaluated on the maximum number of
+seeds are considered to choose the best configuration from. The **Evaluated Configuration**
 points will have a true objective score, all be it possibly noisy if the objective is noisy.
 Using these two kind of points, we can try to infer what the performance for the rest of the
 configuration space will be.

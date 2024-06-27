@@ -31,8 +31,8 @@ class Recorder:
     ----------
     path : Path
         The path to the recorded information.
-    last_trial_id : tuple[Any, Optional[float]]
-        The last id containing the configuration and the budget.
+    last_trial_id : tuple[Any, Optional[float], Optional[int]]
+        The last id containing the configuration, budget, and seed.
     start_time : float
         The current time in seconds since the epoch.
     start_times : Dict[Any, Any]
@@ -86,20 +86,23 @@ class Recorder:
 
         # Set variables
         self.last_trial_id: Optional[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], int]
         ] = None
         self.start_time = time.time()
         self.start_times: Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], float
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]], float
         ] = {}
         self.models: Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[Any]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]],
+            Optional[Any],
         ] = {}
         self.origins: Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Optional[str]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]],
+            Optional[str],
         ] = {}
         self.additionals: Dict[
-            Tuple[Union[Dict[Any, Any], Configuration], Optional[float]], Dict[Any, Any]
+            Tuple[Union[Dict[Any, Any], Configuration], Optional[float], Optional[int]],
+            Dict[Any, Any],
         ] = {}
 
         # Define trials container
@@ -155,6 +158,7 @@ class Recorder:
         self,
         config: Configuration,
         budget: Optional[float] = None,
+        seed: int = -1,
         model: Optional[Any] = None,
         origin: Optional[str] = None,
         additional: Optional[dict] = None,
@@ -170,6 +174,9 @@ class Recorder:
         budget : Optional[float], optional
             The budget.
             Default is None.
+        seed : int
+            The seed.
+            Default is -1.
         model : Optional[Any], optional
             The model used.
             Default is None.
@@ -186,7 +193,11 @@ class Recorder:
         if additional is None:
             additional = {}
 
-        id: Tuple[Union[Dict[Any, Any], Configuration], Optional[float]] = (config, budget)
+        id: Tuple[Union[Dict[Any, Any], Configuration], Optional[float], int] = (
+            config,
+            budget,
+            seed,
+        )
 
         if start_time is None:
             start_time = time.time() - self.start_time
@@ -205,13 +216,15 @@ class Recorder:
         status: Status = Status.SUCCESS,
         config: Optional[Union[dict, Configuration]] = None,
         budget: Optional[float] = np.inf,
+        seed: int = -1,
         additional: Optional[dict] = None,
         end_time: Optional[float] = None,
     ) -> None:
         """
         End the recording and add it to the trial history.
 
-        In case of multi-processing, config+budget should be passed.
+        In case of multi-fidelity, config+budget should be passed.
+        In case of non-deterministic runs, seed should be passed.
         If it can't be passed, it can't be matched correctly.
 
         Parameters
@@ -228,6 +241,9 @@ class Recorder:
         budget : float, optional
             The budget.
             Default is np.inf.
+        seed : int
+            The seed.
+            Default is -1.
         additional : Optional[dict], optional
             Additional information.
             Default is None.
@@ -244,11 +260,11 @@ class Recorder:
             additional = {}
 
         if config is not None:
-            id = (config, budget)
+            id = (config, budget, seed)
         else:
             assert self.last_trial_id is not None, "No trial started yet."
             id = self.last_trial_id
-            config, budget = id[0], id[1]
+            config, budget, seed = id[0], id[1], id[2]
 
         model = self.models[id]
         start_additional = self.additionals[id].copy()
@@ -259,12 +275,14 @@ class Recorder:
             end_time = time.time() - self.start_time
 
         assert budget is not None
+        assert seed is not None
 
         # Add to trial history
         self.run.add(
             costs=costs,
             config=config,
             budget=budget,
+            seed=seed,
             start_time=start_time,
             end_time=end_time,
             status=status,

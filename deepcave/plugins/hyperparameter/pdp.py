@@ -25,7 +25,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
@@ -368,13 +368,13 @@ class PartialDependencies(StaticPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
     def get_pdp_figure(  # type: ignore
-        run, inputs, outputs, show_confidence, show_ice, title=None
+        run, inputs, outputs, show_confidence, show_ice, title=None, fontsize=None
     ) -> go.Figure:
         """
         Create a figure of the Partial Dependency Plot (PDP).
@@ -393,6 +393,8 @@ class PartialDependencies(StaticPlugin):
             Whether to show ice curves in the plot.
         title
             Title of the plot.
+        fontsize
+            Fontsize of the plot.
 
         Returns
         -------
@@ -471,6 +473,9 @@ class PartialDependencies(StaticPlugin):
             ]
 
             tickvals, ticktext = get_hyperparameter_ticks(hp1)
+            # Allow to pass a fontsize (necessary when leveraging PDP in Symbolic Explanation)
+            if fontsize is None:
+                fontsize = config.FIGURE_FONT_SIZE
             layout = go.Layout(
                 {
                     "xaxis": {
@@ -482,6 +487,7 @@ class PartialDependencies(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": title,
+                    "font": dict(size=fontsize),
                 }
             )
         else:
@@ -507,8 +513,9 @@ class PartialDependencies(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
+                    margin=config.FIGURE_MARGIN,
                     title=title,
+                    font=dict(size=fontsize),
                 )
             )
 

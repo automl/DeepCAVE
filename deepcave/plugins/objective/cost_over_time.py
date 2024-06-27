@@ -19,8 +19,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave import notification
-from deepcave.config import Config
+from deepcave import config, notification
 from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, check_equality
 from deepcave.runs.exceptions import NotMergeableError, RunInequality
@@ -226,7 +225,9 @@ class CostOverTime(DynamicPlugin):
             },
             "budget_id": {
                 "options": self.budget_options,
-                "value": self.budget_options[-1]["value"],
+                "value": self.budget_options[0]["value"]
+                if len(self.budget_options) == 1
+                else self.budget_options[-2]["value"],
             },
             "xaxis": {
                 "options": [
@@ -300,8 +301,8 @@ class CostOverTime(DynamicPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -345,7 +346,7 @@ class CostOverTime(DynamicPlugin):
                 continue
 
             objective = run.get_objective(inputs["objective_id"])
-            config_ids = outputs[run.id]["config_ids"]
+            ids = outputs[run.id]["ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "trials":
                 x = outputs[run.id]["ids"]
@@ -360,8 +361,12 @@ class CostOverTime(DynamicPlugin):
             hoverinfo = "skip"
             symbol = None
             mode = "lines"
-            if len(config_ids) > 0:
-                hovertext = [get_hovertext_from_config(run, config_id) for config_id in config_ids]
+            if len(run.history) > 0:
+                hovertext = [
+                    get_hovertext_from_config(run, trial.config_id, trial.budget)
+                    for id, trial in enumerate(run.history)
+                    if id in ids
+                ]
                 hoverinfo = "text"
                 symbol = "circle"
                 mode = "lines+markers"
@@ -420,7 +425,8 @@ class CostOverTime(DynamicPlugin):
         layout = go.Layout(
             xaxis=dict(title=xaxis_label, type=type),
             yaxis=dict(title=objective.name),
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
 
         figure = go.Figure(data=traces, layout=layout)

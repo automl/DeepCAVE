@@ -20,6 +20,7 @@ from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
+from deepcave.utils.logs import get_logger
 
 
 class fANOVA:
@@ -50,6 +51,7 @@ class fANOVA:
         self.cs = run.configspace
         self.hps = self.cs.get_hyperparameters()
         self.hp_names = self.cs.get_hyperparameter_names()
+        self.logger = get_logger(self.__class__.__name__)
 
     def calculate(
         self,
@@ -152,7 +154,14 @@ class fANOVA:
                 )
 
                 if len(non_zero_idx[0]) == 0:
-                    raise RuntimeError("Encountered zero total variance in all trees.")
+                    self.logger.warning("Encountered zero total variance in all trees.")
+                    importances[sub_hp_ids] = (
+                        np.nan,
+                        np.nan,
+                        np.nan,
+                        np.nan,
+                    )
+                    continue
 
                 fractions_total = np.array(
                     [

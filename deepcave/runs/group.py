@@ -64,10 +64,17 @@ class Group(AbstractRun):
         try:
             attributes = check_equality(self.runs)
             # abstract run requires meta to contain budgets / objectives
-            self.meta = {"budgets": attributes["budgets"], "objectives": attributes["objectives"]}
+            self.meta = {
+                "budgets": attributes["budgets"],
+                "objectives": attributes["objectives"],
+            }
+            self.meta["seeds"] = list(
+                set([seed for run in self.runs for seed in run.meta["seeds"].copy()])
+            )
             self.configspace = attributes["configspace"]
             self.objectives = attributes["objectives"]
             self.budgets = attributes["budgets"]
+            self.seeds = self.meta["seeds"]
 
             # New config ids are needed
             current_config_id = 0
@@ -103,7 +110,7 @@ class Group(AbstractRun):
                     # Deep copy trial
                     trial = deepcopy(trial)
 
-                    (config_id, budget) = trial.get_key()
+                    (config_id, budget, seed) = trial.get_key()
 
                     # Config id might have changed
                     new_config_id = config_mapping[config_id]

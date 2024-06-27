@@ -91,7 +91,7 @@ def get_slider_marks(
         steps = len(strings)
 
     for i, string in enumerate(strings):
-        if i % (len(strings) / steps) == 0:
+        if i % int(len(strings) / steps) == 0:
             marks[i] = {"label": str(string)}
         else:
             if access_all:

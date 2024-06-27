@@ -20,15 +20,18 @@ from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
+from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import get_color, save_image
+
+logger = get_logger(__name__)
 
 
 class Importances(StaticPlugin):
@@ -337,6 +340,8 @@ class Importances(StaticPlugin):
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
+            if any(np.isnan(val) for value in importances.values() for val in value):
+                logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances
 
         return data  # type: ignore
@@ -359,8 +364,8 @@ class Importances(StaticPlugin):
         """
         return dcc.Graph(
             register("graph", "figure"),
-            style={"height": Config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": Config.FIGURE_DOWNLOAD_SCALE}},
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
         )
 
     @staticmethod
@@ -456,8 +461,9 @@ class Importances(StaticPlugin):
             barmode="group",
             yaxis_title="Importance",
             legend={"title": "Budget"},
-            margin=Config.FIGURE_MARGIN,
+            margin=config.FIGURE_MARGIN,
             xaxis=dict(tickangle=-45),
+            font=dict(size=config.FIGURE_FONT_SIZE),
         )
         save_image(figure, "importances.pdf")
 

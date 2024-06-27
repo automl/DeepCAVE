@@ -1,3 +1,29 @@
+# Version 1.3
+
+## Converters
+- Add support for AMLTK.
+
+# Version 1.2.1
+
+## Quality of Life
+- Runs now get displayed with their parent directory for better distinguishability.
+- Increase plot font sizes.
+- Add a simple loading bar functionality for longer runs.
+
+## General
+- Seed is now required in the Recorder.
+
+## Bug-Fixes
+- Use normalized LPI importance via variance instead of importance over mean (#152)
+- Return nan as importance values if variance is 0. for a hyperparameter / budget (#152)
+
+## Plugins
+- Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
+- Use highest budget as default budget for Cost over Time instead of Combined.
+- Show best value / config for each objective instead of merged objective in Overview (#159).
+- Use chosen objective instead of merged objective to get the incumbent for the calculation of LPI importance (#159).
+- Add total runtime in overview (#155).
+
 # Version 1.2
 
 ## Plugins
@@ -8,13 +34,17 @@
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
-- Allow to load multi-objective SMAC3v2 and add example (#69)
+- Allow to load multi-objective SMAC3v2 and add example (#69).
+- Allow to load runs with multiple seeds and add examples (#70).
+- Correct incumbent calculation when single objective should be maximized.
+- Correct range of configuration cube slider for number of configs.
 - Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
 - Save plotly plots in higher resolution upon download.
+- Get hovertext per budget in Footprint, Config Cube, Cost over Time, and Pareto Front.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).
@@ -29,6 +59,7 @@
 - For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
 - Add init files to all test directories.
 - Correct LPI importance tests.
+- Free port when exiting via the exit button (#52).
 
 ## Documentation
 - Add How to Contribute section.

@@ -80,7 +80,7 @@ class DataFrameRun(Run):
             serialized_objectives += [objective.to_json()]
 
         # Meta
-        self.meta = {"objectives": serialized_objectives, "budgets": []}
+        self.meta = {"objectives": serialized_objectives, "budgets": [], "seeds": []}
         self.meta.update(meta)
 
     @staticmethod
@@ -275,12 +275,14 @@ class DataFrameRun(Run):
             trial_data = trials.loc[index]
             costs = DataFrameRun._extract_costs(trial_data)
             budget = DataFrameRun._extract_budget(trial_data)
+            seed = DataFrameRun._extract_seed(trial_data)
             run_meta = DataFrameRun._extract_run_meta(trial_data)
             config = DataFrameRun._extract_config(trial_data, configspace)
             additional = DataFrameRun._extract_additional(trial_data, configspace)
             self.add(
                 costs,
                 config,
+                seed,
                 budget,
                 run_meta["start_time"],
                 run_meta["end_time"],
@@ -304,6 +306,10 @@ class DataFrameRun(Run):
     @staticmethod
     def _extract_budget(data: pd.Series) -> Union[int, float]:
         return int(data["budget"])
+
+    @staticmethod
+    def _extract_seed(data: pd.Series) -> int:
+        return int(data["seed"])
 
     @staticmethod
     def _extract_run_meta(data: pd.Series) -> Dict[str, Any]:
