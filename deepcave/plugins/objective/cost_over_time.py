@@ -86,7 +86,7 @@ class CostOverTime(DynamicPlugin):
             elif run_inequality == RunInequality.INEQ_META:
                 notification.update("The meta data of the runs is not equal.", color="warning")
             elif run_inequality == RunInequality.INEQ_OBJECTIVE:
-                raise NotMergeableError("The objectives of th πe selected runs cannot be merged.")
+                raise NotMergeableError("The objectives of the selected runs cannot be merged.")
 
         # Set some attributes here
         # It is necessary to get the run with the smallest budget and objective options

@@ -304,7 +304,6 @@ class PartialDependencies(StaticPlugin):
             specific=True,
             statuses=Status.SUCCESS,
         )
-        print(df)
         X = df[hp_names].to_numpy()
         Y = df[objective.name].to_numpy()
 

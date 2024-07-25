@@ -1,6 +1,6 @@
 import unittest
 
-from deepcave.evaluators.ablation_importances import AblationImportances as Evaluator
+from deepcave.evaluators.ablation import Ablation as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 

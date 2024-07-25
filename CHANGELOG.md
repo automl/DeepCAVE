@@ -1,9 +1,10 @@
 # Version 1.2.2
 
-## Ablation Importance
-- Added ablation importance as evaluator for the importances plugin.
+## Ablation Paths
+- Added ablation paths as a plugin.
+- Added ablation as a evaluator to use for the plugin.
 - Added tests as well as documentation.
-- Modified the help buttons for importances to also display information about ablation importance.
+- Modified the RandomForest surrogate model, so it can be passed the number of trees.
 
 # Version 1.2.1
 
