@@ -107,7 +107,6 @@ class LPI:
             objectives=objectives, budget=budget, specific=True, include_combined_cost=True
         )
         X = df[self.hp_names].to_numpy()
-
         Y = df[COMBINED_COST_NAME].to_numpy()
 
         # Get model and train it
@@ -271,6 +270,7 @@ class LPI:
                 std = 0
 
             importances[hp_name] = (mean, std)
+
         return importances
 
     def _get_neighborhood(self) -> Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]:

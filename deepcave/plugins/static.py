@@ -230,7 +230,6 @@ class StaticPlugin(Plugin, ABC):
 
                             # Save results in cache
                             # Same optional string problem
-
                             rc.set(run, job_plugin_id, job_inputs_key, job_run_outputs)
                             self.logger.debug(f"Job {job_id} cached.")
 
