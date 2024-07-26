@@ -21,6 +21,7 @@ import numpy as np
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
+from deepcave.utils.logs import get_logger
 
 
 class Ablation:
@@ -51,6 +52,7 @@ class Ablation:
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
         self.importances: Optional[Dict[Any, Any]] = None
+        self.logger = get_logger(self.__class__.__name__)
 
     def calculate(
         self,
@@ -112,7 +114,7 @@ class Ablation:
             inc_cost = -inc_cost
 
         if inc_cost > def_cost:
-            print(
+            self.logger.warning(
                 "The predicted incumbent cost is smaller than the predicted default "
                 f"cost for budget: {budget}. This could mean that the configuration space "
                 "with which the surrogate model was trained contained too few examples."
@@ -218,8 +220,8 @@ class Ablation:
         hp_count = len(self.cs.get_hyperparameter_names())
         if max_hp != "":
             if max_hp_difference <= 0:
-                print(
-                    "Warning: No improvement found in ablation step "
+                self.logger.info(
+                    "No improvement found in ablation step "
                     f"{hp_count - len(hp_it) + 1}/{hp_count} for budget {budget}, "
                     "choose hyperparameter with smallest increase in cost."
                 )
@@ -232,8 +234,8 @@ class Ablation:
                 max_hp_cost = -max_hp_cost
             return True, max_hp, max_hp_cost, max_hp_var
         else:
-            print(
-                f"Warning: End ablation at step {hp_count - len(hp_it) + 1}/{hp_count} "
+            self.logger.info(
+                f"End ablation at step {hp_count - len(hp_it) + 1}/{hp_count} "
                 f"for budget {budget} (remaining hyperparameters not activate in incumbent or "
                 "default configuration)."
             )
