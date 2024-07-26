@@ -8,8 +8,7 @@
         "tanh",
         "relu"
       ],
-      "default": "sigmoid",
-      "probabilities": null
+      "default": "sigmoid"
     },
     {
       "name": "batch_size",
@@ -45,8 +44,7 @@
         "mlp",
         "cnn"
       ],
-      "default": "mlp",
-      "probabilities": null
+      "default": "mlp"
     },
     {
       "name": "num_neurons_layer1",

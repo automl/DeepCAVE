@@ -329,7 +329,7 @@ class LPI:
                 try:
                     new_config = Configuration(self.cs, vector=new_array)
                     hp_neighborhood.append(new_config)
-                    new_config.is_valid_configuration()
+                    new_config.check_valid_configuration()
                     check_forbidden(self.cs.forbidden_clauses, new_array)
 
                     checked_neighbors.append(neighbor)

@@ -231,7 +231,7 @@ class PartialDependencies(StaticPlugin):
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get selected values
         objective_value = inputs["objective_id"]["value"]
@@ -288,7 +288,7 @@ class PartialDependencies(StaticPlugin):
             If the objective is None.
         """
         # Surrogate
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]

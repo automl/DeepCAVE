@@ -195,7 +195,7 @@ class ConfigurationCube(DynamicPlugin):
         budget_value = inputs["budget_id"]["value"]
 
         # Prepare others
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get selected values
         n_configs_value = inputs["n_configs"]["value"]

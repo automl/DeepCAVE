@@ -20,7 +20,7 @@ if __name__ == "__main__":
     # Instantiate the plugin
     plugin = ParallelCoordinates()
     inputs = plugin.generate_inputs(
-        hyperparameter_names=run.configspace.get_hyperparameter_names(),
+        hyperparameter_names=list(run.configspace.keys()),
         objective_id=objective_id,
         budget_id=budget_id,
         show_important_only=True,

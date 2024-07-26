@@ -264,7 +264,7 @@ class Configurations(DynamicPlugin):
             # And add it to the lists
             X.append(x)
 
-        columns = run.configspace.get_hyperparameter_names()
+        columns = list(run.configspace.keys())
         columns += ["highlighted"]
 
         cs_df = pd.DataFrame(data=X, columns=columns)
@@ -449,7 +449,7 @@ class Configurations(DynamicPlugin):
         df = deserialize(outputs["cs_df"], dtype=pd.DataFrame)
 
         highlighted = df["highlighted"].values
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get highlighted column
         highlighted_df = df[df["highlighted"] == 1]

@@ -8,8 +8,7 @@
         "tanh",
         "relu"
       ],
-      "default": "logistic",
-      "probabilities": null
+      "default": "logistic"
     },
     {
       "name": "batch_size",
@@ -54,8 +53,7 @@
         "sgd",
         "adam"
       ],
-      "default": "sgd",
-      "probabilities": null
+      "default": "sgd"
     }
   ],
   "conditions": [],

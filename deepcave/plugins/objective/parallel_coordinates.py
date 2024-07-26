@@ -220,7 +220,7 @@ class ParallelCoordinates(StaticPlugin):
 
         # Prepare others
         n_hps = inputs["n_hps"]["value"]
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         if inputs["show_important_only"]["value"] == "true":
             hp_options = []

@@ -219,7 +219,7 @@ class Importances(StaticPlugin):
         budget_options = get_checklist_options(budgets, budget_ids)
         budget_value = inputs["budget_ids"]["value"]
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         hp_options = get_checklist_options(hp_names)
         hp_value = inputs["hyperparameter_names"]["value"]
         n_hps = inputs["n_hps"]["value"]
@@ -321,7 +321,7 @@ class Importances(StaticPlugin):
                 )
             run.configs = dict(enumerate(configs_wo_const))
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         budgets = run.get_budgets(include_combined=True)
 
         evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None

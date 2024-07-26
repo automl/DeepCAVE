@@ -481,11 +481,12 @@ class AbstractRun(ABC):
         Optional[int]
             The configuration id.
         """
-        if isinstance(config, Configuration):
-            config = config.get_dictionary()
-
         # Find out config id
         for id, c in self.configs.items():
+            if isinstance(c, dict):
+                c = Configuration(self.configspace, c)
+            if isinstance(config, dict):
+                config = Configuration(self.configspace, config)
             if c == config:
                 return id
 

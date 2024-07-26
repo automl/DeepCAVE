@@ -346,7 +346,7 @@ class SymbolicExplanations(StaticPlugin):
         RuntimeError
             If the objective is None.
         """
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
@@ -544,7 +544,7 @@ class SymbolicExplanations(StaticPlugin):
             hp2 = run.configspace.get_hyperparameter(hp2_name)
             selected_hyperparameters += [hp2]
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
