@@ -23,7 +23,7 @@ if __name__ == "__main__":
     inputs = plugin.generate_inputs(
         objective_id=objective_id,
         budget_id=budget_id,
-        n_hps=40,
+        n_hps=100,
         n_trees=100,
     )
     # Note: Filter variables are not considered.

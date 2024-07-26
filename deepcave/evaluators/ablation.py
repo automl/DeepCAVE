@@ -4,8 +4,9 @@
 
 This module evaluates the ablation paths.
 
-Starting from a default configuration, the ablation path method iteratively changes the default
-configuration to the incumbent configuration by changing one hyperparameter at a time, choosing the
+Ablation Paths is a method to analyze the importance of hyperparameters in a configuration space.
+Starting from a default configuration, the default configuration is iteratively changed to the
+incumbent configuration by changing one hyperparameter at a time, choosing the
 hyperparameter that leads to the largest improvement in the objective function at each step.
 
 ## Classes:
@@ -37,22 +38,23 @@ class Ablation:
         The configuration space of the run.
     hp_names : List[str]
         A list of the hyperparameter names.
-    importances : Optional[Dict[Any, Any]]
-        A dictionary containing the importances for each HP.
+    performances : Optional[Dict[Any, Any]]
+        A dictionary containing the performances for each HP.
+    improvements : Optional[Dict[Any, Any]]
+        A dictionary containing the improvements over the respective previous step for each HP.
     objectives : Optional[Union[Objective, List[Objective]]]
         The objective(s) of the run.
-    default_encode : List
-        An encoding of the default configuration.
     default_config : Configurations
         The default configuration of this configuration space.
-        Gets changed step by step to the incumbent.
+        Gets changed step by step towards the incumbent configuration.
     """
 
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
         self.hp_names = self.cs.get_hyperparameter_names()
-        self.importances: Optional[Dict[Any, Any]] = None
+        self.performances: Optional[Dict[Any, Any]] = None
+        self.improvements: Optional[Dict[Any, Any]] = None
         self.logger = get_logger(self.__class__.__name__)
 
     def calculate(
@@ -63,7 +65,7 @@ class Ablation:
         seed: int = 0,  # noqa
     ) -> None:
         """
-        Calculate the ablation path importances.
+        Calculate the ablation path performances and improvements.
 
         Parameters
         ----------
@@ -80,7 +82,7 @@ class Ablation:
             Default is 0.
         """
         if isinstance(objectives, list) and len(objectives) > 1:
-            raise ValueError("Only one objective is supported for ablation importances.")
+            raise ValueError("Only one objective is supported for ablation paths.")
         objective = objectives[0] if isinstance(objectives, list) else objectives
         assert isinstance(objective, Objective)
 
@@ -136,7 +138,6 @@ class Ablation:
                 if not continue_ablation:
                     break
 
-                # As only one objective is allowed, there is only one objective in the list
                 if objective.optimize == "upper":
                     # For returning the importance, flip back the objective if it was flipped before
                     performances[max_hp] = (-max_hp_cost, max_hp_std)

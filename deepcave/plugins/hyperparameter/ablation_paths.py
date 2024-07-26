@@ -5,7 +5,7 @@
 This module provides a plugin for the visualization of the ablation paths.
 
 Provided utilities include getting input and output layout (filtered or non-filtered),
-processing the data and loading the outputs. Also provides a matplotlib version.
+processing the data and loading the outputs.
 
 ## Classes
     - Ablation_Paths: This class provides a plugin for the visualization of the ablation paths.
@@ -33,7 +33,7 @@ class AblationPaths(StaticPlugin):
     Provide a plugin for the visualization of the ablation paths.
 
     Provided utilities include getting input/output layout, data processing
-    and loading outputs. Also provides a matplotlib version.
+    and loading outputs.
     """
 
     id = "ablation_paths"
@@ -109,8 +109,7 @@ class AblationPaths(StaticPlugin):
                 [
                     dbc.Label("Limit Hyperparameters"),
                     help_button(
-                        "Shows only the n most important hyperparameters. If an important "
-                        "hyperparameter was de-selected, it is not shown but skipped."
+                        "Shows only the n most important (i.e. first selected) hyperparameters."
                     ),
                     dbc.Input(id=register("n_hps", "value"), type="number"),
                 ],
@@ -149,7 +148,7 @@ class AblationPaths(StaticPlugin):
 
     def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore # noqa: E501
         """
-        Work like 'load_inputs' but called after inputs have changed.
+        Works like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
@@ -239,7 +238,6 @@ class AblationPaths(StaticPlugin):
         ------
         RuntimeError
             If the number of trees is not specified.
-            If the method is not found.
         """
         objective = run.get_objective(inputs["objective_id"])
         n_trees = inputs["n_trees"]
