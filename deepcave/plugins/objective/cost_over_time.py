@@ -225,7 +225,9 @@ class CostOverTime(DynamicPlugin):
             },
             "budget_id": {
                 "options": self.budget_options,
-                "value": self.budget_options[-1]["value"],
+                "value": self.budget_options[0]["value"]
+                if len(self.budget_options) == 1
+                else self.budget_options[-2]["value"],
             },
             "xaxis": {
                 "options": [
@@ -344,8 +346,7 @@ class CostOverTime(DynamicPlugin):
                 continue
 
             objective = run.get_objective(inputs["objective_id"])
-            budget = run.get_budget(inputs["budget_id"])
-            config_ids = outputs[run.id]["config_ids"]
+            ids = outputs[run.id]["ids"]
             x = outputs[run.id]["times"]
             if inputs["xaxis"] == "trials":
                 x = outputs[run.id]["ids"]
@@ -360,9 +361,11 @@ class CostOverTime(DynamicPlugin):
             hoverinfo = "skip"
             symbol = None
             mode = "lines"
-            if len(config_ids) > 0:
+            if len(run.history) > 0:
                 hovertext = [
-                    get_hovertext_from_config(run, config_id, budget) for config_id in config_ids
+                    get_hovertext_from_config(run, trial.config_id, trial.budget)
+                    for id, trial in enumerate(run.history)
+                    if id in ids
                 ]
                 hoverinfo = "text"
                 symbol = "circle"

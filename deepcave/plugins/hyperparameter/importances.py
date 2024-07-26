@@ -27,8 +27,11 @@ from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
+from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import get_color, save_image
+
+logger = get_logger(__name__)
 
 
 class Importances(StaticPlugin):
@@ -342,6 +345,8 @@ class Importances(StaticPlugin):
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
             importances = evaluator.get_importances(hp_names)
+            if any(np.isnan(val) for value in importances.values() for val in value):
+                logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances
         return data  # type: ignore
 

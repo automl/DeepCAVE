@@ -754,15 +754,15 @@ class AbstractRun(ABC):
         ----------
         budget : Optional[Union[int, float]]
             Budget to select the costs. If no budget is given, the highest budget is chosen.
-            By default None.
+            By default, None.
         statuses : Optional[Union[Status, List[Status]]]
             Only selected stati are considered. If no status is given, all stati are considered.
-            By default None.
+            By default, None.
         seed : Optional[int], optional
             Seed to select the costs. If no seed is given, all seeds are considered.
-            By default None.
+            By default, None.
         selected_ids: Optional[List[int]], optional
-            If set, only history ids in the list will be considered. By default None.
+            If set, only history ids in the list will be considered. By default, None.
 
         Returns
         -------
