@@ -1,14 +1,15 @@
 # noqa: D400
 """
-# Ablation Importances
+# Ablation Paths
 
-This module evaluates the ablation importance.
+This module evaluates the ablation paths.
 
-The ablation method determines the parameter importances between two configurations.
-One being the default configuration and one the incumbent.
+Starting from a default configuration, the ablation path method iteratively changes the default
+configuration to the incumbent configuration by changing one hyperparameter at a time, choosing the
+hyperparameter that leads to the largest improvement in the objective function at each step.
 
 ## Classes:
-    - AblationImportances: Provide an evaluator of the ablation importances.
+    - Ablation: Provide an evaluator of the ablation paths.
 """
 
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -83,7 +84,8 @@ class Ablation:
         objective = objectives[0] if isinstance(objectives, list) else objectives
         assert isinstance(objective, Objective)
 
-        importances: OrderedDict = OrderedDict()
+        performances: OrderedDict = OrderedDict()
+        improvements: OrderedDict = OrderedDict()
 
         df = self.run.get_encoded_data(objective, budget, specific=True)
 
@@ -105,7 +107,8 @@ class Ablation:
         default_encode = self.run.encode_config(self.default_config)
 
         # Obtain the predicted cost of the default and incumbent configuration
-        def_cost, _ = self._model.predict(np.array([default_encode]))
+        def_cost, def_std = self._model.predict(np.array([default_encode]))
+        def_cost, def_std = def_cost[0], def_std[0]
         inc_cost, _ = self._model.predict(np.array([incumbent_encode]))
 
         # For further calculations, assume that the objective is to be minimized
@@ -119,13 +122,14 @@ class Ablation:
                 f"cost for budget: {budget}. This could mean that the configuration space "
                 "with which the surrogate model was trained contained too few examples."
             )
-            importances = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
+            performances = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
+            improvements = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
         else:
             # Copy the hps names as to not remove objects from the original list
             hp_it = self.hp_names.copy()
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
-                continue_ablation, max_hp, max_hp_cost, max_hp_var = self._ablation(
+                continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
                     objective, budget, incumbent_config, def_cost, hp_it
                 )
 
@@ -135,38 +139,56 @@ class Ablation:
                 # As only one objective is allowed, there is only one objective in the list
                 if objective.optimize == "upper":
                     # For returning the importance, flip back the objective if it was flipped before
-                    importances[max_hp] = (-max_hp_cost[0], max_hp_var[0])
+                    performances[max_hp] = (-max_hp_cost, max_hp_std)
                 else:
-                    importances[max_hp] = (max_hp_cost[0], max_hp_var[0])
-                # New 'default' cost
+                    performances[max_hp] = (max_hp_cost, max_hp_std)
+                impr_std = np.sqrt(def_std**2 + max_hp_std**2)
+                improvements[max_hp] = ((def_cost - max_hp_cost), impr_std)
+                # New 'default' cost and std
                 def_cost = max_hp_cost
+                def_std = max_hp_std
                 # Remove the current best hp for keeping the order right
                 hp_it.remove(max_hp)
 
-        self.importances = importances
+        self.performances = performances
+        self.improvements = improvements
 
-    def get_importances(self, hp_names: List[str]) -> Optional[Dict[Any, Any]]:
+    def get_ablation_performances(self) -> Optional[Dict[Any, Any]]:
         """
-        Get the importances.
-
-        Parameters
-        ----------
-        hp_names : List[str]
-            A list of the hp names.
+        Get the ablation performances.
 
         Returns
         -------
         Optional[Dict[Any, Any]]
-            A dictionary containing the importance.
+            A dictionary containing the ablation performances.
 
         Raises
         ------
         RuntimeError
-            If the importance score have not been calculated.
+            If the ablation performances have not been calculated.
         """
-        if self.importances is None:
-            raise RuntimeError("Importance scores must be calculated first.")
-        return self.importances
+        if self.performances is None:
+            raise RuntimeError("Ablation performances scores must be calculated first.")
+        return self.performances
+
+    def get_ablation_improvements(self) -> Optional[Dict[Any, Any]]:
+        """
+        Get the ablation improvements.
+
+        Returns
+        -------
+        Optional[Dict[Any, Any]]
+            A dictionary containing the ablation improvements.
+
+        Raises
+        ------
+        RuntimeError
+            If the ablation improvements have not been calculated.
+        """
+        if self.improvements is None:
+            raise RuntimeError("Ablation improvements must be calculated first.")
+
+        return self.improvements
 
     def _ablation(
         self,
@@ -188,14 +210,14 @@ class Ablation:
         incumbent_config: Any
             The incumbent configuration.
         def_cost: Any
-            The current cost.
+            The default cost.
         hp_it: List[str]
             A list of the HPs that still have to be looked at.
 
         Returns
         -------
         Tuple[Any, Any, Any, Any]
-            continue_ablation, max_hp, max_hp_performance, max_hp_var
+            continue_ablation, max_hp, max_hp_performance, max_hp_std
         """
         max_hp = ""
         max_hp_difference = -np.inf
@@ -227,12 +249,12 @@ class Ablation:
                 )
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
-            max_hp_cost, max_hp_var = self._model.predict(
+            max_hp_cost, max_hp_std = self._model.predict(
                 np.array([self.run.encode_config(self.default_config)])
             )
             if objective.optimize == "upper":
                 max_hp_cost = -max_hp_cost
-            return True, max_hp, max_hp_cost, max_hp_var
+            return True, max_hp, max_hp_cost[0], max_hp_std[0]
         else:
             self.logger.info(
                 f"End ablation at step {hp_count - len(hp_it) + 1}/{hp_count} "

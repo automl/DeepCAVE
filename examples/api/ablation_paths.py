@@ -8,13 +8,12 @@ Note that other plugins use the same interfaces and can be used in the same fash
 
 from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
 from deepcave.runs.converters.deepcave import DeepCAVERun
-from deepcave.runs.converters.smac3v1 import SMAC3v1Run
 from pathlib import Path
 
 
 if __name__ == "__main__":
     # Instantiate the run
-    run = SMAC3v1Run.from_path(Path("logs/SMAC3v1/outlier-detection/DEHB-pendigits-015-0-0"))
+    run = DeepCAVERun.from_path(Path("logs/DeepCAVE/minimal/run_2"))
 
     objective_id = run.get_objective_ids()[0]
     budget_id = run.get_budget_ids()[0]
@@ -32,6 +31,7 @@ if __name__ == "__main__":
 
     # Finally, you can load the figure. Here, the filter variables play a role.
     # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-    figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
-    figure.write_image("examples/api/ablation_paths.png", scale=2.0)
+    figure1, figure2 = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+    figure1.write_image("examples/api/ablation_paths_performance.png", scale=2.0)
+    figure2.write_image("examples/api/ablation_paths_improvement.png", scale=2.0)
     # figure.show()

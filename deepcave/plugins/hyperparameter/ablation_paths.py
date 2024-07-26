@@ -142,7 +142,7 @@ class AblationPaths(StaticPlugin):
             Content to be filled.
         """
         return {
-            "n_trees": {"value": 10},
+            "n_trees": {"value": 100},
             "n_hps": {"value": 0},
             "budget_id": {"options": get_checklist_options(), "value": None},
         }
@@ -233,7 +233,7 @@ class AblationPaths(StaticPlugin):
         Returns
         -------
         Dict[str, Any]
-            A serialzied dictionary.
+            A serialized dictionary.
 
         Raises
         ------
@@ -247,7 +247,6 @@ class AblationPaths(StaticPlugin):
         if n_trees is None:
             raise RuntimeError("Please specify the number of trees.")
 
-        hp_names = run.configspace.get_hyperparameter_names()
         budgets = run.get_budgets(include_combined=True)
 
         evaluator = Ablation(run)
@@ -259,12 +258,13 @@ class AblationPaths(StaticPlugin):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
-            importances = evaluator.get_importances(hp_names)
-            data[budget_id] = importances
+            performances = evaluator.get_ablation_performances()
+            improvements = evaluator.get_ablation_improvements()
+            data[budget_id] = [performances, improvements]
         return data  # type: ignore
 
     @staticmethod
-    def get_output_layout(register: Callable) -> dcc.Graph:
+    def get_output_layout(register: Callable) -> List[dcc.Graph]:
         """
         Get the layout for the output block.
 
@@ -276,17 +276,24 @@ class AblationPaths(StaticPlugin):
 
         Returns
         -------
-        dcc.Graph
+        List[dcc.Graph]
             Layout for the output block.
         """
-        return dcc.Graph(
-            register("graph", "figure"),
-            style={"height": config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
-        )
+        return [
+            dcc.Graph(
+                register("perf_graph", "figure"),
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+            ),
+            dcc.Graph(
+                register("impr_graph", "figure"),
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+            ),
+        ]
 
     @staticmethod
-    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
+    def load_outputs(run, inputs, outputs) -> List[go.Figure]:  # type: ignore
         """
         Read in raw data and prepare for layout.
 
@@ -307,8 +314,8 @@ class AblationPaths(StaticPlugin):
 
         Returns
         -------
-        go.figure
-            The figure of the ablation paths.
+        return [figure1, figure2]
+            The figures of the ablation paths.
         """
         # First selected, should always be shown first
         selected_budget_id = inputs["budget_id"]
@@ -321,30 +328,35 @@ class AblationPaths(StaticPlugin):
             n_hps = int(n_hps)
 
         # Collect data
-        data = {}
-        for budget_id, importances in outputs.items():
+        data1, data2 = {}, {}
+        for budget_id, results in outputs.items():
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
             if budget_id != selected_budget_id:
                 continue
 
             x = []
-            y = []
-            error_y = []
-            for hp_name, results in importances.items():
+            y1, y2 = [], []
+            error_y1, error_y2 = [], []
+            for hp_name, result in results[0].items():
                 x += [hp_name]
-                y += [results[0]]
-                error_y += [results[1]]
+                y1 += [result[0]]
+                error_y1 += [result[1]]
+            for _, result in results[1].items():
+                y2 += [result[0]]
+                error_y2 += [result[1]]
 
-            data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
+            data1[budget_id] = (np.array(x), np.array(y1), np.array(error_y1))
+            data2[budget_id] = (np.array(x), np.array(y2), np.array(error_y2))
 
-        bar_data = []
-        for budget_id, values in data.items():
+        bar_data1, bar_data2 = [], []
+
+        for budget_id, values in data1.items():
             budget = run.get_budget(budget_id, human=True)
 
             x = list(values[0][:n_hps])
 
-            bar_data += [
+            bar_data1 += [
                 go.Bar(
                     name=budget,
                     x=x,
@@ -354,8 +366,23 @@ class AblationPaths(StaticPlugin):
                 )
             ]
 
-        figure = go.Figure(data=bar_data)
-        figure.update_layout(
+        for budget_id, values in data2.items():
+            budget = run.get_budget(budget_id, human=True)
+
+            x = list(values[0][:n_hps])
+
+            bar_data2 += [
+                go.Bar(
+                    name=budget,
+                    x=x,
+                    y=values[1][:n_hps],
+                    error_y_array=values[2][:n_hps],
+                    marker_color=get_color(budget_id),
+                )
+            ]
+
+        figure1 = go.Figure(data=bar_data1)
+        figure1.update_layout(
             barmode="group",
             yaxis_title=objective.name,
             legend={"title": "Budget"},
@@ -363,6 +390,17 @@ class AblationPaths(StaticPlugin):
             xaxis=dict(tickangle=-45),
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
-        save_image(figure, "ablation_path.pdf")
+        save_image(figure1, "ablation_path_performance.pdf")
 
-        return figure
+        figure2 = go.Figure(data=bar_data2)
+        figure2.update_layout(
+            barmode="group",
+            yaxis_title="Improvement",
+            legend={"title": "Budget"},
+            margin=config.FIGURE_MARGIN,
+            xaxis=dict(tickangle=-45),
+            font=dict(size=config.FIGURE_FONT_SIZE),
+        )
+        save_image(figure2, "ablation_path_improvement.pdf")
+
+        return [figure1, figure2]

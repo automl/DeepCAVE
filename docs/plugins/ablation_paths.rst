@@ -1,29 +1,25 @@
 Ablation Paths
 ===========
 
-.. warning::
-    This page is under construction.
-
+Ablation Paths is a method to analyze the importance of hyperparameters in a configuration space.
+Starting from a default configuration, the default configuration is iteratively changed to the
+incumbent configuration by changing one hyperparameter at a time, choosing the
+hyperparameter that leads to the largest improvement in the objective function at each step.
 
 .. image:: ../images/plugins/ablation_importances.png
 
+To learn more about Ablation Paths, please see the paper
+`Efficient Parameter Importance Analysis via Ablation with Surrogates
+<https://doi.org/10.1609/aaai.v31i1.10657>`_.
 
 .. note::
-    If a plot is not showing for a specific budget, you might have to expand your configuration space in order to
-    improve the performance of the surrogate model. You can also increase the number of trees.
+    If a plot is not showing for a specific budget, you might have to evaluate more configurations
+    from your configuration space in order to improve the performance of the surrogate model.
+    You can also try to increase the number of trees for the surrogate model.
+
+.. note::
     Please note the order the hyperparameters are in. The performance increase
-    or decrease of each hypterparameter depends on the hyperparameter(s) prior to it. If the performance decreases, ablation importance
-    chooses the hyperparameter with the smallest decrease. If two hyperparameters increase or decrease the performance equally,
-    they are chosen randomly.
-
-    Biedenkapp, A., Lindauer, M., Eggensperger, K., Hutter, F., Fawcett, C., & Hoos, H. (2017).
-    Efficient Parameter Importance Analysis via Ablation with Surrogates.
-    Proceedings of the AAAI Conference on Artificial Intelligence, 31(1). https://doi.org/10.1609/aaai.v31i1.10657
-
-.. warning::
-    It is not recommended to limit the number of hyperparameters for this method. This is because all
-    hyperparameters depend on each other and ignoring some can cause a loss of information.
-
-.. warning::
-    It is not recommended to display multiple budget at once. The ranking of the hyperparameters is important and will get
-    mixed up, because for different budgets the ranking can change.
+    or decrease of each hyperparameter depends on the hyperparameter(s) prior to it.
+    If the performance decreases no matter which hyperparameter is chosen next,
+    the hyperparameter with the smallest decrease in performance is chosen.
+    If two hyperparameters increase or decrease the performance equally, one is chosen randomly.
