@@ -6,7 +6,7 @@ Starting from a default configuration, the default configuration is iteratively 
 incumbent configuration by changing one hyperparameter at a time, choosing the
 hyperparameter that leads to the largest improvement in the objective function at each step.
 
-.. image:: ../images/plugins/ablation_importances.png
+.. image:: ../images/plugins/ablation_paths.png
 
 To learn more about Ablation Paths, please see the paper
 `Efficient Parameter Importance Analysis via Ablation with Surrogates
