@@ -9,7 +9,8 @@
         "swish-1",
         "tanh"
       ],
-      "default": "relu"
+      "default": "relu",
+      "probabilities": null
     },
     {
       "name": "backbone:batch_normalization",
@@ -18,7 +19,8 @@
         true,
         false
       ],
-      "default": false
+      "default": false,
+      "probabilities": null
     },
     {
       "name": "backbone:dropout",
@@ -27,7 +29,8 @@
         true,
         false
       ],
-      "default": true
+      "default": true,
+      "probabilities": null
     },
     {
       "name": "backbone:num_latent_units",
@@ -54,7 +57,8 @@
         true,
         false
       ],
-      "default": false
+      "default": false,
+      "probabilities": null
     },
     {
       "name": "data_loader:batch_size",
@@ -74,7 +78,8 @@
         "ae",
         "vae"
       ],
-      "default": "dasvdd"
+      "default": "dasvdd",
+      "probabilities": null
     },
     {
       "name": "optimizer:__choice__",
@@ -83,7 +88,8 @@
         "AdamWOptimizer",
         "SGDOptimizer"
       ],
-      "default": "AdamWOptimizer"
+      "default": "AdamWOptimizer",
+      "probabilities": null
     },
     {
       "name": "scaler:__choice__",
@@ -95,7 +101,8 @@
         "RobustScaler",
         "L101Scaler"
       ],
-      "default": "MinMaxScaler"
+      "default": "MinMaxScaler",
+      "probabilities": null
     },
     {
       "name": "backbone:dropout_rate",
@@ -142,7 +149,8 @@
         "swish-1",
         "tanh"
       ],
-      "default": "tanh"
+      "default": "tanh",
+      "probabilities": null
     },
     {
       "name": "model:dagmm:gmm_dimensionality",
@@ -206,7 +214,8 @@
         "SGDOptimizer",
         "AdagradOptimizer"
       ],
-      "default": "AdagradOptimizer"
+      "default": "AdagradOptimizer",
+      "probabilities": null
     },
     {
       "name": "optimizer:AdamWOptimizer:beta1",

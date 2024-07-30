@@ -52,7 +52,8 @@
         "AdaptedCosine",
         "CosineWithRestarts"
       ],
-      "default": "AdaptedCosine"
+      "default": "AdaptedCosine",
+      "probabilities": null
     },
     {
       "name": "lr_scheduler_tmax",
@@ -88,7 +89,8 @@
         true,
         false
       ],
-      "default": true
+      "default": true,
+      "probabilities": null
     },
     {
       "name": "weight_decay",
