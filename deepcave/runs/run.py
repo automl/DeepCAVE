@@ -24,6 +24,7 @@ from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
 from deepcave.utils.hash import string_to_hash
+from deepcave.utils.util import config_to_tuple
 
 
 class Run(AbstractRun, ABC):
@@ -286,6 +287,7 @@ class Run(AbstractRun, ABC):
             config_id_len = len(self.configs)
             self.configs[config_id_len] = config
             self.origins[config_id_len] = origin
+            self.config_id_mapping[config_to_tuple(config)] = config_id_len
 
         config_id = self.get_config_id(config)
         if config_id is None:
