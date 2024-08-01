@@ -14,6 +14,7 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 from copy import deepcopy
 
 import numpy as np
+from ConfigSpace.configuration_space import Configuration
 from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
@@ -100,6 +101,9 @@ class Group(AbstractRun):
                         if config == added_config:
                             config_mapping[config_id] = added_config_id
                             break
+
+                    if isinstance(config, Configuration):
+                        config = config.get_dictionary()
 
                     if config_id not in config_mapping:
                         self.configs[current_config_id] = config

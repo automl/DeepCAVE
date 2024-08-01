@@ -66,7 +66,6 @@ repos:
             'rq>=1.10.1',
             'werkzeug==2.0.3',
             'pyarrow==16.1.0',
-            'fastparquet==2024.5.0',
             'pyPDPPartitioner>=0.1.8'
         ] # Needed for mypy, so that it knows the types to check
 

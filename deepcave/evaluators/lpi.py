@@ -14,7 +14,11 @@ import numpy as np
 from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value, check_forbidden
 from ConfigSpace.exceptions import ForbiddenValueError
-from ConfigSpace.hyperparameters import CategoricalHyperparameter
+from ConfigSpace.hyperparameters import (
+    CategoricalHyperparameter,
+    NumericalHyperparameter,
+)
+from ConfigSpace.types import Array, f64
 from ConfigSpace.util import impute_inactive_values
 
 from deepcave.constants import COMBINED_COST_NAME
@@ -296,12 +300,15 @@ class LPI:
             hp_neighborhood = []
             checked_neighbors = []  # On unit cube
             checked_neighbors_non_unit_cube = []  # Not on unit cube
-            hp = self.cs.get_hyperparameter(hp_name)
+            hp = self.cs[hp_name]
             num_neighbors = hp.get_num_neighbors(self.incumbent[hp_name])
+
+            neighbors: Union[List[Union[f64]], Array[Union[f64]]]
 
             if num_neighbors == 0:
                 continue
             elif np.isinf(num_neighbors):
+                assert isinstance(hp, NumericalHyperparameter)
                 if hp.log:
                     base = np.e
                     log_lower = np.log(hp.lower) / np.log(base)
@@ -315,7 +322,7 @@ class LPI:
                     )
                 else:
                     neighbors_range = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
-                neighbors = list(map(lambda x: hp._inverse_transform(x), neighbors_range))
+                neighbors = list(map(lambda x: hp.to_vector(x), neighbors_range))
             else:
                 neighbors = hp.get_neighbors(self.incumbent_array[hp_idx], self.rs)
 
@@ -340,7 +347,7 @@ class LPI:
             sort_idx = list(
                 map(lambda x: x[0], sorted(enumerate(checked_neighbors), key=lambda y: y[1]))
             )
-            if isinstance(self.cs.get_hyperparameter(hp_name), CategoricalHyperparameter):
+            if isinstance(self.cs[hp_name], CategoricalHyperparameter):
                 checked_neighbors_non_unit_cube_categorical = list(
                     np.array(checked_neighbors_non_unit_cube)[sort_idx]
                 )

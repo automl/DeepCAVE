@@ -533,7 +533,7 @@ class SymbolicExplanations(StaticPlugin):
         """
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        hp1 = run.configspace.get_hyperparameter(hp1_name)
+        hp1 = run.configspace[hp1_name]
         selected_hyperparameters = [hp1]
 
         hp2_name = inputs["hyperparameter_name_2"]
@@ -541,7 +541,7 @@ class SymbolicExplanations(StaticPlugin):
         hp2 = None
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-            hp2 = run.configspace.get_hyperparameter(hp2_name)
+            hp2 = run.configspace[hp2_name]
             selected_hyperparameters += [hp2]
 
         hp_names = list(run.configspace.keys())

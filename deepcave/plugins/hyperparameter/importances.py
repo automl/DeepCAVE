@@ -310,8 +310,8 @@ class Importances(StaticPlugin):
             configspace_wo_const = ConfigurationSpace()
             for k in hp_dict_wo_const.keys():
                 configspace_wo_const.add_hyperparameter(hp_dict_wo_const[k])
-            configspace_wo_const.add_conditions(run.configspace.get_conditions())
-            configspace_wo_const.add_forbidden_clauses(run.configspace.get_forbiddens())
+            configspace_wo_const.add(run.configspace.conditions)
+            configspace_wo_const.add(run.configspace.forbidden_clauses)
             run.configspace = configspace_wo_const
 
             configs_wo_const = []

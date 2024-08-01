@@ -398,7 +398,7 @@ class ParallelCoordinates(StaticPlugin):
             data[hp_name]["label"] = hp_name
             data[hp_name]["range"] = VALUE_RANGE
 
-            hp = run.configspace.get_hyperparameter(hp_name)
+            hp = run.configspace[hp_name]
             tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)
 
             data[hp_name]["tickvals"] = tickvals
