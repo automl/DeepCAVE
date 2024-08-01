@@ -171,7 +171,7 @@ def custom_round(number: float, min_decimals: int = 3, max_decimals: int = 10) -
     return round(number, max_decimals)
 
 
-def config_to_tuple(config: dict, round_places: int = 13) -> tuple:
+def config_to_tuple(config: dict, round_places: int = 10) -> tuple:
     """
     Convert a configuration dictionary to a tuple and round floats.
 
@@ -181,7 +181,7 @@ def config_to_tuple(config: dict, round_places: int = 13) -> tuple:
         The configuration dictionary.
     round_places : int
         The number of places to round floats.
-        Default is 13 (as used in ConfigSpace).
+        Default is 10.
     """
     return tuple(
         (k, np.round(v, round_places) if isinstance(v, float) else v) for k, v in config.items()

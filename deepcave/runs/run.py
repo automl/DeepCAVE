@@ -18,6 +18,7 @@ import ConfigSpace
 import jsonlines
 import numpy as np
 from ConfigSpace.configuration_space import Configuration
+from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 from ConfigSpace.read_and_write import json as cs_json
 
 from deepcave.runs import AbstractRun, Status, Trial
@@ -287,7 +288,8 @@ class Run(AbstractRun, ABC):
             config_id_len = len(self.configs)
             self.configs[config_id_len] = config
             self.origins[config_id_len] = origin
-            self.config_id_mapping[config_to_tuple(config)] = config_id_len
+            # Use same rounding as ConfigSpace does
+            self.config_id_mapping[config_to_tuple(config, ROUND_PLACES)] = config_id_len
 
         config_id = self.get_config_id(config)
         if config_id is None:

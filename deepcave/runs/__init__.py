@@ -25,6 +25,7 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 
 from deepcave.constants import (
     COMBINED_BUDGET,
@@ -486,7 +487,8 @@ class AbstractRun(ABC):
         # Convert the input configuration to a tuple
         if isinstance(config, Configuration):
             config = config.get_dictionary()
-        input_config_tuple = config_to_tuple(config)
+        # Use same rounding as ConfigSpace does
+        input_config_tuple = config_to_tuple(config, ROUND_PLACES)
 
         # Check if the input configuration tuple exists in the config id mapping
         if input_config_tuple in self.config_id_mapping:
