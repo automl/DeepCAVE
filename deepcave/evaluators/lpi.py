@@ -161,7 +161,9 @@ class LPI:
 
                 # Create the neighbor-Configuration object
                 new_array = self.incumbent_array.copy()
-                new_array = change_hp_value(self.cs, new_array, hp_name, unit_neighbor, hp_idx)
+                new_array = change_hp_value(
+                    self.cs, new_array, hp_name, unit_neighbor, self.cs.index_of[hp_name]
+                )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
                 # Get the leaf values
