@@ -431,6 +431,13 @@ class Run(AbstractRun, ABC):
         origins = json.loads(self.origins_fn.read_text())
         self.origins = {int(k): v for k, v in origins.items()}
 
+        # Make sure there is a config_id_mapping
+        if not self.config_id_mapping:
+            for config_id, config in self.configs.items():
+                if isinstance(config, Configuration):
+                    config = config.get_dictionary()
+                self.config_id_mapping[config_to_tuple(config, ROUND_PLACES)] = config_id
+
         # Load history
         with jsonlines.open(self.history_fn) as f:
             self.history = []

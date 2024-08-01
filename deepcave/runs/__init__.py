@@ -62,6 +62,8 @@ class AbstractRun(ABC):
         The configuration space of the run.
     configs: Dict[int, Configuration]
         Contains the configurations.
+    config_id_mapping: Dict[Tuple, int]
+        Maps configuration tuples to configuration ids.
     origins: Dict[int, str]
         The origin of the configuration.
     models: Dict[int, Optional[Union[str, "torch.nn.Module"]]]
