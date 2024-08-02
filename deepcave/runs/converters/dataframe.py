@@ -1,10 +1,8 @@
 #  noqa: D400
 """
-# DeepCave
+# DataFrameRun
 
-This module provides utilities to crate a Run object based on a DataFrame representation.
-
-Version x.x is used.
+This module provides utilities to create a Run object based on a DataFrame representation.
 
 ## Classes
     - DataFrameRun: Define a Run object based on a DataFrame representation.
@@ -30,8 +28,6 @@ from deepcave.utils.hash import file_to_hash
 class DataFrameRun(Run):
     """
     Define a Run object based on a DataFrame representation.
-
-    Version x.x is used.
 
     Properties
     ----------
@@ -124,8 +120,8 @@ class DataFrameRun(Run):
         if self.path is None:
             return ""
 
-        # Use hash of history.json as id
-        return file_to_hash(self.path / "metadata.csv")
+        # Use hash of trials.csv as id
+        return file_to_hash(self.path / "trials.csv")
 
     @staticmethod
     def load_metadata(path: Path) -> tuple[Dict[str, Any], list[Objective]]:
@@ -176,7 +172,6 @@ class DataFrameRun(Run):
                         bounds=(df["lower"][row_number], df["upper"][row_number]),
                         distribution=distribution,
                         default=float(df["default"][row_number]),
-                        q=df["q"][row_number] if pd.notna(df["q"][row_number]) else None,
                         log=df["log"][row_number],
                     )
                 )
@@ -187,7 +182,6 @@ class DataFrameRun(Run):
                         bounds=(df["lower"][row_number], df["upper"][row_number]),
                         distribution=distribution,
                         default=df["default"][row_number],
-                        q=df["q"][row_number] if pd.notna(df["q"][row_number]) else None,
                         log=df["log"][row_number],
                     )
                 )
@@ -214,7 +208,7 @@ class DataFrameRun(Run):
                         f" but {df['type']} was given."
                     )
                 )
-        configspace.add_hyperparameters(hyperparameters)
+        configspace.add(hyperparameters)
         return configspace
 
     @staticmethod
@@ -261,14 +255,16 @@ class DataFrameRun(Run):
         ]
         return entries
 
-    def load_trials(self, path: Path, configspace: ConfigSpace) -> pd.DataFrame:
+    def load_trials(self, path: Path, configspace: ConfigSpace) -> None:
         """
         Load the trials of the run.
 
-        Returns
-        -------
-        pd.DataFrame
-            The trials of the run.
+        Parameters
+        ----------
+        path : Path
+            The path to the run.
+        configspace : ConfigSpace.ConfigurationSpace
+            The configuration space of the run.
         """
         trials = pd.read_csv(os.path.join(path, "trials.csv"))
         for index in trials.index:
@@ -328,7 +324,7 @@ class DataFrameRun(Run):
 
     @staticmethod
     def _extract_additional(data: pd.Series, configspace: ConfigSpace) -> Dict[str, Any]:
-        hyperparameters = configspace.get_hyperparameter_names()
+        hyperparameters = list(configspace.keys())
         costs_metrics = [index for index in data.index if index.startswith("cost_")]
         budgets = ["budget"]
         meta = ["config_id", "start_time", "end_time", "status"]
