@@ -42,11 +42,7 @@ def get_types(
 
     Returns
     -------
-    Tuple[
-        List[int],
-        Union[List[Tuple[float, float]],
-        Tuple[floating[_64Bit], floating[_64Bit]]]
-        ]
+    Tuple[List[int], List[Tuple[float, float]]]
         The types of the Hyperparameters, as well as the bounds and instance features.
 
     Raises
@@ -108,28 +104,28 @@ def get_types(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)  # type: ignore
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, NormalIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.lower, param.upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaFloatHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)  # type: ignore
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.lower, param.upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif not isinstance(
             param,
             (
