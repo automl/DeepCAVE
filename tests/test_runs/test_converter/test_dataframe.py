@@ -34,7 +34,6 @@ class TestDataframeConverter(unittest.TestCase):
                 "lower": [0, None],
                 "upper": [1, None],
                 "distribution": ["normal", None],
-                "q": [0.2, None],
                 "log": [False, None],
                 "item_0": [None, "a"],
                 "item_1": [None, "b"],
@@ -54,7 +53,6 @@ class TestDataframeConverter(unittest.TestCase):
                 bounds=(0, 1),
                 distribution=ConfigSpace.Normal(mu=0, sigma=1),
                 default=0.2,
-                q=0.2,
                 log=False,
             )
         )
@@ -75,7 +73,6 @@ class TestDataframeConverter(unittest.TestCase):
                 bounds=(0, 1),
                 distribution=ConfigSpace.Normal(mu=0, sigma=1),
                 default=0.2,
-                q=0.2,
                 log=False,
             )
         )
@@ -86,6 +83,7 @@ class TestDataframeConverter(unittest.TestCase):
             {
                 "config_id": [0, 1],
                 "budget": [1, 2],
+                "seed": [-1, -1],
                 "cost_normal": [1, 2],
                 "cost_beta": [1, 2],
                 "start_time": [0, 1],
@@ -103,6 +101,7 @@ class TestDataframeConverter(unittest.TestCase):
                 "costs": [1, 1],
                 "cost_names": ["cost_normal", "cost_beta"],
                 "budget": 1,
+                "seed": -1,
                 "run_meta": {
                     "start_time": 0,
                     "end_time": 1,
@@ -116,6 +115,7 @@ class TestDataframeConverter(unittest.TestCase):
                 "costs": [2, 2],
                 "cost_names": ["cost_normal", "cost_beta"],
                 "budget": 2,
+                "seed": -1,
                 "run_meta": {
                     "start_time": 1,
                     "end_time": 2,
@@ -153,7 +153,6 @@ class TestDataframeConverter(unittest.TestCase):
                     "lower": [0, None],
                     "upper": [1, None],
                     "distribution": ["normal", None],
-                    "q": [0.2, None],
                     "log": [False, None],
                     "item_0": [None, "a"],
                     "item_1": [None, "b"],
@@ -172,6 +171,7 @@ class TestDataframeConverter(unittest.TestCase):
                 {
                     "config_id": [0, 1],
                     "budget": [1, 2],
+                    "seed": [-1, -1],
                     "cost_normal": [1, 2],
                     "cost_beta": [1, 2],
                     "start_time": [0, 1],
