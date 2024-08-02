@@ -47,7 +47,7 @@ class TestDataframeConverter(unittest.TestCase):
         )
 
         expected_configspace = ConfigSpace.ConfigurationSpace()
-        expected_configspace.add_hyperparameter(
+        expected_configspace.add(
             ConfigSpace.Float(
                 name="a",
                 bounds=(0, 1),
@@ -56,7 +56,7 @@ class TestDataframeConverter(unittest.TestCase):
                 log=False,
             )
         )
-        expected_configspace.add_hyperparameter(
+        expected_configspace.add(
             ConfigSpace.Categorical(name="b", items=["a", "b"], default="a", ordered=False)
         )
 
@@ -67,7 +67,7 @@ class TestDataframeConverter(unittest.TestCase):
 
     def test_load_trials(self):
         configspace = ConfigSpace.ConfigurationSpace()
-        configspace.add_hyperparameter(
+        configspace.add(
             ConfigSpace.Float(
                 name="a",
                 bounds=(0, 1),
@@ -76,7 +76,7 @@ class TestDataframeConverter(unittest.TestCase):
                 log=False,
             )
         )
-        configspace.add_hyperparameter(
+        configspace.add(
             ConfigSpace.Categorical(name="b", items=["a", "b"], default="a", ordered=False)
         )
         trial_dataframe = pd.DataFrame(
