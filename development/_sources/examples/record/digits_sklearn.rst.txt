@@ -167,3 +167,7 @@ process in DeepCAVE format.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: digits_sklearn.py <digits_sklearn.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: digits_sklearn.zip <digits_sklearn.zip>`

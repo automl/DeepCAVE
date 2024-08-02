@@ -4,11 +4,6 @@ deepcave.utils.util
 .. automodule:: deepcave.utils.util
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,15 +14,3 @@ deepcave.utils.util
       print_progress_bar
       short_string
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

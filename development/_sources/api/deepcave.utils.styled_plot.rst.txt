@@ -4,26 +4,9 @@ deepcave.utils.styled\_plot
 .. automodule:: deepcave.utils.styled_plot
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       StyledPlot
    
-   
-
-   
-   
-   
-
-
-

@@ -23,7 +23,7 @@
     
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -166,6 +166,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="examples/api/parallel_coordinates.html">
        Parallel Coordinates
       </a>
@@ -254,6 +259,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="plugins/importances.html">
      Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/ablation_paths.html">
+     Ablation Paths
     </a>
    </li>
    <li class="toctree-l2">
@@ -408,6 +418,11 @@
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
         </a>
@@ -512,6 +527,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -772,14 +792,18 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation">Ablation (class in deepcave.evaluators.ablation)</a>
+</li>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths">AblationPaths (class in deepcave.plugins.hyperparameter.ablation_paths)</a>
+</li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun">AbstractRun (class in deepcave.runs)</a>
 </li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.add">add() (deepcave.runs.run.Run method)</a>
 </li>
-      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.add_run">add_run() (deepcave.runs.handler.RunHandler method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.add_run">add_run() (deepcave.runs.handler.RunHandler method)</a>
+</li>
       <li><a href="api/deepcave.utils.dash.html#deepcave.utils.dash.alert">alert() (in module deepcave.utils.dash)</a>
 </li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.all_runs">all_runs (deepcave.plugins.Plugin property)</a>
@@ -810,9 +834,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.utils.cache.html#deepcave.utils.cache.Cache">Cache (class in deepcave.utils.cache)</a>
 </li>
-      <li><a href="api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA.calculate">calculate() (deepcave.evaluators.fanova.fANOVA method)</a>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.calculate">calculate() (deepcave.evaluators.ablation.Ablation method)</a>
 
       <ul>
+        <li><a href="api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA.calculate">(deepcave.evaluators.fanova.fANOVA method)</a>
+</li>
         <li><a href="api/deepcave.evaluators.footprint.html#deepcave.evaluators.footprint.Footprint.calculate">(deepcave.evaluators.footprint.Footprint method)</a>
 </li>
         <li><a href="api/deepcave.evaluators.lpi.html#deepcave.evaluators.lpi.LPI.calculate">(deepcave.evaluators.lpi.LPI method)</a>
@@ -859,6 +885,13 @@
 
       <ul>
         <li><a href="api/deepcave.evaluators.html#module-deepcave.evaluators">module</a>
+</li>
+      </ul></li>
+      <li>
+    deepcave.evaluators.ablation
+
+      <ul>
+        <li><a href="api/deepcave.evaluators.ablation.html#module-deepcave.evaluators.ablation">module</a>
 </li>
       </ul></li>
       <li>
@@ -967,6 +1000,13 @@
 </li>
       </ul></li>
       <li>
+    deepcave.plugins.hyperparameter.ablation_paths
+
+      <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#module-deepcave.plugins.hyperparameter.ablation_paths">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.plugins.hyperparameter.importances
 
       <ul>
@@ -1071,6 +1111,8 @@
         <li><a href="api/deepcave.runs.converters.bohb.html#module-deepcave.runs.converters.bohb">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepcave.runs.converters.deepcave
 
@@ -1078,8 +1120,6 @@
         <li><a href="api/deepcave.runs.converters.deepcave.html#module-deepcave.runs.converters.deepcave">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepcave.runs.converters.smac3v1
 
@@ -1385,6 +1425,10 @@
         <li><a href="api/deepcave.utils.run_caches.html#deepcave.utils.run_caches.RunCaches.get">(deepcave.utils.run_caches.RunCaches method)</a>
 </li>
       </ul></li>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.get_ablation_improvements">get_ablation_improvements() (deepcave.evaluators.ablation.Ablation method)</a>
+</li>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.get_ablation_performances">get_ablation_performances() (deepcave.evaluators.ablation.Ablation method)</a>
+</li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_all_costs">get_all_costs() (deepcave.runs.AbstractRun method)</a>
 </li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_available_run_paths">get_available_run_paths() (deepcave.runs.handler.RunHandler method)</a>
@@ -1417,9 +1461,11 @@
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_data">get_encoded_data() (deepcave.runs.AbstractRun method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">get_filter_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_filter_layout">get_filter_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_filter_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_filter_layout">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
@@ -1451,9 +1497,11 @@
       </ul></li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_incumbent">get_incumbent() (deepcave.runs.AbstractRun method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">get_input_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_input_layout">get_input_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_input_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
@@ -1485,12 +1533,12 @@
 </li>
       <li><a href="api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.get_link">get_link() (deepcave.plugins.summary.configurations.Configurations static method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.utils.logs.html#deepcave.utils.logs.get_logger">get_logger() (in module deepcave.utils.logs)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_meta">get_meta() (deepcave.runs.AbstractRun method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_model">get_model() (deepcave.runs.AbstractRun method)</a>
 
       <ul>
@@ -1527,9 +1575,11 @@
 </li>
       <li><a href="api/deepcave.runs.group.html#deepcave.runs.group.Group.get_original_run">get_original_run() (deepcave.runs.group.Group method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">get_output_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_output_layout">get_output_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_output_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
@@ -1683,9 +1733,11 @@
 </li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.load">load() (deepcave.runs.run.Run method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">load_dependency_inputs() (deepcave.plugins.hyperparameter.importances.Importances method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_dependency_inputs">load_dependency_inputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">(deepcave.plugins.hyperparameter.importances.Importances method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_dependency_inputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations method)</a>
@@ -1701,9 +1753,11 @@
         <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_dependency_inputs">(deepcave.plugins.summary.footprint.FootPrint method)</a>
 </li>
       </ul></li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_inputs">load_inputs() (deepcave.plugins.hyperparameter.importances.Importances method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_inputs">load_inputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_inputs">(deepcave.plugins.hyperparameter.importances.Importances method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_inputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations method)</a>
@@ -1729,9 +1783,11 @@
         <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_mpl_outputs">(deepcave.plugins.summary.footprint.FootPrint static method)</a>
 </li>
       </ul></li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_outputs">load_outputs() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_outputs">load_outputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_outputs">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_outputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
@@ -1771,6 +1827,8 @@
       <ul>
         <li><a href="api/deepcave.evaluators.html#module-deepcave.evaluators">deepcave.evaluators</a>
 </li>
+        <li><a href="api/deepcave.evaluators.ablation.html#module-deepcave.evaluators.ablation">deepcave.evaluators.ablation</a>
+</li>
         <li><a href="api/deepcave.evaluators.epm.html#module-deepcave.evaluators.epm">deepcave.evaluators.epm</a>
 </li>
         <li><a href="api/deepcave.evaluators.epm.fanova_forest.html#module-deepcave.evaluators.epm.fanova_forest">deepcave.evaluators.epm.fanova_forest</a>
@@ -1800,6 +1858,8 @@
         <li><a href="api/deepcave.plugins.dynamic.html#module-deepcave.plugins.dynamic">deepcave.plugins.dynamic</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.html#module-deepcave.plugins.hyperparameter">deepcave.plugins.hyperparameter</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#module-deepcave.plugins.hyperparameter.ablation_paths">deepcave.plugins.hyperparameter.ablation_paths</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.importances.html#module-deepcave.plugins.hyperparameter.importances">deepcave.plugins.hyperparameter.importances</a>
 </li>
@@ -1964,9 +2024,11 @@
 </li>
       <li><a href="api/deepcave.utils.util.html#deepcave.utils.util.print_progress_bar">print_progress_bar() (in module deepcave.utils.util)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">process() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.process">process() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.process">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
@@ -2189,7 +2251,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -4,26 +4,9 @@ deepcave.plugins.objective.parallel\_coordinates
 .. automodule:: deepcave.plugins.objective.parallel_coordinates
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       ParallelCoordinates
    
-   
-
-   
-   
-   
-
-
-

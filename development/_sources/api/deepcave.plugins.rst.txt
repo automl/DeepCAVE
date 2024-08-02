@@ -4,39 +4,21 @@
 .. automodule:: deepcave.plugins
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Plugin
    
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.plugins.budget
-   deepcave.plugins.dynamic
-   deepcave.plugins.hyperparameter
-   deepcave.plugins.objective
-   deepcave.plugins.static
-   deepcave.plugins.summary
-
+   budget
+   dynamic
+   hyperparameter
+   objective
+   static
+   summary

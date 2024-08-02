@@ -4,26 +4,9 @@ deepcave.runs.group
 .. automodule:: deepcave.runs.group
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Group
    
-   
-
-   
-   
-   
-
-
-

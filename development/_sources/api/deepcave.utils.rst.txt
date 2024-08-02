@@ -4,47 +4,29 @@
 .. automodule:: deepcave.utils
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.utils.cache
-   deepcave.utils.cast
-   deepcave.utils.compression
-   deepcave.utils.configs
-   deepcave.utils.configspace
-   deepcave.utils.converters
-   deepcave.utils.dash
-   deepcave.utils.data_structures
-   deepcave.utils.docs
-   deepcave.utils.files
-   deepcave.utils.hash
-   deepcave.utils.layout
-   deepcave.utils.logs
-   deepcave.utils.notification
-   deepcave.utils.run_caches
-   deepcave.utils.styled_plot
-   deepcave.utils.styled_plotty
-   deepcave.utils.symbolic_regression
-   deepcave.utils.url
-   deepcave.utils.util
-
+   cache
+   cast
+   compression
+   configs
+   configspace
+   converters
+   dash
+   data_structures
+   docs
+   files
+   hash
+   layout
+   logs
+   notification
+   run_caches
+   styled_plot
+   styled_plotty
+   symbolic_regression
+   url
+   util

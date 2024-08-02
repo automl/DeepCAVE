@@ -4,11 +4,6 @@ deepcave.utils.hash
 .. automodule:: deepcave.utils.hash
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ deepcave.utils.hash
       file_to_hash
       string_to_hash
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

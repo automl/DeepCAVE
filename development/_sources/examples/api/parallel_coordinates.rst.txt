@@ -74,3 +74,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parallel_coordinates.py <parallel_coordinates.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: parallel_coordinates.zip <parallel_coordinates.zip>`

@@ -69,3 +69,7 @@ This example shows how DeepCAVE can be used to record a minimal run.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: minimal.py <minimal.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: minimal.zip <minimal.zip>`

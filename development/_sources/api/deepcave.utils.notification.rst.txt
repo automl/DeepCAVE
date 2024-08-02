@@ -4,26 +4,9 @@ deepcave.utils.notification
 .. automodule:: deepcave.utils.notification
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Notification
    
-   
-
-   
-   
-   
-
-
-

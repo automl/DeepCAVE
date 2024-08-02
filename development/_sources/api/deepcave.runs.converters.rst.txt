@@ -4,32 +4,14 @@ deepcave.runs.converters
 .. automodule:: deepcave.runs.converters
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.runs.converters.amltk
-   deepcave.runs.converters.bohb
-   deepcave.runs.converters.deepcave
-   deepcave.runs.converters.smac3v1
-   deepcave.runs.converters.smac3v2
-
+   amltk
+   bohb
+   deepcave
+   smac3v1
+   smac3v2

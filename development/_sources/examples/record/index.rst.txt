@@ -36,7 +36,7 @@ AutoML runs.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in D...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example shows how sklearn can be used to record an optimization process in DeepCAVE format.">
 
 .. only:: html
 
@@ -53,7 +53,7 @@ AutoML runs.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This more advanced example incorporates multiple objectives, budgets and statusses to show the strenghts of DeepCAVE&#x27;s recorder.">
 
 .. only:: html
 

@@ -4,26 +4,9 @@ deepcave.utils.logs
 .. automodule:: deepcave.utils.logs
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       get_logger
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

@@ -321,3 +321,7 @@ show the strenghts of DeepCAVE's recorder.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: mnist_pytorch.py <mnist_pytorch.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: mnist_pytorch.zip <mnist_pytorch.zip>`

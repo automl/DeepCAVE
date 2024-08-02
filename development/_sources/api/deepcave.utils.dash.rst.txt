@@ -4,11 +4,6 @@ deepcave.utils.dash
 .. automodule:: deepcave.utils.dash
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ deepcave.utils.dash
       alert
       flash
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

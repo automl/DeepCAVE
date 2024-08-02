@@ -4,11 +4,6 @@ deepcave.utils.converters
 .. automodule:: deepcave.utils.converters
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ deepcave.utils.converters
       extract_costs
       extract_value
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

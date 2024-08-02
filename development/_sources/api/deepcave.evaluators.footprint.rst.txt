@@ -4,26 +4,9 @@ deepcave.evaluators.footprint
 .. automodule:: deepcave.evaluators.footprint
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Footprint
    
-   
-
-   
-   
-   
-
-
-

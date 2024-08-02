@@ -24,7 +24,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -37,7 +37,7 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.evaluators.epm" href="deepcave.evaluators.epm.html" />
+    <link rel="next" title="deepcave.evaluators.ablation" href="deepcave.evaluators.ablation.html" />
     <link rel="prev" title="deepcave.layouts.sidebar" href="deepcave.layouts.sidebar.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -169,6 +169,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
       </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../plugins/importances.html">
      Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/ablation_paths.html">
+     Ablation Paths
     </a>
    </li>
    <li class="toctree-l2">
@@ -411,6 +421,11 @@
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
         </a>
@@ -515,6 +530,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -746,21 +766,26 @@
 </dd>
 <dt>lpi</dt><dd><p>This module provides utilities to calculate the local parameter importance (LPI).</p>
 </dd>
+<dt>ablation</dt><dd><p>This module evaluates the ablation paths.</p>
+</dd>
 </dl>
 </section>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.epm.html#module-deepcave.evaluators.epm" title="deepcave.evaluators.epm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.evaluators.epm</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.ablation.html#module-deepcave.evaluators.ablation" title="deepcave.evaluators.ablation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ablation</span></code></a></p></td>
+<td><p># Ablation Paths</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.epm.html#module-deepcave.evaluators.epm" title="deepcave.evaluators.epm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">epm</span></code></a></p></td>
 <td><p># epm</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.fanova.html#module-deepcave.evaluators.fanova" title="deepcave.evaluators.fanova"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.evaluators.fanova</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.fanova.html#module-deepcave.evaluators.fanova" title="deepcave.evaluators.fanova"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fanova</span></code></a></p></td>
 <td><p># fANOVA</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.footprint.html#module-deepcave.evaluators.footprint" title="deepcave.evaluators.footprint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.evaluators.footprint</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.footprint.html#module-deepcave.evaluators.footprint" title="deepcave.evaluators.footprint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">footprint</span></code></a></p></td>
 <td><p># Footprint</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.lpi.html#module-deepcave.evaluators.lpi" title="deepcave.evaluators.lpi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.evaluators.lpi</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.lpi.html#module-deepcave.evaluators.lpi" title="deepcave.evaluators.lpi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lpi</span></code></a></p></td>
 <td><p># LPI</p></td>
 </tr>
 </tbody>
@@ -780,10 +805,10 @@
             <p class="prev-next-title">deepcave.layouts.sidebar</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.evaluators.epm.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.evaluators.ablation.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.evaluators.epm</p>
+        <p class="prev-next-title">deepcave.evaluators.ablation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -808,7 +833,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

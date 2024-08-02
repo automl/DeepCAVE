@@ -4,26 +4,9 @@ deepcave.layouts.sidebar
 .. automodule:: deepcave.layouts.sidebar
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       SidebarLayout
    
-   
-
-   
-   
-   
-
-
-

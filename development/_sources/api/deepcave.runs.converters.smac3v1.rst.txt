@@ -4,26 +4,9 @@ deepcave.runs.converters.smac3v1
 .. automodule:: deepcave.runs.converters.smac3v1
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       SMAC3v1Run
    
-   
-
-   
-   
-   
-
-
-

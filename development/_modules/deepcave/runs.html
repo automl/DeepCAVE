@@ -23,7 +23,7 @@
     
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -166,6 +166,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../examples/api/parallel_coordinates.html">
        Parallel Coordinates
       </a>
@@ -254,6 +259,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../plugins/importances.html">
      Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../plugins/ablation_paths.html">
+     Ablation Paths
     </a>
    </li>
    <li class="toctree-l2">
@@ -408,6 +418,11 @@
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../../api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
         </a>
@@ -512,6 +527,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="../../api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -1657,9 +1677,12 @@
         <span class="n">selected_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the incumbent with its normalized objective value.</span>
+<span class="sd">        Return the incumbent with its objective value (merged obj value for multiple objectives).</span>
 
-<span class="sd">        The incumbent is the configuration with the lowest normalized objective value.</span>
+<span class="sd">        The incumbent is the configuration with the</span>
+<span class="sd">            lowest objective value in case of objective.optimize == &quot;lower&quot; (or merged objectives)</span>
+<span class="sd">            and</span>
+<span class="sd">            highest objective value in case of objective.optimize == &quot;upper&quot;.</span>
 
 <span class="sd">        Optionally, only configurations which were evaluated on the passed budget, seed,</span>
 <span class="sd">        and stati are considered.</span>
@@ -1681,7 +1704,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        Tuple[Configuration, float]</span>
-<span class="sd">            Incumbent with its normalized cost.</span>
+<span class="sd">            Incumbent with its cost.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -2345,7 +2368,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

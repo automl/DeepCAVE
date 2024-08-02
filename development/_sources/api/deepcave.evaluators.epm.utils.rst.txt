@@ -4,26 +4,9 @@ deepcave.evaluators.epm.utils
 .. automodule:: deepcave.evaluators.epm.utils
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       get_types
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

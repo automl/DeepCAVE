@@ -18,7 +18,7 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Partial Dependencies. Note that other plugins use the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Partial Dependencies. Note that other plugins use the same interfaces and can be used in the same fashion.">
 
 .. only:: html
 
@@ -35,7 +35,7 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Importances. Note that other plugins use the same inte...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Importances. Note that other plugins use the same interfaces and can be used in the same fashion.">
 
 .. only:: html
 
@@ -52,7 +52,24 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Parallel Coordinates. Note that other plugins use the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Ablation Paths. Note that other plugins use the same interfaces and can be used in the same fashion.">
+
+.. only:: html
+
+  .. image:: /examples/api/images/thumb/sphx_glr_ablation_paths_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_api_ablation_paths.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Ablation Paths</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Parallel Coordinates. Note that other plugins use the same interfaces and can be used in the same fashion.">
 
 .. only:: html
 
@@ -79,5 +96,6 @@ Have a look into the examples, to get an overview how to use DeepCAVE in this wa
 
    /examples/api/pdp
    /examples/api/importances
+   /examples/api/ablation_paths
    /examples/api/parallel_coordinates
 

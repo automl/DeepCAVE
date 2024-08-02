@@ -73,3 +73,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: pdp.py <pdp.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: pdp.zip <pdp.zip>`

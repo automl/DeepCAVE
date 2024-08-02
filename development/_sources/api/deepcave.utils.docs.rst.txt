@@ -4,26 +4,9 @@ deepcave.utils.docs
 .. automodule:: deepcave.utils.docs
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       rst_to_md
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

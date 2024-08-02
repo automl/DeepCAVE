@@ -4,11 +4,6 @@ deepcave.utils.compression
 .. automodule:: deepcave.utils.compression
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ deepcave.utils.compression
       deserialize
       serialize
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

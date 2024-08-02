@@ -23,7 +23,7 @@
     
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -166,6 +166,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
        Parallel Coordinates
       </a>
@@ -254,6 +259,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../../../../plugins/importances.html">
      Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../../../plugins/ablation_paths.html">
+     Ablation Paths
     </a>
    </li>
    <li class="toctree-l2">
@@ -408,6 +418,11 @@
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../../../../api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
         </a>
@@ -512,6 +527,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="../../../../api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -750,6 +770,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provide a plugin for the visualization of the importances.</span>
 
+<span class="sd">    Evaluators are fANOVA and LPI (local parameter importance).</span>
+
 <span class="sd">    Provided utilities include getting input/output layout, data processing</span>
 <span class="sd">    and loading outputs. Also provides a matplotlib version.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -892,7 +914,10 @@
 <span class="sd">        Dict[str, Dict[str, Any]]</span>
 <span class="sd">            Content to be filled.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">method_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Local Parameter Importance (local)&quot;</span><span class="p">,</span> <span class="s2">&quot;fANOVA (global)&quot;</span><span class="p">]</span>
+        <span class="n">method_labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Local Parameter Importance (local)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fANOVA (global)&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="n">method_values</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;local&quot;</span><span class="p">,</span> <span class="s2">&quot;global&quot;</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="p">{</span>
@@ -1069,7 +1094,6 @@
             <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nan encountered in importance values for budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
             <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">importances</span>
-
         <span class="k">return</span> <span class="n">data</span>  <span class="c1"># type: ignore</span></div>
 
 
@@ -1152,14 +1176,13 @@
             <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">results</span> <span class="ow">in</span> <span class="n">importances</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">selected_hp_names</span><span class="p">:</span>
                     <span class="k">continue</span>
-
                 <span class="n">x</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
                 <span class="n">y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
                 <span class="n">error_y</span> <span class="o">+=</span> <span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
             <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">error_y</span><span class="p">))</span>
 
-        <span class="c1"># Sort by last fidelity now</span>
+        <span class="c1"># Sort by last fidelity</span>
         <span class="n">selected_budget_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">selected_budget_ids</span><span class="p">)</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">selected_budget_id</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">idx</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[:</span><span class="n">n_hps</span><span class="p">]</span>
@@ -1169,14 +1192,6 @@
             <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">budget_id</span><span class="p">,</span> <span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">x</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
-            <span class="c1"># new_x = []</span>
-            <span class="c1"># for string in x:</span>
-            <span class="c1">#    string = string.replace(&quot;center_optimizer:&quot;, &quot;&quot;)</span>
-            <span class="c1">#    string = string.replace(&quot;:__choice__&quot;, &quot;&quot;)</span>
-            <span class="c1">#    string = string.replace(&quot;AdamWOptimizer&quot;, &quot;AdamW&quot;)</span>
-            <span class="c1">#    string = string.replace(&quot;SGDOptimizer&quot;, &quot;SGD&quot;)</span>
-            <span class="c1">#    new_x += [string]</span>
-            <span class="c1"># x = new_x</span>
 
             <span class="n">bar_data</span> <span class="o">+=</span> <span class="p">[</span>
                 <span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
@@ -1348,7 +1363,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

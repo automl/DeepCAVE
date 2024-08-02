@@ -4,28 +4,10 @@ deepcave.plugins.budget
 .. automodule:: deepcave.plugins.budget
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.plugins.budget.budget_correlation
-
+   budget_correlation

@@ -24,7 +24,7 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.plugins.hyperparameter.pdp" href="deepcave.plugins.hyperparameter.pdp.html" />
-    <link rel="prev" title="deepcave.plugins.hyperparameter" href="deepcave.plugins.hyperparameter.html" />
+    <link rel="prev" title="deepcave.plugins.hyperparameter.ablation_paths" href="deepcave.plugins.hyperparameter.ablation_paths.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -169,6 +169,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/parallel_coordinates.html">
        Parallel Coordinates
       </a>
@@ -257,6 +262,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../plugins/importances.html">
      Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/ablation_paths.html">
+     Ablation Paths
     </a>
    </li>
    <li class="toctree-l2">
@@ -410,6 +420,11 @@
        </i>
       </label>
       <ul class="current">
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
        <li class="toctree-l4 current active">
         <a class="current reference internal" href="#">
          deepcave.plugins.hyperparameter.importances
@@ -515,6 +530,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -846,6 +866,7 @@ processing the data and loading the outputs. Also provides a matplotlib version.
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.hyperparameter.importances.</span></span><span class="sig-name descname"><span class="pre">Importances</span></span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.static.html#deepcave.plugins.static.StaticPlugin" title="deepcave.plugins.static.StaticPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">StaticPlugin</span></code></a></p>
 <p>Provide a plugin for the visualization of the importances.</p>
+<p>Evaluators are fANOVA and LPI (local parameter importance).</p>
 <p>Provided utilities include getting input/output layout, data processing
 and loading outputs. Also provides a matplotlib version.</p>
 <dl class="py method">
@@ -1051,11 +1072,11 @@ Please see ‘_clean_inputs’ for more information.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.plugins.hyperparameter.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.plugins.hyperparameter.ablation_paths.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.plugins.hyperparameter</p>
+            <p class="prev-next-title">deepcave.plugins.hyperparameter.ablation_paths</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="deepcave.plugins.hyperparameter.pdp.html" title="next page">
@@ -1086,7 +1107,7 @@ Please see ‘_clean_inputs’ for more information.</p>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

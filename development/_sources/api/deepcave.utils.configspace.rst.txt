@@ -4,11 +4,6 @@ deepcave.utils.configspace
 .. automodule:: deepcave.utils.configspace
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ deepcave.utils.configspace
       sample_border_config
       sample_random_config
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
