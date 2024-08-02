@@ -355,12 +355,12 @@ class AblationPaths(StaticPlugin):
             x = list(values[0][:n_hps])
 
             bar_data1 += [
-                go.Bar(
+                go.Scatter(
                     name=budget,
                     x=x,
                     y=values[1][:n_hps],
-                    error_y_array=values[2][:n_hps],
-                    marker_color=get_color(budget_id),
+                    error_y=dict(array=values[2][:n_hps]),
+                    line=dict(color=get_color(0)),
                 )
             ]
 
@@ -375,16 +375,21 @@ class AblationPaths(StaticPlugin):
                     x=x,
                     y=values[1][:n_hps],
                     error_y_array=values[2][:n_hps],
-                    marker_color=get_color(budget_id),
+                    marker_color=get_color(0),
                 )
             ]
 
         figure1 = go.Figure(data=bar_data1)
         figure1.update_layout(
             barmode="group",
+            title={
+                "text": "Ablation Path when Iteratively Setting the Hyperparameters to Their "
+                "Incumbent Value",
+                "font": {"size": config.FIGURE_FONT_SIZE + 2},
+            },
             yaxis_title=objective.name,
             legend={"title": "Budget"},
-            margin=config.FIGURE_MARGIN,
+            margin=dict(t=50, b=0, l=0, r=0),
             xaxis=dict(tickangle=-45),
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
@@ -393,9 +398,13 @@ class AblationPaths(StaticPlugin):
         figure2 = go.Figure(data=bar_data2)
         figure2.update_layout(
             barmode="group",
-            yaxis_title="Improvement",
+            title={
+                "text": "Change in Objective with Respect to the Previous Ablation Step",
+                "font": {"size": config.FIGURE_FONT_SIZE + 2},
+            },
+            yaxis_title=f"Change in {objective.name}",
             legend={"title": "Budget"},
-            margin=config.FIGURE_MARGIN,
+            margin=dict(t=50, b=0, l=0, r=0),
             xaxis=dict(tickangle=-45),
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
