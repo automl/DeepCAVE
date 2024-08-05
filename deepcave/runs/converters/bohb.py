@@ -141,9 +141,8 @@ class BOHBRun(Run):
             else:
                 status = Status.CRASHED
 
-            if status != Status.SUCCESS and status != Status.UNKNOWN:
+            if status != Status.SUCCESS:
                 # Costs which failed, should not be included
-                # Consider UNKNOWN as valid here, as BOHB does not provide a status by default
                 cost = None
 
             run.add(
