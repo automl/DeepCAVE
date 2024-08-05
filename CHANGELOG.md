@@ -2,6 +2,7 @@
 
 ## Converters
 - Add support for AMLTK.
+- BOHB: Consider missing state as valid state as state is not provided by default.
 
 # Version 1.2.1
 

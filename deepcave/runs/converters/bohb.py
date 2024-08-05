@@ -115,8 +115,10 @@ class BOHBRun(Run):
             cost = bohb_run.loss
             budget = bohb_run.budget
 
-            if bohb_run.info is None:
-                status_string = "CRASHED"
+            if not isinstance(bohb_run.info, dict) or (
+                isinstance(bohb_run.info, dict) and "state" not in bohb_run.info.keys()
+            ):
+                status_string = "SUCCESS"
             else:
                 status_string = bohb_run.info["state"]
 
@@ -139,8 +141,9 @@ class BOHBRun(Run):
             else:
                 status = Status.CRASHED
 
-            if status != Status.SUCCESS:
+            if status != Status.SUCCESS and status != Status.UNKNOWN:
                 # Costs which failed, should not be included
+                # Consider UNKNOWN as valid here, as BOHB does not provide a status by default
                 cost = None
 
             run.add(
