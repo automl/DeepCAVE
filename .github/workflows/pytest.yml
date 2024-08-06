@@ -31,19 +31,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+        python-version: ["3.9", "3.10", "3.11"]
         os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python 3.9
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
-          pip install swig
+          sudo apt-get update
+          sudo apt-get install -y python3-dev
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          activate-environment: test-environment
+          python-version: ${{ matrix.python-version }}
+          auto-update-conda: true
+
+      - name: Install conda dependencies
+        run: |
+          conda install -c miniconda swig
+
+      - name: Install pip dependencies
+        run: |
           python -m pip install ".[dev]"
 
       - name: Run pytest
