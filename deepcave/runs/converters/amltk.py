@@ -12,10 +12,12 @@ from typing import Union
 
 import pickle
 import re
+from io import StringIO
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from ConfigSpace.configuration_space import ConfigurationSpace
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -93,11 +95,9 @@ class AMLTKRun(Run):
         path = Path(path)
 
         # Read configspace
-        from ConfigSpace.read_and_write import json as cs_json
-
         with open(path / "configspace.json", "rb") as f:
             json_string = pickle.load(f)
-        configspace = cs_json.read(json_string)
+        configspace = ConfigurationSpace.from_json(StringIO(json_string))
 
         history = pd.read_parquet(path / "history.parquet")
 

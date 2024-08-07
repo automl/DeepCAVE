@@ -10,4 +10,6 @@ footprint
     This module provides utilities for creating a footprint of a run.
 lpi
     This module provides utilities to calculate the local parameter importance (LPI).
+ablation
+    This module evaluates the ablation paths.
 """

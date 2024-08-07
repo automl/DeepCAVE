@@ -430,7 +430,7 @@ class RandomForest:
             # Transform list of 2d arrays into a 3d array
             num_trees = self._model.options.num_trees
             shape = (X.shape[0], num_trees, third_dimension)
-            preds_as_array = np.zeros(shape) * np.NaN
+            preds_as_array = np.zeros(shape) * np.nan
             for i, preds_per_tree in enumerate(all_preds):
                 for j, pred in enumerate(preds_per_tree):
                     preds_as_array[i, j, : len(pred)] = pred

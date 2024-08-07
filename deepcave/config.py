@@ -94,6 +94,7 @@ class Config:
     def PLUGINS(self) -> Dict[str, List[Any]]:
         """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
         from deepcave.plugins.hyperparameter.importances import Importances
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
@@ -125,6 +126,7 @@ class Config:
             ],
             "Hyperparameter Analysis": [
                 Importances(),
+                AblationPaths(),
                 PartialDependencies(),
                 SymbolicExplanations(),
             ],

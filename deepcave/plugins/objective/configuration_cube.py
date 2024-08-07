@@ -195,7 +195,7 @@ class ConfigurationCube(DynamicPlugin):
         budget_value = inputs["budget_id"]["value"]
 
         # Prepare others
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get selected values
         n_configs_value = inputs["n_configs"]["value"]
@@ -348,7 +348,7 @@ class ConfigurationCube(DynamicPlugin):
         layout_kwargs = {}
         if n_configs > 0 and len(hp_names) > 0:
             for i, (hp_name, axis_name) in enumerate(zip(hp_names, ["xaxis", "yaxis", "zaxis"])):
-                hp = run.configspace.get_hyperparameter(hp_name)
+                hp = run.configspace[hp_name]
                 values = df[hp_name].values.tolist()
 
                 tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)

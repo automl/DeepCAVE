@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Instantiate the plugin
     plugin = Importances()
     inputs = plugin.generate_inputs(
-        hyperparameter_names=run.configspace.get_hyperparameter_names(),
+        hyperparameter_names=list(run.configspace.keys()),
         objective_id=objective_id,
         budget_ids=budget_ids,
         method="global",

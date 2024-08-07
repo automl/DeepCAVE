@@ -1,15 +1,15 @@
 import unittest
 
-from deepcave.evaluators.lpi import LPI as Evaluator
+from deepcave.evaluators.ablation import Ablation as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
 
-class TestLPI(unittest.TestCase):
+class TestAblation(unittest.TestCase):
     def setUp(self):
         # Initiate run here
         self.run: AbstractRun = SMAC3v2Run.from_path("logs/SMAC3v2/mlp/run_1")
-        self.hp_names = list(self.run.configspace.keys())
+        self.hp_names = self.run.configspace.get_hyperparameter_names()
         self.evaluator = Evaluator(self.run)
 
     def test(self):
@@ -18,10 +18,10 @@ class TestLPI(unittest.TestCase):
 
         # Calculate
         self.evaluator.calculate(objective, budget, seed=0)
-        importances = self.evaluator.get_importances(self.hp_names)
+        importances = self.evaluator.get_ablation_performances()
 
         self.evaluator.calculate(objective, budget, seed=42)
-        importances2 = self.evaluator.get_importances(self.hp_names)
+        importances2 = self.evaluator.get_ablation_performances()
 
         # Different seed: Different results
         assert importances["batch_size"][1] != importances2["batch_size"][1]
@@ -32,10 +32,10 @@ class TestLPI(unittest.TestCase):
 
         # Calculate
         self.evaluator.calculate(objective, budget, seed=0)
-        importances = self.evaluator.get_importances(self.hp_names)
+        importances = self.evaluator.get_ablation_performances()
 
         self.evaluator.calculate(objective, budget, seed=0)
-        importances2 = self.evaluator.get_importances(self.hp_names)
+        importances2 = self.evaluator.get_ablation_performances()
 
         # Same seed: Same results
         assert importances["batch_size"][1] == importances2["batch_size"][1]

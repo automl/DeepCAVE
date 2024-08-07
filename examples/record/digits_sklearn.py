@@ -42,7 +42,7 @@ def get_configspace(seed):
         name="learning_rate", lower=0.0001, upper=0.1, log=True
     )
 
-    configspace.add_hyperparameters(
+    configspace.add(
         [
             num_neurons_layer1,
             num_neurons_layer2,

@@ -38,6 +38,8 @@ class Importances(StaticPlugin):
     """
     Provide a plugin for the visualization of the importances.
 
+    Evaluators are fANOVA and LPI (local parameter importance).
+
     Provided utilities include getting input/output layout, data processing
     and loading outputs. Also provides a matplotlib version.
     """
@@ -172,7 +174,10 @@ class Importances(StaticPlugin):
         Dict[str, Dict[str, Any]]
             Content to be filled.
         """
-        method_labels = ["Local Parameter Importance (local)", "fANOVA (global)"]
+        method_labels = [
+            "Local Parameter Importance (local)",
+            "fANOVA (global)",
+        ]
         method_values = ["local", "global"]
 
         return {
@@ -219,7 +224,7 @@ class Importances(StaticPlugin):
         budget_options = get_checklist_options(budgets, budget_ids)
         budget_value = inputs["budget_ids"]["value"]
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         hp_options = get_checklist_options(hp_names)
         hp_value = inputs["hyperparameter_names"]["value"]
         n_hps = inputs["n_hps"]["value"]
@@ -310,8 +315,8 @@ class Importances(StaticPlugin):
             configspace_wo_const = ConfigurationSpace()
             for k in hp_dict_wo_const.keys():
                 configspace_wo_const.add_hyperparameter(hp_dict_wo_const[k])
-            configspace_wo_const.add_conditions(run.configspace.get_conditions())
-            configspace_wo_const.add_forbidden_clauses(run.configspace.get_forbiddens())
+            configspace_wo_const.add(run.configspace.conditions)
+            configspace_wo_const.add(run.configspace.forbidden_clauses)
             run.configspace = configspace_wo_const
 
             configs_wo_const = []
@@ -321,7 +326,7 @@ class Importances(StaticPlugin):
                 )
             run.configs = dict(enumerate(configs_wo_const))
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         budgets = run.get_budgets(include_combined=True)
 
         evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
@@ -343,7 +348,6 @@ class Importances(StaticPlugin):
             if any(np.isnan(val) for value in importances.values() for val in value):
                 logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances
-
         return data  # type: ignore
 
     @staticmethod
@@ -420,14 +424,13 @@ class Importances(StaticPlugin):
             for hp_name, results in importances.items():
                 if hp_name not in selected_hp_names:
                     continue
-
                 x += [hp_name]
                 y += [results[0]]
                 error_y += [results[1]]
 
             data[budget_id] = (np.array(x), np.array(y), np.array(error_y))
 
-        # Sort by last fidelity now
+        # Sort by last fidelity
         selected_budget_id = max(selected_budget_ids)
         idx = np.argsort(data[selected_budget_id][1], axis=None)[::-1]
         idx = idx[:n_hps]
@@ -437,14 +440,6 @@ class Importances(StaticPlugin):
             budget = run.get_budget(budget_id, human=True)
 
             x = values[0][idx]
-            # new_x = []
-            # for string in x:
-            #    string = string.replace("center_optimizer:", "")
-            #    string = string.replace(":__choice__", "")
-            #    string = string.replace("AdamWOptimizer", "AdamW")
-            #    string = string.replace("SGDOptimizer", "SGD")
-            #    new_x += [string]
-            # x = new_x
 
             bar_data += [
                 go.Bar(

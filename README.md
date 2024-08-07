@@ -72,7 +72,7 @@ from deepcave import Recorder, Objective
 configspace = CS.ConfigurationSpace(seed=0)
 alpha = CS.hyperparameters.UniformFloatHyperparameter(
     name='alpha', lower=0, upper=1)
-configspace.add_hyperparameter(alpha)
+configspace.add(alpha)
 
 accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
 mse = Objective("mse", lower=0)

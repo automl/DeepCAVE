@@ -50,7 +50,7 @@ class fANOVA:
         self.run = run
         self.cs = run.configspace
         self.hps = self.cs.get_hyperparameters()
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
         self.logger = get_logger(self.__class__.__name__)
 
     def calculate(

@@ -9,7 +9,7 @@ class TestFanova(unittest.TestCase):
     def setUp(self):
         # Initiate run here
         self.run: AbstractRun = SMAC3v1Run.from_path("logs/SMAC3v1/mlp/run_1")
-        self.hp_names = self.run.configspace.get_hyperparameter_names()
+        self.hp_names = list(self.run.configspace.keys())
         self.evaluator = Evaluator(self.run)
 
     def test(self):
