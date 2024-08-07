@@ -1,6 +1,7 @@
 import os
 import tempfile
 import unittest
+from pathlib import Path
 
 import ConfigSpace
 import pandas as pd
@@ -93,8 +94,8 @@ class TestDataframeConverter(unittest.TestCase):
                 "config_id": [0, 1],
                 "budget": [1, 2],
                 "seed": [-1, -1],
-                "cost_normal": [1, 2],
-                "cost_beta": [1, 2],
+                "metric:normal [0.0, 1.0] (maximize)": [1, 2],
+                "metric:beta [0.0, 1.0] (maximize)": [1, 2],
                 "start_time": [0, 1],
                 "end_time": [1, 2],
                 "status": ["success", "timeout"],
@@ -108,7 +109,7 @@ class TestDataframeConverter(unittest.TestCase):
             {
                 "config_id": 0,
                 "costs": [1, 1],
-                "cost_names": ["cost_normal", "cost_beta"],
+                "cost_names": ["normal", "beta"],
                 "budget": 1,
                 "seed": -1,
                 "run_meta": {
@@ -122,7 +123,7 @@ class TestDataframeConverter(unittest.TestCase):
             {
                 "config_id": 1,
                 "costs": [2, 2],
-                "cost_names": ["cost_normal", "cost_beta"],
+                "cost_names": ["normal", "beta"],
                 "budget": 2,
                 "seed": -1,
                 "run_meta": {
@@ -135,7 +136,7 @@ class TestDataframeConverter(unittest.TestCase):
             },
         ]
 
-        objectives = [Objective("cost_normal"), Objective("cost_beta")]
+        objectives = [Objective("normal"), Objective("beta")]
 
         run = DataFrameRun("test_run", configspace, objectives=objectives)
 
@@ -148,7 +149,7 @@ class TestDataframeConverter(unittest.TestCase):
 
     def test_from_path(self):
         with tempfile.TemporaryDirectory() as tmpdirname:
-            metadata_path = os.path.join(tmpdirname, "metadata.csv")
+            metadata_path = Path(os.path.join(tmpdirname, "metadata.csv"))
             metadata = pd.DataFrame(
                 {"name": ["test_run"], "objective_0": ["Cost_0"], "objective_1": ["Cost_1"]}
             )
@@ -175,14 +176,14 @@ class TestDataframeConverter(unittest.TestCase):
             )
             configspace.to_csv(configspace_path, index=False)
 
-            trials_path = os.path.join(tmpdirname, "trials.csv")
+            trials_path = Path(os.path.join(tmpdirname, "trials.csv"))
             trials = pd.DataFrame(
                 {
                     "config_id": [0, 1],
                     "budget": [1, 2],
                     "seed": [-1, -1],
-                    "cost_normal": [1, 2],
-                    "cost_beta": [1, 2],
+                    "metric:normal [0.0, 1.0] (maximize)": [1, 2],
+                    "metric:beta [0.0, 1.0] (maximize)": [1, 2],
                     "start_time": [0, 1],
                     "end_time": [1, 2],
                     "status": ["success", "timeout"],
@@ -193,7 +194,7 @@ class TestDataframeConverter(unittest.TestCase):
             )
             trials.to_csv(trials_path, index=False)
 
-            _ = DataFrameRun.from_path(os.path.join(tmpdirname))
+            _ = DataFrameRun.from_path(Path(tmpdirname))
 
 
 if __name__ == "__main__":

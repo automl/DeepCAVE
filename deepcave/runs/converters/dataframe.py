@@ -18,6 +18,7 @@ from pathlib import Path
 import ConfigSpace
 import pandas as pd
 from ConfigSpace import Categorical, Float, Integer
+from ConfigSpace.hyperparameters import Hyperparameter
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -177,7 +178,7 @@ class DataFrameRun(Run):
         df = pd.read_csv(os.path.join(path, "configspace.csv"))
         configspace = ConfigSpace.ConfigurationSpace()
 
-        hyperparameters = []
+        hyperparameters: List[Hyperparameter] = []
 
         for row_number in range(len(df)):
             distribution = DataFrameRun._extract_numeric_distribution(df, row_number, path)
@@ -185,21 +186,21 @@ class DataFrameRun(Run):
             if df["type"][row_number] == "float":
                 hyperparameters.append(
                     Float(
-                        name=df["name"][row_number],
-                        bounds=(df["lower"][row_number], df["upper"][row_number]),
+                        name=str(df["name"][row_number]),
+                        bounds=(float(df["lower"][row_number]), float(df["upper"][row_number])),
                         distribution=distribution,
                         default=float(df["default"][row_number]),
-                        log=df["log"][row_number],
+                        log=bool(df["log"][row_number]),
                     )
                 )
             elif df["type"][row_number] == "integer":
                 hyperparameters.append(
                     Integer(
-                        name=df["name"][row_number],
-                        bounds=(df["lower"][row_number], df["upper"][row_number]),
+                        name=str(df["name"][row_number]),
+                        bounds=(int(df["lower"][row_number]), int(df["upper"][row_number])),
                         distribution=distribution,
                         default=df["default"][row_number],
-                        log=df["log"][row_number],
+                        log=bool(df["log"][row_number]),
                     )
                 )
             elif df["type"][row_number] == "categorical":
@@ -210,7 +211,7 @@ class DataFrameRun(Run):
 
                 hyperparameters.append(
                     Categorical(
-                        name=df["name"][row_number],
+                        name=str(df["name"][row_number]),
                         items=items,
                         default=df["default"][row_number],
                         ordered=df["ordered"][row_number],
@@ -231,7 +232,18 @@ class DataFrameRun(Run):
     @staticmethod
     def _extract_numeric_distribution(
         df: pd.DataFrame, row_number: int, path: Path
-    ) -> ConfigSpace.Distribution:
+    ) -> Union[
+        ConfigSpace.distributions.Uniform,
+        ConfigSpace.distributions.Normal,
+        ConfigSpace.distributions.Beta,
+        None,
+    ]:
+        distribution: Union[
+            ConfigSpace.distributions.Uniform,
+            ConfigSpace.distributions.Normal,
+            ConfigSpace.distributions.Beta,
+            None,
+        ] = None
         if df["type"][row_number] == "float" or type(df["type"][row_number]) == "integer":
             if "distribution" in df.columns and df["distribution"][row_number] is not None:
                 if df["distribution"][row_number] == "normal":
@@ -272,7 +284,7 @@ class DataFrameRun(Run):
         ]
         return entries
 
-    def load_trials(self, path: Path, configspace: ConfigSpace) -> None:
+    def load_trials(self, path: Path, configspace: ConfigSpace.ConfigurationSpace) -> None:
         """
         Load the trials of the run.
 
@@ -313,7 +325,7 @@ class DataFrameRun(Run):
 
     @staticmethod
     def _extract_costs(data: pd.Series) -> Union[List[float], float]:
-        costs_metrics = [index for index in data.index if index.startswith("cost_")]
+        costs_metrics = [index for index in data.index if index.startswith("metric:")]
         return list([float(x) for x in data[costs_metrics]])
 
     @staticmethod
@@ -340,7 +352,9 @@ class DataFrameRun(Run):
         }
 
     @staticmethod
-    def _extract_additional(data: pd.Series, configspace: ConfigSpace) -> Dict[str, Any]:
+    def _extract_additional(
+        data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
+    ) -> Dict[str, Any]:
         hyperparameters = list(configspace.keys())
         costs_metrics = [index for index in data.index if index.startswith("cost_")]
         budgets = ["budget"]
