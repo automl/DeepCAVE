@@ -17,9 +17,8 @@ from pathlib import Path
 import ConfigSpace
 import jsonlines
 import numpy as np
-from ConfigSpace.configuration_space import Configuration
+from ConfigSpace.configuration_space import Configuration, ConfigurationSpace
 from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
-from ConfigSpace.read_and_write import json as cs_json
 
 from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
@@ -353,7 +352,7 @@ class Run(AbstractRun, ABC):
         self.path = Path(path)
 
         # Save configspace
-        self.configspace_fn.write_text(cs_json.write(self.configspace))
+        self.configspace.to_json(self.configspace_fn)
 
         # Save meta data (could be changed)
         self.meta_fn.write_text(json.dumps(self.meta, indent=4))
@@ -420,7 +419,7 @@ class Run(AbstractRun, ABC):
         self.meta = json.loads(self.meta_fn.read_text())
 
         # Load configspace
-        self.configspace = cs_json.read(self.configspace_fn.read_text())
+        self.configspace = ConfigurationSpace.from_json(self.configspace_fn)
 
         # Load configs
         configs = json.loads(self.configs_fn.read_text())

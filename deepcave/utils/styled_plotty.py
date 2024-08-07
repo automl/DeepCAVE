@@ -524,11 +524,10 @@ def generate_config_code(register: Callable, variables: List[str]) -> List[Compo
     """
     code = """
     from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
-    from ConfigSpace.read_and_write import cs_json
 
     # Create configspace
-    with open({{path}}, 'r') as f:
-        cs = cs_json.read(f.read())
+    cs = ConfigurationSpace.from_json({{path}})
+
 
     # Create config
     values = {{config_dict}}

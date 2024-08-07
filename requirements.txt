@@ -15,7 +15,7 @@ sympy>=1.12
 requests>=2.31.0
 
 # AutoML packages
-ConfigSpace==1.1.4
+ConfigSpace==1.2.0
 pyrfr>=0.9.0
 hpbandster==0.7.4
 
