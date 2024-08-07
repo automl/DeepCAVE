@@ -14,6 +14,7 @@ Displaying Data with Plugins
    parallel_coordinates
    budget_correlation
    importances
+   ablation_paths
    partial_dependencies
    symbolic_explanations
 

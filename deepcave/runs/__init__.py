@@ -875,9 +875,12 @@ class AbstractRun(ABC):
         selected_ids: Optional[List[int]] = None,
     ) -> Tuple[Configuration, float]:
         """
-        Return the incumbent with its normalized objective value.
+        Return the incumbent with its objective value (merged obj value for multiple objectives).
 
-        The incumbent is the configuration with the lowest normalized objective value.
+        The incumbent is the configuration with the
+            lowest objective value in case of objective.optimize == "lower" (or merged objectives)
+            and
+            highest objective value in case of objective.optimize == "upper".
 
         Optionally, only configurations which were evaluated on the passed budget, seed,
         and stati are considered.
@@ -899,7 +902,7 @@ class AbstractRun(ABC):
         Returns
         -------
         Tuple[Configuration, float]
-            Incumbent with its normalized cost.
+            Incumbent with its cost.
 
         Raises
         ------
