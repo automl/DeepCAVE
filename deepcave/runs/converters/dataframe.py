@@ -10,8 +10,8 @@ This module provides utilities to create a Run object based on a DataFrame repre
 
 from typing import Any, Dict, List, Optional, Union
 
-import copy
 import os
+import re
 import warnings
 from pathlib import Path
 
@@ -91,14 +91,16 @@ class DataFrameRun(Run):
         path : Path, optional
             The path to the run.
         """
-        metadata, objectives = DataFrameRun.load_metadata(path)
+        # extract name based on last part of path
+        name = path.stem
+
+        objectives = DataFrameRun.load_objectives(path)
         configspace = DataFrameRun.load_configspace(path)
 
         run = DataFrameRun(
-            name=metadata["name"],
+            name=name,
             configspace=configspace,
             objectives=objectives,
-            meta=metadata,
             path=path,
         )
         run.load_trials(path, configspace)
@@ -124,28 +126,43 @@ class DataFrameRun(Run):
         return file_to_hash(self.path / "trials.csv")
 
     @staticmethod
-    def load_metadata(path: Path) -> tuple[Dict[str, Any], list[Objective]]:
+    def load_objectives(path: Path) -> list[Objective]:
         """
-        Load the metadata of the run.
+        Load the objectives of the run from the trials.csv file.
+
+        This method reads the trials.csv file and extracts the objectives from the column names.
+        The objectives are expected in format `metric:<name> [<lower>, <upper>] (<maximize>)`.
 
         Returns
         -------
         pd.DataFrame
             The metadata of the run.
         """
-        if Path(os.path.join(path, "metadata.csv")).exists():
-            metadata = pd.read_csv(os.path.join(path, "metadata.csv"))
-            metadata = dict(metadata.iloc[0])
-        else:
-            metadata = {}
+        objectiv_list = []
 
-        objectives = []
-        for key, value in copy.deepcopy(metadata).items():
-            if key.lower().startswith("objective_"):
-                objectives.append(Objective(value))
-                del metadata[key]
+        trials = pd.read_csv(os.path.join(path, "trials.csv"))
 
-        return metadata, objectives
+        for column in trials.columns:
+            if column.startswith("metric"):
+                match = re.match(
+                    r"metric:(\w+) \[(-?\d+\.?\d*|[-+]inf), (-?\d+\.?\d*|[-+]inf)\] \((\w+)\)",
+                    column,
+                )
+                assert match is not None
+                metric_name = match.group(1)
+                lower = float(match.group(2))
+                upper = float(match.group(3))
+                maximize = match.group(4) == "maximize"
+
+                objectiv_list.append(
+                    Objective(
+                        name=metric_name,
+                        lower=lower,
+                        upper=upper,
+                        optimize="upper" if maximize else "lower",
+                    )
+                )
+        return objectiv_list
 
     @staticmethod
     def load_configspace(path: Path) -> ConfigSpace.ConfigurationSpace:

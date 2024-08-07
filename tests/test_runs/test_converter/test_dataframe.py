@@ -14,16 +14,25 @@ class TestDataframeConverter(unittest.TestCase):
     def setUp(self) -> None:
         return pd.set_option("display.max_columns", None)
 
-    def test_load_metadata(self):
-        df = pd.DataFrame({"value_1": [1], "value_2": ["2b"], "value_3": [True]})
+    def test_load_objectives(self):
+        df = pd.DataFrame(
+            {
+                "metric:accuracy [0.0, 1.0] (maximize)": [0, 1],
+                "metric:loss [0.0, 1.0] (minimize)": [1, 0],
+                "other": [1, 2],
+            }
+        )
 
-        expected_metadata = {"value_1": 1, "value_2": "2b", "value_3": True}
+        expected_objectives = [
+            Objective("accuracy", lower=0.0, upper=1.0, optimize="upper"),
+            Objective("loss", lower=0.0, upper=1.0, optimize="lower"),
+        ]
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            df.to_csv(os.path.join(tmpdirname, "metadata.csv"), index=False)
+            df.to_csv(os.path.join(tmpdirname, "trials.csv"), index=False)
 
-            metadata, _ = DataFrameRun.load_metadata(tmpdirname)
-            self.assertDictEqual(metadata, expected_metadata)
+            objectives = DataFrameRun.load_objectives(tmpdirname)
+            self.assertListEqual(objectives, expected_objectives)
 
     def test_load_configspace(self):
         # TODO Make this a more extensive test
