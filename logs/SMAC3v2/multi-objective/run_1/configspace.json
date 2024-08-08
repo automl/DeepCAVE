@@ -1,17 +1,1 @@
-{
-  "hyperparameters": [
-    {
-      "name": "x",
-      "type": "uniform_float",
-      "log": false,
-      "lower": -2.0,
-      "upper": 2.0,
-      "default": 0.0,
-      "q": null
-    }
-  ],
-  "conditions": [],
-  "forbiddens": [],
-  "python_module_version": "0.6.1",
-  "json_format_version": 0.4
-}
+{"name": null, "hyperparameters": [{"type": "uniform_float", "name": "x", "lower": -2.0, "upper": 2.0, "default_value": 0.0, "log": false, "meta": null}], "conditions": [], "forbiddens": [], "python_module_version": "1.2.0", "format_version": 0.4}

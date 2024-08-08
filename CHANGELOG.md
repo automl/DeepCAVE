@@ -3,6 +3,10 @@
 ## Converters
 - Add support for AMLTK.
 
+## Version-Updates
+- ConfigSpace from 0.6.1 to 1.2.0
+- Numpy from 1.26.4 to 2.0.1
+
 ## Ablation Paths
 - Added ablation paths as a plugin.
 - Added ablation as a evaluator to use for the plugin.

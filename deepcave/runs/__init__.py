@@ -25,6 +25,7 @@ from ConfigSpace import (
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
+from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 
 from deepcave.constants import (
     COMBINED_BUDGET,
@@ -38,6 +39,7 @@ from deepcave.runs.objective import Objective
 from deepcave.runs.status import Status
 from deepcave.runs.trial import Trial
 from deepcave.utils.logs import get_logger
+from deepcave.utils.util import config_to_tuple
 
 
 class AbstractRun(ABC):
@@ -60,6 +62,8 @@ class AbstractRun(ABC):
         The configuration space of the run.
     configs: Dict[int, Configuration]
         Contains the configurations.
+    config_id_mapping: Dict[Tuple, int]
+        Maps configuration tuples to configuration ids.
     origins: Dict[int, str]
         The origin of the configuration.
     models: Dict[int, Optional[Union[str, "torch.nn.Module"]]]
@@ -91,6 +95,7 @@ class AbstractRun(ABC):
         self.meta: Dict[str, Any] = {}
         self.configspace: ConfigSpace.ConfigurationSpace
         self.configs: Dict[int, Union[Configuration, Dict[Any, Any]]] = {}
+        self.config_id_mapping: Dict[Tuple, int] = {}
         self.origins: Dict[int, Optional[str]] = {}
         self.models: Dict[  # type: ignore
             int, Optional[Union[str, "torch.nn.Module"]]  # noqa: F821
@@ -481,15 +486,17 @@ class AbstractRun(ABC):
         Optional[int]
             The configuration id.
         """
+        # Convert the input configuration to a tuple
         if isinstance(config, Configuration):
             config = config.get_dictionary()
+        # Use same rounding as ConfigSpace does
+        input_config_tuple = config_to_tuple(config, ROUND_PLACES)
 
-        # Find out config id
-        for id, c in self.configs.items():
-            if c == config:
-                return id
-
-        return None
+        # Check if the input configuration tuple exists in the config id mapping
+        if input_config_tuple in self.config_id_mapping:
+            return self.config_id_mapping[input_config_tuple]
+        else:
+            return None
 
     def get_num_configs(
         self, budget: Optional[Union[int, float]] = None, seed: Optional[int] = None

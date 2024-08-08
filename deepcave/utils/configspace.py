@@ -13,6 +13,7 @@ from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
     Constant,
     IntegerHyperparameter,
+    NumericalHyperparameter,
     OrdinalHyperparameter,
 )
 from ConfigSpace.util import deactivate_inactive_hyperparameters
@@ -37,9 +38,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
     while True:
         config = {}
         # Iterates over the hyperparameters to get considered values
-        for hp_name, hp in zip(
-            configspace.get_hyperparameter_names(), configspace.get_hyperparameters()
-        ):
+        for hp_name, hp in configspace.items():
             if isinstance(hp, CategoricalHyperparameter):
                 borders = list(hp.choices)
             elif isinstance(hp, Constant):
@@ -47,6 +46,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
             elif isinstance(hp, OrdinalHyperparameter):
                 borders = [hp.sequence[0], hp.sequence[-1]]
             else:
+                assert isinstance(hp, NumericalHyperparameter)
                 borders = [hp.lower, hp.upper]
 
             # Get a random choice
@@ -55,7 +55,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
 
         try:
             configuration = deactivate_inactive_hyperparameters(config, configspace)
-            configuration.is_valid_configuration()
+            configuration.check_valid_configuration()
         except Exception:
             continue
 
@@ -94,9 +94,7 @@ def sample_random_config(
         config_dict = {}
 
         # Iterates over the hyperparameters to get considered values
-        for hp_name, hp in zip(
-            configspace.get_hyperparameter_names(), configspace.get_hyperparameters()
-        ):
+        for hp_name, hp in configspace.items():
             if isinstance(hp, CategoricalHyperparameter):
                 values = list(hp.choices)
             elif isinstance(hp, Constant):
@@ -104,6 +102,7 @@ def sample_random_config(
             elif isinstance(hp, OrdinalHyperparameter):
                 values = list(hp.sequence)
             else:
+                assert isinstance(hp, NumericalHyperparameter)
                 if hp.log:
                     values = []
                     value = hp.lower
@@ -125,7 +124,7 @@ def sample_random_config(
 
         try:
             configuration = deactivate_inactive_hyperparameters(config_dict, configspace)
-            configuration.is_valid_configuration()
+            configuration.check_valid_configuration()
         except Exception:
             continue
 

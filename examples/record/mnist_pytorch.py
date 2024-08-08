@@ -185,7 +185,7 @@ def get_configspace(seed):
     num_neurons_layer1 = UniformIntegerHyperparameter(name="num_neurons_layer1", lower=5, upper=100)
     num_neurons_layer2 = UniformIntegerHyperparameter(name="num_neurons_layer2", lower=5, upper=100)
 
-    configspace.add_hyperparameters(
+    configspace.add(
         [
             model,
             activation,

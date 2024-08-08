@@ -131,7 +131,7 @@ class Footprint:
         data = self.run.get_encoded_data(
             objective, budget, statuses=Status.SUCCESS, specific=False, include_config_ids=True
         )
-        hp_names = self.run.configspace.get_hyperparameter_names()
+        hp_names = list(self.run.configspace.keys())
 
         # Make numpy arrays
         X = data[hp_names].to_numpy()
