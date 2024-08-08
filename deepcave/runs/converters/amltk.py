@@ -10,9 +10,7 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
 
 from typing import Union
 
-import pickle
 import re
-from io import StringIO
 from pathlib import Path
 
 import numpy as np
@@ -95,9 +93,7 @@ class AMLTKRun(Run):
         path = Path(path)
 
         # Read configspace
-        with open(path / "configspace.json", "rb") as f:
-            json_string = pickle.load(f)
-        configspace = ConfigurationSpace.from_json(StringIO(json_string))
+        configspace = ConfigurationSpace.from_json(path / "configspace.json")
 
         history = pd.read_parquet(path / "history.parquet")
 
