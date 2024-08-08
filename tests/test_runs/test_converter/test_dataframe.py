@@ -4,11 +4,13 @@ import unittest
 from pathlib import Path
 
 import ConfigSpace
+import numpy as np
 import pandas as pd
 
 from deepcave.runs import Status
 from deepcave.runs.converters.dataframe import DataFrameRun
 from deepcave.runs.objective import Objective
+from deepcave.runs.trial import Trial
 
 
 class TestDataframeConverter(unittest.TestCase):
@@ -18,8 +20,8 @@ class TestDataframeConverter(unittest.TestCase):
     def test_load_objectives(self):
         df = pd.DataFrame(
             {
-                "metric:accuracy [0.0, 1.0] (maximize)": [0, 1],
-                "metric:loss [0.0, 1.0] (minimize)": [1, 0],
+                "metric:accuracy 0.0;1.0 (maximize)": [0, 1],
+                "metric:loss 0.0;1.0 (minimize)": [1, 0],
                 "other": [1, 2],
             }
         )
@@ -94,8 +96,8 @@ class TestDataframeConverter(unittest.TestCase):
                 "config_id": [0, 1],
                 "budget": [1, 2],
                 "seed": [-1, -1],
-                "metric:normal [0.0, 1.0] (maximize)": [1, 2],
-                "metric:beta [0.0, 1.0] (maximize)": [1, 2],
+                "metric:normal 0.0;1.0 (maximize)": [1, 2],
+                "metric:beta 0.0;1.0 (maximize)": [1, 2],
                 "start_time": [0, 1],
                 "end_time": [1, 2],
                 "status": ["success", "timeout"],
@@ -106,34 +108,36 @@ class TestDataframeConverter(unittest.TestCase):
         )
 
         expected_trials = [
-            {
-                "config_id": 0,
-                "costs": [1, 1],
-                "cost_names": ["normal", "beta"],
-                "budget": 1,
-                "seed": -1,
-                "run_meta": {
-                    "start_time": 0,
-                    "end_time": 1,
-                    "status": Status.SUCCESS,
+            Trial(
+                config_id=0,
+                costs=[1.0, 1.0],
+                budget=1,
+                seed=-1,
+                start_time=np.int64(0),
+                end_time=np.int64(1),
+                status=Status.SUCCESS,
+                additional={
+                    "seed": np.int64(-1),
+                    "metric:normal 0.0;1.0 (maximize)": np.int64(1),
+                    "metric:beta 0.0;1.0 (maximize)": np.int64(1),
+                    "additional": "Baum",
                 },
-                "config": ConfigSpace.Configuration(configspace, values={"a": 0.2, "b": "a"}),
-                "additional": {"additional": "Baum"},
-            },
-            {
-                "config_id": 1,
-                "costs": [2, 2],
-                "cost_names": ["normal", "beta"],
-                "budget": 2,
-                "seed": -1,
-                "run_meta": {
-                    "start_time": 1,
-                    "end_time": 2,
-                    "status": Status.TIMEOUT,
+            ),
+            Trial(
+                config_id=1,
+                costs=[2.0, 2.0],
+                budget=2,
+                seed=-1,
+                start_time=np.int64(1),
+                end_time=np.int64(2),
+                status=Status.TIMEOUT,
+                additional={
+                    "seed": np.int64(-1),
+                    "metric:normal 0.0;1.0 (maximize)": np.int64(2),
+                    "metric:beta 0.0;1.0 (maximize)": np.int64(2),
+                    "additional": "Haus",
                 },
-                "config": ConfigSpace.Configuration(configspace, values={"a": 0.4, "b": "b"}),
-                "additional": {"additional": "Haus"},
-            },
+            ),
         ]
 
         objectives = [Objective("normal"), Objective("beta")]
@@ -149,12 +153,6 @@ class TestDataframeConverter(unittest.TestCase):
 
     def test_from_path(self):
         with tempfile.TemporaryDirectory() as tmpdirname:
-            metadata_path = Path(os.path.join(tmpdirname, "metadata.csv"))
-            metadata = pd.DataFrame(
-                {"name": ["test_run"], "objective_0": ["Cost_0"], "objective_1": ["Cost_1"]}
-            )
-            metadata.to_csv(metadata_path, index=False)
-
             configspace_path = os.path.join(tmpdirname, "configspace.csv")
             configspace = pd.DataFrame(
                 {
@@ -182,8 +180,8 @@ class TestDataframeConverter(unittest.TestCase):
                     "config_id": [0, 1],
                     "budget": [1, 2],
                     "seed": [-1, -1],
-                    "metric:normal [0.0, 1.0] (maximize)": [1, 2],
-                    "metric:beta [0.0, 1.0] (maximize)": [1, 2],
+                    "metric:normal 0.0;1.0 (maximize)": [1, 2],
+                    "metric:beta 0.0;1.0 (maximize)": [1, 2],
                     "start_time": [0, 1],
                     "end_time": [1, 2],
                     "status": ["success", "timeout"],

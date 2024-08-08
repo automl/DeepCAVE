@@ -1,4 +1,4 @@
-config_id,alpha,batch_size,depth,learning_rate_init,cost_standard,status,start_time,end_time,budget,seed,additional
+config_id,alpha,batch_size,depth,learning_rate_init,metric:normal [0.0; 1.0] (maximize),status,start_time,end_time,budget,seed,additional
 0,1.3646716470095907e-06,50,1,0.0001145199593038774,0.2152466367713004,success,0,1,1,-1,
 1,0.07654259389007832,10,2,0.006273080002552674,0.21973094170403584,success,1,2,1,-1,
 2,0.0005027533412617669,115,1,0.00295471450409257,0.2017937219730942,success,2,3,1,-1,

@@ -9,11 +9,11 @@ Note that other plugins use the same interfaces and can be used in the same fash
 from pathlib import Path
 
 from deepcave.plugins.hyperparameter.importances import Importances
-from deepcave.runs.converters.deepcave import DeepCAVERun
+from deepcave.runs.converters.dataframe import DataFrameRun
 
 if __name__ == "__main__":
     # Instantiate the run
-    run = DeepCAVERun.from_path(Path("logs/DeepCAVE/minimal/run_2"))
+    run = DataFrameRun.from_path(Path("logs/DataFrame/run_1"))
 
     objective_id = run.get_objective_ids()[0]
     budget_ids = run.get_budget_ids()

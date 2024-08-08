@@ -146,7 +146,7 @@ class DataFrameRun(Run):
         for column in trials.columns:
             if column.startswith("metric"):
                 match = re.match(
-                    r"metric:(\w+) \[(-?\d+\.?\d*|[-+]inf), (-?\d+\.?\d*|[-+]inf)\] \((\w+)\)",
+                    r"metric:(\w+) \[(-?\d+\.?\d*|[-+]inf); (-?\d+\.?\d*|[-+]inf)\] \((\w+)\)",
                     column,
                 )
                 assert match is not None
