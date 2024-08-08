@@ -1,5 +1,5 @@
-Plugins
-=======
+Displaying Data with Plugins
+============================
 
 .. toctree::
    :hidden:
@@ -14,6 +14,7 @@ Plugins
    parallel_coordinates
    budget_correlation
    importances
+   ablation_paths
    partial_dependencies
    symbolic_explanations
 

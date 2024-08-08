@@ -1,9 +1,16 @@
+#  noqa: D400
+"""
+# Data Structures
+
+This module can be used for updating one dictionary with another dictionary inplace.
+"""
+
 from typing import Dict
 
 
 def update_dict(a: Dict[str, Dict], b: Dict[str, Dict]) -> None:
     """
-    Updates dictionary a with dictionary b inplace.
+    Update dictionary a with dictionary b inplace.
 
     Parameters
     ----------

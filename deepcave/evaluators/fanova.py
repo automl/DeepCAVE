@@ -1,4 +1,16 @@
-from typing import Dict, List, Optional, Tuple, Union
+#  noqa: D400
+"""
+# fANOVA
+
+This module provides a tool for assessing the importance of an algorithms Hyperparameters.
+
+Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.
+
+## Classes
+    - fANOVA: Calculate and provide midpoints and sizes.
+"""
+
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import itertools as it
 
@@ -8,12 +20,27 @@ from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
+from deepcave.utils.logs import get_logger
 
 
 class fANOVA:
     """
-    Calculate and provide midpoints and sizes from the forest's
-    split values in order to get the marginals.
+    Calculate and provide midpoints and sizes.
+
+    They are generated from the forest's split values in order to get the marginals.
+
+    Properties
+    ----------
+    run : AbstractRun
+        The Abstract Run used for the calculation.
+    cs : ConfigurationSpace
+        The configuration space of the run.
+    hps : List[Hyperparameters]
+        The Hyperparameters of the configuration space.
+    hp_names : List[str]
+        The corresponding names of the Hyperparameters.
+    n_trees : int
+        The number of trees.
     """
 
     def __init__(self, run: AbstractRun):
@@ -23,7 +50,8 @@ class fANOVA:
         self.run = run
         self.cs = run.configspace
         self.hps = self.cs.get_hyperparameters()
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
+        self.logger = get_logger(self.__class__.__name__)
 
     def calculate(
         self,
@@ -33,7 +61,7 @@ class fANOVA:
         seed: int = 0,
     ) -> None:
         """
-        Get the data with respect to budget and trains the forest on the encoded data.
+        Get the data with respect to budget and train the forest on the encoded data.
 
         Note
         ----
@@ -42,7 +70,7 @@ class fANOVA:
         Parameters
         ----------
         objectives : Optional[Union[Objective, List[Objective]]], optional
-            Considerd objectives. By default None. If None, all objectives are considered.
+            Considered objectives. By default None. If None, all objectives are considered.
         budget : Optional[Union[int, float]], optional
             Considered budget. By default None. If None, the highest budget is chosen.
         n_trees : int, optional
@@ -54,7 +82,7 @@ class fANOVA:
             objectives = self.run.get_objectives()
 
         if budget is None:
-            budget = self.get_highest_budget()
+            budget = self.run.get_highest_budget()
 
         self.n_trees = n_trees
 
@@ -74,7 +102,7 @@ class fANOVA:
         self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
     ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
-        Returns the importance scores from the passed hyperparameter names.
+        Return the importance scores from the passed Hyperparameter names.
 
         Warning
         -------
@@ -83,17 +111,17 @@ class fANOVA:
         Parameters
         ----------
         hp_names : Optional[List[str]]
-            Selected hyperparameter names to get the importance scores from. If None, all
-            hyperparameters of the configspace are used.
+            Selected Hyperparameter names to get the importance scores from. If None, all
+            Hyperparameters of the configuration space are used.
         depth : int, optional
             How often dimensions should be combined. By default 1.
         sort : bool, optional
-            Whether the hyperparameters should be sorted by importance. By default True.
+            Whether the Hyperparameters should be sorted by importance. By default True.
 
         Returns
         -------
         Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]
-            Dictionary with hyperparameter names and the corresbonding importance scores.
+            Dictionary with Hyperparameter names and the corresponding importance scores.
             The values are tuples of the form (mean individual, var individual, mean total,
             var total). Note that individual and total are the same if depth is 1.
 
@@ -112,14 +140,13 @@ class fANOVA:
         # Calculate the marginals
         vu_individual, vu_total = self._model.compute_marginals(hp_ids, depth)
 
-        importances = {}
+        importances: Dict[Tuple[Any, ...], Tuple[float, float, float, float]] = {}
         for k in range(1, len(hp_ids) + 1):
             if k > depth:
                 break
 
             for sub_hp_ids in it.combinations(hp_ids, k):
                 sub_hp_ids = tuple(sub_hp_ids)
-                importances[sub_hp_ids] = {}
 
                 # clean here to catch zero variance in a trees
                 non_zero_idx = np.nonzero(
@@ -127,7 +154,14 @@ class fANOVA:
                 )
 
                 if len(non_zero_idx[0]) == 0:
-                    raise RuntimeError("Encountered zero total variance in all trees.")
+                    self.logger.warning("Encountered zero total variance in all trees.")
+                    importances[sub_hp_ids] = (
+                        np.nan,
+                        np.nan,
+                        np.nan,
+                        np.nan,
+                    )
+                    continue
 
                 fractions_total = np.array(
                     [
@@ -155,23 +189,24 @@ class fANOVA:
                 k: v for k, v in sorted(importances.items(), key=lambda item: item[1][2])
             }
 
-        # We want to replace the ids with hyperparameter names again
+        # The ids get replaced with hyperparameter names again
         all_hp_names = self.cs.get_hyperparameter_names()
-        importances_ = {}
-        for hp_ids, values in importances.items():
-            hp_names = [all_hp_names[hp_id] for hp_id in hp_ids]
+        importances_: Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]] = {}
+        for hp_ids_importances, values in importances.items():
+            hp_names = [all_hp_names[hp_id] for hp_id in hp_ids_importances]
+            hp_names_key: Union[Tuple[str, ...], str]
             if len(hp_names) == 1:
-                hp_names = hp_names[0]
+                hp_names_key = hp_names[0]
             else:
-                hp_names = tuple(hp_names)
-            importances_[hp_names] = values
+                hp_names_key = tuple(hp_names)
+            importances_[hp_names_key] = values
 
         return importances_
 
     '''
     def marginal_mean_variance_for_values(self, dimlist, values_to_predict):
         """
-        Returns the marginal of selected parameters for specific values
+        Return the marginal of selected parameters for specific values
 
         Parameters
         ----------
@@ -194,7 +229,7 @@ class fANOVA:
 
     def get_most_important_pairwise_marginals(self, params=None, n=10):
         """
-        Returns the n most important pairwise marginals from the whole ConfigSpace.
+        Return the n most important pairwise marginals from the whole ConfigSpace.
 
         Parameters
         ----------
@@ -241,7 +276,7 @@ class fANOVA:
 
     def get_triple_marginals(self, params=None):
         """
-        Returns the n most important pairwise marginals from the whole ConfigSpace
+        Return the n most important pairwise marginals from the whole ConfigSpace
 
         Parameters
         ----------

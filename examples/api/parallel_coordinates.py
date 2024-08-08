@@ -20,7 +20,7 @@ if __name__ == "__main__":
     # Instantiate the plugin
     plugin = ParallelCoordinates()
     inputs = plugin.generate_inputs(
-        hyperparameter_names=run.configspace.get_hyperparameter_names(),
+        hyperparameter_names=list(run.configspace.keys()),
         objective_id=objective_id,
         budget_id=budget_id,
         show_important_only=True,
@@ -34,5 +34,5 @@ if __name__ == "__main__":
     # Finally, you can load the figure. Here, the filter variables play a role.
     # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
     figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
-    figure.write_image("examples/api/parallel_coordinates.png", scale=2.)
+    figure.write_image("examples/api/parallel_coordinates.png", scale=2.0)
     # figure.show()

@@ -1,9 +1,5 @@
 import unittest
 
-import numpy as np
-import pytest
-
-from deepcave.constants import COMBINED_COST_NAME
 from deepcave.evaluators.fanova import fANOVA as Evaluator
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac3v1 import SMAC3v1Run
@@ -13,7 +9,7 @@ class TestFanova(unittest.TestCase):
     def setUp(self):
         # Initiate run here
         self.run: AbstractRun = SMAC3v1Run.from_path("logs/SMAC3v1/mlp/run_1")
-        self.hp_names = self.run.configspace.get_hyperparameter_names()
+        self.hp_names = list(self.run.configspace.keys())
         self.evaluator = Evaluator(self.run)
 
     def test(self):

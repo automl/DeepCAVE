@@ -1,3 +1,13 @@
+#  noqa: D400
+"""
+# Run
+
+This module provides utilities to create a new run and get its attributes.
+
+## Classes
+    - Run: Create a new run.
+"""
+
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Union
 
@@ -7,37 +17,48 @@ from pathlib import Path
 import ConfigSpace
 import jsonlines
 import numpy as np
-from ConfigSpace.configuration_space import Configuration
-from ConfigSpace.read_and_write import json as cs_json
+from ConfigSpace.configuration_space import Configuration, ConfigurationSpace
+from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 
 from deepcave.runs import AbstractRun, Status, Trial
 from deepcave.runs.objective import Objective
 from deepcave.utils.files import make_dirs
 from deepcave.utils.hash import string_to_hash
+from deepcave.utils.util import config_to_tuple
 
 
 class Run(AbstractRun, ABC):
     """
-    Creates a new run.
+    Create a new run and get its attributes.
+
     If path is given, runs are loaded from the path.
 
-    Parameters
+    Properties
     ----------
-    name : str
-        Name of the run.
-    configspace : ConfigSpace, optional
-        Configuration space of the run. Should be None if `path` is used. By default None.
-    objectives : Union[Objective, List[Objective]], optional
-        Objectives of the run. Should be None if `path` is used. By default None
-    meta : Dict[str, Any], optional
-        Meta data of the run. Should be None if `path` is used. By default None.
-    path : Optional[Union[str, Path]], optional
-        If a path is specified, the run is loaded from there. By default None.
-
-    Raises
-    ------
-    RuntimeError
-        If no configuration space is provided or found.
+    configspace : ConfigurationSpace
+        The configuration space of the run.
+    path : Optional[Union[str, Path]]
+        The path of a run to be loaded.
+    meta : Dict[str, Any]
+        Contains serialized objectives and budgets.
+    prefix : str
+        The prefix for the id.
+    meta_fn : Path
+        The path to the meta data.
+    configspace_fn : Path
+        The path to the configuration space file.
+    configs_fn : Path
+        The path to the configurations file.
+    origins_fn : Path
+        The path to the origins file.
+    history_fn : Path
+        The path to the history file.
+    models_dir : Path
+        The path to the models directory.
+    configs : Dict[int, Configuration]
+        Containing the configurations.
+    models : Dict[int, Optional[Union[str, "torch.nn.Module"]]]
+        Contains the models.
     """
 
     prefix = "run"
@@ -46,10 +67,10 @@ class Run(AbstractRun, ABC):
     def __init__(
         self,
         name: str,
-        configspace: ConfigSpace = None,
-        objectives: Union[Objective, List[Objective]] = None,
-        meta: Dict[str, Any] = None,
-        path: Optional[Union[str, Path]] = None,
+        configspace: Optional[ConfigSpace.ConfigurationSpace] = None,
+        objectives: Optional[Union[Objective, List[Objective]]] = None,
+        meta: Optional[Dict[str, Any]] = None,
+        path: Optional[Path] = None,
     ) -> None:
         super(Run, self).__init__(name)
 
@@ -60,7 +81,8 @@ class Run(AbstractRun, ABC):
 
         # Reset and load configspace/path
         self.reset()
-        self.configspace = configspace
+        if configspace is not None:
+            self.configspace = configspace
         self.path = path
         if self.path is not None:
             self.load()
@@ -81,7 +103,7 @@ class Run(AbstractRun, ABC):
             serialized_objectives += [objective.to_json()]
 
         # Meta
-        self.meta = {"objectives": serialized_objectives, "budgets": []}
+        self.meta = {"objectives": serialized_objectives, "budgets": [], "seeds": []}
         self.meta.update(meta)
 
     @classmethod
@@ -89,23 +111,53 @@ class Run(AbstractRun, ABC):
     def from_path(cls, path: Path) -> "Run":
         """
         Based on a path, return a new Run object.
+
+        Parameters
+        ----------
+        path : Path
+            The path to get the run from.
+
+        Returns
+        -------
+        "Run"
+            The run loaded from the path.
         """
         pass
 
     @property
     def id(self) -> str:
+        """
+        Get a hash as id.
+
+        Returns
+        -------
+        str
+            The hashed id.
+        """
         return string_to_hash(f"{self.prefix}:{self.path}")
 
     @property
     def path(self) -> Optional[Path]:
+        """
+        Return the path of the run if it exists.
+
+        Returns
+        -------
+        Optional[Path]
+            The path of the run.
+        """
         return self._path
 
     @path.setter
-    def path(self, value: Optional[Union[str, Path]]):
+    def path(self, value: Optional[Union[str, Path]]) -> None:
         """
-        If path is changed, also change the filenames of all created files.
-        """
+        Set the paths of the run and the JSON files.
 
+        Parameters
+        ----------
+        value : Optional[Union[str, Path]]
+            The path for the directory.
+        """
         if value is None:
             self._path = None
             return
@@ -122,7 +174,7 @@ class Run(AbstractRun, ABC):
 
     def exists(self) -> bool:
         """
-        Checks if the run exists based on the internal path.
+        Check if the run exists based on the internal path.
 
         Returns
         -------
@@ -147,17 +199,19 @@ class Run(AbstractRun, ABC):
         self,
         costs: Union[List[float], float],
         config: Union[Dict, Configuration],
+        seed: int,
         budget: float = np.inf,
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
-        origin: str = None,
-        model: Union[str, "torch.nn.Module"] = None,  # type: ignore
+        origin: Optional[str] = None,
+        model: Union[str, "torch.nn.Module"] = None,  # type: ignore # noqa: F821
         additional: Optional[Dict] = None,
     ) -> None:
         """
-        Adds a trial to the run.
-        If combination of config and budget already exists, it will be overwritten.
+        Add a trial to the run.
+
+        If combination of config, seed, and budget already exists, it will be overwritten.
         Not successful runs are added with `None` costs.
 
         Parameters
@@ -166,18 +220,22 @@ class Run(AbstractRun, ABC):
             Costs of the run. In case of multi-objective, a list of costs is expected.
         config : Union[Dict, Configuration]
             The corresponding configuration.
+        seed : int
+            Seed of the run.
+        budget : float, optional
+            Budget of the run. By default np.inf
         start_time : float, optional
-            Start time. By default 0.0
+            Start time. By default, 0.0
         end_time : float, optional
-            End time. By default 0.0
+            End time. By default, 0.0
         status : Status, optional
-            Status of the trial. By default Status.SUCCESS
+            Status of the trial. By default, Status.SUCCESS
         origin : str, optional
-            Origin of the trial. By default None
-        model : Union[str, &quot;torch.nn.Module&quot;], optional
-            Model of the trial. By default None
+            Origin of the trial. By default, None
+        model : Union[str, "torch.nn.Module"], optional
+            Model of the trial. By default, None
         additional : Optional[Dict], optional
-            Additional information of the trial. By default None.
+            Additional information of the trial. By default, None.
             Following information is used by DeepCAVE:
             * traceback
 
@@ -185,6 +243,8 @@ class Run(AbstractRun, ABC):
         ------
         RuntimeError
             If number of costs does not match number of objectives.
+        ValueError
+            If config id is None.
         """
         if additional is None:
             additional = {}
@@ -208,12 +268,12 @@ class Run(AbstractRun, ABC):
             # If cost is none, replace it later with the highest cost
             if cost is not None:
                 # Update bounds here
-                if not objective.lock_lower:
-                    if cost < objective.lower:  # type: ignore
+                if not objective.lock_lower and objective.lower is not None:
+                    if cost < objective.lower:
                         objective.lower = cost
 
-                if not objective.lock_upper:
-                    if cost > objective.upper:  # type: ignore
+                if not objective.lock_upper and objective.upper is not None:
+                    if cost > objective.upper:
                         objective.upper = cost
 
             updated_objectives += [objective.to_json()]
@@ -224,14 +284,20 @@ class Run(AbstractRun, ABC):
             config = config.get_dictionary()
 
         if config not in self.configs.values():
-            config_id = len(self.configs)
-            self.configs[config_id] = config
-            self.origins[config_id] = origin
+            config_id_len = len(self.configs)
+            self.configs[config_id_len] = config
+            self.origins[config_id_len] = origin
+            # Use same rounding as ConfigSpace does
+            self.config_id_mapping[config_to_tuple(config, ROUND_PLACES)] = config_id_len
 
         config_id = self.get_config_id(config)
+        if config_id is None:
+            raise ValueError("Config id is None.")
+
         trial = Trial(
             config_id=config_id,
             budget=budget,
+            seed=seed,
             costs=costs,
             start_time=np.round(start_time, 2),
             end_time=np.round(end_time, 2),
@@ -254,21 +320,39 @@ class Run(AbstractRun, ABC):
 
         self._update_highest_budget(config_id, budget, status)
 
+        # Update seeds
+        if seed not in self.meta["seeds"]:
+            self.meta["seeds"].append(seed)
+            self.meta["seeds"].sort()
+
         # Update models
-        # Problem: We don't want to have the model in the cache.
-        # Therefore, we first keep the model as it is,
+        # Problem: The model should not be in the cache.
+        # Therefore, first the model is kept as it is,
         # but remove it from the dict and save it to the disk later on.
         if model is not None:
             self.models[config_id] = model
 
-    def save(self, path: Optional[Union[str, Path]] = None):
+    def save(self, path: Union[str, Path]) -> None:
+        """
+        Save the run and its information.
+
+        Parameters
+        ----------
+        path : Optional[Union[str, Path]]
+            The path in which to save the trials.
+
+        Raises
+        ------
+        RuntimeError
+            If the path is not specified.
+        """
         if path is None:
             raise RuntimeError("Please specify a path to save the trials.")
 
         self.path = Path(path)
 
         # Save configspace
-        self.configspace_fn.write_text(cs_json.write(self.configspace))
+        self.configspace.to_json(self.configspace_fn)
 
         # Save meta data (could be changed)
         self.meta_fn.write_text(json.dumps(self.meta, indent=4))
@@ -286,7 +370,7 @@ class Run(AbstractRun, ABC):
 
         # Models
         if len(self.models) > 0:
-            # We import torch here because we don't want to have it as requirement.
+            # torch is imported here, because it is not wanted as requirement.
             import torch
 
             # Iterate over models and save them if they are a module.
@@ -305,6 +389,21 @@ class Run(AbstractRun, ABC):
                 del self.models[config_id]
 
     def load(self, path: Optional[Union[str, Path]] = None) -> None:
+        """
+        Load the run.
+
+        Parameters
+        ----------
+        path : Optional[Union[str, Path]], optional
+            The path where to load the run from.
+            Default is None.
+
+        Raises
+        ------
+        RuntimeError
+            If the path is None.
+            If the trials were not found.
+        """
         self.reset()
 
         if path is None and self.path is None:
@@ -320,7 +419,7 @@ class Run(AbstractRun, ABC):
         self.meta = json.loads(self.meta_fn.read_text())
 
         # Load configspace
-        self.configspace = cs_json.read(self.configspace_fn.read_text())
+        self.configspace = ConfigurationSpace.from_json(self.configspace_fn)
 
         # Load configs
         configs = json.loads(self.configs_fn.read_text())
@@ -330,6 +429,13 @@ class Run(AbstractRun, ABC):
         # Load origins
         origins = json.loads(self.origins_fn.read_text())
         self.origins = {int(k): v for k, v in origins.items()}
+
+        # Make sure there is a config_id_mapping
+        if not self.config_id_mapping:
+            for config_id, config in self.configs.items():
+                if isinstance(config, Configuration):
+                    config = config.get_dictionary()
+                self.config_id_mapping[config_to_tuple(config, ROUND_PLACES)] = config_id
 
         # Load history
         with jsonlines.open(self.history_fn) as f:

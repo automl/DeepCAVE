@@ -17,7 +17,7 @@ class TestRandomForestSurrogate(unittest.TestCase):
         sampler.sample(100)
 
         # Surrogate
-        self.surrogate = RandomForestSurrogate(self.cs)
+        self.surrogate = RandomForestSurrogate(self.cs, seed=42)
         self.surrogate.fit(sampler.X, sampler.y)
 
     def test_predict_config(self):

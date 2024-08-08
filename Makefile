@@ -2,7 +2,7 @@
 # are usually completed in github actions.
 
 SHELL := /bin/bash
-VERSION := 1.2
+VERSION := 1.3
 
 NAME := DeepCAVE
 PACKAGE_NAME := deepcave
@@ -49,6 +49,9 @@ install-dev:
 	$(PIP) install -e ".[dev]"
 	pre-commit install
 
+install-examples:
+	$(PIP) install -e ".[examples]"
+
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :
 	$(BLACK) ${EXAMPLES_DIR} --check || :
@@ -62,7 +65,7 @@ check-pydocstyle:
 	$(PYDOCSTYLE) ${SOURCE_DIR} || :
 
 check-mypy:
-	$(MYPY) ${SOURCE_DIR} || :
+	$(MYPY) --check-untyped-defs --install-types --non-interactive --ignore-missing-imports ${SOURCE_DIR} || :
 
 check-flake8:
 	$(FLAKE8) ${SOURCE_DIR} || :
@@ -120,7 +123,7 @@ publish: clean build
 	$(PYTHON) -m twine upload --repository testpypi ${DIST}/*
 	@echo
 	@echo "Test with the following:"
-	@echo "* Create a new virtual environment to install the uplaoded distribution into"
+	@echo "* Create a new virtual environment to install the uploaded distribution into"
 	@echo "* Run the following:"
 	@echo "--- pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ ${PACKAGE_NAME}==${VERSION}"
 	@echo

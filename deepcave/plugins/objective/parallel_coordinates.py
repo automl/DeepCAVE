@@ -1,3 +1,16 @@
+#  noqa: D400
+
+"""
+# ParallelCoordinates
+
+This module provides utilities for visualizing the parallel coordinates.
+
+## Classes
+    - ParallelCoordinates : Can be used for visualizing the parallel coordinates.
+"""
+
+from typing import Any, Callable, Dict, List
+
 from collections import defaultdict
 
 import dash_bootstrap_components as dbc
@@ -7,7 +20,7 @@ import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.constants import VALUE_RANGE
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.plugins.static import StaticPlugin
@@ -20,6 +33,8 @@ logger = get_logger(__name__)
 
 
 class ParallelCoordinates(StaticPlugin):
+    """Can be used for visualizing the parallel coordinates."""
+
     id = "parallel_coordinates"
     name = "Parallel Coordinates"
     icon = "far fa-map"
@@ -27,7 +42,21 @@ class ParallelCoordinates(StaticPlugin):
     help = "docs/plugins/parallel_coordinates.rst"
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to regsiter (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -45,8 +74,9 @@ class ParallelCoordinates(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
+                                "Budget refers to the multi-fidelity budget. "
                                 "Combined budget means that the trial on the highest evaluated"
-                                " budget is used.\n\n"
+                                " budget is used.  \n "
                                 "Note: Selecting combined budget might be misleading if a time"
                                 " objective is used. Often, higher budget take longer to evaluate,"
                                 " which might negatively influence the results."
@@ -79,7 +109,21 @@ class ParallelCoordinates(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layouts for the filter block.
+        """
         return [
             dbc.Row(
                 [
@@ -120,7 +164,19 @@ class ParallelCoordinates(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        So, if the plugin is called for the first time or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            Content to be filled.
+        """
         return {
             "show_important_only": {"options": get_select_options(binary=True), "value": "true"},
             "show_unsuccessful": {"options": get_select_options(binary=True), "value": "false"},
@@ -129,8 +185,28 @@ class ParallelCoordinates(StaticPlugin):
             "hide_hps": {"hidden": True},
         }
 
-    def load_dependency_inputs(self, run, _, inputs):
-        # Prepare objetives
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Work like 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned.
+        The returned dictionary will be merged with the inputs.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Current content of the inputs.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The dictionary with the changes.
+        """
+        # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -144,7 +220,7 @@ class ParallelCoordinates(StaticPlugin):
 
         # Prepare others
         n_hps = inputs["n_hps"]["value"]
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         if inputs["show_important_only"]["value"] == "true":
             hp_options = []
@@ -186,29 +262,99 @@ class ParallelCoordinates(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs : Dict[str, Any]
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            The serialized dictionary.
+        """
         budget = run.get_budget(inputs["budget_id"])
         objective = run.get_objective(inputs["objective_id"])
-        df = serialize(run.get_encoded_data(objective, budget))
-        result = {"df": df}
+        df = run.get_encoded_data(objective, budget)
+        df = df.groupby(df.columns.drop(objective.name).to_list(), as_index=False).mean()
+        df = serialize(df)
+        result: Dict[str, Any] = {"df": df}
 
         if inputs["show_important_only"]:
             # Let's run a quick fANOVA here
             evaluator = fANOVA(run)
             evaluator.calculate(objective, budget, n_trees=10, seed=0)
-            importances = evaluator.get_importances()
-            importances = {u: v[0] for u, v in importances.items()}
-            important_hp_names = sorted(importances, key=lambda key: importances[key], reverse=True)
+            importances_dict = evaluator.get_importances()
+            importances = {u: v[0] for u, v in importances_dict.items()}
+            important_hp_names = sorted(
+                importances, key=lambda key: importances[key], reverse=False
+            )
             result["important_hp_names"] = important_hp_names
 
         return result
 
     @staticmethod
-    def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+    def get_output_layout(register: Callable) -> dcc.Graph:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_output function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            The layouts for the output block.
+        """
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs) -> go.Figure:  # type: ignore
+        """
+        Read in the raw data and prepare them for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
+        or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            The inputs and filter values fromt the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        go.Figure
+            The output figure.
+        """
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
@@ -238,7 +384,7 @@ class ParallelCoordinates(StaticPlugin):
             if b:
                 objective_values += [value]
 
-        data = defaultdict(dict)
+        data: defaultdict = defaultdict(dict)
         for hp_name in hp_names:
             values = []
             for hp_v, objective_v in zip(df[hp_name].values, df[objective_name].values):
@@ -252,7 +398,7 @@ class ParallelCoordinates(StaticPlugin):
             data[hp_name]["label"] = hp_name
             data[hp_name]["range"] = VALUE_RANGE
 
-            hp = run.configspace.get_hyperparameter(hp_name)
+            hp = run.configspace[hp_name]
             tickvals, ticktext = get_hyperparameter_ticks(hp, ticks=4, include_nan=True)
 
             data[hp_name]["tickvals"] = tickvals
@@ -275,7 +421,10 @@ class ParallelCoordinates(StaticPlugin):
                 dimensions=list([d for d in data.values()]),
                 labelangle=45,
             ),
-            layout=dict(margin=dict(t=150, b=50, l=100, r=0)),
+            layout=dict(
+                margin=dict(t=150, b=50, l=100, r=0),
+                font=dict(size=config.FIGURE_FONT_SIZE),
+            ),
         )
         save_image(figure, "parallel_coordinates.pdf")
 

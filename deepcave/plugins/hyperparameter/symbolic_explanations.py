@@ -27,7 +27,7 @@ from dash import dcc, html
 from gplearn.genetic import SymbolicRegressor
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.hyperparameter.pdp import PartialDependencies
 from deepcave.plugins.static import StaticPlugin
@@ -89,8 +89,9 @@ class SymbolicExplanations(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
+                                "Budget refers to the multi-fidelity budget. "
                                 "Combined budget means that the trial on the highest"
-                                " evaluated budget is used.\n\n"
+                                " evaluated budget is used.  \n "
                                 "Note: Selecting combined budget might be misleading if"
                                 " a time objective is used. Often, higher budget take "
                                 " longer to evaluate, which might negatively influence "
@@ -145,7 +146,7 @@ class SymbolicExplanations(StaticPlugin):
                                     ),
                                     dcc.Slider(
                                         id=register("parsimony", "value", type=int),
-                                        marks=dict([i, str(10**i)] for i in range(-8, 1)),
+                                        marks=dict((i, str(10**i)) for i in range(-8, 1)),
                                         min=-8,
                                         max=0,
                                         step=1,
@@ -345,7 +346,7 @@ class SymbolicExplanations(StaticPlugin):
         RuntimeError
             If the objective is None.
         """
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
@@ -448,10 +449,10 @@ class SymbolicExplanations(StaticPlugin):
                 f"{objective.name} = "
                 f"{convert_symb(symb_model, n_decimals=3, hp_names=selected_hyperparameters)}"
             )
-        except:
+        except Exception as e:
             conv_expr = (
                 "Conversion of the expression failed. Please try another seed or increase "
-                "the parsimony hyperparameter."
+                f"the parsimony hyperparameter: {e}"
             )
 
         if len(conv_expr) > 150:
@@ -490,8 +491,16 @@ class SymbolicExplanations(StaticPlugin):
             Layout for the output block.
         """
         return [
-            dcc.Graph(register("symb_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
-            dcc.Graph(register("pdp_graph", "figure"), style={"height": Config.FIGURE_HEIGHT}),
+            dcc.Graph(
+                register("symb_graph", "figure"),
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+            ),
+            dcc.Graph(
+                register("pdp_graph", "figure"),
+                style={"height": config.FIGURE_HEIGHT},
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+            ),
         ]
 
     @staticmethod
@@ -524,7 +533,7 @@ class SymbolicExplanations(StaticPlugin):
         """
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        hp1 = run.configspace.get_hyperparameter(hp1_name)
+        hp1 = run.configspace[hp1_name]
         selected_hyperparameters = [hp1]
 
         hp2_name = inputs["hyperparameter_name_2"]
@@ -532,10 +541,10 @@ class SymbolicExplanations(StaticPlugin):
         hp2 = None
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-            hp2 = run.configspace.get_hyperparameter(hp2_name)
+            hp2 = run.configspace[hp2_name]
             selected_hyperparameters += [hp2]
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
 
@@ -568,6 +577,7 @@ class SymbolicExplanations(StaticPlugin):
                         "title": objective_name,
                     },
                     "title": expr,
+                    "font": dict(size=config.FIGURE_FONT_SIZE - 4),
                 }
             )
         else:
@@ -591,8 +601,9 @@ class SymbolicExplanations(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
+                    margin=config.FIGURE_MARGIN,
                     title=expr,
+                    font=dict(size=config.FIGURE_FONT_SIZE - 4),
                 )
             )
 
@@ -605,7 +616,13 @@ class SymbolicExplanations(StaticPlugin):
             pdp_title = "Partial Dependency for comparison:"
 
         figure2 = PartialDependencies.get_pdp_figure(
-            run, inputs, outputs, show_confidence=False, show_ice=False, title=pdp_title
+            run,
+            inputs,
+            outputs,
+            show_confidence=False,
+            show_ice=False,
+            title=pdp_title,
+            fontsize=config.FIGURE_FONT_SIZE - 4,
         )
 
         return [figure1, figure2]

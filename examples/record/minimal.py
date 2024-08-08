@@ -15,7 +15,7 @@ configspace = CS.ConfigurationSpace(seed=0)
 alpha = CS.hyperparameters.UniformFloatHyperparameter(name="alpha", lower=0, upper=1)
 beta = CS.hyperparameters.Constant(name="beta", value=1)
 
-configspace.add_hyperparameters([alpha, beta])
+configspace.add([alpha, beta])
 
 accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
 time = Objective("time")
@@ -27,6 +27,7 @@ with Recorder(configspace, objectives=[accuracy, time], save_path=save_path) as 
             r.start(config, budget)
 
             # Your code goes here
-            accuracy = np.random.uniform(low=0.0, high=1.0, size=None)
+            accuracy = np.random.uniform(low=0.0, high=1.0)
+            time = np.random.uniform(low=0.0, high=1.0)
 
-            r.end(costs=[accuracy, None])
+            r.end(costs=[accuracy, time], seed=0)

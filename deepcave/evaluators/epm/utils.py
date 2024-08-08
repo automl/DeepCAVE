@@ -1,4 +1,12 @@
-import typing
+#  noqa: D400
+"""
+# Utils
+
+This module provides a utility to get the types
+as well as the bounds of the Hyperparameters.
+"""
+
+from typing import List, Optional, Tuple
 
 import numpy as np
 from ConfigSpace import ConfigurationSpace
@@ -17,10 +25,32 @@ from ConfigSpace.hyperparameters import (
 
 def get_types(
     config_space: ConfigurationSpace,
-    instance_features: typing.Optional[np.ndarray] = None,
-) -> typing.Tuple[typing.List[int], typing.List[typing.Tuple[float, float]]]:
-    """Return the types of the hyperparameters and the bounds of the
-    hyperparameters and instance features.
+    instance_features: Optional[np.ndarray] = None,
+) -> Tuple[List[int], List[Tuple[float, float]]]:
+    """
+    Return the types of the Hyperparameters.
+
+    Also return the bounds of the Hyperparameters and instance features.
+
+    Parameters
+    ----------
+    config_space : ConfigurationSpace
+        The configuration space.
+    instance_features : Optional[np.ndarray], optional
+        The instance features.
+        Default is None.
+
+    Returns
+    -------
+    Tuple[List[int], List[Tuple[float, float]]]
+        The types of the Hyperparameters, as well as the bounds and instance features.
+
+    Raises
+    ------
+    ValueError
+        Inactive parameters not supported for Beta and Normal Hyperparameters.
+    TypeError
+        If the Hyperparameter Type is unknown.
     """
     # Extract types vector for rf from config space and the bounds
     types = [0] * len(config_space.get_hyperparameters())
@@ -47,7 +77,7 @@ def get_types(
             else:
                 bounds[i] = (0, int(n_cats) - 1)
         elif isinstance(param, Constant):
-            # for constants we simply set types to 0 which makes it a numerical
+            # for constants types are simply set to 0 which makes it a numerical
             # parameter
             if can_be_inactive:
                 bounds[i] = (2, np.nan)
@@ -55,7 +85,7 @@ def get_types(
             else:
                 bounds[i] = (0, np.nan)
                 types[i] = 0
-            # and we leave the bounds to be 0 for now
+            # and the bounds are left to be 0 for now
         elif isinstance(param, UniformFloatHyperparameter):
             # Are sampled on the unit hypercube thus the bounds
             # are always 0.0, 1.0
@@ -74,28 +104,28 @@ def get_types(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, NormalIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.nfhp._lower, param.nfhp._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaFloatHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.bfhp._lower, param.bfhp._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif not isinstance(
             param,
             (

@@ -1,10 +1,31 @@
+#  noqa: D400
+"""
+# PartialDependencies
+
+This module provides utilities for generating Partial Dependency Plots (PDP).
+
+Provided utilities include getting input and output layout (filtered or non-filtered),
+processing the data and loading the outputs.
+
+## Classes
+    - PartialDependencies: Generate a Partial Dependency Plot (PDP).
+
+## Constants
+    GRID_POINTS_PER_AXIS : int
+    SAMPLES_PER_HP : int
+    MAX_SAMPLES : int
+    MAX_SHOWN_SAMPLES : int
+"""
+
+from typing import Any, Callable, Dict, List
+
 import dash_bootstrap_components as dbc
 import numpy as np
 import plotly.graph_objs as go
 from dash import dcc, html
 from pyPDP.algorithms.pdp import PDP
 
-from deepcave.config import Config
+from deepcave import config
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import Status
@@ -18,6 +39,13 @@ MAX_SHOWN_SAMPLES = 100
 
 
 class PartialDependencies(StaticPlugin):
+    """
+    Generate Partial Dependency Plots (PDP).
+
+    Provided utilities include getting input and output layout (filtered or non-filtered),
+    processing the data and loading the outputs.
+    """
+
     id = "pdp"
     name = "Partial Dependencies"
     icon = "fas fa-grip-lines"
@@ -25,7 +53,21 @@ class PartialDependencies(StaticPlugin):
     activate_run_selection = True
 
     @staticmethod
-    def get_input_layout(register):
+    def get_input_layout(register: Callable) -> List[dbc.Row]:
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dbc.Row]
+            The layout for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -43,8 +85,9 @@ class PartialDependencies(StaticPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
+                                "Budget refers to the multi-fidelity budget. "
                                 "Combined budget means that the trial on the highest"
-                                " evaluated budget is used.\n\n"
+                                " evaluated budget is used.  \n "
                                 "Note: Selecting combined budget might be misleading if"
                                 " a time objective is used. Often, higher budget take "
                                 " longer to evaluate, which might negatively influence "
@@ -87,7 +130,21 @@ class PartialDependencies(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register):
+    def get_filter_layout(register: Callable) -> List[Any]:
+        """
+        Get the layout for the filter block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            The layout for the filter block.
+        """
         return [
             dbc.Row(
                 [
@@ -124,13 +181,48 @@ class PartialDependencies(StaticPlugin):
             ),
         ]
 
-    def load_inputs(self):
+    def load_inputs(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        If the plugin is called for the first time, or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            Content to be filled.
+        """
         return {
             "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 
-    def load_dependency_inputs(self, run, previous_inputs, inputs):
+    def load_dependency_inputs(self, run, previous_inputs, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
+        """
+        Work like 'load_inputs' but called after inputs have changed.
+
+        Note
+        ----
+        Only the changes have to be returned. The returned dictionary
+        will be merged with the inputs.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Current content of the inputs.
+        previous_inputs
+            Previous content of the inputs.
+            Not used in this specific function.
+
+        Returns
+        -------
+        Dict[str, Any]
+            Dictionary with the changes.
+        """
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_options = get_select_options(objective_names, objective_ids)
@@ -139,13 +231,12 @@ class PartialDependencies(StaticPlugin):
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get selected values
         objective_value = inputs["objective_id"]["value"]
         budget_value = inputs["budget_id"]["value"]
         hp1_value = inputs["hyperparameter_name_1"]["value"]
-        hp2_value = inputs["hyperparameter_name_2"]["value"]
 
         if objective_value is None:
             objective_value = objective_ids[0]
@@ -165,9 +256,39 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def process(run, inputs):
+    def process(run, inputs) -> Dict[str, Any]:  # type: ignore
+        """
+        Return raw data based on a run and the input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The run to process.
+        inputs
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A serialized dictionary.
+
+        Raises
+        ------
+        RuntimeError
+            If the objective is None.
+        """
         # Surrogate
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
@@ -197,7 +318,7 @@ class PartialDependencies(StaticPlugin):
             selected_hyperparameters += [hp2]
 
         num_samples = SAMPLES_PER_HP * len(X)
-        # We limit the samples to max 10k
+        # The samples are limited to max 10k
         if num_samples > MAX_SAMPLES:
             num_samples = MAX_SAMPLES
 
@@ -213,7 +334,7 @@ class PartialDependencies(StaticPlugin):
         x = pdp.x_pdp.tolist()
         y = pdp.y_pdp.tolist()
 
-        # We have to cut the ICE curves because it's too much data
+        # The ICE curves have to be cut because it's too much data
         x_ice = pdp._ice.x_ice.tolist()
         y_ice = pdp._ice.y_ice.tolist()
 
@@ -230,22 +351,67 @@ class PartialDependencies(StaticPlugin):
         }
 
     @staticmethod
-    def get_output_layout(register):
-        return dcc.Graph(register("graph", "figure"), style={"height": Config.FIGURE_HEIGHT})
+    def get_output_layout(register: Callable) -> dcc.Graph:
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        dcc.Graph
+            Layout for the output block.
+        """
+        return dcc.Graph(
+            register("graph", "figure"),
+            style={"height": config.FIGURE_HEIGHT},
+            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        )
 
     @staticmethod
-    def get_pdp_figure(run, inputs, outputs, show_confidence, show_ice, title=None):
+    def get_pdp_figure(  # type: ignore
+        run, inputs, outputs, show_confidence, show_ice, title=None, fontsize=None
+    ) -> go.Figure:
+        """
+        Create a figure of the Partial Dependency Plot (PDP).
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+        show_confidence
+            Whether to show confidence in the plot.
+        show_ice
+            Whether to show ice curves in the plot.
+        title
+            Title of the plot.
+        fontsize
+            Fontsize of the plot.
+
+        Returns
+        -------
+        go.Figure
+            The figure of the Partial Dependency Plot (PDP).
+        """
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        hp1 = run.configspace.get_hyperparameter(hp1_name)
+        hp1 = run.configspace[hp1_name]
 
         hp2_name = inputs["hyperparameter_name_2"]
         hp2_idx = None
         hp2 = None
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-            hp2 = run.configspace.get_hyperparameter(hp2_name)
+            hp2 = run.configspace[hp2_name]
 
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
@@ -259,7 +425,7 @@ class PartialDependencies(StaticPlugin):
         y_ice = np.asarray(outputs["y_ice"])
 
         traces = []
-        if hp2_idx is None:  # 1D
+        if hp2 is None:  # 1D
             # Add ICE curves
             if show_ice:
                 for x_, y_ in zip(x_ice, y_ice):
@@ -307,6 +473,9 @@ class PartialDependencies(StaticPlugin):
             ]
 
             tickvals, ticktext = get_hyperparameter_ticks(hp1)
+            # Allow to pass a fontsize (necessary when leveraging PDP in Symbolic Explanation)
+            if fontsize is None:
+                fontsize = config.FIGURE_FONT_SIZE
             layout = go.Layout(
                 {
                     "xaxis": {
@@ -317,7 +486,8 @@ class PartialDependencies(StaticPlugin):
                     "yaxis": {
                         "title": objective_name,
                     },
-                    "title": title
+                    "title": title,
+                    "font": dict(size=fontsize),
                 }
             )
         else:
@@ -343,8 +513,9 @@ class PartialDependencies(StaticPlugin):
                 dict(
                     xaxis=dict(tickvals=x_tickvals, ticktext=x_ticktext, title=hp1_name),
                     yaxis=dict(tickvals=y_tickvals, ticktext=y_ticktext, title=hp2_name),
-                    margin=Config.FIGURE_MARGIN,
-                    title=title
+                    margin=config.FIGURE_MARGIN,
+                    title=title,
+                    font=dict(size=fontsize),
                 )
             )
 
@@ -354,7 +525,30 @@ class PartialDependencies(StaticPlugin):
         return figure
 
     @staticmethod
-    def load_outputs(run, inputs, outputs):
+    def load_outputs(run, inputs, outputs):  # type: ignore
+        """
+        Read the raw data and prepare it for the layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        go.Figure
+            The figure of the Partial Dependency Plot (PDP).
+        """
         show_confidence = inputs["show_confidence"]
         show_ice = inputs["show_ice"]
 

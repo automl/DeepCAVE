@@ -1,3 +1,42 @@
+# Version 1.3
+
+## Converters
+- Add support for AMLTK.
+
+## Version-Updates
+- ConfigSpace from 0.6.1 to 1.2.0
+- Numpy from 1.26.4 to 2.0.1
+
+## Ablation Paths
+- Added ablation paths as a plugin.
+- Added ablation as a evaluator to use for the plugin.
+- Added tests as well as documentation.
+- Modified the RandomForest surrogate model, so it can be passed the number of trees.
+
+## Bug-Fixes
+- Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
+
+# Version 1.2.1
+
+## Quality of Life
+- Runs now get displayed with their parent directory for better distinguishability.
+- Increase plot font sizes.
+- Add a simple loading bar functionality for longer runs.
+
+## General
+- Seed is now required in the Recorder.
+
+## Bug-Fixes
+- Use normalized LPI importance via variance instead of importance over mean (#152)
+- Return nan as importance values if variance is 0. for a hyperparameter / budget (#152)
+
+## Plugins
+- Show a run's hoover-text for the actual budget of a trial in Cost over Time with Combined budget (#154).
+- Use highest budget as default budget for Cost over Time instead of Combined.
+- Show best value / config for each objective instead of merged objective in Overview (#159).
+- Use chosen objective instead of merged objective to get the incumbent for the calculation of LPI importance (#159).
+- Add total runtime in overview (#155).
+
 # Version 1.2
 
 ## Plugins
@@ -19,7 +58,6 @@
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
-- - Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
 
 # Version 1.1.3
 
