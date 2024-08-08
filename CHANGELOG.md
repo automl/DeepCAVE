@@ -6,6 +6,7 @@
 ## Version-Updates
 - ConfigSpace from 0.6.1 to 1.2.0
 - Numpy from 1.26.4 to 2.0.1
+- pyPDPPartitioner from to 0.1.8 to 0.1.9
 
 ## Ablation Paths
 - Added ablation paths as a plugin.
@@ -41,15 +42,23 @@
 
 ## Plugins
 - Add symbolic explanations plugin (#46).
+- It is now possible to view multiple unequal runs at once in Cost over Time and Pareto (#93).
+- Runs with unequal objectives cannot be displayed together.
+- Added an enum for displaying according warning messages.
 
 ## Enhancements
 - Fix lower bounds of dependency versions.
-- Allow to load multi-objective SMAC3v2 and add example (#69)
+- Allow to load multi-objective SMAC3v2 and add example (#69).
+- Allow to load runs with multiple seeds and add examples (#70).
+- Correct incumbent calculation when single objective should be maximized.
+- Correct range of configuration cube slider for number of configs.
 - Do not disable existing loggers.
 - Update author email.
 - Add exit button which first deletes running jobs and then terminates DeepCave.
 - Nicer handling of Keyboard Interrupt.
 - Disable debug mode.
+- Save plotly plots in higher resolution upon download.
+- Get hovertext per budget in Footprint, Config Cube, Cost over Time, and Pareto Front.
 
 ## Bug-Fixes
 - Fix missing objective specification in LPI evaluator (#71).
@@ -58,6 +67,39 @@
 - Reset inputs to fix error when subsequently selecting runs with different configspaces, objectives or budgets (#106).
 - Fix errors due to changing inputs before runselection (#64).
 - For fANOVA, remove constant hyperparameters from configspace (#9).
+- When getting budget, objectives etc from multiple runs in Cost over Time and Pareto Front:
+    - Instead of taking the first run as comparative value,
+    - take the one with the lowest budget, else the index for the budgets could be out of bounds.
+- For PCP, show hyperparameters with highest importance closest to the cost, i.e. right (#124).
+- Add init files to all test directories.
+- Correct LPI importance tests.
+- Free port when exiting via the exit button (#52).
+
+## Documentation
+- Add How to Contribute section.
+- Expand documentation for partial dependence plugin.
+
+## Version-Updates
+- Black version from 23.1.0 to 23.3.0
+- Mypy from 0.930 to 1.5.1
+
+## Mypy
+- Updated args so there are no missing imports
+- Updated additional dependencies, so mypy can check all types
+- Note: If the installs in requirements change, it has to be adapted in additional dependencies
+- Added many type annotations
+- In some cases internal refactoring for variables, due to typing
+
+## Pydocstyle and Linter
+- Major overhaul of docstrings in various files
+- Removed unused imports and variables
+
+## Groups
+- Groups now get a default name, if no name was entered by the user.
+- Groups get sorted alphabetically to appear more ordered.
+
+## Additional Changes
+- Added a "make install examples" in Makefile
 
 # Version 1.1.3
 
@@ -85,7 +127,7 @@
 - SMAC 2.0
 
 ## Dependencies
-- Remove SMAC dependency by adding required function directly
+- Remove SMAC dependency by adding required function directly.
 
 # Version 1.0.1
 
