@@ -32,4 +32,4 @@ werkzeug==2.0.3
 pyarrow==16.1.0
 fastparquet==2024.5.0
 
-pyPDPPartitioner>=0.1.8
+pyPDPPartitioner>=0.1.9
