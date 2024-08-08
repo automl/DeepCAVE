@@ -44,7 +44,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # Instantiate the plugin
         plugin = Importances()
         inputs = plugin.generate_inputs(
-            hyperparameter_names=run.configspace.get_hyperparameter_names(),
+            hyperparameter_names=list(run.configspace.keys()),
             objective_id=objective_id,
             budget_ids=budget_ids,
             method="global",

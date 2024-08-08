@@ -931,7 +931,7 @@ show the strenghts of DeepCAVE’s recorder.</p>
     <span class="n">num_neurons_layer1</span> <span class="o">=</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;num_neurons_layer1&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">num_neurons_layer2</span> <span class="o">=</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;num_neurons_layer2&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-    <span class="n">configspace</span><span class="o">.</span><span class="n">add_hyperparameters</span><span class="p">(</span>
+    <span class="n">configspace</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
         <span class="p">[</span>
             <span class="n">model</span><span class="p">,</span>
             <span class="n">activation</span><span class="p">,</span>

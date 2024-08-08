@@ -736,7 +736,7 @@
 <span class="sd">as well as the bounds of the Hyperparameters.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
@@ -757,8 +757,8 @@
 <a class="viewcode-back" href="../../../../api/deepcave.evaluators.epm.utils.html#deepcave.evaluators.epm.utils.get_types">[docs]</a>
 <span class="k">def</span> <span class="nf">get_types</span><span class="p">(</span>
     <span class="n">config_space</span><span class="p">:</span> <span class="n">ConfigurationSpace</span><span class="p">,</span>
-    <span class="n">instance_features</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="n">instance_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the types of the Hyperparameters.</span>
 
@@ -774,7 +774,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Tuple[typing.List[int], List[Tuple[float, float]]]</span>
+<span class="sd">    Tuple[List[int], List[Tuple[float, float]]]</span>
 <span class="sd">        The types of the Hyperparameters, as well as the bounds and instance features.</span>
 
 <span class="sd">    Raises</span>
@@ -836,28 +836,28 @@
                     <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">lower_vectorized</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">upper_vectorized</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">NormalIntegerHyperparameter</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">nfhp</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">nfhp</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">lower_vectorized</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">upper_vectorized</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">BetaFloatHyperparameter</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">lower_vectorized</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">upper_vectorized</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">BetaIntegerHyperparameter</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">can_be_inactive</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Inactive parameters not supported for Beta and Normal Hyperparameters&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">bfhp</span><span class="o">.</span><span class="n">_lower</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">bfhp</span><span class="o">.</span><span class="n">_upper</span><span class="p">)</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">lower_vectorized</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">upper_vectorized</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
             <span class="n">param</span><span class="p">,</span>
             <span class="p">(</span>

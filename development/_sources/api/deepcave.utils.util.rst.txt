@@ -8,6 +8,7 @@ deepcave.utils.util
 
    .. autosummary::
    
+      config_to_tuple
       custom_round
       get_latest_change
       get_random_string

@@ -767,7 +767,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
     <span class="c1"># Instantiate the plugin</span>
     <span class="n">plugin</span> <span class="o">=</span> <span class="n">ParallelCoordinates</span><span class="p">()</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">generate_inputs</span><span class="p">(</span>
-        <span class="n">hyperparameter_names</span><span class="o">=</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">(),</span>
+        <span class="n">hyperparameter_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
         <span class="n">objective_id</span><span class="o">=</span><span class="n">objective_id</span><span class="p">,</span>
         <span class="n">budget_id</span><span class="o">=</span><span class="n">budget_id</span><span class="p">,</span>
         <span class="n">show_important_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>

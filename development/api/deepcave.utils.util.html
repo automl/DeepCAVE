@@ -729,6 +729,15 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deepcave.utils.util.config_to_tuple">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     config_to_tuple()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#deepcave.utils.util.custom_round">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -802,23 +811,44 @@ It also provides a function to get the difference between now and a given timest
 <p class="rubric">Functions</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.custom_round" title="deepcave.utils.util.custom_round"><code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_round</span></code></a>(number[, min_decimals, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.config_to_tuple" title="deepcave.utils.util.config_to_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config_to_tuple</span></code></a>(config[, round_places])</p></td>
+<td><p>Convert a configuration dictionary to a tuple and round floats.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.custom_round" title="deepcave.utils.util.custom_round"><code class="xref py py-obj docutils literal notranslate"><span class="pre">custom_round</span></code></a>(number[, min_decimals, ...])</p></td>
 <td><p>Round a number to the nearest decimal.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.get_latest_change" title="deepcave.utils.util.get_latest_change"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_latest_change</span></code></a>(st_mtime)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.get_latest_change" title="deepcave.utils.util.get_latest_change"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_latest_change</span></code></a>(st_mtime)</p></td>
 <td><p>Get the difference between now and a given timestamp.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.get_random_string" title="deepcave.utils.util.get_random_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_string</span></code></a>(length)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.get_random_string" title="deepcave.utils.util.get_random_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_random_string</span></code></a>(length)</p></td>
 <td><p>Get a random string with a specific length.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.print_progress_bar" title="deepcave.utils.util.print_progress_bar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_progress_bar</span></code></a>(total, iteration[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.print_progress_bar" title="deepcave.utils.util.print_progress_bar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_progress_bar</span></code></a>(total, iteration[, ...])</p></td>
 <td><p>Print a simple progress bar.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.utils.util.short_string" title="deepcave.utils.util.short_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">short_string</span></code></a>(value[, length, mode])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#deepcave.utils.util.short_string" title="deepcave.utils.util.short_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">short_string</span></code></a>(value[, length, mode])</p></td>
 <td><p>Shorten the given string.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="deepcave.utils.util.config_to_tuple">
+<span class="sig-prename descclassname"><span class="pre">deepcave.utils.util.</span></span><span class="sig-name descname"><span class="pre">config_to_tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_places</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/util.html#config_to_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.util.config_to_tuple" title="Link to this definition">¶</a></dt>
+<dd><p>Convert a configuration dictionary to a tuple and round floats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>dict</em>) – The configuration dictionary.</p></li>
+<li><p><strong>round_places</strong> (<em>int</em>) – The number of places to round floats.
+Default is 10.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="deepcave.utils.util.custom_round">
 <span class="sig-prename descclassname"><span class="pre">deepcave.utils.util.</span></span><span class="sig-name descname"><span class="pre">custom_round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/utils/util.html#custom_round"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.utils.util.custom_round" title="Link to this definition">¶</a></dt>

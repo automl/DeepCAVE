@@ -744,9 +744,12 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters.hp_components</span> <span class="kn">import</span> <span class="n">ROUND_PLACES</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">NotMergeableError</span><span class="p">,</span> <span class="n">check_equality</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">config_to_tuple</span>
 
 
 <div class="viewcode-block" id="Group">
@@ -831,9 +834,16 @@
                             <span class="n">config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">added_config_id</span>
                             <span class="k">break</span>
 
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
+                        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
+
                     <span class="k">if</span> <span class="n">config_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config_mapping</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">current_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">current_config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+                        <span class="c1"># Use same rounding as ConfigSpace does</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span>
+                            <span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">current_config_id</span>
                         <span class="n">config_mapping</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_config_id</span>
                         <span class="n">current_config_id</span> <span class="o">+=</span> <span class="mi">1</span>
 

@@ -1014,15 +1014,13 @@
 <span class="sd">        tickvals and ticktext.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># This is basically the inverse of `encode_config`.</span>
-    <span class="n">tickvals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+    <span class="n">tickvals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
         <span class="n">ticktext</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ticktext</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span>
-            <span class="p">]</span>
+            <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">]</span>
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
         <span class="n">tickvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">CONSTANT_VALUE</span><span class="p">]</span>
@@ -1047,12 +1045,12 @@
 
         <span class="n">inverse_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-            <span class="n">inverse_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
+            <span class="n">inverse_values</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
 
         <span class="c1"># Integers are rounded, they are mapped</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">IntegerHyperparameter</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">inverse_values</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
                     <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
@@ -1062,8 +1060,8 @@
                 <span class="c1"># Now add additional values are added</span>
                 <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">additional_values</span><span class="p">:</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="n">NAN_VALUE</span><span class="p">):</span>
-                        <span class="n">label</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                        <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+                        <span class="n">label</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span><span class="p">:</span>
                             <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
@@ -1081,7 +1079,7 @@
                         <span class="ow">and</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tickvals</span>
                     <span class="p">):</span>
                         <span class="n">tickvals</span> <span class="o">+=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
-                        <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">_transform_scalar</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
+                        <span class="n">ticktext</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">to_value</span><span class="p">(</span><span class="n">value</span><span class="p">)]</span>
 
     <span class="n">ticktext</span> <span class="o">=</span> <span class="p">[</span><span class="n">prettify_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">ticktext</span><span class="p">]</span>
 
@@ -1282,11 +1280,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">code</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    from ConfigSpace.configuration_space import ConfigurationSpace, Configuration</span>
-<span class="s2">    from ConfigSpace.read_and_write import cs_json</span>
 
 <span class="s2">    # Create configspace</span>
-<span class="s2">    with open({{path}}, &#39;r&#39;) as f:</span>
-<span class="s2">        cs = cs_json.read(f.read())</span>
+<span class="s2">    cs = ConfigurationSpace.from_json({{path}})</span>
+
 
 <span class="s2">    # Create config</span>
 <span class="s2">    values = {{config_dict}}</span>

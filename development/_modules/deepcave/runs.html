@@ -755,6 +755,7 @@
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters.hp_components</span> <span class="kn">import</span> <span class="n">ROUND_PLACES</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">COMBINED_BUDGET</span><span class="p">,</span>
@@ -768,6 +769,7 @@
 <span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.trial</span> <span class="kn">import</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">config_to_tuple</span>
 
 
 <div class="viewcode-block" id="AbstractRun">
@@ -792,6 +794,8 @@
 <span class="sd">        The configuration space of the run.</span>
 <span class="sd">    configs: Dict[int, Configuration]</span>
 <span class="sd">        Contains the configurations.</span>
+<span class="sd">    config_id_mapping: Dict[Tuple, int]</span>
+<span class="sd">        Maps configuration tuples to configuration ids.</span>
 <span class="sd">    origins: Dict[int, str]</span>
 <span class="sd">        The origin of the configuration.</span>
 <span class="sd">    models: Dict[int, Optional[Union[str, &quot;torch.nn.Module&quot;]]]</span>
@@ -825,6 +829,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">:</span> <span class="n">ConfigSpace</span><span class="o">.</span><span class="n">ConfigurationSpace</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Configuration</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span>  <span class="c1"># type: ignore</span>
             <span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;torch.nn.Module&quot;</span><span class="p">]]</span>  <span class="c1"># noqa: F821</span>
@@ -1260,15 +1265,17 @@
 <span class="sd">        Optional[int]</span>
 <span class="sd">            The configuration id.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert the input configuration to a tuple</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
+        <span class="c1"># Use same rounding as ConfigSpace does</span>
+        <span class="n">input_config_tuple</span> <span class="o">=</span> <span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)</span>
 
-        <span class="c1"># Find out config id</span>
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">config</span><span class="p">:</span>
-                <span class="k">return</span> <span class="nb">id</span>
-
-        <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="c1"># Check if the input configuration tuple exists in the config id mapping</span>
+        <span class="k">if</span> <span class="n">input_config_tuple</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span><span class="n">input_config_tuple</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="AbstractRun.get_num_configs">

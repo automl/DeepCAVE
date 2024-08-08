@@ -744,7 +744,11 @@
 <span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">Configuration</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.c_util</span> <span class="kn">import</span> <span class="n">change_hp_value</span><span class="p">,</span> <span class="n">check_forbidden</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.exceptions</span> <span class="kn">import</span> <span class="n">ForbiddenValueError</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">CategoricalHyperparameter</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
+    <span class="n">NumericalHyperparameter</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.types</span> <span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">f64</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.util</span> <span class="kn">import</span> <span class="n">impute_inactive_values</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">COMBINED_COST_NAME</span>
@@ -891,7 +895,9 @@
 
                 <span class="c1"># Create the neighbor-Configuration object</span>
                 <span class="n">new_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incumbent_array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                <span class="n">new_array</span> <span class="o">=</span> <span class="n">change_hp_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">new_array</span><span class="p">,</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">unit_neighbor</span><span class="p">,</span> <span class="n">hp_idx</span><span class="p">)</span>
+                <span class="n">new_array</span> <span class="o">=</span> <span class="n">change_hp_value</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">new_array</span><span class="p">,</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">unit_neighbor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">index_of</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
+                <span class="p">)</span>
                 <span class="n">new_config</span> <span class="o">=</span> <span class="n">impute_inactive_values</span><span class="p">(</span><span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">new_array</span><span class="p">))</span>
 
                 <span class="c1"># Get the leaf values</span>
@@ -1034,12 +1040,15 @@
             <span class="n">hp_neighborhood</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">checked_neighbors</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># On unit cube</span>
             <span class="n">checked_neighbors_non_unit_cube</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Not on unit cube</span>
-            <span class="n">hp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">)</span>
+            <span class="n">hp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="n">hp_name</span><span class="p">]</span>
             <span class="n">num_neighbors</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">get_num_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incumbent</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
+
+            <span class="n">neighbors</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">f64</span><span class="p">]],</span> <span class="n">Array</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">f64</span><span class="p">]]]</span>
 
             <span class="k">if</span> <span class="n">num_neighbors</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">num_neighbors</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">NumericalHyperparameter</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">log</span><span class="p">:</span>
                     <span class="n">base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">e</span>
                     <span class="n">log_lower</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">lower</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
@@ -1053,7 +1062,7 @@
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">neighbors_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">upper</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">continous_neighbors</span><span class="p">)</span>
-                <span class="n">neighbors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">hp</span><span class="o">.</span><span class="n">_inverse_transform</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">neighbors_range</span><span class="p">))</span>
+                <span class="n">neighbors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">hp</span><span class="o">.</span><span class="n">to_vector</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">neighbors_range</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">neighbors</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">get_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">incumbent_array</span><span class="p">[</span><span class="n">hp_idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rs</span><span class="p">)</span>
 
@@ -1067,7 +1076,7 @@
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">new_config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">vector</span><span class="o">=</span><span class="n">new_array</span><span class="p">)</span>
                     <span class="n">hp_neighborhood</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_config</span><span class="p">)</span>
-                    <span class="n">new_config</span><span class="o">.</span><span class="n">is_valid_configuration</span><span class="p">()</span>
+                    <span class="n">new_config</span><span class="o">.</span><span class="n">check_valid_configuration</span><span class="p">()</span>
                     <span class="n">check_forbidden</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">forbidden_clauses</span><span class="p">,</span> <span class="n">new_array</span><span class="p">)</span>
 
                     <span class="n">checked_neighbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
@@ -1078,7 +1087,7 @@
             <span class="n">sort_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
                 <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">checked_neighbors</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp_name</span><span class="p">),</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">[</span><span class="n">hp_name</span><span class="p">],</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
                 <span class="n">checked_neighbors_non_unit_cube_categorical</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">checked_neighbors_non_unit_cube</span><span class="p">)[</span><span class="n">sort_idx</span><span class="p">]</span>
                 <span class="p">)</span>

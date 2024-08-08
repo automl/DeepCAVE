@@ -1089,7 +1089,7 @@
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If the objective is None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">budget</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">])</span>
         <span class="n">hp1</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">]</span>
@@ -1282,7 +1282,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">hp1_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_1&quot;</span><span class="p">]</span>
         <span class="n">hp1_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
-        <span class="n">hp1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp1_name</span><span class="p">)</span>
+        <span class="n">hp1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">[</span><span class="n">hp1_name</span><span class="p">]</span>
         <span class="n">selected_hyperparameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">hp1</span><span class="p">]</span>
 
         <span class="n">hp2_name</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_name_2&quot;</span><span class="p">]</span>
@@ -1290,10 +1290,10 @@
         <span class="n">hp2</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">hp2_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp2_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="n">hp2_idx</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_idx_by_hyperparameter_name</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
-            <span class="n">hp2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter</span><span class="p">(</span><span class="n">hp2_name</span><span class="p">)</span>
+            <span class="n">hp2</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="p">[</span><span class="n">hp2_name</span><span class="p">]</span>
             <span class="n">selected_hyperparameters</span> <span class="o">+=</span> <span class="p">[</span><span class="n">hp2</span><span class="p">]</span>
 
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">objective_name</span> <span class="o">=</span> <span class="n">objective</span><span class="o">.</span><span class="n">name</span>
 

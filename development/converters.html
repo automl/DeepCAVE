@@ -791,9 +791,8 @@ consider when running AMLTK:</p>
 </div>
 </li>
 <li><p>Save the configuration space as a ConfigSpace JSON file:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ConfigSpace.read_and_write</span> <span class="kn">import</span> <span class="n">json</span> <span class="k">as</span> <span class="n">cs_json</span>
-<span class="n">space</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">search_space</span><span class="p">(</span><span class="n">parser</span><span class="o">=</span><span class="s2">&quot;configspace&quot;</span><span class="p">)</span>
-<span class="n">bucket</span><span class="o">.</span><span class="n">store</span><span class="p">({</span><span class="s2">&quot;configspace.json&quot;</span><span class="p">:</span> <span class="n">cs_json</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">space</span><span class="p">)})</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">space</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">search_space</span><span class="p">(</span><span class="n">parser</span><span class="o">=</span><span class="s2">&quot;configspace&quot;</span><span class="p">)</span>
+<span class="n">bucket</span><span class="o">.</span><span class="n">store</span><span class="p">({</span><span class="s2">&quot;configspace.json&quot;</span><span class="p">:</span> <span class="n">space</span><span class="o">.</span><span class="n">to_serialized_dict</span><span class="p">()})</span>
 </pre></div>
 </div>
 </li>

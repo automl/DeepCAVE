@@ -747,13 +747,14 @@
 <span class="kn">import</span> <span class="nn">ConfigSpace</span>
 <span class="kn">import</span> <span class="nn">jsonlines</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">Configuration</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.read_and_write</span> <span class="kn">import</span> <span class="n">json</span> <span class="k">as</span> <span class="n">cs_json</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">ConfigurationSpace</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters.hp_components</span> <span class="kn">import</span> <span class="n">ROUND_PLACES</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.files</span> <span class="kn">import</span> <span class="n">make_dirs</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">config_to_tuple</span>
 
 
 <div class="viewcode-block" id="Run">
@@ -1026,6 +1027,8 @@
             <span class="n">config_id_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">[</span><span class="n">config_id_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">[</span><span class="n">config_id_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+            <span class="c1"># Use same rounding as ConfigSpace does</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span><span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)]</span> <span class="o">=</span> <span class="n">config_id_len</span>
 
         <span class="n">config_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_config_id</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">config_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1092,7 +1095,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
         <span class="c1"># Save configspace</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">configspace_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">cs_json</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace_fn</span><span class="p">)</span>
 
         <span class="c1"># Save meta data (could be changed)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
@@ -1162,7 +1165,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta_fn</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
 
         <span class="c1"># Load configspace</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">cs_json</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace_fn</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace_fn</span><span class="p">)</span>
 
         <span class="c1"># Load configs</span>
         <span class="n">configs</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs_fn</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
@@ -1172,6 +1175,13 @@
         <span class="c1"># Load origins</span>
         <span class="n">origins</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origins_fn</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origins</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">origins</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c1"># Make sure there is a config_id_mapping</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span><span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)]</span> <span class="o">=</span> <span class="n">config_id</span>
 
         <span class="c1"># Load history</span>
         <span class="k">with</span> <span class="n">jsonlines</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history_fn</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

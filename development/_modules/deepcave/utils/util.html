@@ -741,6 +741,8 @@
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">string</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 
 <div class="viewcode-block" id="get_random_string">
 <a class="viewcode-back" href="../../../api/deepcave.utils.util.html#deepcave.utils.util.get_random_string">[docs]</a>
@@ -911,6 +913,26 @@
         <span class="k">if</span> <span class="n">rounded</span> <span class="o">!=</span> <span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">rounded</span>
     <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">max_decimals</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="config_to_tuple">
+<a class="viewcode-back" href="../../../api/deepcave.utils.util.html#deepcave.utils.util.config_to_tuple">[docs]</a>
+<span class="k">def</span> <span class="nf">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">round_places</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a configuration dictionary to a tuple and round floats.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config : dict</span>
+<span class="sd">        The configuration dictionary.</span>
+<span class="sd">    round_places : int</span>
+<span class="sd">        The number of places to round floats.</span>
+<span class="sd">        Default is 10.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">round_places</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

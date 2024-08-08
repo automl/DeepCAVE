@@ -37,9 +37,8 @@ consider when running AMLTK:
 
    .. code-block:: python
 
-      from ConfigSpace.read_and_write import json as cs_json
       space = pipeline.search_space(parser="configspace")
-      bucket.store({"configspace.json": cs_json.write(space)})
+      bucket.store({"configspace.json": space.to_serialized_dict()})
 
 3. Define the start and end times for your trials:
 
