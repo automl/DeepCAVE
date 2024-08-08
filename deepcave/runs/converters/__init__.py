@@ -17,4 +17,6 @@ smac3v2
     (Sequential Model-based Algorithm Configuration) run.
 amltk
     This module provides utilities to create an AMLTK (AutoML Toolkit) run.
+optuna
+    This module provides utilities to create an Optuna run.
 """
