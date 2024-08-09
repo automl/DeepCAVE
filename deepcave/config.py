@@ -95,14 +95,16 @@ class Config:
         """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
         from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
+        from deepcave.plugins.hyperparameter.configuration_cube import ConfigurationCube
         from deepcave.plugins.hyperparameter.importances import Importances
+        from deepcave.plugins.hyperparameter.parallel_coordinates import (
+            ParallelCoordinates,
+        )
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
             SymbolicExplanations,
         )
-        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
         from deepcave.plugins.objective.cost_over_time import CostOverTime
-        from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
         from deepcave.plugins.objective.pareto_front import ParetoFront
         from deepcave.plugins.summary.configurations import Configurations
         from deepcave.plugins.summary.footprint import FootPrint
@@ -117,9 +119,7 @@ class Config:
             ],
             "Objective Analysis": [
                 CostOverTime(),
-                ConfigurationCube(),
                 ParetoFront(),
-                ParallelCoordinates(),
             ],
             "Budget Analysis": [
                 BudgetCorrelation(),
@@ -127,7 +127,9 @@ class Config:
             "Hyperparameter Analysis": [
                 Importances(),
                 AblationPaths(),
+                ConfigurationCube(),
                 PartialDependencies(),
+                ParallelCoordinates(),
                 SymbolicExplanations(),
             ],
         }

@@ -1,3 +1,9 @@
+# Version 1.3.1
+
+## Move plugins
+- Moved the Configuration cube and the parallel coordinates plugin from objective to hyperparameter.
+- Changed layout accordingly as well as the documentation.
+
 # Version 1.3
 
 ## Converters
