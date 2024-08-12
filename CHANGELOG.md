@@ -1,9 +1,3 @@
-# Version 1.3.1
-
-## Move plugins
-- Moved the Configuration cube and the parallel coordinates plugin from objective to hyperparameter.
-- Changed layout accordingly as well as the documentation.
-
 # Version 1.3
 
 ## Converters
@@ -19,6 +13,10 @@
 - Added ablation as a evaluator to use for the plugin.
 - Added tests as well as documentation.
 - Modified the RandomForest surrogate model, so it can be passed the number of trees.
+
+## Move plugins
+- Moved the Configuration cube and the parallel coordinates plugin from objective to hyperparameter.
+- Changed layout accordingly as well as the documentation.
 
 ## Bug-Fixes
 - Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).

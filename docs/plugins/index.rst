@@ -14,8 +14,8 @@ Displaying Data with Plugins
    importances
    ablation_paths
    configuration_cube
-   partial_dependencies
    parallel_coordinates
+   partial_dependencies
    symbolic_explanations
 
 

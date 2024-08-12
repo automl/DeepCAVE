@@ -128,8 +128,8 @@ class Config:
                 Importances(),
                 AblationPaths(),
                 ConfigurationCube(),
-                PartialDependencies(),
                 ParallelCoordinates(),
+                PartialDependencies(),
                 SymbolicExplanations(),
             ],
         }
