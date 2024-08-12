@@ -10,7 +10,5 @@ deepcave.plugins.objective
    :toctree:
    :recursive:
 
-   configuration_cube
    cost_over_time
-   parallel_coordinates
    pareto_front

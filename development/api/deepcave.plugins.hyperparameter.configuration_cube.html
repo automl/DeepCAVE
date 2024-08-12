@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.plugins.objective.configuration_cube &#8212; DeepCAVE Documentation 1.3 documentation</title>
+    <title>deepcave.plugins.hyperparameter.configuration_cube &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -37,8 +37,8 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.plugins.objective.parallel_coordinates" href="deepcave.plugins.objective.parallel_coordinates.html" />
-    <link rel="prev" title="deepcave.plugins.objective" href="deepcave.plugins.objective.html" />
+    <link rel="next" title="deepcave.plugins.hyperparameter.importances" href="deepcave.plugins.hyperparameter.importances.html" />
+    <link rel="prev" title="deepcave.plugins.hyperparameter.ablation_paths" href="deepcave.plugins.hyperparameter.ablation_paths.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -240,18 +240,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/configuration_cube.html">
-     Configuration Cube
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../plugins/pareto_front.html">
      Pareto Front
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/parallel_coordinates.html">
-     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -267,6 +257,16 @@
    <li class="toctree-l2">
     <a class="reference internal" href="../plugins/ablation_paths.html">
      Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/parallel_coordinates.html">
+     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -410,24 +410,34 @@
        deepcave.plugins.dynamic
       </a>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3 current active has-children">
       <a class="reference internal" href="deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+      <input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
       <label for="toctree-checkbox-9">
        <i class="fas fa-chevron-down">
        </i>
       </label>
-      <ul>
+      <ul class="current">
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.hyperparameter.ablation_paths.html">
          deepcave.plugins.hyperparameter.ablation_paths
         </a>
        </li>
+       <li class="toctree-l4 current active">
+        <a class="current reference internal" href="#">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
@@ -442,27 +452,10 @@
        </li>
       </ul>
      </li>
-     <li class="toctree-l3 current active has-children">
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-      <label for="toctree-checkbox-10">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul class="current">
-       <li class="toctree-l4 current active">
-        <a class="current reference internal" href="#">
-         deepcave.plugins.objective.configuration_cube
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
-         deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-      </ul>
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="deepcave.plugins.static.html">
@@ -473,8 +466,8 @@
       <a class="reference internal" href="deepcave.plugins.summary.html">
        deepcave.plugins.summary
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-      <label for="toctree-checkbox-11">
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -502,8 +495,8 @@
     <a class="reference internal" href="deepcave.layouts.html">
      deepcave.layouts
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
-    <label for="toctree-checkbox-12">
+    <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+    <label for="toctree-checkbox-11">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -524,8 +517,8 @@
     <a class="reference internal" href="deepcave.evaluators.html">
      deepcave.evaluators
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
-    <label for="toctree-checkbox-13">
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -539,8 +532,8 @@
       <a class="reference internal" href="deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
-      <label for="toctree-checkbox-14">
+      <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+      <label for="toctree-checkbox-13">
        <i class="fas fa-chevron-down">
        </i>
       </label>
@@ -588,8 +581,8 @@
     <a class="reference internal" href="deepcave.utils.html">
      deepcave.utils
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
-    <label for="toctree-checkbox-15">
+    <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+    <label for="toctree-checkbox-14">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -729,7 +722,7 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube">
+  <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube">
    <code class="docutils literal notranslate">
     <span class="pre">
      ConfigurationCube
@@ -738,7 +731,7 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_filter_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_filter_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.get_filter_layout()
@@ -747,7 +740,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_input_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_input_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.get_input_layout()
@@ -756,7 +749,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_output_layout">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_output_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.get_output_layout()
@@ -765,7 +758,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_dependency_inputs">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.load_dependency_inputs()
@@ -774,7 +767,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_inputs">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_inputs">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.load_inputs()
@@ -783,7 +776,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_outputs">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_outputs">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.load_outputs()
@@ -792,7 +785,7 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.process">
+    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.process">
      <code class="docutils literal notranslate">
       <span class="pre">
        ConfigurationCube.process()
@@ -823,8 +816,8 @@
               
               <div>
                 
-  <section id="module-deepcave.plugins.objective.configuration_cube">
-<span id="deepcave-plugins-objective-configuration-cube"></span><h1>deepcave.plugins.objective.configuration_cube<a class="headerlink" href="#module-deepcave.plugins.objective.configuration_cube" title="Link to this heading">¶</a></h1>
+  <section id="module-deepcave.plugins.hyperparameter.configuration_cube">
+<span id="deepcave-plugins-hyperparameter-configuration-cube"></span><h1>deepcave.plugins.hyperparameter.configuration_cube<a class="headerlink" href="#module-deepcave.plugins.hyperparameter.configuration_cube" title="Link to this heading">¶</a></h1>
 <p># ConfigurationCube</p>
 <p>This module provides utilities for visualizing and creating a configuration cube.</p>
 <p>The configuration cube displays configurations and their score on the objective.</p>
@@ -837,19 +830,19 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube" title="deepcave.plugins.objective.configuration_cube.ConfigurationCube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigurationCube</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube" title="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigurationCube</span></code></a>()</p></td>
 <td><p>A plugin for visualizing a configuration cube.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.objective.configuration_cube.</span></span><span class="sig-name descname"><span class="pre">ConfigurationCube</span></span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.plugins.hyperparameter.configuration_cube.</span></span><span class="sig-name descname"><span class="pre">ConfigurationCube</span></span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin" title="deepcave.plugins.dynamic.DynamicPlugin"><code class="xref py py-class docutils literal notranslate"><span class="pre">DynamicPlugin</span></code></a></p>
 <p>A plugin for visualizing a configuration cube.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_filter_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_filter_layout" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_filter_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_filter_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.get_filter_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_filter_layout" title="Link to this definition">¶</a></dt>
 <dd><p>Get the layout for the filter block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -866,8 +859,8 @@ The register_input function is located in the Plugin superclass.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_input_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_input_layout" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_input_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_input_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.get_input_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_input_layout" title="Link to this definition">¶</a></dt>
 <dd><p>Get the layout for the input block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -884,8 +877,8 @@ The register_input function is located in the Plugin superclass.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_output_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_output_layout" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_output_layout">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_output_layout" title="Link to this definition">¶</a></dt>
 <dd><p>Get the layout for the output block.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -902,8 +895,8 @@ The register_output function is located in the Plugin superclass.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">
-<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_dependency_inputs">
+<span class="sig-name descname"><span class="pre">load_dependency_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.load_dependency_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_dependency_inputs" title="Link to this definition">¶</a></dt>
 <dd><p>Work like ‘load_inputs’ but called after inputs have changed.</p>
 <p>It is restricted to three Hyperparameters.</p>
 <div class="admonition note">
@@ -928,8 +921,8 @@ The returned dictionary will be merged with the inputs.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_inputs">
-<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_inputs" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_inputs">
+<span class="sig-name descname"><span class="pre">load_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.load_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_inputs" title="Link to this definition">¶</a></dt>
 <dd><p>Load the content for the defined inputs in ‘get_input_layout’ and ‘get_filter_layout’.</p>
 <p>This method is necessary to pre-load contents for the inputs.
 So, if the plugin is called for the first time or there are no results in the cache,
@@ -945,8 +938,8 @@ the plugin gets its content from this method.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_outputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_outputs" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_outputs">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.load_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Read in the raw data and prepares them for the layout.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -972,8 +965,8 @@ Please see ‘_clean_inputs’ for more information.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.objective.configuration_cube.ConfigurationCube.process">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/objective/configuration_cube.html#ConfigurationCube.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.objective.configuration_cube.ConfigurationCube.process" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.process">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/configuration_cube.html#ConfigurationCube.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.process" title="Link to this definition">¶</a></dt>
 <dd><p>Return raw data based on the run and input data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1011,17 +1004,17 @@ Please see ‘_clean_inputs’ for more information.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.plugins.objective.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.plugins.hyperparameter.ablation_paths.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.plugins.objective</p>
+            <p class="prev-next-title">deepcave.plugins.hyperparameter.ablation_paths</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.plugins.objective.parallel_coordinates.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.plugins.hyperparameter.importances.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.plugins.objective.parallel_coordinates</p>
+        <p class="prev-next-title">deepcave.plugins.hyperparameter.importances</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

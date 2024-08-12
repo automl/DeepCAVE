@@ -11,6 +11,8 @@ deepcave.plugins.hyperparameter
    :recursive:
 
    ablation_paths
+   configuration_cube
    importances
+   parallel_coordinates
    pdp
    symbolic_explanations
