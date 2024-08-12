@@ -231,7 +231,7 @@ class PartialDependencies(StaticPlugin):
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
 
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
 
         # Get selected values
         objective_value = inputs["objective_id"]["value"]
@@ -288,7 +288,7 @@ class PartialDependencies(StaticPlugin):
             If the objective is None.
         """
         # Surrogate
-        hp_names = run.configspace.get_hyperparameter_names()
+        hp_names = list(run.configspace.keys())
         objective = run.get_objective(inputs["objective_id"])
         budget = run.get_budget(inputs["budget_id"])
         hp1 = inputs["hyperparameter_name_1"]
@@ -404,14 +404,14 @@ class PartialDependencies(StaticPlugin):
         # Parse inputs
         hp1_name = inputs["hyperparameter_name_1"]
         hp1_idx = run.configspace.get_idx_by_hyperparameter_name(hp1_name)
-        hp1 = run.configspace.get_hyperparameter(hp1_name)
+        hp1 = run.configspace[hp1_name]
 
         hp2_name = inputs["hyperparameter_name_2"]
         hp2_idx = None
         hp2 = None
         if hp2_name is not None and hp2_name != "":
             hp2_idx = run.configspace.get_idx_by_hyperparameter_name(hp2_name)
-            hp2 = run.configspace.get_hyperparameter(hp2_name)
+            hp2 = run.configspace[hp2_name]
 
         objective = run.get_objective(inputs["objective_id"])
         objective_name = objective.name
@@ -425,7 +425,7 @@ class PartialDependencies(StaticPlugin):
         y_ice = np.asarray(outputs["y_ice"])
 
         traces = []
-        if hp2_idx is None:  # 1D
+        if hp2 is None:  # 1D
             # Add ICE curves
             if show_ice:
                 for x_, y_ in zip(x_ice, y_ice):

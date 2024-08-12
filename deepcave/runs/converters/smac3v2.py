@@ -17,6 +17,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+from ConfigSpace.configuration_space import ConfigurationSpace
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -95,10 +96,7 @@ class SMAC3v2Run(Run):
         path = Path(path)
 
         # Read configspace
-        from ConfigSpace.read_and_write import json as cs_json
-
-        with (path / "configspace.json").open("r") as f:
-            configspace = cs_json.read(f.read())
+        configspace = ConfigurationSpace.from_json(path / "configspace.json")
 
         # Read objectives
         with (path / "scenario.json").open() as json_file:

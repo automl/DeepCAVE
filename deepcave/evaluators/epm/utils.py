@@ -6,7 +6,7 @@ This module provides a utility to get the types
 as well as the bounds of the Hyperparameters.
 """
 
-import typing
+from typing import List, Optional, Tuple
 
 import numpy as np
 from ConfigSpace import ConfigurationSpace
@@ -25,8 +25,8 @@ from ConfigSpace.hyperparameters import (
 
 def get_types(
     config_space: ConfigurationSpace,
-    instance_features: typing.Optional[np.ndarray] = None,
-) -> typing.Tuple[typing.List[int], typing.List[typing.Tuple[float, float]]]:
+    instance_features: Optional[np.ndarray] = None,
+) -> Tuple[List[int], List[Tuple[float, float]]]:
     """
     Return the types of the Hyperparameters.
 
@@ -42,7 +42,7 @@ def get_types(
 
     Returns
     -------
-    Tuple[typing.List[int], List[Tuple[float, float]]]
+    Tuple[List[int], List[Tuple[float, float]]]
         The types of the Hyperparameters, as well as the bounds and instance features.
 
     Raises
@@ -104,28 +104,28 @@ def get_types(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, NormalIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.nfhp._lower, param.nfhp._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaFloatHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param._lower, param._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif isinstance(param, BetaIntegerHyperparameter):
             if can_be_inactive:
                 raise ValueError(
                     "Inactive parameters not supported for Beta and Normal Hyperparameters"
                 )
 
-            bounds[i] = (param.bfhp._lower, param.bfhp._upper)
+            bounds[i] = (param.lower_vectorized, param.upper_vectorized)  # type: ignore
         elif not isinstance(
             param,
             (

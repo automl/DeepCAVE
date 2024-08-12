@@ -15,7 +15,7 @@ configspace = CS.ConfigurationSpace(seed=0)
 alpha = CS.hyperparameters.UniformFloatHyperparameter(name="alpha", lower=0, upper=1)
 beta = CS.hyperparameters.Constant(name="beta", value=1)
 
-configspace.add_hyperparameters([alpha, beta])
+configspace.add([alpha, beta])
 
 accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
 time = Objective("time")

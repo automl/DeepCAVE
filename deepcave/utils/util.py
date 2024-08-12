@@ -11,6 +11,8 @@ import datetime
 import random
 import string
 
+import numpy as np
+
 
 def get_random_string(length: int) -> str:
     """
@@ -167,3 +169,20 @@ def custom_round(number: float, min_decimals: int = 3, max_decimals: int = 10) -
         if rounded != round(number, i - 1):
             return rounded
     return round(number, max_decimals)
+
+
+def config_to_tuple(config: dict, round_places: int = 10) -> tuple:
+    """
+    Convert a configuration dictionary to a tuple and round floats.
+
+    Parameters
+    ----------
+    config : dict
+        The configuration dictionary.
+    round_places : int
+        The number of places to round floats.
+        Default is 10.
+    """
+    return tuple(
+        (k, np.round(v, round_places) if isinstance(v, float) else v) for k, v in config.items()
+    )

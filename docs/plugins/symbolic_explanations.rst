@@ -15,8 +15,8 @@ While the Partial Dependencies plugin provides a plot describing the effects of 
 the model performance, the Symbolic Explanations plugin additionally allows to obtain an explicit
 formula capturing these effects.
 
-.. image:: ../images/plugins/symbolic_explanations.png
-
 To learn more about Symbolic Explanations, please see the paper
 `Symbolic Explanations for Hyperparameter Optimization
 <https://openreview.net/forum?id=JQwAc91sg_x>`_.
+
+.. image:: ../images/plugins/symbolic_explanations.png

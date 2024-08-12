@@ -4,6 +4,20 @@
 - Add support for AMLTK.
 - BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
+## Version-Updates
+- ConfigSpace from 0.6.1 to 1.2.0
+- Numpy from 1.26.4 to 2.0.1
+- pyPDPPartitioner from to 0.1.8 to 0.1.9
+
+## Ablation Paths
+- Added ablation paths as a plugin.
+- Added ablation as a evaluator to use for the plugin.
+- Added tests as well as documentation.
+- Modified the RandomForest surrogate model, so it can be passed the number of trees.
+
+## Bug-Fixes
+- Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
+
 # Version 1.2.1
 
 ## Quality of Life
