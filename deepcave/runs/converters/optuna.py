@@ -251,16 +251,10 @@ class OptunaRun(Run):
             else:
                 time = float(endtime - starttime)
 
-            # Round budget
-            # if trial["budget"] is not None:
-            #    budget = np.round(trial["budget"], 2)
-            # else:
-            budget = 0.0
-
             run.add(
                 costs=cost + [time] if isinstance(cost, list) else [cost, time],  # type: ignore
                 config=config,
-                budget=budget,
+                budget=0.0,
                 seed=-1,
                 start_time=starttime,
                 end_time=endtime,

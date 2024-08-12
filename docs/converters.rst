@@ -85,7 +85,8 @@ consider when running Optuna:
    This step is optional but recommended for better visualization and understanding of your study's objectives in DeepCAVE.
 
 .. warning::
-    Loading Optuna runs with conditional search spaces is not supported.
+    Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
+    is not supported.
     This limitation arises because Optuna leverages a dynamic search space, which cannot be
     trivially converted into a static search space as used in DeepCAVE.
 
