@@ -143,7 +143,7 @@ class OptunaRun(Run):
 
         for hp_name, hp in optuna_space.items():
             if isinstance(hp, FloatDistribution) or isinstance(hp, IntDistribution):
-                if hp.step is not None:
+                if hp.step is not None and hp.step != 1:
                     logger.warning(
                         f"Step is not supported. "
                         f'Step={hp.step} will be ignored for hyperparameter "{hp_name}".'
@@ -169,29 +169,22 @@ class OptunaRun(Run):
                         log=hp.log,
                     )
                 )
-            # elif df["type"][row_number] == "categorical":
-            #     if "weigths" in df.columns:
-            #         warnings.warn("Weights are not supported by us. They will be ignored.")
-            #
-            #     items = DataFrameRun._extract_items(df, row_number)
-            #
-            #     hyperparameters.append(
-            #         Categorical(
-            #             name=str(df["name"][row_number]),
-            #             items=items,
-            #             default=df["default"][row_number],
-            #             ordered=df["ordered"][row_number],
-            #         )
-            #     )
-            #
-            # else:
-            #     raise ValueError(
-            #         (
-            #             f"In {os.path.join(path, 'configspace.csv')}, the "
-            #             "hyperparametertype must be `float`, `categorical` or `integer`"
-            #             f" but {df['type']} was given."
-            #         )
-            #     )
+            elif isinstance(hp, CategoricalDistribution):
+                hyperparameters.append(
+                    Categorical(
+                        name=hp_name,
+                        default=hp.choices[0],
+                        items=hp.choices,
+                    )
+                )
+            else:
+                raise ValueError(
+                    (
+                        "The hyperparameters in the Optuna study must be of type "
+                        "`FloatDistribution`, `IntDistribution` or `CategoricalDistribution`, "
+                        f"but a hyperparameter of type {type(hp)} was given."
+                    )
+                )
         configspace.add(hyperparameters)
 
         n_objectives = max(len(trial.values) for trial in optuna_study.trials)
