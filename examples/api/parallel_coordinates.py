@@ -6,7 +6,7 @@ This example shows how to use the plugin Parallel Coordinates.
 Note that other plugins use the same interfaces and can be used in the same fashion.
 """
 
-from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
+from deepcave.plugins.hyperparameter.parallel_coordinates import ParallelCoordinates
 from deepcave.runs.converters.deepcave import DeepCAVERun
 from pathlib import Path
 
