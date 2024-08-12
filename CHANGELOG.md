@@ -2,6 +2,7 @@
 
 ## Converters
 - Add support for AMLTK.
+- Add support for Optuna.
 
 ## Version-Updates
 - ConfigSpace from 0.6.1 to 1.2.0
