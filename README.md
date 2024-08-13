@@ -50,7 +50,7 @@ conda install -c anaconda swig
 make install-dev
 ```
 
-If you want to use the given examples, run this after installing:
+If you want to try the examples for recording your results in DeepCAVE format, run this after installing:
 ```bash
 make install-examples
 ```
