@@ -9,12 +9,12 @@ Displaying Data with Plugins
    configurations
    configuration_footprint
    cost_over_time
-   configuration_cube
    pareto_front
-   parallel_coordinates
    budget_correlation
    importances
    ablation_paths
+   configuration_cube
+   parallel_coordinates
    partial_dependencies
    symbolic_explanations
 

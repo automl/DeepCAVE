@@ -12,4 +12,8 @@ pdp
     This module provides utilities for generating Partial Dependency Plots (PDP).
 symbolic_explanations
     This module provides utilities for generating symbolic explanations.
+parallel_coordinates
+    This module provides utilities for visualizing the parallel coordinates.
+configuration_cube
+    This module provides utilities for visualizing and creating a configruation cube.
 """
