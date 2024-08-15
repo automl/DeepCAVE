@@ -21,6 +21,11 @@
 ## Bug-Fixes
 - Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
 
+## Quality of Life
+- Disable warnings during RunHandler initialization to avoid showing warnings with respect to previously loaded runs.
+- Remove option to use docker (not yet supported).
+- Add SMAC3v2 multi-fidelity example runs.
+
 # Version 1.2.1
 
 ## Quality of Life
