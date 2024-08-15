@@ -25,6 +25,7 @@ if __name__ == "__main__":
         budget_id=budget_id,
         n_hps=100,
         n_trees=100,
+        show_confidence=False,
     )
     # Note: Filter variables are not considered.
     outputs = plugin.generate_outputs(run, inputs)
