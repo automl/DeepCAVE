@@ -1199,7 +1199,7 @@ class AbstractRun(ABC):
 
             config = Configuration(self.configspace, config)
 
-        hps = self.configspace.get_hyperparameters()
+        hps = list(self.configspace.values())
         values = list(config.get_array())
 
         if specific:
@@ -1335,9 +1335,9 @@ class AbstractRun(ABC):
             conditional = {}
             impute_values = {}
 
-            for idx, hp in enumerate(self.configspace.get_hyperparameters()):
+            for idx, hp in enumerate(list(self.configspace.values())):
                 if idx not in conditional:
-                    parents = self.configspace.get_parents_of(hp.name)
+                    parents = self.configspace.parents_of[hp.name]
                     if len(parents) == 0:
                         conditional[idx] = False
                     else:
@@ -1365,7 +1365,7 @@ class AbstractRun(ABC):
         else:
             columns = []
 
-        columns += [name for name in self.configspace.get_hyperparameter_names()]
+        columns += [name for name in list(self.configspace.keys())]
         columns += [objective.name for objective in objectives]
 
         if include_combined_cost:

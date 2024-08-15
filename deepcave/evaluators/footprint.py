@@ -56,7 +56,7 @@ class Footprint:
 
         # Important parameters
         is_categorical, depth = [], []
-        for hp in self.cs.get_hyperparameters():
+        for hp in list(self.cs.values()):
             if isinstance(hp, CategoricalHyperparameter):
                 is_categorical.append(True)
             else:
@@ -346,7 +346,7 @@ class Footprint:
         # The number of hps is just counted
         # Since X is normalized, 1 can just be added
         max_distance = 0
-        for hp in self.cs.get_hyperparameters():
+        for hp in list(self.cs.values()):
             if isinstance(hp, CategoricalHyperparameter) or isinstance(hp, Constant):
                 continue
 
