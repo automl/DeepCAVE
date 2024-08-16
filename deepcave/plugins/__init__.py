@@ -593,7 +593,7 @@ class Plugin(Layout, ABC):
             Dictionary containing the mapping information.
         """
         # This is necessary, because of the conditional type of order
-        order: Union[List[Tuple[str, str]], List[Tuple[str, str, Any]]]
+        order: Union[List[Tuple[str, str]], List[Tuple[str, str, bool, Any]]]
 
         if input:
             order = self.inputs
@@ -630,10 +630,8 @@ class Plugin(Layout, ABC):
         List[Optional[str]]
             Sorted list from the given dict.
         """
-        from deepcave import c
-
         # This is necessary, because of the conditional type of order
-        order: Union[List[Tuple[str, str, bool]], List[Tuple[str, str, bool, Any]]]
+        order: Union[List[Tuple[str, str]], List[Tuple[str, str, bool, Any]]]
 
         if input:
             order = self.inputs
@@ -641,12 +639,9 @@ class Plugin(Layout, ABC):
             order = self.outputs
 
         result: List[Optional[str]] = []
-        for id, attribute, instance, *_ in order:
+        for id, attribute, *_ in order:
             if not input:
-                # Instance is mlp_mode in case of outputs
-                # Simply ignore other outputs.
-                if instance != c.get("matplotlib-mode"):
-                    continue
+                continue
 
             try:
                 value = d[id][attribute]
