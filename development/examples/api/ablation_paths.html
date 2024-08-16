@@ -770,16 +770,15 @@ Note that other plugins use the same interfaces and can be used in the same fash
         <span class="n">budget_id</span><span class="o">=</span><span class="n">budget_id</span><span class="p">,</span>
         <span class="n">n_hps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
         <span class="n">n_trees</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">show_confidence</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># Note: Filter variables are not considered.</span>
     <span class="n">outputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">generate_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
 
     <span class="c1"># Finally, you can load the figure. Here, the filter variables play a role.</span>
-    <span class="c1"># Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.</span>
-    <span class="n">figure1</span><span class="p">,</span> <span class="n">figure2</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>  <span class="c1"># plotly.go figure</span>
+    <span class="n">figure1</span><span class="p">,</span> <span class="n">figure2</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
     <span class="n">figure1</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="s2">&quot;examples/api/ablation_paths_performance.png&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
     <span class="n">figure2</span><span class="o">.</span><span class="n">write_image</span><span class="p">(</span><span class="s2">&quot;examples/api/ablation_paths_improvement.png&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="c1"># figure.show()</span>
 </pre></div>
 </div>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-api-ablation-paths-py">

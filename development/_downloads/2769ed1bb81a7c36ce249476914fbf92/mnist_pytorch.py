@@ -2,14 +2,12 @@
 Multi-Layer Perceptron via PyTorch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This more advanced example incorporates multiple objectives, budgets and statusses to
-show the strenghts of DeepCAVE's recorder.
+This more advanced example incorporates multiple objectives, budgets and statuses to
+show the strength of DeepCAVE's recorder.
 """
 
 
-from inspect import BoundArguments
 import os
-from re import T
 import time as t
 import random
 import ConfigSpace as CS
@@ -198,8 +196,8 @@ def get_configspace(seed):
     )
 
     # Now add sub configspace
-    configspace.add_condition(CS.EqualsCondition(num_neurons_layer1, model, "mlp"))
-    configspace.add_condition(CS.EqualsCondition(num_neurons_layer2, model, "mlp"))
+    configspace.add(CS.EqualsCondition(num_neurons_layer1, model, "mlp"))
+    configspace.add(CS.EqualsCondition(num_neurons_layer2, model, "mlp"))
 
     return configspace
 

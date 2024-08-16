@@ -998,8 +998,8 @@
             <span class="n">std</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">if</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">importances</span><span class="p">:</span>
-                <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
-                <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
+                <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
+                <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanvar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">[</span><span class="n">hp_name</span><span class="p">])</span>
 
             <span class="c1"># Use this to quantify importance via importance over mean value (not normalized to 1)</span>
             <span class="c1"># mean = self.importances[hp_name][0]</span>

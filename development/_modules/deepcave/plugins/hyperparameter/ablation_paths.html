@@ -824,7 +824,7 @@
 <div class="viewcode-block" id="AblationPaths.get_filter_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_filter_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the layout for the filter block.</span>
 
@@ -836,29 +836,64 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        List[html.Div]</span>
+<span class="sd">        List[dbc.Row]</span>
 <span class="sd">            Layout for the filter block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">[</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Limit Hyperparameters&quot;</span><span class="p">),</span>
-                    <span class="n">help_button</span><span class="p">(</span>
-                        <span class="s2">&quot;Shows only the n most important (i.e. first selected) hyperparameters.&quot;</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Limit Hyperparameters&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;Shows only the n most important (i.e. first selected) &quot;</span>
+                                        <span class="s2">&quot;hyperparameters.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;n_hps&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">),</span>
+                                <span class="p">],</span>
+                                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;n_hps&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;number&quot;</span><span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show confidence&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span><span class="s2">&quot;Displays the confidence bands.&quot;</span><span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">])</span>
+                                    <span class="p">),</span>
+                                <span class="p">]</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
                 <span class="p">],</span>
-                <span class="n">className</span><span class="o">=</span><span class="s2">&quot;mb-3&quot;</span><span class="p">,</span>
             <span class="p">),</span>
-            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">dbc</span><span class="o">.</span><span class="n">Row</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budgets&quot;</span><span class="p">),</span>
-                    <span class="n">help_button</span><span class="p">(</span>
-                        <span class="s2">&quot;Budget refers to the multi-fidelity budget. &quot;</span>
-                        <span class="s2">&quot;The hyperparameters are sorted by the highest budget.&quot;</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Budgets&quot;</span><span class="p">),</span>
+                                    <span class="n">help_button</span><span class="p">(</span>
+                                        <span class="s2">&quot;Budget refers to the multi-fidelity budget. &quot;</span>
+                                        <span class="s2">&quot;The hyperparameters are sorted by the highest budget.&quot;</span>
+                                    <span class="p">),</span>
+                                    <span class="n">dbc</span><span class="o">.</span><span class="n">RadioItems</span><span class="p">(</span>
+                                        <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span>
+                                    <span class="p">),</span>
+                                <span class="p">]</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
                     <span class="p">),</span>
-                    <span class="n">dbc</span><span class="o">.</span><span class="n">RadioItems</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;budget_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                <span class="p">]</span>
+                <span class="p">],</span>
             <span class="p">),</span>
         <span class="p">]</span></div>
 
@@ -882,6 +917,7 @@
             <span class="s2">&quot;n_trees&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
             <span class="s2">&quot;n_hps&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
             <span class="s2">&quot;budget_id&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_checklist_options</span><span class="p">(),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+            <span class="s2">&quot;show_confidence&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">binary</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">},</span>
         <span class="p">}</span></div>
 
 
@@ -1069,6 +1105,7 @@
         <span class="n">selected_budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">]</span>
         <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
         <span class="n">n_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_hps&quot;</span><span class="p">]</span>
+        <span class="n">show_confidence</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">n_hps</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">n_hps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">PreventUpdate</span>
@@ -1109,7 +1146,7 @@
                     <span class="n">name</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                     <span class="n">y</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">],</span>
-                    <span class="n">error_y</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">]),</span>
+                    <span class="n">error_y</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">array</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">])</span> <span class="k">if</span> <span class="n">show_confidence</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span>
                 <span class="p">)</span>
             <span class="p">]</span>
@@ -1124,7 +1161,7 @@
                     <span class="n">name</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
                     <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
                     <span class="n">y</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">],</span>
-                    <span class="n">error_y_array</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">],</span>
+                    <span class="n">error_y_array</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">][:</span><span class="n">n_hps</span><span class="p">]</span> <span class="k">if</span> <span class="n">show_confidence</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">marker_color</span><span class="o">=</span><span class="n">get_color</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">]</span>
