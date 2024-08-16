@@ -75,21 +75,6 @@ class HeaderLayout(Layout):
                 html.Button(className="navbar-toggler position-absolute d-md-none collapsed"),
                 dcc.Location(id="matplotlib-mode-refresh", refresh=True),
                 dbc.Button(
-                    [
-                        "Matplotlib",
-                        dbc.Badge(
-                            "off",
-                            color="light",
-                            text_color="black",
-                            className="ms-2",
-                            id="matplotlib-mode-badge",
-                        ),
-                    ],
-                    color="secondary",
-                    className="me-2",
-                    id="matplotlib-mode-toggle",
-                ),
-                dbc.Button(
                     "Exit", color="secondary", className="me-2", id="exit-deepcave", disabled=False
                 ),
             ],

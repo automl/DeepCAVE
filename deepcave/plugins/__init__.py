@@ -834,7 +834,7 @@ class Plugin(Layout, ABC):
         FileNotFoundError
             If the help file can not be found.
         """
-        from deepcave import c, notification
+        from deepcave import notification
 
         # Reset runtime variables
         self.previous_inputs = {}
@@ -969,7 +969,7 @@ class Plugin(Layout, ABC):
                     id=f"{self.id}-output",
                     className="shadow-sm p-3 bg-white rounded-lg loading-container",
                     children=output_layout,
-                    style={} if not c.get("matplotlib-mode") else {"display": "none"},
+                    style={},
                 )
             ]
 
