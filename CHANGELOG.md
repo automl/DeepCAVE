@@ -2,6 +2,7 @@
 
 ## Converters
 - Add support for AMLTK.
+- BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
 ## Version-Updates
 - ConfigSpace from 0.6.1 to 1.2.0
