@@ -28,6 +28,7 @@
 - Remove option to use docker (not yet supported).
 - Add SMAC3v2 multi-fidelity example runs.
 - Add more useful SMAC3v2 multi-objective example run.
+- Remove defective matplotlib button and associated functionalities.
 
 # Version 1.2.1
 
