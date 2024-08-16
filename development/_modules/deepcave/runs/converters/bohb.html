@@ -842,8 +842,10 @@
             <span class="n">cost</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">loss</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">budget</span>
 
-            <span class="k">if</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">status_string</span> <span class="o">=</span> <span class="s2">&quot;CRASHED&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;state&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">status_string</span> <span class="o">=</span> <span class="s2">&quot;SUCCESS&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">status_string</span> <span class="o">=</span> <span class="n">bohb_run</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span>
 
