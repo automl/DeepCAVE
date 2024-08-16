@@ -115,8 +115,10 @@ class BOHBRun(Run):
             cost = bohb_run.loss
             budget = bohb_run.budget
 
-            if bohb_run.info is None:
-                status_string = "CRASHED"
+            if not isinstance(bohb_run.info, dict) or (
+                isinstance(bohb_run.info, dict) and "state" not in bohb_run.info.keys()
+            ):
+                status_string = "SUCCESS"
             else:
                 status_string = bohb_run.info["state"]
 

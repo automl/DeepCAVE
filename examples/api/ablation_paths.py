@@ -25,13 +25,12 @@ if __name__ == "__main__":
         budget_id=budget_id,
         n_hps=100,
         n_trees=100,
+        show_confidence=False,
     )
     # Note: Filter variables are not considered.
     outputs = plugin.generate_outputs(run, inputs)
 
     # Finally, you can load the figure. Here, the filter variables play a role.
-    # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-    figure1, figure2 = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+    figure1, figure2 = plugin.load_outputs(run, inputs, outputs)
     figure1.write_image("examples/api/ablation_paths_performance.png", scale=2.0)
     figure2.write_image("examples/api/ablation_paths_improvement.png", scale=2.0)
-    # figure.show()
