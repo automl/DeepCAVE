@@ -263,8 +263,8 @@ class LPI:
             std = 0
 
             if hp_name in self.importances:
-                mean = np.mean(self.variances[hp_name])
-                std = np.var(self.variances[hp_name])
+                mean = np.nanmean(self.variances[hp_name])
+                std = np.nanvar(self.variances[hp_name])
 
             # Use this to quantify importance via importance over mean value (not normalized to 1)
             # mean = self.importances[hp_name][0]

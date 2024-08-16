@@ -8,7 +8,7 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
     - AMLTKRun: Define an AMLTK run object.
 """
 
-from typing import Union
+from typing import Optional, Sequence, Union
 
 import re
 from pathlib import Path
@@ -53,7 +53,7 @@ class AMLTKRun(Run):
         if self.path is None:
             return ""
 
-        # Use hash of history.csv as id
+        # Use hash of history.parquet as id
         return file_to_hash(self.path / "history.parquet")
 
     @property
@@ -168,12 +168,11 @@ class AMLTKRun(Run):
             else:
                 status = Status.UNKNOWN
 
-            amltk_cost = extract_costs(trial)
-            cost = amltk_cost[0] if len(amltk_cost) == 1 else amltk_cost
+            cost: Sequence[Optional[float]] = extract_costs(trial)
 
             if status != Status.SUCCESS:
                 # Costs which failed, should not be included
-                cost = [None] * len(cost) if isinstance(cost, list) else None
+                cost = [None] * len(cost)
                 time = None
             else:
                 time = float(endtime - starttime)
@@ -190,7 +189,7 @@ class AMLTKRun(Run):
                 additional_info = None
 
             run.add(
-                costs=cost + [time] if isinstance(cost, list) else [cost, time],  # type: ignore
+                costs=cost + [time],  # type: ignore
                 config=config,
                 budget=budget,
                 seed=trial["trial_seed"],
