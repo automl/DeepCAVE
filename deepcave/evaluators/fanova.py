@@ -49,8 +49,8 @@ class fANOVA:
 
         self.run = run
         self.cs = run.configspace
-        self.hps = self.cs.get_hyperparameters()
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hps = list(self.cs.values())
+        self.hp_names = list(self.cs.keys())
         self.logger = get_logger(self.__class__.__name__)
 
     def calculate(
@@ -135,7 +135,7 @@ class fANOVA:
 
         hp_ids = []
         for hp_name in hp_names:
-            hp_ids.append(self.cs.get_idx_by_hyperparameter_name(hp_name))
+            hp_ids.append(self.cs.index_of[hp_name])
 
         # Calculate the marginals
         vu_individual, vu_total = self._model.compute_marginals(hp_ids, depth)
@@ -190,7 +190,7 @@ class fANOVA:
             }
 
         # The ids get replaced with hyperparameter names again
-        all_hp_names = self.cs.get_hyperparameter_names()
+        all_hp_names = list(self.cs.keys())
         importances_: Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]] = {}
         for hp_ids_importances, values in importances.items():
             hp_names = [all_hp_names[hp_id] for hp_id in hp_ids_importances]

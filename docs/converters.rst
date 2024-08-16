@@ -13,6 +13,7 @@ Currently, DeepCAVE supports the following converters:
 - Auto-Sklearn
 - Auto-PyTorch
 - AMLTK
+- Optuna
 
 
 .. note::
@@ -37,9 +38,8 @@ consider when running AMLTK:
 
    .. code-block:: python
 
-      from ConfigSpace.read_and_write import json as cs_json
       space = pipeline.search_space(parser="configspace")
-      bucket.store({"configspace.json": cs_json.write(space)})
+      bucket.store({"configspace.json": space.to_serialized_dict()})
 
 3. Define the start and end times for your trials:
 
@@ -60,6 +60,35 @@ consider when running AMLTK:
      after the AMLTK run has finished by loading it into a Pandas Dataframe, manipulating it, and
      writing it back to the ``history.parquet`` file.
 
+Optuna Converter
+----------------
+
+To be able to load your Optuna run into DeepCave, there are a few points to
+consider when running Optuna:
+
+1. Save the Optuna ``study`` object as a Pickle file:
+
+   .. code-block:: python
+
+        import pickle
+        with open("<path-to-save-study>/optuna_study.pkl", "wb") as f:
+            pickle.dump(study, f)
+
+   Replace ``<path-to-save-study>`` with the directory where you want to store the Pickle file.
+
+2. Optional: If you want to display the names of your objectives in DeepCAVE, you can set metric names in Optuna using the following command:
+
+   .. code-block:: python
+
+        study.set_metric_names(["Accuracy", "Flops"])
+
+   This step is optional but recommended for better visualization and understanding of your study's objectives in DeepCAVE.
+
+.. warning::
+    Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
+    is not supported.
+    This limitation arises because Optuna leverages a dynamic search space, which cannot be
+    trivially converted into a static search space as used in DeepCAVE.
 
 Custom Converter
 ----------------

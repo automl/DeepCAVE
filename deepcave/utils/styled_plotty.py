@@ -267,15 +267,13 @@ def get_hyperparameter_ticks(
         tickvals and ticktext.
     """
     # This is basically the inverse of `encode_config`.
-    tickvals: List[Union[float, int]]
+    tickvals: List[Any]
     if isinstance(hp, CategoricalHyperparameter):
         ticktext = hp.choices
         if len(ticktext) == 1:
             tickvals = [0]
         else:
-            tickvals = [
-                hp._inverse_transform(choice) / (len(hp.choices) - 1) for choice in hp.choices
-            ]
+            tickvals = [hp.to_vector(choice) / (len(hp.choices) - 1) for choice in hp.choices]
 
     elif isinstance(hp, Constant):
         tickvals = [CONSTANT_VALUE]
@@ -300,12 +298,12 @@ def get_hyperparameter_ticks(
 
         inverse_values = []
         for value in values:
-            inverse_values += [hp._transform_scalar(value)]
+            inverse_values += [hp.to_value(value)]
 
         # Integers are rounded, they are mapped
         if isinstance(hp, IntegerHyperparameter):
             for label in inverse_values:
-                value = hp._inverse_transform(label)
+                value = hp.to_vector(label)
 
                 if value not in tickvals:
                     tickvals += [value]
@@ -315,8 +313,8 @@ def get_hyperparameter_ticks(
                 # Now add additional values are added
                 for value in additional_values:
                     if not (value is None or np.isnan(value) or value == NAN_VALUE):
-                        label = hp._transform_scalar(value)
-                        value = hp._inverse_transform(label)
+                        label = hp.to_value(value)
+                        value = hp.to_vector(label)
 
                         if value not in tickvals:
                             tickvals += [value]
@@ -334,7 +332,7 @@ def get_hyperparameter_ticks(
                         and value not in tickvals
                     ):
                         tickvals += [value]
-                        ticktext += [hp._transform_scalar(value)]
+                        ticktext += [hp.to_value(value)]
 
     ticktext = [prettify_label(label) for label in ticktext]
 
@@ -526,11 +524,10 @@ def generate_config_code(register: Callable, variables: List[str]) -> List[Compo
     """
     code = """
     from ConfigSpace.configuration_space import ConfigurationSpace, Configuration
-    from ConfigSpace.read_and_write import cs_json
 
     # Create configspace
-    with open({{path}}, 'r') as f:
-        cs = cs_json.read(f.read())
+    cs = ConfigurationSpace.from_json({{path}})
+
 
     # Create config
     values = {{config_dict}}

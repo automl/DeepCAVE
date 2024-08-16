@@ -48,22 +48,27 @@ repos:
             'absl-py>=1.0.0',
             'jsonlines>=3.0.0',
             'pandas>=1.3.4',
-            'numpy==1.26.4',
-            'matplotlib>=3.5.1',
+            'numpy==2.0.1',
+            'matplotlib==3.9.0',
+            'seaborn>=0.13.0',
             'pyyaml>=6.0.1',
             'kaleido>=0.2.1',
             'gplearn>=0.4.2',
             'sympy>=1.12',
-            'ConfigSpace==0.6.1',
+            'requests>=2.31.0',
+            'ConfigSpace==1.2.0',
             'pyrfr>=0.9.0',
             'hpbandster==0.7.4',
+            'optuna==3.6.1',
             'dash==2.0.0',
             'dash-extensions==0.0.71',
             'dash-bootstrap-components==1.0.3',
             'redis>=4.1.4',
             'rq>=1.10.1',
             'werkzeug==2.0.3',
-            'pyPDPPartitioner>=0.1.8'
+            'pyarrow==16.1.0',
+            'fastparquet==2024.5.0',
+            'pyPDPPartitioner>=0.1.9'
         ] # Needed for mypy, so that it knows the types to check
 
   - repo: https://github.com/PyCQA/flake8

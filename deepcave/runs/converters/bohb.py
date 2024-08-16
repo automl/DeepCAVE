@@ -13,6 +13,8 @@ from typing import Any, Dict, Union
 
 from pathlib import Path
 
+from ConfigSpace.configuration_space import ConfigurationSpace
+
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
@@ -83,9 +85,7 @@ class BOHBRun(Run):
         path = Path(path)
 
         # Read configspace
-        from ConfigSpace.read_and_write import json as cs_json
-
-        configspace = cs_json.read((path / "configspace.json").read_text())
+        configspace = ConfigurationSpace.from_json(path / "configspace.json")
 
         # Read objectives
         # It has to be defined here, because the type of the objective is not known
@@ -115,8 +115,10 @@ class BOHBRun(Run):
             cost = bohb_run.loss
             budget = bohb_run.budget
 
-            if bohb_run.info is None:
-                status_string = "CRASHED"
+            if not isinstance(bohb_run.info, dict) or (
+                isinstance(bohb_run.info, dict) and "state" not in bohb_run.info.keys()
+            ):
+                status_string = "SUCCESS"
             else:
                 status_string = bohb_run.info["state"]
 

@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Instantiate the plugin
     plugin = Importances()
     inputs = plugin.generate_inputs(
-        hyperparameter_names=run.configspace.get_hyperparameter_names(),
+        hyperparameter_names=list(run.configspace.keys()),
         objective_id=objective_id,
         budget_ids=budget_ids,
         method="global",
@@ -32,6 +32,5 @@ if __name__ == "__main__":
     outputs = plugin.generate_outputs(run, inputs)
 
     # Finally, you can load the figure. Here, the filter variables play a role.
-    figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+    figure = plugin.load_outputs(run, inputs, outputs)
     figure.write_image("examples/api/importances.png", scale=2.0)
-    # figure.show()
