@@ -17,6 +17,7 @@ A utility to convert a string text to a simpler, lower case text format is provi
     ABORTED: int
     NOT_EVALUATED: int
     FAILED: int
+    PRUNED: int
     UNKNOWN: int
 """
 
@@ -42,7 +43,8 @@ class Status(IntEnum):
     ABORTED = 5
     NOT_EVALUATED = 6
     FAILED = 7
-    UNKNOWN = 8
+    PRUNED = 8
+    UNKNOWN = 9
 
     def to_text(self) -> str:
         """
