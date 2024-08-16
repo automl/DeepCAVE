@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 from ConfigSpace import Configuration
-from ConfigSpace.c_util import change_hp_value, check_forbidden
+from ConfigSpace.c_util import change_hp_value
 from ConfigSpace.exceptions import ForbiddenValueError
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -61,7 +61,7 @@ class LPI:
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
         self.variances: Optional[Dict[Any, List[Any]]] = None
         self.importances: Optional[Dict[Any, Any]] = None
 
@@ -291,7 +291,7 @@ class LPI:
         neighborhood : Dict[str, List[Union[np.ndarray, List[np.ndarray]]]]
             The neighborhood.
         """
-        hp_names = self.cs.get_hyperparameter_names()
+        hp_names = list(self.cs.keys())
 
         neighborhood: Dict[str, List[Union[np.ndarray, List[np.ndarray]]]] = {}
         for hp_idx, hp_name in enumerate(hp_names):
@@ -326,7 +326,7 @@ class LPI:
                     neighbors_range = np.linspace(hp.lower, hp.upper, self.continous_neighbors)
                 neighbors = list(map(lambda x: hp.to_vector(x), neighbors_range))
             else:
-                neighbors = hp.get_neighbors(self.incumbent_array[hp_idx], self.rs)
+                neighbors = hp.neighbors_vectorized(self.incumbent_array[hp_idx], n=4, seed=self.rs)
 
             for neighbor in neighbors:
                 if neighbor in checked_neighbors:
@@ -339,7 +339,7 @@ class LPI:
                     new_config = Configuration(self.cs, vector=new_array)
                     hp_neighborhood.append(new_config)
                     new_config.check_valid_configuration()
-                    check_forbidden(self.cs.forbidden_clauses, new_array)
+                    self.cs.check_configuration_vector_representation(new_array)
 
                     checked_neighbors.append(neighbor)
                     checked_neighbors_non_unit_cube.append(new_config[hp_name])

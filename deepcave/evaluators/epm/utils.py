@@ -53,11 +53,11 @@ def get_types(
         If the Hyperparameter Type is unknown.
     """
     # Extract types vector for rf from config space and the bounds
-    types = [0] * len(config_space.get_hyperparameters())
+    types = [0] * len(list(config_space.values()))
     bounds = [(np.nan, np.nan)] * len(types)
 
-    for i, param in enumerate(config_space.get_hyperparameters()):
-        parents = config_space.get_parents_of(param.name)
+    for i, param in enumerate(list(config_space.values())):
+        parents = config_space.parents_of[param.name]
         if len(parents) == 0:
             can_be_inactive = False
         else:
