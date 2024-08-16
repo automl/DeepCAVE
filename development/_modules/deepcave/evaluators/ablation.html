@@ -852,8 +852,8 @@
 
         <span class="k">if</span> <span class="n">inc_cost</span> <span class="o">&gt;</span> <span class="n">def_cost</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;The predicted incumbent cost is smaller than the predicted default &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;cost for budget: </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">. This could mean that the configuration space &quot;</span>
+                <span class="s2">&quot;The predicted incumbent objective is worse than the predicted default &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;objective for budget: </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">. This could mean that the configuration space &quot;</span>
                 <span class="s2">&quot;with which the surrogate model was trained contained too few examples.&quot;</span>
             <span class="p">)</span>
             <span class="n">performances</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">({</span><span class="n">hp_name</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">hp_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp_names</span><span class="p">})</span>
@@ -981,12 +981,6 @@
                 <span class="k">continue</span>
         <span class="n">hp_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
         <span class="k">if</span> <span class="n">max_hp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">max_hp_difference</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="s2">&quot;No improvement found in ablation step &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hp_count</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">hp_it</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">hp_count</span><span class="si">}</span><span class="s2"> for budget </span><span class="si">{</span><span class="n">budget</span><span class="si">}</span><span class="s2">, &quot;</span>
-                    <span class="s2">&quot;choose hyperparameter with smallest increase in cost.&quot;</span>
-                <span class="p">)</span>
             <span class="c1"># For the maximum impact hyperparameter, switch the default with the incumbent value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">default_config</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span> <span class="o">=</span> <span class="n">incumbent_config</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span>
             <span class="n">max_hp_cost</span><span class="p">,</span> <span class="n">max_hp_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
