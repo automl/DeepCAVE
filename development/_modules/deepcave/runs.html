@@ -2018,7 +2018,7 @@
 
             <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
 
-        <span class="n">hps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">()</span>
+        <span class="n">hps</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
         <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_array</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="n">specific</span><span class="p">:</span>
@@ -2160,9 +2160,9 @@
             <span class="n">conditional</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">impute_values</span> <span class="o">=</span> <span class="p">{}</span>
 
-            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">()):</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">values</span><span class="p">())):</span>
                 <span class="k">if</span> <span class="n">idx</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">conditional</span><span class="p">:</span>
-                    <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_parents_of</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">parents_of</span><span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                         <span class="n">conditional</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -2190,7 +2190,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()]</span>
+        <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
         <span class="n">columns</span> <span class="o">+=</span> <span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">objective</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">include_combined_cost</span><span class="p">:</span>

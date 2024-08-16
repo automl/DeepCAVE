@@ -786,7 +786,7 @@
 
         <span class="c1"># Important parameters</span>
         <span class="n">is_categorical</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">):</span>
                 <span class="n">is_categorical</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1085,7 +1085,7 @@
         <span class="c1"># The number of hps is just counted</span>
         <span class="c1"># Since X is normalized, 1 can just be added</span>
         <span class="n">max_distance</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_hyperparameters</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalHyperparameter</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">Constant</span><span class="p">):</span>
                 <span class="k">continue</span>
 
@@ -1260,7 +1260,7 @@
 <span class="sd">        int</span>
 <span class="sd">            Depth of the Hyperparameter.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_parents_of</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+        <span class="n">parents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">parents_of</span><span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">parents</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">1</span>
 
@@ -1271,7 +1271,7 @@
             <span class="n">old_parents</span> <span class="o">=</span> <span class="n">new_parents</span>
             <span class="n">new_parents</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">old_parents</span><span class="p">:</span>
-                <span class="n">pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_parents_of</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">pp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_parents_of</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">pp</span><span class="p">:</span>
                     <span class="n">new_parents</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
