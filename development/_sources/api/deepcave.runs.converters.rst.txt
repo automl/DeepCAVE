@@ -13,5 +13,6 @@ deepcave.runs.converters
    amltk
    bohb
    deepcave
+   optuna
    smac3v1
    smac3v2

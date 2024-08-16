@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.runs.converters.smac3v1 &#8212; DeepCAVE Documentation 1.3 documentation</title>
+    <title>deepcave.runs.converters.optuna &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -725,40 +725,54 @@
               
               <div>
                 
-  <h1>Source code for deepcave.runs.converters.smac3v1</h1><div class="highlight"><pre>
+  <h1>Source code for deepcave.runs.converters.optuna</h1><div class="highlight"><pre>
 <span></span><span class="c1">#  noqa: D400</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"># SMAC3v1Run</span>
+<span class="sd"># OptunaRun</span>
 
-<span class="sd">This module provides utilities to create a SMAC3v1</span>
-<span class="sd">(Sequential Model-based Algorithm Configuration) run.</span>
-
-<span class="sd">Version 1.4 is used.</span>
+<span class="sd">This module provides utilities to create an Optuna run.</span>
 
 <span class="sd">## Classes</span>
-<span class="sd">    - SMAC3v1Run: Define a SMAC3v1 run object.</span>
+<span class="sd">    - OptunaRun: Define an Optuna run object.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.configuration_space</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Categorical</span><span class="p">,</span>
+    <span class="n">Configuration</span><span class="p">,</span>
+    <span class="n">ConfigurationSpace</span><span class="p">,</span>
+    <span class="n">Float</span><span class="p">,</span>
+    <span class="n">Integer</span><span class="p">,</span>
+    <span class="n">Uniform</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">Hyperparameter</span>
+<span class="kn">from</span> <span class="nn">optuna.distributions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CategoricalDistribution</span><span class="p">,</span>
+    <span class="n">FloatDistribution</span><span class="p">,</span>
+    <span class="n">IntDistribution</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">optuna.search_space</span> <span class="kn">import</span> <span class="n">IntersectionSearchSpace</span>
+<span class="kn">from</span> <span class="nn">optuna.study</span> <span class="kn">import</span> <span class="n">StudyDirection</span>
+<span class="kn">from</span> <span class="nn">optuna.trial</span> <span class="kn">import</span> <span class="n">TrialState</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.run</span> <span class="kn">import</span> <span class="n">Run</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">file_to_hash</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SMAC3v1Run">
-<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run">[docs]</a>
-<span class="k">class</span> <span class="nc">SMAC3v1Run</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
+<div class="viewcode-block" id="OptunaRun">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun">[docs]</a>
+<span class="k">class</span> <span class="nc">OptunaRun</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Define a SMAC3v1 (Sequential Model-based Algorithm Configuration) run object.</span>
-
-<span class="sd">    Version 1.4 is used.</span>
+<span class="sd">    Define an Optuna run object.</span>
 
 <span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
@@ -766,8 +780,29 @@
 <span class="sd">        The path to the run.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;SMAC3v1&quot;</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;Optuna&quot;</span>
     <span class="n">_initial_order</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_pickle_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the path to the pickle file from the directory path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : Path</span>
+<span class="sd">            The path to the directory containing the pickle file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Path</span>
+<span class="sd">            The path to the pickle file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pickle_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.pkl&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pickle_files</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;There should be exactly one pickle file in the directory.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pickle_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -785,8 +820,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1"># Use hash of history.json as id</span>
-        <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span>
+        <span class="n">pickle_file</span> <span class="o">=</span> <span class="n">OptunaRun</span><span class="o">.</span><span class="n">_get_pickle_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
@@ -801,23 +836,24 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
+        <span class="n">pickle_file</span> <span class="o">=</span> <span class="n">OptunaRun</span><span class="o">.</span><span class="n">_get_pickle_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
 
-<div class="viewcode-block" id="SMAC3v1Run.from_path">
-<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.from_path">[docs]</a>
+<div class="viewcode-block" id="OptunaRun.from_path">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;SMAC3v1Run&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;OptunaRun&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Based on working_dir/run_name/*, return a new trials object.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        path : Union[Path, str]</span>
-<span class="sd">            The path to base the run on.</span>
+<span class="sd">            The path to base the trial object on.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        A SMAC3v1 run.</span>
+<span class="sd">        The Optuna run.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -826,112 +862,137 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
+        <span class="c1"># Load the optuna study from the file path</span>
+        <span class="n">pickle_file_path</span> <span class="o">=</span> <span class="n">OptunaRun</span><span class="o">.</span><span class="n">_get_pickle_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pickle_file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">optuna_study</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
         <span class="c1"># Read configspace</span>
-        <span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;configspace.json&quot;</span><span class="p">)</span>
+        <span class="n">optuna_space</span> <span class="o">=</span> <span class="n">IntersectionSearchSpace</span><span class="p">(</span><span class="n">include_pruned</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">study</span><span class="o">=</span><span class="n">optuna_study</span><span class="p">)</span>
+        <span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="p">()</span>
 
-        <span class="c1"># Read objectives</span>
-        <span class="c1"># It has to be defined here, because the type of the objective is not known</span>
-        <span class="c1"># Only lock lower</span>
-        <span class="n">objective1</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Cost&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">objective2</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">hyperparameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Hyperparameter</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Read meta</span>
-        <span class="c1"># Everything else is ignored</span>
-        <span class="n">ignore</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;train_inst_fn&quot;</span><span class="p">,</span> <span class="s2">&quot;pcs_fn&quot;</span><span class="p">,</span> <span class="s2">&quot;execdir&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">hp_name</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">optuna_space</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">FloatDistribution</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">IntDistribution</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hp</span><span class="o">.</span><span class="n">step</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Step is not supported. &quot;</span>
+                        <span class="sa">f</span><span class="s1">&#39;Step=</span><span class="si">{</span><span class="n">hp</span><span class="o">.</span><span class="n">step</span><span class="si">}</span><span class="s1"> will be ignored for hyperparameter &quot;</span><span class="si">{</span><span class="n">hp_name</span><span class="si">}</span><span class="s1">&quot;.&#39;</span>
+                    <span class="p">)</span>
 
-        <span class="n">meta</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scenario.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-                <span class="n">items</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; = &quot;</span><span class="p">)</span>
-                <span class="n">arg</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">FloatDistribution</span><span class="p">):</span>
+                <span class="n">hyperparameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Float</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">hp_name</span><span class="p">,</span>
+                        <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">high</span><span class="p">),</span>
+                        <span class="n">distribution</span><span class="o">=</span><span class="n">Uniform</span><span class="p">(),</span>
+                        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">log</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">IntDistribution</span><span class="p">):</span>
+                <span class="n">hyperparameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Integer</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">hp_name</span><span class="p">,</span>
+                        <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">high</span><span class="p">),</span>
+                        <span class="n">distribution</span><span class="o">=</span><span class="n">Uniform</span><span class="p">(),</span>
+                        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">log</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">log</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="n">CategoricalDistribution</span><span class="p">):</span>
+                <span class="n">hyperparameters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">Categorical</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="n">hp_name</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">items</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;The hyperparameters in the Optuna study must be of type &quot;</span>
+                        <span class="s2">&quot;`FloatDistribution`, `IntDistribution` or `CategoricalDistribution`, &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;but a hyperparameter of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span><span class="si">}</span><span class="s2"> was given.&quot;</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        <span class="n">configspace</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">hyperparameters</span><span class="p">)</span>
 
-                <span class="c1"># Remove \n</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">n_objectives</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">trial</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">optuna_study</span><span class="o">.</span><span class="n">trials</span><span class="p">)</span>
+        <span class="n">obj_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_objectives</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">optuna_study</span><span class="o">.</span><span class="n">metric_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">metric_name</span> <span class="o">=</span> <span class="n">optuna_study</span><span class="o">.</span><span class="n">metric_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">metric_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Objective</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">optimize</span> <span class="o">=</span> <span class="s2">&quot;lower&quot;</span> <span class="k">if</span> <span class="n">optuna_study</span><span class="o">.</span><span class="n">directions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">StudyDirection</span><span class="o">.</span><span class="n">MINIMIZE</span> <span class="k">else</span> <span class="s2">&quot;upper&quot;</span>
 
-                <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
-                    <span class="n">meta</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Objective</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">metric_name</span><span class="p">,</span>
+                    <span class="n">lower</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">upper</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">optimize</span><span class="o">=</span><span class="n">optimize</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">))</span>
 
         <span class="c1"># Let&#39;s create a new run object</span>
-        <span class="n">run</span> <span class="o">=</span> <span class="n">SMAC3v1Run</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="p">[</span><span class="n">objective1</span><span class="p">,</span> <span class="n">objective2</span><span class="p">],</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span>
-        <span class="p">)</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">OptunaRun</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># The path has to be set manually</span>
         <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
 
-        <span class="c1"># Iterate over the runhistory</span>
-        <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">all_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-            <span class="n">config_origins</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;config_origins&quot;</span><span class="p">]</span>
-            <span class="n">configs</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;configs&quot;</span><span class="p">]</span>
-
-        <span class="n">instance_ids</span> <span class="o">=</span> <span class="p">[]</span>
-
         <span class="n">first_starttime</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">config_id</span><span class="p">,</span> <span class="n">instance_id</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">budget</span><span class="p">),</span> <span class="p">(</span>
-            <span class="n">cost</span><span class="p">,</span>
-            <span class="n">time</span><span class="p">,</span>
-            <span class="n">status</span><span class="p">,</span>
-            <span class="n">starttime</span><span class="p">,</span>
-            <span class="n">endtime</span><span class="p">,</span>
-            <span class="n">additional_info</span><span class="p">,</span>
-        <span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">instance_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance_ids</span><span class="p">:</span>
-                <span class="n">instance_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">instance_id</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">instance_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Instances are not supported.&quot;</span><span class="p">)</span>
-
-            <span class="n">config_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config_id</span><span class="p">)</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="n">optuna_study</span><span class="o">.</span><span class="n">trials</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">configspace</span><span class="p">,</span> <span class="n">trial</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Could not convert the configuration of trial </span><span class="si">{</span><span class="n">trial</span><span class="o">.</span><span class="n">number</span><span class="si">}</span><span class="s2"> to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;a ConfigSpace configuration.</span><span class="se">\n</span><span class="s2">This might be due to the &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;configuration space containing conditionals or dynamic &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;hyperparameter value ranges, which are currently not supported.&quot;</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">first_starttime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">first_starttime</span> <span class="o">=</span> <span class="n">starttime</span>
+                <span class="n">first_starttime</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">datetime_start</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
 
-            <span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">-</span> <span class="n">first_starttime</span>
-            <span class="n">endtime</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">first_starttime</span>
+            <span class="n">starttime</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">datetime_start</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">-</span> <span class="n">first_starttime</span>
+            <span class="n">endtime</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">datetime_complete</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span> <span class="o">-</span> <span class="n">first_starttime</span>
 
-            <span class="n">status</span> <span class="o">=</span> <span class="n">status</span><span class="p">[</span><span class="s2">&quot;__enum__&quot;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="s2">&quot;SUCCESS&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TrialState</span><span class="o">.</span><span class="n">COMPLETE</span><span class="p">:</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span>
-            <span class="k">elif</span> <span class="s2">&quot;TIMEOUT&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">TIMEOUT</span>
-            <span class="k">elif</span> <span class="s2">&quot;ABORT&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">ABORTED</span>
-            <span class="k">elif</span> <span class="s2">&quot;MEMOUT&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">MEMORYOUT</span>
-            <span class="k">elif</span> <span class="s2">&quot;RUNNING&quot;</span> <span class="ow">in</span> <span class="n">status</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TrialState</span><span class="o">.</span><span class="n">FAIL</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">FAILED</span>
+            <span class="k">elif</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TrialState</span><span class="o">.</span><span class="n">PRUNED</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">PRUNED</span>
+            <span class="k">elif</span> <span class="n">trial</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">TrialState</span><span class="o">.</span><span class="n">RUNNING</span> <span class="ow">or</span> <span class="n">trial</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">TrialState</span><span class="o">.</span><span class="n">WAITING</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+            <span class="n">cost</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">values</span>
 
             <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
                 <span class="c1"># Costs which failed, should not be included</span>
-                <span class="n">cost</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">time</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">starttime</span>
-
-            <span class="c1"># Round budget</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-
-            <span class="n">origin</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="k">if</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_origins</span><span class="p">:</span>
-                <span class="n">origin</span> <span class="o">=</span> <span class="n">config_origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">endtime</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">)</span>
 
             <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-                <span class="n">costs</span><span class="o">=</span><span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>
+                <span class="n">costs</span><span class="o">=</span><span class="n">cost</span> <span class="o">+</span> <span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
                 <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
-                <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>
-                <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+                <span class="n">budget</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">seed</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">start_time</span><span class="o">=</span><span class="n">starttime</span><span class="p">,</span>
                 <span class="n">end_time</span><span class="o">=</span><span class="n">endtime</span><span class="p">,</span>
                 <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
-                <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
-                <span class="n">additional</span><span class="o">=</span><span class="n">additional_info</span><span class="p">,</span>
+                <span class="n">origin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">additional</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">run</span></div>
