@@ -10,8 +10,7 @@ It handles different callbacks of the layout.
     - HeaderLayout: This class provides the header and its layout.
 """
 
-
-from typing import List, Literal, Optional, Tuple, Union
+from typing import List, Optional, Tuple
 
 import os
 import time
@@ -21,7 +20,7 @@ import requests
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from deepcave import app, c, config, queue
+from deepcave import app, config, queue
 from deepcave.layouts import Layout
 
 
@@ -35,58 +34,8 @@ class HeaderLayout(Layout):
     def register_callbacks(self) -> None:
         """Register and handle the callbacks."""
         super().register_callbacks()
-        self._callback_update_matplotlib_mode()
         self._callback_delete_jobs()
         self._callback_terminate_deepcave()
-
-    def _callback_update_matplotlib_mode(self) -> None:
-        outputs = [
-            Output("matplotlib-mode-toggle", "color"),
-            Output("matplotlib-mode-badge", "children"),
-            Output("matplotlib-mode-refresh", "href"),
-        ]
-        inputs = [
-            Input("matplotlib-mode-toggle", "n_clicks"),
-            Input("matplotlib-mode-refresh", "pathname"),
-        ]
-
-        @app.callback(outputs, inputs)  # type: ignore
-        def callback(
-            n_clicks: int, pathname: str
-        ) -> Union[
-            Tuple[Literal["primary"], Literal["on"], str],
-            Tuple[Literal["secondary"], Literal["off"], str],
-        ]:
-            """
-            Update the matplotlib mode.
-
-            Parameters
-            ----------
-            n_clicks : int
-                Number of clicks.
-            pathname : str
-                Pathname.
-
-            Returns
-            -------
-            Tuple[Literal["primary"], Literal["on"], str],
-            Tuple[Literal["secondary"], Literal["off"], str]
-                Tuple of either "primary", "on", pathname or "secondary", "off", pathname.
-            """
-            update = None
-            mode = c.get("matplotlib-mode")
-            if mode is None:
-                mode = False
-
-            if n_clicks is not None:
-                update = pathname
-                mode = not mode
-                c.set("matplotlib-mode", value=mode)
-
-            if mode:
-                return "primary", "on", update
-            else:
-                return "secondary", "off", update
 
     def _callback_delete_jobs(self) -> None:
         inputs = [Input("exit-deepcave", "n_clicks")]
