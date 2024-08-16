@@ -195,7 +195,7 @@ class PartialDependencies(StaticPlugin):
             Content to be filled.
         """
         return {
-            "show_confidence": {"options": get_select_options(binary=True), "value": "true"},
+            "show_confidence": {"options": get_select_options(binary=True), "value": "false"},
             "show_ice": {"options": get_select_options(binary=True), "value": "true"},
         }
 

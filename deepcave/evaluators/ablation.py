@@ -52,7 +52,7 @@ class Ablation:
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
         self.performances: Optional[Dict[Any, Any]] = None
         self.improvements: Optional[Dict[Any, Any]] = None
         self.logger = get_logger(self.__class__.__name__)
@@ -93,7 +93,7 @@ class Ablation:
 
         # Obtain all configurations with theirs costs
         df = df.dropna(subset=[objective.name])
-        X = df[self.run.configspace.get_hyperparameter_names()].to_numpy()
+        X = df[list(self.run.configspace.keys())].to_numpy()
         Y = df[objective.name].to_numpy()
 
         # A Random Forest Regressor is used as surrogate model
@@ -224,7 +224,7 @@ class Ablation:
         max_hp_difference = -np.inf
 
         for hp in hp_it:
-            if incumbent_config[hp] is not None and hp in self.default_config.keys():
+            if hp in hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
 
@@ -240,7 +240,7 @@ class Ablation:
                     max_hp_difference = difference
             else:
                 continue
-        hp_count = len(self.cs.get_hyperparameter_names())
+        hp_count = len(list(self.cs.keys()))
         if max_hp != "":
             if max_hp_difference <= 0:
                 self.logger.info(

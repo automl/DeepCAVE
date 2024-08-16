@@ -89,7 +89,7 @@ class AblationPaths(StaticPlugin):
         ]
 
     @staticmethod
-    def get_filter_layout(register: Callable) -> List[html.Div]:
+    def get_filter_layout(register: Callable) -> List[dbc.Row]:
         """
         Get the layout for the filter block.
 
@@ -101,29 +101,64 @@ class AblationPaths(StaticPlugin):
 
         Returns
         -------
-        List[html.Div]
+        List[dbc.Row]
             Layout for the filter block.
         """
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Limit Hyperparameters"),
-                    help_button(
-                        "Shows only the n most important (i.e. first selected) hyperparameters."
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dbc.Label("Limit Hyperparameters"),
+                                    help_button(
+                                        "Shows only the n most important (i.e. first selected) "
+                                        "hyperparameters."
+                                    ),
+                                    dbc.Input(id=register("n_hps", "value"), type="number"),
+                                ],
+                                className="mb-3",
+                            ),
+                        ],
+                        md=6,
                     ),
-                    dbc.Input(id=register("n_hps", "value"), type="number"),
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dbc.Label("Show confidence"),
+                                    help_button("Displays the confidence bands."),
+                                    dbc.Select(
+                                        id=register("show_confidence", ["value", "options"])
+                                    ),
+                                ]
+                            ),
+                        ],
+                        md=6,
+                    ),
                 ],
-                className="mb-3",
             ),
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Budgets"),
-                    help_button(
-                        "Budget refers to the multi-fidelity budget. "
-                        "The hyperparameters are sorted by the highest budget."
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dbc.Label("Budgets"),
+                                    help_button(
+                                        "Budget refers to the multi-fidelity budget. "
+                                        "The hyperparameters are sorted by the highest budget."
+                                    ),
+                                    dbc.RadioItems(
+                                        id=register("budget_id", ["value", "options"]), inline=True
+                                    ),
+                                ]
+                            ),
+                        ],
+                        md=6,
                     ),
-                    dbc.RadioItems(id=register("budget_id", ["value", "options"]), inline=True),
-                ]
+                ],
             ),
         ]
 
@@ -144,6 +179,7 @@ class AblationPaths(StaticPlugin):
             "n_trees": {"value": 100},
             "n_hps": {"value": 0},
             "budget_id": {"options": get_checklist_options(), "value": None},
+            "show_confidence": {"options": get_select_options(binary=True), "value": "false"},
         }
 
     def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore # noqa: E501
@@ -319,6 +355,7 @@ class AblationPaths(StaticPlugin):
         selected_budget_id = inputs["budget_id"]
         objective = run.get_objective(inputs["objective_id"])
         n_hps = inputs["n_hps"]
+        show_confidence = inputs["show_confidence"]
 
         if n_hps == "" or n_hps is None:
             raise PreventUpdate
@@ -359,7 +396,7 @@ class AblationPaths(StaticPlugin):
                     name=budget,
                     x=x,
                     y=values[1][:n_hps],
-                    error_y=dict(array=values[2][:n_hps]),
+                    error_y=dict(array=values[2][:n_hps]) if show_confidence else None,
                     line=dict(color=get_color(0)),
                 )
             ]
@@ -374,7 +411,7 @@ class AblationPaths(StaticPlugin):
                     name=budget,
                     x=x,
                     y=values[1][:n_hps],
-                    error_y_array=values[2][:n_hps],
+                    error_y_array=values[2][:n_hps] if show_confidence else None,
                     marker_color=get_color(0),
                 )
             ]

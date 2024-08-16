@@ -12,6 +12,7 @@ from typing import Any, Callable, TypeVar, cast
 import datetime
 import os
 import sys
+import warnings
 from functools import wraps
 from pathlib import Path
 
@@ -115,8 +116,13 @@ if any(file in _exec_file for file in _exec_files):
         # Run caches
         rc = RunCaches(config)
 
-        # Run Handler
-        run_handler = RunHandler(config, c, rc)
+        # Supress warnings during initializing run handler to avoid showing warnings with respect
+        # to previously loaded runs
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+
+            # Run Handler
+            run_handler = RunHandler(config, c, rc)
 
         # Notifications
         notification = Notification()

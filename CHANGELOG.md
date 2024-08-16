@@ -2,6 +2,8 @@
 
 ## Converters
 - Add support for AMLTK.
+- Add support for Optuna.
+- BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
 ## Version-Updates
 - ConfigSpace from 0.6.1 to 1.2.0
@@ -20,6 +22,12 @@
 
 ## Bug-Fixes
 - Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
+
+## Quality of Life
+- Disable warnings during RunHandler initialization to avoid showing warnings with respect to previously loaded runs.
+- Remove option to use docker (not yet supported).
+- Add SMAC3v2 multi-fidelity example runs.
+- Add more useful SMAC3v2 multi-objective example run.
 
 # Version 1.2.1
 
