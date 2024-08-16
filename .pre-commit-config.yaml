@@ -59,6 +59,7 @@ repos:
             'ConfigSpace==1.2.0',
             'pyrfr>=0.9.0',
             'hpbandster==0.7.4',
+            'optuna==3.6.1',
             'dash==2.0.0',
             'dash-extensions==0.0.71',
             'dash-bootstrap-components==1.0.3',

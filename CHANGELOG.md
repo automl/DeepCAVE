@@ -2,6 +2,7 @@
 
 ## Converters
 - Add support for AMLTK.
+- Add support for Optuna.
 - BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
 ## Version-Updates
