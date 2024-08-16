@@ -521,7 +521,7 @@ class Footprint:
         int
             Depth of the Hyperparameter.
         """
-        parents = self.cs.get_parents_of(hp)
+        parents = self.cs.parents_of[hp.name]
         if not parents:
             return 1
 
@@ -532,7 +532,7 @@ class Footprint:
             old_parents = new_parents
             new_parents = []
             for p in old_parents:
-                pp = self.cs.get_parents_of(p)
+                pp = self.cs.get_parents_of(p.name)
                 if pp:
                     new_parents.extend(pp)
                 else:
