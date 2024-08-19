@@ -17,6 +17,7 @@ Displaying Data with Plugins
    parallel_coordinates
    partial_dependencies
    symbolic_explanations
+   custom_plugins
 
 
 Plugins are used to display data in a specific way. There are plugins to analyse the performance,
@@ -75,13 +76,12 @@ viewable upon completion.
     clean the cache directly in the interface.
 
 
-Custom Plugin
--------------
+Adding a Plugin
+--------------
 
-DeepCAVE was designed so that the plugins require minimal design. We recommend using any of our
-provided plugins as a starting point and change it to your needs.
+If you would like to add your own plugin, please have a look at our :ref:`tutorial on how to add
+a plugin <custom-plugin>` and use any of our provided plugins as a starting point.
 
-After you have created your plugin, you need to register it in your config file. If you work
-on the branch directly, you can adapt ``deepcave/config.py`` to your needs.
+
 We would be very happy to receive pull-requests!
 
