@@ -19,7 +19,6 @@ from collections import defaultdict
 
 import dash_bootstrap_components as dbc
 from dash import dcc, html
-from dash.dash import no_update
 from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
@@ -84,7 +83,7 @@ class Plugin(Layout, ABC):
     def __init__(self) -> None:
         # Registered inputs and outputs
         self.inputs: List[Tuple[str, str, bool, Any]] = []
-        self.outputs: List[Tuple[str, str, bool]] = []
+        self.outputs: List[Tuple[str, str]] = []
 
         # For runtime
         self.previous_inputs: Dict[str, Dict[str, str]] = {}
@@ -100,7 +99,6 @@ class Plugin(Layout, ABC):
         self.__class__.get_input_layout(self.register_input)
         self.__class__.get_filter_layout(lambda a, b: self.register_input(a, b, filter=True))
         self.__class__.get_output_layout(self.register_output)
-        self.__class__.get_mpl_output_layout(lambda a, b: self.register_output(a, b, mpl=True))
 
         super().__init__()
 
@@ -211,9 +209,7 @@ class Plugin(Layout, ABC):
 
         return self.get_internal_input_id(id)
 
-    def register_output(
-        self, id: str, attributes: Union[str, List[str]] = "value", mpl: bool = False
-    ) -> str:
+    def register_output(self, id: str, attributes: Union[str, List[str]] = "value") -> str:
         """
         Register an output variable for the plugin.
 
@@ -223,8 +219,6 @@ class Plugin(Layout, ABC):
             Specifies the id of the output.
         attributes : Union[str, List[str]], optional
             Attribute, by default "value"
-        mpl : bool, optional
-            Specifies if the registration is for matplotlib or default, by default False
 
         Returns
         -------
@@ -234,11 +228,8 @@ class Plugin(Layout, ABC):
         if isinstance(attributes, str):
             attributes = [attributes]
 
-        if mpl:
-            id += "-mpl"
-
         for attribute in attributes:
-            key = (id, attribute, mpl)
+            key = (id, attribute)
             if key not in self.outputs:
                 self.outputs.append(key)
 
@@ -545,10 +536,9 @@ class Plugin(Layout, ABC):
         Any
             The processed outputs.
         """
-        from deepcave import c, run_handler
+        from deepcave import run_handler
 
         # Use raw outputs to update our layout
-        mpl_active = c.get("matplotlib-mode")
         passed_runs: Union[List[AbstractRun], AbstractRun]
 
         if self.activate_run_selection:
@@ -561,12 +551,9 @@ class Plugin(Layout, ABC):
         # Clean inputs
         cleaned_inputs = self._clean_inputs(inputs)
 
-        # passed runs could be a list, but load mpl outputs and load outputs do not
+        # passed runs could be a list, but load outputs not
         # accept lists, but expect single runs
-        if mpl_active:
-            outputs = self.__class__.load_mpl_outputs(passed_runs, cleaned_inputs, passed_outputs)  # type: ignore # noqa: E501
-        else:
-            outputs = self.__class__.load_outputs(passed_runs, cleaned_inputs, passed_outputs)  # type: ignore # noqa: E501
+        outputs = self.__class__.load_outputs(passed_runs, cleaned_inputs, passed_outputs)  # type: ignore # noqa: E501
 
         logger.debug("Raw outputs processed successfully.")
 
@@ -580,20 +567,6 @@ class Plugin(Layout, ABC):
         else:
             if not isinstance(outputs, list):
                 outputs = [outputs]
-
-        # no_updates has to be added here for the mode that is not wanted
-        count_outputs = 0
-        count_mpl_outputs = 0
-        for _, _, mpl_mode in self.outputs:
-            if mpl_mode:
-                count_mpl_outputs += 1
-            else:
-                count_outputs += 1
-
-        if mpl_active:
-            outputs = [no_update for _ in range(count_outputs)] + outputs
-        else:
-            outputs = outputs + [no_update for _ in range(count_mpl_outputs)]
 
         if len(outputs) == 1:
             return outputs[0]
@@ -620,7 +593,7 @@ class Plugin(Layout, ABC):
             Dictionary containing the mapping information.
         """
         # This is necessary, because of the conditional type of order
-        order: Union[List[Tuple[str, str, bool]], List[Tuple[str, str, bool, Any]]]
+        order: Union[List[Tuple[str, str]], List[Tuple[str, str, bool, Any]]]
 
         if input:
             order = self.inputs
@@ -657,10 +630,8 @@ class Plugin(Layout, ABC):
         List[Optional[str]]
             Sorted list from the given dict.
         """
-        from deepcave import c
-
         # This is necessary, because of the conditional type of order
-        order: Union[List[Tuple[str, str, bool]], List[Tuple[str, str, bool, Any]]]
+        order: Union[List[Tuple[str, str]], List[Tuple[str, str, bool, Any]]]
 
         if input:
             order = self.inputs
@@ -668,12 +639,9 @@ class Plugin(Layout, ABC):
             order = self.outputs
 
         result: List[Optional[str]] = []
-        for id, attribute, instance, *_ in order:
+        for id, attribute, *_ in order:
             if not input:
-                # Instance is mlp_mode in case of outputs
-                # Simply ignore other outputs.
-                if instance != c.get("matplotlib-mode"):
-                    continue
+                continue
 
             try:
                 value = d[id][attribute]
@@ -866,7 +834,7 @@ class Plugin(Layout, ABC):
         FileNotFoundError
             If the help file can not be found.
         """
-        from deepcave import c, notification
+        from deepcave import notification
 
         # Reset runtime variables
         self.previous_inputs = {}
@@ -1001,41 +969,7 @@ class Plugin(Layout, ABC):
                     id=f"{self.id}-output",
                     className="shadow-sm p-3 bg-white rounded-lg loading-container",
                     children=output_layout,
-                    style={} if not c.get("matplotlib-mode") else {"display": "none"},
-                )
-            ]
-
-        def register_out(a: str, b: Union[List[str], str]) -> str:
-            """
-            Register the output.
-
-            Note
-            ----
-            For more information, see 'register_output'
-
-            Parameters
-            ----------
-            a : str
-                Specifies the id of the output.
-            b : Union[List[str], str]
-                Attribute.
-
-            Returns
-            -------
-            str
-                Unique id for the output and plugin.
-                This is necessary because ids are defined globally.
-            """
-            return self.register_output(a, b, mpl=True)
-
-        output_layout = self.__class__.get_mpl_output_layout(register_out)
-        if output_layout is not None:
-            components += [
-                html.Div(
-                    id=f"{self.id}-mpl-output",
-                    className="shadow-sm p-3 bg-white rounded-lg loading-container",
-                    children=output_layout,
-                    style={} if c.get("matplotlib-mode") else {"display": "none"},
+                    style={},
                 )
             ]
 
@@ -1322,24 +1256,6 @@ class Plugin(Layout, ABC):
         return None
 
     @staticmethod
-    def get_mpl_output_layout(register: Callable) -> Optional[Union[Component, List[Component]]]:
-        """
-        Layout for the matplotlib output block.
-
-        Parameters
-        ----------
-        register : Callable
-            The register method to register outputs.
-            For more information, see 'register_input'.
-
-        Returns
-        -------
-        Optional[Union[Component, List[Component]]]
-            Layout for the matplotlib output block.
-        """
-        return None
-
-    @staticmethod
     def load_outputs(
         runs: Union[AbstractRun, Dict[str, AbstractRun]],
         inputs: Dict[str, Dict[str, str]],
@@ -1353,39 +1269,6 @@ class Plugin(Layout, ABC):
         The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or
         `load_dependency_inputs`.
         Inputs are cleaned s.t. only the first value is used.
-        Also, boolean values are casted to booleans.
-
-        Parameters
-        ----------
-        runs : Union[AbstractRun, Dict[str, AbstractRun]]
-            All selected runs. If `activate_run_selection` is set, only the selected run is
-            returned.
-        inputs : Dict[str, Dict[str, str]]
-            Input and filter values from the user.
-        outputs : Dict[str, Union[str, Dict[str, str]]]
-            Raw outputs from the runs. If `activate_run_selection` is set,
-            a Dict[str, str] is returned.
-
-        Returns
-        -------
-        Union[Component, List[Component]]
-            The components must be in the same position as defined in `get_output_layout`.
-        """
-        return []
-
-    @staticmethod
-    def load_mpl_outputs(
-        runs: Union[AbstractRun, Dict[str, AbstractRun]],
-        inputs: Dict[str, Dict[str, str]],
-        outputs: Dict[str, Union[str, Dict[str, str]]],
-    ) -> Union[Component, List[Component]]:
-        """
-        Read in the raw data and prepare them for the layout.
-
-        Note
-        ----
-        The passed `inputs` are cleaned and therefore differs compared to `load_inputs` or
-        `load_dependency_inputs`. Inputs are cleaned s.t. only the first value is used.
         Also, boolean values are casted to booleans.
 
         Parameters

@@ -123,7 +123,7 @@ class StaticPlugin(Plugin, ABC):
 
         # Plugin specific outputs
         outputs = []
-        for id, attribute, _ in self.outputs:
+        for id, attribute in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
         inputs = [
