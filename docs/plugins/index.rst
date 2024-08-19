@@ -53,6 +53,8 @@ The plugins in DeepCAVE are structured in a specific way. This is done with thre
 .. image:: ../images/plugins/blocks.png
 
 
+.. _plugin_types:
+
 Plugin Types
 ------------
 
