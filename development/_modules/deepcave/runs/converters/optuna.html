@@ -750,14 +750,6 @@
     <span class="n">Uniform</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">Hyperparameter</span>
-<span class="kn">from</span> <span class="nn">optuna.distributions</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CategoricalDistribution</span><span class="p">,</span>
-    <span class="n">FloatDistribution</span><span class="p">,</span>
-    <span class="n">IntDistribution</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">optuna.search_space</span> <span class="kn">import</span> <span class="n">IntersectionSearchSpace</span>
-<span class="kn">from</span> <span class="nn">optuna.study</span> <span class="kn">import</span> <span class="n">StudyDirection</span>
-<span class="kn">from</span> <span class="nn">optuna.trial</span> <span class="kn">import</span> <span class="n">TrialState</span>
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
@@ -800,7 +792,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pickle_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.pkl&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pickle_files</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;There should be exactly one pickle file in the directory.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There should be exactly one pickle file in &#39;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pickle_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -861,6 +853,21 @@
 <span class="sd">            Instances are not supported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">optuna.distributions</span> <span class="kn">import</span> <span class="p">(</span>
+                <span class="n">CategoricalDistribution</span><span class="p">,</span>
+                <span class="n">FloatDistribution</span><span class="p">,</span>
+                <span class="n">IntDistribution</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="kn">from</span> <span class="nn">optuna.search_space</span> <span class="kn">import</span> <span class="n">IntersectionSearchSpace</span>
+            <span class="kn">from</span> <span class="nn">optuna.study</span> <span class="kn">import</span> <span class="n">StudyDirection</span>
+            <span class="kn">from</span> <span class="nn">optuna.trial</span> <span class="kn">import</span> <span class="n">TrialState</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;The Optuna package is required to load Optuna runs. &quot;</span>
+                <span class="s2">&quot;Please install it via `make install-optuna`&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># Load the optuna study from the file path</span>
         <span class="n">pickle_file_path</span> <span class="o">=</span> <span class="n">OptunaRun</span><span class="o">.</span><span class="n">_get_pickle_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>

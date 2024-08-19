@@ -827,7 +827,13 @@
         <span class="n">run</span> <span class="o">=</span> <span class="n">BOHBRun</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="p">{})</span>
         <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
 
-        <span class="kn">from</span> <span class="nn">hpbandster.core.result</span> <span class="kn">import</span> <span class="n">logged_results_to_HBS_result</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">hpbandster.core.result</span> <span class="kn">import</span> <span class="n">logged_results_to_HBS_result</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;The HpBandSter package is required to load BOHB runs. &quot;</span>
+                <span class="s2">&quot;Please install it via `make install-bohb`&quot;</span>
+            <span class="p">)</span>
 
         <span class="n">bohb</span> <span class="o">=</span> <span class="n">logged_results_to_HBS_result</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
         <span class="n">config_mapping</span> <span class="o">=</span> <span class="n">bohb</span><span class="o">.</span><span class="n">get_id2config_mapping</span><span class="p">()</span>
