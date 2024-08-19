@@ -46,10 +46,11 @@ jobs:
 
       - name: Install conda dependencies
         run: |
-          conda install -c miniconda swig
+          conda install -c anaconda swig
 
       - name: Install ${{ env.package-name }}
         run: |
+          python -V
           python -m pip install --upgrade pip
           python -m pip install ".[dev]"
 
