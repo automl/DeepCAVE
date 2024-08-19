@@ -5,8 +5,11 @@ Runs and Converters
    :hidden:
    :maxdepth: 2
 
+   smac
    amltk
    optuna
+   bohb
+   deepcave
    custom
 
 
@@ -27,12 +30,12 @@ transform it into run objects.
 
 Currently, DeepCAVE offers the following converters:
 
-- DeepCAVE (native)
 - SMAC (v1.4)
 - SMAC (v2.0.0)
-- BOHB
 - AMLTK
 - Optuna
+- BOHB
+- DeepCAVE (native)
 
 
 .. note::

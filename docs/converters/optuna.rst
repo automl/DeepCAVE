@@ -22,7 +22,7 @@ consider when running Optuna:
 
    This step is optional but recommended for better visualization and understanding of your study's objectives in DeepCAVE.
 
-Furthermore, to load and Optuna run into DeepCAVE, it is necessary to install Optuna, e.g. via:
+Furthermore, to load an Optuna run into DeepCAVE, it is necessary to install Optuna, e.g. via:
 
    .. code-block:: bash
 
