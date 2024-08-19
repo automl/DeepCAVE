@@ -22,14 +22,6 @@ from ConfigSpace import (
     Uniform,
 )
 from ConfigSpace.hyperparameters import Hyperparameter
-from optuna.distributions import (
-    CategoricalDistribution,
-    FloatDistribution,
-    IntDistribution,
-)
-from optuna.search_space import IntersectionSearchSpace
-from optuna.study import StudyDirection
-from optuna.trial import TrialState
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -70,7 +62,7 @@ class OptunaRun(Run):
         """
         pickle_files = list(path.glob("*.pkl"))
         if len(pickle_files) != 1:
-            raise RuntimeError("There should be exactly one pickle file in the directory.")
+            raise RuntimeError(f"There should be exactly one pickle file in '{path}'")
         else:
             return pickle_files[0]
 
@@ -129,6 +121,21 @@ class OptunaRun(Run):
             Instances are not supported.
         """
         path = Path(path)
+
+        try:
+            from optuna.distributions import (
+                CategoricalDistribution,
+                FloatDistribution,
+                IntDistribution,
+            )
+            from optuna.search_space import IntersectionSearchSpace
+            from optuna.study import StudyDirection
+            from optuna.trial import TrialState
+        except ImportError:
+            raise ImportError(
+                "The Optuna package is required to load Optuna runs. "
+                "Please install it via `make install-optuna`"
+            )
 
         # Load the optuna study from the file path
         pickle_file_path = OptunaRun._get_pickle_file(path)

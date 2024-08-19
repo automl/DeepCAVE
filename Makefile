@@ -52,6 +52,12 @@ install-dev:
 install-examples:
 	$(PIP) install -e ".[examples]"
 
+install-optuna:
+	$(PIP) install -e ".[optuna]"
+
+install-bohb:
+	$(PIP) install -e ".[bohb]"
+
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :
 	$(BLACK) ${EXAMPLES_DIR} --check || :

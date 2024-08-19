@@ -95,7 +95,13 @@ class BOHBRun(Run):
         run = BOHBRun(path.stem, configspace=configspace, objectives=objective, meta={})
         run._path = path
 
-        from hpbandster.core.result import logged_results_to_HBS_result
+        try:
+            from hpbandster.core.result import logged_results_to_HBS_result
+        except ImportError:
+            raise ImportError(
+                "The HpBandSter package is required to load BOHB runs. "
+                "Please install it via `make install-bohb`"
+            )
 
         bohb = logged_results_to_HBS_result(str(path))
         config_mapping = bohb.get_id2config_mapping()
