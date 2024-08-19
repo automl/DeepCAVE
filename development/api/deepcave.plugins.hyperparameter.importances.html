@@ -507,6 +507,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -668,11 +673,6 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.styled_plotty.html">
        deepcave.utils.styled_plotty
       </a>
@@ -754,15 +754,6 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Importances.get_mpl_output_layout()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -785,15 +776,6 @@
      <code class="docutils literal notranslate">
       <span class="pre">
        Importances.load_inputs()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Importances.load_mpl_outputs()
       </span>
      </code>
     </a>
@@ -904,24 +886,6 @@ The register_input function is located in the Plugin superclass.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_mpl_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_mpl_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout" title="Link to this definition">¶</a></dt>
-<dd><p>Get the layout for the matplotlib output block.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>register</strong> (<em>Callable</em>) – Method to register outputs.
-The register_input function is located in the Plugin superclass.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The layout for the matplotlib output block.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>html.Img</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_output_layout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">register</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.get_output_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout" title="Link to this definition">¶</a></dt>
 <dd><p>Get the layout for the output block.</p>
@@ -977,24 +941,6 @@ the plugin gets its content from this method.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dict[str, Dict[str, Any]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_mpl_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">run</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/plugins/hyperparameter/importances.html#Importances.load_mpl_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Read the raw data and prepare it for the layout.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>run</strong> – The selected run.</p></li>
-<li><p><strong>inputs</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Input and filter values from the user.</p></li>
-<li><p><strong>outputs</strong> – Raw output from the run.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rendered matplotlib figure of the importances.</p>
 </dd>
 </dl>
 </dd></dl>

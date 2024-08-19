@@ -504,6 +504,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../api/deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../api/deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -665,11 +670,6 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="../../../api/deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="../../../api/deepcave.utils.styled_plotty.html">
        deepcave.utils.styled_plotty
       </a>
@@ -758,7 +758,7 @@
 
 <span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
-<span class="sd">    outputs : List[Tuple[str, str, bool]]</span>
+<span class="sd">    outputs : List[Tuple[str, str]]</span>
 <span class="sd">        The registered outputs.</span>
 <span class="sd">    inputs : List[Tuple[str, str, bool, Any]]</span>
 <span class="sd">        The registered inputs.</span>
@@ -794,7 +794,7 @@
         <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">app</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">rc</span>
 
         <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_output_id</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="n">attribute</span><span class="p">))</span>
 
         <span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Input</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_internal_id</span><span class="p">(</span><span class="s2">&quot;update-button&quot;</span><span class="p">),</span> <span class="s2">&quot;n_clicks&quot;</span><span class="p">)]</span>

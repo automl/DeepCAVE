@@ -25,7 +25,6 @@
    logs
    notification
    run_caches
-   styled_plot
    styled_plotty
    symbolic_regression
    url
