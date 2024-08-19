@@ -10,7 +10,7 @@ It includes the corresponding Pareto Front plugin.
     - ParetoFront: Generate an interactive Pareto Front visualization.
 """
 
-from typing import Any, Callable, Dict, List, Literal, Union
+from typing import Any, Callable, Dict, List, Union
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -22,7 +22,6 @@ from deepcave.plugins.dynamic import DynamicPlugin
 from deepcave.runs import AbstractRun, Status, check_equality
 from deepcave.runs.exceptions import NotMergeableError, RunInequality
 from deepcave.utils.layout import get_select_options, help_button
-from deepcave.utils.styled_plot import plt
 from deepcave.utils.styled_plotty import (
     get_color,
     get_hovertext_from_config,
@@ -533,113 +532,3 @@ class ParetoFront(DynamicPlugin):
         save_image(figure, "pareto_front.pdf")
 
         return figure
-
-    @staticmethod
-    def get_mpl_output_layout(register: Callable) -> html.Img:
-        """
-        Get the layout for the matplotlib output block.
-
-        Parameters
-        ----------
-        register : Callable
-            Method to register outputs.
-            The register_output function is located in the Plugin superclass.
-
-        Returns
-        -------
-        html.Img
-            The layout for the matplotlib output block.
-        """
-        return html.Img(
-            id=register("graph", "src"),
-            className="img-fluid",
-        )
-
-    @staticmethod
-    def load_mpl_outputs(runs, inputs, outputs):  # type: ignore
-        """
-        Read in the raw data and prepare them for the layout.
-
-        Note
-        ----
-        The passed inputs are cleaned and therefore differs compared to 'load_inputs'
-        or 'load_dependency_inputs'.
-        Please see '_clean_inputs' for more information.
-
-        Parameters
-        ----------
-        runs :
-            The selected runs.
-        inputs :
-            Input and filter values from the user.
-        outputs :
-            Raw outputs from the runs.
-
-        Returns
-        -------
-        The rendered matplotlib figure.
-        """
-        show_all = inputs["show_all"] == "true"
-
-        plt.figure()
-        for idx, run in enumerate(runs):
-            show_runs = inputs["show_runs"] == "true"
-            show_groups = inputs["show_groups"] == "true"
-
-            if run.prefix == "group" and not show_groups:
-                continue
-
-            if run.prefix != "group" and not show_runs:
-                continue
-
-            points = np.array(outputs[run.id]["points"])
-
-            x, y = [], []
-            x_pareto, y_pareto = [], []
-
-            pareto_points = outputs[run.id]["pareto_points"]
-            for point_idx, pareto in enumerate(pareto_points):
-                if pareto:
-                    x_pareto += [points[point_idx][0]]
-                    y_pareto += [points[point_idx][1]]
-                else:
-                    x += [points[point_idx][0]]
-                    y += [points[point_idx][1]]
-
-            color = plt.get_color(idx)  # type: ignore
-            color_pareto = plt.get_color(idx)  # type: ignore
-
-            if show_all:
-                plt.scatter(x, y, color=color, marker="o", s=3)
-
-            # Check if hv or vh is needed
-            objective_1 = run.get_objective(inputs["objective_id_1"])
-            objective_2 = run.get_objective(inputs["objective_id_2"])
-            optimize1 = objective_1.optimize
-            optimize2 = objective_2.optimize
-
-            line_shape: Union[Literal["post"], Literal["pre"], Literal["mid"]]
-            if optimize1 == optimize2:
-                if objective_1.optimize == "lower":
-                    line_shape = "post"
-                else:
-                    line_shape = "pre"
-            else:
-                line_shape = "post"
-
-            plt.step(
-                x_pareto,
-                y_pareto,
-                color=color_pareto,
-                marker="o",
-                label=run.name,
-                linewidth=1,
-                markersize=3,
-                where=line_shape,
-            )
-            plt.xlabel(objective_1.name)
-            plt.ylabel(objective_2.name)
-
-        plt.legend()
-
-        return plt.render()  # type: ignore
