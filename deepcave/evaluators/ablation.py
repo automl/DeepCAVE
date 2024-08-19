@@ -121,14 +121,21 @@ class Ablation:
         if inc_cost > def_cost:
             self.logger.warning(
                 "The predicted incumbent objective is worse than the predicted default "
-                f"objective for budget: {budget}. This could mean that the configuration space "
-                "with which the surrogate model was trained contained too few examples."
+                f"objective for budget: {budget}. Aborting ablation path calculation."
             )
-            performances = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
-            improvements = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
+            performances = OrderedDict({hp_name: (0, 0) for hp_name in ["default"] + self.hp_names})
+            improvements = OrderedDict({hp_name: (0, 0) for hp_name in ["default"] + self.hp_names})
         else:
             # Copy the hps names as to not remove objects from the original list
             hp_it = self.hp_names.copy()
+
+            # Add improvement and performance of the default configuration
+            improvements["default"] = (0, 0)
+            if objective.optimize == "upper":
+                performances["default"] = (-def_cost, def_std)
+            else:
+                performances["default"] = (def_cost, def_std)
+
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
                 continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
