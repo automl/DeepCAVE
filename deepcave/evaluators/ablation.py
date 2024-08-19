@@ -52,7 +52,7 @@ class Ablation:
     def __init__(self, run: AbstractRun):
         self.run = run
         self.cs = run.configspace
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
         self.performances: Optional[Dict[Any, Any]] = None
         self.improvements: Optional[Dict[Any, Any]] = None
         self.logger = get_logger(self.__class__.__name__)
@@ -93,7 +93,7 @@ class Ablation:
 
         # Obtain all configurations with theirs costs
         df = df.dropna(subset=[objective.name])
-        X = df[self.run.configspace.get_hyperparameter_names()].to_numpy()
+        X = df[list(self.run.configspace.keys())].to_numpy()
         Y = df[objective.name].to_numpy()
 
         # A Random Forest Regressor is used as surrogate model
@@ -120,15 +120,22 @@ class Ablation:
 
         if inc_cost > def_cost:
             self.logger.warning(
-                "The predicted incumbent cost is smaller than the predicted default "
-                f"cost for budget: {budget}. This could mean that the configuration space "
-                "with which the surrogate model was trained contained too few examples."
+                "The predicted incumbent objective is worse than the predicted default "
+                f"objective for budget: {budget}. Aborting ablation path calculation."
             )
-            performances = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
-            improvements = OrderedDict({hp_name: (0, 0) for hp_name in self.hp_names})
+            performances = OrderedDict({hp_name: (0, 0) for hp_name in ["default"] + self.hp_names})
+            improvements = OrderedDict({hp_name: (0, 0) for hp_name in ["default"] + self.hp_names})
         else:
             # Copy the hps names as to not remove objects from the original list
             hp_it = self.hp_names.copy()
+
+            # Add improvement and performance of the default configuration
+            improvements["default"] = (0, 0)
+            if objective.optimize == "upper":
+                performances["default"] = (-def_cost, def_std)
+            else:
+                performances["default"] = (def_cost, def_std)
+
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
                 continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
@@ -224,7 +231,7 @@ class Ablation:
         max_hp_difference = -np.inf
 
         for hp in hp_it:
-            if incumbent_config[hp] is not None and hp in self.default_config.keys():
+            if hp in hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
 
@@ -240,14 +247,8 @@ class Ablation:
                     max_hp_difference = difference
             else:
                 continue
-        hp_count = len(self.cs.get_hyperparameter_names())
+        hp_count = len(list(self.cs.keys()))
         if max_hp != "":
-            if max_hp_difference <= 0:
-                self.logger.info(
-                    "No improvement found in ablation step "
-                    f"{hp_count - len(hp_it) + 1}/{hp_count} for budget {budget}, "
-                    "choose hyperparameter with smallest increase in cost."
-                )
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
             max_hp_cost, max_hp_std = self._model.predict(

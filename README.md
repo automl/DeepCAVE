@@ -55,6 +55,13 @@ If you want to use the given examples, run this after installing:
 make install-examples
 ```
 
+To load runs created with Optuna or the BOHB optimizer, you need to install the
+respective packages by running:
+```bash
+make install-optuna
+make install-bohb
+```
+
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get
 further help (e.g. if you can not install redis server or you are on a mac).
 
@@ -72,7 +79,7 @@ from deepcave import Recorder, Objective
 configspace = CS.ConfigurationSpace(seed=0)
 alpha = CS.hyperparameters.UniformFloatHyperparameter(
     name='alpha', lower=0, upper=1)
-configspace.add_hyperparameter(alpha)
+configspace.add(alpha)
 
 accuracy = Objective("accuracy", lower=0, upper=1, optimize="upper")
 mse = Objective("mse", lower=0)

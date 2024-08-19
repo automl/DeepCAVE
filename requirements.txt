@@ -5,7 +5,7 @@ setuptools==68.2.2
 absl-py>=1.0.0
 jsonlines>=3.0.0
 pandas>=1.3.4
-numpy==1.26.4
+numpy==2.0.1 # Fix numpy as version 2.1.0 will drop support for Python 3.9
 matplotlib==3.9.0
 seaborn>=0.13.0
 pyyaml>=6.0.1
@@ -15,9 +15,8 @@ sympy>=1.12
 requests>=2.31.0
 
 # AutoML packages
-ConfigSpace==0.6.1
+ConfigSpace==1.2.0
 pyrfr>=0.9.0
-hpbandster==0.7.4
 
 # Upgrading to 2.1.0 or higher breaks the slider because string keys in marks
 # can not be interpreted anymore (2.0.0 works nicely)
@@ -32,4 +31,4 @@ werkzeug==2.0.3
 pyarrow==16.1.0
 fastparquet==2024.5.0
 
-pyPDPPartitioner>=0.1.8
+pyPDPPartitioner>=0.1.9
