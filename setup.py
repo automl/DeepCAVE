@@ -63,7 +63,7 @@ setuptools.setup(
         "console_scripts": ["deepcave = deepcave.cli:main"],
     },
     test_suite="pytest",
-    platforms=["Linux"],
+    platforms=["Linux", "MacOS"],
     classifiers=[
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
@@ -76,6 +76,7 @@ setuptools.setup(
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Scientific/Engineering",
         "Topic :: Software Development",
