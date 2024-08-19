@@ -55,6 +55,13 @@ If you want to try the examples for recording your results in DeepCAVE format, r
 make install-examples
 ```
 
+To load runs created with Optuna or the BOHB optimizer, you need to install the
+respective packages by running:
+```bash
+make install-optuna
+make install-bohb
+```
+
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get
 further help (e.g. if you can not install redis server or you are on a mac).
 
