@@ -1,49 +1,53 @@
 Configurations
 ==============
 
-This plugin let's you analyze single configurations. After you select a run and a configuration id
-you see the information listed in four parts:
+This plugin enables in-depth analysis of individual configurations. After selecting a run and
+configuration ID, the information is presented in four sections:
 
 * Overview
 * Objectives
 * Configuration
 * Code
 
-Since configurations are used throughout the application, you might find links associated to this
-plugin. This plugin is capable of answering following questions:
+Since configurations are used throughout the application, you might find links that direct you
+to the Configurations plugin in other plugins.
+
+This plugin is capable of answering following questions:
 
 * Where is the configuration coming from?
-* How are the objective values with respect to the budgets?
-* How is the status of a trial associated with the selected configuration?
+* How do the objective values vary with different budgets?
+* What is the status of trials associated with the selected configuration?
 * Which values have been used for a certain configuration?
-* How can I access the configuration in python?
+* How can I access the configuration in Python?
 
 
 Overview
 --------
-The overview tells you more about the origin of the configuration. Especially, if you are
-viewing a group, it is important to know from which run and from which configuration id the
+The overview tells you more about the origin of the configuration. Especially if you are
+viewing a group, it is important to know from which run and from which configuration ID the
 selected configuration is coming from.
 
 
 Objectives
 ----------
-The objective section, on the other hand, visualizes the objective values over the budgets. In here,
-you can determine how your metrics change with increasing budget. Using the table view,
-not only the objective values are listed but also why a specific combination of budget and objective
-might not be available (e.g., because it crashed or it simply was not evaluated).
+The objectives section visualizes how objective values vary across different budgets, allowing you
+to assess how your metrics change as the budget increases.
+The table view provides a detailed listing of objective values, along with explanations for why
+certain budget and objective combinations might be missing (e.g., due to a crash or because they
+were not evaluated).
 
 
 Configuration
 -------------
-In the configuration section, you see how the hyperparameters were selected in the end. While the
-graph view gives you a nice overview, the table displays the concrete values.
+In the configuration section, you can view the final selected hyperparameters. The graph view offers
+a visual summary, while the table provides detailed information on the specific values chosen.
 
 
 Code
 ----
-Often a configuration is selected for deployment, which makes it crucial to access it somehow.
-The code block provides you the code to access the configuration code-wise.
+When a configuration is selected for deployment, it is essential to access it programmatically.
+The code section provides you with the code necessary to retrieve the configuration, facilitating
+its integration and use in your applications.
 
 
 .. image:: ../images/plugins/configurations.png
