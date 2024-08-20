@@ -137,7 +137,7 @@ Note that the objectives need to be named ``metric:<name> [<lower>; <upper>] (<m
 The ``status`` column should contain the status of the trial. The following status codes are supported (both upper or lower case):
 SUCCESS, TIMEOUT, MEMORYOUT, CRASHED, ABORTED, NOT_EVALUATED, FAILED, PRUNED, UNKNOWN
 
-``budget`` is the multi-fidelity budget and can be omitted if not used.
+The ``budget`` column should contain the multi-fidelity budget and can be omitted if not used.
 The same holds for the ``seed`` column, containing the trial seed.
 
 .. warning::
