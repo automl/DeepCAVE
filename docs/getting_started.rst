@@ -27,6 +27,8 @@ the left of it.
 After loading runs, you will be able to select them in the different plugins.
 On the main page, you can also add them to groups to create and analyze combined runs.
 
+To look at some example runs, you can load the runs stored in the `logs` directory of the DeepCAVE.
+
 More Options
 ------------
 

@@ -37,6 +37,8 @@ Currently, DeepCAVE offers the following converters:
 - BOHB
 - DeepCAVE (native)
 
+In the `logs` directory, you can find example runs for each of the converters.
+
 
 .. note::
     DeepCAVE observes optimizer data on the file system and therefore allows for monitoring of both
