@@ -81,7 +81,7 @@ class ConfigurationCube(DynamicPlugin):
                         [
                             dbc.Label("Budget"),
                             help_button(
-                                "Budget refers to the multi-fidelity budget."
+                                "Budget refers to the multi-fidelity budget. "
                                 "Combined budget means that the trial on the highest"
                                 " evaluated budget is used.  \n "
                                 "Note: Selecting combined budget might be misleading if"
