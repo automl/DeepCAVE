@@ -139,9 +139,10 @@ class Config:
         """Get a list of available run converters."""
         from deepcave.runs.converters.amltk import AMLTKRun
         from deepcave.runs.converters.bohb import BOHBRun
+        from deepcave.runs.converters.dataframe import DataFrameRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.optuna import OptunaRun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run
         from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
-        return [AMLTKRun, BOHBRun, DeepCAVERun, OptunaRun, SMAC3v1Run, SMAC3v2Run]
+        return [AMLTKRun, BOHBRun, DeepCAVERun, OptunaRun, SMAC3v1Run, SMAC3v2Run, DataFrameRun]

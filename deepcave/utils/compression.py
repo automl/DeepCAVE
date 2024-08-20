@@ -25,6 +25,32 @@ JSON_DEFAULT_SEPARATORS = (",", ": ")
 TYPE = TypeVar("TYPE")
 
 
+class Encoder(json.JSONEncoder):
+    """Define a custom JSON Encoder."""
+
+    def default(self, obj: Any) -> Any:
+        """
+        Return the object as list if np.ndarray.
+
+        Parameters
+        ----------
+        obj : Any
+            The object to be converted.
+
+        Returns
+        -------
+        Any
+            The converted object.
+        """
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
+
 def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     """
     Serialize a dataframe to a string.
@@ -39,27 +65,6 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     str
         The serialized object as a JSON formatted string.
     """
-
-    class Encoder(json.JSONEncoder):
-        """Define a custom JSON Encoder."""
-
-        def default(self, obj: Any) -> Any:
-            """
-            Return the object as list if np.ndarray.
-
-            Parameters
-            ----------
-            obj : Any
-                The object to be converted.
-
-            Returns
-            -------
-            Any
-                The converted object.
-            """
-            if isinstance(obj, np.ndarray):
-                return obj.tolist()
-            return json.JSONEncoder.default(self, obj)
 
     if isinstance(data, pd.DataFrame):
         # TODO(dwoiwode): Why not just data.to_json()? Or at least make json smaller in dumps

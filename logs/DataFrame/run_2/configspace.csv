@@ -1,0 +1,3 @@
+name,type,log,lower,upper,default,distribution,item_0,item_1,ordered,distribution_mu,distribution_sigma,distribution_alpha,distribution_beta
+n_estimators,integer,False,10,100,55,uniform,,,,,,,
+max_samples,float,False,0.1,0.9,0.5,uniform,,,,,,,
