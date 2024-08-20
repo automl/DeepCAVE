@@ -93,16 +93,17 @@ consider when running Optuna:
 Pandas DataFrame Converter
 --------------------------
 
-To enable loading files created with additional tools, DeepCAVE provides a converter that can load
-Pandas DataFrames. To use this converter, you need to save your data as a csv file and provide the
-path to the csv file when selecting the run in DeepCAVE. To do so you need to save both the
-History of Trials and the Hyperparameter Search Space as csv files.
+To enable loading files created with additional tools not supported by DeepCAVE, we provide a
+converter that can load runs from Pandas DataFrames.
+To use this converter, you need to save both the history of trials and the hyperparameter search
+space as CSV files and put them in a folder. Then, you can select that folder as your run in
+DeepCAVE
 
-We expect the Hyperparameter Search Space to be saved as ``configspace.csv`` in the following format:
+We expect the hyperparameter search space to be saved as ``configspace.csv`` in the following format:
 
 +---------------------+-------------+-------+-------------+---------+---------+-------------+---------+---------+---------+-----------------+---------------------+---------------------+------------------+
-| Name                | Type        | Log   | Lower Bound | Upper   | Default | Distribution| item_0  | item_1  | Ordered | Distribution_mu | Distribution_sigma  | Distribution_alpha  | Distribution_beta|
-|                     |             |       |             | Bound   |         |             |         |         |         |                 |                     |                     |                  |
+| name                | type        | log   | lower       | upper   | default | distribution| item_0  | item_1  | ordered | distribution_mu | distribution_sigma  | distribution_alpha  | distribution_beta|
+|                     |             |       |             |         |         |             |         |         |         |                 |                     |                     |                  |
 +=====================+=============+=======+=============+=========+=========+=============+=========+=========+=========+=================+=====================+=====================+==================+
 | alpha               | float       | True  | 1e-08       | 1.0     | 0.01    | normal      |         |         |         | 0.01            | 0.01                |                     |                  |
 +---------------------+-------------+-------+-------------+---------+---------+-------------+---------+---------+---------+-----------------+---------------------+---------------------+------------------+
@@ -115,7 +116,7 @@ We expect the Hyperparameter Search Space to be saved as ``configspace.csv`` in 
 | gradient_clipping   | categorical |       |             |         |         |             | True    | False   | True    |                 |                     |                     |                  |
 +---------------------+-------------+-------+-------------+---------+---------+-------------+---------+---------+---------+-----------------+---------------------+---------------------+------------------+
 
-We expect the History of Trials to be saved as ``trials.csv`` in the following format:
+We expect the history of trials to be saved as ``trials.csv`` in the following format:
 
 +-----------+-------------------------+------------+-------+----------------------+-------------------+-------------------------------------+----------+------------+----------+--------+------+------------+
 | config_id | alpha                   | batch_size | depth | learning_rate_init   | gradient_clipping | metric:normal [0.0; 1.0] (maximize) | status   | start_time | end_time | budget | seed | additional |
@@ -127,9 +128,11 @@ We expect the History of Trials to be saved as ``trials.csv`` in the following f
 | 2         | 0.0005027533412617669   | 115        | 1     | 0.00295471450409257  | true              | 0.2017937219730942                  | success  | 2          | 3        | 1      | -1   |            |
 +-----------+-------------------------+------------+-------+----------------------+-------------------+-------------------------------------+----------+------------+----------+--------+------+------------+
 
-Note, that the objectives need to be named ``metric:<name> [<lower>; <upper>] (<maximize or minimize>)`` where
+Note that the objectives need to be named ``metric:<name> [<lower>; <upper>] (<maximize or minimize>)``, where
 ``<name>`` is the name of the objective, ``<lower>``, ``<upper>`` are the objective bounds and
 ``<maximize or minimize>`` is the optimization direction.
+
+For some more examples, please have a look at the example runs in `logs/DataFrame`.
 
 Custom Converter
 ----------------
