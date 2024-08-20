@@ -20,6 +20,7 @@ This plugin is capable of answering following questions:
 * Which values have been used for a certain configuration?
 * How can I access the configuration in Python?
 
+.. image:: ../images/plugins/configurations.png
 
 Overview
 --------
@@ -48,6 +49,3 @@ Code
 When a configuration is selected for deployment, it is essential to access it programmatically.
 The code section provides you with the code necessary to retrieve the configuration, facilitating
 its integration and use in your applications.
-
-
-.. image:: ../images/plugins/configurations.png

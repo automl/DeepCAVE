@@ -20,6 +20,8 @@ To learn more about Symbolic Explanations, please see the paper
 `Symbolic Explanations for Hyperparameter Optimization
 <https://openreview.net/forum?id=JQwAc91sg_x>`_.
 
+.. image:: ../images/plugins/symbolic_explanations.png
+
 Options
 -------
 * **Objective:** Select the objective function you wish to analyze. In the one hyperparameter case, the objective is plotted on the y-axis, in the two hyperparameter case, it is represented by the color.
@@ -43,6 +45,3 @@ Furthermore, you can adjust the following parameters of the symbolic regression:
 * **Random seed:** The random seed to be used in the symbolic regression.
 
 * **Metric:** The metric to evaluate the fitness of the formulas.
-
-
-.. image:: ../images/plugins/symbolic_explanations.png

@@ -24,6 +24,8 @@ This plugin is capable of answering the following questions:
 * How does optimizer A compare to optimizer B? Is optimizer A more effective than optimizer B?
 * How long does it take for the optimizer to reach a specific objective value?
 
+.. image:: ../images/plugins/cost_over_time.png
+
 
 Inputs and Filters
 ------------------
@@ -46,6 +48,3 @@ assessing which optimizer converges more quickly and whether the optimizer conve
 
 In contrast to individual runs, groups show the mean and standard deviation across all runs within
 the group. This feature helps you understand the variability and spread among multiple runs.
-
-
-.. image:: ../images/plugins/cost_over_time.png

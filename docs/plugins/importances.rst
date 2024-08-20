@@ -11,6 +11,8 @@ This plugin is capable of answering following questions:
 * How does the importance of each hyperparameter vary across different budgets?
 * How does the local parameter importance compare to the global importance as determined by fANOVA?
 
+.. image:: ../images/plugins/importances.png
+
 Importance Methods
 ------------------
 
@@ -50,8 +52,6 @@ To refine your analysis, you can apply various filters after calculation:
 * **Limit Hyperparameters**: Show only the top N most important hyperparameters.
 
 * **Budgets**: Filter the results to view importance scores specific to certain multi-fidelity budgets, allowing you to analyze how hyperparameter importance varies with budget changes.
-
-.. image:: ../images/plugins/importances.png
 
 .. warning::
     As the fANOVA implementation relies on pyrfr, which cannot be applied to constant hyperparameters.

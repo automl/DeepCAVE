@@ -25,6 +25,7 @@ This plugin is capable of answering the following questions:
 * Why did certain trials crash?
 * On which multi-fidelity budgets were the configurations evaluated?
 
+.. image:: ../images/plugins/overview.png
 
 Quick Information
 -----------------
@@ -81,6 +82,3 @@ Configuration Space
 Lastly, you can find details about the configuration space that was optimized. This section
 includes information on the name of each parameter, the possible values that could be explored,
 the default value, and whether the optimization was performed on a logarithmic or a linear scale.
-
-
-.. image:: ../images/plugins/overview.png

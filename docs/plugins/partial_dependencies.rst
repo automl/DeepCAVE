@@ -20,6 +20,8 @@ This plugin is capable of answering the following questions:
   accuracy increase if the learning rate decreases?
 * What are the regions of the hyperparameter space that lead to better or worse performance?
 
+.. image:: ../images/plugins/partial_dependencies.png
+
 Options
 -------
 * **Objective**: Select the objective function you wish to analyze. In the one hyperparameter case,
@@ -40,7 +42,3 @@ To refine your analysis, you can apply filters after calculation:
 
 * **Show ICE Curves**: Selection for whether to to show the ICE curves used during computation
   (only for the one hyperparameter case).
-
-
-
-.. image:: ../images/plugins/partial_dependencies.png

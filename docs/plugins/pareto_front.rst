@@ -16,5 +16,4 @@ This plugin can help answer the following questions:
 * Which configuration should I choose if I slightly favor objective A over objective B?
 * How does optimizer A compare to optimizer B? Is optimizer A more effective than optimizer B?
 
-
 .. image:: ../images/plugins/pareto_front.png

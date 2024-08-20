@@ -31,6 +31,8 @@ algorithm, here `MDS <https://en.wikipedia.org/wiki/Multidimensional_scaling>`_.
 preserve distances as accurately as possible when mapping from a high-dimensional space to a
 lower-dimensional one. While not perfect, this technique provides valuable insights.
 
+.. image:: ../images/plugins/configuration_footprint.png
+
 There are two plots available. Both share the same axes, with points plotted in consistent
 coordinates. Switching between them will provide a comprehensive understanding of your
 configuration footprint:
@@ -65,6 +67,3 @@ representation of your configuration space.
 There will likely be small clusters of **Evaluated Points**, where the optimizer focused on
 finding optimal configurations, as well as scattered points across valid regions to provide a
 broad understanding of scores for various objectives.
-
-
-.. image:: ../images/plugins/configuration_footprint.png

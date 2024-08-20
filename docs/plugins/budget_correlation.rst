@@ -20,13 +20,7 @@ This plugin is capable of answering following questions:
 * Should I consider running further optimization at lower budgets to cover more of the
   configuration space?
 
-
-Options
--------
-
-**Objective**: Here, you can select the objective you wish to analyze the correlation between
-budgets for.
-
+.. image:: ../images/plugins/budget_correlation.png
 
 Correlation Interpretation
 --------------------------
@@ -51,6 +45,3 @@ situation. For reference, here’s a guideline for interpreting correlation scor
 * 0.30-0.39: Moderate relationship
 * 0.20-0.29: Weak relationship
 * 0.01-0.19: No or negligible relationship
-
-
-.. image:: ../images/plugins/budget_correlation.png

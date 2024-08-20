@@ -16,6 +16,8 @@ This can help provide insight and answers to various questions:
 * Which hyperparameter values or combinations are associated with high or low final scores?
 * What preferences does the optimizer exhibit for certain hyperparameters?
 
+.. image:: ../images/plugins/parallel_coordinates.png
+
 Options
 -------
 
@@ -56,5 +58,3 @@ The plot offers some interactive features for in-depth analysis:
 * **Re-arranging:** You can drag and reposition the hyperparameters and the objective to better
   group and compare them. This feature helps in customizing the view to focus on relevant hyperparameters
   for your analysis.
-
-.. image:: ../images/plugins/parallel_coordinates.png
