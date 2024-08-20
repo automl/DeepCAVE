@@ -332,6 +332,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -850,7 +855,8 @@
 <dl class="simple">
 <dt>configspace<span class="classifier">ConfigurationSpace</span></dt><dd><p>The configuration space of the run.</p>
 </dd>
-<dt>path<span class="classifier">Optional[Union[str, Path]]</span></dt><dd><p>The path of a run to be loaded.</p>
+<dt>path<span class="classifier">Optional[Union[str, Path]]</span></dt><dd><p>The path of a run to be loaded. If path is not None, the given parameters are used.
+If path is None, the run is created from the given parameters.</p>
 </dd>
 <dt>meta<span class="classifier">Dict[str, Any]</span></dt><dd><p>Contains serialized objectives and budgets.</p>
 </dd>

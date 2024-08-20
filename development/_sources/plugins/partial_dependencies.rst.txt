@@ -19,6 +19,9 @@ This plugin is capable of answering the following questions:
 * How does the objective change with respect to one or two hyperparameters? For example, does the
   accuracy increase if the learning rate decreases?
 * Do multiple trials show similar behavior?
+Options
+-------
+* **Objective**: Here you can select the objective you wish to analyze for. In the one hyperparameter case the objective is plotted on the y-axis, in the two hyperparameter case it is represented by the color.
 
 Options
 -------

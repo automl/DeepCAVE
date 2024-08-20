@@ -332,6 +332,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -737,6 +742,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pandas-dataframe-converter">
+   Pandas DataFrame Converter
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#custom-converter">
    Custom Converter
   </a>
@@ -776,6 +786,7 @@ sure that folders are put into the right format so that the files can be interpr
 <li><p>Auto-PyTorch</p></li>
 <li><p>AMLTK</p></li>
 <li><p>Optuna</p></li>
+<li><p>Pandas DataFrame</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -847,6 +858,186 @@ consider when running Optuna:</p>
 is not supported.
 This limitation arises because Optuna leverages a dynamic search space, which cannot be
 trivially converted into a static search space as used in DeepCAVE.</p>
+</div>
+</section>
+<section id="pandas-dataframe-converter">
+<h2>Pandas DataFrame Converter<a class="headerlink" href="#pandas-dataframe-converter" title="Link to this heading">¶</a></h2>
+<p>To enable loading files created with additional tools not supported by DeepCAVE, we provide a
+converter that can load runs from Pandas DataFrames.
+To use this converter, you need to save both the history of trials and the hyperparameter search
+space as CSV files and put them in a folder. Then, you can select that folder as your run in
+DeepCAVE</p>
+<p>We expect the hyperparameter search space to be saved as <code class="docutils literal notranslate"><span class="pre">configspace.csv</span></code> in the following format:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>log</p></th>
+<th class="head"><p>lower</p></th>
+<th class="head"><p>upper</p></th>
+<th class="head"><p>default</p></th>
+<th class="head"><p>distribution</p></th>
+<th class="head"><p>item_0</p></th>
+<th class="head"><p>item_1</p></th>
+<th class="head"><p>ordered</p></th>
+<th class="head"><p>distribution_mu</p></th>
+<th class="head"><p>distribution_sigma</p></th>
+<th class="head"><p>distribution_alpha</p></th>
+<th class="head"><p>distribution_beta</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>alpha</p></td>
+<td><p>float</p></td>
+<td><p>True</p></td>
+<td><p>1e-08</p></td>
+<td><p>1.0</p></td>
+<td><p>0.01</p></td>
+<td><p>normal</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>0.01</p></td>
+<td><p>0.01</p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>batch_size</p></td>
+<td><p>integer</p></td>
+<td><p>True</p></td>
+<td><p>4.0</p></td>
+<td><p>256.0</p></td>
+<td><p>32.0</p></td>
+<td><p>uniform</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>depth</p></td>
+<td><p>integer</p></td>
+<td><p>False</p></td>
+<td><p>1.0</p></td>
+<td><p>3.0</p></td>
+<td><p>3.0</p></td>
+<td><p>uniform</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>learning_rate_init</p></td>
+<td><p>float</p></td>
+<td><p>True</p></td>
+<td><p>1e-05</p></td>
+<td><p>1.0</p></td>
+<td><p>0.01</p></td>
+<td><p>beta</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>2.0</p></td>
+<td><p>5.0</p></td>
+</tr>
+<tr class="row-even"><td><p>gradient_clipping</p></td>
+<td><p>categorical</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>We expect the history of trials to be saved as <code class="docutils literal notranslate"><span class="pre">trials.csv</span></code> in the following format:</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>config_id</p></th>
+<th class="head"><p>alpha</p></th>
+<th class="head"><p>batch_size</p></th>
+<th class="head"><p>depth</p></th>
+<th class="head"><p>learning_rate_init</p></th>
+<th class="head"><p>gradient_clipping</p></th>
+<th class="head"><p>metric:normal [0.0; 1.0] (maximize)</p></th>
+<th class="head"><p>status</p></th>
+<th class="head"><p>start_time</p></th>
+<th class="head"><p>end_time</p></th>
+<th class="head"><p>budget</p></th>
+<th class="head"><p>seed</p></th>
+<th class="head"><p>additional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>1.3646716470095907e-06</p></td>
+<td><p>50</p></td>
+<td><p>1</p></td>
+<td><p>0.0001145199593038774</p></td>
+<td><p>true</p></td>
+<td><p>0.2152466367713004</p></td>
+<td><p>success</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>-1</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0.07654259389007832</p></td>
+<td><p>10</p></td>
+<td><p>2</p></td>
+<td><p>0.006273080002552674</p></td>
+<td><p>false</p></td>
+<td><p>0.21973094170403584</p></td>
+<td><p>success</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>1</p></td>
+<td><p>-1</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>0.0005027533412617669</p></td>
+<td><p>115</p></td>
+<td><p>1</p></td>
+<td><p>0.00295471450409257</p></td>
+<td><p>true</p></td>
+<td><p>0.2017937219730942</p></td>
+<td><p>success</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>1</p></td>
+<td><p>-1</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>For some more examples, please have a look at the example runs in <cite>logs/DataFrame</cite>.</p>
+<p>Note that the objectives need to be named <code class="docutils literal notranslate"><span class="pre">metric:&lt;name&gt;</span> <span class="pre">[&lt;lower&gt;;</span> <span class="pre">&lt;upper&gt;]</span> <span class="pre">(&lt;maximize</span> <span class="pre">or</span> <span class="pre">minimize&gt;)</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is the name of the objective, <code class="docutils literal notranslate"><span class="pre">&lt;lower&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;upper&gt;</span></code> are the objective bounds and
+<code class="docutils literal notranslate"><span class="pre">&lt;maximize</span> <span class="pre">or</span> <span class="pre">minimize&gt;</span></code> is the optimization direction.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">status</span></code> column should contain the status of the trial. The following status codes are supported (both upper or lower case):
+SUCCESS, TIMEOUT, MEMORYOUT, CRASHED, ABORTED, NOT_EVALUATED, FAILED, PRUNED, UNKNOWN</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">budget</span></code> column should contain the multi-fidelity budget and can be omitted if not used.
+The same holds for the <code class="docutils literal notranslate"><span class="pre">seed</span></code> column, containing the trial seed.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Conditions and forbiddens are not supported in the current version of the Pandas DataFrame converter.</p>
 </div>
 </section>
 <section id="custom-converter">

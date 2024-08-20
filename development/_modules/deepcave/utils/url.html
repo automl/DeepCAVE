@@ -329,6 +329,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -738,6 +743,8 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">urllib</span>
 
+<span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">Encoder</span>
+
 
 <div class="viewcode-block" id="create_url">
 <a class="viewcode-back" href="../../../api/deepcave.utils.url.html#deepcave.utils.url.create_url">[docs]</a>
@@ -758,7 +765,7 @@
 <span class="sd">        The URL.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">Encoder</span><span class="p">)</span>
     <span class="n">converted_string</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pathname</span><span class="si">}</span><span class="s2">/?inputs=</span><span class="si">{</span><span class="n">converted_string</span><span class="si">}</span><span class="s2">&quot;</span></div>

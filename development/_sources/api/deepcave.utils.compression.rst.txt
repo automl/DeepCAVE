@@ -11,3 +11,9 @@ deepcave.utils.compression
       deserialize
       serialize
    
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      Encoder
+   

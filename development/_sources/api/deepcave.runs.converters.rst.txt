@@ -12,6 +12,7 @@ deepcave.runs.converters
 
    amltk
    bohb
+   dataframe
    deepcave
    optuna
    smac3v1

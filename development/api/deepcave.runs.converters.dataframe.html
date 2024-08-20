@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.runs.converters.amltk &#8212; DeepCAVE Documentation 1.3 documentation</title>
+    <title>deepcave.runs.converters.dataframe &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -37,8 +37,8 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.runs.converters.bohb" href="deepcave.runs.converters.bohb.html" />
-    <link rel="prev" title="deepcave.runs.converters" href="deepcave.runs.converters.html" />
+    <link rel="next" title="deepcave.runs.converters.deepcave" href="deepcave.runs.converters.deepcave.html" />
+    <link rel="prev" title="deepcave.runs.converters.bohb" href="deepcave.runs.converters.bohb.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -321,8 +321,8 @@
        </i>
       </label>
       <ul class="current">
-       <li class="toctree-l4 current active">
-        <a class="current reference internal" href="#">
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.amltk.html">
          deepcave.runs.converters.amltk
         </a>
        </li>
@@ -331,8 +331,8 @@
          deepcave.runs.converters.bohb
         </a>
        </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.dataframe.html">
+       <li class="toctree-l4 current active">
+        <a class="current reference internal" href="#">
          deepcave.runs.converters.dataframe
         </a>
        </li>
@@ -732,37 +732,64 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#deepcave.runs.converters.amltk.AMLTKRun">
+  <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun">
    <code class="docutils literal notranslate">
     <span class="pre">
-     AMLTKRun
+     DataFrameRun
     </span>
    </code>
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.runs.converters.amltk.AMLTKRun.from_path">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.from_path">
      <code class="docutils literal notranslate">
       <span class="pre">
-       AMLTKRun.from_path()
+       DataFrameRun.from_path()
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.runs.converters.amltk.AMLTKRun.hash">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.hash">
      <code class="docutils literal notranslate">
       <span class="pre">
-       AMLTKRun.hash
+       DataFrameRun.hash
       </span>
      </code>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#deepcave.runs.converters.amltk.AMLTKRun.latest_change">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.latest_change">
      <code class="docutils literal notranslate">
       <span class="pre">
-       AMLTKRun.latest_change
+       DataFrameRun.latest_change
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_configspace">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DataFrameRun.load_configspace()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_objectives">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DataFrameRun.load_objectives()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_trials">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DataFrameRun.load_trials()
       </span>
      </code>
     </a>
@@ -790,29 +817,29 @@
               
               <div>
                 
-  <section id="module-deepcave.runs.converters.amltk">
-<span id="deepcave-runs-converters-amltk"></span><h1>deepcave.runs.converters.amltk<a class="headerlink" href="#module-deepcave.runs.converters.amltk" title="Link to this heading">¶</a></h1>
-<p># AMLTKRun</p>
-<p>This module provides utilities to create an AMLTK (AutoML Toolkit) run.</p>
+  <section id="module-deepcave.runs.converters.dataframe">
+<span id="deepcave-runs-converters-dataframe"></span><h1>deepcave.runs.converters.dataframe<a class="headerlink" href="#module-deepcave.runs.converters.dataframe" title="Link to this heading">¶</a></h1>
+<p># DataFrameRun</p>
+<p>This module provides utilities to create a Run object based on a DataFrame representation.</p>
 <dl class="simple">
 <dt>## Classes</dt><dd><ul class="simple">
-<li><p>AMLTKRun: Define an AMLTK run object.</p></li>
+<li><p>DataFrameRun: Define a Run object based on a DataFrame representation.</p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.converters.amltk.AMLTKRun" title="deepcave.runs.converters.amltk.AMLTKRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AMLTKRun</span></code></a>(name[, configspace, objectives, ...])</p></td>
-<td><p>Define an AMLTK (AutoML Toolkit) run object.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.converters.dataframe.DataFrameRun" title="deepcave.runs.converters.dataframe.DataFrameRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrameRun</span></code></a>(name[, configspace, ...])</p></td>
+<td><p>Define a Run object based on a DataFrame representation.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
-<dt class="sig sig-object py" id="deepcave.runs.converters.amltk.AMLTKRun">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.converters.amltk.</span></span><span class="sig-name descname"><span class="pre">AMLTKRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/amltk.html#AMLTKRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.amltk.AMLTKRun" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.converters.dataframe.</span></span><span class="sig-name descname"><span class="pre">DataFrameRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/dataframe.html#DataFrameRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-class docutils literal notranslate"><span class="pre">Run</span></code></a></p>
-<p>Define an AMLTK (AutoML Toolkit) run object.</p>
+<p>Define a Run object based on a DataFrame representation.</p>
 <section id="properties">
 <h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
 <dl class="simple">
@@ -820,25 +847,22 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="deepcave.runs.converters.amltk.AMLTKRun.from_path">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/amltk.html#AMLTKRun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.amltk.AMLTKRun.from_path" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.from_path">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/dataframe.html#DataFrameRun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.from_path" title="Link to this definition">¶</a></dt>
 <dd><p>Based on working_dir/run_name/<a href="#id1"><span class="problematic" id="id2">*</span></a>, return a new trials object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>path</strong> (<em>Union</em><em>[</em><em>Path</em><em>, </em><em>str</em><em>]</em>) – The path to base the trial object on.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>The AMLTK run.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – Instances are not supported.</p>
+<dd class="field-even"><p>The DataFrame run.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="deepcave.runs.converters.amltk.AMLTKRun.hash">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.amltk.AMLTKRun.hash" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.hash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.hash" title="Link to this definition">¶</a></dt>
 <dd><p>Hash of the current run.</p>
 <p>If the hash changes, the cache has to be cleared.
 This ensures that the cache always holds the latest results of the run.</p>
@@ -853,8 +877,8 @@ This ensures that the cache always holds the latest results of the run.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="deepcave.runs.converters.amltk.AMLTKRun.latest_change">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">latest_change</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#deepcave.runs.converters.amltk.AMLTKRun.latest_change" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.latest_change">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">latest_change</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.latest_change" title="Link to this definition">¶</a></dt>
 <dd><p>Get the timestamp of the latest change.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -862,6 +886,53 @@ This ensures that the cache always holds the latest results of the run.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Union[float, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.load_configspace">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_configspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/dataframe.html#DataFrameRun.load_configspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_configspace" title="Link to this definition">¶</a></dt>
+<dd><p>Load the configspace of the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The configspace of the run.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.load_objectives">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_objectives</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/dataframe.html#DataFrameRun.load_objectives"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_objectives" title="Link to this definition">¶</a></dt>
+<dd><p>Load the objectives of the run from the trials.csv file.</p>
+<p>This method reads the trials.csv file and extracts the objectives from the column names.
+The objectives are expected in format <cite>metric:&lt;name&gt; [&lt;lower&gt;; &lt;upper&gt;] (&lt;maximize&gt;)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The metadata of the run.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.converters.dataframe.DataFrameRun.load_trials">
+<span class="sig-name descname"><span class="pre">load_trials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/dataframe.html#DataFrameRun.load_trials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.dataframe.DataFrameRun.load_trials" title="Link to this definition">¶</a></dt>
+<dd><p>Load the trials of the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>Path</em>) – The path to the run.</p></li>
+<li><p><strong>configspace</strong> (<em>ConfigSpace.ConfigurationSpace</em>) – The configuration space of the run.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -877,17 +948,17 @@ This ensures that the cache always holds the latest results of the run.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.runs.converters.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.runs.converters.bohb.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.runs.converters</p>
+            <p class="prev-next-title">deepcave.runs.converters.bohb</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.runs.converters.bohb.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.runs.converters.deepcave.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.runs.converters.bohb</p>
+        <p class="prev-next-title">deepcave.runs.converters.deepcave</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

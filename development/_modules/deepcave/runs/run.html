@@ -329,6 +329,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -750,6 +755,7 @@
 
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">Trial</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">Encoder</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.files</span> <span class="kn">import</span> <span class="n">make_dirs</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">string_to_hash</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">config_to_tuple</span>
@@ -768,7 +774,8 @@
 <span class="sd">    configspace : ConfigurationSpace</span>
 <span class="sd">        The configuration space of the run.</span>
 <span class="sd">    path : Optional[Union[str, Path]]</span>
-<span class="sd">        The path of a run to be loaded.</span>
+<span class="sd">        The path of a run to be loaded. If path is not None, the given parameters are used.</span>
+<span class="sd">        If path is None, the run is created from the given parameters.</span>
 <span class="sd">    meta : Dict[str, Any]</span>
 <span class="sd">        Contains serialized objectives and budgets.</span>
 <span class="sd">    prefix : str</span>
@@ -803,7 +810,6 @@
         <span class="n">path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Run</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">objectives</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">objectives</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">meta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1096,9 +1102,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configspace_fn</span><span class="p">)</span>
 
         <span class="c1"># Save meta data (could be changed)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meta_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">configs_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">origins_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origins_fn</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origins</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">Encoder</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 
         <span class="c1"># Save history</span>
         <span class="k">with</span> <span class="n">jsonlines</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history_fn</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

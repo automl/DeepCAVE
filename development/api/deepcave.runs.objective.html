@@ -332,6 +332,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -875,6 +880,9 @@ It also provides functions for merging and comparing objectives.</p>
 <dd><p>Check if bounds should be locked.</p>
 <p>Lock the lower bound if lower is not None.
 Lock the upper bound if upper is not None.</p>
+<p>Additionally, sets self.lower to np.inf if it is None and self.upper to -np.inf if it is
+None, resulting in an empty bound.
+Therefore, the values will be updated as soon as configurations are added.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>RuntimeError</strong> – If optimize is not <cite>lower</cite> or <cite>upper</cite>.</p>

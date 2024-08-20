@@ -329,6 +329,11 @@
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="../../../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../../../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
         </a>
@@ -782,6 +787,10 @@
 
 <span class="sd">        Lock the lower bound if lower is not None.</span>
 <span class="sd">        Lock the upper bound if upper is not None.</span>
+
+<span class="sd">        Additionally, sets self.lower to np.inf if it is None and self.upper to -np.inf if it is</span>
+<span class="sd">        None, resulting in an empty bound.</span>
+<span class="sd">        Therefore, the values will be updated as soon as configurations are added.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
