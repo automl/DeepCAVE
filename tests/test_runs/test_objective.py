@@ -3,6 +3,7 @@ import unittest
 
 from deepcave.runs.exceptions import NotMergeableError
 from deepcave.runs.objective import Objective
+from deepcave.utils.compression import Encoder
 
 
 class TestRun(unittest.TestCase):
@@ -37,7 +38,7 @@ class TestRun(unittest.TestCase):
     def test_serializable(self) -> None:
         o1 = Objective("test", lower=0, upper=1, optimize="lower")
         o1_json = o1.to_json()
-        json.dumps(o1_json)
+        json.dumps(o1_json, cls=Encoder)
         o2 = Objective.from_json(o1_json)
         o1.merge(o2)
 

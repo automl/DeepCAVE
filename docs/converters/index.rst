@@ -10,6 +10,7 @@ Runs and Converters
    optuna
    bohb
    deepcave
+   dataframe
    custom_converters
 
 
@@ -36,6 +37,7 @@ Currently, DeepCAVE offers the following converters:
 - Optuna
 - BOHB
 - DeepCAVE (native)
+- Pandas DataFrame
 
 In the `logs` directory, you can find example runs for each of the converters.
 

@@ -1,0 +1,5 @@
+name,type,log,lower,upper,default,distribution,item_0,item_1,item_2,ordered,distribution_mu,distribution_sigma,distribution_alpha,distribution_beta
+criterion,categorical,False,,,gini,,gini,entropy,log_loss,,,,
+max_features,float,False,0.0,1.0,0.5,uniform,,,,,,,
+n_estimators,integer,False,10,100,55,uniform,,,,,,,
+SimpleImputer_strategy,categorical,False,,,mean,,mean,median,,,,,
