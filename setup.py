@@ -41,7 +41,7 @@ extras_require = {
 
 setuptools.setup(
     name="deepcave",
-    author_email="s.segel@ai.uni-hannover.de",
+    author_email="l.fehring@ai.uni-hannover.de",
     description="An interactive framework to visualize and analyze your AutoML process in real-time.",
     long_description=read_file("README.md"),
     long_description_content_type="text/markdown",
