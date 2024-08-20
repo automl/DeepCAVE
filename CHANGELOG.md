@@ -3,6 +3,7 @@
 ## Converters
 - Add support for AMLTK.
 - Add support for Optuna.
+- Add support for adding a run in DataFrame format (#137).
 - BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
 ## Version-Updates
