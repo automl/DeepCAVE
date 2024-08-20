@@ -13,10 +13,6 @@ loggers:
     level: INFO
     handlers: [ console ]
     propagate: no
-  matplotlib:
-    level: INFO
-    handlers: [ console ]
-    propagate: no
   werkzeug:
     level: ERROR
     handlers: [ console ]

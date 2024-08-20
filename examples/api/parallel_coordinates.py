@@ -6,7 +6,7 @@ This example shows how to use the plugin Parallel Coordinates.
 Note that other plugins use the same interfaces and can be used in the same fashion.
 """
 
-from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
+from deepcave.plugins.hyperparameter.parallel_coordinates import ParallelCoordinates
 from deepcave.runs.converters.deepcave import DeepCAVERun
 from pathlib import Path
 
@@ -32,7 +32,5 @@ if __name__ == "__main__":
     outputs = plugin.generate_outputs(run, inputs)
 
     # Finally, you can load the figure. Here, the filter variables play a role.
-    # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-    figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+    figure = plugin.load_outputs(run, inputs, outputs)
     figure.write_image("examples/api/parallel_coordinates.png", scale=2.0)
-    # figure.show()

@@ -109,7 +109,7 @@ class RandomForest:
         self.types = np.array(types)
 
         # Prepare everything for PCA
-        self.n_params = len(configspace.get_hyperparameters())
+        self.n_params = len(list(configspace.values()))
         self.n_features = 0
         if instance_features is not None:
             self.n_features = instance_features.shape[1]
@@ -207,9 +207,9 @@ class RandomForest:
         impute_values: Dict[int, float] = {}
 
         X = X.copy()
-        for idx, hp in enumerate(self.cs.get_hyperparameters()):
+        for idx, hp in enumerate(list(self.cs.values())):
             if idx not in conditional:
-                parents = self.cs.get_parents_of(hp.name)
+                parents = self.cs.parents_of[hp.name]
                 if len(parents) == 0:
                     conditional[idx] = False
                 else:

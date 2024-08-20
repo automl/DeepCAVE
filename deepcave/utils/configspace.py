@@ -38,7 +38,7 @@ def sample_border_config(configspace: ConfigurationSpace) -> Iterator[Configurat
     while True:
         config = {}
         # Iterates over the hyperparameters to get considered values
-        for hp_name, hp in zip(list(configspace.keys()), configspace.get_hyperparameters()):
+        for hp_name, hp in configspace.items():
             if isinstance(hp, CategoricalHyperparameter):
                 borders = list(hp.choices)
             elif isinstance(hp, Constant):
@@ -94,7 +94,7 @@ def sample_random_config(
         config_dict = {}
 
         # Iterates over the hyperparameters to get considered values
-        for hp_name, hp in zip(list(configspace.keys()), configspace.get_hyperparameters()):
+        for hp_name, hp in configspace.items():
             if isinstance(hp, CategoricalHyperparameter):
                 values = list(hp.choices)
             elif isinstance(hp, Constant):

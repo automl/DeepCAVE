@@ -43,8 +43,7 @@ Features
 - Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
 - Asynchronous execution of expensive plugins and caching of their results.
 - Help buttons and integrated documentation in the interface helps you to understand the plugins.
-- Use the matplotlib mode to customize and save the plots for your publication.
-- The API mode gives you full access to the code, while you do not have to interact with the 
+- The API mode gives you full access to the code, while you do not have to interact with the
   interface. Otherwise, you can also make use of the raw data, provided by every plugin.
 
 

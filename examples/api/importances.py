@@ -32,7 +32,5 @@ if __name__ == "__main__":
     outputs = plugin.generate_outputs(run, inputs)
 
     # Finally, you can load the figure. Here, the filter variables play a role.
-    # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-    figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+    figure = plugin.load_outputs(run, inputs, outputs)
     figure.write_image("examples/api/importances.png", scale=2.0)
-    # figure.show()

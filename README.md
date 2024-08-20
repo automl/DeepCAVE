@@ -22,7 +22,6 @@ budget analysis.
 - Modularized plugin structure with access to selected runs/groups to provide maximal flexibility.
 - Asynchronous execution of expensive plugins and caching of their results.
 - Help buttons and integrated documentation in the interface helps you to understand the plugins.
-- Use the matplotlib mode to customize and save the plots for your publication.
 - The API mode gives you full access to the code, while you do not have to interact with the 
 interface. Otherwise, you can also make use of the raw data, provided by every plugin.
 
@@ -53,6 +52,13 @@ make install-dev
 If you want to use the given examples, run this after installing:
 ```bash
 make install-examples
+```
+
+To load runs created with Optuna or the BOHB optimizer, you need to install the
+respective packages by running:
+```bash
+make install-optuna
+make install-bohb
 ```
 
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get

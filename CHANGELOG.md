@@ -2,16 +2,33 @@
 
 ## Converters
 - Add support for AMLTK.
+- Add support for Optuna.
+- BOHB: Consider missing state as valid state as state is not provided by default (#65).
 
 ## Version-Updates
 - ConfigSpace from 0.6.1 to 1.2.0
 - Numpy from 1.26.4 to 2.0.1
+- pyPDPPartitioner from to 0.1.8 to 0.1.9
 
 ## Ablation Paths
 - Added ablation paths as a plugin.
 - Added ablation as a evaluator to use for the plugin.
 - Added tests as well as documentation.
 - Modified the RandomForest surrogate model, so it can be passed the number of trees.
+
+## Move plugins
+- Moved the Configuration cube and the parallel coordinates plugin from objective to hyperparameter.
+- Changed layout accordingly as well as the documentation.
+
+## Bug-Fixes
+- Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
+
+## Quality of Life
+- Disable warnings during RunHandler initialization to avoid showing warnings with respect to previously loaded runs.
+- Remove option to use docker (not yet supported).
+- Add SMAC3v2 multi-fidelity example runs.
+- Add more useful SMAC3v2 multi-objective example run.
+- Remove defective matplotlib button and associated functionalities.
 
 # Version 1.2.1
 
