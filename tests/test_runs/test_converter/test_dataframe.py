@@ -20,8 +20,8 @@ class TestDataframeConverter(unittest.TestCase):
     def test_load_objectives(self):
         df = pd.DataFrame(
             {
-                "metric:accuracy 0.0;1.0 (maximize)": [0, 1],
-                "metric:loss 0.0;1.0 (minimize)": [1, 0],
+                "metric:accuracy [0.0; 1.0] (maximize)": [0, 1],
+                "metric:loss [0.0; 1.0] (minimize)": [1, 0],
                 "other": [1, 2],
             }
         )
@@ -180,8 +180,8 @@ class TestDataframeConverter(unittest.TestCase):
                     "config_id": [0, 1],
                     "budget": [1, 2],
                     "seed": [-1, -1],
-                    "metric:normal 0.0;1.0 (maximize)": [1, 2],
-                    "metric:beta 0.0;1.0 (maximize)": [1, 2],
+                    "metric:normal [0.0; 1.0] (maximize)": [1, 2],
+                    "metric:beta [0.0; 1.0] (maximize)": [1, 2],
                     "start_time": [0, 1],
                     "end_time": [1, 2],
                     "status": ["success", "timeout"],
