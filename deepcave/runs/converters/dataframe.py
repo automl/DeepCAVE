@@ -16,6 +16,7 @@ import warnings
 from pathlib import Path
 
 import ConfigSpace
+import numpy as np
 import pandas as pd
 from ConfigSpace import Categorical, Float, Integer
 from ConfigSpace.hyperparameters import Hyperparameter
@@ -332,7 +333,7 @@ class DataFrameRun(Run):
     @staticmethod
     def _extract_budget(data: pd.Series) -> Union[int, float]:
         if "budget" in data.index and pd.notna(data["budget"]):
-            return float(data["budget"])
+            return np.round(float(data["budget"]), 2)
         else:
             return 0.0
 
