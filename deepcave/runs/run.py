@@ -281,7 +281,7 @@ class Run(AbstractRun, ABC):
         self.meta["objectives"] = updated_objectives
 
         if isinstance(config, Configuration):
-            config = config.get_dictionary()
+            config = dict(config)
 
         if config not in self.configs.values():
             config_id_len = len(self.configs)
@@ -434,7 +434,7 @@ class Run(AbstractRun, ABC):
         if not self.config_id_mapping:
             for config_id, config in self.configs.items():
                 if isinstance(config, Configuration):
-                    config = config.get_dictionary()
+                    config = dict(config)
                 self.config_id_mapping[config_to_tuple(config, ROUND_PLACES)] = config_id
 
         # Load history

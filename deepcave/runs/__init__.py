@@ -488,7 +488,7 @@ class AbstractRun(ABC):
         """
         # Convert the input configuration to a tuple
         if isinstance(config, Configuration):
-            config = config.get_dictionary()
+            config = dict(config)
         # Use same rounding as ConfigSpace does
         input_config_tuple = config_to_tuple(config, ROUND_PLACES)
 

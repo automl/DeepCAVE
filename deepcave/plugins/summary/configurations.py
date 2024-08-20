@@ -532,5 +532,5 @@ class Configurations(DynamicPlugin):
             Configurations._get_configspace_figure(inputs, outputs, run),
             create_table(outputs["cs_table_data"]),
             f'"{str(path)}"',
-            str(config.get_dictionary()),
+            str(dict(config)),
         ]
