@@ -8,7 +8,7 @@ This module provides utilities to create a Run object based on a DataFrame repre
     - DataFrameRun: Define a Run object based on a DataFrame representation.
 """
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import os
 import re
@@ -16,7 +16,6 @@ import warnings
 from pathlib import Path
 
 import ConfigSpace
-import numpy as np
 import pandas as pd
 from ConfigSpace import Categorical, Float, Integer
 from ConfigSpace.hyperparameters import Hyperparameter
@@ -40,86 +39,18 @@ class DataFrameRun(Run):
     prefix = "DataFrame"
     _initial_order = 3
 
-    def __init__(
-        self,
-        name: str,
-        configspace: Optional[ConfigSpace.ConfigurationSpace] = None,
-        objectives: Union[Objective, list[Objective], None] = None,
-        meta: Optional[dict[str, Any]] = None,
-        path: Optional[Path] = None,
-    ) -> None:
-        super(Run, self).__init__(name)
-        if objectives is None:
-            objectives = []
-        if meta is None:
-            meta = {}
-
-        # Reset and load configspace/path
-        self.reset()
-        if configspace is not None:
-            self.configspace = configspace
-        self.path = path
-        if self.path is not None:
-            self.load()
-            # Without the return from the superclass
-
-        if configspace is None and path is None:
-            raise RuntimeError(
-                "Please provide a configspace or specify a path to load existing trials."
-            )
-
-        # Objectives
-        if not isinstance(objectives, List):
-            objectives = [objectives]
-
-        serialized_objectives = []
-        for objective in objectives:
-            assert isinstance(objective, Objective)
-            serialized_objectives += [objective.to_json()]
-
-        # Meta
-        self.meta = {"objectives": serialized_objectives, "budgets": [], "seeds": []}
-        self.meta.update(meta)
-
-    @staticmethod
-    def from_path(
-        path: Path,
-    ) -> "DataFrameRun":
-        """
-        Initialize a Run object.
-
-        Parameters
-        ----------
-        path : Path, optional
-            The path to the run.
-        """
-        # extract name based on last part of path
-        name = path.stem
-
-        objectives = DataFrameRun.load_objectives(path)
-        configspace = DataFrameRun.load_configspace(path)
-
-        run = DataFrameRun(
-            name=name,
-            configspace=configspace,
-            objectives=objectives,
-            path=path,
-        )
-        run.load_trials(path, configspace)
-        return run
-
-    def load(self, path: Optional[Union[str, Path]] = None) -> None:
-        """Do nothing. This method is only here, to overwrite the abstract method in Run."""
-
     @property
     def hash(self) -> str:
         """
-        Get a hash as id.
+        Hash of the current run.
+
+        If the hash changes, the cache has to be cleared.
+        This ensures that the cache always holds the latest results of the run.
 
         Returns
         -------
         str
-            The hashed id.
+            The hash of the run.
         """
         if self.path is None:
             return ""
@@ -127,13 +58,61 @@ class DataFrameRun(Run):
         # Use hash of trials.csv as id
         return file_to_hash(self.path / "trials.csv")
 
+    @property
+    def latest_change(self) -> Union[float, int]:
+        """
+        Get the timestamp of the latest change.
+
+        Returns
+        -------
+        Union[float, int]
+            The latest change.
+        """
+        if self.path is None:
+            return 0
+
+        return Path(self.path / "trials.csv").stat().st_mtime
+
+    @classmethod
+    def from_path(cls, path: Union[Path, str]) -> "DataFrameRun":
+        """
+        Based on working_dir/run_name/*, return a new trials object.
+
+        Parameters
+        ----------
+        path : Union[Path, str]
+            The path to base the trial object on.
+
+        Returns
+        -------
+        The DataFrame run.
+        """
+        path = Path(path)
+
+        objectives = DataFrameRun.load_objectives(path)
+        objectives.append(Objective("Time"))
+
+        configspace = DataFrameRun.load_configspace(path)
+
+        run = DataFrameRun(
+            name=path.stem,
+            configspace=configspace,
+            objectives=objectives,
+        )
+
+        # The path has to be set manually
+        run._path = path
+
+        run.load_trials(path, configspace)
+        return run
+
     @staticmethod
     def load_objectives(path: Path) -> list[Objective]:
         """
         Load the objectives of the run from the trials.csv file.
 
         This method reads the trials.csv file and extracts the objectives from the column names.
-        The objectives are expected in format `metric:<name> [<lower>, <upper>] (<maximize>)`.
+        The objectives are expected in format `metric:<name> [<lower>; <upper>] (<maximize>)`.
 
         Returns
         -------
@@ -190,7 +169,9 @@ class DataFrameRun(Run):
                         name=str(df["name"][row_number]),
                         bounds=(float(df["lower"][row_number]), float(df["upper"][row_number])),
                         distribution=distribution,
-                        default=float(df["default"][row_number]),
+                        default=float(df["default"][row_number])
+                        if pd.notna(df["default"][row_number])
+                        else None,
                         log=bool(df["log"][row_number]),
                     )
                 )
@@ -200,7 +181,9 @@ class DataFrameRun(Run):
                         name=str(df["name"][row_number]),
                         bounds=(int(df["lower"][row_number]), int(df["upper"][row_number])),
                         distribution=distribution,
-                        default=df["default"][row_number],
+                        default=df["default"][row_number]
+                        if pd.notna(df["default"][row_number])
+                        else None,
                         log=bool(df["log"][row_number]),
                     )
                 )
@@ -210,14 +193,7 @@ class DataFrameRun(Run):
 
                 items = DataFrameRun._extract_items(df, row_number)
 
-                ordered = (
-                    False
-                    if (
-                        isinstance(df["ordered"][row_number], float)
-                        and np.isnan(df["ordered"][row_number])
-                    )
-                    else df["ordered"][row_number]
-                )
+                ordered = False if pd.isna(df["ordered"][row_number]) else df["ordered"][row_number]
                 hyperparameters.append(
                     Categorical(
                         name=str(df["name"][row_number]),
@@ -289,8 +265,7 @@ class DataFrameRun(Run):
         entries = [
             str(df[column][row_number])
             for column in relevant_columns
-            if df[column][row_number] is not None
-            and not (isinstance(df[column][row_number], float) and np.isnan(df[column][row_number]))
+            if df[column][row_number] is not None and pd.notna(df[column][row_number])
         ]
         return entries
 
@@ -306,22 +281,38 @@ class DataFrameRun(Run):
             The configuration space of the run.
         """
         trials = pd.read_csv(os.path.join(path, "trials.csv"))
+        first_starttime = None
         for index in trials.index:
             trial_data = trials.loc[index]
-            costs = DataFrameRun._extract_costs(trial_data)
+            cost: Sequence[Optional[float]] = DataFrameRun._extract_costs(trial_data)
             budget = DataFrameRun._extract_budget(trial_data)
             seed = DataFrameRun._extract_seed(trial_data)
             run_meta = DataFrameRun._extract_run_meta(trial_data)
             config = DataFrameRun._extract_config(trial_data, configspace)
             additional = DataFrameRun._extract_additional(trial_data, configspace)
+
+            if first_starttime is None:
+                first_starttime = run_meta["start_time"]
+
+            starttime = run_meta["start_time"] - first_starttime
+            endtime = run_meta["end_time"] - first_starttime
+
+            if run_meta["status"] != Status.SUCCESS:
+                # Costs which failed, should not be included
+                cost = [None] * len(cost)
+                time = None
+            else:
+                time = float(endtime - starttime)
+
             self.add(
-                costs,
-                config,
-                seed,
-                budget,
-                run_meta["start_time"],
-                run_meta["end_time"],
-                run_meta["status"],
+                costs=cost + [time],  # type: ignore
+                config=config,
+                budget=budget,
+                seed=seed,
+                start_time=starttime,
+                end_time=endtime,
+                status=run_meta["status"],
+                origin=None,
                 additional=additional,
             )
 
@@ -334,17 +325,23 @@ class DataFrameRun(Run):
         return ConfigSpace.Configuration(configspace, values=hyperparameters)
 
     @staticmethod
-    def _extract_costs(data: pd.Series) -> Union[List[float], float]:
+    def _extract_costs(data: pd.Series) -> List[float]:
         costs_metrics = [index for index in data.index if index.startswith("metric:")]
         return list([float(x) for x in data[costs_metrics]])
 
     @staticmethod
     def _extract_budget(data: pd.Series) -> Union[int, float]:
-        return int(data["budget"])
+        if "budget" in data.index and pd.notna(data["budget"]):
+            return float(data["budget"])
+        else:
+            return 0.0
 
     @staticmethod
     def _extract_seed(data: pd.Series) -> int:
-        return int(data["seed"])
+        if "seed" in data.index and pd.notna(data["seed"]):
+            return int(data["seed"])
+        else:
+            return -1
 
     @staticmethod
     def _extract_run_meta(data: pd.Series) -> Dict[str, Any]:
@@ -356,8 +353,8 @@ class DataFrameRun(Run):
         except KeyError:
             raise ValueError(f"Invalid status value: {status_str}")
         return {
-            "start_time": int(meta_data["start_time"]),
-            "end_time": int(meta_data["end_time"]),
+            "start_time": float(meta_data["start_time"]),
+            "end_time": float(meta_data["end_time"]),
             "status": meta_data["status"],
         }
 
@@ -366,9 +363,10 @@ class DataFrameRun(Run):
         data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
     ) -> Dict[str, Any]:
         hyperparameters = list(configspace.keys())
-        costs_metrics = [index for index in data.index if index.startswith("cost_")]
-        budgets = ["budget"]
+        costs_metrics = [index for index in data.index if index.startswith("metric")]
+        budgets = ["budget"] if "budget" in data.index else []
+        seeds = ["seed"] if "seed" in data.index else []
         meta = ["config_id", "start_time", "end_time", "status"]
-        additional = data.drop(hyperparameters + costs_metrics + budgets + meta)
+        additional = data.drop(hyperparameters + costs_metrics + budgets + seeds + meta)
         additional = dict(additional)
         return {key: value if pd.notna(value) else None for key, value in additional.items()}
