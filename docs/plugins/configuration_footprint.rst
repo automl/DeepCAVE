@@ -1,69 +1,70 @@
 Configuration Footprint
 =======================
 
-Configuration footprint is useful for exploring how much is known about your configuration space by
-the optimizer and view its preferences during the run. These can be generated and will be cached
-when hitting the `Process` button.
+The Configuration Footprint plugin helps you explore how thoroughly the optimizer has explored your
+configuration space and view its preferences during the run. You can generate and cache these
+insights by clicking the `Process` button.
 
 This plugin is capable of answering following questions:
 
 * Was the configuration space well-covered by the optimizer?
-* Can I stop the optimization process or do I need to invest more computational resources?
-* Which hyperparameter values are favorable?
+* Can I stop the optimization process or should I invest more computational resources?
+* Which hyperparameter values are considered favorable?
 
-First, let's briefly mention the various kind of configurations we are concerned with here.
+First, let's briefly mention the various kinds of configurations we are concerned with here:
 
-* **Incumbent**: This is the best configuration for a given objective, like *cost* or *time*,
+* **Incumbent**: The best configuration identified for a given objective, like *cost* or *time*,
   shown as a red triangle.
-* **Evaluated Configuration**: These are configurations evaluated by the optimizer and we know the
-  true objective value, shown with *orange x*'s.
-* **Unevaluated Configuration**: These are configurations sampled by the optimizer but have no been
-  evaluated, shown with *purple x*'s.
-* **Border Configuration**: These are configurations that exist at the edge of the configuration
-  space at the min and max values for scalars.
+* **Evaluated Configurations**: Configurations that have been assessed by the optimizer, with known
+  true objective values, marked with *orange x*'s.
+* **Random Configurations**: Configurations that have been sampled randomly from the configuration
+  space, indicated by *purple x*'s.
+* **Border Configurations**: Configurations located at the edges of the configuration space,
+  corresponding to the minimum and maximum values for scalar parameters, shown as *green x*'s.
 
-Using the **Evaluated Configuration** and the **Incumbent** for each objective type and under each
-budget, we have some knowledge about what kind of score we'll get around those points, and we can
-try to infer for all other points in the configuration space.
+By leveraging the **Evaluated Configurations** and the **Incumbent** for each objective and
+budget, we gain insights into the expected objective values around these points and can infer
+information about other points in the configuration space.
 
-The next point to address is how we represent a high dimensional Configuration in something we can
-plot in 2D. This is done using a dimensionality reduction algorithm
-`MDS <https://en.wikipedia.org/wiki/Multidimensional_scaling>`_ which attempts to preserve distances
-as well as possible when converting from the high dimensional spaceto the lower dimensional one.
-Of course this is not perfect but it can still provide a lot of insight.
+To visualize a high-dimensional configuration space in 2D, we use a dimensionality reduction
+algorithm, here `MDS <https://en.wikipedia.org/wiki/Multidimensional_scaling>`_. MDS aims to
+preserve distances as accurately as possible when mapping from a high-dimensional space to a
+lower-dimensional one. While not perfect, this technique provides valuable insights.
 
-Now we can begin to talk about the plots. These two plots share the same axis and and points will be
-plotted in the same co-ordinates so swapping between them will be most beneficial to get a firm
-grasp on your configuration footprint.
+There are two plots available. Both share the same axes, with points plotted in consistent
+coordinates. Switching between them will provide a comprehensive understanding of your
+configuration footprint:
 
 
 Performance plot
 ----------------
-Perhaps the most useful plot of the two is to see how much we know about which configuration will
-achieve which **objective** score. To view this, mousing over the **Incumbent** will tell you the
-best configuration found for the given *objective* and *budget*. For non-deterministic runs (i.e.
-multiple seeds evaluated per configuration), only configurations evaluated on the maximum number of
-seeds are considered to choose the best configuration from. The **Evaluated Configuration**
-points will have a true objective score, all be it possibly noisy if the objective is noisy.
-Using these two kind of points, we can try to infer what the performance for the rest of the
-configuration space will be.
+The performance plot is particularly useful for understanding which configurations are likely to
+achieve specific **objective** scores. By hovering over the **Incumbent**, you can identify the best
+configuration found for the given *objective* and *budget*.
+For non-deterministic runs (where multiple seeds are evaluated per configuration), only
+configurations evaluated with the maximum number of seeds are considered for determining the
+best configuration.
 
-It's important to note that the background colour, represnting the objective is a best estimate
-given what we already know and does not indicate the true objective value in regions where there
-are no configurations evaluated. We can increase the resolution using the *Details* option, which
-influences the gridsize when generating the plot, at the cost of increased compute time to generate
-it.
+The **Evaluated Configuration** have actual objective scores, though these may be noisy if the
+objective itself is noisy. By leveraging a surrogate model, we can use them to approximate the
+performance of other areas in the configuration space.
+This approximation is represented by the background colour. It does not reflect the true objective
+value in areas where no configurations have been evaluated.
+
+To improve resolution, you can use the
+Details option, which adjusts the grid size for the plot. Note that increasing resolution will
+also increase computation time.
 
 
 Coverage plot
 -------------
-Here you'll get a nice overview of how much your configuration space is sampled and under what
-regions it is most evaluated. This is where the **Border Configurations** can be quite informative
-to view. Ideally you will see these **Border Configurations** at the borders of the different blobs,
-indicating the bounds of the 2d representation of your configuration space. There will likely be
-small clusters of **Evaluated Points** where the optimizer focused on finding good configurations
-as well as some points scattered through the valid configuration regions, to get a good
-understanding of the scores for the various objectives.
+The Coverage Plot provides an overview of how well your configuration space has been sampled and
+highlights which regions have been most thoroughly evaluated.
+**Border Configurations** are particularly informative here, showing the edges of the 2D
+representation of your configuration space.
+There will likely be small clusters of **Evaluated Points**, where the optimizer focused on
+finding optimal configurations, as well as scattered points across valid regions to provide a
+broad understanding of scores for various objectives.
 
 
 .. image:: ../images/plugins/configuration_footprint.png
