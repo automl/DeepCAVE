@@ -11,10 +11,10 @@ This tutorial will guide you through the steps to add a new plugin in DeepCAVE.
 We will create a simple plugin that demonstrates the basic structure and functionality.
 By the end of this tutorial, you will hopefully have a better understanding of how to create and use plugins in DeepCAVE.
 
-Step 1: Create the Plugin class
+Step 1: Create the plugin class
 -------------------------------
 
-1. Create your plugin python file in the `plugins` directory of your DeepCAVE installation.
+1. Start by creating a new Python file in the `deepcave/plugins` directory of your DeepCAVE installation.
    For example, you can create a file named `my_first_plugin.py`.
 
 2. Define the basic structure of the plugin. You can start by using the following code:
@@ -68,20 +68,12 @@ To understand where each part of the layout belongs to, please refer to the foll
 .. image:: ../images/plugins/blocks.png
 
 
-Step 2: Integrate your plugin
+Step 2: Register your plugin
 -----------------------------
 
 To fully integrate your plugin, you need to add it to the list of available plugins per category in the `deepcave/config.py` file.
 The plugin needs to be imported and then added to the plugin dictionary.
 In addition, please add a short description to the `__init__.py` file of the corresponding category in the `deepcave/plugins` directory.
-
-If you want to document your plugin accordingly, you can add your `.rst` under `docs/plugins` and add it to the `docs/plugins/index.py` file.
-You can also define a class variable in your `my_first_plugin.py` with the path to your documentation, called `help`.
-
-.. code-block:: python
-
-    # Example of help variable
-    help = "docs/plugins/my_first_plugin.rst"
 
 Step 3: Decide on your plugin type
 ----------------------------------
@@ -122,7 +114,19 @@ Please note that at this moment icons from the newer versions may not be availab
         # Example icon
         icon = "fas fa-chart-line"
 
-Step 6: Congratulate yourself
+Step 6: Document your plugin
+-----------------------------
+
+To document your plugin, create a corresponding `.rst` file under `docs/plugins` and add it to
+the `docs/plugins/index.py` file.
+Additionally, define a class variable in your `my_first_plugin.py` with the path to your documentation, called `help`.
+
+.. code-block:: python
+
+    # Example of help variable
+    help = "docs/plugins/my_first_plugin.rst"
+
+Step 7: Congratulate yourself
 -----------------------------
 
 Congratulations, you just wrote your first DeepCAVE plugin!

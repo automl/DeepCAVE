@@ -10,13 +10,13 @@ Runs and Converters
    optuna
    bohb
    deepcave
-   custom
+   custom_converters
 
 
 The Run Object
 --------------
 
-DeepCAVE utilizes :ref:`run<deepcave.runs.run>` objects as a fundamental unit for data
+DeepCAVE utilizes :ref:`Run<deepcave.runs.run>` objects as a fundamental unit for data
 interpretation.
 A run represents a hyperparameter optimization process, encompassing a collection of
 trials, each corresponding to a specific hyperparameter configuration with its associated
@@ -42,3 +42,8 @@ Currently, DeepCAVE offers the following converters:
     DeepCAVE observes optimizer data on the file system and therefore allows for monitoring of both
     finished processes and running processes that regularly write new results to disk.
 
+Adding a Converter
+------------------
+
+If you would like to add your own converter, please have a look at our :ref:`tutorial on how to add
+a converter <custom-converter>` and use any of our provided converters as a starting point.
