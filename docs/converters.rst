@@ -128,11 +128,20 @@ We expect the history of trials to be saved as ``trials.csv`` in the following f
 | 2         | 0.0005027533412617669   | 115        | 1     | 0.00295471450409257  | true              | 0.2017937219730942                  | success  | 2          | 3        | 1      | -1   |            |
 +-----------+-------------------------+------------+-------+----------------------+-------------------+-------------------------------------+----------+------------+----------+--------+------+------------+
 
+For some more examples, please have a look at the example runs in `logs/DataFrame`.
+
 Note that the objectives need to be named ``metric:<name> [<lower>; <upper>] (<maximize or minimize>)``, where
 ``<name>`` is the name of the objective, ``<lower>``, ``<upper>`` are the objective bounds and
 ``<maximize or minimize>`` is the optimization direction.
 
-For some more examples, please have a look at the example runs in `logs/DataFrame`.
+The ``status`` column should contain the status of the trial. The following status codes are supported (both upper or lower case):
+SUCCESS, TIMEOUT, MEMORYOUT, CRASHED, ABORTED, NOT_EVALUATED, FAILED, PRUNED, UNKNOWN
+
+``budget`` is the multi-fidelity budget and can be omitted if not used.
+The same holds for the ``seed`` column, containing the trial seed.
+
+.. warning::
+    Conditions and forbiddens are not supported in the current version of the Pandas DataFrame converter.
 
 Custom Converter
 ----------------
