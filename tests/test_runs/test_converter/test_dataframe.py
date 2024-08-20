@@ -96,8 +96,8 @@ class TestDataframeConverter(unittest.TestCase):
                 "config_id": [0, 1],
                 "budget": [1, 2],
                 "seed": [-1, -1],
-                "metric:normal 0.0;1.0 (maximize)": [1, 2],
-                "metric:beta 0.0;1.0 (maximize)": [1, 2],
+                "metric:normal [0.0; 1.0] (maximize)": [1, 2],
+                "metric:beta [0.0; 1.0] (maximize)": [1, 2],
                 "start_time": [0, 1],
                 "end_time": [1, 2],
                 "status": ["success", "timeout"],
@@ -140,7 +140,7 @@ class TestDataframeConverter(unittest.TestCase):
             ),
         ]
 
-        objectives = [Objective("normal"), Objective("beta")]
+        objectives = [Objective("normal"), Objective("beta"), Objective("Time")]
 
         run = DataFrameRun("test_run", configspace, objectives=objectives)
 
