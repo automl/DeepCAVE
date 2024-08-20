@@ -1,13 +1,13 @@
 Cost Over Time
 ==============
 
-One goal of using AutoML is to gain high-peak performance. However, you also want to see
-how the objectives change over time. To see the change based on the time or number of
-configurations, this plugin visualize it for you.
+One of the goals of using AutoML is to achieve high peak performance. However, it is also important
+to track how the objectives evolve over time. This plugin visualizes these changes based on time
+or the number of trials evaluated.
 
-Since multiple runs are supported, you directly see which run performs best to which time.
-If you decide to display groups (which are combined runs), you will see the mean and standard
-deviation too.
+With support for multiple runs, you can easily see which run performs best at various points in
+time. If you choose to display groups of combined runs, the plugin will also show the mean and
+standard deviation, providing a clearer picture of performance trends.
 
 .. note::
     The configuration spaces of the selected runs should be equal. Otherwise, a good comparison
@@ -15,37 +15,37 @@ deviation too.
 
 .. note::
     For non-deterministic runs (i.e. multiple seeds evaluated per configuration), only
-    configurations evaluated on the maximum number of seeds are considered to choose the best
-    configuration at a given time from.
+    configurations evaluated on the maximum number of seeds are considered for choosing the best
+    configuration at a given point in time.
 
-This plugin is capable of answering following questions:
+This plugin is capable of answering the following questions:
 
 * Does the optimizer converge?
-* How performs optimizer A in comparison to optimizer B? Is optimizer A better than optimizer B?
-* How long does the optimizer need to reach a certain objective value?
+* How does optimizer A compare to optimizer B? Is optimizer A more effective than optimizer B?
+* How long does it take for the optimizer to reach a specific objective value?
 
 
 Inputs and Filters
 ------------------
-The objective is used to compare the runs on the y-axis. The option "x-axis" is a
-convenient way to influence the x-axis to your needs. If you are viewing a run which takes long,
-then the logarithmic option would be best for you. If you want to know how many configurations the
-optimizer needed to achieve a specific result, then "evaluated configurations" would be the choice
-for you.
 
-Aditionally, you can specify whether you would like to see runs and/or groups or not.
+The objective is used to compare runs along the y-axis. You can adjust the x-axis to suit your
+needs using the available options. For long-running processes, a logarithmic scale is often
+more useful. If you want to see how many configurations the optimizer needed to achieve a specific
+result, selecting "evaluated configurations" will provide that insight.
+
+Additionally, you can choose to display either individual runs, groups of runs, or both.
 
 
 Interpretation
 --------------
 
-As mentioned above, the resulting graph shows the objective values on the y-axis and the
-time on the x-axis. Based on the lines, you can see when a run/group is performing better/worse
-to the others and to which time. This graph is perfect to determine which optimizer converges
-faster and/or if the optimizer converges at all.
+As mentioned above, the resulting graph shows the objective values on the y-axis and the time on
+the x-axis. By examining the lines, you can determine when a particular run or group outperforms
+or underperforms relative to others, and at what times. This graph is particularly useful for
+assessing which optimizer converges more quickly and whether the optimizer converges at all.
 
-In contrast to the runs, groups show the mean and standard deviation of all included runs of
-the group. Use this feature to see how much spread between multiple runs exists.
+In contrast to individual runs, groups show the mean and standard deviation across all runs within
+the group. This feature helps you understand the variability and spread among multiple runs.
 
 
 .. image:: ../images/plugins/cost_over_time.png
