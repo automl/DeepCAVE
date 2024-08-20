@@ -16,6 +16,7 @@ import warnings
 from pathlib import Path
 
 import ConfigSpace
+import numpy as np
 import pandas as pd
 from ConfigSpace import Categorical, Float, Integer
 from ConfigSpace.hyperparameters import Hyperparameter
@@ -139,7 +140,7 @@ class DataFrameRun(Run):
         pd.DataFrame
             The metadata of the run.
         """
-        objectiv_list = []
+        objective_list = []
 
         trials = pd.read_csv(os.path.join(path, "trials.csv"))
 
@@ -155,7 +156,7 @@ class DataFrameRun(Run):
                 upper = float(match.group(3))
                 maximize = match.group(4) == "maximize"
 
-                objectiv_list.append(
+                objective_list.append(
                     Objective(
                         name=metric_name,
                         lower=lower,
@@ -163,7 +164,7 @@ class DataFrameRun(Run):
                         optimize="upper" if maximize else "lower",
                     )
                 )
-        return objectiv_list
+        return objective_list
 
     @staticmethod
     def load_configspace(path: Path) -> ConfigSpace.ConfigurationSpace:
@@ -209,12 +210,20 @@ class DataFrameRun(Run):
 
                 items = DataFrameRun._extract_items(df, row_number)
 
+                ordered = (
+                    False
+                    if (
+                        isinstance(df["ordered"][row_number], float)
+                        and np.isnan(df["ordered"][row_number])
+                    )
+                    else df["ordered"][row_number]
+                )
                 hyperparameters.append(
                     Categorical(
                         name=str(df["name"][row_number]),
                         items=items,
                         default=df["default"][row_number],
-                        ordered=df["ordered"][row_number],
+                        ordered=ordered,
                     )
                 )
 
@@ -281,6 +290,7 @@ class DataFrameRun(Run):
             str(df[column][row_number])
             for column in relevant_columns
             if df[column][row_number] is not None
+            and not (isinstance(df[column][row_number], float) and np.isnan(df[column][row_number]))
         ]
         return entries
 
@@ -319,7 +329,7 @@ class DataFrameRun(Run):
     def _extract_config(
         data: pd.Series, configspace: ConfigSpace.ConfigurationSpace
     ) -> ConfigSpace.Configuration:
-        hyperparameter_names = configspace.get_hyperparameter_names()
+        hyperparameter_names = list(configspace.keys())
         hyperparameters = dict(zip(hyperparameter_names, data[hyperparameter_names]))
         return ConfigSpace.Configuration(configspace, values=hyperparameters)
 
