@@ -4,26 +4,9 @@ deepcave.runs.trial
 .. automodule:: deepcave.runs.trial
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Trial
    
-   
-
-   
-   
-   
-
-
-

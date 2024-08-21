@@ -4,39 +4,21 @@
 .. automodule:: deepcave.layouts
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Layout
    
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.layouts.general
-   deepcave.layouts.header
-   deepcave.layouts.main
-   deepcave.layouts.not_found
-   deepcave.layouts.notification
-   deepcave.layouts.sidebar
-
+   general
+   header
+   main
+   not_found
+   notification
+   sidebar

@@ -4,11 +4,6 @@ deepcave.utils.layout
 .. automodule:: deepcave.utils.layout
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -21,15 +16,3 @@ deepcave.utils.layout
       help_button
       render_table
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

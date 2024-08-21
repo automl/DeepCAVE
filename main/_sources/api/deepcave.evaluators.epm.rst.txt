@@ -4,31 +4,13 @@ deepcave.evaluators.epm
 .. automodule:: deepcave.evaluators.epm
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.evaluators.epm.fanova_forest
-   deepcave.evaluators.epm.random_forest
-   deepcave.evaluators.epm.random_forest_surrogate
-   deepcave.evaluators.epm.utils
-
+   fanova_forest
+   random_forest
+   random_forest_surrogate
+   utils

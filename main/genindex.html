@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
+    <title>Index &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -23,14 +23,14 @@
     
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="_static/documentation_options.js?v=2e6055c8"></script>
+    <script src="_static/documentation_options.js?v=f6073981"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2.1
+        v1.3
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -163,6 +163,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="examples/api/importances.html">
        Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="examples/api/ablation_paths.html">
+       Ablation Paths
       </a>
      </li>
      <li class="toctree-l3">
@@ -232,18 +237,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plugins/configuration_cube.html">
-     Configuration Cube
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="plugins/pareto_front.html">
      Pareto Front
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plugins/parallel_coordinates.html">
-     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -257,6 +252,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="plugins/ablation_paths.html">
+     Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="plugins/partial_dependencies.html">
      Partial Dependencies
     </a>
@@ -266,12 +276,59 @@
      Symbolic Explanations
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plugins/custom_plugins.html">
+     Adding a Plugin
+    </a>
+   </li>
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="converters.html">
-   Converters
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="converters/index.html">
+   Runs and Converters
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/smac.html">
+     SMAC
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/amltk.html">
+     AMLTK
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/optuna.html">
+     Optuna
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/bohb.html">
+     BOHB
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/deepcave.html">
+     DeepCAVE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/dataframe.html">
+     Pandas DataFrame
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="converters/custom_converters.html">
+     Adding a Converter
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="how_to_contribute.html">
@@ -282,8 +339,8 @@
   <a class="reference internal" href="api.html">
    API References
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -292,8 +349,8 @@
     <a class="reference internal" href="api/deepcave.runs.html">
      deepcave.runs
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -302,20 +359,35 @@
       <a class="reference internal" href="api/deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-      <label for="toctree-checkbox-7">
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.optuna.html">
+         deepcave.runs.converters.optuna
         </a>
        </li>
        <li class="toctree-l4">
@@ -376,8 +448,8 @@
     <a class="reference internal" href="api/deepcave.plugins.html">
      deepcave.plugins
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -396,15 +468,30 @@
       <a class="reference internal" href="api/deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-      <label for="toctree-checkbox-9">
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.plugins.hyperparameter.configuration_cube.html">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
@@ -419,27 +506,10 @@
        </li>
       </ul>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-      <label for="toctree-checkbox-10">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="api/deepcave.plugins.objective.configuration_cube.html">
-         deepcave.plugins.objective.configuration_cube
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="api/deepcave.plugins.objective.parallel_coordinates.html">
-         deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-      </ul>
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.plugins.static.html">
@@ -486,6 +556,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="api/deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -507,6 +582,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -592,6 +672,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="api/deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
@@ -634,11 +719,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="api/deepcave.utils.run_caches.html">
        deepcave.utils.run_caches
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="api/deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
       </a>
      </li>
      <li class="toctree-l3">
@@ -721,16 +801,16 @@
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
- | <a href="#X"><strong>X</strong></a>
- | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.layouts.html#deepcave.layouts.Layout.__call__">__call__() (deepcave.layouts.Layout method)</a>
+      <li><a href="api/deepcave.layouts.header.html#deepcave.layouts.header.HeaderLayout.__call__">__call__() (deepcave.layouts.header.HeaderLayout method)</a>
 
       <ul>
+        <li><a href="api/deepcave.layouts.html#deepcave.layouts.Layout.__call__">(deepcave.layouts.Layout method)</a>
+</li>
         <li><a href="api/deepcave.layouts.not_found.html#deepcave.layouts.not_found.NotFoundLayout.__call__">(deepcave.layouts.not_found.NotFoundLayout method)</a>
 </li>
         <li><a href="api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.__call__">(deepcave.layouts.sidebar.SidebarLayout method)</a>
@@ -746,8 +826,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__eq__">__eq__() (deepcave.runs.objective.Objective method)</a>
 </li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.__getattr__">__getattr__() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
       <li><a href="api/deepcave.runs.group.html#deepcave.runs.group.Group.__iter__">__iter__() (deepcave.runs.group.Group method)</a>
 </li>
       <li><a href="api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__post_init__">__post_init__() (deepcave.runs.objective.Objective method)</a>
@@ -762,6 +840,10 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation">Ablation (class in deepcave.evaluators.ablation)</a>
+</li>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths">AblationPaths (class in deepcave.plugins.hyperparameter.ablation_paths)</a>
+</li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun">AbstractRun (class in deepcave.runs)</a>
 </li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.add">add() (deepcave.runs.run.Run method)</a>
@@ -774,19 +856,19 @@
 </li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.all_runs">all_runs (deepcave.plugins.Plugin property)</a>
 </li>
+      <li><a href="api/deepcave.runs.converters.amltk.html#deepcave.runs.converters.amltk.AMLTKRun">AMLTKRun (class in deepcave.runs.converters.amltk)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="glossary.html#term-BO"><strong>BO</strong></a>
-</li>
-      <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun">BOHBRun (class in deepcave.runs.converters.bohb)</a>
+      <li><a href="glossary.html#term-BO-Bayesian-Optimization"><strong>BO (Bayesian Optimization)</strong></a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.boxplot">boxplot() (deepcave.utils.styled_plot.StyledPlot method)</a>
+      <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun">BOHBRun (class in deepcave.runs.converters.bohb)</a>
 </li>
       <li><a href="glossary.html#term-Budget"><strong>Budget</strong></a>
 </li>
@@ -798,9 +880,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.utils.cache.html#deepcave.utils.cache.Cache">Cache (class in deepcave.utils.cache)</a>
 </li>
-      <li><a href="api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA.calculate">calculate() (deepcave.evaluators.fanova.fANOVA method)</a>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.calculate">calculate() (deepcave.evaluators.ablation.Ablation method)</a>
 
       <ul>
+        <li><a href="api/deepcave.evaluators.fanova.html#deepcave.evaluators.fanova.fANOVA.calculate">(deepcave.evaluators.fanova.fANOVA method)</a>
+</li>
         <li><a href="api/deepcave.evaluators.footprint.html#deepcave.evaluators.footprint.Footprint.calculate">(deepcave.evaluators.footprint.Footprint method)</a>
 </li>
         <li><a href="api/deepcave.evaluators.lpi.html#deepcave.evaluators.lpi.LPI.calculate">(deepcave.evaluators.lpi.LPI method)</a>
@@ -824,7 +908,11 @@
 </li>
       <li><a href="api/deepcave.evaluators.epm.fanova_forest.html#deepcave.evaluators.epm.fanova_forest.FanovaForest.compute_marginals">compute_marginals() (deepcave.evaluators.epm.fanova_forest.FanovaForest method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube">ConfigurationCube (class in deepcave.plugins.objective.configuration_cube)</a>
+      <li><a href="api/deepcave.utils.util.html#deepcave.utils.util.config_to_tuple">config_to_tuple() (in module deepcave.utils.util)</a>
+</li>
+      <li><a href="glossary.html#term-Configuration"><strong>Configuration</strong></a>
+</li>
+      <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube">ConfigurationCube (class in deepcave.plugins.hyperparameter.configuration_cube)</a>
 </li>
       <li><a href="api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations">Configurations (class in deepcave.plugins.summary.configurations)</a>
 </li>
@@ -842,11 +930,20 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun">DataFrameRun (class in deepcave.runs.converters.dataframe)</a>
+</li>
       <li>
     deepcave.evaluators
 
       <ul>
         <li><a href="api/deepcave.evaluators.html#module-deepcave.evaluators">module</a>
+</li>
+      </ul></li>
+      <li>
+    deepcave.evaluators.ablation
+
+      <ul>
+        <li><a href="api/deepcave.evaluators.ablation.html#module-deepcave.evaluators.ablation">module</a>
 </li>
       </ul></li>
       <li>
@@ -913,6 +1010,13 @@
 </li>
       </ul></li>
       <li>
+    deepcave.layouts.header
+
+      <ul>
+        <li><a href="api/deepcave.layouts.header.html#module-deepcave.layouts.header">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.layouts.not_found
 
       <ul>
@@ -955,10 +1059,31 @@
 </li>
       </ul></li>
       <li>
+    deepcave.plugins.hyperparameter.ablation_paths
+
+      <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#module-deepcave.plugins.hyperparameter.ablation_paths">module</a>
+</li>
+      </ul></li>
+      <li>
+    deepcave.plugins.hyperparameter.configuration_cube
+
+      <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#module-deepcave.plugins.hyperparameter.configuration_cube">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.plugins.hyperparameter.importances
 
       <ul>
         <li><a href="api/deepcave.plugins.hyperparameter.importances.html#module-deepcave.plugins.hyperparameter.importances">module</a>
+</li>
+      </ul></li>
+      <li>
+    deepcave.plugins.hyperparameter.parallel_coordinates
+
+      <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#module-deepcave.plugins.hyperparameter.parallel_coordinates">module</a>
 </li>
       </ul></li>
       <li>
@@ -980,20 +1105,6 @@
 
       <ul>
         <li><a href="api/deepcave.plugins.objective.html#module-deepcave.plugins.objective">module</a>
-</li>
-      </ul></li>
-      <li>
-    deepcave.plugins.objective.configuration_cube
-
-      <ul>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#module-deepcave.plugins.objective.configuration_cube">module</a>
-</li>
-      </ul></li>
-      <li>
-    deepcave.plugins.objective.parallel_coordinates
-
-      <ul>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#module-deepcave.plugins.objective.parallel_coordinates">module</a>
 </li>
       </ul></li>
       <li>
@@ -1046,10 +1157,26 @@
 </li>
       </ul></li>
       <li>
+    deepcave.runs.converters.amltk
+
+      <ul>
+        <li><a href="api/deepcave.runs.converters.amltk.html#module-deepcave.runs.converters.amltk">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.runs.converters.bohb
 
       <ul>
         <li><a href="api/deepcave.runs.converters.bohb.html#module-deepcave.runs.converters.bohb">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    deepcave.runs.converters.dataframe
+
+      <ul>
+        <li><a href="api/deepcave.runs.converters.dataframe.html#module-deepcave.runs.converters.dataframe">module</a>
 </li>
       </ul></li>
       <li>
@@ -1059,8 +1186,13 @@
         <li><a href="api/deepcave.runs.converters.deepcave.html#module-deepcave.runs.converters.deepcave">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    deepcave.runs.converters.optuna
+
+      <ul>
+        <li><a href="api/deepcave.runs.converters.optuna.html#module-deepcave.runs.converters.optuna">module</a>
+</li>
+      </ul></li>
       <li>
     deepcave.runs.converters.smac3v1
 
@@ -1174,6 +1306,13 @@
 </li>
       </ul></li>
       <li>
+    deepcave.utils.converters
+
+      <ul>
+        <li><a href="api/deepcave.utils.converters.html#module-deepcave.utils.converters">module</a>
+</li>
+      </ul></li>
+      <li>
     deepcave.utils.dash
 
       <ul>
@@ -1237,13 +1376,6 @@
 </li>
       </ul></li>
       <li>
-    deepcave.utils.styled_plot
-
-      <ul>
-        <li><a href="api/deepcave.utils.styled_plot.html#module-deepcave.utils.styled_plot">module</a>
-</li>
-      </ul></li>
-      <li>
     deepcave.utils.styled_plotty
 
       <ul>
@@ -1273,6 +1405,8 @@
       </ul></li>
       <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun">DeepCAVERun (class in deepcave.runs.converters.deepcave)</a>
 </li>
+      <li><a href="api/deepcave.utils.compression.html#deepcave.utils.compression.Encoder.default">default() (deepcave.utils.compression.Encoder method)</a>
+</li>
       <li><a href="api/deepcave.utils.compression.html#deepcave.utils.compression.deserialize">deserialize() (in module deepcave.utils.compression)</a>
 </li>
       <li><a href="api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin">DynamicPlugin (class in deepcave.plugins.dynamic)</a>
@@ -1289,13 +1423,21 @@
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.encode_configs">encode_configs() (deepcave.runs.AbstractRun method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.utils.compression.html#deepcave.utils.compression.Encoder">Encoder (class in deepcave.utils.compression)</a>
+</li>
       <li><a href="api/deepcave.runs.recorder.html#deepcave.runs.recorder.Recorder.end">end() (deepcave.runs.recorder.Recorder method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.exists">exists() (deepcave.runs.run.Run method)</a>
 </li>
       <li><a href="api/deepcave.utils.symbolic_regression.html#deepcave.utils.symbolic_regression.exp">exp() (in module deepcave.utils.symbolic_regression)</a>
+</li>
+      <li><a href="api/deepcave.utils.converters.html#deepcave.utils.converters.extract_config">extract_config() (in module deepcave.utils.converters)</a>
+</li>
+      <li><a href="api/deepcave.utils.converters.html#deepcave.utils.converters.extract_costs">extract_costs() (in module deepcave.utils.converters)</a>
+</li>
+      <li><a href="api/deepcave.utils.converters.html#deepcave.utils.converters.extract_value">extract_value() (in module deepcave.utils.converters)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1307,24 +1449,28 @@
 </li>
       <li><a href="api/deepcave.evaluators.epm.fanova_forest.html#deepcave.evaluators.epm.fanova_forest.FanovaForest">FanovaForest (class in deepcave.evaluators.epm.fanova_forest)</a>
 </li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.figure">figure() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
       <li><a href="api/deepcave.utils.hash.html#deepcave.utils.hash.file_to_hash">file_to_hash() (in module deepcave.utils.hash)</a>
 </li>
       <li><a href="api/deepcave.utils.dash.html#deepcave.utils.dash.flash">flash() (in module deepcave.utils.dash)</a>
 </li>
       <li><a href="api/deepcave.evaluators.footprint.html#deepcave.evaluators.footprint.Footprint">Footprint (class in deepcave.evaluators.footprint)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint">FootPrint (class in deepcave.plugins.summary.footprint)</a>
 </li>
       <li><a href="api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.from_json">from_json() (deepcave.runs.objective.Objective static method)</a>
 </li>
-      <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun.from_path">from_path() (deepcave.runs.converters.bohb.BOHBRun class method)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.runs.converters.amltk.html#deepcave.runs.converters.amltk.AMLTKRun.from_path">from_path() (deepcave.runs.converters.amltk.AMLTKRun class method)</a>
 
       <ul>
+        <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun.from_path">(deepcave.runs.converters.bohb.BOHBRun class method)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.from_path">(deepcave.runs.converters.dataframe.DataFrameRun class method)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun.from_path">(deepcave.runs.converters.deepcave.DeepCAVERun class method)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.from_path">(deepcave.runs.converters.optuna.OptunaRun class method)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.from_path">(deepcave.runs.converters.smac3v1.SMAC3v1Run class method)</a>
 </li>
@@ -1351,6 +1497,10 @@
         <li><a href="api/deepcave.utils.run_caches.html#deepcave.utils.run_caches.RunCaches.get">(deepcave.utils.run_caches.RunCaches method)</a>
 </li>
       </ul></li>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.get_ablation_improvements">get_ablation_improvements() (deepcave.evaluators.ablation.Ablation method)</a>
+</li>
+      <li><a href="api/deepcave.evaluators.ablation.html#deepcave.evaluators.ablation.Ablation.get_ablation_performances">get_ablation_performances() (deepcave.evaluators.ablation.Ablation method)</a>
+</li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_all_costs">get_all_costs() (deepcave.runs.AbstractRun method)</a>
 </li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_available_run_paths">get_available_run_paths() (deepcave.runs.handler.RunHandler method)</a>
@@ -1367,12 +1517,8 @@
 </li>
       <li><a href="api/deepcave.utils.layout.html#deepcave.utils.layout.get_checklist_options">get_checklist_options() (in module deepcave.utils.layout)</a>
 </li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.get_color">get_color() (deepcave.utils.styled_plot.StyledPlot method)</a>
-
-      <ul>
-        <li><a href="api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">(in module deepcave.utils.styled_plotty)</a>
+      <li><a href="api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">get_color() (in module deepcave.utils.styled_plotty)</a>
 </li>
-      </ul></li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_config">get_config() (deepcave.runs.AbstractRun method)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_config_id">get_config_id() (deepcave.runs.AbstractRun method)</a>
@@ -1383,14 +1529,16 @@
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_encoded_data">get_encoded_data() (deepcave.runs.AbstractRun method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">get_filter_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_filter_layout">get_filter_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_filter_layout">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_filter_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.get_filter_layout">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_filter_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_filter_layout">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_filter_layout">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_filter_layout">(deepcave.plugins.Plugin static method)</a>
 </li>
@@ -1417,16 +1565,18 @@
       </ul></li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_incumbent">get_incumbent() (deepcave.runs.AbstractRun method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">get_input_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_input_layout">get_input_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_input_layout">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_input_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.get_input_layout">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_input_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_input_layout">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_input_layout">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_input_layout">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_input_layout">(deepcave.plugins.Plugin static method)</a>
 </li>
@@ -1449,26 +1599,18 @@
 </li>
       <li><a href="api/deepcave.evaluators.epm.random_forest.html#deepcave.evaluators.epm.random_forest.RandomForest.get_leaf_values">get_leaf_values() (deepcave.evaluators.epm.random_forest.RandomForest method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.get_link">get_link() (deepcave.plugins.summary.configurations.Configurations static method)</a>
 </li>
       <li><a href="api/deepcave.utils.logs.html#deepcave.utils.logs.get_logger">get_logger() (in module deepcave.utils.logs)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_meta">get_meta() (deepcave.runs.AbstractRun method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.get_model">get_model() (deepcave.runs.AbstractRun method)</a>
 
       <ul>
         <li><a href="api/deepcave.runs.group.html#deepcave.runs.group.Group.get_model">(deepcave.runs.group.Group method)</a>
-</li>
-      </ul></li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_mpl_output_layout">get_mpl_output_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
-
-      <ul>
-        <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_mpl_output_layout">(deepcave.plugins.Plugin static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.get_mpl_output_layout">(deepcave.plugins.summary.footprint.FootPrint static method)</a>
 </li>
       </ul></li>
       <li><a href="api/deepcave.runs.group.html#deepcave.runs.group.Group.get_new_config_id">get_new_config_id() (deepcave.runs.group.Group method)</a>
@@ -1493,16 +1635,18 @@
 </li>
       <li><a href="api/deepcave.runs.group.html#deepcave.runs.group.Group.get_original_run">get_original_run() (deepcave.runs.group.Group method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">get_output_layout() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.get_output_layout">get_output_layout() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.get_output_layout">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.get_output_layout">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.get_output_layout">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.get_output_layout">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.get_output_layout">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.get_output_layout">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.get_output_layout">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.get_output_layout">(deepcave.plugins.Plugin static method)</a>
 </li>
@@ -1584,9 +1728,15 @@
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.hash">hash (deepcave.runs.AbstractRun property)</a>
 
       <ul>
+        <li><a href="api/deepcave.runs.converters.amltk.html#deepcave.runs.converters.amltk.AMLTKRun.hash">(deepcave.runs.converters.amltk.AMLTKRun property)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun.hash">(deepcave.runs.converters.bohb.BOHBRun property)</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.hash">(deepcave.runs.converters.dataframe.DataFrameRun property)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun.hash">(deepcave.runs.converters.deepcave.DeepCAVERun property)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.hash">(deepcave.runs.converters.optuna.OptunaRun property)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.hash">(deepcave.runs.converters.smac3v1.SMAC3v1Run property)</a>
 </li>
@@ -1597,9 +1747,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.layouts.header.html#deepcave.layouts.header.HeaderLayout">HeaderLayout (class in deepcave.layouts.header)</a>
+</li>
       <li><a href="api/deepcave.utils.layout.html#deepcave.utils.layout.help_button">help_button() (in module deepcave.utils.layout)</a>
 </li>
       <li><a href="api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.hex_to_rgb">hex_to_rgb() (in module deepcave.utils.styled_plotty)</a>
+</li>
+      <li><a href="glossary.html#term-Hyperparameter"><strong>Hyperparameter</strong></a>
 </li>
   </ul></td>
 </tr></table>
@@ -1619,6 +1773,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances">Importances (class in deepcave.plugins.hyperparameter.importances)</a>
 </li>
+      <li><a href="glossary.html#term-Incumbent"><strong>Incumbent</strong></a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1628,9 +1784,15 @@
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.latest_change">latest_change (deepcave.runs.AbstractRun property)</a>
 
       <ul>
+        <li><a href="api/deepcave.runs.converters.amltk.html#deepcave.runs.converters.amltk.AMLTKRun.latest_change">(deepcave.runs.converters.amltk.AMLTKRun property)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.bohb.html#deepcave.runs.converters.bohb.BOHBRun.latest_change">(deepcave.runs.converters.bohb.BOHBRun property)</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.latest_change">(deepcave.runs.converters.dataframe.DataFrameRun property)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun.latest_change">(deepcave.runs.converters.deepcave.DeepCAVERun property)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.latest_change">(deepcave.runs.converters.optuna.OptunaRun property)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.latest_change">(deepcave.runs.converters.smac3v1.SMAC3v1Run property)</a>
 </li>
@@ -1641,20 +1803,22 @@
       </ul></li>
       <li><a href="api/deepcave.layouts.html#deepcave.layouts.Layout">Layout (class in deepcave.layouts)</a>
 </li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.legend">legend() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.load">load() (deepcave.runs.run.Run method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">load_dependency_inputs() (deepcave.plugins.hyperparameter.importances.Importances method)</a>
+      <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.load_configspace">load_configspace() (deepcave.runs.converters.dataframe.DataFrameRun static method)</a>
+</li>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_dependency_inputs">load_dependency_inputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_dependency_inputs">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_dependency_inputs">(deepcave.plugins.hyperparameter.importances.Importances method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_dependency_inputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_dependency_inputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_dependency_inputs">(deepcave.plugins.objective.configuration_cube.ConfigurationCube method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_dependency_inputs">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_dependency_inputs">(deepcave.plugins.Plugin method)</a>
 </li>
@@ -1663,16 +1827,18 @@
         <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_dependency_inputs">(deepcave.plugins.summary.footprint.FootPrint method)</a>
 </li>
       </ul></li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_inputs">load_inputs() (deepcave.plugins.hyperparameter.importances.Importances method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_inputs">load_inputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_inputs">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_inputs">(deepcave.plugins.hyperparameter.importances.Importances method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.load_inputs">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_inputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_inputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_inputs">(deepcave.plugins.objective.configuration_cube.ConfigurationCube method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_inputs">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_inputs">(deepcave.plugins.Plugin method)</a>
 </li>
@@ -1683,24 +1849,20 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_mpl_outputs">load_mpl_outputs() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.load_objectives">load_objectives() (deepcave.runs.converters.dataframe.DataFrameRun static method)</a>
+</li>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_outputs">load_outputs() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
-        <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_mpl_outputs">(deepcave.plugins.Plugin static method)</a>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.load_outputs">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube static method)</a>
 </li>
-        <li><a href="api/deepcave.plugins.summary.footprint.html#deepcave.plugins.summary.footprint.FootPrint.load_mpl_outputs">(deepcave.plugins.summary.footprint.FootPrint static method)</a>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_outputs">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
 </li>
-      </ul></li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.load_outputs">load_outputs() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
-
-      <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.load_outputs">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.load_outputs">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.load_outputs">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.load_outputs">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.load_outputs">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_outputs">(deepcave.plugins.Plugin static method)</a>
 </li>
@@ -1712,6 +1874,8 @@
 </li>
       </ul></li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.load_run_inputs">load_run_inputs() (deepcave.plugins.Plugin static method)</a>
+</li>
+      <li><a href="api/deepcave.runs.converters.dataframe.html#deepcave.runs.converters.dataframe.DataFrameRun.load_trials">load_trials() (deepcave.runs.converters.dataframe.DataFrameRun method)</a>
 </li>
       <li><a href="api/deepcave.evaluators.lpi.html#deepcave.evaluators.lpi.LPI">LPI (class in deepcave.evaluators.lpi)</a>
 </li>
@@ -1733,6 +1897,8 @@
       <ul>
         <li><a href="api/deepcave.evaluators.html#module-deepcave.evaluators">deepcave.evaluators</a>
 </li>
+        <li><a href="api/deepcave.evaluators.ablation.html#module-deepcave.evaluators.ablation">deepcave.evaluators.ablation</a>
+</li>
         <li><a href="api/deepcave.evaluators.epm.html#module-deepcave.evaluators.epm">deepcave.evaluators.epm</a>
 </li>
         <li><a href="api/deepcave.evaluators.epm.fanova_forest.html#module-deepcave.evaluators.epm.fanova_forest">deepcave.evaluators.epm.fanova_forest</a>
@@ -1751,6 +1917,8 @@
 </li>
         <li><a href="api/deepcave.layouts.html#module-deepcave.layouts">deepcave.layouts</a>
 </li>
+        <li><a href="api/deepcave.layouts.header.html#module-deepcave.layouts.header">deepcave.layouts.header</a>
+</li>
         <li><a href="api/deepcave.layouts.not_found.html#module-deepcave.layouts.not_found">deepcave.layouts.not_found</a>
 </li>
         <li><a href="api/deepcave.layouts.sidebar.html#module-deepcave.layouts.sidebar">deepcave.layouts.sidebar</a>
@@ -1763,17 +1931,19 @@
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.html#module-deepcave.plugins.hyperparameter">deepcave.plugins.hyperparameter</a>
 </li>
+        <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#module-deepcave.plugins.hyperparameter.ablation_paths">deepcave.plugins.hyperparameter.ablation_paths</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#module-deepcave.plugins.hyperparameter.configuration_cube">deepcave.plugins.hyperparameter.configuration_cube</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.importances.html#module-deepcave.plugins.hyperparameter.importances">deepcave.plugins.hyperparameter.importances</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#module-deepcave.plugins.hyperparameter.parallel_coordinates">deepcave.plugins.hyperparameter.parallel_coordinates</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#module-deepcave.plugins.hyperparameter.pdp">deepcave.plugins.hyperparameter.pdp</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#module-deepcave.plugins.hyperparameter.symbolic_explanations">deepcave.plugins.hyperparameter.symbolic_explanations</a>
 </li>
         <li><a href="api/deepcave.plugins.objective.html#module-deepcave.plugins.objective">deepcave.plugins.objective</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#module-deepcave.plugins.objective.configuration_cube">deepcave.plugins.objective.configuration_cube</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#module-deepcave.plugins.objective.parallel_coordinates">deepcave.plugins.objective.parallel_coordinates</a>
 </li>
         <li><a href="api/deepcave.plugins.static.html#module-deepcave.plugins.static">deepcave.plugins.static</a>
 </li>
@@ -1789,9 +1959,15 @@
 </li>
         <li><a href="api/deepcave.runs.converters.html#module-deepcave.runs.converters">deepcave.runs.converters</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.amltk.html#module-deepcave.runs.converters.amltk">deepcave.runs.converters.amltk</a>
+</li>
         <li><a href="api/deepcave.runs.converters.bohb.html#module-deepcave.runs.converters.bohb">deepcave.runs.converters.bohb</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.dataframe.html#module-deepcave.runs.converters.dataframe">deepcave.runs.converters.dataframe</a>
+</li>
         <li><a href="api/deepcave.runs.converters.deepcave.html#module-deepcave.runs.converters.deepcave">deepcave.runs.converters.deepcave</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.optuna.html#module-deepcave.runs.converters.optuna">deepcave.runs.converters.optuna</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#module-deepcave.runs.converters.smac3v1">deepcave.runs.converters.smac3v1</a>
 </li>
@@ -1825,6 +2001,8 @@
 </li>
         <li><a href="api/deepcave.utils.configspace.html#module-deepcave.utils.configspace">deepcave.utils.configspace</a>
 </li>
+        <li><a href="api/deepcave.utils.converters.html#module-deepcave.utils.converters">deepcave.utils.converters</a>
+</li>
         <li><a href="api/deepcave.utils.dash.html#module-deepcave.utils.dash">deepcave.utils.dash</a>
 </li>
         <li><a href="api/deepcave.utils.data_structures.html#module-deepcave.utils.data_structures">deepcave.utils.data_structures</a>
@@ -1842,8 +2020,6 @@
         <li><a href="api/deepcave.utils.notification.html#module-deepcave.utils.notification">deepcave.utils.notification</a>
 </li>
         <li><a href="api/deepcave.utils.run_caches.html#module-deepcave.utils.run_caches">deepcave.utils.run_caches</a>
-</li>
-        <li><a href="api/deepcave.utils.styled_plot.html#module-deepcave.utils.styled_plot">deepcave.utils.styled_plot</a>
 </li>
         <li><a href="api/deepcave.utils.styled_plotty.html#module-deepcave.utils.styled_plotty">deepcave.utils.styled_plotty</a>
 </li>
@@ -1886,6 +2062,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.utils.cast.html#deepcave.utils.cast.optional_int">optional_int() (in module deepcave.utils.cast)</a>
 </li>
+      <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun">OptunaRun (class in deepcave.runs.converters.optuna)</a>
+</li>
       <li><a href="api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview">Overview (class in deepcave.plugins.summary.overview)</a>
 </li>
   </ul></td>
@@ -1894,7 +2072,7 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates">ParallelCoordinates (class in deepcave.plugins.objective.parallel_coordinates)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates">ParallelCoordinates (class in deepcave.plugins.hyperparameter.parallel_coordinates)</a>
 </li>
       <li><a href="api/deepcave.utils.configs.html#deepcave.utils.configs.parse_config">parse_config() (in module deepcave.utils.configs)</a>
 </li>
@@ -1922,16 +2100,18 @@
 </li>
       <li><a href="api/deepcave.utils.util.html#deepcave.utils.util.print_progress_bar">print_progress_bar() (in module deepcave.utils.util)</a>
 </li>
-      <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">process() (deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+      <li><a href="api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.process">process() (deepcave.plugins.hyperparameter.ablation_paths.AblationPaths static method)</a>
 
       <ul>
+        <li><a href="api/deepcave.plugins.hyperparameter.configuration_cube.html#deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube.process">(deepcave.plugins.hyperparameter.configuration_cube.ConfigurationCube static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.importances.html#deepcave.plugins.hyperparameter.importances.Importances.process">(deepcave.plugins.hyperparameter.importances.Importances static method)</a>
+</li>
+        <li><a href="api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.process">(deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates static method)</a>
+</li>
         <li><a href="api/deepcave.plugins.hyperparameter.pdp.html#deepcave.plugins.hyperparameter.pdp.PartialDependencies.process">(deepcave.plugins.hyperparameter.pdp.PartialDependencies static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations.process">(deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.configuration_cube.html#deepcave.plugins.objective.configuration_cube.ConfigurationCube.process">(deepcave.plugins.objective.configuration_cube.ConfigurationCube static method)</a>
-</li>
-        <li><a href="api/deepcave.plugins.objective.parallel_coordinates.html#deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates.process">(deepcave.plugins.objective.parallel_coordinates.ParallelCoordinates static method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.process">(deepcave.plugins.Plugin static method)</a>
 </li>
@@ -1954,9 +2134,11 @@
 </li>
       <li><a href="api/deepcave.runs.recorder.html#deepcave.runs.recorder.Recorder">Recorder (class in deepcave.runs.recorder)</a>
 </li>
-      <li><a href="api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.register_callbacks">register_callbacks() (deepcave.layouts.sidebar.SidebarLayout method)</a>
+      <li><a href="api/deepcave.layouts.header.html#deepcave.layouts.header.HeaderLayout.register_callbacks">register_callbacks() (deepcave.layouts.header.HeaderLayout method)</a>
 
       <ul>
+        <li><a href="api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout.register_callbacks">(deepcave.layouts.sidebar.SidebarLayout method)</a>
+</li>
         <li><a href="api/deepcave.plugins.dynamic.html#deepcave.plugins.dynamic.DynamicPlugin.register_callbacks">(deepcave.plugins.dynamic.DynamicPlugin method)</a>
 </li>
         <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_callbacks">(deepcave.plugins.Plugin method)</a>
@@ -1968,11 +2150,9 @@
 </li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">register_output() (deepcave.plugins.Plugin method)</a>
 </li>
-      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.remove_run">remove_run() (deepcave.runs.handler.RunHandler method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.render">render() (deepcave.utils.styled_plot.StyledPlot method)</a>
+      <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.remove_run">remove_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.reset">reset() (deepcave.runs.AbstractRun method)</a>
 
@@ -2008,8 +2188,6 @@
 </li>
       <li><a href="api/deepcave.runs.run.html#deepcave.runs.run.Run.save">save() (deepcave.runs.run.Run method)</a>
 </li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.save_figure">save_figure() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
       <li><a href="api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.save_image">save_image() (in module deepcave.utils.styled_plotty)</a>
 </li>
       <li><a href="api/deepcave.utils.compression.html#deepcave.utils.compression.serialize">serialize() (in module deepcave.utils.compression)</a>
@@ -2030,8 +2208,6 @@
 </li>
       <li><a href="api/deepcave.layouts.sidebar.html#deepcave.layouts.sidebar.SidebarLayout">SidebarLayout (class in deepcave.layouts.sidebar)</a>
 </li>
-      <li><a href="glossary.html#term-SMAC"><strong>SMAC</strong></a>
-</li>
       <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run">SMAC3v1Run (class in deepcave.runs.converters.smac3v1)</a>
 </li>
       <li><a href="api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run">SMAC3v2Run (class in deepcave.runs.converters.smac3v2)</a>
@@ -2043,8 +2219,6 @@
       <li><a href="api/deepcave.runs.status.html#deepcave.runs.status.Status">Status (class in deepcave.runs.status)</a>
 </li>
       <li><a href="api/deepcave.utils.hash.html#deepcave.utils.hash.string_to_hash">string_to_hash() (in module deepcave.utils.hash)</a>
-</li>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot">StyledPlot (class in deepcave.utils.styled_plot)</a>
 </li>
       <li><a href="api/deepcave.plugins.hyperparameter.symbolic_explanations.html#deepcave.plugins.hyperparameter.symbolic_explanations.SymbolicExplanations">SymbolicExplanations (class in deepcave.plugins.hyperparameter.symbolic_explanations)</a>
 </li>
@@ -2103,22 +2277,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="X">X</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.xlim">xlim() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="Y">Y</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/deepcave.utils.styled_plot.html#deepcave.utils.styled_plot.StyledPlot.ylim">ylim() (deepcave.utils.styled_plot.StyledPlot method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 
 
               </div>
@@ -2147,7 +2305,7 @@
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -4,26 +4,9 @@ deepcave.evaluators.lpi
 .. automodule:: deepcave.evaluators.lpi
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       LPI
    
-   
-
-   
-   
-   
-
-
-

@@ -4,24 +4,11 @@ deepcave.runs.exceptions
 .. automodule:: deepcave.runs.exceptions
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       RunInequality
-   
-   
-
-   
    
    .. rubric:: Exceptions
 
@@ -30,7 +17,3 @@ deepcave.runs.exceptions
       NotMergeableError
       NotValidRunError
    
-   
-
-
-

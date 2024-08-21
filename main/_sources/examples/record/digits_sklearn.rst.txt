@@ -65,7 +65,7 @@ process in DeepCAVE format.
             name="learning_rate", lower=0.0001, upper=0.1, log=True
         )
 
-        configspace.add_hyperparameters(
+        configspace.add(
             [
                 num_neurons_layer1,
                 num_neurons_layer2,
@@ -167,3 +167,7 @@ process in DeepCAVE format.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: digits_sklearn.py <digits_sklearn.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: digits_sklearn.zip <digits_sklearn.zip>`

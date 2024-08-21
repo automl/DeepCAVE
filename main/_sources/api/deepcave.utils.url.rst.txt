@@ -4,11 +4,6 @@ deepcave.utils.url
 .. automodule:: deepcave.utils.url
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -16,15 +11,3 @@ deepcave.utils.url
       create_url
       parse_url
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

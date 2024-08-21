@@ -1,0 +1,12 @@
+deepcave.plugins.hyperparameter.parallel\_coordinates
+=====================================================
+
+.. automodule:: deepcave.plugins.hyperparameter.parallel_coordinates
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      ParallelCoordinates
+   

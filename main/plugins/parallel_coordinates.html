@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Parallel Coordinates &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
+    <title>Parallel Coordinates &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -24,21 +24,21 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=2e6055c8"></script>
+    <script src="../_static/documentation_options.js?v=f6073981"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Budget Correlation" href="budget_correlation.html" />
-    <link rel="prev" title="Pareto Front" href="pareto_front.html" />
+    <link rel="next" title="Partial Dependencies" href="partial_dependencies.html" />
+    <link rel="prev" title="Configuration Cube" href="configuration_cube.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2.1
+        v1.3
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -166,6 +166,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/importances.html">
        Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
       </a>
      </li>
      <li class="toctree-l3">
@@ -235,18 +240,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="configuration_cube.html">
-     Configuration Cube
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="pareto_front.html">
      Pareto Front
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -260,6 +255,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="ablation_paths.html">
+     Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="partial_dependencies.html">
      Partial Dependencies
     </a>
@@ -269,12 +279,59 @@
      Symbolic Explanations
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="custom_plugins.html">
+     Adding a Plugin
+    </a>
+   </li>
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../converters.html">
-   Converters
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../converters/index.html">
+   Runs and Converters
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/smac.html">
+     SMAC
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/amltk.html">
+     AMLTK
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/optuna.html">
+     Optuna
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/bohb.html">
+     BOHB
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/deepcave.html">
+     DeepCAVE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/dataframe.html">
+     Pandas DataFrame
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/custom_converters.html">
+     Adding a Converter
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../how_to_contribute.html">
@@ -285,8 +342,8 @@
   <a class="reference internal" href="../api.html">
    API References
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -295,8 +352,8 @@
     <a class="reference internal" href="../api/deepcave.runs.html">
      deepcave.runs
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -305,20 +362,35 @@
       <a class="reference internal" href="../api/deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-      <label for="toctree-checkbox-7">
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.optuna.html">
+         deepcave.runs.converters.optuna
         </a>
        </li>
        <li class="toctree-l4">
@@ -379,8 +451,8 @@
     <a class="reference internal" href="../api/deepcave.plugins.html">
      deepcave.plugins
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -399,15 +471,30 @@
       <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-      <label for="toctree-checkbox-9">
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.configuration_cube.html">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
@@ -422,27 +509,10 @@
        </li>
       </ul>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-      <label for="toctree-checkbox-10">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.configuration_cube.html">
-         deepcave.plugins.objective.configuration_cube
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.parallel_coordinates.html">
-         deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-      </ul>
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.plugins.static.html">
@@ -489,6 +559,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -510,6 +585,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="../api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -595,6 +675,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
@@ -637,11 +722,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.utils.run_caches.html">
        deepcave.utils.run_caches
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
       </a>
      </li>
      <li class="toctree-l3">
@@ -699,13 +779,13 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#options">
-   Options
+  <a class="reference internal nav-link" href="#using-the-plot">
+   Using the plot
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#using-the-plot">
-   Using the plot
+  <a class="reference internal nav-link" href="#options">
+   Options
   </a>
  </li>
 </ul>
@@ -731,55 +811,57 @@
                 
   <section id="parallel-coordinates">
 <h1>Parallel Coordinates<a class="headerlink" href="#parallel-coordinates" title="Link to this heading">¶</a></h1>
-<p>With parallel coordinates, you can see configurations plotted as a line through their hyperparameter
-values and to which final score they reach.
-You can use this to identify trends in hyperparamter value ranges that achieve certain scores.
-For example, you may find that high performing configurations may all share the same value for a
-certain categorical hyperparamter, as indicated by many high scoring lines passing through this
-value. These lines will be ordered according to their importance in determining the final score from
-left to right with the default to show the top 10 important ones.
-Lastly, you can place visual filters along these spines to really home-in on hyperparamters
-important for your analysis.</p>
+<p>The Parallel Coordinates plugin visualizes hyperparameter configurations as a line through their
+hyperparameter values and their final objective score.
+This visualization helps in identifying trends and patterns related to the final scores achieved
+by various configurations.
+For example, you may find that high performing configurations all share the same value for a
+certain categorical hyperparameter, as indicated by many high scoring lines passing through this
+value.
+The lines can be ordered according to their fANOVA importance from right to left
+(i.e. more important hyperparameters are closer to the objective score on the right).</p>
 <p>This can help provide insight and answers to various questions:</p>
 <ul class="simple">
-<li><p>What hyperparamter values, or combinations of them, lead to a range of final scores?</p></li>
-<li><p>Which hyperparamter values does the optimizer tend to prefer?</p></li>
-<li><p>What hyperparamter configurations lead to crash configurations?</p></li>
+<li><p>Which hyperparameter values or combinations are associated with high or low final scores?</p></li>
+<li><p>What preferences does the optimizer exhibit for certain hyperparameters?</p></li>
 </ul>
+<img alt="../_images/parallel_coordinates.png" src="../_images/parallel_coordinates.png" />
+<section id="using-the-plot">
+<h2>Using the plot<a class="headerlink" href="#using-the-plot" title="Link to this heading">¶</a></h2>
+<p>The plot offers some interactive features for in-depth analysis:</p>
+<ul class="simple">
+<li><p><strong>Visual Filters:</strong> Add visual filters by drawing lines on the hyperparameter or objective value
+ranges. on the axes. For instance, placing a line on the objective value range allows you to
+filter configurations within that specific range. Multiple filters can be applied, and clicking
+on them again will remove them.</p></li>
+<li><p><strong>Re-arranging:</strong> You can drag and reposition the hyperparameters and the objective to better
+group and compare them. This feature helps in customizing the view to focus on relevant hyperparameters
+for your analysis.</p></li>
+</ul>
+</section>
 <section id="options">
 <h2>Options<a class="headerlink" href="#options" title="Link to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Objective</strong>: Here you can select the objective you wish to analyze for.
-The score will be placed as the last bar along the x-axis along with incoming lines indication
-which configuration achieved what score.</p></li>
-<li><p><strong>Budget</strong>: Here you can specify a filter for which budgets you wish to view.
-The <em>Combined</em> budget will show all configurations trialed but only show their scores on the
-highest budget if it was evaluated under multiple different budgets.</p></li>
-<li><p><strong>Show Important hyperparameters</strong>: With this, you can limit the number of spines in the plot to
-just the top 10 most important hyperparamters, calculated using fANOVA with 5 trees.
-These will be arranged left to right according to their importance.
-You can select <em>No</em> and instead show <strong>all</strong> hyperparamters, selecting those you consider most
-important for you.</p></li>
-<li><p><strong>Show Unsuccessful Configurations</strong>: By default, we do not crowd the plot with configurations that
-did not manage to complete but you may enable plotting them by changing this to <em>Yes</em>.
-This could be useful to identify hyperparamters or combinations of them that caused them to not
-complete.</p></li>
+The final scores are depicted as the last item along the x-axis.</p></li>
+<li><p><strong>Budget</strong>: Select the multi-fidelity budget to be used. The plugin will only consider trials evaluated
+on the selected budget. The <em>Combined</em> budget option displays all configurations but shows scores only
+from the highest budget if a configuration was evaluated with multiple budgets.</p></li>
+<li><p><strong>Show Important Hyperparameters</strong>: Order hyperparameters according to their fANOVA importance.
+The more right a hyperparameter stands, the more important it is. Activating this option might
+take longer.</p></li>
 </ul>
-</section>
-<section id="using-the-plot">
-<h2>Using the plot<a class="headerlink" href="#using-the-plot" title="Link to this heading">¶</a></h2>
-<p>The plot can be overwhelming at first but it is quite dynamic and easy to filter.</p>
-<p>One of the most useful features to know is that you can draw a bar on a spine to add a visual filter
-to all of the configuration lines.
-Doing so on the objective, the right most spine, can help filter configurations that achieve a
-certain score range. You can place as many of these as you like and clicking on them again to remove
-them.</p>
-<p>You can further re-arrange the spines by dragging their label above the spine left or right.
-Doing so allows you to group together relevant hyperparamters and view configurations in a way that
-makes sense for the question or problem at hand.</p>
-<p>Sometimes, well-performing configurations tend to use similar hyperparameters.
-This plugins let you analyze this behaviour in detail.</p>
-<img alt="../_images/parallel_coordinates.png" src="../_images/parallel_coordinates.png" />
+<p>To refine your analysis, you can apply filters after calculation:</p>
+<ul class="simple">
+<li><p><strong>Limit Hyperparameters</strong>: Shows either the N most important hyperparameters (if show important
+hyperparameters is true) or the first N selected hyperparameters.</p></li>
+<li><p><strong>Hyperparameters</strong>: Shows only the selected hyperparameters (only available if “Show Important
+Hyperparameters” is false).</p></li>
+<li><p><strong>Show Unsuccessful Configurations</strong>: By default, we do not crowd the plot with configurations that
+did not manage to complete but you can enable plotting them by changing this to <em>Yes</em>.
+This can be useful to identify hyperparameters or combinations of them that caused the trial to
+crash.</p></li>
+</ul>
 </section>
 </section>
 
@@ -789,17 +871,17 @@ This plugins let you analyze this behaviour in detail.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="pareto_front.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="configuration_cube.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Pareto Front</p>
+            <p class="prev-next-title">Configuration Cube</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="budget_correlation.html" title="next page">
+    <a class='right-next' id="next-link" href="partial_dependencies.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Budget Correlation</p>
+        <p class="prev-next-title">Partial Dependencies</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -824,7 +906,7 @@ This plugins let you analyze this behaviour in detail.</p>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

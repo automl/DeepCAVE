@@ -4,11 +4,6 @@ deepcave.utils.symbolic\_regression
 .. automodule:: deepcave.utils.symbolic_regression
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@ deepcave.utils.symbolic\_regression
       exp
       get_function_set
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

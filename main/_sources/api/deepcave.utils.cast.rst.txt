@@ -4,26 +4,9 @@ deepcave.utils.cast
 .. automodule:: deepcave.utils.cast
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       optional_int
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

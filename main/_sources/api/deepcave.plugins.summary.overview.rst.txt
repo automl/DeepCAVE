@@ -4,26 +4,9 @@ deepcave.plugins.summary.overview
 .. automodule:: deepcave.plugins.summary.overview
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       Overview
    
-   
-
-   
-   
-   
-
-
-

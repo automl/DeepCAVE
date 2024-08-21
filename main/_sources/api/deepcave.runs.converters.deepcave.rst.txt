@@ -4,26 +4,9 @@ deepcave.runs.converters.deepcave
 .. automodule:: deepcave.runs.converters.deepcave
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       DeepCAVERun
    
-   
-
-   
-   
-   
-
-
-

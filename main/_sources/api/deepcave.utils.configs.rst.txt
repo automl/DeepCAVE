@@ -4,26 +4,9 @@ deepcave.utils.configs
 .. automodule:: deepcave.utils.configs
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       parse_config
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

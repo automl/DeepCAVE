@@ -24,7 +24,7 @@ Importances
 This example shows how to use the plugin Importances.
 Note that other plugins use the same interfaces and can be used in the same fashion.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-39
+.. GENERATED FROM PYTHON SOURCE LINES 8-37
 
 .. code-block:: Python
 
@@ -44,7 +44,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
         # Instantiate the plugin
         plugin = Importances()
         inputs = plugin.generate_inputs(
-            hyperparameter_names=run.configspace.get_hyperparameter_names(),
+            hyperparameter_names=list(run.configspace.keys()),
             objective_id=objective_id,
             budget_ids=budget_ids,
             method="global",
@@ -55,10 +55,8 @@ Note that other plugins use the same interfaces and can be used in the same fash
         outputs = plugin.generate_outputs(run, inputs)
 
         # Finally, you can load the figure. Here, the filter variables play a role.
-        # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-        figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+        figure = plugin.load_outputs(run, inputs, outputs)
         figure.write_image("examples/api/importances.png", scale=2.0)
-        # figure.show()
 
 
 .. _sphx_glr_download_examples_api_importances.py:
@@ -74,3 +72,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: importances.py <importances.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: importances.zip <importances.zip>`

@@ -4,26 +4,9 @@ deepcave.layouts.not\_found
 .. automodule:: deepcave.layouts.not_found
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       NotFoundLayout
    
-   
-
-   
-   
-   
-
-
-

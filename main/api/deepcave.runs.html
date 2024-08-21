@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.runs &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
+    <title>deepcave.runs &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -24,14 +24,14 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=2e6055c8"></script>
+    <script src="../_static/documentation_options.js?v=f6073981"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2.1
+        v1.3
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -166,6 +166,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/importances.html">
        Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
       </a>
      </li>
      <li class="toctree-l3">
@@ -235,18 +240,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/configuration_cube.html">
-     Configuration Cube
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../plugins/pareto_front.html">
      Pareto Front
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../plugins/parallel_coordinates.html">
-     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -260,6 +255,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/ablation_paths.html">
+     Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="../plugins/partial_dependencies.html">
      Partial Dependencies
     </a>
@@ -269,12 +279,59 @@
      Symbolic Explanations
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plugins/custom_plugins.html">
+     Adding a Plugin
+    </a>
+   </li>
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../converters.html">
-   Converters
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../converters/index.html">
+   Runs and Converters
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/smac.html">
+     SMAC
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/amltk.html">
+     AMLTK
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/optuna.html">
+     Optuna
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/bohb.html">
+     BOHB
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/deepcave.html">
+     DeepCAVE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/dataframe.html">
+     Pandas DataFrame
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/custom_converters.html">
+     Adding a Converter
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../how_to_contribute.html">
@@ -285,8 +342,8 @@
   <a class="reference internal" href="../api.html">
    API References
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -295,8 +352,8 @@
     <a class="current reference internal" href="#">
      deepcave.runs
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -305,20 +362,35 @@
       <a class="reference internal" href="deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-      <label for="toctree-checkbox-7">
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.runs.converters.optuna.html">
+         deepcave.runs.converters.optuna
         </a>
        </li>
        <li class="toctree-l4">
@@ -379,8 +451,8 @@
     <a class="reference internal" href="deepcave.plugins.html">
      deepcave.plugins
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -399,15 +471,30 @@
       <a class="reference internal" href="deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-      <label for="toctree-checkbox-9">
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.configuration_cube.html">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
@@ -422,27 +509,10 @@
        </li>
       </ul>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-      <label for="toctree-checkbox-10">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.configuration_cube.html">
-         deepcave.plugins.objective.configuration_cube
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.plugins.objective.parallel_coordinates.html">
-         deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-      </ul>
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="deepcave.plugins.static.html">
@@ -489,6 +559,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -510,6 +585,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -595,6 +675,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
@@ -637,11 +722,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.run_caches.html">
        deepcave.utils.run_caches
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
       </a>
      </li>
      <li class="toctree-l3">
@@ -1102,6 +1182,8 @@
 </dd>
 <dt>configs: Dict[int, Configuration]</dt><dd><p>Contains the configurations.</p>
 </dd>
+<dt>config_id_mapping: Dict[Tuple, int]</dt><dd><p>Maps configuration tuples to configuration ids.</p>
+</dd>
 <dt>origins: Dict[int, str]</dt><dd><p>The origin of the configuration.</p>
 </dd>
 <dt>models: Dict[int, Optional[Union[str, “torch.nn.Module”]]]</dt><dd><p>Contains the modules.</p>
@@ -1410,8 +1492,13 @@ Moreover, if no budget is available None is returned.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.runs.AbstractRun.get_incumbent">
 <span class="sig-name descname"><span class="pre">get_incumbent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statuses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_ids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs.html#AbstractRun.get_incumbent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.AbstractRun.get_incumbent" title="Link to this definition">¶</a></dt>
-<dd><p>Return the incumbent with its normalized objective value.</p>
-<p>The incumbent is the configuration with the lowest normalized objective value.</p>
+<dd><p>Return the incumbent with its objective value (merged obj value for multiple objectives).</p>
+<dl class="simple">
+<dt>The incumbent is the configuration with the</dt><dd><p>lowest objective value in case of objective.optimize == “lower” (or merged objectives)
+and
+highest objective value in case of objective.optimize == “upper”.</p>
+</dd>
+</dl>
 <p>Optionally, only configurations which were evaluated on the passed budget, seed,
 and stati are considered.</p>
 <dl class="field-list simple">
@@ -1426,7 +1513,7 @@ useful if only ids up to a certain end-time shall be considered. By default None
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Incumbent with its normalized cost.</p>
+<dd class="field-even"><p>Incumbent with its cost.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[Configuration, float]</p>
@@ -1867,31 +1954,31 @@ original number objectives.</p></li>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.converters.html#module-deepcave.runs.converters" title="deepcave.runs.converters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.converters</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.converters.html#module-deepcave.runs.converters" title="deepcave.runs.converters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">converters</span></code></a></p></td>
 <td><p># converters</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.exceptions.html#module-deepcave.runs.exceptions" title="deepcave.runs.exceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.exceptions</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.exceptions.html#module-deepcave.runs.exceptions" title="deepcave.runs.exceptions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exceptions</span></code></a></p></td>
 <td><p># Exceptions</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.group.html#module-deepcave.runs.group" title="deepcave.runs.group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.group</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.group.html#module-deepcave.runs.group" title="deepcave.runs.group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">group</span></code></a></p></td>
 <td><p># Group</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.handler.html#module-deepcave.runs.handler" title="deepcave.runs.handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.handler</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.handler.html#module-deepcave.runs.handler" title="deepcave.runs.handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handler</span></code></a></p></td>
 <td><p># Handler</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.objective.html#module-deepcave.runs.objective" title="deepcave.runs.objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.objective</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.objective.html#module-deepcave.runs.objective" title="deepcave.runs.objective"><code class="xref py py-obj docutils literal notranslate"><span class="pre">objective</span></code></a></p></td>
 <td><p># Objective</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.recorder.html#module-deepcave.runs.recorder" title="deepcave.runs.recorder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.recorder</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.recorder.html#module-deepcave.runs.recorder" title="deepcave.runs.recorder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recorder</span></code></a></p></td>
 <td><p># Recorder</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.run.html#module-deepcave.runs.run" title="deepcave.runs.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.run</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.run.html#module-deepcave.runs.run" title="deepcave.runs.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a></p></td>
 <td><p># Run</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.status.html#module-deepcave.runs.status" title="deepcave.runs.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.status</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.runs.status.html#module-deepcave.runs.status" title="deepcave.runs.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span></code></a></p></td>
 <td><p># Status</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.trial.html#module-deepcave.runs.trial" title="deepcave.runs.trial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">deepcave.runs.trial</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.runs.trial.html#module-deepcave.runs.trial" title="deepcave.runs.trial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">trial</span></code></a></p></td>
 <td><p># Trial</p></td>
 </tr>
 </tbody>
@@ -1939,7 +2026,7 @@ original number objectives.</p></li>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Adding a Plugin &#8212; DeepCAVE Documentation 1.3 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
+
+    <script src="../_static/documentation_options.js?v=f6073981"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Runs and Converters" href="../converters/index.html" />
+    <link rel="prev" title="Symbolic Explanations" href="symbolic_explanations.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+  <a class="navbar-brand" href="../index.html">
+  <!-- <p class="title">DeepCAVE Documentation</p> -->
+  </a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/automl/DeepCAVE" rel="noopener" target="_blank" title="GitHub">
+            <span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/automl_org?lang=de" rel="noopener" target="_blank" title="Twitter">
+            <span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label>
+          </a>
+        </li>
+      </ul>
+      </div>
+      
+      <div class="navbar-end-item">
+        <div class="dropdown mt-1">
+    <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
+        data-toggle="dropdown">
+        v1.3
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <form class="bd-search align-items-center" action="../search.html" method="get" style="width: 100%;">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control btn btn-md" name="q" id="search-input"
+    placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off">
+</form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../getting_started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../examples/index.html">
+   Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../examples/api/index.html">
+     API
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/pdp.html">
+       Partial Dependencies
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/importances.html">
+       Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../examples/record/index.html">
+     Record
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/record/minimal.html">
+       Record Minimal Run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/record/digits_sklearn.html">
+       Multi-Layer Perceptron via Sklearn
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/record/mnist_pytorch.html">
+       Multi-Layer Perceptron via PyTorch
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Displaying Data with Plugins
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="overview.html">
+     Overview
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configurations.html">
+     Configurations
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configuration_footprint.html">
+     Configuration Footprint
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cost_over_time.html">
+     Cost Over Time
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pareto_front.html">
+     Pareto Front
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="budget_correlation.html">
+     Budget Correlation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="importances.html">
+     Importances
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ablation_paths.html">
+     Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="partial_dependencies.html">
+     Partial Dependencies
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="symbolic_explanations.html">
+     Symbolic Explanations
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Adding a Plugin
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../converters/index.html">
+   Runs and Converters
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/smac.html">
+     SMAC
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/amltk.html">
+     AMLTK
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/optuna.html">
+     Optuna
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/bohb.html">
+     BOHB
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/deepcave.html">
+     DeepCAVE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/dataframe.html">
+     Pandas DataFrame
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/custom_converters.html">
+     Adding a Converter
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../how_to_contribute.html">
+   How to Contribute
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../api.html">
+   API References
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/deepcave.runs.html">
+     deepcave.runs
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../api/deepcave.runs.converters.html">
+       deepcave.runs.converters
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.bohb.html">
+         deepcave.runs.converters.bohb
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.deepcave.html">
+         deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.optuna.html">
+         deepcave.runs.converters.optuna
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.smac3v1.html">
+         deepcave.runs.converters.smac3v1
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.smac3v2.html">
+         deepcave.runs.converters.smac3v2
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.exceptions.html">
+       deepcave.runs.exceptions
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.group.html">
+       deepcave.runs.group
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.handler.html">
+       deepcave.runs.handler
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.objective.html">
+       deepcave.runs.objective
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.recorder.html">
+       deepcave.runs.recorder
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.run.html">
+       deepcave.runs.run
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.status.html">
+       deepcave.runs.status
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.runs.trial.html">
+       deepcave.runs.trial
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/deepcave.plugins.html">
+     deepcave.plugins
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.plugins.budget.html">
+       deepcave.plugins.budget
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.plugins.dynamic.html">
+       deepcave.plugins.dynamic
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.html">
+       deepcave.plugins.hyperparameter
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.configuration_cube.html">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.importances.html">
+         deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.pdp.html">
+         deepcave.plugins.hyperparameter.pdp
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.symbolic_explanations.html">
+         deepcave.plugins.hyperparameter.symbolic_explanations
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.plugins.objective.html">
+       deepcave.plugins.objective
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.plugins.static.html">
+       deepcave.plugins.static
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../api/deepcave.plugins.summary.html">
+       deepcave.plugins.summary
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+      <label for="toctree-checkbox-11">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.summary.configurations.html">
+         deepcave.plugins.summary.configurations
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.summary.footprint.html">
+         deepcave.plugins.summary.footprint
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.summary.overview.html">
+         deepcave.plugins.summary.overview
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/deepcave.layouts.html">
+     deepcave.layouts
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.layouts.not_found.html">
+       deepcave.layouts.not_found
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.layouts.sidebar.html">
+       deepcave.layouts.sidebar
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/deepcave.evaluators.html">
+     deepcave.evaluators
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="../api/deepcave.evaluators.epm.html">
+       deepcave.evaluators.epm
+      </a>
+      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+      <label for="toctree-checkbox-14">
+       <i class="fas fa-chevron-down">
+       </i>
+      </label>
+      <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.evaluators.epm.fanova_forest.html">
+         deepcave.evaluators.epm.fanova_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.evaluators.epm.random_forest.html">
+         deepcave.evaluators.epm.random_forest
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.evaluators.epm.random_forest_surrogate.html">
+         deepcave.evaluators.epm.random_forest_surrogate
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.evaluators.epm.utils.html">
+         deepcave.evaluators.epm.utils
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.fanova.html">
+       deepcave.evaluators.fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.footprint.html">
+       deepcave.evaluators.footprint
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.lpi.html">
+       deepcave.evaluators.lpi
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../api/deepcave.utils.html">
+     deepcave.utils
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
+    <label for="toctree-checkbox-15">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.cache.html">
+       deepcave.utils.cache
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.cast.html">
+       deepcave.utils.cast
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.compression.html">
+       deepcave.utils.compression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.configs.html">
+       deepcave.utils.configs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.configspace.html">
+       deepcave.utils.configspace
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.dash.html">
+       deepcave.utils.dash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.data_structures.html">
+       deepcave.utils.data_structures
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.docs.html">
+       deepcave.utils.docs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.files.html">
+       deepcave.utils.files
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.hash.html">
+       deepcave.utils.hash
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.layout.html">
+       deepcave.utils.layout
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.logs.html">
+       deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.notification.html">
+       deepcave.utils.notification
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.run_caches.html">
+       deepcave.utils.run_caches
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.styled_plotty.html">
+       deepcave.utils.styled_plotty
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.symbolic_regression.html">
+       deepcave.utils.symbolic_regression
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.url.html">
+       deepcave.utils.url
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.util.html">
+       deepcave.utils.util
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../glossary.html">
+   Glossary
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../faq.html">
+   Frequently Asked Questions
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-1-create-the-plugin-class">
+   Step 1: Create the plugin class
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#understand-the-structure-of-the-layout">
+     Understand the structure of the layout
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-2-register-your-plugin">
+   Step 2: Register your plugin
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-3-decide-on-your-plugin-type">
+   Step 3: Decide on your plugin type
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-4-adjust-the-functions-of-your-plugin">
+   Step 4: Adjust the functions of your plugin
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-5-fit-the-plugin-to-your-needs">
+   Step 5: Fit the plugin to your needs
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adjustment-1-activate-run-selection">
+     Adjustment 1: Activate run selection
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adjustment-2-icon">
+     Adjustment 2: Icon
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-6-document-your-plugin">
+   Step 6: Document your plugin
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#step-7-congratulate-yourself">
+   Step 7: Congratulate yourself
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="adding-a-plugin">
+<span id="custom-plugin"></span><h1>Adding a Plugin<a class="headerlink" href="#adding-a-plugin" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>This tutorial will guide you through the steps to add a new plugin in DeepCAVE.
+We will create a simple plugin that demonstrates the basic structure and functionality.
+By the end of this tutorial, you will hopefully have a better understanding of how to create and use plugins in DeepCAVE.</p>
+</section>
+<section id="step-1-create-the-plugin-class">
+<h2>Step 1: Create the plugin class<a class="headerlink" href="#step-1-create-the-plugin-class" title="Link to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Start by creating a new Python file in the <cite>deepcave/plugins</cite> directory of your DeepCAVE installation.
+For example, you can create a file named <cite>my_first_plugin.py</cite>.</p></li>
+<li><p>Define the basic structure of the plugin. You can start by using the following code:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyFirstPlugin</span><span class="p">(</span><span class="n">PluginType</span><span class="p">):</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;my_first_plugin&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;My first plugin&quot;</span>
+    <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;My first plugin icon&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the input block of the plugin.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_filter_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the filter block of the plugin.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Works like &#39;load_inputs&#39; but called after inputs have changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process your input data and return raw data to be used in the output layout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the output block of the plugin.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load the raw output data for the plugin and create a figure to be shown in the output block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<section id="understand-the-structure-of-the-layout">
+<h3>Understand the structure of the layout<a class="headerlink" href="#understand-the-structure-of-the-layout" title="Link to this heading">¶</a></h3>
+<p>To understand where each part of the layout belongs to, please refer to the following depiction:</p>
+<img alt="../_images/blocks.png" src="../_images/blocks.png" />
+</section>
+</section>
+<section id="step-2-register-your-plugin">
+<h2>Step 2: Register your plugin<a class="headerlink" href="#step-2-register-your-plugin" title="Link to this heading">¶</a></h2>
+<p>To fully integrate your plugin, you need to add it to the list of available plugins per category in the <cite>deepcave/config.py</cite> file.
+The plugin needs to be imported and then added to the plugin dictionary.
+In addition, please add a short description to the <cite>__init__.py</cite> file of the corresponding category in the <cite>deepcave/plugins</cite> directory.</p>
+</section>
+<section id="step-3-decide-on-your-plugin-type">
+<h2>Step 3: Decide on your plugin type<a class="headerlink" href="#step-3-decide-on-your-plugin-type" title="Link to this heading">¶</a></h2>
+<p>Your plugin can either be dynamic or static. You need to substitute <cite>PluginType</cite> in the example code with either
+<cite>DynamicPlugin</cite> or <cite>StaticPlugin</cite>.</p>
+<p>If your plugin needs more processing time or computing power, we recommend you choose <cite>StaticPlugin</cite> as your plugin type,
+as this way it will not immediately start processing once you select it.
+Otherwise you can choose the <cite>DynamicPlugin</cite>, which will execute directly when you select the plugin
+(see <a class="reference internal" href="index.html#plugin-types"><span class="std std-ref">static plugin</span></a> for more information).</p>
+</section>
+<section id="step-4-adjust-the-functions-of-your-plugin">
+<h2>Step 4: Adjust the functions of your plugin<a class="headerlink" href="#step-4-adjust-the-functions-of-your-plugin" title="Link to this heading">¶</a></h2>
+<p>In Step 1 you saw how the basic structure of the plugin should look like.
+Please refer to the <span class="xref std std-ref">api references</span> documentation, so you can fit these functions to your specific needs.</p>
+<p>Note that you might want to add a <cite>check_runs_compatability</cite> functionality if you want to analyze more than one run.</p>
+</section>
+<section id="step-5-fit-the-plugin-to-your-needs">
+<h2>Step 5: Fit the plugin to your needs<a class="headerlink" href="#step-5-fit-the-plugin-to-your-needs" title="Link to this heading">¶</a></h2>
+<section id="adjustment-1-activate-run-selection">
+<h3>Adjustment 1: Activate run selection<a class="headerlink" href="#adjustment-1-activate-run-selection" title="Link to this heading">¶</a></h3>
+<p>You can add a select bar at the top of your plugin, where the run(s) to analyze can be manually selected.
+To do this, simply add <cite>activate_run_selection</cite> to your class variables and set it to <cite>True</cite>.</p>
+</section>
+<section id="adjustment-2-icon">
+<h3>Adjustment 2: Icon<a class="headerlink" href="#adjustment-2-icon" title="Link to this heading">¶</a></h3>
+<p>You can choose your own icon from the <a class="reference external" href="https://fontawesome.com/start">Font Awesome</a> library.
+Please note that at this moment icons from the newer versions may not be available.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example icon</span>
+<span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;fas fa-chart-line&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="step-6-document-your-plugin">
+<h2>Step 6: Document your plugin<a class="headerlink" href="#step-6-document-your-plugin" title="Link to this heading">¶</a></h2>
+<p>To document your plugin, create a corresponding <cite>.rst</cite> file under <cite>docs/plugins</cite> and add it to
+the <cite>docs/plugins/index.py</cite> file.
+Additionally, define a class variable in your <cite>my_first_plugin.py</cite> with the path to your documentation, called <cite>help</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example of help variable</span>
+<span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;docs/plugins/my_first_plugin.rst&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="step-7-congratulate-yourself">
+<h2>Step 7: Congratulate yourself<a class="headerlink" href="#step-7-congratulate-yourself" title="Link to this heading">¶</a></h2>
+<p>Congratulations, you just wrote your first DeepCAVE plugin!
+If you have any questions, please do not hesitate to contact us.</p>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="symbolic_explanations.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Symbolic Explanations</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../converters/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Runs and Converters</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.9ea38e314b9e6d9dab77.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright Copyright 2024, R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+7.4.7. Template is modified version of <a
+href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

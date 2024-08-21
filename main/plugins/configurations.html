@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Configurations &#8212; DeepCAVE Documentation 1.2.1 documentation</title>
+    <title>Configurations &#8212; DeepCAVE Documentation 1.3 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -24,14 +24,14 @@
     
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=2e6055c8"></script>
+    <script src="../_static/documentation_options.js?v=f6073981"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.2.1
+        v1.3
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.2.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.2.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -166,6 +166,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/importances.html">
        Importances
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/ablation_paths.html">
+       Ablation Paths
       </a>
      </li>
      <li class="toctree-l3">
@@ -235,18 +240,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="configuration_cube.html">
-     Configuration Cube
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="pareto_front.html">
      Pareto Front
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="parallel_coordinates.html">
-     Parallel Coordinates
     </a>
    </li>
    <li class="toctree-l2">
@@ -260,6 +255,21 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="ablation_paths.html">
+     Ablation Paths
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="configuration_cube.html">
+     Configuration Cube
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="parallel_coordinates.html">
+     Parallel Coordinates
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="partial_dependencies.html">
      Partial Dependencies
     </a>
@@ -269,12 +279,59 @@
      Symbolic Explanations
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="custom_plugins.html">
+     Adding a Plugin
+    </a>
+   </li>
   </ul>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../converters.html">
-   Converters
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../converters/index.html">
+   Runs and Converters
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/smac.html">
+     SMAC
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/amltk.html">
+     AMLTK
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/optuna.html">
+     Optuna
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/bohb.html">
+     BOHB
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/deepcave.html">
+     DeepCAVE
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/dataframe.html">
+     Pandas DataFrame
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../converters/custom_converters.html">
+     Adding a Converter
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../how_to_contribute.html">
@@ -285,8 +342,8 @@
   <a class="reference internal" href="../api.html">
    API References
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-  <label for="toctree-checkbox-5">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -295,8 +352,8 @@
     <a class="reference internal" href="../api/deepcave.runs.html">
      deepcave.runs
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-    <label for="toctree-checkbox-6">
+    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -305,20 +362,35 @@
       <a class="reference internal" href="../api/deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-      <label for="toctree-checkbox-7">
+      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <label for="toctree-checkbox-8">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.amltk.html">
+         deepcave.runs.converters.amltk
+        </a>
+       </li>
        <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.runs.converters.bohb.html">
          deepcave.runs.converters.bohb
         </a>
        </li>
        <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.dataframe.html">
+         deepcave.runs.converters.dataframe
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.runs.converters.deepcave.html">
          deepcave.runs.converters.deepcave
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.runs.converters.optuna.html">
+         deepcave.runs.converters.optuna
         </a>
        </li>
        <li class="toctree-l4">
@@ -379,8 +451,8 @@
     <a class="reference internal" href="../api/deepcave.plugins.html">
      deepcave.plugins
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+    <label for="toctree-checkbox-9">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -399,15 +471,30 @@
       <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.html">
        deepcave.plugins.hyperparameter
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-      <label for="toctree-checkbox-9">
+      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+      <label for="toctree-checkbox-10">
        <i class="fas fa-chevron-down">
        </i>
       </label>
       <ul>
        <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.ablation_paths.html">
+         deepcave.plugins.hyperparameter.ablation_paths
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.configuration_cube.html">
+         deepcave.plugins.hyperparameter.configuration_cube
+        </a>
+       </li>
+       <li class="toctree-l4">
         <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.importances.html">
          deepcave.plugins.hyperparameter.importances
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="../api/deepcave.plugins.hyperparameter.parallel_coordinates.html">
+         deepcave.plugins.hyperparameter.parallel_coordinates
         </a>
        </li>
        <li class="toctree-l4">
@@ -422,27 +509,10 @@
        </li>
       </ul>
      </li>
-     <li class="toctree-l3 has-children">
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.plugins.objective.html">
        deepcave.plugins.objective
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-      <label for="toctree-checkbox-10">
-       <i class="fas fa-chevron-down">
-       </i>
-      </label>
-      <ul>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.configuration_cube.html">
-         deepcave.plugins.objective.configuration_cube
-        </a>
-       </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="../api/deepcave.plugins.objective.parallel_coordinates.html">
-         deepcave.plugins.objective.parallel_coordinates
-        </a>
-       </li>
-      </ul>
      </li>
      <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.plugins.static.html">
@@ -489,6 +559,11 @@
     </label>
     <ul>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.layouts.header.html">
+       deepcave.layouts.header
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.layouts.not_found.html">
        deepcave.layouts.not_found
       </a>
@@ -510,6 +585,11 @@
      </i>
     </label>
     <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.evaluators.ablation.html">
+       deepcave.evaluators.ablation
+      </a>
+     </li>
      <li class="toctree-l3 has-children">
       <a class="reference internal" href="../api/deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
@@ -595,6 +675,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/deepcave.utils.converters.html">
+       deepcave.utils.converters
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.utils.dash.html">
        deepcave.utils.dash
       </a>
@@ -637,11 +722,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../api/deepcave.utils.run_caches.html">
        deepcave.utils.run_caches
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/deepcave.utils.styled_plot.html">
-       deepcave.utils.styled_plot
       </a>
      </li>
      <li class="toctree-l3">
@@ -741,46 +821,50 @@
                 
   <section id="configurations">
 <h1>Configurations<a class="headerlink" href="#configurations" title="Link to this heading">¶</a></h1>
-<p>This plugin let’s you analyze single configurations. After you select a run and a configuration id
-you see the information listed in four parts:</p>
+<p>This plugin enables in-depth analysis of individual configurations. After selecting a run and
+configuration ID, the information is presented in four sections:</p>
 <ul class="simple">
 <li><p>Overview</p></li>
 <li><p>Objectives</p></li>
 <li><p>Configuration</p></li>
 <li><p>Code</p></li>
 </ul>
-<p>Since configurations are used throughout the application, you might find links associated to this
-plugin. This plugin is capable of answering following questions:</p>
+<p>Since configurations are used throughout the application, you might find links that direct you
+to the Configurations plugin in other plugins.</p>
+<p>This plugin is capable of answering following questions:</p>
 <ul class="simple">
 <li><p>Where is the configuration coming from?</p></li>
-<li><p>How are the objective values with respect to the budgets?</p></li>
-<li><p>How is the status of a trial associated with the selected configuration?</p></li>
+<li><p>How do the objective values vary with different budgets?</p></li>
+<li><p>What is the status of trials associated with the selected configuration?</p></li>
 <li><p>Which values have been used for a certain configuration?</p></li>
-<li><p>How can I access the configuration in python?</p></li>
+<li><p>How can I access the configuration in Python?</p></li>
 </ul>
+<img alt="../_images/configurations.png" src="../_images/configurations.png" />
+<img alt="../_images/configurations2.png" src="../_images/configurations2.png" />
 <section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
-<p>The overview tells you more about the origin of the configuration. Especially, if you are
-viewing a group, it is important to know from which run and from which configuration id the
+<p>The overview tells you more about the origin of the configuration. Especially if you are
+viewing a group, it is important to know from which run and from which configuration ID the
 selected configuration is coming from.</p>
 </section>
 <section id="objectives">
 <h2>Objectives<a class="headerlink" href="#objectives" title="Link to this heading">¶</a></h2>
-<p>The objective section, on the other hand, visualizes the objective values over the budgets. In here,
-you can determine how your metrics change with increasing budget. Using the table view,
-not only the objective values are listed but also why a specific combination of budget and objective
-might not be available (e.g., because it crashed or it simply was not evaluated).</p>
+<p>The objectives section visualizes how objective values vary across different budgets, allowing you
+to assess how your metrics change as the budget increases.
+The table view provides a detailed listing of objective values, along with explanations for why
+certain budget and objective combinations might be missing (e.g., due to a crash or because they
+were not evaluated).</p>
 </section>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
-<p>In the configuration section, you see how the hyperparameters were selected in the end. While the
-graph view gives you a nice overview, the table displays the concrete values.</p>
+<p>In the configuration section, you can view the final selected hyperparameters. The graph view offers
+a visual summary, while the table provides detailed information on the specific values chosen.</p>
 </section>
 <section id="code">
 <h2>Code<a class="headerlink" href="#code" title="Link to this heading">¶</a></h2>
-<p>Often a configuration is selected for deployment, which makes it crucial to access it somehow.
-The code block provides you the code to access the configuration code-wise.</p>
-<img alt="../_images/configurations.png" src="../_images/configurations.png" />
+<p>When a configuration is selected for deployment, it is essential to access it programmatically.
+The code section provides you with the code necessary to retrieve the configuration, facilitating
+its integration and use in your applications.</p>
 </section>
 </section>
 
@@ -825,7 +909,7 @@ The code block provides you the code to access the configuration code-wise.</p>
     <div class="footer-item">
       <p class="sphinx-version">
 Created using <a href="http://sphinx-doc.org/">Sphinx</a>
-7.3.7. Template is modified version of <a
+7.4.7. Template is modified version of <a
 href="https://pydata-sphinx-theme.readthedocs.io">PyData Sphinx Theme</a>. <br>
 </p>
     </div>

@@ -4,11 +4,6 @@ deepcave.utils.styled\_plotty
 .. automodule:: deepcave.utils.styled_plotty
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -23,15 +18,3 @@ deepcave.utils.styled\_plotty
       prettify_label
       save_image
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

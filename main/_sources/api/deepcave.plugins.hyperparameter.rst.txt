@@ -4,30 +4,15 @@ deepcave.plugins.hyperparameter
 .. automodule:: deepcave.plugins.hyperparameter
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.plugins.hyperparameter.importances
-   deepcave.plugins.hyperparameter.pdp
-   deepcave.plugins.hyperparameter.symbolic_explanations
-
+   ablation_paths
+   configuration_cube
+   importances
+   parallel_coordinates
+   pdp
+   symbolic_explanations

@@ -21,18 +21,16 @@
 Multi-Layer Perceptron via PyTorch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This more advanced example incorporates multiple objectives, budgets and statusses to
-show the strenghts of DeepCAVE's recorder.
+This more advanced example incorporates multiple objectives, budgets and statuses to
+show the strength of DeepCAVE's recorder.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-286
+.. GENERATED FROM PYTHON SOURCE LINES 8-284
 
 .. code-block:: Python
 
 
 
-    from inspect import BoundArguments
     import os
-    from re import T
     import time as t
     import random
     import ConfigSpace as CS
@@ -208,7 +206,7 @@ show the strenghts of DeepCAVE's recorder.
         num_neurons_layer1 = UniformIntegerHyperparameter(name="num_neurons_layer1", lower=5, upper=100)
         num_neurons_layer2 = UniformIntegerHyperparameter(name="num_neurons_layer2", lower=5, upper=100)
 
-        configspace.add_hyperparameters(
+        configspace.add(
             [
                 model,
                 activation,
@@ -221,8 +219,8 @@ show the strenghts of DeepCAVE's recorder.
         )
 
         # Now add sub configspace
-        configspace.add_condition(CS.EqualsCondition(num_neurons_layer1, model, "mlp"))
-        configspace.add_condition(CS.EqualsCondition(num_neurons_layer2, model, "mlp"))
+        configspace.add(CS.EqualsCondition(num_neurons_layer1, model, "mlp"))
+        configspace.add(CS.EqualsCondition(num_neurons_layer2, model, "mlp"))
 
         return configspace
 
@@ -321,3 +319,7 @@ show the strenghts of DeepCAVE's recorder.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: mnist_pytorch.py <mnist_pytorch.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: mnist_pytorch.zip <mnist_pytorch.zip>`

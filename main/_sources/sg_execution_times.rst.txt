@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.000** total execution time for 6 files **from all galleries**:
+**00:00.000** total execution time for 7 files **from all galleries**:
 
 .. container::
 
@@ -32,6 +32,9 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr_examples_api_ablation_paths.py` (``../examples/api/ablation_paths.py``)
+     - 00:00.000
+     - 0.0
    * - :ref:`sphx_glr_examples_api_importances.py` (``../examples/api/importances.py``)
      - 00:00.000
      - 0.0

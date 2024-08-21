@@ -24,7 +24,7 @@ Partial Dependencies
 This example shows how to use the plugin Partial Dependencies.
 Note that other plugins use the same interfaces and can be used in the same fashion.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-38
+.. GENERATED FROM PYTHON SOURCE LINES 8-36
 
 .. code-block:: Python
 
@@ -54,10 +54,8 @@ Note that other plugins use the same interfaces and can be used in the same fash
         outputs = plugin.generate_outputs(run, inputs)
 
         # Finally, you can load the figure. Here, the filter variables play a role.
-        # Alternatively: Use the matplotlib output (`load_mpl_outputs`) if available.
-        figure = plugin.load_outputs(run, inputs, outputs)  # plotly.go figure
+        figure = plugin.load_outputs(run, inputs, outputs)
         figure.write_image("examples/api/pdp.png")
-        # figure.show()
 
 
 .. _sphx_glr_download_examples_api_pdp.py:
@@ -73,3 +71,7 @@ Note that other plugins use the same interfaces and can be used in the same fash
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: pdp.py <pdp.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: pdp.zip <pdp.zip>`

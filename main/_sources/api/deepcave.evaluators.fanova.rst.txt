@@ -4,26 +4,9 @@ deepcave.evaluators.fanova
 .. automodule:: deepcave.evaluators.fanova
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
    .. rubric:: Classes
 
    .. autosummary::
    
       fANOVA
    
-   
-
-   
-   
-   
-
-
-

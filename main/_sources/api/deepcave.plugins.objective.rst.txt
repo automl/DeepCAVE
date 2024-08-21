@@ -4,31 +4,11 @@ deepcave.plugins.objective
 .. automodule:: deepcave.plugins.objective
 
    
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
 .. rubric:: Modules
 
 .. autosummary::
    :toctree:
    :recursive:
 
-   deepcave.plugins.objective.configuration_cube
-   deepcave.plugins.objective.cost_over_time
-   deepcave.plugins.objective.parallel_coordinates
-   deepcave.plugins.objective.pareto_front
-
+   cost_over_time
+   pareto_front
