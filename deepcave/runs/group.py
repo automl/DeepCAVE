@@ -103,7 +103,7 @@ class Group(AbstractRun):
                             break
 
                     if isinstance(config, Configuration):
-                        config = config.get_dictionary()
+                        config = dict(config)
 
                     if config_id not in config_mapping:
                         self.configs[current_config_id] = config

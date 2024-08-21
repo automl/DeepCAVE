@@ -95,10 +95,9 @@ class ParallelCoordinates(StaticPlugin):
                 [
                     dbc.Label("Show Important Hyperparameters"),
                     help_button(
-                        "Only the most important hyperparameters are shown which are "
-                        "calculated by fANOVA using 10 trees. The more left a "
-                        "hyperparameter stands, the more important it is. However, activating "
-                        "this option might take longer."
+                        "Order hyperparameters according to their fANOVA importance. The more "
+                        "right a hyperparameter stands, the more important it is. However, "
+                        "activating this option might take longer."
                     ),
                     dbc.Select(
                         id=register("show_important_only", ["value", "options"]),
@@ -346,7 +345,7 @@ class ParallelCoordinates(StaticPlugin):
         run
             The selected run.
         inputs
-            The inputs and filter values fromt the user.
+            The inputs and filter values from the user.
         outputs
             Raw output from the run.
 
@@ -369,10 +368,12 @@ class ParallelCoordinates(StaticPlugin):
 
         if show_important_only:
             hp_names = outputs["important_hp_names"]
+            # cut off from the left side to cut off the least important hyperparameters first
+            show_n_hps = len(hp_names) - n_hps
+            hp_names = hp_names[show_n_hps:]
         else:
             hp_names = inputs["hyperparameter_names"]
-
-        hp_names = hp_names[:n_hps]
+            hp_names = hp_names[n_hps:]
 
         df = outputs["df"]
         df = deserialize(df, dtype=pd.DataFrame)
