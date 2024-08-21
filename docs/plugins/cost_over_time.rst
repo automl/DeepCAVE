@@ -44,7 +44,9 @@ Options
 
 * **Objective:** Select the objective function you wish to analyze.
 
-* **Budget:** Select the budget you wish to analyze.
+* **Budget**: Select the multi-fidelity budget to be used. The plugin will only consider trials evaluated
+  on the selected budget. The *Combined* budget option displays all configurations but shows scores only
+  from the highest budget if a configuration was evaluated with multiple budgets.
 
 To refine your analysis, you can apply various filters after calculation:
 

@@ -39,9 +39,9 @@ global impact of hyperparameters. For more details on fANOVA, please refer to th
 Options
 -------
 
-* **Method:** Whether to calculate the local parameter importance or the fANOVA importance.
-
 * **Objective:** Select the objective function you wish to analyze.
+
+* **Method:** Whether to calculate the local parameter importance or the fANOVA importance.
 
 * **Trees:** Specify the number of trees for the random forest surrogate model used in calculating importance scores.
 
