@@ -32,34 +32,36 @@ plugin structure allow extending the tool at any time effortlessly.
 
 
 Features
-^^^^^^^^
+========
 
-Features
-********
+Interactive Interface
+---------------------
 
 - **Interactive Dashboard:**
-  Fully implemented in Python, this dashboard allows you to self-analyze your optimization runs with ease.
-
-- **Analysis of Running Processes:**
-  Analyze and monitor optimization processes as they occur, with automatic detection of run changes.
-
-- **Extensive Plugin Collection:**
-  Explore a wide range of plugins for in-depth performance, hyperparameter, and budget analysis.
-
-- **Optimizer Support:**
-  Work with many optimizers using our converters, including SMAC, BOHB, AMLTK, and Optuna.
-
-- **Native Format Saving:**
-  Save AutoML runs from various optimizers in DeepCAVE's native format using the built-in recorder.
-
-- **Flexible Data Loading:**
-  Alternatively, load AutoML runs from other optimizers by converting them into a Pandas DataFrame.
+  The dashboard runs in a webbrowser and allows you to self-analyze your optimization runs interactively.
 
 - **Run Selection Interface:**
   Easily select runs from your working directory directly within the interface.
 
+- **Integrated Help and Documentation:**
+  Use help buttons and integrated documentation within the interface to better understand the plugins.
+
+
+Comprehensive Analysis Tools
+----------------------------
+
+- **Extensive Plugin Collection:**
+  Explore a wide range of plugins for in-depth performance, hyperparameter, and budget analysis.
+
+- **Analysis of Running Processes:**
+  Analyze and monitor optimization processes as they occur, with automatic detection of run changes.
+
 - **Group Analysis:**
   Choose groups of runs for combined analysis to gain deeper insights.
+
+
+Flexible and Modular Architecture
+---------------------------------
 
 - **Modular Plugin Architecture:**
   Benefit from a modularized plugin structure with access to selected runs and groups, offering you maximum flexibility.
@@ -67,8 +69,22 @@ Features
 - **Asynchronous Execution:**
   Utilize asynchronous execution of resource-intensive plugins and caching of results to improve performance.
 
-- **Integrated Help and Documentation:**
-  Use help buttons and integrated documentation within the interface to better understand the plugins.
+
+Broad Optimizer Support
+-----------------------
+
+- **Optimizer Support:**
+  Work with many frameworks and optimizers using our converters, including converters for SMAC, BOHB, AMLTK, and Optuna.
+
+- **Native Format Saving:**
+  Save AutoML runs from various frameworks in DeepCAVE's native format using the built-in recorder.
+
+- **Flexible Data Loading:**
+  Alternatively, load AutoML runs from other frameworks by converting them into a Pandas DataFrame.
+
+
+Developer and API Features
+--------------------------
 
 - **API Mode:**
   Interact with the code directly through API mode, allowing you to bypass the graphical interface if preferred.

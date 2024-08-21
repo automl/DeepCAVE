@@ -22,12 +22,17 @@ the menu on the left.
 This is further explained in the :ref:`plugins<Displaying Data with Plugins>` section.
 
 DeepCAVE uses :ref:`runs<Runs and Converters>` to interpret HPO optimization runs.
-You can add a run by navigating to the directory of the run and clicking on the "+" button on
+You can add a run by navigating to the directory of the run and clicking on the `+` button on
 the left of it.
 After loading runs, you will be able to select them in the different plugins.
 On the main page, you can also add them to groups to create and analyze combined runs.
 
-To look at some example runs, you can load the runs stored in the `logs` directory of the DeepCAVE.
+DeepCAVE comes with some pre-evaluated runs to get a feel for what DeepCAVE can do.
+
+If you installed the package from GitHub via `git clone git@github.com:automl/DeepCAVE.git; pip install -e DeepCAVE`,
+you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
+For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
+the `+` button left to it.
 
 More Options
 ------------
