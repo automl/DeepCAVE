@@ -18,24 +18,27 @@ This plugin is capable of answering the following questions:
 
 * How does the objective change with respect to one or two hyperparameters? For example, does the
   accuracy increase if the learning rate decreases?
-* Do multiple trials show similar behavior?
-Options
--------
-* **Objective**: Here you can select the objective you wish to analyze for. In the one hyperparameter case the objective is plotted on the y-axis, in the two hyperparameter case it is represented by the color.
-
-Options
--------
-* **Objective**: Here you can select the objective you wish to analyze. In the one hyperparameter case the objective is plotted on the y-axis, in the two hyperparameter case it is represented by the color.
-
-* **Budget**: Here you can select the multi-fidelity budget to be used. The plugin will only consider trials evaluated on the selected budget.
-
-* **Hyperparameter 1**: Here you can select the first hyperparameter. It is plotted along the x-axis.
-
-* **Hyperparameter 2**: Here you can optionally select the second hyperparameter.
-
-* **Show Confidence**: Selection for whether or not to show confidence estimates (based on the surrogate model's uncertainty estimate).
-
-* **Show ICE Curves**: Selection for whether or not to to show the ICE curves used during computation (only for the one hyperparameter case).
-
+* What are the regions of the hyperparameter space that lead to better or worse performance?
 
 .. image:: ../images/plugins/partial_dependencies.png
+
+Options
+-------
+* **Objective**: Select the objective function you wish to analyze. In the one hyperparameter case,
+  the objective is plotted on the y-axis, in the two hyperparameter case, it is represented by the color.
+
+* **Budget**: Select the multi-fidelity budget to be used. The plugin will only consider trials evaluated
+  on the selected budget. The *Combined* budget option displays all configurations but shows scores only
+  from the highest budget if a configuration was evaluated with multiple budgets.
+
+* **Hyperparameter #1**: Select the first hyperparameter. It is plotted along the x-axis.
+
+* **Hyperparameter #2**: Optionally select the second hyperparameter.
+
+To refine your analysis, you can apply filters after calculation:
+
+* **Show Confidence**: Selection of whether to display confidence estimates based on the surrogate
+  model's uncertainty estimates.
+
+* **Show ICE Curves**: Selection for whether to to show the ICE curves used during computation
+  (only for the one hyperparameter case).
