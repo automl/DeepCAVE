@@ -297,10 +297,6 @@ class TestLogger(unittest.TestCase):
         self.assertEqual("TestLogger", logger.name)
 
     def test_logging_config(self):
-        mpl_logger = get_logger("matplotlib")
-        self.assertEqual(logging.INFO, mpl_logger.level)
-        self.assertFalse(mpl_logger.propagate)
-
         plugin_logger = get_logger("src.plugins")
         self.assertEqual(logging.INFO, plugin_logger.level)
         self.assertFalse(plugin_logger.propagate)

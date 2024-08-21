@@ -69,7 +69,6 @@ class Config:
 
     # Default Meta information which are used across the platform
     META_DEFAULT: Dict[str, Any] = {
-        "matplotlib-mode": False,
         "working_dir": None,  # str(DEFAULT_WORKING_DIRECTORY),
         "selected_run_paths": [],
         "groups": {},  # {group_name: [run_path, ...]}
@@ -94,14 +93,17 @@ class Config:
     def PLUGINS(self) -> Dict[str, List[Any]]:
         """A list of available plugins per category."""
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
+        from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
+        from deepcave.plugins.hyperparameter.configuration_cube import ConfigurationCube
         from deepcave.plugins.hyperparameter.importances import Importances
+        from deepcave.plugins.hyperparameter.parallel_coordinates import (
+            ParallelCoordinates,
+        )
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
             SymbolicExplanations,
         )
-        from deepcave.plugins.objective.configuration_cube import ConfigurationCube
         from deepcave.plugins.objective.cost_over_time import CostOverTime
-        from deepcave.plugins.objective.parallel_coordinates import ParallelCoordinates
         from deepcave.plugins.objective.pareto_front import ParetoFront
         from deepcave.plugins.summary.configurations import Configurations
         from deepcave.plugins.summary.footprint import FootPrint
@@ -116,15 +118,16 @@ class Config:
             ],
             "Objective Analysis": [
                 CostOverTime(),
-                ConfigurationCube(),
                 ParetoFront(),
-                ParallelCoordinates(),
             ],
             "Budget Analysis": [
                 BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
                 Importances(),
+                AblationPaths(),
+                ConfigurationCube(),
+                ParallelCoordinates(),
                 PartialDependencies(),
                 SymbolicExplanations(),
             ],
@@ -134,9 +137,12 @@ class Config:
     @property
     def CONVERTERS(self) -> List[Type["Run"]]:
         """Get a list of available run converters."""
+        from deepcave.runs.converters.amltk import AMLTKRun
         from deepcave.runs.converters.bohb import BOHBRun
+        from deepcave.runs.converters.dataframe import DataFrameRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
+        from deepcave.runs.converters.optuna import OptunaRun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run
         from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
-        return [DeepCAVERun, BOHBRun, SMAC3v1Run, SMAC3v2Run]
+        return [AMLTKRun, BOHBRun, DeepCAVERun, OptunaRun, SMAC3v1Run, SMAC3v2Run, DataFrameRun]

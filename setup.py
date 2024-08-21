@@ -30,12 +30,18 @@ extras_require = {
         "torchvision>=0.16.0",
         "pytorch-lightning>=2.1.1",
     ],
+    "optuna": [
+        "optuna==3.6.1",
+    ],
+    "bohb": [
+        "hpbandster==0.7.4",
+    ],
 }
 
 
 setuptools.setup(
     name="deepcave",
-    author_email="s.segel@ai.uni-hannover.de",
+    author_email="l.fehring@ai.uni-hannover.de",
     description="An interactive framework to visualize and analyze your AutoML process in real-time.",
     long_description=read_file("README.md"),
     long_description_content_type="text/markdown",

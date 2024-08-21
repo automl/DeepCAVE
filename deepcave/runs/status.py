@@ -16,6 +16,9 @@ A utility to convert a string text to a simpler, lower case text format is provi
     CRASHED: int
     ABORTED: int
     NOT_EVALUATED: int
+    FAILED: int
+    PRUNED: int
+    UNKNOWN: int
 """
 
 from enum import IntEnum
@@ -39,6 +42,9 @@ class Status(IntEnum):
     CRASHED = 4
     ABORTED = 5
     NOT_EVALUATED = 6
+    FAILED = 7
+    PRUNED = 8
+    UNKNOWN = 9
 
     def to_text(self) -> str:
         """

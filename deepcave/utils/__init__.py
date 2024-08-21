@@ -32,8 +32,6 @@ notification
     This module provides utilities for creating, updating and resetting notifications.
 run_caches
     This module defines a class for holding the caches for selected runs.
-styled_plot
-    This module provides utilities to customize functions from the matplotlib.
 styled_plotty
     This module provides utilities for styling and customizing different plots with plotly.
 url

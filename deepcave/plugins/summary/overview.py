@@ -236,7 +236,8 @@ class Overview(DynamicPlugin):
         seeds = run.get_seeds(include_combined=False)
 
         # Budget-seed combinations
-        budget_seed_combinations = list(itertools.product(budgets, seeds))
+        formatted_budgets = [float(b) if isinstance(b, float) else b for b in budgets]
+        budget_seed_combinations = list(itertools.product(formatted_budgets, seeds))
 
         # Setup statistics dict for bar plot
         status_statistics: Dict[float, Dict[Status, int]] = {}
@@ -414,7 +415,7 @@ class Overview(DynamicPlugin):
             stats_data.append(trace)
 
         stats_layout = go.Layout(
-            legend={"title": "Budget (Seed)"},
+            legend={"title": "Budget"},
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),

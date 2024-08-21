@@ -1,17 +1,17 @@
 {
-    "name": "6c26cf2442c04561b8a975190969b1e5",
-    "deterministic": true,
+    "name": "9eed722d0e75f876b6cf655a6b3c7daa",
+    "deterministic": false,
     "objectives": [
-        "metric1",
-        "metric2"
+        "1 - accuracy",
+        "model_size"
     ],
     "crash_cost": Infinity,
     "termination_cost_threshold": Infinity,
-    "walltime_limit": Infinity,
+    "walltime_limit": 500,
     "cputime_limit": Infinity,
     "trial_walltime_limit": null,
     "trial_memory_limit": null,
-    "n_trials": 150,
+    "n_trials": 200,
     "use_default_config": false,
     "instances": null,
     "instance_features": null,
@@ -25,16 +25,46 @@
         },
         "runner": {
             "name": "TargetFunctionRunner",
-            "code": "b't\\x00|\\x00d\\x01\\x19\\x00\\x83\\x01\\\\\\x02}\\x02}\\x03|\\x02|\\x03d\\x02\\x9c\\x02S\\x00'"
+            "code": "b'|\\x01\\xa0\\x00d\\x01d\\x02\\xa1\\x02}\\x04|\\x01\\xa0\\x00d\\x03d\\x04\\xa1\\x02}\\x05|\\x01\\xa0\\x00d\\x05d\\x06\\xa1\\x02}\\x06t\\x01\\xa0\\x01\\xa1\\x00}\\x07t\\x02\\xa0\\x03\\xa1\\x00\\x8fC\\x01\\x00t\\x02\\xa0\\x04d\\x07\\xa1\\x01\\x01\\x00t\\x05|\\x01d\\x08\\x19\\x00g\\x01|\\x01d\\t\\x19\\x00\\x14\\x00|\\x01d\\n\\x19\\x00|\\x06|\\x01d\\x0b\\x19\\x00|\\x04|\\x05t\\x06t\\x07\\xa0\\x08|\\x03\\xa1\\x01\\x83\\x01|\\x02d\\x0c\\x8d\\x08}\\x08t\\td\\r|\\x02d\\x0ed\\x0f\\x8d\\x03}\\tt\\n|\\x08t\\x0bj\\x0ct\\x0bj\\r|\\td\\x10d\\x11\\x8d\\x05}\\n|\\x08\\xa0\\x0et\\x0bj\\x0ct\\x0bj\\r\\xa1\\x02\\x01\\x00W\\x00d\\x00\\x04\\x00\\x04\\x00\\x83\\x03\\x01\\x00n\\x081\\x00s`w\\x01\\x01\\x00\\x01\\x00\\x01\\x00Y\\x00\\x01\\x00d\\x12t\\x07\\xa0\\x0f|\\n\\xa1\\x01\\x18\\x00t\\x07\\xa0\\x10d\\x13d\\x14\\x84\\x00|\\x08j\\x11D\\x00\\x83\\x01\\xa1\\x01d\\x15\\x9c\\x02S\\x00'"
         },
         "model": {
             "name": "RandomForest",
             "types": [
+                3,
+                0,
+                0,
+                3,
+                0,
+                4,
                 0
             ],
             "bounds": [
                 [
+                    3,
+                    NaN
+                ],
+                [
                     0,
+                    1.0
+                ],
+                [
+                    0,
+                    1.0
+                ],
+                [
+                    3,
+                    NaN
+                ],
+                [
+                    -1.0,
+                    1.0
+                ],
+                [
+                    4,
+                    NaN
+                ],
+                [
+                    -1.0,
                     1.0
                 ]
             ],
@@ -95,7 +125,7 @@
         },
         "initial_design": {
             "name": "SobolInitialDesign",
-            "n_configs": 10,
+            "n_configs": 5,
             "n_configs_per_hyperparameter": 10,
             "additional_configs": [],
             "seed": 0
@@ -117,11 +147,9 @@
             "seed": 0
         },
         "multi_objective_algorithm": {
-            "name": "MeanAggregationStrategy",
-            "objective_weights": [
-                1,
-                2
-            ]
+            "name": "ParEGO",
+            "rho": 0.05,
+            "seed": 0
         },
         "config_selector": {
             "name": "ConfigSelector",
@@ -129,7 +157,7 @@
             "retries": 16,
             "min_trials": 1
         },
-        "version": "2.0.2"
+        "version": "2.2.0"
     },
-    "output_directory": "smac3_output/6c26cf2442c04561b8a975190969b1e5/0"
+    "output_directory": "smac3_output/9eed722d0e75f876b6cf655a6b3c7daa/0"
 }

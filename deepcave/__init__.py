@@ -12,13 +12,14 @@ from typing import Any, Callable, TypeVar, cast
 import datetime
 import os
 import sys
+import warnings
 from functools import wraps
 from pathlib import Path
 
 name = "DeepCAVE"
 package_name = "deepcave"
 author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
-author_email = "s.segel@ai.uni-hannover.de"
+author_email = "l.fehring@ai.uni-hannover.de"
 description = "An interactive framework to visualize and analyze your AutoML process in real-time."
 url = "automl.org"
 project_urls = {
@@ -26,7 +27,7 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, {author}"
-version = "1.2.1"
+version = "1.3"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
@@ -115,8 +116,13 @@ if any(file in _exec_file for file in _exec_files):
         # Run caches
         rc = RunCaches(config)
 
-        # Run Handler
-        run_handler = RunHandler(config, c, rc)
+        # Supress warnings during initializing run handler to avoid showing warnings with respect
+        # to previously loaded runs
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+
+            # Run Handler
+            run_handler = RunHandler(config, c, rc)
 
         # Notifications
         notification = Notification()

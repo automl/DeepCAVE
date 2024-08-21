@@ -2,7 +2,7 @@
 # are usually completed in github actions.
 
 SHELL := /bin/bash
-VERSION := 1.2.1
+VERSION := 1.3
 
 NAME := DeepCAVE
 PACKAGE_NAME := deepcave
@@ -51,6 +51,12 @@ install-dev:
 
 install-examples:
 	$(PIP) install -e ".[examples]"
+
+install-optuna:
+	$(PIP) install -e ".[optuna]"
+
+install-bohb:
+	$(PIP) install -e ".[bohb]"
 
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :

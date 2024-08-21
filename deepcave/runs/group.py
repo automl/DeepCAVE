@@ -14,9 +14,12 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 from copy import deepcopy
 
 import numpy as np
+from ConfigSpace.configuration_space import Configuration
+from ConfigSpace.hyperparameters.hp_components import ROUND_PLACES
 
 from deepcave.runs import AbstractRun, NotMergeableError, check_equality
 from deepcave.utils.hash import string_to_hash
+from deepcave.utils.util import config_to_tuple
 
 
 class Group(AbstractRun):
@@ -99,9 +102,16 @@ class Group(AbstractRun):
                             config_mapping[config_id] = added_config_id
                             break
 
+                    if isinstance(config, Configuration):
+                        config = dict(config)
+
                     if config_id not in config_mapping:
                         self.configs[current_config_id] = config
                         self.origins[current_config_id] = origin
+                        # Use same rounding as ConfigSpace does
+                        self.config_id_mapping[
+                            config_to_tuple(config, ROUND_PLACES)
+                        ] = current_config_id
                         config_mapping[config_id] = current_config_id
                         current_config_id += 1
 

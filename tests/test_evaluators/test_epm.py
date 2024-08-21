@@ -13,7 +13,7 @@ class TestEPM(unittest.TestCase):
         # Initiate run here
         self.run: AbstractRun = SMAC3v1Run.from_path("logs/SMAC3v1/mlp/run_1")
         self.cs = self.run.configspace
-        self.hp_names = self.cs.get_hyperparameter_names()
+        self.hp_names = list(self.cs.keys())
 
         # Get the data
         df = self.run.get_encoded_data(

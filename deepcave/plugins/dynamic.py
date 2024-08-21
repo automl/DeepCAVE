@@ -28,7 +28,7 @@ class DynamicPlugin(Plugin, ABC):
 
     Properties
     ----------
-    outputs : List[Tuple[str, str, bool]]
+    outputs : List[Tuple[str, str]]
         The registered outputs.
     inputs : List[Tuple[str, str, bool, Any]]
         The registered inputs.
@@ -62,7 +62,7 @@ class DynamicPlugin(Plugin, ABC):
         from deepcave import app, c, rc
 
         outputs = []
-        for id, attribute, _ in self.outputs:
+        for id, attribute in self.outputs:
             outputs.append(Output(self.get_internal_output_id(id), attribute))
 
         inputs = [Input(self.get_internal_id("update-button"), "n_clicks")]
