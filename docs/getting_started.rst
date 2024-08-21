@@ -29,10 +29,10 @@ On the main page, you can also add them to groups to create and analyze combined
 
 DeepCAVE comes with some pre-evaluated runs to get a feeling for what DeepCAVE can do.
 
-If you cloned the repository from GitHub via `git clone https://github.com/automl/DeepCAVE.git`,
-you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
-For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
-the `+` button left to it.
+If you cloned the repository from GitHub via ``git clone https://github.com/automl/DeepCAVE.git``,
+you can try out some examples by exploring the ``logs`` directory inside the DeepCAVE dashboard.
+For example, if you navigate to ``logs/DeepCAVE``, you can view the run ``mnist_pytorch`` if you hit
+the ``+`` button left to it.
 
 More Options
 ------------
