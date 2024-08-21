@@ -2,11 +2,12 @@
 
 # DeepCAVE
 
-DeepCAVE is a visualization and analysis tool for AutoML (especially for the sub-problem
-hyperparameter optimization) runs. The framework is programmed on top of Dash and therefore
-entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights
-and bring the human back in the loop. Moreover, the powerful run interface and the modularized
-plugin structure allow extending the tool at any time effortlessly.
+DeepCAVE is a visualization and analysis tool for AutoML, especially for the sub-problem
+hyperparameter optimization. The framework is programmed on top of Dash and therefore
+entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights,
+aiding in understanding and debugging the application of hyperparameter optimization. 
+Moreover, the powerful run interface and the modularized plugin structure allow extending the 
+tool at any time effortlessly.
 
 ![Configuration Footprint](docs/images/plugins/configuration_footprint.png)
 
