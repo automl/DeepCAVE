@@ -1,0 +1,2209 @@
+{
+  "stats": {
+    "submitted": 112,
+    "finished": 112,
+    "running": 0
+  },
+  "data": [
+    [
+      1,
+      null,
+      209652396,
+      null,
+      [
+        0.695625193438564,
+        1176.0
+      ],
+      0.5294697284698486,
+      1,
+      1724237366.987448,
+      1724237367.5186465,
+      {}
+    ],
+    [
+      1,
+      null,
+      398764591,
+      null,
+      [
+        0.7596069328381306,
+        1176.0
+      ],
+      0.4671597480773926,
+      1,
+      1724237367.5237608,
+      1724237367.994595,
+      {}
+    ],
+    [
+      2,
+      null,
+      209652396,
+      null,
+      [
+        0.052865985762921675,
+        10878.0
+      ],
+      1.4634242057800293,
+      1,
+      1724237368.0058963,
+      1724237369.47318,
+      {}
+    ],
+    [
+      2,
+      null,
+      398764591,
+      null,
+      [
+        0.04898019189105551,
+        10878.0
+      ],
+      2.092824935913086,
+      1,
+      1724237369.4769742,
+      1724237371.5728726,
+      {}
+    ],
+    [
+      3,
+      null,
+      209652396,
+      null,
+      [
+        0.4806855462705045,
+        11000.0
+      ],
+      3.6757280826568604,
+      1,
+      1724237371.5816784,
+      1724237375.261391,
+      {}
+    ],
+    [
+      3,
+      null,
+      398764591,
+      null,
+      [
+        0.5841751779634788,
+        11000.0
+      ],
+      3.6475863456726074,
+      1,
+      1724237375.2755017,
+      1724237378.9290643,
+      {}
+    ],
+    [
+      4,
+      null,
+      209652396,
+      null,
+      [
+        0.06121324667285677,
+        23296.0
+      ],
+      3.721745491027832,
+      1,
+      1724237378.9535654,
+      1724237382.6831198,
+      {}
+    ],
+    [
+      4,
+      null,
+      398764591,
+      null,
+      [
+        0.05622253172392444,
+        23296.0
+      ],
+      2.818784713745117,
+      1,
+      1724237382.697734,
+      1724237385.5203161,
+      {}
+    ],
+    [
+      5,
+      null,
+      209652396,
+      null,
+      [
+        0.89983286908078,
+        136077.0
+      ],
+      8.468122005462646,
+      1,
+      1724237385.541956,
+      1724237394.0474892,
+      {}
+    ],
+    [
+      5,
+      null,
+      398764591,
+      null,
+      [
+        0.89983286908078,
+        136077.0
+      ],
+      9.04597282409668,
+      1,
+      1724237394.054343,
+      1724237403.1050382,
+      {}
+    ],
+    [
+      6,
+      null,
+      209652396,
+      null,
+      [
+        0.029493964716806098,
+        14256.0
+      ],
+      2.1823346614837646,
+      1,
+      1724237403.6042078,
+      1724237405.7879884,
+      {}
+    ],
+    [
+      6,
+      null,
+      398764591,
+      null,
+      [
+        0.031165273909006475,
+        14256.0
+      ],
+      2.3028643131256104,
+      1,
+      1724237405.796616,
+      1724237408.1037688,
+      {}
+    ],
+    [
+      7,
+      null,
+      209652396,
+      null,
+      [
+        0.038960074280408596,
+        18231.0
+      ],
+      2.428361177444458,
+      1,
+      1724237408.114906,
+      1724237410.5471082,
+      {}
+    ],
+    [
+      7,
+      null,
+      398764591,
+      null,
+      [
+        0.042855153203342544,
+        18231.0
+      ],
+      4.399349212646484,
+      1,
+      1724237410.5551813,
+      1724237414.96271,
+      {}
+    ],
+    [
+      8,
+      null,
+      209652396,
+      null,
+      [
+        0.7527669452181986,
+        14507.0
+      ],
+      3.9079227447509766,
+      1,
+      1724237414.9830146,
+      1724237418.9012928,
+      {}
+    ],
+    [
+      8,
+      null,
+      398764591,
+      null,
+      [
+        0.5725208913649025,
+        14507.0
+      ],
+      3.8667750358581543,
+      1,
+      1724237418.9125261,
+      1724237422.783867,
+      {}
+    ],
+    [
+      9,
+      null,
+      209652396,
+      null,
+      [
+        0.7696146703806871,
+        15015.0
+      ],
+      3.276869773864746,
+      1,
+      1724237422.7990563,
+      1724237426.0797198,
+      {}
+    ],
+    [
+      9,
+      null,
+      398764591,
+      null,
+      [
+        0.686126586196224,
+        15015.0
+      ],
+      3.9818310737609863,
+      1,
+      1724237426.0883815,
+      1724237430.0751226,
+      {}
+    ],
+    [
+      10,
+      null,
+      209652396,
+      null,
+      [
+        0.8363881151346333,
+        22040.0
+      ],
+      2.4935004711151123,
+      1,
+      1724237430.1109753,
+      1724237432.6156974,
+      {}
+    ],
+    [
+      10,
+      null,
+      398764591,
+      null,
+      [
+        0.8158232745280098,
+        22040.0
+      ],
+      2.5039045810699463,
+      1,
+      1724237432.6233943,
+      1724237435.1312451,
+      {}
+    ],
+    [
+      11,
+      null,
+      209652396,
+      null,
+      [
+        0.5642602909316001,
+        13515.0
+      ],
+      2.5069334506988525,
+      1,
+      1724237435.1457381,
+      1724237437.6568894,
+      {}
+    ],
+    [
+      11,
+      null,
+      398764591,
+      null,
+      [
+        0.5742896935933148,
+        13515.0
+      ],
+      1.4908370971679688,
+      1,
+      1724237437.6652923,
+      1724237439.1598794,
+      {}
+    ],
+    [
+      12,
+      null,
+      209652396,
+      null,
+      [
+        0.10182606004333028,
+        18231.0
+      ],
+      2.357492685317993,
+      1,
+      1724237439.1737332,
+      1724237441.5353866,
+      {}
+    ],
+    [
+      12,
+      null,
+      398764591,
+      null,
+      [
+        0.11242958836273598,
+        18231.0
+      ],
+      2.5401835441589355,
+      1,
+      1724237441.5448616,
+      1724237444.0891109,
+      {}
+    ],
+    [
+      13,
+      null,
+      209652396,
+      null,
+      [
+        0.04952336737852059,
+        20535.0
+      ],
+      2.531620979309082,
+      1,
+      1724237444.1021678,
+      1724237446.6375537,
+      {}
+    ],
+    [
+      13,
+      null,
+      398764591,
+      null,
+      [
+        0.06009904054472304,
+        20535.0
+      ],
+      2.4454538822174072,
+      1,
+      1724237446.646996,
+      1724237449.0962873,
+      {}
+    ],
+    [
+      14,
+      null,
+      209652396,
+      null,
+      [
+        0.8458449396471681,
+        11618.0
+      ],
+      2.723912477493286,
+      1,
+      1724237449.5966113,
+      1724237452.3217869,
+      {}
+    ],
+    [
+      14,
+      null,
+      398764591,
+      null,
+      [
+        0.8530872794800372,
+        11618.0
+      ],
+      3.421290397644043,
+      1,
+      1724237452.3314676,
+      1724237455.7568688,
+      {}
+    ],
+    [
+      15,
+      null,
+      209652396,
+      null,
+      [
+        0.8336366450015475,
+        12506.0
+      ],
+      3.967498302459717,
+      1,
+      1724237455.777781,
+      1724237459.7489686,
+      {}
+    ],
+    [
+      15,
+      null,
+      398764591,
+      null,
+      [
+        0.8859083874961312,
+        12506.0
+      ],
+      4.563793420791626,
+      1,
+      1724237459.7635384,
+      1724237464.337948,
+      {}
+    ],
+    [
+      16,
+      null,
+      209652396,
+      null,
+      [
+        0.47012844320643765,
+        12728.0
+      ],
+      7.112757921218872,
+      1,
+      1724237464.3545263,
+      1724237471.4715672,
+      {}
+    ],
+    [
+      16,
+      null,
+      398764591,
+      null,
+      [
+        0.37331012070566383,
+        12728.0
+      ],
+      3.7946126461029053,
+      1,
+      1724237471.4874413,
+      1724237475.2856448,
+      {}
+    ],
+    [
+      17,
+      null,
+      209652396,
+      null,
+      [
+        0.08682451253481904,
+        12950.0
+      ],
+      2.192924737930298,
+      1,
+      1724237475.3131115,
+      1724237477.5097792,
+      {}
+    ],
+    [
+      17,
+      null,
+      398764591,
+      null,
+      [
+        0.09683844011142051,
+        12950.0
+      ],
+      3.4605424404144287,
+      1,
+      1724237477.5214474,
+      1724237480.985748,
+      {}
+    ],
+    [
+      18,
+      null,
+      209652396,
+      null,
+      [
+        0.858050139275766,
+        11618.0
+      ],
+      6.547772407531738,
+      1,
+      1724237481.0065498,
+      1724237487.558174,
+      {}
+    ],
+    [
+      18,
+      null,
+      398764591,
+      null,
+      [
+        0.8714995357474467,
+        11618.0
+      ],
+      4.917768239974976,
+      1,
+      1724237487.5720732,
+      1724237492.496138,
+      {}
+    ],
+    [
+      19,
+      null,
+      209652396,
+      null,
+      [
+        0.02726864747756108,
+        11840.0
+      ],
+      3.7907168865203857,
+      1,
+      1724237492.5132222,
+      1724237496.3079205,
+      {}
+    ],
+    [
+      19,
+      null,
+      398764591,
+      null,
+      [
+        0.030061900340451864,
+        11840.0
+      ],
+      3.4173219203948975,
+      1,
+      1724237496.3161922,
+      1724237499.7371476,
+      {}
+    ],
+    [
+      20,
+      null,
+      209652396,
+      null,
+      [
+        0.7033983286908078,
+        1464.0
+      ],
+      0.6647806167602539,
+      1,
+      1724237499.766841,
+      1724237500.435249,
+      {}
+    ],
+    [
+      20,
+      null,
+      398764591,
+      null,
+      [
+        0.6266001238006809,
+        1464.0
+      ],
+      0.6178851127624512,
+      1,
+      1724237500.445525,
+      1724237501.0658352,
+      {}
+    ],
+    [
+      21,
+      null,
+      209652396,
+      null,
+      [
+        0.7356809037449705,
+        11174.0
+      ],
+      1.3181257247924805,
+      1,
+      1724237501.077976,
+      1724237502.3984425,
+      {}
+    ],
+    [
+      21,
+      null,
+      398764591,
+      null,
+      [
+        0.6554921077065924,
+        11174.0
+      ],
+      1.7390820980072021,
+      1,
+      1724237502.4098353,
+      1724237504.152982,
+      {}
+    ],
+    [
+      22,
+      null,
+      209652396,
+      null,
+      [
+        0.17806406685236775,
+        51531.0
+      ],
+      17.884517431259155,
+      1,
+      1724237504.1919744,
+      1724237522.0806723,
+      {}
+    ],
+    [
+      22,
+      null,
+      398764591,
+      null,
+      [
+        0.17085267718972452,
+        51531.0
+      ],
+      19.286856174468994,
+      1,
+      1724237522.111301,
+      1724237541.4017344,
+      {}
+    ],
+    [
+      23,
+      null,
+      209652396,
+      null,
+      [
+        0.15915351284432067,
+        8806.0
+      ],
+      1.9399235248565674,
+      1,
+      1724237541.8379767,
+      1724237543.7793858,
+      {}
+    ],
+    [
+      23,
+      null,
+      398764591,
+      null,
+      [
+        0.16138966264314458,
+        8806.0
+      ],
+      1.9773027896881104,
+      1,
+      1724237543.7902756,
+      1724237545.7714593,
+      {}
+    ],
+    [
+      24,
+      null,
+      209652396,
+      null,
+      [
+        0.1157582791705355,
+        9842.0
+      ],
+      1.504607915878296,
+      1,
+      1724237545.8010006,
+      1724237547.3092403,
+      {}
+    ],
+    [
+      24,
+      null,
+      398764591,
+      null,
+      [
+        0.10574899411946759,
+        9842.0
+      ],
+      1.2036850452423096,
+      1,
+      1724237547.3216667,
+      1724237548.5282705,
+      {}
+    ],
+    [
+      25,
+      null,
+      209652396,
+      null,
+      [
+        0.14246672856700715,
+        8732.0
+      ],
+      1.2975361347198486,
+      1,
+      1724237548.554233,
+      1724237549.8555255,
+      {}
+    ],
+    [
+      25,
+      null,
+      398764591,
+      null,
+      [
+        0.11575673166202416,
+        8732.0
+      ],
+      1.2408199310302734,
+      1,
+      1724237549.8632436,
+      1724237551.1064327,
+      {}
+    ],
+    [
+      26,
+      null,
+      209652396,
+      null,
+      [
+        0.10462395543175484,
+        8658.0
+      ],
+      1.5468530654907227,
+      1,
+      1724237551.12173,
+      1724237552.6709957,
+      {}
+    ],
+    [
+      26,
+      null,
+      398764591,
+      null,
+      [
+        0.1302290312596719,
+        8658.0
+      ],
+      1.370211124420166,
+      1,
+      1724237552.6862025,
+      1724237554.060307,
+      {}
+    ],
+    [
+      27,
+      null,
+      209652396,
+      null,
+      [
+        0.09350510677808721,
+        8584.0
+      ],
+      3.8541646003723145,
+      1,
+      1724237554.08888,
+      1724237557.9466207,
+      {}
+    ],
+    [
+      27,
+      null,
+      398764591,
+      null,
+      [
+        0.08626121943670684,
+        8584.0
+      ],
+      2.5304486751556396,
+      1,
+      1724237557.976397,
+      1724237560.5120707,
+      {}
+    ],
+    [
+      28,
+      null,
+      209652396,
+      null,
+      [
+        0.38844475394614675,
+        8288.0
+      ],
+      2.2112631797790527,
+      1,
+      1724237560.5492873,
+      1724237562.7643187,
+      {}
+    ],
+    [
+      28,
+      null,
+      398764591,
+      null,
+      [
+        0.3478056329309812,
+        8288.0
+      ],
+      1.5724549293518066,
+      1,
+      1724237562.7785027,
+      1724237564.3545032,
+      {}
+    ],
+    [
+      29,
+      null,
+      209652396,
+      null,
+      [
+        0.7896332404828227,
+        1332.0
+      ],
+      0.5663919448852539,
+      1,
+      1724237564.3861747,
+      1724237564.9562829,
+      {}
+    ],
+    [
+      29,
+      null,
+      398764591,
+      null,
+      [
+        0.7673924481584649,
+        1332.0
+      ],
+      0.41503071784973145,
+      1,
+      1724237564.9707077,
+      1724237565.3896987,
+      {}
+    ],
+    [
+      30,
+      null,
+      209652396,
+      null,
+      [
+        0.04840451872485296,
+        67275.0
+      ],
+      10.784584283828735,
+      1,
+      1724237565.453112,
+      1724237576.2400954,
+      {}
+    ],
+    [
+      30,
+      null,
+      398764591,
+      null,
+      [
+        0.04897554936552173,
+        67275.0
+      ],
+      10.197855472564697,
+      1,
+      1724237576.2604654,
+      1724237586.4620829,
+      {}
+    ],
+    [
+      31,
+      null,
+      209652396,
+      null,
+      [
+        0.16528164654905608,
+        62408.0
+      ],
+      14.148459672927856,
+      1,
+      1724237587.0972548,
+      1724237601.2478325,
+      {}
+    ],
+    [
+      31,
+      null,
+      398764591,
+      null,
+      [
+        0.2220473537604457,
+        62408.0
+      ],
+      24.438376665115356,
+      1,
+      1724237601.2804315,
+      1724237625.7260249,
+      {}
+    ],
+    [
+      32,
+      null,
+      209652396,
+      null,
+      [
+        0.14859795728876501,
+        13230.0
+      ],
+      6.07361626625061,
+      1,
+      1724237625.8055627,
+      1724237631.8863482,
+      {}
+    ],
+    [
+      32,
+      null,
+      398764591,
+      null,
+      [
+        0.2379789538842464,
+        13230.0
+      ],
+      6.225111246109009,
+      1,
+      1724237631.9171817,
+      1724237638.149763,
+      {}
+    ],
+    [
+      33,
+      null,
+      209652396,
+      null,
+      [
+        0.23039616217889203,
+        3552.0
+      ],
+      1.977271556854248,
+      1,
+      1724237638.2623851,
+      1724237640.2459612,
+      {}
+    ],
+    [
+      33,
+      null,
+      398764591,
+      null,
+      [
+        0.2515521510368307,
+        3552.0
+      ],
+      1.44423508644104,
+      1,
+      1724237640.2602785,
+      1724237641.7083178,
+      {}
+    ],
+    [
+      34,
+      null,
+      209652396,
+      null,
+      [
+        0.1914345403899722,
+        3774.0
+      ],
+      2.023667335510254,
+      1,
+      1724237641.768804,
+      1724237643.7969365,
+      {}
+    ],
+    [
+      34,
+      null,
+      398764591,
+      null,
+      [
+        0.2170427112349118,
+        3774.0
+      ],
+      3.1605305671691895,
+      1,
+      1724237643.8210657,
+      1724237646.9857936,
+      {}
+    ],
+    [
+      35,
+      null,
+      209652396,
+      null,
+      [
+        0.3183023831631073,
+        3700.0
+      ],
+      2.2452504634857178,
+      1,
+      1724237647.0659592,
+      1724237649.316628,
+      {}
+    ],
+    [
+      35,
+      null,
+      398764591,
+      null,
+      [
+        0.2559842154131847,
+        3700.0
+      ],
+      2.380690813064575,
+      1,
+      1724237649.3498003,
+      1724237651.736958,
+      {}
+    ],
+    [
+      36,
+      null,
+      209652396,
+      null,
+      [
+        0.19700711853915198,
+        4588.0
+      ],
+      1.6852364540100098,
+      1,
+      1724237651.7890835,
+      1724237653.4780731,
+      {}
+    ],
+    [
+      36,
+      null,
+      398764591,
+      null,
+      [
+        0.20869699783348805,
+        4588.0
+      ],
+      3.177788496017456,
+      1,
+      1724237653.493485,
+      1724237656.6750424,
+      {}
+    ],
+    [
+      37,
+      null,
+      209652396,
+      null,
+      [
+        0.26545032497678744,
+        3478.0
+      ],
+      1.6602215766906738,
+      1,
+      1724237656.7720957,
+      1724237658.4472306,
+      {}
+    ],
+    [
+      37,
+      null,
+      398764591,
+      null,
+      [
+        0.2437635406994738,
+        3478.0
+      ],
+      0.780987024307251,
+      1,
+      1724237658.4564562,
+      1724237659.2398703,
+      {}
+    ],
+    [
+      38,
+      null,
+      209652396,
+      null,
+      [
+        0.2047833488084183,
+        39360.0
+      ],
+      7.782496213912964,
+      1,
+      1724237659.8603015,
+      1724237667.6447995,
+      {}
+    ],
+    [
+      38,
+      null,
+      398764591,
+      null,
+      [
+        0.21926183844011138,
+        39360.0
+      ],
+      12.431576490402222,
+      1,
+      1724237667.6703806,
+      1724237680.105623,
+      {}
+    ],
+    [
+      39,
+      null,
+      209652396,
+      null,
+      [
+        0.07624264933457137,
+        25200.0
+      ],
+      5.013370990753174,
+      1,
+      1724237680.1557708,
+      1724237685.173661,
+      {}
+    ],
+    [
+      39,
+      null,
+      398764591,
+      null,
+      [
+        0.07514391829155043,
+        25200.0
+      ],
+      6.08760929107666,
+      1,
+      1724237685.1975937,
+      1724237691.2892265,
+      {}
+    ],
+    [
+      40,
+      null,
+      209652396,
+      null,
+      [
+        Infinity,
+        Infinity
+      ],
+      0.0,
+      2,
+      1724237691.3383894,
+      1724237692.254286,
+      {
+        "traceback": "Traceback (most recent call last):\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 186, in run\n    rval = self(config_copy, target_function, kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 259, in __call__\n    return algorithm(config, **algorithm_kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/examples/3_multi_objective/2_parego.py\", line 91, in train\n    score = cross_val_score(classifier, digits.data, digits.target, cv=cv, error_score=\"raise\")\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 712, in cross_val_score\n    cv_results = cross_validate(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 423, in cross_validate\n    results = parallel(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 74, in __call__\n    return super().__call__(iterable_with_config)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 1085, in __call__\n    if self.dispatch_one_batch(iterator):\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 901, in dispatch_one_batch\n    self._dispatch(tasks)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 819, in _dispatch\n    job = self._backend.apply_async(batch, callback=cb)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 208, in apply_async\n    result = ImmediateResult(func)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 597, in __init__\n    self.results = batch()\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in __call__\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in <listcomp>\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 136, in __call__\n    return self.function(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 888, in _fit_and_score\n    estimator.fit(X_train, y_train, **fit_params)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/base.py\", line 1473, in wrapper\n    return fit_method(estimator, *args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 751, in fit\n    return self._fit(X, y, incremental=False)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 495, in _fit\n    raise ValueError(\nValueError: Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.\n",
+        "error": "ValueError('Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.')"
+      }
+    ],
+    [
+      40,
+      null,
+      398764591,
+      null,
+      [
+        Infinity,
+        Infinity
+      ],
+      0.0,
+      2,
+      1724237692.2961733,
+      1724237698.8285115,
+      {
+        "traceback": "Traceback (most recent call last):\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 186, in run\n    rval = self(config_copy, target_function, kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 259, in __call__\n    return algorithm(config, **algorithm_kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/examples/3_multi_objective/2_parego.py\", line 91, in train\n    score = cross_val_score(classifier, digits.data, digits.target, cv=cv, error_score=\"raise\")\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 712, in cross_val_score\n    cv_results = cross_validate(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 423, in cross_validate\n    results = parallel(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 74, in __call__\n    return super().__call__(iterable_with_config)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 1088, in __call__\n    while self.dispatch_one_batch(iterator):\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 901, in dispatch_one_batch\n    self._dispatch(tasks)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 819, in _dispatch\n    job = self._backend.apply_async(batch, callback=cb)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 208, in apply_async\n    result = ImmediateResult(func)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 597, in __init__\n    self.results = batch()\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in __call__\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in <listcomp>\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 136, in __call__\n    return self.function(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 888, in _fit_and_score\n    estimator.fit(X_train, y_train, **fit_params)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/base.py\", line 1473, in wrapper\n    return fit_method(estimator, *args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 751, in fit\n    return self._fit(X, y, incremental=False)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 495, in _fit\n    raise ValueError(\nValueError: Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.\n",
+        "error": "ValueError('Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.')"
+      }
+    ],
+    [
+      41,
+      null,
+      209652396,
+      null,
+      [
+        0.08292014856081698,
+        23912.0
+      ],
+      4.115952730178833,
+      1,
+      1724237698.8826046,
+      1724237703.002278,
+      {}
+    ],
+    [
+      41,
+      null,
+      398764591,
+      null,
+      [
+        0.07624729186010515,
+        23912.0
+      ],
+      6.540659666061401,
+      1,
+      1724237703.0281866,
+      1724237709.5730276,
+      {}
+    ],
+    [
+      42,
+      null,
+      209652396,
+      null,
+      [
+        0.3516774992262457,
+        56125.0
+      ],
+      10.898817300796509,
+      1,
+      1724237709.6476934,
+      1724237720.5506852,
+      {}
+    ],
+    [
+      42,
+      null,
+      398764591,
+      null,
+      [
+        0.2999226245744351,
+        56125.0
+      ],
+      9.566471338272095,
+      1,
+      1724237720.5682645,
+      1724237730.138431,
+      {}
+    ],
+    [
+      43,
+      null,
+      209652396,
+      null,
+      [
+        0.05620396162178898,
+        9620.0
+      ],
+      2.2214033603668213,
+      1,
+      1724237730.196887,
+      1724237732.4221683,
+      {}
+    ],
+    [
+      43,
+      null,
+      398764591,
+      null,
+      [
+        0.04675177963478805,
+        9620.0
+      ],
+      1.3170650005340576,
+      1,
+      1724237732.4347801,
+      1724237733.7546182,
+      {}
+    ],
+    [
+      44,
+      null,
+      209652396,
+      null,
+      [
+        0.5231367997523987,
+        78338.0
+      ],
+      10.00623869895935,
+      1,
+      1724237733.7848077,
+      1724237743.7932658,
+      {}
+    ],
+    [
+      44,
+      null,
+      398764591,
+      null,
+      [
+        0.5058139894769421,
+        78338.0
+      ],
+      13.061837196350098,
+      1,
+      1724237743.8129697,
+      1724237756.87862,
+      {}
+    ],
+    [
+      45,
+      null,
+      209652396,
+      null,
+      [
+        0.059543484989167395,
+        23595.0
+      ],
+      5.123198747634888,
+      1,
+      1724237756.9457438,
+      1724237762.0726674,
+      {}
+    ],
+    [
+      45,
+      null,
+      398764591,
+      null,
+      [
+        0.07570102135561751,
+        23595.0
+      ],
+      6.610807657241821,
+      1,
+      1724237762.1071942,
+      1724237768.7247977,
+      {}
+    ],
+    [
+      46,
+      null,
+      209652396,
+      null,
+      [
+        0.06289538842463638,
+        59469.0
+      ],
+      19.850443840026855,
+      1,
+      1724237769.7569642,
+      1724237789.6087425,
+      {}
+    ],
+    [
+      46,
+      null,
+      398764591,
+      null,
+      [
+        0.06512070566388117,
+        59469.0
+      ],
+      19.171188592910767,
+      1,
+      1724237789.664216,
+      1724237808.8429682,
+      {}
+    ],
+    [
+      47,
+      null,
+      209652396,
+      null,
+      [
+        0.31775456515010836,
+        11960.0
+      ],
+      14.834659337997437,
+      1,
+      1724237808.9499495,
+      1724237823.7869036,
+      {}
+    ],
+    [
+      47,
+      null,
+      398764591,
+      null,
+      [
+        0.18143144537294964,
+        11960.0
+      ],
+      16.41909956932068,
+      1,
+      1724237823.8321626,
+      1724237840.254833,
+      {}
+    ],
+    [
+      48,
+      null,
+      209652396,
+      null,
+      [
+        0.8581151346332405,
+        13230.0
+      ],
+      2.980994462966919,
+      1,
+      1724237840.3712997,
+      1724237843.357878,
+      {}
+    ],
+    [
+      48,
+      null,
+      398764591,
+      null,
+      [
+        0.89983286908078,
+        13230.0
+      ],
+      2.422799825668335,
+      1,
+      1724237843.3782806,
+      1724237845.8045733,
+      {}
+    ],
+    [
+      49,
+      null,
+      209652396,
+      null,
+      [
+        0.89983286908078,
+        6464.0
+      ],
+      0.39530491828918457,
+      1,
+      1724237845.8911114,
+      1724237846.2903454,
+      {}
+    ],
+    [
+      49,
+      null,
+      398764591,
+      null,
+      [
+        0.8987186629526462,
+        6464.0
+      ],
+      0.42281222343444824,
+      1,
+      1724237846.3286953,
+      1724237846.7552748,
+      {}
+    ],
+    [
+      50,
+      null,
+      209652396,
+      null,
+      [
+        0.8736877127824203,
+        1036.0
+      ],
+      0.36019420623779297,
+      1,
+      1724237846.8207157,
+      1724237847.1843686,
+      {}
+    ],
+    [
+      50,
+      null,
+      398764591,
+      null,
+      [
+        0.7490297121634168,
+        1036.0
+      ],
+      0.3886287212371826,
+      1,
+      1724237847.2048776,
+      1724237847.5970504,
+      {}
+    ],
+    [
+      51,
+      null,
+      209652396,
+      null,
+      [
+        0.06788765088207982,
+        12358.0
+      ],
+      1.1922216415405273,
+      1,
+      1724237847.6569562,
+      1724237848.852827,
+      {}
+    ],
+    [
+      51,
+      null,
+      398764591,
+      null,
+      [
+        0.06344784896316935,
+        12358.0
+      ],
+      1.3650479316711426,
+      1,
+      1724237848.8738663,
+      1724237850.2426152,
+      {}
+    ],
+    [
+      52,
+      null,
+      209652396,
+      null,
+      [
+        0.4730145465800062,
+        4107.0
+      ],
+      0.9254372119903564,
+      1,
+      1724237850.3062227,
+      1724237851.236301,
+      {}
+    ],
+    [
+      52,
+      null,
+      398764591,
+      null,
+      [
+        0.4090405447229959,
+        4107.0
+      ],
+      0.7665317058563232,
+      1,
+      1724237851.260358,
+      1724237852.0307689,
+      {}
+    ],
+    [
+      53,
+      null,
+      209652396,
+      null,
+      [
+        0.9042819560507582,
+        17556.0
+      ],
+      2.042292833328247,
+      1,
+      1724237852.0863736,
+      1724237854.1324897,
+      {}
+    ],
+    [
+      53,
+      null,
+      398764591,
+      null,
+      [
+        0.8592014856081709,
+        17556.0
+      ],
+      1.8930647373199463,
+      1,
+      1724237854.141301,
+      1724237856.0361466,
+      {}
+    ],
+    [
+      54,
+      null,
+      209652396,
+      null,
+      [
+        0.06677653977096865,
+        38236.0
+      ],
+      2.684231758117676,
+      1,
+      1724237857.1091785,
+      1724237859.7949688,
+      {}
+    ],
+    [
+      54,
+      null,
+      398764591,
+      null,
+      [
+        0.05398019189105541,
+        38236.0
+      ],
+      4.663877725601196,
+      1,
+      1724237859.8191512,
+      1724237864.4869251,
+      {}
+    ],
+    [
+      55,
+      null,
+      209652396,
+      null,
+      [
+        0.5887728257505416,
+        3080.0
+      ],
+      0.7111039161682129,
+      1,
+      1724237864.5819852,
+      1724237865.2971618,
+      {}
+    ],
+    [
+      55,
+      null,
+      398764591,
+      null,
+      [
+        0.3734091612503869,
+        3080.0
+      ],
+      0.6650412082672119,
+      1,
+      1724237865.3094254,
+      1724237865.9767952,
+      {}
+    ],
+    [
+      56,
+      null,
+      209652396,
+      null,
+      [
+        0.25875425564840593,
+        5031.0
+      ],
+      0.7961483001708984,
+      1,
+      1724237866.0102243,
+      1724237866.8087513,
+      {}
+    ],
+    [
+      56,
+      null,
+      398764591,
+      null,
+      [
+        0.27379449086969987,
+        5031.0
+      ],
+      0.7691662311553955,
+      1,
+      1724237866.829099,
+      1724237867.6019433,
+      {}
+    ]
+  ],
+  "configs": {
+    "1": {
+      "activation": "logistic",
+      "n_layer": 3,
+      "n_neurons": 12,
+      "solver": "lbfgs"
+    },
+    "2": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 147,
+      "solver": "adam",
+      "batch_size": 78,
+      "learning_rate_init": 0.0005349238049
+    },
+    "3": {
+      "activation": "relu",
+      "n_layer": 5,
+      "n_neurons": 44,
+      "solver": "sgd",
+      "batch_size": 157,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.0890353975764
+    },
+    "4": {
+      "activation": "logistic",
+      "n_layer": 3,
+      "n_neurons": 91,
+      "solver": "adam",
+      "batch_size": 175,
+      "learning_rate_init": 0.004156370185
+    },
+    "5": {
+      "activation": "logistic",
+      "n_layer": 4,
+      "n_neurons": 201,
+      "solver": "sgd",
+      "batch_size": 204,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.0160710680847
+    },
+    "6": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 88,
+      "solver": "sgd",
+      "batch_size": 171,
+      "learning_rate": "adaptive",
+      "learning_rate_init": 0.0472373054902
+    },
+    "7": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 103,
+      "solver": "sgd",
+      "batch_size": 218,
+      "learning_rate": "adaptive",
+      "learning_rate_init": 0.0130653192348
+    },
+    "8": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 89,
+      "solver": "sgd",
+      "batch_size": 228,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.3314705520699
+    },
+    "9": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 91,
+      "solver": "sgd",
+      "batch_size": 167,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.0008786416866
+    },
+    "10": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 116,
+      "solver": "sgd",
+      "batch_size": 171,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.0005718729718
+    },
+    "11": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 85,
+      "solver": "sgd",
+      "batch_size": 167,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.002767630844
+    },
+    "12": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 103,
+      "solver": "sgd",
+      "batch_size": 170,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.001559531328
+    },
+    "13": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 111,
+      "solver": "sgd",
+      "batch_size": 203,
+      "learning_rate": "adaptive",
+      "learning_rate_init": 0.0059174409986
+    },
+    "14": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 157,
+      "solver": "adam",
+      "batch_size": 59,
+      "learning_rate_init": 0.897205118603
+    },
+    "15": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 169,
+      "solver": "adam",
+      "batch_size": 36,
+      "learning_rate_init": 0.9412852340297
+    },
+    "16": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 172,
+      "solver": "adam",
+      "batch_size": 44,
+      "learning_rate_init": 0.0880847509121
+    },
+    "17": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 175,
+      "solver": "adam",
+      "batch_size": 105,
+      "learning_rate_init": 0.0483116249356
+    },
+    "18": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 157,
+      "solver": "adam",
+      "batch_size": 42,
+      "learning_rate_init": 0.6611431531584
+    },
+    "19": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 160,
+      "solver": "adam",
+      "batch_size": 35,
+      "learning_rate_init": 0.0007915970698
+    },
+    "20": {
+      "activation": "tanh",
+      "n_layer": 5,
+      "n_neurons": 12,
+      "solver": "adam",
+      "batch_size": 253,
+      "learning_rate_init": 0.0006906791883
+    },
+    "21": {
+      "activation": "relu",
+      "n_layer": 1,
+      "n_neurons": 151,
+      "solver": "adam",
+      "batch_size": 182,
+      "learning_rate_init": 0.1393942466245
+    },
+    "22": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 193,
+      "solver": "lbfgs"
+    },
+    "23": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 119,
+      "solver": "adam",
+      "batch_size": 83,
+      "learning_rate_init": 0.0002055361228
+    },
+    "24": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 133,
+      "solver": "adam",
+      "batch_size": 77,
+      "learning_rate_init": 0.000253029493
+    },
+    "25": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 118,
+      "solver": "adam",
+      "batch_size": 78,
+      "learning_rate_init": 0.0002721779526
+    },
+    "26": {
+      "activation": "relu",
+      "n_layer": 1,
+      "n_neurons": 117,
+      "solver": "adam",
+      "batch_size": 70,
+      "learning_rate_init": 0.0002816628732
+    },
+    "27": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 116,
+      "solver": "adam",
+      "batch_size": 84,
+      "learning_rate_init": 0.0003699382372
+    },
+    "28": {
+      "activation": "relu",
+      "n_layer": 1,
+      "n_neurons": 112,
+      "solver": "adam",
+      "batch_size": 168,
+      "learning_rate_init": 0.0002424491507
+    },
+    "29": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 18,
+      "solver": "adam",
+      "batch_size": 167,
+      "learning_rate_init": 0.0002198713792
+    },
+    "30": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 225,
+      "solver": "adam",
+      "batch_size": 63,
+      "learning_rate_init": 0.0005040676057
+    },
+    "31": {
+      "activation": "tanh",
+      "n_layer": 5,
+      "n_neurons": 116,
+      "solver": "sgd",
+      "batch_size": 84,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.0003443868212
+    },
+    "32": {
+      "activation": "tanh",
+      "n_layer": 5,
+      "n_neurons": 49,
+      "solver": "sgd",
+      "batch_size": 264,
+      "learning_rate": "adaptive",
+      "learning_rate_init": 0.1603746298283
+    },
+    "33": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 48,
+      "solver": "adam",
+      "batch_size": 86,
+      "learning_rate_init": 0.0003791271639
+    },
+    "34": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 51,
+      "solver": "adam",
+      "batch_size": 84,
+      "learning_rate_init": 0.0003879581747
+    },
+    "35": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 50,
+      "solver": "adam",
+      "batch_size": 82,
+      "learning_rate_init": 0.0002920188239
+    },
+    "36": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 62,
+      "solver": "adam",
+      "batch_size": 82,
+      "learning_rate_init": 0.0003252571439
+    },
+    "37": {
+      "activation": "tanh",
+      "n_layer": 1,
+      "n_neurons": 47,
+      "solver": "adam",
+      "batch_size": 82,
+      "learning_rate_init": 0.0003244314107
+    },
+    "38": {
+      "activation": "logistic",
+      "n_layer": 3,
+      "n_neurons": 123,
+      "solver": "adam",
+      "batch_size": 68,
+      "learning_rate_init": 0.0005284900305
+    },
+    "39": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 126,
+      "solver": "adam",
+      "batch_size": 66,
+      "learning_rate_init": 0.0005349238049
+    },
+    "40": {
+      "activation": "relu",
+      "n_layer": 4,
+      "n_neurons": 111,
+      "solver": "sgd",
+      "batch_size": 65,
+      "learning_rate": "invscaling",
+      "learning_rate_init": 0.2063835089917
+    },
+    "41": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 122,
+      "solver": "adam",
+      "batch_size": 66,
+      "learning_rate_init": 0.0005263856992
+    },
+    "42": {
+      "activation": "logistic",
+      "n_layer": 4,
+      "n_neurons": 125,
+      "solver": "adam",
+      "batch_size": 63,
+      "learning_rate_init": 0.0005365008384
+    },
+    "43": {
+      "activation": "logistic",
+      "n_layer": 1,
+      "n_neurons": 130,
+      "solver": "adam",
+      "batch_size": 61,
+      "learning_rate_init": 0.0006012678837
+    },
+    "44": {
+      "activation": "logistic",
+      "n_layer": 5,
+      "n_neurons": 131,
+      "solver": "adam",
+      "batch_size": 52,
+      "learning_rate_init": 0.0005310776686
+    },
+    "45": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 121,
+      "solver": "adam",
+      "batch_size": 50,
+      "learning_rate_init": 0.0005265811795
+    },
+    "46": {
+      "activation": "tanh",
+      "n_layer": 4,
+      "n_neurons": 129,
+      "solver": "lbfgs"
+    },
+    "47": {
+      "activation": "relu",
+      "n_layer": 4,
+      "n_neurons": 52,
+      "solver": "lbfgs"
+    },
+    "48": {
+      "activation": "logistic",
+      "n_layer": 5,
+      "n_neurons": 49,
+      "solver": "adam",
+      "batch_size": 185,
+      "learning_rate_init": 0.001
+    },
+    "49": {
+      "activation": "logistic",
+      "n_layer": 5,
+      "n_neurons": 32,
+      "solver": "lbfgs"
+    },
+    "50": {
+      "activation": "logistic",
+      "n_layer": 1,
+      "n_neurons": 14,
+      "solver": "sgd",
+      "batch_size": 166,
+      "learning_rate": "adaptive",
+      "learning_rate_init": 0.001
+    },
+    "51": {
+      "activation": "logistic",
+      "n_layer": 1,
+      "n_neurons": 167,
+      "solver": "adam",
+      "batch_size": 200,
+      "learning_rate_init": 0.001
+    },
+    "52": {
+      "activation": "tanh",
+      "n_layer": 2,
+      "n_neurons": 37,
+      "solver": "sgd",
+      "batch_size": 200,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.001
+    },
+    "53": {
+      "activation": "logistic",
+      "n_layer": 3,
+      "n_neurons": 77,
+      "solver": "sgd",
+      "batch_size": 34,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.0002197217688
+    },
+    "54": {
+      "activation": "relu",
+      "n_layer": 3,
+      "n_neurons": 121,
+      "solver": "sgd",
+      "batch_size": 167,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.001
+    },
+    "55": {
+      "activation": "relu",
+      "n_layer": 4,
+      "n_neurons": 22,
+      "solver": "sgd",
+      "batch_size": 182,
+      "learning_rate": "constant",
+      "learning_rate_init": 0.0007822885147
+    },
+    "56": {
+      "activation": "logistic",
+      "n_layer": 2,
+      "n_neurons": 43,
+      "solver": "lbfgs"
+    }
+  },
+  "config_origins": {
+    "1": "Initial Design: Sobol",
+    "2": "Initial Design: Sobol",
+    "3": "Initial Design: Sobol",
+    "4": "Initial Design: Sobol",
+    "5": "Initial Design: Sobol",
+    "6": "Acquisition Function Maximizer: Local Search",
+    "7": "Acquisition Function Maximizer: Local Search",
+    "8": "Acquisition Function Maximizer: Local Search",
+    "9": "Acquisition Function Maximizer: Local Search",
+    "10": "Acquisition Function Maximizer: Local Search",
+    "11": "Acquisition Function Maximizer: Local Search",
+    "12": "Acquisition Function Maximizer: Local Search",
+    "13": "Acquisition Function Maximizer: Local Search",
+    "14": "Acquisition Function Maximizer: Local Search",
+    "15": "Acquisition Function Maximizer: Local Search",
+    "16": "Acquisition Function Maximizer: Local Search",
+    "17": "Acquisition Function Maximizer: Local Search",
+    "18": "Acquisition Function Maximizer: Local Search",
+    "19": "Acquisition Function Maximizer: Local Search",
+    "20": "Random Search",
+    "21": "Random Search",
+    "22": "Random Search",
+    "23": "Acquisition Function Maximizer: Local Search",
+    "24": "Acquisition Function Maximizer: Local Search",
+    "25": "Acquisition Function Maximizer: Local Search",
+    "26": "Acquisition Function Maximizer: Local Search",
+    "27": "Acquisition Function Maximizer: Local Search",
+    "28": "Acquisition Function Maximizer: Local Search",
+    "29": "Acquisition Function Maximizer: Local Search",
+    "30": "Random Search",
+    "31": "Acquisition Function Maximizer: Local Search",
+    "32": "Random Search",
+    "33": "Acquisition Function Maximizer: Local Search",
+    "34": "Acquisition Function Maximizer: Local Search",
+    "35": "Acquisition Function Maximizer: Local Search",
+    "36": "Acquisition Function Maximizer: Local Search",
+    "37": "Acquisition Function Maximizer: Local Search",
+    "38": "Acquisition Function Maximizer: Local Search",
+    "39": "Acquisition Function Maximizer: Local Search",
+    "40": "Random Search",
+    "41": "Acquisition Function Maximizer: Local Search",
+    "42": "Acquisition Function Maximizer: Local Search",
+    "43": "Acquisition Function Maximizer: Local Search",
+    "44": "Acquisition Function Maximizer: Local Search",
+    "45": "Acquisition Function Maximizer: Local Search",
+    "46": "Acquisition Function Maximizer: Local Search",
+    "47": "Acquisition Function Maximizer: Local Search",
+    "48": "Acquisition Function Maximizer: Local Search",
+    "49": "Random Search",
+    "50": "Acquisition Function Maximizer: Local Search",
+    "51": "Acquisition Function Maximizer: Local Search",
+    "52": "Acquisition Function Maximizer: Local Search",
+    "53": "Random Search",
+    "54": "Acquisition Function Maximizer: Local Search",
+    "55": "Acquisition Function Maximizer: Local Search",
+    "56": "Acquisition Function Maximizer: Local Search"
+  }
+}
