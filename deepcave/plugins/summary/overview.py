@@ -415,7 +415,7 @@ class Overview(DynamicPlugin):
             stats_data.append(trace)
 
         stats_layout = go.Layout(
-            legend={"title": "Budget (Seed)"},
+            legend={"title": "Budget"},
             barmode="group",
             xaxis=dict(title="Status"),
             yaxis=dict(title="Number of configurations"),
