@@ -1025,7 +1025,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_objectives</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">config</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">config_id_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="p">)</span>
@@ -1184,7 +1184,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_dictionary</span><span class="p">()</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span><span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)]</span> <span class="o">=</span> <span class="n">config_id</span>
 
         <span class="c1"># Load history</span>

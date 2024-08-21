@@ -832,10 +832,9 @@
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Show Important Hyperparameters&quot;</span><span class="p">),</span>
                     <span class="n">help_button</span><span class="p">(</span>
-                        <span class="s2">&quot;Only the most important hyperparameters are shown which are &quot;</span>
-                        <span class="s2">&quot;calculated by fANOVA using 10 trees. The more left a &quot;</span>
-                        <span class="s2">&quot;hyperparameter stands, the more important it is. However, activating &quot;</span>
-                        <span class="s2">&quot;this option might take longer.&quot;</span>
+                        <span class="s2">&quot;Order hyperparameters according to their fANOVA importance. The more &quot;</span>
+                        <span class="s2">&quot;right a hyperparameter stands, the more important it is. However, &quot;</span>
+                        <span class="s2">&quot;activating this option might take longer.&quot;</span>
                     <span class="p">),</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
                         <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;show_important_only&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">]),</span>
@@ -1101,7 +1100,7 @@
 <span class="sd">        run</span>
 <span class="sd">            The selected run.</span>
 <span class="sd">        inputs</span>
-<span class="sd">            The inputs and filter values fromt the user.</span>
+<span class="sd">            The inputs and filter values from the user.</span>
 <span class="sd">        outputs</span>
 <span class="sd">            Raw output from the run.</span>
 
@@ -1124,10 +1123,12 @@
 
         <span class="k">if</span> <span class="n">show_important_only</span><span class="p">:</span>
             <span class="n">hp_names</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;important_hp_names&quot;</span><span class="p">]</span>
+            <span class="c1"># cut off from the left side to cut off the least important hyperparameters first</span>
+            <span class="n">show_n_hps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_hps</span>
+            <span class="n">hp_names</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="n">show_n_hps</span><span class="p">:]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">hp_names</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;hyperparameter_names&quot;</span><span class="p">]</span>
-
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[:</span><span class="n">n_hps</span><span class="p">]</span>
+            <span class="n">hp_names</span> <span class="o">=</span> <span class="n">hp_names</span><span class="p">[</span><span class="n">n_hps</span><span class="p">:]</span>
 
         <span class="n">df</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">deserialize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span>
