@@ -25,7 +25,14 @@ conda install -c anaconda swig
 pip install DeepCAVE
 ```
 
-If you want to contribute to DeepCAVE use the following steps instead:
+To load runs created with Optuna or the BOHB optimizer, you need to install the
+respective packages by running:
+```bash
+pip install deepcave[optuna]
+pip install deepcave[bohb]
+```
+
+If you want to contribute to DeepCAVE, use the following steps instead:
 ```bash
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
@@ -35,16 +42,9 @@ conda install -c anaconda swig
 make install-dev
 ```
 
-If you want to try the examples for recording your results in DeepCAVE format, run this after installing:
+To try the examples for recording your results in DeepCAVE format, run this after installing:
 ```bash
 make install-examples
-```
-
-To load runs created with Optuna or the BOHB optimizer, you need to install the
-respective packages by running:
-```bash
-make install-optuna
-make install-bohb
 ```
 
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get
