@@ -18,6 +18,21 @@ This can help provide insight and answers to various questions:
 
 .. image:: ../images/plugins/parallel_coordinates.png
 
+
+Using the plot
+--------------
+The plot offers some interactive features for in-depth analysis:
+
+* **Visual Filters:** Add visual filters by drawing lines on the hyperparameter or objective value
+  ranges. on the axes. For instance, placing a line on the objective value range allows you to
+  filter configurations within that specific range. Multiple filters can be applied, and clicking
+  on them again will remove them.
+
+* **Re-arranging:** You can drag and reposition the hyperparameters and the objective to better
+  group and compare them. This feature helps in customizing the view to focus on relevant hyperparameters
+  for your analysis.
+
+
 Options
 -------
 
@@ -44,17 +59,3 @@ To refine your analysis, you can apply filters after calculation:
   did not manage to complete but you can enable plotting them by changing this to *Yes*.
   This can be useful to identify hyperparameters or combinations of them that caused the trial to
   crash.
-
-
-Using the plot
---------------
-The plot offers some interactive features for in-depth analysis:
-
-* **Visual Filters:** Add visual filters by drawing lines on the hyperparameter or objective value
-  ranges. on the axes. For instance, placing a line on the objective value range allows you to
-  filter configurations within that specific range. Multiple filters can be applied, and clicking
-  on them again will remove them.
-
-* **Re-arranging:** You can drag and reposition the hyperparameters and the objective to better
-  group and compare them. This feature helps in customizing the view to focus on relevant hyperparameters
-  for your analysis.

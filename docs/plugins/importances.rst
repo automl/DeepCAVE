@@ -36,10 +36,10 @@ global impact of hyperparameters. For more details on fANOVA, please refer to th
 <https://proceedings.mlr.press/v32/hutter14.html>`_.
 
 
-Further Options
----------------
+Options
+-------
 
-Before calculation, besides the importance method there are two more options you can set:
+* **Method:** Whether to calculate the local parameter importance or the fANOVA importance.
 
 * **Objective:** Select the objective function you wish to analyze.
 
@@ -54,7 +54,7 @@ To refine your analysis, you can apply various filters after calculation:
 * **Budgets**: Filter the results to view importance scores specific to certain multi-fidelity budgets, allowing you to analyze how hyperparameter importance varies with budget changes.
 
 .. warning::
-    As the fANOVA implementation relies on pyrfr, which cannot be applied to constant hyperparameters.
+    The fANOVA implementation relies on pyrfr, which cannot be applied to constant hyperparameters.
     As a workaround, we remove constant hyperparameters before calculation.
     This will break if the configuration space contains any conditions or forbiddens including
     constant hyperparameters.

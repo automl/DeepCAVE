@@ -17,3 +17,20 @@ This plugin can help answer the following questions:
 * How does optimizer A compare to optimizer B? Is optimizer A more effective than optimizer B?
 
 .. image:: ../images/plugins/pareto_front.png
+
+Options
+-------
+
+* **Objective #1 / #2:** Select the objective functions you wish to analyze.
+
+* **Budget:** Select the budget you wish to analyze.
+
+To refine your analysis, you can apply various filters after calculation:
+
+* **Show all configurations:** Additionally to the pareto front, also the other configurations are
+  displayed. This makes it easier to see the performance differences.
+
+* **Show error bars**: Show error bars in the case of non-deterministic runs with multiple seeds
+  evaluated per configuration.
+
+* **Show Runs / Show Groups**: You can choose to display either individual runs, groups of runs, or both.

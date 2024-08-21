@@ -22,6 +22,7 @@ This plugin is capable of answering following questions:
 
 .. image:: ../images/plugins/budget_correlation.png
 
+
 Correlation Interpretation
 --------------------------
 
@@ -45,3 +46,9 @@ situation. For reference, here’s a guideline for interpreting correlation scor
 * 0.30-0.39: Moderate relationship
 * 0.20-0.29: Weak relationship
 * 0.01-0.19: No or negligible relationship
+
+
+Options
+-------
+
+* **Objective:** Select the objective function you wish to analyze.

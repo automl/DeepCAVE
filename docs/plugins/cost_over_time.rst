@@ -27,17 +27,6 @@ This plugin is capable of answering the following questions:
 .. image:: ../images/plugins/cost_over_time.png
 
 
-Inputs and Filters
-------------------
-
-The objective is used to compare runs along the y-axis. You can adjust the x-axis to suit your
-needs using the available options. For long-running processes, a logarithmic scale is often
-more useful. If you want to see how many configurations the optimizer needed to achieve a specific
-result, selecting "evaluated configurations" will provide that insight.
-
-Additionally, you can choose to display either individual runs, groups of runs, or both.
-
-
 Interpretation
 --------------
 
@@ -48,3 +37,18 @@ assessing which optimizer converges more quickly and whether the optimizer conve
 
 In contrast to individual runs, groups show the mean and standard deviation across all runs within
 the group. This feature helps you understand the variability and spread among multiple runs.
+
+
+Options
+-------
+
+* **Objective:** Select the objective function you wish to analyze.
+
+* **Budget:** Select the budget you wish to analyze.
+
+To refine your analysis, you can apply various filters after calculation:
+
+* **X-Axis:** You can adjust the x-axis to suit your needs using the available options.
+  For long-running processes, a logarithmic scale is often more useful.
+
+* **Show Runs / Show Groups**: You can choose to display either individual runs, groups of runs, or both.

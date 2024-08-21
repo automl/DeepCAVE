@@ -202,7 +202,7 @@ class ParetoFront(DynamicPlugin):
                         [
                             dbc.Label("Show error bars"),
                             help_button(
-                                "Show error bars In the case of non-deterministic runs with "
+                                "Show error bars in the case of non-deterministic runs with "
                                 "multiple seeds evaluated per configuration."
                             ),
                             dbc.Select(

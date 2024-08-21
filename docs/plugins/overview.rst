@@ -1,7 +1,7 @@
 Overview
 ========
 
-The plugin overview allows you to see the most important information about
+This plugin allows you to see the most important information about
 your selected runs. It can serve as sanity check and let's you know
 about the meta data, objectives, and statistics of your selected run.
 
@@ -32,7 +32,7 @@ This plugin is capable of answering the following questions:
 Quick Information
 -----------------
 
-In the **Quick Information** box you'll find information regarding summary statistics about your run or
+Here you'll find information regarding summary statistics about your run or
 group of runs. This includes information about the optimizer used, how many configurations were tried, when
 the runs were last updated, and a handy quick link to the **best configuration** with respect to the different objectives.
 
