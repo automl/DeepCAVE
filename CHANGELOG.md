@@ -11,7 +11,7 @@
 - Numpy from 1.26.4 to 2.0.1
 - pyPDPPartitioner from to 0.1.8 to 0.1.9
 
-## Ablation Paths
+## Ablation Paths Plugin
 - Added ablation paths as a plugin.
 - Added ablation as a evaluator to use for the plugin.
 - Added tests as well as documentation.
@@ -25,6 +25,7 @@
 - Upgrade pyPDPPartitioner to 0.1.9 as a requirement which fixes a bug related to copying config space objects (#111).
 
 ## Quality of Life
+- Update the documentation to reflect the new changes.
 - Disable warnings during RunHandler initialization to avoid showing warnings with respect to previously loaded runs.
 - Remove option to use docker (not yet supported).
 - Add SMAC3v2 multi-fidelity example runs.
