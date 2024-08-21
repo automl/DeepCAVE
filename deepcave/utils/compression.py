@@ -65,7 +65,6 @@ def serialize(data: Union[Dict, List, pd.DataFrame]) -> str:
     str
         The serialized object as a JSON formatted string.
     """
-
     if isinstance(data, pd.DataFrame):
         # TODO(dwoiwode): Why not just data.to_json()? Or at least make json smaller in dumps
         return json.dumps(json.loads(data.to_json()), separators=JSON_DENSE_SEPARATORS)
