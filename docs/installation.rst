@@ -43,24 +43,37 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
     starting services such as Redis, workers, and the webserver.
 
 
+Mac Related
+^^^^^^^^^^^
+If you want to run DeepCAVE on a M1 Mac, you need to add
+
+.. code:: bash
+
+    export DISABLE_SPRING=true
+    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+
+to your ``~/.bash_profile`` to enable multi-processing.
+
+
 Redis Server
 ^^^^^^^^^^^^
 
 If you have problems installing `redis-server`, please try the following steps:
 
-1. First check if `redis-server` is available:
+1. First, check if `redis-server` is available:
 
     .. code:: bash
 
         redis-server
 
-2. If you see something like `/usr/sbin/redis-server`, then you simply have to expand your path:
+2. If you see something like ``/usr/sbin/redis-server``, then you simply have to expand your path:
 
     .. code:: bash
 
         export PATH=$PATH:/usr/sbin
 
-    Consider adding this to your `~/.bashrc` file.
+    Consider adding this to your ``~/.bashrc`` file.
     Check if `redis-server` works now.
 
 3. If no `redis-server` was found, try to install it:
@@ -88,16 +101,3 @@ If you have problems installing `redis-server`, please try the following steps:
         export PATH=$PATH:`pwd`
         cd ../../
 
-
-
-Mac Related
-^^^^^^^^^^^
-If you want to run DeepCAVE on a M1 Mac, you need to add
-
-.. code:: bash
-
-    export DISABLE_SPRING=true
-    export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-
-
-to your ```~/.bash_profile``` to enable multi-processing.

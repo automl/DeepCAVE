@@ -21,6 +21,8 @@ This plugin is capable of answering following questions:
 * How can I access the configuration in Python?
 
 .. image:: ../images/plugins/configurations.png
+.. image:: ../images/plugins/configurations2.png
+
 
 Overview
 --------

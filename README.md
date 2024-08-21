@@ -2,14 +2,15 @@
 
 # DeepCAVE
 
-DeepCAVE is a visualization and analysis tool for AutoML, especially for the sub-problem
-hyperparameter optimization. The framework is programmed on top of Dash and therefore
-entirely interactive. Multiple and diverse plugins make it possible to efficiently generate insights,
-aiding in understanding and debugging the application of hyperparameter optimization. 
-Moreover, the powerful run interface and the modularized plugin structure allow extending the 
+DeepCAVE is a visualization and analysis tool for AutoML, with a particular focus on
+hyperparameter optimization (HPO). Built on the Dash framework, it offers a fully
+interactive experience. The tool features a variety of plugins that enable efficient insight
+generation, aiding in understanding and debugging the application of HPO.
+Additionally, the powerful run interface and the modularized plugin structure allow extending the 
 tool at any time effortlessly.
 
 ![Configuration Footprint](docs/images/plugins/configuration_footprint.png)
+
 
 ## Installation
 
@@ -49,6 +50,7 @@ make install-bohb
 Please visit the [documentation](https://automl.github.io/DeepCAVE/main/installation.html) to get
 further help (e.g. if you cannot install redis server or if you are on MacOS).
 
+
 ## Visualizing and Evaluating
 
 The webserver as well as the queue/workers can be started by simply running:
@@ -59,6 +61,17 @@ deepcave --open
 If you specify `--open` your webbrowser automatically opens at `http://127.0.0.1:8050/`.
 You can find more arguments and information (like using custom configurations) in the
 [documentation](https://automl.github.io/DeepCAVE/main/getting_started.html).
+
+
+## Example runs
+
+DeepCAVE comes with some pre-evaluated runs to get a feeling for what DeepCAVE can do.
+
+If you installed the package from GitHub via `git clone git@github.com:automl/DeepCAVE.git; pip install -e DeepCAVE`,
+you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
+For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
+the `+` button left to it.
+
 
 ## Features
 
@@ -102,15 +115,6 @@ You can find more arguments and information (like using custom configurations) i
 ### Developer and API Features
 - **API Mode:**  
   Interact with the code directly through API mode, allowing you to bypass the graphical interface if preferred.
-
-## Example runs
-
-DeepCAVE comes with some pre-evaluated runs to get a feel for what DeepCAVE can do.
-
-If you installed the package from GitHub via `git clone git@github.com:automl/DeepCAVE.git; pip install -e DeepCAVE`,
-you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
-For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
-the `+` button left to it.
 
 
 ## Citation

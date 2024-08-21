@@ -21,6 +21,8 @@ To learn more about Symbolic Explanations, please see the paper
 <https://openreview.net/forum?id=JQwAc91sg_x>`_.
 
 .. image:: ../images/plugins/symbolic_explanations.png
+.. image:: ../images/plugins/symbolic_explanations2.png
+
 
 Options
 -------

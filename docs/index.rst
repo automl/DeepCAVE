@@ -21,21 +21,21 @@ Home
 
 
 DeepCAVE is a visualization and analysis tool for AutoML, with a particular focus on
-hyperparameter optimization (HPO) runs. Built on the Dash framework, it offers a fully
+hyperparameter optimization (HPO). Built on the Dash framework, it offers a fully
 interactive experience. The tool features a variety of plugins that enable efficient insight
-generation, aiding in understanding and debugging the application of HPO
-Additionally, the powerful run interface and the modularized
-plugin structure allow extending the tool at any time effortlessly.
+generation, aiding in understanding and debugging the application of HPO.
+Additionally, the powerful run interface and the modularized plugin structure allow extending the
+tool at any time effortlessly.
 
 
 .. image:: ./images/plugins/configuration_footprint.png
 
 
 Features
-========
+--------
 
 Interactive Interface
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 - **Interactive Dashboard:**
   The dashboard runs in a webbrowser and allows you to self-analyze your optimization runs interactively.
@@ -48,7 +48,7 @@ Interactive Interface
 
 
 Comprehensive Analysis Tools
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - **Extensive Plugin Collection:**
   Explore a wide range of plugins for in-depth performance, hyperparameter, and budget analysis.
@@ -61,7 +61,7 @@ Comprehensive Analysis Tools
 
 
 Flexible and Modular Architecture
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - **Modular Plugin Architecture:**
   Benefit from a modularized plugin structure with access to selected runs and groups, offering you maximum flexibility.
@@ -71,7 +71,7 @@ Flexible and Modular Architecture
 
 
 Broad Optimizer Support
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 - **Optimizer Support:**
   Work with many frameworks and optimizers using our converters, including converters for SMAC, BOHB, AMLTK, and Optuna.
@@ -84,14 +84,14 @@ Broad Optimizer Support
 
 
 Developer and API Features
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - **API Mode:**
   Interact with the code directly through API mode, allowing you to bypass the graphical interface if preferred.
 
 
 Citation
-^^^^^^^^
+--------
 
 If you use DeepCAVE in one of your research projects, please cite our `ReALML@ICML'22 workshop paper <https://arxiv.org/abs/2206.03493>`_:
 
