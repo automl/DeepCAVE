@@ -26,7 +26,7 @@ Furthermore, to load an Optuna run into DeepCAVE, it is necessary to install Opt
 
    .. code-block:: bash
 
-        make install-optuna
+        pip install deepcave[optuna]
 
 .. warning::
     Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges

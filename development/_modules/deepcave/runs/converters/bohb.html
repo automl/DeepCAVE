@@ -884,7 +884,7 @@
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">&quot;The HpBandSter package is required to load BOHB runs. &quot;</span>
-                <span class="s2">&quot;Please install it via `make install-bohb`&quot;</span>
+                <span class="s2">&quot;Please install it via `pip install deepcave[bohb]`&quot;</span>
             <span class="p">)</span>
 
         <span class="n">bohb</span> <span class="o">=</span> <span class="n">logged_results_to_HBS_result</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>

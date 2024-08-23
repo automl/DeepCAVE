@@ -5,4 +5,4 @@ To load an BOHB run into DeepCAVE, it is necessary to install HpBandSter, e.g. v
 
    .. code-block:: bash
 
-        make install-bohb
+        pip install deepcave[bohb]
