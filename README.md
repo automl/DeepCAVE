@@ -132,4 +132,4 @@ If you use DeepCAVE in one of your research projects, please cite our [ReALML@IC
 }
 ```
 
-Copyright (C) 2016-2022  [AutoML Group](http://www.automl.org/).
+Copyright (C) 2021-2024 The DeepCAVE Authors

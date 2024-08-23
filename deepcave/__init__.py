@@ -18,9 +18,12 @@ from pathlib import Path
 
 name = "DeepCAVE"
 package_name = "deepcave"
-author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
+author = (
+    "S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and "
+    "R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer"
+)
 author_email = "l.fehring@ai.uni-hannover.de"
-description = "An interactive framework to visualize and analyze your AutoML process in real-time."
+description = "A Visualization and Analysis Tool for Automated Machine Learning."
 url = "automl.org"
 project_urls = {
     "Documentation": "https://automl.github.io/DeepCAVE/main",
