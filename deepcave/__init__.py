@@ -1,3 +1,17 @@
+# Copyright 2021-2024 The DeepCAVE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #  noqa: D400
 """
 # DeepCAVE
@@ -18,9 +32,12 @@ from pathlib import Path
 
 name = "DeepCAVE"
 package_name = "deepcave"
-author = "R. Sass and E. Bergman and A. Biedenkapp and F. Hutter and M. Lindauer"
+author = (
+    "S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and "
+    "R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer"
+)
 author_email = "l.fehring@ai.uni-hannover.de"
-description = "An interactive framework to visualize and analyze your AutoML process in real-time."
+description = "A Visualization and Analysis Tool for Automated Machine Learning."
 url = "automl.org"
 project_urls = {
     "Documentation": "https://automl.github.io/DeepCAVE/main",
