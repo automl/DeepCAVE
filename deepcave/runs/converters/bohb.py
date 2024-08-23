@@ -100,7 +100,7 @@ class BOHBRun(Run):
         except ImportError:
             raise ImportError(
                 "The HpBandSter package is required to load BOHB runs. "
-                "Please install it via `make install-bohb`"
+                "Please install it via `pip install deepcave[bohb]`"
             )
 
         bohb = logged_results_to_HBS_result(str(path))

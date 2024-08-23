@@ -20,6 +20,14 @@ installed directly. If you use a different environment, make sure that
     conda install -c anaconda swig
     pip install DeepCAVE
 
+To load runs created with Optuna or the BOHB optimizer, you need to install the
+respective packages by running:
+
+.. code:: bash
+
+    pip install deepcave[optuna]
+    pip install deepcave[bohb]
+
 
 If you want to contribute to DeepCAVE, you can clone it from GitHub and install the dev package:
 
@@ -30,6 +38,13 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
     conda activate DeepCAVE
     conda install -c anaconda swig
     make install-dev
+
+To try the examples for recording your results in DeepCAVE format, run this after installing:
+
+.. code:: bash
+
+    make install-examples
+
 
 .. warning::
 

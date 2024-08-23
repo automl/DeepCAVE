@@ -134,7 +134,7 @@ class OptunaRun(Run):
         except ImportError:
             raise ImportError(
                 "The Optuna package is required to load Optuna runs. "
-                "Please install it via `make install-optuna`"
+                "Please install it via `pip install deepcave[optuna]`"
             )
 
         # Load the optuna study from the file path

@@ -1,3 +1,8 @@
+# Version 1.3.1
+
+## Quality of Life
+- Improved documentation on installation of extra requirements.
+
 # Version 1.3
 
 ## Converters
