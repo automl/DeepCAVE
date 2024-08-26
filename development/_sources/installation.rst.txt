@@ -28,6 +28,11 @@ respective packages by running:
     pip install deepcave[optuna]
     pip install deepcave[bohb]
 
+To try the examples for recording your results in DeepCAVE format, run this after installing:
+
+.. code:: bash
+
+    pip install deepcave[examples]
 
 If you want to contribute to DeepCAVE, you can clone it from GitHub and install the dev package:
 
@@ -38,12 +43,6 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
     conda activate DeepCAVE
     conda install -c anaconda swig
     make install-dev
-
-To try the examples for recording your results in DeepCAVE format, run this after installing:
-
-.. code:: bash
-
-    make install-examples
 
 
 .. warning::
