@@ -11,4 +11,4 @@ You can install them via the following command:
 
 .. code-block:: bash
 
-    make install-examples
+    pip install deepcave[examples]

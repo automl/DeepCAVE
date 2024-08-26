@@ -1,3 +1,9 @@
+# Version 1.3.1
+
+## Quality of Life
+- Improve documentation on installation of extra requirements.
+- Add licence information to all source files.
+
 # Version 1.3
 
 ## Converters
