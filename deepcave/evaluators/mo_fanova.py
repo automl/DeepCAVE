@@ -68,7 +68,6 @@ class MOfANOVA(fANOVA):
         weightings : numpy.ndarray
              The weightings.
         """
-        print(df[objectives_normed])
         optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
         return (
             df[optimized][objectives_normed]
@@ -137,7 +136,7 @@ class MOfANOVA(fANOVA):
         df = self.run.get_encoded_data(
             objectives, budget, specific=True, include_combined_cost=True
         )
-        X = df[self.hp_names].to_numpy()
+
 
         # normalize objectives
         objectives_normed = list()
@@ -147,10 +146,11 @@ class MOfANOVA(fANOVA):
                 df[obj.name].max() - df[obj.name].min()
             )
             objectives_normed.append(normed)
-
-        df_all = pd.DataFrame([])
+        df = df.dropna(subset=objectives_normed)
+        X = df[self.hp_names].to_numpy()
         weightings = self.get_weightings(objectives_normed, df)
         print(weightings)
+        df_all = pd.DataFrame([])
 
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
