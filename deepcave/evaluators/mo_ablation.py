@@ -214,6 +214,12 @@ class MOAblation(Ablation):
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
             df_res = self.calculate_ablation_path(df, objectives_normed, w, budget)
+            if df_res is None:
+                columns = ["hp_name", "importance", "variance", "new_performance", "weight"]
+                self.df_importances = pd.DataFrame(0, index=np.arange(len(self.hp_names) + 1),
+                                                   columns=columns)
+                self.df_importances["hp_name"] = ["Default"] + self.hp_names
+                return
             df_res["weight"] = w[0]
             self.df_importances = pd.concat([self.df_importances, df_res])
         self.df_importances = self.df_importances.reset_index(drop=True)

@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     objective_id1 = run.get_objective_ids()[0]
     objective_id2 = run.get_objective_ids()[1]
-    budget_id = run.get_budget_ids()[0]
+    budget_id = run.get_budget_ids()[1]
 
     # Instantiate the plugin
     plugin = AblationPaths()
