@@ -397,7 +397,6 @@ class AblationPaths(StaticPlugin):
         """
         if inputs["objective_id2"] and inputs["objective_id2"]!=-1:
             # MO case: other plot
-            print(outputs["objective_id2"])
             return AblationPaths.load_outputs_mo(run, inputs, outputs)
 
 
