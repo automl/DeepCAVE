@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 
 
-def is_pareto_efficient(costs):
+def is_pareto_efficient(costs: np.ndarray) -> np.ndarray:
     """
     Find the pareto-efficient points.
 

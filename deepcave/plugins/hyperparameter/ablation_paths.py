@@ -593,7 +593,7 @@ class AblationPaths(StaticPlugin):
         # Update the layout
         fig.update_layout(
             xaxis_title="Weight for " + objective1,
-            yaxis_title="Importance",
+            yaxis_title="Sum of the weighted normalized performance",
             xaxis=dict(range=[0, 1], tickangle=-45),
             yaxis=dict(
                 range=[
