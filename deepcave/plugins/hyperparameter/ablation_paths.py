@@ -311,9 +311,8 @@ class AblationPaths(StaticPlugin):
             If the number of trees is not specified.
         """
         objective = run.get_objective(inputs["objective_id1"])
-        if inputs["objective_id2"]:
-            if inputs["objective_id2"] != -1:
-                objective = [objective, run.get_objective(inputs["objective_id2"])]
+        if inputs["objective_id2"] not in (None, -1):
+            objective = [objective, run.get_objective(inputs["objective_id2"])]
         n_trees = inputs["n_trees"]
 
         if n_trees is None:
@@ -395,7 +394,7 @@ class AblationPaths(StaticPlugin):
         return [figure1, figure2]
             The figures of the ablation paths.
         """
-        if inputs["objective_id2"] and inputs["objective_id2"]!=-1:
+        if inputs["objective_id2"] not in (None, -1):
             # MO case: other plot
             return AblationPaths.load_outputs_mo(run, inputs, outputs)
 

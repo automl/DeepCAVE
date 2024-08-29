@@ -337,7 +337,7 @@ class Importances(StaticPlugin):
         """
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
-                objective = [objective, run.get_objective(inputs["objective_id2"])]
+            objective = [objective, run.get_objective(inputs["objective_id2"])]
         method = inputs["method"]
         n_trees = inputs["n_trees"]
 
@@ -450,7 +450,6 @@ class Importances(StaticPlugin):
 
         if inputs["objective_id2"] not in (None, -1):
             # MO case: other plot
-            print('test')
             return Importances.load_ouputs_mo_fanova(run, inputs, outputs)
 
         # First selected, should always be shown first
