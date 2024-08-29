@@ -402,7 +402,6 @@ class Importances(StaticPlugin):
                 if any(pd.read_json(StringIO(importances))["importance"].isna()):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
             else:
-                assert not isinstance(evaluator, (MOLPI, MOfANOVA))
                 importances = evaluator.get_importances(hp_names)
                 assert isinstance(importances, Dict)
                 if any(np.isnan(val) for value in importances.values() for val in value):
