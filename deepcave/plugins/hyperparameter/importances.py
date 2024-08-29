@@ -224,7 +224,7 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run: Union[AbstractRun, list[AbstractRun], None], _: Any, inputs: Dict[str, Any]) -> Dict[
+    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[
         str, Any]:  # type: ignore # noqa: E501
         """
         Works like 'load_inputs' but called after inputs have changed.
@@ -236,7 +236,7 @@ class Importances(StaticPlugin):
 
         Parameters
         ----------
-        run : Union[AbstractRun, list[AbstractRun], None]
+        run
             The selected run.
         inputs : Dict[str, Any]
             Current content of the inputs.
