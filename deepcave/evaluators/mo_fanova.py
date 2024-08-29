@@ -68,6 +68,7 @@ class MOfANOVA(fANOVA):
         weightings : numpy.ndarray
              The weightings.
         """
+        print(df[objectives_normed])
         optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
         return (
             df[optimized][objectives_normed]
@@ -89,6 +90,7 @@ class MOfANOVA(fANOVA):
         is_efficient : numpy.ndarray
              A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
         """
+        print('costs', costs)
         is_efficient = np.ones(costs.shape[0], dtype=bool)
         for i, c in enumerate(costs):
             is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
