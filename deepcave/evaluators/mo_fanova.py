@@ -93,6 +93,7 @@ class MOfANOVA(fANOVA):
         )
 
         # normalize objectives
+        assert isinstance(objectives, list)
         objectives_normed = list()
         for obj in objectives:
             normed = obj.name + "_normed"

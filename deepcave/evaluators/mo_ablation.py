@@ -91,7 +91,7 @@ class MOAblation(Ablation):
 
         return self.df_importances.to_json()
 
-    def predict(self, cfg, weighting):
+    def predict(self, cfg: dict, weighting: np.ndarray) -> Tuple[float, float]:
         """
         Predict the performance of the input configuration.
 
@@ -142,6 +142,7 @@ class MOAblation(Ablation):
             The seed for the surrogate model.
             Default is 0.
         """
+        assert isinstance(objectives, list)
         for objective in objectives:
             assert isinstance(objective, Objective)
 
@@ -283,7 +284,7 @@ class MOAblation(Ablation):
         incumbent_config: Any,
         def_cost: Any,
         hp_it: List[str],
-        weighting: Tuple[float, float],
+        weighting: np.ndarray[Any, Any],
     ) -> Tuple[Any, Any, Any, Any]:
         """
         Calculate the ablation importance for each hyperparameter.
@@ -298,7 +299,7 @@ class MOAblation(Ablation):
             The default cost.
         hp_it: List[str]
             A list of the HPs that still have to be looked at.
-        weighting : List[float]
+        weighting : np.ndarray[Any, Any]
             The weighting of the objective values.
 
         Returns

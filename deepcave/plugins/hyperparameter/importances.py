@@ -49,6 +49,7 @@ from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
+from deepcave.runs.objective import Objective
 
 logger = get_logger(__name__)
 
@@ -341,6 +342,7 @@ class Importances(StaticPlugin):
             If the number of trees is not specified.
             If the method is not found.
         """
+        objective: Union[Objective, list[Objective]] = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]
