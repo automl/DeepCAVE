@@ -1,3 +1,8 @@
+# Version 1.3.2
+
+## Features
+- Allow Importance and ablation path analysis for multi-objective runs.
+
 # Version 1.3.1
 
 ## Quality of Life
