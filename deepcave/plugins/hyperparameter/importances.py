@@ -46,7 +46,7 @@ from deepcave.utils.layout import get_checklist_options, get_select_options, hel
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
 import pandas as pd
-import seaborn as sns
+import plotly.express as px
 
 logger = get_logger(__name__)
 
@@ -591,14 +591,15 @@ class Importances(StaticPlugin):
             # Sort data by the weight column
             group_data = group_data.sort_values(by='weight')
 
-            colors = {label: color for label, color in zip(idx, sns.color_palette('colorblind', n_colors=len(idx)))}
+            color_palette = px.colors.qualitative.Plotly  # Choose a color palette
+            colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(idx.unique())}
 
             figure.add_trace(go.Scatter(
                 x=group_data['weight'],
                 y=group_data['importance'],
                 mode='lines',
                 name=group_id,
-                fillcolor=colors[group_id]
+                line=dict(color=colors[group_id])
             ))
 
             # Add the shaded area representing the variance
