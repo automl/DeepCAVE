@@ -153,6 +153,6 @@ class MOfANOVA(fANOVA):
             raise RuntimeError("Importance scores must be calculated first.")
 
         if hp_names:
-            return self.importances_.loc[self.importances_["hp_name"].isin(hp_names)]
+            return self.importances_.loc[self.importances_["hp_name"].isin(hp_names)].to_json()
         else:
             return self.importances_.to_json()
