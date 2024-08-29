@@ -25,7 +25,7 @@ processing the data and loading the outputs.
     - Ablation_Paths: This class provides a plugin for the visualization of the ablation paths.
 """
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Union, Optional
 
 import math
 from io import StringIO
@@ -318,7 +318,7 @@ class AblationPaths(StaticPlugin):
         RuntimeError
             If the number of trees is not specified.
         """
-        objective: Union[Objective, list[Objective], None] = None
+        objective: Union[Optional[Objective], list[Optional[Objective]], None] = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]

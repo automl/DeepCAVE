@@ -342,7 +342,7 @@ class Importances(StaticPlugin):
             If the number of trees is not specified.
             If the method is not found.
         """
-        objective: Union[Objective, list[Objective], None] = None
+        objective: Union[Optional[Objective], list[Optional[Objective]], None] = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]
