@@ -162,6 +162,7 @@ class MOAblation(Ablation):
 
             if obj.optimize == "upper":
                 df[normed] = 1-df[normed]
+                print('upper')
             objectives_normed.append(normed)
 
             # train one model per objective
@@ -222,8 +223,6 @@ class MOAblation(Ablation):
         inc_cost, _ = self.predict(
             self.run.encode_config(incumbent_config, specific=True), weighting
         )
-
-        # TODO make sure objectives are minimized
 
         if inc_cost > def_cost:
             self.logger.warning(
