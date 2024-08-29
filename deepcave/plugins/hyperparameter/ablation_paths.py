@@ -28,6 +28,7 @@ processing the data and loading the outputs.
 from typing import Any, Callable, Dict, List
 
 import math
+from io import StringIO
 
 import dash_bootstrap_components as dbc
 import numpy as np
@@ -543,7 +544,7 @@ class AblationPaths(StaticPlugin):
             budget_id = int(budget_id)
             if budget_id != selected_budget_id:
                 continue
-            df_importances = pd.read_json(importances_json)
+            df_importances = pd.read_json(StringIO(importances_json))
             data[budget_id] = df_importances
 
         # Sort by last fidelity now
