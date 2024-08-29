@@ -25,7 +25,7 @@ processing the data and loading the outputs.
     - Ablation_Paths: This class provides a plugin for the visualization of the ablation paths.
 """
 
-from typing import Any, Callable, Dict, List, Union, Optional
+from typing import Any, Callable, Dict, List, Union
 
 import math
 from io import StringIO
@@ -46,7 +46,6 @@ from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, save_image
-from deepcave.runs.objective import Objective
 
 
 class AblationPaths(StaticPlugin):
@@ -341,6 +340,7 @@ class AblationPaths(StaticPlugin):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
             if isinstance(objective, list):
+                assert isinstance(evaluator, MOAblation)
                 data[budget_id] = evaluator.get_importances()
             else:
                 performances = evaluator.get_ablation_performances()
