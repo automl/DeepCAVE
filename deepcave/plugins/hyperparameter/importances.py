@@ -590,12 +590,14 @@ class Importances(StaticPlugin):
             # Sort data by the weight column
             group_data = group_data.sort_values(by='weight')
 
+            colors = {label: color for label, color in zip(hps, sns.color_palette('colorblind', n_colors=len(hps)))}
+
             figure.add_trace(go.Scatter(
                 x=group_data['weight'],
                 y=group_data['importance'],
                 mode='lines',
                 name=group_id,
-                fillcolor=group_id
+                fillcolor=colors[group_id]
             ))
 
             # Add the shaded area representing the variance
@@ -610,7 +612,7 @@ class Importances(StaticPlugin):
                 hoverinfo='skip',
                 showlegend=False,
                 opacity=0.2,
-                fillcolor=group_id
+                fillcolor=colors[group_id]
             ))
 
         # Update the layout for labels, title, and axis limits
