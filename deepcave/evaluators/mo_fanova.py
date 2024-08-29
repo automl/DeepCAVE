@@ -136,10 +136,12 @@ class MOfANOVA(fANOVA):
             objectives, budget, specific=True, include_combined_cost=True
         )
         X = df[self.hp_names].to_numpy()
+        print(X)
 
         # normalize objectives
         objectives_normed = list()
         for obj in objectives:
+            print(obj.name)
             normed = obj.name + "_normed"
             df[normed] = (df[obj.name] - df[obj.name].min()) / (
                 df[obj.name].max() - df[obj.name].min()
@@ -165,6 +167,7 @@ class MOfANOVA(fANOVA):
         self.importances_ = df_all.rename(
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
+        print(self.importances_)
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, sort: bool = True
