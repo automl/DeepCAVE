@@ -91,7 +91,7 @@ class MOAblation(Ablation):
 
         return self.df_importances.to_json()
 
-    def predict(self, cfg: dict, weighting: np.ndarray) -> Tuple[float, float]:
+    def predict(self, cfg: list[Any], weighting: np.ndarray) -> Tuple[float, float]:
         """
         Predict the performance of the input configuration.
 
