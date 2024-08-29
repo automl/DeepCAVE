@@ -35,6 +35,19 @@ global impact of hyperparameters. For more details on fANOVA, please refer to th
 `An Efficient Approach for Assessing Hyperparameter Importance
 <https://proceedings.mlr.press/v32/hutter14.html>`_.
 
+Multi-Objective Importance
+--------------------------
+
+Both LPI and fANOVA can be applied to two objectives displaying how the importance changes from one
+objective to the other. Based on a weighting scheme, the two objectives are scalarized to form a
+single objective for which the importance is calculated. The resulting plot then shows the
+scalarized importance for different weightings. The weightings are calculated based on the points
+on the pareto front which is the set of non-dominated solutions. For more detail on this, please
+see the paper `Hyperparameter Importance Analysis for Multi-Objective AutoML
+<https://arxiv.org/abs/2405.07640>`_.
+
+.. image:: ../images/plugins/importances_mo.png
+
 
 Options
 -------
