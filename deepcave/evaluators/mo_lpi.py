@@ -314,9 +314,7 @@ class MOLPI(LPI):
         }
         return imp_var_dict
 
-    def get_importances(
-        self, hp_names: Optional[List[str]] = None, sort: bool = True
-    ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
+    def get_importances(self, hp_names: List[str]) -> str:
         """
         Return the importance scores from the passed Hyperparameter names.
 
@@ -325,8 +323,6 @@ class MOLPI(LPI):
         hp_names : Optional[List[str]]
             Selected Hyperparameter names to get the importance scores from. If None, all
             Hyperparameters of the configuration space are used.
-        sort : bool, optional
-            Whether the Hyperparameters should be sorted by importance. By default True.
 
         Returns
         -------
@@ -342,12 +338,7 @@ class MOLPI(LPI):
         if self.importances is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        res = (
-            self.importances.sort_values(by="importance", ascending=False)
-            if sort
-            else self.importances
-        )
-
         if hp_names:
-            res = res.loc[self.importances["hp_name"].isin(hp_names)]
-        return res.to_json()
+            return self.importances.loc[self.importances["hp_name"].isin(hp_names)].to_json()
+        else:
+            return self.importances.to_json()
