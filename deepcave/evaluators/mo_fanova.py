@@ -26,13 +26,13 @@ Utilities provide calculation of the data wrt the budget and train the forest on
 
 from typing import Dict, List, Optional, Tuple, Union
 
-import numpy as np
 import pandas as pd
 
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
+from deepcave.utils.multi_objective_importance import get_weightings
 
 
 class MOfANOVA(fANOVA):
@@ -51,51 +51,6 @@ class MOfANOVA(fANOVA):
 
         super().__init__(run)
         self.importances_ = None
-
-    def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
-        """
-        Calculate the weighting for the weighted importance using the points on the pareto-front.
-
-        Parameters
-        ----------
-        objectives_normed : List[str]
-            The normalized objective names as a list of strings.
-        df : pandas.dataframe
-            The dataframe containing the encoded data.
-
-        Returns
-        -------
-        weightings : numpy.ndarray
-             The weightings.
-        """
-        optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
-        return (
-            df[optimized][objectives_normed]
-            .T.apply(lambda values: values / values.sum())
-            .T.to_numpy()
-        )
-
-    def is_pareto_efficient(self, costs):
-        """
-        Find the pareto-efficient points.
-
-        Parameters
-        ----------
-        costs : numpy.ndarray
-            An (n_points, n_costs) array.
-
-        Returns
-        -------
-        is_efficient : numpy.ndarray
-             A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
-        """
-        print('costs', costs)
-        is_efficient = np.ones(costs.shape[0], dtype=bool)
-        for i, c in enumerate(costs):
-            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
-                np.any(costs[i + 1 :] > c, axis=1)
-            )
-        return is_efficient
 
     def calculate(
         self,
@@ -148,7 +103,7 @@ class MOfANOVA(fANOVA):
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()
-        weightings = self.get_weightings(objectives_normed, df)
+        weightings = get_weightings(objectives_normed, df)
         df_all = pd.DataFrame([])
 
         # calculate importance for each weighting generated from the pareto efficient points
