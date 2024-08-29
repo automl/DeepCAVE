@@ -557,6 +557,8 @@ class AblationPaths(StaticPlugin):
                                           df['importance'])
 
         grouped_df = df.groupby(['weight', 'hp_name'])['accuracy'].sum().unstack(fill_value=0)
+        color_palette = px.colors.qualitative.Plotly  # Choose a color palette
+        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys()))}
 
         # Create traces for each hp_name
         traces = []
@@ -569,7 +571,9 @@ class AblationPaths(StaticPlugin):
                 name=column,
                 hoverinfo='skip',
                 showlegend=True,
-                opacity=0.2
+                opacity=0.2,
+                fillcolor=colors[column],
+                line=dict(color=colors[column]),
             ))
 
         fig = go.Figure(data=traces)
@@ -578,9 +582,6 @@ class AblationPaths(StaticPlugin):
         fig.update_layout(
             xaxis_title="Weight for " + objective1,
             yaxis_title="Importance",
-            title={
-                "text": "Multi-Objective Ablation Path",
-                "font": {"size": config.FIGURE_FONT_SIZE + 2},},
             xaxis=dict(range=[0, 1], tickangle=-45),
             yaxis=dict(
                 range=[
