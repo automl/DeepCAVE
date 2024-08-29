@@ -21,8 +21,8 @@ This module provides utilities for calculating multi-objective importances.
 
 from typing import List
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 
 def is_pareto_efficient(costs):
@@ -42,7 +42,7 @@ def is_pareto_efficient(costs):
     is_efficient = np.ones(costs.shape[0], dtype=bool)
     for i, c in enumerate(costs):
         is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
-            np.any(costs[i + 1:] > c, axis=1)
+            np.any(costs[i + 1 :] > c, axis=1)
         )
     return is_efficient
 
@@ -65,7 +65,5 @@ def get_weightings(objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray
     """
     optimized = is_pareto_efficient(df[objectives_normed].to_numpy())
     return (
-        df[optimized][objectives_normed]
-        .T.apply(lambda values: values / values.sum())
-        .T.to_numpy()
+        df[optimized][objectives_normed].T.apply(lambda values: values / values.sum()).T.to_numpy()
     )

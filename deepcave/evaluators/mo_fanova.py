@@ -92,7 +92,6 @@ class MOfANOVA(fANOVA):
             objectives, budget, specific=True, include_combined_cost=True
         )
 
-
         # normalize objectives
         objectives_normed = list()
         for obj in objectives:

@@ -121,7 +121,6 @@ class MOLPI(LPI):
             objectives=objectives, budget=budget, specific=True, include_combined_cost=True
         )
 
-
         # normalize objectives
         assert isinstance(objectives, list)
         objectives_normed = list()
