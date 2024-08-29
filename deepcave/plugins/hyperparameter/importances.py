@@ -236,7 +236,7 @@ class Importances(StaticPlugin):
 
         Parameters
         ----------
-        run
+        run : AbstractRun
             The selected run.
         inputs : Dict[str, Any]
             Current content of the inputs.

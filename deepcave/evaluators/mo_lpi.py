@@ -76,12 +76,12 @@ class MOLPI(LPI):
         self.importances: Optional[pd.DataFrame] = None
 
     def calculate(
-        self,
-        objectives: Optional[Union[Objective, List[Objective]]] = None,
-        budget: Optional[Union[int, float]] = None,
-        continous_neighbors: int = 500,
-        n_trees: int = 10,
-        seed: int = 0,
+            self,
+            objectives: Optional[Union[Objective, List[Objective]]] = None,
+            budget: Optional[Union[int, float]] = None,
+            continous_neighbors: int = 500,
+            n_trees: int = 10,
+            seed: int = 0,
     ) -> None:
         """
         Prepare the data and train a RandomForest model.
@@ -125,10 +125,10 @@ class MOLPI(LPI):
         for obj in objectives:
             normed = obj.name + "_normed"
             df[normed] = (df[obj.name] - df[obj.name].min()) / (
-                df[obj.name].max() - df[obj.name].min()
+                    df[obj.name].max() - df[obj.name].min()
             )
             if obj.optimize == "upper":
-                df[normed] = 1-df[normed]
+                df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()

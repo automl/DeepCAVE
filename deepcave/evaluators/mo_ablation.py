@@ -119,11 +119,11 @@ class MOAblation(Ablation):
         return mean, var
 
     def calculate(
-        self,
-        objectives: Optional[Union[Objective, List[Objective]]],  # noqa
-        budget: Optional[Union[int, float]] = None,  # noqa
-        n_trees: int = 50,  # noqa
-        seed: int = 0,  # noqa
+            self,
+            objectives: Optional[Union[Objective, List[Objective]]],  # noqa
+            budget: Optional[Union[int, float]] = None,  # noqa
+            n_trees: int = 50,  # noqa
+            seed: int = 0,  # noqa
     ) -> None:
         """
         Calculate the MO ablation path performances and improvements.
@@ -157,11 +157,11 @@ class MOAblation(Ablation):
         for obj in objectives:
             normed = obj.name + "_normed"
             df[normed] = (df[obj.name] - df[obj.name].min()) / (
-                df[obj.name].max() - df[obj.name].min()
+                    df[obj.name].max() - df[obj.name].min()
             )
 
             if obj.optimize == "upper":
-                df[normed] = 1-df[normed]
+                df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
 
             # train one model per objective
@@ -186,7 +186,8 @@ class MOAblation(Ablation):
             self.df_importances = pd.concat([self.df_importances, df_res])
         self.df_importances = self.df_importances.reset_index(drop=True)
 
-    def calculate_ablation_path(self, df: pd.DataFrame, objectives_normed: List[str], weighting: np.ndarray, budget: Optional[Union[int, float]]) -> pd.DataFrame:
+    def calculate_ablation_path(self, df: pd.DataFrame, objectives_normed: List[str], weighting: np.ndarray,
+                                budget: Optional[Union[int, float]]) -> pd.DataFrame:
         """
         Calculate the ablation path performances.
 
@@ -280,12 +281,12 @@ class MOAblation(Ablation):
             return df_abl.reset_index(drop=True)
 
     def ablation(
-        self,
-        budget: Optional[Union[int, float]],
-        incumbent_config: Any,
-        def_cost: Any,
-        hp_it: List[str],
-        weighting: np.ndarray[Any, Any],
+            self,
+            budget: Optional[Union[int, float]],
+            incumbent_config: Any,
+            def_cost: Any,
+            hp_it: List[str],
+            weighting: np.ndarray[Any, Any],
     ) -> Tuple[Any, Any, Any, Any]:
         """
         Calculate the ablation importance for each hyperparameter.

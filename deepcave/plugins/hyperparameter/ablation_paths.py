@@ -212,7 +212,8 @@ class AblationPaths(StaticPlugin):
             "show_confidence": {"options": get_select_options(binary=True), "value": "false"},
         }
 
-    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore # noqa: E501
+    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[
+        str, Any]:  # type: ignore # noqa: E501
         """
         Works like 'load_inputs' but called after inputs have changed.
 
@@ -335,7 +336,7 @@ class AblationPaths(StaticPlugin):
             evaluator = Ablation(run)
 
         # Collect data
-        data: Dict[Any,Any] = {}
+        data: Dict[Any, Any] = {}
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
@@ -476,7 +477,7 @@ class AblationPaths(StaticPlugin):
             barmode="group",
             title={
                 "text": "Ablation Path when Iteratively Setting the Hyperparameters to Their "
-                "Incumbent Value",
+                        "Incumbent Value",
                 "font": {"size": config.FIGURE_FONT_SIZE + 2},
             },
             yaxis_title=objective.name,
