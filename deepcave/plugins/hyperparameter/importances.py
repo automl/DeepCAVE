@@ -395,7 +395,7 @@ class Importances(StaticPlugin):
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
-
+            importances: Union[dict[str, tuple[float, float]], dict[Union[str, tuple[str, ...]], tuple[float, float, float, float]],str, None] = None
             if isinstance(objective, list):
                 assert isinstance(evaluator, (MOLPI, MOfANOVA))
                 importances = evaluator.get_importances_(hp_names)
