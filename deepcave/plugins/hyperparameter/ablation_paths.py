@@ -43,6 +43,7 @@ from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, save_image
 import pandas as pd
+import plotly.express as px
 
 class AblationPaths(StaticPlugin):
     """
