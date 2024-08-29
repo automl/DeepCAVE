@@ -109,9 +109,9 @@ class MOLPI(LPI):
 
         # Set variables
         self.continous_neighbors = continous_neighbors
-        self.incumbent, _ = self.run.get_incumbent(budget=budget, objectives=objectives)
+        # self.incumbent, _ = self.run.get_incumbent(budget=budget, objectives=objectives)
         self.default = self.cs.get_default_configuration()
-        self.incumbent_array = self.incumbent.get_array()
+        # self.incumbent_array = self.incumbent.get_array()
 
         self.seed = seed
         self.rs = np.random.RandomState(seed)
@@ -141,6 +141,10 @@ class MOLPI(LPI):
             # Use same forest as for fanova
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
+
+            incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
+            self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
+            self.incumbent_array = self.incumbent.get_array()
             importances = self.calc_one_weighting()
             df_res = pd.DataFrame(importances).loc[0:1].T.reset_index()
             df_res["weight"] = w[0]
