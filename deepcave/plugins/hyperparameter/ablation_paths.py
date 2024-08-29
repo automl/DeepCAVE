@@ -559,7 +559,7 @@ class AblationPaths(StaticPlugin):
 
         grouped_df = df.groupby(['weight', 'hp_name'])['accuracy'].sum().unstack(fill_value=0)
         color_palette = px.colors.qualitative.Plotly  # Choose a color palette
-        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys()))}
+        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys())+['Default'])}
 
         # Create traces for each hp_name
         traces = []
