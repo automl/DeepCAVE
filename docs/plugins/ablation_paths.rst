@@ -19,6 +19,21 @@ To learn more about Ablation Paths, please see the paper
 .. image:: ../images/plugins/ablation_paths.png
 .. image:: ../images/plugins/ablation_paths2.png
 
+Multi-Objective Ablation Paths
+------------------------------
+
+The ablation path analysis can be applied to two objectives displaying how the importance changes
+from one objective to the other. Based on a weighting scheme, the two objectives are scalarized to
+form a single objective for which the ablation path is calculated. The resulting plot shows the
+contribution of each hyperparameter to the performance for different weightings, including the
+default performance. Note that the y-axis displays the sum of the scalarized normalized performance.
+The weightings are calculated based on the points on the pareto-front, which is the set of
+non-dominated solutions. For more detail on this, please see the paper
+`Hyperparameter Importance Analysis for Multi-Objective AutoML
+<https://arxiv.org/abs/2405.07640>`_.
+
+.. image:: ../images/plugins/ablation_paths_mo.png
+
 Options
 -------
 * **Objective**: Select the objective function you wish to analyze.
