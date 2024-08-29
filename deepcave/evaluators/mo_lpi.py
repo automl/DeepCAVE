@@ -72,6 +72,7 @@ class MOLPI(LPI):
 
     def __init__(self, run: AbstractRun):
         super().__init__(run)
+        self.importances: Optional[pd.DataFrame] = None
 
     def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
         """
