@@ -149,13 +149,11 @@ class MOfANOVA(fANOVA):
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()
         weightings = self.get_weightings(objectives_normed, df)
-        print(weightings)
         df_all = pd.DataFrame([])
 
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
             Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
-            print(Y)
 
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
@@ -164,13 +162,11 @@ class MOfANOVA(fANOVA):
                 .loc[0:1]
                 .T.reset_index()
             )
-            print(df_res)
             df_res["weight"] = w[0]
             df_all = pd.concat([df_all, df_res])
         self.importances_ = df_all.rename(
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
-        print(self.importances_)
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, sort: bool = True

@@ -162,7 +162,7 @@ class MOLPI(LPI):
         df = self.run.get_encoded_data(
             objectives=objectives, budget=budget, specific=True, include_combined_cost=True
         )
-        X = df[self.hp_names].to_numpy()
+
 
         # normalize objectives
         assert isinstance(objectives, list)
@@ -173,7 +173,8 @@ class MOLPI(LPI):
                 df[obj.name].max() - df[obj.name].min()
             )
             objectives_normed.append(normed)
-
+        df = df.dropna(subset=objectives_normed)
+        X = df[self.hp_names].to_numpy()
         df_all = pd.DataFrame([])
         weightings = self.get_weightings(objectives_normed, df)
 
