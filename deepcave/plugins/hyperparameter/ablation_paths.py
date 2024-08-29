@@ -593,4 +593,4 @@ class AblationPaths(StaticPlugin):
         save_image(fig, "ablation_path_performance.pdf")
 
 
-        return [fig, None]
+        return [fig, go.Figure()]
