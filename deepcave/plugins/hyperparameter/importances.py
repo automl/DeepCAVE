@@ -46,6 +46,7 @@ from deepcave.utils.layout import get_checklist_options, get_select_options, hel
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
 import pandas as pd
+import seaborn as sns
 
 logger = get_logger(__name__)
 
@@ -590,7 +591,7 @@ class Importances(StaticPlugin):
             # Sort data by the weight column
             group_data = group_data.sort_values(by='weight')
 
-            colors = {label: color for label, color in zip(hps, sns.color_palette('colorblind', n_colors=len(hps)))}
+            colors = {label: color for label, color in zip(idx, sns.color_palette('colorblind', n_colors=len(idx)))}
 
             figure.add_trace(go.Scatter(
                 x=group_data['weight'],
