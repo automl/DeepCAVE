@@ -615,7 +615,8 @@ class Importances(StaticPlugin):
                 showlegend=False,
                 opacity=0.2,
                 fillcolor=colors[group_id],
-                line=dict(color=colors[group_id])
+                line=dict(color=colors[group_id]),
+                mode='lines',
             ))
 
         # Update the layout for labels, title, and axis limits
