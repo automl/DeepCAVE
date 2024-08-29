@@ -558,11 +558,10 @@ class AblationPaths(StaticPlugin):
 
         df = data[selected_budget_id][
             data[selected_budget_id]["hp_name"].isin(idx)
-        ]  # only keep selected hps
+        ].copy()  # only keep selected hps
 
-        df["accuracy"] = np.where(
-            df["hp_name"] == "Default", 1 - df["new_performance"], df["importance"]
-        )
+        df.loc[df["hp_name"] == "Default", "accuracy"] = 1 - df["new_performance"]
+        df.loc[df["hp_name"] != "Default", "accuracy"] = df["importance"]
 
         grouped_df = df.groupby(["weight", "hp_name"])["accuracy"].sum().unstack(fill_value=0)
         color_palette = px.colors.qualitative.Plotly  # Choose a color palette
