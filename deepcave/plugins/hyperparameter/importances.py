@@ -397,14 +397,13 @@ class Importances(StaticPlugin):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
 
-
             if isinstance(objective, list):
                 assert isinstance(evaluator, (MOLPI, MOfANOVA))
                 importances = evaluator.get_importances_(hp_names)
                 if any(pd.read_json(StringIO(importances))["importance"].isna()):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
             else:
-                assert isinstance(evaluator, (LocalEvaluator, GlobalEvaluator))
+                assert not isinstance(evaluator, (MOLPI, MOfANOVA))
                 importances = evaluator.get_importances(hp_names)
                 if any(np.isnan(val) for value in importances.values() for val in value):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
