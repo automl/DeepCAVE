@@ -101,7 +101,7 @@ class MOfANOVA(fANOVA):
                 df[obj.name].max() - df[obj.name].min()
             )
             if obj.optimize == "upper":
-                df[normed] = 1-df[normed]
+                df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()
@@ -125,8 +125,7 @@ class MOfANOVA(fANOVA):
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
 
-    def get_importances_(
-            self, hp_names: Optional[List[str]] = None) -> str:
+    def get_importances_(self, hp_names: Optional[List[str]] = None) -> str:
         """
         Return the importance scores from the passed Hyperparameter names.
 

@@ -161,7 +161,7 @@ class MOAblation(Ablation):
             )
 
             if obj.optimize == "upper":
-                df[normed] = 1-df[normed]
+                df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
 
             # train one model per objective
@@ -186,7 +186,13 @@ class MOAblation(Ablation):
             self.df_importances = pd.concat([self.df_importances, df_res])
         self.df_importances = self.df_importances.reset_index(drop=True)
 
-    def calculate_ablation_path(self, df: pd.DataFrame, objectives_normed: List[str], weighting: np.ndarray, budget: Optional[Union[int, float]]) -> pd.DataFrame:
+    def calculate_ablation_path(
+        self,
+        df: pd.DataFrame,
+        objectives_normed: List[str],
+        weighting: np.ndarray,
+        budget: Optional[Union[int, float]],
+    ) -> pd.DataFrame:
         """
         Calculate the ablation path performances.
 

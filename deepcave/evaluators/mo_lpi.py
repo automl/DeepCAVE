@@ -116,7 +116,11 @@ class MOLPI(LPI):
 
         # Get data
         df = self.run.get_encoded_data(
-            objectives=objectives, budget=budget, specific=True, include_combined_cost=True, include_config_ids=True
+            objectives=objectives,
+            budget=budget,
+            specific=True,
+            include_combined_cost=True,
+            include_config_ids=True,
         )
 
         # normalize objectives
@@ -128,7 +132,7 @@ class MOLPI(LPI):
                 df[obj.name].max() - df[obj.name].min()
             )
             if obj.optimize == "upper":
-                df[normed] = 1-df[normed]
+                df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()

@@ -335,7 +335,7 @@ class AblationPaths(StaticPlugin):
             evaluator = Ablation(run)
 
         # Collect data
-        data: Dict[Any,Any] = {}
+        data: Dict[Any, Any] = {}
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
