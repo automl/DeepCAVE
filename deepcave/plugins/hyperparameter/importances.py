@@ -584,11 +584,6 @@ class Importances(StaticPlugin):
         figure = go.Figure()
         df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep top hps
 
-        # # TODO: necessary?
-        # # convert back to float after json serialization
-        # for col in ['weight', 'importance', 'variance']:
-        #     df[col] = df[col].astype(float)
-
         # Group by 'hp_name' and plot each group
         for group_id, group_data in df.groupby('hp_name'):
             # Sort data by the weight column

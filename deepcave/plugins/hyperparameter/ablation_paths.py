@@ -397,6 +397,7 @@ class AblationPaths(StaticPlugin):
         """
         if inputs["objective_id2"] and inputs["objective_id2"]!=-1:
             # MO case: other plot
+            print(outputs["objective_id2"])
             return AblationPaths.load_outputs_mo(run, inputs, outputs)
 
 
@@ -548,11 +549,6 @@ class AblationPaths(StaticPlugin):
         idx = list(idx[:n_hps]) + ['Default']
 
         df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep selected hps
-
-        # TODO: necessary?
-        # convert back to float after json serialization
-        for col in ['weight', 'importance', 'variance', 'new_performance']:
-            df[col] = df[col].astype(float)
 
         df['accuracy'] = np.where(df['hp_name'] == 'Default', 1 - df['new_performance'],
                                           df['importance'])
