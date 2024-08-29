@@ -216,8 +216,9 @@ class MOAblation(Ablation):
             df_res = self.calculate_ablation_path(df, objectives_normed, w, budget)
             if df_res is None:
                 columns = ["hp_name", "importance", "variance", "new_performance", "weight"]
-                self.df_importances = pd.DataFrame(0, index=np.arange(len(self.hp_names) + 1),
-                                                   columns=columns)
+                self.df_importances = pd.DataFrame(
+                    0, index=np.arange(len(self.hp_names) + 1), columns=columns
+                )
                 self.df_importances["hp_name"] = ["Default"] + self.hp_names
                 return
             df_res["weight"] = w[0]
