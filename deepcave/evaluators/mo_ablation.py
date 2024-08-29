@@ -159,6 +159,9 @@ class MOAblation(Ablation):
             df[normed] = (df[obj.name] - df[obj.name].min()) / (
                 df[obj.name].max() - df[obj.name].min()
             )
+
+            if obj.optimize == "upper":
+                df[normed] = 1-df[normed]
             objectives_normed.append(normed)
 
             # train one model per objective

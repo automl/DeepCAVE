@@ -100,6 +100,8 @@ class MOfANOVA(fANOVA):
             df[normed] = (df[obj.name] - df[obj.name].min()) / (
                 df[obj.name].max() - df[obj.name].min()
             )
+            if obj.optimize == "upper":
+                df[normed] = 1-df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()
