@@ -403,7 +403,7 @@ class AblationPaths(StaticPlugin):
 
         # First selected, should always be shown first
         selected_budget_id = inputs["budget_id"]
-        objective = run.get_objective(inputs["objective_id"])
+        objective = run.get_objective(inputs["objective_id1"])
         n_hps = inputs["n_hps"]
         show_confidence = inputs["show_confidence"]
 
