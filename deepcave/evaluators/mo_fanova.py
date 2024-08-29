@@ -115,7 +115,7 @@ class MOfANOVA(fANOVA):
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
             df_res = (
-                pd.DataFrame(super(MOfANOVA, self).get_importances_(hp_names=None))
+                pd.DataFrame(super(MOfANOVA, self).get_importances(hp_names=None))
                 .loc[0:1]
                 .T.reset_index()
             )
