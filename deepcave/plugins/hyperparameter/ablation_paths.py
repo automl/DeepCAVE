@@ -318,7 +318,7 @@ class AblationPaths(StaticPlugin):
         RuntimeError
             If the number of trees is not specified.
         """
-        objective: Union[Objective, list[Optional[Objective]], None] = None
+        objective: Union[Objective, list[Objective], None] = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]

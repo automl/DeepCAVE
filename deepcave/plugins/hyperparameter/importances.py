@@ -342,7 +342,7 @@ class Importances(StaticPlugin):
             If the number of trees is not specified.
             If the method is not found.
         """
-        objective: Union[Objective, list[Optional[Objective]], None] = None
+        objective: Union[Objective, list[Objective], None] = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]
@@ -399,6 +399,7 @@ class Importances(StaticPlugin):
 
             importances = evaluator.get_importances(hp_names)
             if isinstance(objective, list):
+                assert isinstance(importances, str)
                 if any(pd.read_json(StringIO(importances))["importance"].isna()):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
             else:

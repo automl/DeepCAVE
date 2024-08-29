@@ -71,7 +71,7 @@ class MOAblation(Ablation):
         self.models: List = []
         self.df_importances = pd.DataFrame([])
 
-    def get_importances(self) -> str:
+    def get_importances(self, hp_names: Optional[list[str]], depth: int = 0, sort: bool = True) -> dict[Union[str, tuple[str, ...]], tuple[float, float, float, float]]:
         """
         Return the importance scores.
 

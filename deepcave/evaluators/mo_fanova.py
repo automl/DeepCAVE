@@ -125,7 +125,7 @@ class MOfANOVA(fANOVA):
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, sort: bool = True
-    ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
+    ) -> Union[Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]], str]:
         """
         Return the importance scores from the passed Hyperparameter names.
 
