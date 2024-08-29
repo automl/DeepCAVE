@@ -1,4 +1,17 @@
-# TODO
+# Copyright 2021-2024 The DeepCAVE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #  noqa: D400
 """
 # fANOVA
@@ -13,19 +26,23 @@ Utilities provide calculation of the data wrt the budget and train the forest on
 
 from typing import Dict, List, Optional, Tuple, Union
 
-
 import numpy as np
+import pandas as pd
+
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
-import pandas as pd
+
 
 class MOfANOVA(fANOVA):
     """
     Multi-Objective fANOVA.
-    Calculate and provide midpoints and sizes from the forest's split values in order to get the marginals.
-    Override: to train the random forest with an arbitrary weighting of the objectives (multi-objective case).
+
+    Calculate and provide midpoints and sizes from the forest's split values in order to get
+    the marginals.
+    Override: to train the random forest with an arbitrary weighting of the objectives
+    (multi-objective case).
     """
 
     def __init__(self, run: AbstractRun):
@@ -35,24 +52,28 @@ class MOfANOVA(fANOVA):
         super().__init__(run)
         self.importances_ = None
 
-    def get_weightings(self, objectives_normed, df):
+    def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
         """
-        Calculates the weighting used for the weighted importance. It uses the points on the pareto-front as weightings
+        Calculate the weighting for the weighted importance using the points on the pareto-front.
 
         Parameters
         ----------
         objectives_normed : List[str]
-            the normalized objective names as a list of strings
+            The normalized objective names as a list of strings.
         df : pandas.dataframe
-            the dataframe containing the encoded data
+            The dataframe containing the encoded data.
 
         Returns
-        ----------
-        weightings : numpy.ndarray[numpy.ndarray]
-             the weightings as a list of lists
+        -------
+        weightings : numpy.ndarray
+             The weightings.
         """
         optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
-        return df[optimized][objectives_normed].T.apply(lambda values: values / values.sum()).T.to_numpy()
+        return (
+            df[optimized][objectives_normed]
+            .T.apply(lambda values: values / values.sum())
+            .T.to_numpy()
+        )
 
     def is_pareto_efficient(self, costs):
         """
@@ -61,18 +82,19 @@ class MOfANOVA(fANOVA):
         Parameters
         ----------
         costs : numpy.ndarray
-            An (n_points, n_costs) array
+            An (n_points, n_costs) array.
 
         Returns
-        ----------
+        -------
         is_efficient : numpy.ndarray
-             A (n_points, ) boolean array, indicating whether each point is Pareto efficient
+             A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
         """
         is_efficient = np.ones(costs.shape[0], dtype=bool)
         for i, c in enumerate(costs):
-            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(np.any(costs[i + 1:] > c, axis=1))
+            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
+                np.any(costs[i + 1 :] > c, axis=1)
+            )
         return is_efficient
-
 
     def calculate(
         self,
@@ -83,7 +105,8 @@ class MOfANOVA(fANOVA):
     ) -> None:
         """
         Get the data with respect to budget and train the forest on the encoded data.
-        Calculates weighted fAnova for multiple objectives.
+
+        Calculates weighted fanova for multiple objectives.
 
         Note
         ----
@@ -117,8 +140,10 @@ class MOfANOVA(fANOVA):
         # normalize objectives
         objectives_normed = list()
         for obj in objectives:
-            normed = obj.name + '_normed'
-            df[normed] = (df[obj.name] - df[obj.name].min()) / (df[obj.name].max() - df[obj.name].min())
+            normed = obj.name + "_normed"
+            df[normed] = (df[obj.name] - df[obj.name].min()) / (
+                df[obj.name].max() - df[obj.name].min()
+            )
             objectives_normed.append(normed)
 
         df_all = pd.DataFrame([])
@@ -130,12 +155,16 @@ class MOfANOVA(fANOVA):
 
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
-            df_res = pd.DataFrame(super(MOfANOVA, self).get_importances(hp_names=None)).loc[0:1].T.reset_index()
-            df_res['weight'] = w[0]
+            df_res = (
+                pd.DataFrame(super(MOfANOVA, self).get_importances(hp_names=None))
+                .loc[0:1]
+                .T.reset_index()
+            )
+            df_res["weight"] = w[0]
             df_all = pd.concat([df_all, df_res])
-        self.importances_ = df_all.rename(columns={0: 'importance', 1: 'variance', 'index': 'hp_name'}).reset_index(drop=True)
-
-
+        self.importances_ = df_all.rename(
+            columns={0: "importance", 1: "variance", "index": "hp_name"}
+        ).reset_index(drop=True)
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, sort: bool = True
@@ -154,7 +183,8 @@ class MOfANOVA(fANOVA):
         Returns
         -------
         Dict
-            Dictionary with Hyperparameter names and the corresponding importance scores and variances.
+            Dictionary with Hyperparameter names and the corresponding importance scores and
+            variances.
 
         Raises
         ------
@@ -164,8 +194,11 @@ class MOfANOVA(fANOVA):
         if self.importances_ is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        res = self.importances_.sort_values(by='importance', ascending=False) if sort else self.importances_
+        res = (
+            self.importances_.sort_values(by="importance", ascending=False)
+            if sort
+            else self.importances_
+        )
         if hp_names:
-            res = res[self.importances_['hp_name'].isin(hp_names)]
+            res = res.loc[self.importances_["hp_name"].isin(hp_names)]
         return res.to_json()
-

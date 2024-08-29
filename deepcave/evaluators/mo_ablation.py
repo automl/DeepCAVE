@@ -1,3 +1,17 @@
+# Copyright 2021-2024 The DeepCAVE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # noqa: D400
 """
 # Ablation Paths
@@ -13,21 +27,23 @@ hyperparameter that leads to the largest improvement in the objective function a
     - Ablation: Provide an evaluator of the ablation paths.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import copy
 
 import numpy as np
+import pandas as pd
 
-from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.evaluators.ablation import Ablation
+from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
-import pandas as pd
+
 
 class MOAblation(Ablation):
     """
     Provide an evaluator of the ablation paths.
+
     Override: Multi-Objective case
 
     Properties
@@ -51,7 +67,7 @@ class MOAblation(Ablation):
 
     def __init__(self, run: AbstractRun):
         super().__init__(run)
-        self.models = []
+        self.models: List = []
         self.df_importances = pd.DataFrame([])
 
     def get_importances(self):
@@ -61,7 +77,8 @@ class MOAblation(Ablation):
         Returns
         -------
         Dict
-            Dictionary with Hyperparameter names and the corresponding importance scores and variances.
+            Dictionary with Hyperparameter names and the corresponding importance scores and
+            variances.
 
         Raises
         ------
@@ -73,25 +90,28 @@ class MOAblation(Ablation):
 
         return self.df_importances.to_json()
 
-
-    def get_weightings(self, objectives_normed, df):
+    def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
         """
-        Calculates the weighting used for the weighted importance. It uses the points on the pareto-front as weightings
+        Calculate the weighting for the weighted importance using the points on the pareto-front.
 
         Parameters
         ----------
         objectives_normed : List[str]
-            the normalized objective names as a list of strings
+            The normalized objective names as a list of strings.
         df : pandas.dataframe
-            the dataframe containing the encoded data
+            The dataframe containing the encoded data.
 
         Returns
-        ----------
+        -------
         weightings : numpy.ndarray[numpy.ndarray]
-             the weightings as a list of lists
+             The weightings as a list of lists.
         """
         optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
-        return df[optimized][objectives_normed].T.apply(lambda values: values / values.sum()).T.to_numpy()
+        return (
+            df[optimized][objectives_normed]
+            .T.apply(lambda values: values / values.sum())
+            .T.to_numpy()
+        )
 
     def is_pareto_efficient(self, costs):
         """
@@ -100,37 +120,39 @@ class MOAblation(Ablation):
         Parameters
         ----------
         costs : numpy.ndarray
-            An (n_points, n_costs) array
+            An (n_points, n_costs) array.
 
         Returns
-        ----------
+        -------
         is_efficient : numpy.ndarray
-             A (n_points, ) boolean array, indicating whether each point is Pareto efficient
+             A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
         """
         is_efficient = np.ones(costs.shape[0], dtype=bool)
         for i, c in enumerate(costs):
-            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(np.any(costs[i + 1:] > c, axis=1))
+            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
+                np.any(costs[i + 1 :] > c, axis=1)
+            )
         return is_efficient
-
 
     def predict(self, cfg, weighting):
         """
-        Predicts the performance of the input configuration. The model results are weighted by the input weightings
-        and summed.
+        Predict the performance of the input configuration.
+
+        The model results are weighted by the input weightings and summed.
 
         Parameters
         ----------
         cfg : Dict
-            configuration
+            Configuration.
         weighting : List[float]
-            weightings
+            Weightings.
 
         Returns
-        ----------
+        -------
         mean : float
-             the mean of the weighted sum of predictions
+             The mean of the weighted sum of predictions.
         var : float
-             the variance of the weighted sum of predictions
+             The variance of the weighted sum of predictions.
         """
         mean, var = 0, 0
         for model, w in zip(self.models, weighting):
@@ -175,8 +197,10 @@ class MOAblation(Ablation):
         # normalize objectives
         objectives_normed = list()
         for obj in objectives:
-            normed = obj.name + '_normed'
-            df[normed] = (df[obj.name] - df[obj.name].min()) / (df[obj.name].max() - df[obj.name].min())
+            normed = obj.name + "_normed"
+            df[normed] = (df[obj.name] - df[obj.name].min()) / (
+                df[obj.name].max() - df[obj.name].min()
+            )
             objectives_normed.append(normed)
 
             # train one model per objective
@@ -190,10 +214,9 @@ class MOAblation(Ablation):
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
             df_res = self.calculate_ablation_path(df, objectives_normed, w, budget)
-            df_res['weight'] = w[0]
+            df_res["weight"] = w[0]
             self.df_importances = pd.concat([self.df_importances, df_res])
         self.df_importances = self.df_importances.reset_index(drop=True)
-
 
     def calculate_ablation_path(self, df, objectives_normed, weighting, budget):
         """
@@ -202,7 +225,7 @@ class MOAblation(Ablation):
         Parameters
         ----------
         df : pd.DataFrame
-            Dataframe with encoded data
+            Dataframe with encoded data.
         objectives_normed : List[str]
             The normed objective names to be considered.
         weighting : List[float]
@@ -212,13 +235,15 @@ class MOAblation(Ablation):
             Default is None.
 
         Returns
-        ----------
+        -------
         df : pd.DataFrame
-            Dataframe with results of the ablation calculation
+            Dataframe with results of the ablation calculation.
         """
         # Get the incumbent configuration
-        incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, weighting)))
-        incumbent_config = self.run.get_config(df.iloc[incumbent_cfg_id]['config_id'])
+        incumbent_cfg_id = np.argmin(
+            sum(df[obj] * w for obj, w in zip(objectives_normed, weighting))
+        )
+        incumbent_config = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
 
         # Get the default configuration
         self.default_config = self.cs.get_default_configuration()
@@ -226,7 +251,9 @@ class MOAblation(Ablation):
 
         # Obtain the predicted cost of the default and incumbent configuration
         def_cost, def_std = self.predict(default_encode, weighting)
-        inc_cost, _ = self.predict(self.run.encode_config(incumbent_config, specific=True), weighting)
+        inc_cost, _ = self.predict(
+            self.run.encode_config(incumbent_config, specific=True), weighting
+        )
 
         # TODO make sure objectives are minimized
 
@@ -241,8 +268,19 @@ class MOAblation(Ablation):
             hp_it = self.hp_names.copy()
             df_abl = pd.DataFrame([])
             df_abl = pd.concat(
-                [df_abl, pd.DataFrame(
-                    {'hp_name': 'Default', 'importance': 0, 'variance': def_std, 'new_performance': def_cost}, index=[0])])
+                [
+                    df_abl,
+                    pd.DataFrame(
+                        {
+                            "hp_name": "Default",
+                            "importance": 0,
+                            "variance": def_std,
+                            "new_performance": def_cost,
+                        },
+                        index=[0],
+                    ),
+                ]
+            )
 
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
@@ -257,8 +295,19 @@ class MOAblation(Ablation):
                 def_cost = max_hp_cost
 
                 df_abl = pd.concat(
-                    [df_abl, pd.DataFrame(
-                        {'hp_name': max_hp, 'importance': diff, 'variance': max_hp_std, 'new_performance': max_hp_cost}, index=[i+1])])
+                    [
+                        df_abl,
+                        pd.DataFrame(
+                            {
+                                "hp_name": max_hp,
+                                "importance": diff,
+                                "variance": max_hp_std,
+                                "new_performance": max_hp_cost,
+                            },
+                            index=[i + 1],
+                        ),
+                    ]
+                )
 
                 # Remove the current best hp for keeping the order right
                 hp_it.remove(max_hp)
@@ -270,7 +319,7 @@ class MOAblation(Ablation):
         incumbent_config: Any,
         def_cost: Any,
         hp_it: List[str],
-        weighting: Tuple[float, float]
+        weighting: Tuple[float, float],
     ) -> Tuple[Any, Any, Any, Any]:
         """
         Calculate the ablation importance for each hyperparameter.
@@ -301,7 +350,9 @@ class MOAblation(Ablation):
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
 
-                new_cost, _ = self.predict(self.run.encode_config(config_copy, specific=True), weighting)
+                new_cost, _ = self.predict(
+                    self.run.encode_config(config_copy, specific=True), weighting
+                )
                 difference = def_cost - new_cost
 
                 # Check for the maximum difference hyperparameter in this round
@@ -314,7 +365,9 @@ class MOAblation(Ablation):
         if max_hp != "":
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
-            max_hp_cost, max_hp_std = self.predict(self.run.encode_config(self.default_config, specific=True), weighting)
+            max_hp_cost, max_hp_std = self.predict(
+                self.run.encode_config(self.default_config, specific=True), weighting
+            )
             return True, max_hp, max_hp_cost, max_hp_std
         else:
             self.logger.info(

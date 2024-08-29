@@ -25,11 +25,14 @@ processing the data and loading the outputs.
     - Ablation_Paths: This class provides a plugin for the visualization of the ablation paths.
 """
 
-import math
 from typing import Any, Callable, Dict, List
+
+import math
 
 import dash_bootstrap_components as dbc
 import numpy as np
+import pandas as pd
+import plotly.express as px
 import plotly.graph_objs as go
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
@@ -42,8 +45,7 @@ from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.styled_plotty import get_color, save_image
-import pandas as pd
-import plotly.express as px
+
 
 class AblationPaths(StaticPlugin):
     """
@@ -234,11 +236,15 @@ class AblationPaths(StaticPlugin):
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_value1 = inputs["objective_id1"]["value"]
-        objective_value2 = inputs["objective_id2"]["value"] # in the multi-objective case
+        objective_value2 = inputs["objective_id2"]["value"]  # in the multi-objective case
 
         objective_options = get_select_options(objective_names, objective_ids)
-        objective_options2 = [dic for dic in objective_options if dic['value'] != objective_value1] # make sure the same objective cannot be chosen twice
-        objective_options2 +=  [{'label': 'Select objective ...', 'value': -1}] # add the option to deselect the second objective
+        objective_options2 = [
+            dict for dict in objective_options if dict["value"] != objective_value1
+        ]  # make sure the same objective cannot be chosen twice
+        objective_options2 += [
+            {"label": "Select objective ...", "value": -1}
+        ]  # add the option to deselect the second objective
 
         # Prepare budgets
         budgets = run.get_budgets(human=True)
@@ -320,8 +326,7 @@ class AblationPaths(StaticPlugin):
 
         budgets = run.get_budgets(include_combined=True)
 
-
-        if isinstance(objective,list):
+        if isinstance(objective, list):
             evaluator = MOAblation(run)
         else:
             evaluator = Ablation(run)
@@ -397,7 +402,6 @@ class AblationPaths(StaticPlugin):
         if inputs["objective_id2"] not in (None, -1):
             # MO case: other plot
             return AblationPaths.load_outputs_mo(run, inputs, outputs)
-
 
         # First selected, should always be shown first
         selected_budget_id = inputs["budget_id"]
@@ -543,33 +547,47 @@ class AblationPaths(StaticPlugin):
             data[budget_id] = df_importances
 
         # Sort by last fidelity now
-        idx = data[selected_budget_id].groupby("hp_name")['importance'].max().sort_values(ascending=False).index
-        idx = list(idx[:n_hps]) + ['Default']
+        idx = (
+            data[selected_budget_id]
+            .groupby("hp_name")["importance"]
+            .max()
+            .sort_values(ascending=False)
+            .index
+        )
+        idx = list(idx[:n_hps]) + ["Default"]
 
-        df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep selected hps
+        df = data[selected_budget_id][
+            data[selected_budget_id]["hp_name"].isin(idx)
+        ]  # only keep selected hps
 
-        df['accuracy'] = np.where(df['hp_name'] == 'Default', 1 - df['new_performance'],
-                                          df['importance'])
+        df["accuracy"] = np.where(
+            df["hp_name"] == "Default", 1 - df["new_performance"], df["importance"]
+        )
 
-        grouped_df = df.groupby(['weight', 'hp_name'])['accuracy'].sum().unstack(fill_value=0)
+        grouped_df = df.groupby(["weight", "hp_name"])["accuracy"].sum().unstack(fill_value=0)
         color_palette = px.colors.qualitative.Plotly  # Choose a color palette
-        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys())+['Default'])}
+        colors = {
+            hp: color_palette[i % len(color_palette)]
+            for i, hp in enumerate(list(run.configspace.keys()) + ["Default"])
+        }
 
         # Create traces for each hp_name
         traces = []
         for column in grouped_df.columns:
-            traces.append(go.Scatter(
-                x=grouped_df.index,
-                y=grouped_df[column],
-                mode='lines',
-                stackgroup='one',  # This makes the traces stacked
-                name=column,
-                hoverinfo='skip',
-                showlegend=True,
-                opacity=0.2,
-                fillcolor=colors[column],
-                line=dict(color=colors[column]),
-            ))
+            traces.append(
+                go.Scatter(
+                    x=grouped_df.index,
+                    y=grouped_df[column],
+                    mode="lines",
+                    stackgroup="one",  # This makes the traces stacked
+                    name=column,
+                    hoverinfo="skip",
+                    showlegend=True,
+                    opacity=0.2,
+                    fillcolor=colors[column],
+                    line=dict(color=colors[column]),
+                )
+            )
 
         fig = go.Figure(data=traces)
 
@@ -580,9 +598,11 @@ class AblationPaths(StaticPlugin):
             xaxis=dict(range=[0, 1], tickangle=-45),
             yaxis=dict(
                 range=[
-                    math.floor(10 * (1 - (
-                                df[df['hp_name'] == 'Default']['new_performance'].max() + 0.01))) / 10,
-                    1
+                    math.floor(
+                        10 * (1 - (df[df["hp_name"] == "Default"]["new_performance"].max() + 0.01))
+                    )
+                    / 10,
+                    1,
                 ]
             ),
             margin=config.FIGURE_MARGIN,
@@ -596,20 +616,10 @@ class AblationPaths(StaticPlugin):
         white_fig.update_layout(
             paper_bgcolor="white",
             plot_bgcolor="white",
-            xaxis=dict(
-                showgrid=False,
-                zeroline=False,
-                visible=False
-            ),
-            yaxis=dict(
-                showgrid=False,
-                zeroline=False,
-                visible=False
-            ),
-            font=dict(
-                color="white"
-            ),
-            showlegend=False
+            xaxis=dict(showgrid=False, zeroline=False, visible=False),
+            yaxis=dict(showgrid=False, zeroline=False, visible=False),
+            font=dict(color="white"),
+            showlegend=False,
         )
 
         return [fig, white_fig]

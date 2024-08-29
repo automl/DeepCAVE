@@ -1,4 +1,17 @@
-# TODO
+# Copyright 2021-2024 The DeepCAVE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #  noqa: D400
 """
 # LPI
@@ -9,26 +22,27 @@ This module provides utilities to calculate the local parameter importance (LPI)
     - LPI: This class calculates the local parameter importance (LPI).
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
+import pandas as pd
 from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value
-
 from ConfigSpace.util import impute_inactive_values
 
 from deepcave.evaluators.epm.fanova_forest import FanovaForest
+from deepcave.evaluators.lpi import LPI
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
-from deepcave.evaluators.lpi import LPI
-import pandas as pd
 
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
 class MOLPI(LPI):
     """
     Calculate the multi-objective local parameter importance (LPI).
-    Override: to train the random forest with an arbitrary weighting of the objectives (multi-objective case).
+
+    Override: to train the random forest with an arbitrary weighting of the objectives
+    (multi-objective case).
 
     Properties
     ----------
@@ -59,42 +73,48 @@ class MOLPI(LPI):
     def __init__(self, run: AbstractRun):
         super().__init__(run)
 
-    def get_weightings(self, objectives_normed, df):
+    def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
         """
-        Calculates the weighting used for the weighted importance. It uses the points on the pareto-front as weightings
+        Calculate the weighting for the weighted importance using the points on the pareto-front.
 
         Parameters
         ----------
         objectives_normed : List[str]
-            the normalized objective names as a list of strings
+            The normalized objective names as a list of strings.
         df : pandas.dataframe
-            the dataframe containing the encoded data
+            The dataframe containing the encoded data.
 
         Returns
-        ----------
+        -------
         weightings : numpy.ndarray[numpy.ndarray]
-             the weightings as a list of lists
+             The weightings as a list of lists.
         """
         optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
-        return df[optimized][objectives_normed].T.apply(lambda values: values / values.sum()).T.to_numpy()
+        return (
+            df[optimized][objectives_normed]
+            .T.apply(lambda values: values / values.sum())
+            .T.to_numpy()
+        )
 
-    def is_pareto_efficient(self, costs):
+    def is_pareto_efficient(self, costs: np.ndarray) -> np.ndarray:
         """
         Find the pareto-efficient points.
 
         Parameters
         ----------
         costs : numpy.ndarray
-            An (n_points, n_costs) array
+            An (n_points, n_costs) array.
 
         Returns
-        ----------
+        -------
         is_efficient : numpy.ndarray
-             A (n_points, ) boolean array, indicating whether each point is Pareto efficient
+             A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
         """
         is_efficient = np.ones(costs.shape[0], dtype=bool)
         for i, c in enumerate(costs):
-            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(np.any(costs[i + 1:] > c, axis=1))
+            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
+                np.any(costs[i + 1 :] > c, axis=1)
+            )
         return is_efficient
 
     def calculate(
@@ -145,10 +165,13 @@ class MOLPI(LPI):
         X = df[self.hp_names].to_numpy()
 
         # normalize objectives
+        assert isinstance(objectives, list)
         objectives_normed = list()
         for obj in objectives:
-            normed = obj.name + '_normed'
-            df[normed] = (df[obj.name] - df[obj.name].min()) / (df[obj.name].max() - df[obj.name].min())
+            normed = obj.name + "_normed"
+            df[normed] = (df[obj.name] - df[obj.name].min()) / (
+                df[obj.name].max() - df[obj.name].min()
+            )
             objectives_normed.append(normed)
 
         df_all = pd.DataFrame([])
@@ -162,19 +185,23 @@ class MOLPI(LPI):
             self._model.train(X, Y)
             importances = self.calc_one_weighting()
             df_res = pd.DataFrame(importances).loc[0:1].T.reset_index()
-            df_res['weight'] = w[0]
+            df_res["weight"] = w[0]
             df_all = pd.concat([df_all, df_res])
-        self.importances = df_all.rename(columns={0: 'importance', 1: 'variance', 'index':'hp_name'}).reset_index(drop=True)
-        self.importances = self.importances.applymap(lambda x: max(x, 0) if not isinstance(x, str) else x) # no negative values
+        self.importances = df_all.rename(
+            columns={0: "importance", 1: "variance", "index": "hp_name"}
+        ).reset_index(drop=True)
+        self.importances = self.importances.map(
+            lambda x: max(x, 0) if not isinstance(x, str) else x
+        )  # no negative values
 
-    def calc_one_weighting(self):
+    def calc_one_weighting(self) -> Dict[str, Tuple[float, float]]:
         """
         Prepare the data after a model has be trained for one weighting.
 
         Returns
         -------
-        imp_var_dict: dict
-            Dictionary of importances and variances
+        imp_var_dict: Dict[str, Tuple[float, float]]
+            Dictionary of importances and variances.
         """
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()
@@ -248,11 +275,6 @@ class MOLPI(LPI):
                 performances[hp_name].append(inc_perf)
                 variances[hp_name].append(inc_var)
 
-            # After all neighbors are estimated, look at all performances except the incumbent
-            perf_before = performances[hp_name][:incumbent_idx]
-            perf_after = performances[hp_name][incumbent_idx + 1 :]
-            tmp_perf = perf_before + perf_after
-
             # Avoid division by zero
             if delta == 0:
                 delta = 1
@@ -284,8 +306,11 @@ class MOLPI(LPI):
             ]
             for p, trees in overall_var_per_tree.items()
         }
-        imp_var_dict = { k:(np.mean(overall_var_per_tree[k]), np.var(overall_var_per_tree[k])) for k in overall_var_per_tree}
-        return  imp_var_dict
+        imp_var_dict = {
+            k: (np.mean(overall_var_per_tree[k]), np.var(overall_var_per_tree[k]))
+            for k in overall_var_per_tree
+        }
+        return imp_var_dict
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, sort: bool = True
@@ -304,7 +329,8 @@ class MOLPI(LPI):
         Returns
         -------
         Dict
-            Dictionary with Hyperparameter names and the corresponding importance scores and variances.
+            Dictionary with Hyperparameter names and the corresponding importance scores and
+            variances.
 
         Raises
         ------
@@ -314,8 +340,12 @@ class MOLPI(LPI):
         if self.importances is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        res = self.importances.sort_values(by='importance', ascending=False) if sort else self.importances
+        res = (
+            self.importances.sort_values(by="importance", ascending=False)
+            if sort
+            else self.importances
+        )
 
         if hp_names:
-            res = res[self.importances['hp_name'].isin(hp_names)]
+            res = res.loc[self.importances["hp_name"].isin(hp_names)]
         return res.to_json()

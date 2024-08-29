@@ -27,8 +27,12 @@ processing the data and loading the outputs. Also provides a matplotlib version.
 
 from typing import Any, Callable, Dict, List, Optional, Union
 
+from io import StringIO
+
 import dash_bootstrap_components as dbc
 import numpy as np
+import pandas as pd
+import plotly.express as px
 import plotly.graph_objs as go
 from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
@@ -36,17 +40,15 @@ from dash.exceptions import PreventUpdate
 
 from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
+from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.evaluators.mo_fanova import MOfANOVA
 from deepcave.evaluators.mo_lpi import MOLPI
-from deepcave.evaluators.lpi import LPI as LocalEvaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
 from deepcave.utils.layout import get_checklist_options, get_select_options, help_button
 from deepcave.utils.logs import get_logger
 from deepcave.utils.styled_plotty import get_color, save_image
-import pandas as pd
-import plotly.express as px
 
 logger = get_logger(__name__)
 
@@ -247,11 +249,15 @@ class Importances(StaticPlugin):
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
         objective_value1 = inputs["objective_id1"]["value"]
-        objective_value2 = inputs["objective_id2"]["value"] # in the multi-objective case
+        objective_value2 = inputs["objective_id2"]["value"]  # in the multi-objective case
 
         objective_options = get_select_options(objective_names, objective_ids)
-        objective_options2 = [dic for dic in objective_options if dic['value'] != objective_value1] # make sure the same objective cannot be chosen twice
-        objective_options2 +=  [{'label': 'Select objective ...', 'value': -1}] # add the option to deselect the second objective
+        objective_options2 = [
+            dict for dict in objective_options if dict["value"] != objective_value1
+        ]  # make sure the same objective cannot be chosen twice
+        objective_options2 += [
+            {"label": "Select objective ...", "value": -1}
+        ]  # add the option to deselect the second objective
 
         # Prepare budgets
         budgets = run.get_budgets(human=True)
@@ -372,11 +378,11 @@ class Importances(StaticPlugin):
 
         # Initialize the evaluator
         evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
-        if method == "local" and isinstance(objective,list):
+        if method == "local" and isinstance(objective, list):
             evaluator = MOLPI(run)
         elif method == "local":
             evaluator = LocalEvaluator(run)
-        elif method == "global" and isinstance(objective,list):
+        elif method == "global" and isinstance(objective, list):
             evaluator = MOfANOVA(run)
         elif method == "global":
             evaluator = GlobalEvaluator(run)
@@ -391,7 +397,7 @@ class Importances(StaticPlugin):
 
             importances = evaluator.get_importances(hp_names)
             if isinstance(objective, list):
-                if any(pd.read_json(importances)['importance'].isna()):
+                if any(pd.read_json(StringIO(importances))["importance"].isna()):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
             else:
                 if any(np.isnan(val) for value in importances.values() for val in value):
@@ -447,7 +453,6 @@ class Importances(StaticPlugin):
         go.figure
             The figure of the importances.
         """
-
         if inputs["objective_id2"] not in (None, -1):
             # MO case: other plot
             return Importances.load_ouputs_mo_fanova(run, inputs, outputs)
@@ -544,7 +549,6 @@ class Importances(StaticPlugin):
         go.figure
             The figure of the importances.
         """
-
         # First selected, should always be shown first
         objective1 = run.get_objective(inputs["objective_id1"]).name
         selected_hp_names = inputs["hyperparameter_names"]
@@ -562,65 +566,80 @@ class Importances(StaticPlugin):
         # Collect data
         data = {}
         for budget_id, importances_json in outputs.items():
-            df_importances = pd.read_json(importances_json)
+            df_importances = pd.read_json(StringIO(importances_json))
             # Important to cast budget_id here because of json serialization
             budget_id = int(budget_id)
             if budget_id not in selected_budget_ids:
                 continue
 
-            df_importances = df_importances[df_importances['hp_name'].isin(selected_hp_names)]  # only keep selected hps
+            df_importances = df_importances[
+                df_importances["hp_name"].isin(selected_hp_names)
+            ]  # only keep selected hps
             data[budget_id] = df_importances
 
         # Sort by last fidelity now
         selected_budget_id = max(selected_budget_ids)
-        idx = data[selected_budget_id].groupby("hp_name")['importance'].max().sort_values(ascending=False).index
+        idx = (
+            data[selected_budget_id]
+            .groupby("hp_name")["importance"]
+            .max()
+            .sort_values(ascending=False)
+            .index
+        )
         idx = idx[:n_hps]
 
         color_palette = px.colors.qualitative.Plotly  # Choose a color palette
-        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys()))}
+        colors = {
+            hp: color_palette[i % len(color_palette)]
+            for i, hp in enumerate(list(run.configspace.keys()))
+        }
 
         # Create the figure
         figure = go.Figure()
-        df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep top hps
+        df = data[selected_budget_id][
+            data[selected_budget_id]["hp_name"].isin(idx)
+        ]  # only keep top hps
 
         # Group by 'hp_name' and plot each group
-        for group_id, group_data in df.groupby('hp_name'):
+        for group_id, group_data in df.groupby("hp_name"):
             # Sort data by the weight column
-            group_data = group_data.sort_values(by='weight')
+            group_data = group_data.sort_values(by="weight")
 
-
-
-            figure.add_trace(go.Scatter(
-                x=group_data['weight'],
-                y=group_data['importance'],
-                mode='lines',
-                name=group_id,
-                line=dict(color=colors[group_id])
-            ))
+            figure.add_trace(
+                go.Scatter(
+                    x=group_data["weight"],
+                    y=group_data["importance"],
+                    mode="lines",
+                    name=group_id,
+                    line=dict(color=colors[group_id]),
+                )
+            )
 
             # Add the shaded area representing the variance
-            x = group_data['weight']
-            y1 = (group_data['importance'] - group_data['variance']).to_list()
-            y2 = (group_data['importance'] + group_data['variance'])
+            x = group_data["weight"]
+            y1 = (group_data["importance"] - group_data["variance"]).to_list()
+            y2 = group_data["importance"] + group_data["variance"]
 
-            figure.add_trace(go.Scatter(
-                x=x.tolist()+x[::-1].tolist(),
-                y=y1+y2[::-1].tolist(),
-                fill='toself',
-                hoverinfo='skip',
-                showlegend=False,
-                opacity=0.2,
-                fillcolor=colors[group_id],
-                line=dict(color=colors[group_id]),
-                mode='lines',
-            ))
+            figure.add_trace(
+                go.Scatter(
+                    x=x.tolist() + x[::-1].tolist(),
+                    y=y1 + y2[::-1].tolist(),
+                    fill="toself",
+                    hoverinfo="skip",
+                    showlegend=False,
+                    opacity=0.2,
+                    fillcolor=colors[group_id],
+                    line=dict(color=colors[group_id]),
+                    mode="lines",
+                )
+            )
 
         # Update the layout for labels, title, and axis limits
         figure.update_layout(
-            xaxis_title='Weight for ' + objective1,
-            yaxis_title='Importance',
+            xaxis_title="Weight for " + objective1,
+            yaxis_title="Importance",
             xaxis=dict(range=[0, 1], tickangle=-45),
-            yaxis=dict(range=[0, df['importance'].max()]),
+            yaxis=dict(range=[0, df["importance"].max()]),
             margin=config.FIGURE_MARGIN,
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
@@ -628,4 +647,3 @@ class Importances(StaticPlugin):
         save_image(figure, "importances.pdf")
 
         return figure
-
