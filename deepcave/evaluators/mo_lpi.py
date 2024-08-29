@@ -116,7 +116,11 @@ class MOLPI(LPI):
 
         # Get data
         df = self.run.get_encoded_data(
-            objectives=objectives, budget=budget, specific=True, include_combined_cost=True, include_config_ids=True
+            objectives=objectives,
+            budget=budget,
+            specific=True,
+            include_combined_cost=True,
+            include_config_ids=True,
         )
 
         # normalize objectives

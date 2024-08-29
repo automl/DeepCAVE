@@ -188,6 +188,13 @@ class MOAblation(Ablation):
 
     def calculate_ablation_path(self, df: pd.DataFrame, objectives_normed: List[str], weighting: np.ndarray,
                                 budget: Optional[Union[int, float]]) -> pd.DataFrame:
+    def calculate_ablation_path(
+        self,
+        df: pd.DataFrame,
+        objectives_normed: List[str],
+        weighting: np.ndarray,
+        budget: Optional[Union[int, float]],
+    ) -> pd.DataFrame:
         """
         Calculate the ablation path performances.
 
