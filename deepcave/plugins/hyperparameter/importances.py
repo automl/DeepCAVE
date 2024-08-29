@@ -577,6 +577,9 @@ class Importances(StaticPlugin):
         idx = data[selected_budget_id].groupby("hp_name")['importance'].max().sort_values(ascending=False).index
         idx = idx[:n_hps]
 
+        color_palette = px.colors.qualitative.Plotly  # Choose a color palette
+        colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(list(run.configspace.keys()))}
+
         # Create the figure
         figure = go.Figure()
         df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep top hps
@@ -591,8 +594,7 @@ class Importances(StaticPlugin):
             # Sort data by the weight column
             group_data = group_data.sort_values(by='weight')
 
-            color_palette = px.colors.qualitative.Plotly  # Choose a color palette
-            colors = {hp: color_palette[i % len(color_palette)] for i, hp in enumerate(idx.unique())}
+
 
             figure.add_trace(go.Scatter(
                 x=group_data['weight'],
