@@ -251,6 +251,10 @@ class Importances(StaticPlugin):
         objective_value1 = inputs["objective_id1"]["value"]
         objective_value2 = inputs["objective_id2"]["value"]  # in the multi-objective case
 
+        # Pre-set values
+        if objective_value1 is None:
+            objective_value1 = objective_ids[0]
+
         objective_options = get_select_options(objective_names, objective_ids)
         objective_options2 = [
             dict for dict in objective_options if dict["value"] != objective_value1
@@ -269,10 +273,6 @@ class Importances(StaticPlugin):
         hp_options = get_checklist_options(hp_names)
         hp_value = inputs["hyperparameter_names"]["value"]
         n_hps = inputs["n_hps"]["value"]
-
-        # Pre-set values
-        if objective_value1 is None:
-            objective_value1 = objective_ids[0]
 
         if n_hps == 0:
             n_hps = len(hp_names)
@@ -577,7 +577,7 @@ class Importances(StaticPlugin):
             ]  # only keep selected hps
             data[budget_id] = df_importances
 
-        # Sort by last fidelity now
+        # Keep only n_hps most important hyperparameters according to max importance
         selected_budget_id = max(selected_budget_ids)
         idx = (
             data[selected_budget_id]

@@ -34,6 +34,7 @@ from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.lpi import LPI
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
+from deepcave.utils.multi_objective_importance import get_weightings
 
 
 # https://github.com/automl/ParameterImportance/blob/f4950593ee627093fc30c0847acc5d8bf63ef84b/pimp/evaluator/local_parameter_importance.py#L27
@@ -73,50 +74,6 @@ class MOLPI(LPI):
     def __init__(self, run: AbstractRun):
         super().__init__(run)
         self.importances: Optional[pd.DataFrame] = None
-
-    def get_weightings(self, objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray:
-        """
-        Calculate the weighting for the weighted importance using the points on the pareto-front.
-
-        Parameters
-        ----------
-        objectives_normed : List[str]
-            The normalized objective names as a list of strings.
-        df : pandas.dataframe
-            The dataframe containing the encoded data.
-
-        Returns
-        -------
-        weightings : numpy.ndarray[numpy.ndarray]
-             The weightings as a list of lists.
-        """
-        optimized = self.is_pareto_efficient(df[objectives_normed].to_numpy())
-        return (
-            df[optimized][objectives_normed]
-            .T.apply(lambda values: values / values.sum())
-            .T.to_numpy()
-        )
-
-    def is_pareto_efficient(self, costs: np.ndarray) -> np.ndarray:
-        """
-        Find the pareto-efficient points.
-
-        Parameters
-        ----------
-        costs : numpy.ndarray
-            An (n_points, n_costs) array.
-
-        Returns
-        -------
-        is_efficient : numpy.ndarray
-             A (n_points, ) boolean array, indicating whether each point is Pareto efficient.
-        """
-        is_efficient = np.ones(costs.shape[0], dtype=bool)
-        for i, c in enumerate(costs):
-            is_efficient[i] = np.all(np.any(costs[:i] > c, axis=1)) and np.all(
-                np.any(costs[i + 1 :] > c, axis=1)
-            )
-        return is_efficient
 
     def calculate(
         self,
@@ -164,7 +121,6 @@ class MOLPI(LPI):
             objectives=objectives, budget=budget, specific=True, include_combined_cost=True
         )
 
-
         # normalize objectives
         assert isinstance(objectives, list)
         objectives_normed = list()
@@ -177,7 +133,7 @@ class MOLPI(LPI):
         df = df.dropna(subset=objectives_normed)
         X = df[self.hp_names].to_numpy()
         df_all = pd.DataFrame([])
-        weightings = self.get_weightings(objectives_normed, df)
+        weightings = get_weightings(objectives_normed, df)
 
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:

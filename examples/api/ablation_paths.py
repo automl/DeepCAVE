@@ -15,13 +15,15 @@ if __name__ == "__main__":
     # Instantiate the run
     run = DeepCAVERun.from_path(Path("logs/DeepCAVE/minimal/run_2"))
 
-    objective_id = run.get_objective_ids()[0]
-    budget_id = run.get_budget_ids()[0]
+    objective_id1 = run.get_objective_ids()[0]
+    objective_id2 = run.get_objective_ids()[1]
+    budget_id = run.get_budget_ids()[1]
 
     # Instantiate the plugin
     plugin = AblationPaths()
     inputs = plugin.generate_inputs(
-        objective_id=objective_id,
+        objective_id1=objective_id1,
+        objective_id2=None,  # replace with objective_id2 for multi-objective importance
         budget_id=budget_id,
         n_hps=100,
         n_trees=100,
