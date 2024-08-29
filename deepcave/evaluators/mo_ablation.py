@@ -70,7 +70,7 @@ class MOAblation(Ablation):
         self.models: List = []
         self.df_importances = pd.DataFrame([])
 
-    def get_importances(self):
+    def get_importances(self) -> str:
         """
         Return the importance scores.
 
@@ -113,7 +113,7 @@ class MOAblation(Ablation):
             .T.to_numpy()
         )
 
-    def is_pareto_efficient(self, costs):
+    def is_pareto_efficient(self, costs: np.ndarray) -> np.ndarray:
         """
         Find the pareto-efficient points.
 
@@ -218,7 +218,7 @@ class MOAblation(Ablation):
             self.df_importances = pd.concat([self.df_importances, df_res])
         self.df_importances = self.df_importances.reset_index(drop=True)
 
-    def calculate_ablation_path(self, df, objectives_normed, weighting, budget):
+    def calculate_ablation_path(self, df: pd.DataFrame, objectives_normed: List[str], weighting: np.ndarray, budget: Optional[Union[int, float]]) -> pd.DataFrame:
         """
         Calculate the ablation path performances.
 
@@ -228,7 +228,7 @@ class MOAblation(Ablation):
             Dataframe with encoded data.
         objectives_normed : List[str]
             The normed objective names to be considered.
-        weighting : List[float]
+        weighting : np.ndarray
             The weighting of the objective values.
         budget : Optional[Union[int, float]]
             The budget to be considered. If None, all budgets of the run are considered.
@@ -284,7 +284,7 @@ class MOAblation(Ablation):
 
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
-                continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
+                continue_ablation, max_hp, max_hp_cost, max_hp_std = self.ablation(
                     budget, incumbent_config, def_cost, hp_it, weighting
                 )
 
@@ -313,7 +313,7 @@ class MOAblation(Ablation):
                 hp_it.remove(max_hp)
             return df_abl.reset_index(drop=True)
 
-    def _ablation(
+    def ablation(
         self,
         budget: Optional[Union[int, float]],
         incumbent_config: Any,

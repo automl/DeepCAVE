@@ -75,7 +75,7 @@ class MOfANOVA(fANOVA):
             .T.to_numpy()
         )
 
-    def is_pareto_efficient(self, costs):
+    def is_pareto_efficient(self, costs: np.ndarray) -> np.ndarray:
         """
         Find the pareto-efficient points.
 
