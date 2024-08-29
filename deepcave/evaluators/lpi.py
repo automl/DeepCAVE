@@ -249,7 +249,7 @@ class LPI:
         self.variances = overall_var_per_tree
         self.importances = importances
 
-    def get_importances(self, hp_names: List[str]) -> Union[Dict[str, Tuple[float, float]], str]:
+    def get_importances(self, hp_names: List[str]) -> Dict[str, Tuple[float, float]]:
         """
         Return the importances.
 

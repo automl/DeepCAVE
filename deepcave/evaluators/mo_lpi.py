@@ -274,7 +274,7 @@ class MOLPI(LPI):
         }
         return imp_var_dict
 
-    def get_importances(self, hp_names: List[str]) -> Union[Dict[str, Tuple[float, float]], str]:
+    def get_importances_(self, hp_names: List[str]) -> str:
         """
         Return the importance scores from the passed Hyperparameter names.
 

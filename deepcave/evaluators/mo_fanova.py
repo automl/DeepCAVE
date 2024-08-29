@@ -125,9 +125,9 @@ class MOfANOVA(fANOVA):
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
 
-    def get_importances(
+    def get_importances_(
             self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
-    ) -> Union[Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]], str]:
+    ) -> str:
         """
         Return the importance scores from the passed Hyperparameter names.
 
@@ -153,11 +153,7 @@ class MOfANOVA(fANOVA):
         if self.importances_ is None:
             raise RuntimeError("Importance scores must be calculated first.")
 
-        res = (
-            self.importances_.sort_values(by="importance", ascending=False)
-            if sort
-            else self.importances_
-        )
         if hp_names:
-            res = res.loc[self.importances_["hp_name"].isin(hp_names)]
-        return res.to_json()
+            return self.importances_.loc[self.importances_["hp_name"].isin(hp_names)]
+        else:
+            return self.importances_.to_json()

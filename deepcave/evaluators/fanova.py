@@ -114,7 +114,7 @@ class fANOVA:
 
     def get_importances(
         self, hp_names: Optional[List[str]] = None, depth: int = 1, sort: bool = True
-    ) -> Union[Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]], str]:
+    ) -> Dict[Union[str, Tuple[str, ...]], Tuple[float, float, float, float]]:
         """
         Return the importance scores from the passed Hyperparameter names.
 
