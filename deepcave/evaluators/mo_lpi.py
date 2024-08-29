@@ -142,9 +142,9 @@ class MOLPI(LPI):
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
 
+            print(df.columns)
             incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
             self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
-            print(df.columns)
             self.incumbent_array = self.incumbent.get_array()
             importances = self.calc_one_weighting()
             df_res = pd.DataFrame(importances).loc[0:1].T.reset_index()
