@@ -614,7 +614,8 @@ class Importances(StaticPlugin):
                 hoverinfo='skip',
                 showlegend=False,
                 opacity=0.2,
-                fillcolor=colors[group_id]
+                fillcolor=colors[group_id],
+                line=colors[group_id],
             ))
 
         # Update the layout for labels, title, and axis limits
