@@ -577,7 +577,7 @@ class Importances(StaticPlugin):
             ]  # only keep selected hps
             data[budget_id] = df_importances
 
-        # Sort by last fidelity now
+        # Keep only n_hps most important hyperparameters according to max importance
         selected_budget_id = max(selected_budget_ids)
         idx = (
             data[selected_budget_id]

@@ -239,6 +239,10 @@ class AblationPaths(StaticPlugin):
         objective_value1 = inputs["objective_id1"]["value"]
         objective_value2 = inputs["objective_id2"]["value"]  # in the multi-objective case
 
+        # Pre-set values
+        if objective_value1 is None:
+            objective_value1 = objective_ids[0]
+
         objective_options = get_select_options(objective_names, objective_ids)
         objective_options2 = [
             dict for dict in objective_options if dict["value"] != objective_value1
@@ -255,10 +259,6 @@ class AblationPaths(StaticPlugin):
 
         hp_names = list(run.configspace.keys())
         n_hps = inputs["n_hps"]["value"]
-
-        # Pre-set values
-        if objective_value1 is None:
-            objective_value1 = objective_ids[0]
 
         if n_hps == 0:
             n_hps = len(hp_names)
@@ -361,7 +361,6 @@ class AblationPaths(StaticPlugin):
         List[dcc.Graph]
             Layout for the output block.
         """
-        # TODO remove second Figure if MO-Ablation
         return [
             dcc.Graph(
                 register("perf_graph", "figure"),
