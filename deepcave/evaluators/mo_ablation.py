@@ -162,7 +162,6 @@ class MOAblation(Ablation):
 
             if obj.optimize == "upper":
                 df[normed] = 1-df[normed]
-                print('upper')
             objectives_normed.append(normed)
 
             # train one model per objective
