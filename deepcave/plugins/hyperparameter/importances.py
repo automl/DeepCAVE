@@ -336,6 +336,7 @@ class Importances(StaticPlugin):
             If the method is not found.
         """
         objective = run.get_objective(inputs["objective_id1"])
+        print(inputs["objective_id2"])
         if inputs["objective_id2"]:
             if inputs["objective_id2"] !=-1:
                 objective = [objective, run.get_objective(inputs["objective_id2"])]
@@ -451,6 +452,7 @@ class Importances(StaticPlugin):
 
         if inputs["objective_id2"] and inputs["objective_id2"]!=-1:
             # MO case: other plot
+            print('test')
             return Importances.load_ouputs_mo_fanova(run, inputs, outputs)
 
         # First selected, should always be shown first
