@@ -580,10 +580,10 @@ class Importances(StaticPlugin):
         figure = go.Figure()
         df = data[selected_budget_id][data[selected_budget_id]['hp_name'].isin(idx)]  # only keep top hps
 
-        # TODO: necessary?
-        # convert back to float after json serialization
-        for col in ['weight', 'importance', 'variance']:
-            df[col] = df[col].astype(float)
+        # # TODO: necessary?
+        # # convert back to float after json serialization
+        # for col in ['weight', 'importance', 'variance']:
+        #     df[col] = df[col].astype(float)
 
         # Group by 'hp_name' and plot each group
         for group_id, group_data in df.groupby('hp_name'):
@@ -595,6 +595,7 @@ class Importances(StaticPlugin):
                 y=group_data['importance'],
                 mode='lines',
                 name=group_id,
+                fillcolor=group_id
             ))
 
             # Add the shaded area representing the variance
@@ -609,6 +610,7 @@ class Importances(StaticPlugin):
                 hoverinfo='skip',
                 showlegend=False,
                 opacity=0.2,
+                fillcolor=group_id
             ))
 
         # Update the layout for labels, title, and axis limits
@@ -617,9 +619,6 @@ class Importances(StaticPlugin):
             yaxis_title='Importance',
             xaxis=dict(range=[0, 1], tickangle=-45),
             yaxis=dict(range=[0, df['importance'].max()]),
-            title={
-                "text": "Multi-Objective " + inputs["method"],
-                "font": {"size": config.FIGURE_FONT_SIZE + 2},},
             margin=config.FIGURE_MARGIN,
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
