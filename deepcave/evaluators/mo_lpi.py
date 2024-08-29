@@ -109,16 +109,14 @@ class MOLPI(LPI):
 
         # Set variables
         self.continous_neighbors = continous_neighbors
-        # self.incumbent, _ = self.run.get_incumbent(budget=budget, objectives=objectives)
         self.default = self.cs.get_default_configuration()
-        # self.incumbent_array = self.incumbent.get_array()
 
         self.seed = seed
         self.rs = np.random.RandomState(seed)
 
         # Get data
         df = self.run.get_encoded_data(
-            objectives=objectives, budget=budget, specific=True, include_combined_cost=True
+            objectives=objectives, budget=budget, specific=True, include_combined_cost=True, include_config_ids=True
         )
 
         # normalize objectives
@@ -142,7 +140,6 @@ class MOLPI(LPI):
             self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
             self._model.train(X, Y)
 
-            print(df.columns)
             incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
             self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
             self.incumbent_array = self.incumbent.get_array()
