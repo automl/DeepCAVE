@@ -592,5 +592,25 @@ class AblationPaths(StaticPlugin):
 
         save_image(fig, "ablation_path_performance.pdf")
 
+        # create fake figure to hide the second figure which does not exists for MO
+        white_fig = go.Figure()
+        white_fig.update_layout(
+            paper_bgcolor="white",
+            plot_bgcolor="white",
+            xaxis=dict(
+                showgrid=False,
+                zeroline=False,
+                visible=False
+            ),
+            yaxis=dict(
+                showgrid=False,
+                zeroline=False,
+                visible=False
+            ),
+            font=dict(
+                color="white"
+            ),
+            showlegend=False
+        )
 
-        return [fig, go.Figure()]
+        return [fig, white_fig]
