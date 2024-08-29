@@ -405,6 +405,7 @@ class Importances(StaticPlugin):
             else:
                 assert not isinstance(evaluator, (MOLPI, MOfANOVA))
                 importances = evaluator.get_importances(hp_names)
+                assert isinstance(importances, Dict)
                 if any(np.isnan(val) for value in importances.values() for val in value):
                     logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances

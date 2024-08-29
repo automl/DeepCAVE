@@ -318,7 +318,7 @@ class AblationPaths(StaticPlugin):
         RuntimeError
             If the number of trees is not specified.
         """
-        objective: Union[Objective, list[Objective], list[Optional[Objective]], None] = None
+        objective: Any = None
         objective = run.get_objective(inputs["objective_id1"])
         if inputs["objective_id2"] not in (None, -1):
             objective = [objective, run.get_objective(inputs["objective_id2"])]
@@ -329,13 +329,14 @@ class AblationPaths(StaticPlugin):
 
         budgets = run.get_budgets(include_combined=True)
 
+        evaluator: Union[Ablation, MOAblation, None] = None
         if isinstance(objective, list):
             evaluator = MOAblation(run)
         else:
             evaluator = Ablation(run)
 
         # Collect data
-        data = {}
+        data: Dict[Any,Any] = {}
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
