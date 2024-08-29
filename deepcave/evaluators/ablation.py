@@ -242,10 +242,10 @@ class Ablation:
             continue_ablation, max_hp, max_hp_performance, max_hp_std
         """
         max_hp = ""
-        max_hp_difference = -np.inf
+        max_hp_difference = 0 # so that no hp beloy the default cost is chosen
 
         for hp in hp_it:
-            if hp in hp in incumbent_config.keys() and hp in self.default_config.keys():
+            if hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
 
