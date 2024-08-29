@@ -340,7 +340,7 @@ class AblationPaths(StaticPlugin):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
             if isinstance(objective, list):
-                data[budget_id] = evaluator.get_importances(hp_names=None)
+                data[budget_id] = evaluator.get_importances()
             else:
                 performances = evaluator.get_ablation_performances()
                 improvements = evaluator.get_ablation_improvements()
