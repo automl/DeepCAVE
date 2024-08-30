@@ -137,7 +137,7 @@ class ParetoFront(DynamicPlugin):
                 [
                     dbc.Col(
                         [
-                            dbc.Label("Objective #1"),
+                            dbc.Label("Objective 1"),
                             dbc.Select(
                                 id=register("objective_id_1", ["value", "options"], type=int),
                                 placeholder="Select objective ...",
@@ -147,7 +147,7 @@ class ParetoFront(DynamicPlugin):
                     ),
                     dbc.Col(
                         [
-                            dbc.Label("Objective #2"),
+                            dbc.Label("Objective 2"),
                             dbc.Select(
                                 id=register("objective_id_2", ["value", "options"], type=int),
                                 placeholder="Select objective ...",

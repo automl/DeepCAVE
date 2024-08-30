@@ -122,7 +122,7 @@ class DataFrameRun(Run):
         return run
 
     @staticmethod
-    def load_objectives(path: Path) -> list[Objective]:
+    def load_objectives(path: Path) -> List[Objective]:
         """
         Load the objectives of the run from the trials.csv file.
 
