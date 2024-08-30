@@ -52,6 +52,23 @@ Have a look into the examples to get an overview how to use DeepCAVE in this way
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Parallel Coordinates. Note that other plugins use the same interfaces and can be used in the same fashion.">
+
+.. only:: html
+
+  .. image:: /examples/api/images/thumb/sphx_glr_parallel_coordinates_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_api_parallel_coordinates.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Parallel Coordinates</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Importances. Note that other plugins use the same interfaces and can be used in the same fashion.">
 
 .. only:: html
@@ -81,23 +98,6 @@ Have a look into the examples to get an overview how to use DeepCAVE in this way
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Ablation Paths</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to use the plugin Parallel Coordinates. Note that other plugins use the same interfaces and can be used in the same fashion.">
-
-.. only:: html
-
-  .. image:: /examples/api/images/thumb/sphx_glr_parallel_coordinates_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_api_parallel_coordinates.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Parallel Coordinates</div>
     </div>
 
 

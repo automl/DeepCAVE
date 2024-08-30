@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.utils &#8212; DeepCAVE Documentation 1.3.1 documentation</title>
+    <title>deepcave.utils &#8212; DeepCAVE Documentation 1.3.2 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,14 +31,14 @@
     
   <link rel="preload" as="script" href="../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../_static/documentation_options.js?v=4aaf858c"></script>
+    <script src="../_static/documentation_options.js?v=6a1e1f67"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="deepcave.utils.cache" href="deepcave.utils.cache.html" />
-    <link rel="prev" title="deepcave.evaluators.lpi" href="deepcave.evaluators.lpi.html" />
+    <link rel="prev" title="deepcave.evaluators.mo_lpi" href="deepcave.evaluators.mo_lpi.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.3.1
+        v1.3.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.3.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3.2</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.3.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -164,6 +164,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/importances.html">
        Importances
       </a>
@@ -171,11 +176,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../examples/api/ablation_paths.html">
        Ablation Paths
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../examples/api/parallel_coordinates.html">
-       Parallel Coordinates
       </a>
      </li>
     </ul>
@@ -637,6 +637,21 @@
        deepcave.evaluators.lpi
       </a>
      </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.mo_ablation.html">
+       deepcave.evaluators.mo_ablation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.mo_fanova.html">
+       deepcave.evaluators.mo_fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.evaluators.mo_lpi.html">
+       deepcave.evaluators.mo_lpi
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toctree-l2 current active has-children">
@@ -712,6 +727,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="deepcave.utils.logs.html">
        deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="deepcave.utils.multi_objective_importance.html">
+       deepcave.utils.multi_objective_importance
       </a>
      </li>
      <li class="toctree-l3">
@@ -888,22 +908,25 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.logs.html#module-deepcave.utils.logs" title="deepcave.utils.logs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logs</span></code></a></p></td>
 <td><p># Logs</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.notification.html#module-deepcave.utils.notification" title="deepcave.utils.notification"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notification</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.multi_objective_importance.html#module-deepcave.utils.multi_objective_importance" title="deepcave.utils.multi_objective_importance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multi_objective_importance</span></code></a></p></td>
+<td><p># Multi-Objective importances</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.notification.html#module-deepcave.utils.notification" title="deepcave.utils.notification"><code class="xref py py-obj docutils literal notranslate"><span class="pre">notification</span></code></a></p></td>
 <td><p># Notification</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.run_caches.html#module-deepcave.utils.run_caches" title="deepcave.utils.run_caches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_caches</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.run_caches.html#module-deepcave.utils.run_caches" title="deepcave.utils.run_caches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_caches</span></code></a></p></td>
 <td><p># RunCaches</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.styled_plotty.html#module-deepcave.utils.styled_plotty" title="deepcave.utils.styled_plotty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">styled_plotty</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.styled_plotty.html#module-deepcave.utils.styled_plotty" title="deepcave.utils.styled_plotty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">styled_plotty</span></code></a></p></td>
 <td><p># Styled Plotty</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.symbolic_regression.html#module-deepcave.utils.symbolic_regression" title="deepcave.utils.symbolic_regression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symbolic_regression</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.symbolic_regression.html#module-deepcave.utils.symbolic_regression" title="deepcave.utils.symbolic_regression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symbolic_regression</span></code></a></p></td>
 <td><p># Symbolic Regression</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.url.html#module-deepcave.utils.url" title="deepcave.utils.url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">url</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.url.html#module-deepcave.utils.url" title="deepcave.utils.url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">url</span></code></a></p></td>
 <td><p># URL</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.utils.util.html#module-deepcave.utils.util" title="deepcave.utils.util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="deepcave.utils.util.html#module-deepcave.utils.util" title="deepcave.utils.util"><code class="xref py py-obj docutils literal notranslate"><span class="pre">util</span></code></a></p></td>
 <td><p># Util</p></td>
 </tr>
 </tbody>
@@ -916,11 +939,11 @@
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.evaluators.lpi.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.evaluators.mo_lpi.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.evaluators.lpi</p>
+            <p class="prev-next-title">deepcave.evaluators.mo_lpi</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="deepcave.utils.cache.html" title="next page">
