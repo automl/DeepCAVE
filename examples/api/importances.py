@@ -16,7 +16,7 @@ if __name__ == "__main__":
     run = DeepCAVERun.from_path(Path("logs/DeepCAVE/minimal/run_2"))
 
     objective_id1 = run.get_objective_ids()[0]
-    objective_id2 = run.get_objective_ids()[1]
+    objective_id2 = None  # replace with run.get_objective_ids()[1] for multi-objective importance
     budget_ids = run.get_budget_ids()
 
     # Instantiate the plugin
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     inputs = plugin.generate_inputs(
         hyperparameter_names=list(run.configspace.keys()),
         objective_id1=objective_id1,
-        objective_id2=None,  # replace with objective_id2 for multi-objective importance
+        objective_id2=objective_id2,
         budget_ids=budget_ids,
         method="global",
         n_hps=3,
