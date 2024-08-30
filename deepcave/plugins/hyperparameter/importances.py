@@ -27,8 +27,12 @@ processing the data and loading the outputs. Also provides a matplotlib version.
 
 from typing import Any, Callable, Dict, List, Optional, Union
 
+from io import StringIO
+
 import dash_bootstrap_components as dbc
 import numpy as np
+import pandas as pd
+import plotly.express as px
 import plotly.graph_objs as go
 from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
@@ -37,6 +41,8 @@ from dash.exceptions import PreventUpdate
 from deepcave import config
 from deepcave.evaluators.fanova import fANOVA as GlobalEvaluator
 from deepcave.evaluators.lpi import LPI as LocalEvaluator
+from deepcave.evaluators.mo_fanova import MOfANOVA
+from deepcave.evaluators.mo_lpi import MOLPI
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
 from deepcave.utils.cast import optional_int
@@ -80,15 +86,29 @@ class Importances(StaticPlugin):
             Layout for the input block.
         """
         return [
-            html.Div(
+            dbc.Row(
                 [
-                    dbc.Label("Objective"),
-                    dbc.Select(
-                        id=register("objective_id", ["value", "options"], type=int),
-                        placeholder="Select objective ...",
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective 1"),
+                            dbc.Select(
+                                id=register("objective_id1", ["value", "options"], type=int),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
+                    ),
+                    dbc.Col(
+                        [
+                            dbc.Label("Objective 2"),
+                            dbc.Select(
+                                id=register("objective_id2", ["value", "options"], type=int),
+                                placeholder="Select objective ...",
+                            ),
+                        ],
+                        md=6,
                     ),
                 ],
-                className="mb-3",
             ),
             dbc.Row(
                 [
@@ -204,9 +224,9 @@ class Importances(StaticPlugin):
             "budget_ids": {"options": get_checklist_options(), "value": []},
         }
 
-    def load_dependency_inputs(self, run, _: Any, inputs: Dict[str, Any]) -> Dict[str, Any]:  # type: ignore # noqa: E501
+    def load_dependency_inputs(self, run, _, inputs) -> Dict[str, Any]:  # type: ignore # noqa: E501
         """
-        Work like 'load_inputs' but called after inputs have changed.
+        Works like 'load_inputs' but called after inputs have changed.
 
         Note
         ----
@@ -228,8 +248,20 @@ class Importances(StaticPlugin):
         # Prepare objectives
         objective_names = run.get_objective_names()
         objective_ids = run.get_objective_ids()
+        objective_value1 = inputs["objective_id1"]["value"]
+        objective_value2 = inputs["objective_id2"]["value"]  # in the multi-objective case
+
+        # Pre-set values
+        if objective_value1 is None:
+            objective_value1 = objective_ids[0]
+
         objective_options = get_select_options(objective_names, objective_ids)
-        objective_value = inputs["objective_id"]["value"]
+        objective_options2 = [
+            dict for dict in objective_options if dict["value"] != objective_value1
+        ]  # make sure the same objective cannot be chosen twice
+        objective_options2 += [
+            {"label": "Select objective ...", "value": -1}
+        ]  # add the option to deselect the second objective
 
         # Prepare budgets
         budgets = run.get_budgets(human=True)
@@ -242,10 +274,6 @@ class Importances(StaticPlugin):
         hp_value = inputs["hyperparameter_names"]["value"]
         n_hps = inputs["n_hps"]["value"]
 
-        # Pre-set values
-        if objective_value is None:
-            objective_value = objective_ids[0]
-
         if n_hps == 0:
             n_hps = len(hp_names)
 
@@ -257,9 +285,13 @@ class Importances(StaticPlugin):
                 budget_value = [budget_ids[-1]]
 
         return {
-            "objective_id": {
+            "objective_id1": {
                 "options": objective_options,
-                "value": objective_value,
+                "value": objective_value1,
+            },
+            "objective_id2": {
+                "options": objective_options2,
+                "value": objective_value2,
             },
             "method": {
                 "value": inputs["method"]["value"],
@@ -301,7 +333,7 @@ class Importances(StaticPlugin):
         Returns
         -------
         Dict[str, Any]
-            A serialzied dictionary.
+            A serialized dictionary.
 
         Raises
         ------
@@ -309,7 +341,10 @@ class Importances(StaticPlugin):
             If the number of trees is not specified.
             If the method is not found.
         """
-        objective = run.get_objective(inputs["objective_id"])
+        objective: Any = None
+        objective = run.get_objective(inputs["objective_id1"])
+        if inputs["objective_id2"] not in (None, -1):
+            objective = [objective, run.get_objective(inputs["objective_id2"])]
         method = inputs["method"]
         n_trees = inputs["n_trees"]
 
@@ -342,10 +377,14 @@ class Importances(StaticPlugin):
         hp_names = list(run.configspace.keys())
         budgets = run.get_budgets(include_combined=True)
 
+        # Initialize the evaluator
         evaluator: Optional[Union[LocalEvaluator, GlobalEvaluator]] = None
-        if method == "local":
-            # Initialize the evaluator
+        if method == "local" and isinstance(objective, list):
+            evaluator = MOLPI(run)
+        elif method == "local":
             evaluator = LocalEvaluator(run)
+        elif method == "global" and isinstance(objective, list):
+            evaluator = MOfANOVA(run)
         elif method == "global":
             evaluator = GlobalEvaluator(run)
         else:
@@ -353,14 +392,26 @@ class Importances(StaticPlugin):
 
         # Collect data
         data = {}
+        importances: Union[
+            str,
+            dict[str, tuple[float, float]],
+            dict[Union[str, tuple[str, ...]], tuple[float, float, float, float]],
+        ]
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
-
-            importances = evaluator.get_importances(hp_names)
-            if any(np.isnan(val) for value in importances.values() for val in value):
-                logger.warning(f"Nan encountered in importance values for budget {budget}.")
+            if isinstance(objective, list):
+                assert isinstance(evaluator, (MOLPI, MOfANOVA))
+                importances = evaluator.get_importances_(hp_names)
+                if any(pd.read_json(StringIO(importances))["importance"].isna()):
+                    logger.warning(f"Nan encountered in importance values for budget {budget}.")
+            else:
+                importances = evaluator.get_importances(hp_names)
+                assert isinstance(importances, Dict)
+                if any(np.isnan(val) for value in importances.values() for val in value):
+                    logger.warning(f"Nan encountered in importance values for budget {budget}.")
             data[budget_id] = importances
+
         return data  # type: ignore
 
     @staticmethod
@@ -410,6 +461,10 @@ class Importances(StaticPlugin):
         go.figure
             The figure of the importances.
         """
+        if inputs["objective_id2"] not in (None, -1):
+            # MO case: other plot
+            return Importances.load_ouputs_mo_fanova(run, inputs, outputs)
+
         # First selected, should always be shown first
         selected_hp_names = inputs["hyperparameter_names"]
         selected_budget_ids = inputs["budget_ids"]
@@ -473,6 +528,130 @@ class Importances(StaticPlugin):
             xaxis=dict(tickangle=-45),
             font=dict(size=config.FIGURE_FONT_SIZE),
         )
+        save_image(figure, "importances.pdf")
+
+        return figure
+
+    @staticmethod
+    def load_ouputs_mo_fanova(run, inputs, outputs) -> go.Figure:  # type: ignore
+        """
+        Multi-objective case for read in raw data and prepare for layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        go.figure
+            The figure of the importances.
+        """
+        # First selected, should always be shown first
+        objective1 = run.get_objective(inputs["objective_id1"]).name
+        selected_hp_names = inputs["hyperparameter_names"]
+        selected_budget_ids = inputs["budget_ids"]
+        n_hps = inputs["n_hps"]
+
+        if n_hps == "" or n_hps is None:
+            raise PreventUpdate
+        else:
+            n_hps = int(n_hps)
+
+        if len(selected_hp_names) == 0 or len(selected_budget_ids) == 0:
+            raise PreventUpdate()
+
+        # Collect data
+        data = {}
+        for budget_id, importances_json in outputs.items():
+            df_importances = pd.read_json(StringIO(importances_json))
+            # Important to cast budget_id here because of json serialization
+            budget_id = int(budget_id)
+            if budget_id not in selected_budget_ids:
+                continue
+
+            df_importances = df_importances[
+                df_importances["hp_name"].isin(selected_hp_names)
+            ]  # only keep selected hps
+            data[budget_id] = df_importances
+
+        # Keep only n_hps most important hyperparameters according to max importance
+        selected_budget_id = max(selected_budget_ids)
+        idx = (
+            data[selected_budget_id]
+            .groupby("hp_name")["importance"]
+            .max()
+            .sort_values(ascending=False)
+            .index
+        )
+        idx = idx[:n_hps]
+
+        color_palette = px.colors.qualitative.Plotly  # Choose a color palette
+        colors = {
+            hp: color_palette[i % len(color_palette)]
+            for i, hp in enumerate(list(run.configspace.keys()))
+        }
+
+        # Create the figure
+        figure = go.Figure()
+        df = data[selected_budget_id][
+            data[selected_budget_id]["hp_name"].isin(idx)
+        ]  # only keep top hps
+
+        # Group by 'hp_name' and plot each group
+        for group_id, group_data in df.groupby("hp_name"):
+            # Sort data by the weight column
+            group_data = group_data.sort_values(by="weight")
+
+            figure.add_trace(
+                go.Scatter(
+                    x=group_data["weight"],
+                    y=group_data["importance"],
+                    mode="lines",
+                    name=group_id,
+                    line=dict(color=colors[group_id]),
+                )
+            )
+
+            # Add the shaded area representing the variance
+            x = group_data["weight"]
+            y1 = (group_data["importance"] - group_data["variance"]).to_list()
+            y2 = group_data["importance"] + group_data["variance"]
+
+            figure.add_trace(
+                go.Scatter(
+                    x=x.tolist() + x[::-1].tolist(),
+                    y=y1 + y2[::-1].tolist(),
+                    fill="toself",
+                    hoverinfo="skip",
+                    showlegend=False,
+                    opacity=0.2,
+                    fillcolor=colors[group_id],
+                    line=dict(color=colors[group_id]),
+                    mode="lines",
+                )
+            )
+
+        # Update the layout for labels, title, and axis limits
+        figure.update_layout(
+            xaxis_title="Weight for " + objective1,
+            yaxis_title="Importance",
+            xaxis=dict(range=[0, 1], tickangle=-45),
+            yaxis=dict(range=[0, df["importance"].max()]),
+            margin=config.FIGURE_MARGIN,
+            font=dict(size=config.FIGURE_FONT_SIZE),
+        )
+
         save_image(figure, "importances.pdf")
 
         return figure

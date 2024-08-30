@@ -21,7 +21,7 @@ This plugin can help answer the following questions:
 Options
 -------
 
-* **Objective #1 / #2:** Select the objective functions you wish to analyze.
+* **Objective 1 / 2:** Select the objective functions you wish to analyze.
 
 * **Budget**: Select the multi-fidelity budget to be used. The plugin will only consider trials evaluated
   on the selected budget. The *Combined* budget option displays all configurations but shows scores only
