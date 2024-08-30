@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.hyperparameter.ablation_paths &#8212; DeepCAVE Documentation 1.3.1 documentation</title>
+    <title>deepcave.plugins.hyperparameter.ablation_paths &#8212; DeepCAVE Documentation 1.3.2 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
   <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../../_static/documentation_options.js?v=4aaf858c"></script>
+    <script src="../../../../_static/documentation_options.js?v=6a1e1f67"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../../../_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.3.1
+        v1.3.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.3.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3.2</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.3.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -161,6 +161,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../../../examples/api/importances.html">
        Importances
       </a>
@@ -168,11 +173,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../../../../examples/api/ablation_paths.html">
        Ablation Paths
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../../../../examples/api/parallel_coordinates.html">
-       Parallel Coordinates
       </a>
      </li>
     </ul>
@@ -634,6 +634,21 @@
        deepcave.evaluators.lpi
       </a>
      </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.mo_ablation.html">
+       deepcave.evaluators.mo_ablation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.mo_fanova.html">
+       deepcave.evaluators.mo_fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.evaluators.mo_lpi.html">
+       deepcave.evaluators.mo_lpi
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
@@ -709,6 +724,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../../../../api/deepcave.utils.logs.html">
        deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../../../api/deepcave.utils.multi_objective_importance.html">
+       deepcave.utils.multi_objective_importance
       </a>
      </li>
      <li class="toctree-l3">
@@ -805,16 +825,22 @@
 <span class="sd">    - Ablation_Paths: This class provides a plugin for the visualization of the ablation paths.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
 <span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">dash.exceptions</span> <span class="kn">import</span> <span class="n">PreventUpdate</span>
 
 <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">from</span> <span class="nn">deepcave.evaluators.ablation</span> <span class="kn">import</span> <span class="n">Ablation</span>
+<span class="kn">from</span> <span class="nn">deepcave.evaluators.mo_ablation</span> <span class="kn">import</span> <span class="n">MOAblation</span>
 <span class="kn">from</span> <span class="nn">deepcave.plugins.static</span> <span class="kn">import</span> <span class="n">StaticPlugin</span>
 <span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
 <span class="kn">from</span> <span class="nn">deepcave.utils.cast</span> <span class="kn">import</span> <span class="n">optional_int</span>
@@ -861,9 +887,19 @@
                 <span class="p">[</span>
                     <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
                         <span class="p">[</span>
-                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective 1&quot;</span><span class="p">),</span>
                             <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
-                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective_id&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective_id1&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+                                <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span>
+                            <span class="p">),</span>
+                        <span class="p">],</span>
+                        <span class="n">md</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">dbc</span><span class="o">.</span><span class="n">Col</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="s2">&quot;Objective 2&quot;</span><span class="p">),</span>
+                            <span class="n">dbc</span><span class="o">.</span><span class="n">Select</span><span class="p">(</span>
+                                <span class="nb">id</span><span class="o">=</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;objective_id2&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;options&quot;</span><span class="p">],</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
                                 <span class="n">placeholder</span><span class="o">=</span><span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span>
                             <span class="p">),</span>
                         <span class="p">],</span>
@@ -989,7 +1025,7 @@
 
 <div class="viewcode-block" id="AblationPaths.load_dependency_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_dependency_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: E501</span>
+    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore # noqa: E501</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Works like &#39;load_inputs&#39; but called after inputs have changed.</span>
 
@@ -1000,7 +1036,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        run</span>
+<span class="sd">        run:</span>
 <span class="sd">            The selected run.</span>
 <span class="sd">        inputs : Dict[str, Any]</span>
 <span class="sd">            Current content of the inputs.</span>
@@ -1013,8 +1049,20 @@
         <span class="c1"># Prepare objectives</span>
         <span class="n">objective_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_names</span><span class="p">()</span>
         <span class="n">objective_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()</span>
+        <span class="n">objective_value1</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id1&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">objective_value2</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id2&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>  <span class="c1"># in the multi-objective case</span>
+
+        <span class="c1"># Pre-set values</span>
+        <span class="k">if</span> <span class="n">objective_value1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">objective_value1</span> <span class="o">=</span> <span class="n">objective_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
         <span class="n">objective_options</span> <span class="o">=</span> <span class="n">get_select_options</span><span class="p">(</span><span class="n">objective_names</span><span class="p">,</span> <span class="n">objective_ids</span><span class="p">)</span>
-        <span class="n">objective_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
+        <span class="n">objective_options2</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="nb">dict</span> <span class="k">for</span> <span class="nb">dict</span> <span class="ow">in</span> <span class="n">objective_options</span> <span class="k">if</span> <span class="nb">dict</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">objective_value1</span>
+        <span class="p">]</span>  <span class="c1"># make sure the same objective cannot be chosen twice</span>
+        <span class="n">objective_options2</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Select objective ...&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+        <span class="p">]</span>  <span class="c1"># add the option to deselect the second objective</span>
 
         <span class="c1"># Prepare budgets</span>
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1022,12 +1070,8 @@
         <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="n">budget_ids</span><span class="p">)</span>
         <span class="n">budget_value</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-        <span class="n">hp_names</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameter_names</span><span class="p">()</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="n">n_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_hps&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Pre-set values</span>
-        <span class="k">if</span> <span class="n">objective_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">objective_value</span> <span class="o">=</span> <span class="n">objective_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">n_hps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">n_hps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hp_names</span><span class="p">)</span>
@@ -1038,9 +1082,13 @@
                 <span class="n">budget_value</span> <span class="o">=</span> <span class="n">budget_ids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;objective_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;objective_id1&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options</span><span class="p">,</span>
-                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value1</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;objective_id2&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">objective_options2</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">objective_value2</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;budget_id&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;options&quot;</span><span class="p">:</span> <span class="n">budget_options</span><span class="p">,</span>
@@ -1085,7 +1133,10 @@
 <span class="sd">        RuntimeError</span>
 <span class="sd">            If the number of trees is not specified.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">objective</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id1&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id2&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">objective</span> <span class="o">=</span> <span class="p">[</span><span class="n">objective</span><span class="p">,</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id2&quot;</span><span class="p">])]</span>
         <span class="n">n_trees</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_trees&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">n_trees</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1093,18 +1144,24 @@
 
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">include_combined</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Ablation</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+        <span class="n">evaluator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Ablation</span><span class="p">,</span> <span class="n">MOAblation</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">MOAblation</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">evaluator</span> <span class="o">=</span> <span class="n">Ablation</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
 
         <span class="c1"># Collect data</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">budget</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">budgets</span><span class="p">):</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span>
             <span class="n">evaluator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="n">n_trees</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-            <span class="n">performances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_ablation_performances</span><span class="p">()</span>
-            <span class="n">improvements</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_ablation_improvements</span><span class="p">()</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">performances</span><span class="p">,</span> <span class="n">improvements</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evaluator</span><span class="p">,</span> <span class="n">MOAblation</span><span class="p">)</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_importances</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">performances</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_ablation_performances</span><span class="p">()</span>
+                <span class="n">improvements</span> <span class="o">=</span> <span class="n">evaluator</span><span class="o">.</span><span class="n">get_ablation_improvements</span><span class="p">()</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">performances</span><span class="p">,</span> <span class="n">improvements</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">data</span>  <span class="c1"># type: ignore</span></div>
 
 
@@ -1167,9 +1224,13 @@
 <span class="sd">        return [figure1, figure2]</span>
 <span class="sd">            The figures of the ablation paths.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id2&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c1"># MO case: other plot</span>
+            <span class="k">return</span> <span class="n">AblationPaths</span><span class="o">.</span><span class="n">load_outputs_mo</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+
         <span class="c1"># First selected, should always be shown first</span>
         <span class="n">selected_budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">]</span>
-        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id&quot;</span><span class="p">])</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id1&quot;</span><span class="p">])</span>
         <span class="n">n_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_hps&quot;</span><span class="p">]</span>
         <span class="n">show_confidence</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;show_confidence&quot;</span><span class="p">]</span>
 
@@ -1264,6 +1325,131 @@
         <span class="n">save_image</span><span class="p">(</span><span class="n">figure2</span><span class="p">,</span> <span class="s2">&quot;ablation_path_improvement.pdf&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="n">figure1</span><span class="p">,</span> <span class="n">figure2</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="AblationPaths.load_outputs_mo">
+<a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.ablation_paths.html#deepcave.plugins.hyperparameter.ablation_paths.AblationPaths.load_outputs_mo">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">load_outputs_mo</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Multi-objective case for read in raw data and prepare for layout.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        The passed inputs are cleaned and therefore differ</span>
+<span class="sd">        compared to &#39;load_inputs&#39; or &#39;load_dependency_inputs&#39;.</span>
+<span class="sd">        Please see &#39;_clean_inputs&#39; for more information.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        run</span>
+<span class="sd">            The selected run.</span>
+<span class="sd">        inputs</span>
+<span class="sd">            Input and filter values from the user.</span>
+<span class="sd">        outputs</span>
+<span class="sd">            Raw output from the run.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        return [figure1, None]</span>
+<span class="sd">            The figure of the ablation paths.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First selected, should always be shown first</span>
+        <span class="n">objective1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;objective_id1&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">selected_budget_id</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;budget_id&quot;</span><span class="p">]</span>
+        <span class="n">n_hps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;n_hps&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">n_hps</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">n_hps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">PreventUpdate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_hps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_hps</span><span class="p">)</span>
+
+        <span class="c1"># Collect data</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">budget_id</span><span class="p">,</span> <span class="n">importances_json</span> <span class="ow">in</span> <span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># Important to cast budget_id here because of json serialization</span>
+            <span class="n">budget_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">budget_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">budget_id</span> <span class="o">!=</span> <span class="n">selected_budget_id</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">df_importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">StringIO</span><span class="p">(</span><span class="n">importances_json</span><span class="p">))</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">budget_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_importances</span>
+
+        <span class="c1"># Sort by last fidelity now</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">selected_budget_id</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;hp_name&quot;</span><span class="p">)[</span><span class="s2">&quot;importance&quot;</span><span class="p">]</span>
+            <span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">index</span>
+        <span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">idx</span><span class="p">[:</span><span class="n">n_hps</span><span class="p">])</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">]</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">selected_budget_id</span><span class="p">][</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">selected_budget_id</span><span class="p">][</span><span class="s2">&quot;hp_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># only keep selected hps</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hp_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Default&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;new_performance&quot;</span><span class="p">]</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hp_name&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Default&quot;</span><span class="p">,</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;importance&quot;</span><span class="p">]</span>
+
+        <span class="n">grouped_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="s2">&quot;hp_name&quot;</span><span class="p">])[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">unstack</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">color_palette</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">qualitative</span><span class="o">.</span><span class="n">Plotly</span>  <span class="c1"># Choose a color palette</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">hp</span><span class="p">:</span> <span class="n">color_palette</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">color_palette</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">])</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Create traces for each hp_name</span>
+        <span class="n">traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">grouped_df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+                    <span class="n">x</span><span class="o">=</span><span class="n">grouped_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">grouped_df</span><span class="p">[</span><span class="n">column</span><span class="p">],</span>
+                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+                    <span class="n">stackgroup</span><span class="o">=</span><span class="s2">&quot;one&quot;</span><span class="p">,</span>  <span class="c1"># This makes the traces stacked</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">column</span><span class="p">,</span>
+                    <span class="n">hoverinfo</span><span class="o">=</span><span class="s2">&quot;skip&quot;</span><span class="p">,</span>
+                    <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">opacity</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                    <span class="n">fillcolor</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">column</span><span class="p">],</span>
+                    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">column</span><span class="p">]),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traces</span><span class="p">)</span>
+
+        <span class="c1"># Update the layout</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+            <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Weight for &quot;</span> <span class="o">+</span> <span class="n">objective1</span><span class="p">,</span>
+            <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Sum of the weighted &lt;br&gt; normalized performance&quot;</span><span class="p">,</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tickangle</span><span class="o">=-</span><span class="mi">45</span><span class="p">),</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="nb">range</span><span class="o">=</span><span class="p">[</span>
+                    <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span>
+                        <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;hp_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Default&quot;</span><span class="p">][</span><span class="s2">&quot;new_performance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">))</span>
+                    <span class="p">)</span>
+                    <span class="o">/</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="mi">1</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">margin</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_MARGIN</span><span class="p">,</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">save_image</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="s2">&quot;ablation_path_performance.pdf&quot;</span><span class="p">)</span>
+
+        <span class="c1"># create fake figure to hide the second figure which does not exists for MO</span>
+        <span class="n">white_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+        <span class="n">white_fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+            <span class="n">paper_bgcolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zeroline</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">),</span>
+            <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">fig</span><span class="p">,</span> <span class="n">white_fig</span><span class="p">]</span></div>
 </div>
 
 </pre></div>

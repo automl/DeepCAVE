@@ -1,0 +1,12 @@
+deepcave.evaluators.mo\_fanova
+==============================
+
+.. automodule:: deepcave.evaluators.mo_fanova
+
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      MOfANOVA
+   

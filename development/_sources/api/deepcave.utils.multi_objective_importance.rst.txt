@@ -1,0 +1,13 @@
+deepcave.utils.multi\_objective\_importance
+===========================================
+
+.. automodule:: deepcave.utils.multi_objective_importance
+
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      get_weightings
+      is_pareto_efficient
+   

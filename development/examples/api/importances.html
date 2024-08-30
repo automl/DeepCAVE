@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Importances &#8212; DeepCAVE Documentation 1.3.1 documentation</title>
+    <title>Importances &#8212; DeepCAVE Documentation 1.3.2 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -31,14 +31,14 @@
     
   <link rel="preload" as="script" href="../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../_static/documentation_options.js?v=4aaf858c"></script>
+    <script src="../../_static/documentation_options.js?v=6a1e1f67"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Ablation Paths" href="ablation_paths.html" />
-    <link rel="prev" title="Partial Dependencies" href="pdp.html" />
+    <link rel="prev" title="Parallel Coordinates" href="parallel_coordinates.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -96,11 +96,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.3.1
+        v1.3.2
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.3.1</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.3.2</a>
     </div>
 </div>
       </div>
@@ -125,7 +125,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.3.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.3.2</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
@@ -163,6 +163,11 @@
        Partial Dependencies
       </a>
      </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="parallel_coordinates.html">
+       Parallel Coordinates
+      </a>
+     </li>
      <li class="toctree-l3 current active">
       <a class="current reference internal" href="#">
        Importances
@@ -171,11 +176,6 @@
      <li class="toctree-l3">
       <a class="reference internal" href="ablation_paths.html">
        Ablation Paths
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="parallel_coordinates.html">
-       Parallel Coordinates
       </a>
      </li>
     </ul>
@@ -637,6 +637,21 @@
        deepcave.evaluators.lpi
       </a>
      </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.mo_ablation.html">
+       deepcave.evaluators.mo_ablation
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.mo_fanova.html">
+       deepcave.evaluators.mo_fanova
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.evaluators.mo_lpi.html">
+       deepcave.evaluators.mo_lpi
+      </a>
+     </li>
     </ul>
    </li>
    <li class="toctree-l2 has-children">
@@ -712,6 +727,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../../api/deepcave.utils.logs.html">
        deepcave.utils.logs
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/deepcave.utils.multi_objective_importance.html">
+       deepcave.utils.multi_objective_importance
       </a>
      </li>
      <li class="toctree-l3">
@@ -812,14 +832,16 @@ Note that other plugins use the same interfaces and can be used in the same fash
     <span class="c1"># Instantiate the run</span>
     <span class="n">run</span> <span class="o">=</span> <span class="n">DeepCAVERun</span><span class="o">.</span><span class="n">from_path</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;logs/DeepCAVE/minimal/run_2&quot;</span><span class="p">))</span>
 
-    <span class="n">objective_id</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">objective_id1</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_objective_ids</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">objective_id2</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># replace with run.get_objective_ids()[1] for multi-objective importance</span>
     <span class="n">budget_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget_ids</span><span class="p">()</span>
 
     <span class="c1"># Instantiate the plugin</span>
     <span class="n">plugin</span> <span class="o">=</span> <span class="n">Importances</span><span class="p">()</span>
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">plugin</span><span class="o">.</span><span class="n">generate_inputs</span><span class="p">(</span>
         <span class="n">hyperparameter_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
-        <span class="n">objective_id</span><span class="o">=</span><span class="n">objective_id</span><span class="p">,</span>
+        <span class="n">objective_id1</span><span class="o">=</span><span class="n">objective_id1</span><span class="p">,</span>
+        <span class="n">objective_id2</span><span class="o">=</span><span class="n">objective_id2</span><span class="p">,</span>
         <span class="n">budget_ids</span><span class="o">=</span><span class="n">budget_ids</span><span class="p">,</span>
         <span class="n">method</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span>
         <span class="n">n_hps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -852,11 +874,11 @@ Note that other plugins use the same interfaces and can be used in the same fash
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="pdp.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="parallel_coordinates.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Partial Dependencies</p>
+            <p class="prev-next-title">Parallel Coordinates</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="ablation_paths.html" title="next page">

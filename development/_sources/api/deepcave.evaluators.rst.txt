@@ -15,3 +15,6 @@
    fanova
    footprint
    lpi
+   mo_ablation
+   mo_fanova
+   mo_lpi

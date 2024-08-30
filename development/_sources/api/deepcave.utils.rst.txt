@@ -23,6 +23,7 @@
    hash
    layout
    logs
+   multi_objective_importance
    notification
    run_caches
    styled_plotty
