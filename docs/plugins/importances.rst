@@ -52,7 +52,7 @@ see the paper `Hyperparameter Importance Analysis for Multi-Objective AutoML
 Options
 -------
 
-* **Objective:** Select the objective function you wish to analyze.
+* **Objective 1 / 2**: Choose the objective you wish to calculate the importance for. Optionally, choose a second objective to see how the importance changes from one objective to the other.
 
 * **Method:** Whether to calculate the local parameter importance or the fANOVA importance.
 

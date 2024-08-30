@@ -1,5 +1,5 @@
 Ablation Paths
-===========
+=============
 
 Ablation Paths is a method to analyze the importance of hyperparameters in a configuration space.
 Starting from a default configuration, the default configuration is iteratively changed to the
@@ -36,7 +36,7 @@ non-dominated solutions. For more detail on this, please see the paper
 
 Options
 -------
-* **Objective**: Select the objective function you wish to analyze.
+* **Objective 1 / 2**: Choose the objective you wish to calculate the ablation path for. Optionally, choose a second objective to see how the importance changes from one objective to the other.
 
 * **Trees:** Specify the number of trees for the random forest surrogate model used in calculating importance scores.
 
