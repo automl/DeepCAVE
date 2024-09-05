@@ -142,8 +142,9 @@ class GeneralLayout(Layout):
             # Add text to go to parent directory
             new_element = html.Div(
                 [
-                    dbc.Button(
-                        "+", id={"type": "general-dynamic-add-run", "index": -1}, disabled=True
+                    html.I(
+                        className="fas fa-folder-open fa-lg",
+                        id={"type": "general-dynamic-add-run", "index": -1},
                     ),
                     dbc.Button(
                         "..",
@@ -161,23 +162,47 @@ class GeneralLayout(Layout):
 
             for i, run_path in enumerate(run_paths):
                 run_name = run_handler.get_run_name(run_path)
-                new_element = html.Div(
-                    [
-                        dbc.Button("+", id={"type": "general-dynamic-add-run", "index": i}),
-                        dbc.Button(
-                            run_name,
-                            id={"type": "general-dynamic-change-directory", "index": i},
-                            color="link",
-                        ),
-                        dcc.Store(
-                            id={"type": "general-dynamic-available-run-path", "index": i},
-                            data=run_path,
-                        ),
-                    ],
-                    className="mb-1",
-                )
-                children.append(new_element)
+                is_run = run_handler.add_run(run_path)
 
+                # Differenciate between run and directory for visibility reasons
+                if is_run:
+                    run_handler.remove_run(run_path)
+                    new_element = html.Div(
+                        [
+                            dbc.Button(
+                                "+", id={"type": "general-dynamic-add-run", "index": i}, size="sm"
+                            ),
+                            dbc.Button(
+                                run_name,
+                                id={"type": "general-dynamic-change-directory", "index": i},
+                                color="light",
+                                disabled=True,
+                            ),
+                            dcc.Store(
+                                id={"type": "general-dynamic-available-run-path", "index": i},
+                                data=run_path,
+                            ),
+                        ],
+                        className="mb-1",
+                    )
+                else:
+                    new_element = html.Div(
+                        [
+                            html.I(className="fas fa-folder fa-lg"),
+                            dbc.Button(
+                                run_name,
+                                id={"type": "general-dynamic-change-directory", "index": i},
+                                color="link",
+                            ),
+                            dcc.Store(
+                                id={"type": "general-dynamic-available-run-path", "index": i},
+                                data=run_path,
+                            ),
+                        ],
+                        className="mb-1",
+                    )
+                print(new_element)
+                children.append(new_element)
             if len(children) == 0:
                 return html.Div("No runs found.")
 
