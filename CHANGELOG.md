@@ -1,3 +1,13 @@
+# Version 1.3.3
+
+## Converters
+- Add for each converter a method to check whether a run is valid.
+- Change rst docs of converters.
+
+## General Layout
+- Fix navigation and button problems in general layout.
+- Change general layout to be more intuitiv.
+
 # Version 1.3.2
 
 ## Features

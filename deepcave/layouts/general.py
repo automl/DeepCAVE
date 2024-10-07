@@ -145,6 +145,7 @@ class GeneralLayout(Layout):
                     html.I(
                         className="fas fa-folder-open fa-lg",
                         id={"type": "general-dynamic-add-run", "index": -1},
+                        style={"pointer-events": "none"},
                     ),
                     dbc.Button(
                         "..",
@@ -166,7 +167,6 @@ class GeneralLayout(Layout):
                 is_run = run_handler.is_run(run_path)
                 # Differenciate between run and directory for visibility and usability reasons
                 if is_run:
-                    # run_handler.remove_run(run_path)
                     new_element = html.Div(
                         [
                             dbc.Button(
