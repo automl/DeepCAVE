@@ -162,11 +162,11 @@ class GeneralLayout(Layout):
 
             for i, run_path in enumerate(run_paths):
                 run_name = run_handler.get_run_name(run_path)
-                is_run = run_handler.add_run(run_path)
 
-                # Differenciate between run and directory for visibility reasons
+                is_run = run_handler.is_run(run_path)
+                # Differenciate between run and directory for visibility and usability reasons
                 if is_run:
-                    run_handler.remove_run(run_path)
+                    # run_handler.remove_run(run_path)
                     new_element = html.Div(
                         [
                             dbc.Button(
@@ -201,7 +201,6 @@ class GeneralLayout(Layout):
                         ],
                         className="mb-1",
                     )
-                print(new_element)
                 children.append(new_element)
             if len(children) == 0:
                 return html.Div("No runs found.")

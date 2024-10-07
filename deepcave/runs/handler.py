@@ -523,3 +523,23 @@ class RunHandler:
             runs += list(self.groups.values())
 
         return runs
+
+    def is_run(self, path_name: str) -> bool:
+        """
+        Check whether the path name belongs to a valid run.
+
+        Parameters
+        ----------
+        path_name: str
+            The path to check.
+
+        Returns
+        -------
+        bool
+            True if path is valid run.
+            False otherwise.
+        """
+        for run_class in self.available_run_classes:
+            if run_class.is_valid_run(path_name):
+                return True
+        return False

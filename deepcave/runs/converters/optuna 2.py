@@ -264,3 +264,25 @@ class OptunaRun(Run):
             )
 
         return run
+
+    @classmethod
+    def is_valid_run(cls, path_name: str) -> bool:
+        """
+        Check whether the path name belongs to a valid optuna2 run.
+
+        Parameters
+        ----------
+        path_name: str
+            The path to check.
+
+        Returns
+        -------
+        bool
+            True if path is valid run.
+            False otherwise.
+        """
+        path = Path(path_name)
+        pickle_files = list(path.glob("*.pkl"))
+        if len(pickle_files) != 1:
+            return False
+        return True
