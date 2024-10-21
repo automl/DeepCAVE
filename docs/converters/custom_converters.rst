@@ -71,7 +71,7 @@ Step 3: Implement the methods
    Inside this method, you have to provide a configspace, objectives, and meta data, as well as the
    trials, which have to be added to the newly created run object.
 
-4. **is_valid_run**: This method sould return True, if the given path belongs to a valid run. Valid means, that the given run
+4. **is_valid_run**: This method should return True if the given path belongs to a valid run. Valid means that the given run
    directory contains all files that are necessary for further processing (e.g. a configspace.json).
    
 Step 5: Document your converter
