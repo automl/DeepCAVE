@@ -827,6 +827,12 @@ consider when running Optuna:</p>
 </div>
 <p>Replace <code class="docutils literal notranslate"><span class="pre">&lt;path-to-save-study&gt;</span></code> with the directory where you want to store the Pickle file.</p>
 </li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There has to be exactly one Pickle file.</p>
+</div>
+<ol class="arabic" start="2">
 <li><p>Optional: If you want to display the names of your objectives in DeepCAVE, you can set metric names in Optuna using the following command:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">study</span><span class="o">.</span><span class="n">set_metric_names</span><span class="p">([</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;Flops&quot;</span><span class="p">])</span>
 </pre></div>

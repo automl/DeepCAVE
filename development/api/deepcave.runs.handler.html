@@ -898,6 +898,15 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.handler.RunHandler.is_run">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RunHandler.is_run()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.runs.handler.RunHandler.remove_run">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1190,6 +1199,24 @@ Optional, if <cite>include_groups</cite> is set to True, the groups are also inc
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>AssertionError</strong> – If the working directory is not a string or a Path, an error is thrown.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.handler.RunHandler.is_run">
+<span class="sig-name descname"><span class="pre">is_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/handler.html#RunHandler.is_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.handler.RunHandler.is_run" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether the path name belongs to a valid run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_name</strong> (<em>str</em>) – The path to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if path is valid run.
+False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
