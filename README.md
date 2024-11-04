@@ -69,8 +69,8 @@ DeepCAVE comes with some pre-evaluated runs to get a feeling for what DeepCAVE c
 
 If you cloned the repository from GitHub via `git clone https://github.com/automl/DeepCAVE.git`,
 you can try out some examples by exploring the `logs` directory inside the DeepCAVE dashboard.
-For example, if you navigate to `logs/DeepCAVE`, you can view the run `mnist_pytorch` if you hit
-the `+` button left to it.
+For example, if you navigate to `logs/DeepCAVE/mnist_pytorch`, you can view its runs if you hit
+the `+` button left to them.
 
 
 ## Features
