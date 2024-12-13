@@ -149,7 +149,7 @@ class SMAC3v2Run(Run):
 
         first_starttime = None
 
-        if type(data) is list:
+        if isinstance(data, list):
             import warnings
 
             warnings.warn(
@@ -187,7 +187,37 @@ class SMAC3v2Run(Run):
                 )
                 if run_dict is not None:
                     run.add(**run_dict)
-
+        elif isinstance(data, dict):
+            for config_id, config_data in data.items():
+                instance_id = config_data["instance"]
+                seed = config_data["seed"]
+                budget = config_data["budget"]
+                cost = config_data["cost"]
+                time = config_data["time"]
+                status = config_data["status"]
+                starttime = config_data["starttime"]
+                endtime = config_data["endtime"]
+                additional_info = config_data["additional_info"]
+                run_dict = run._process_data_entry(
+                    config_id,
+                    instance_id,
+                    seed,
+                    budget,
+                    cost,
+                    time,
+                    status,
+                    starttime,
+                    endtime,
+                    additional_info,
+                    first_starttime,
+                    instance_ids,
+                    configs,
+                    config_origins,
+                )
+                if run_dict is not None:
+                    run.add(**run_dict)
+        else:
+            raise RuntimeError("Data in runhistory.json is not in a valid format.")
         return run
 
     def _process_data_entry(
