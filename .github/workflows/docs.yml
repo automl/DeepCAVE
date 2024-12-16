@@ -63,6 +63,9 @@ jobs:
         cp -r ../${{ env.name }}/docs/build/html $branch_name
 
     - name: Push to gh-pages
+      permissions:
+        contents: write
+        id: ${{ github.actor }}
       if: (contains(github.ref, 'development') || contains(github.ref, 'main'))
       run: |
         last_commit=$(git log --pretty=format:"%an: %s")
