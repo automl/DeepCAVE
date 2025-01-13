@@ -1,3 +1,8 @@
+# Version 1.3.4
+
+## Installation
+- Numpy will be installed via conda instead of pip to fix linkage
+
 # Version 1.3.3
 
 ## Converters
