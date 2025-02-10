@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -827,23 +827,23 @@
 <span class="sd">    - Ablation: Provide an evaluator of the ablation paths.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.evaluators.ablation</span> <span class="kn">import</span> <span class="n">Ablation</span>
-<span class="kn">from</span> <span class="nn">deepcave.evaluators.epm.random_forest_surrogate</span> <span class="kn">import</span> <span class="n">RandomForestSurrogate</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.multi_objective_importance</span> <span class="kn">import</span> <span class="n">get_weightings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.evaluators.ablation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ablation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.evaluators.epm.random_forest_surrogate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestSurrogate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.multi_objective_importance</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_weightings</span>
 
 
 <div class="viewcode-block" id="MOAblation">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation">[docs]</a>
-<span class="k">class</span> <span class="nc">MOAblation</span><span class="p">(</span><span class="n">Ablation</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MOAblation</span><span class="p">(</span><span class="n">Ablation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provide an evaluator of the ablation paths.</span>
 
@@ -868,14 +868,14 @@
 <span class="sd">        Gets changed step by step towards the incumbent configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">run</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df_importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([])</span>
 
 <div class="viewcode-block" id="MOAblation.get_importances">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation.get_importances">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_importances</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_importances</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the importance scores.</span>
 
@@ -898,7 +898,7 @@
 
 <div class="viewcode-block" id="MOAblation.predict">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation.predict">[docs]</a>
-    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">weighting</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">weighting</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Predict the performance of the input configuration.</span>
 
@@ -928,7 +928,7 @@
 
 <div class="viewcode-block" id="MOAblation.calculate">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation.calculate">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]],</span>  <span class="c1"># noqa</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># noqa</span>
@@ -999,7 +999,7 @@
 
 <div class="viewcode-block" id="MOAblation.calculate_ablation_path">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation.calculate_ablation_path">[docs]</a>
-    <span class="k">def</span> <span class="nf">calculate_ablation_path</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_ablation_path</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
         <span class="n">objectives_normed</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -1101,7 +1101,7 @@
 
 <div class="viewcode-block" id="MOAblation.ablation">
 <a class="viewcode-back" href="../../../api/deepcave.evaluators.mo_ablation.html#deepcave.evaluators.mo_ablation.MOAblation.ablation">[docs]</a>
-    <span class="k">def</span> <span class="nf">ablation</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ablation</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
         <span class="n">incumbent_config</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
@@ -1187,7 +1187,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
