@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -823,19 +823,19 @@
 <span class="sd">    - Objective: Convert and create objectives.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.runs.exceptions</span> <span class="kn">import</span> <span class="n">NotMergeableError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotMergeableError</span>
 
 
 <div class="viewcode-block" id="Objective">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective">[docs]</a>
 <span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Objective</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Objective</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert, create and merge objectives.</span>
 
@@ -862,7 +862,7 @@
 
 <div class="viewcode-block" id="Objective.__post_init__">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__post_init__">[docs]</a>
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check if bounds should be locked.</span>
 
@@ -899,7 +899,7 @@
 
 <div class="viewcode-block" id="Objective.to_json">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.to_json">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert objectives attributes to a dictionary in a JSON friendly format.</span>
 
@@ -921,7 +921,7 @@
 <div class="viewcode-block" id="Objective.from_json">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.from_json">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Objective&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_json</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;Objective&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an objective from a JSON friendly dictionary format.</span>
 
@@ -950,7 +950,7 @@
 
 <div class="viewcode-block" id="Objective.__eq__">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.__eq__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compare if two instances are equal based on their attributes.</span>
 
@@ -974,7 +974,7 @@
 
 <div class="viewcode-block" id="Objective.merge">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.merge">[docs]</a>
-    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Merge two Objectives over their attributes.</span>
 
@@ -1021,7 +1021,7 @@
 
 <div class="viewcode-block" id="Objective.get_worst_value">
 <a class="viewcode-back" href="../../../api/deepcave.runs.objective.html#deepcave.runs.objective.Objective.get_worst_value">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_worst_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_worst_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the worst value based on the optimization setting.</span>
 
@@ -1057,7 +1057,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

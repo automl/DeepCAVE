@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -822,12 +822,12 @@
 <span class="sd">    - OptunaRun: Define an Optuna run object.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">Categorical</span><span class="p">,</span>
     <span class="n">Configuration</span><span class="p">,</span>
     <span class="n">ConfigurationSpace</span><span class="p">,</span>
@@ -835,20 +835,20 @@
     <span class="n">Integer</span><span class="p">,</span>
     <span class="n">Uniform</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="n">Hyperparameter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace.hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">Hyperparameter</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">Status</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.objective</span> <span class="kn">import</span> <span class="n">Objective</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.hash</span> <span class="kn">import</span> <span class="n">file_to_hash</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">Objective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.hash</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_to_hash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.logs</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="OptunaRun">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun">[docs]</a>
-<span class="k">class</span> <span class="nc">OptunaRun</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OptunaRun</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Define an Optuna run object.</span>
 
@@ -862,7 +862,7 @@
     <span class="n">_initial_order</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_pickle_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_pickle_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the path to the pickle file from the directory path.</span>
 
@@ -883,7 +883,7 @@
             <span class="k">return</span> <span class="n">pickle_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Hash of the current run.</span>
 
@@ -902,7 +902,7 @@
         <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the timestamp of the latest change.</span>
 
@@ -920,7 +920,7 @@
 <div class="viewcode-block" id="OptunaRun.from_path">
 <a class="viewcode-back" href="../../../../api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;OptunaRun&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;OptunaRun&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Based on working_dir/run_name/*, return a new trials object.</span>
 
@@ -941,14 +941,14 @@
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">optuna.distributions</span> <span class="kn">import</span> <span class="p">(</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.distributions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
                 <span class="n">CategoricalDistribution</span><span class="p">,</span>
                 <span class="n">FloatDistribution</span><span class="p">,</span>
                 <span class="n">IntDistribution</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="kn">from</span> <span class="nn">optuna.search_space</span> <span class="kn">import</span> <span class="n">IntersectionSearchSpace</span>
-            <span class="kn">from</span> <span class="nn">optuna.study</span> <span class="kn">import</span> <span class="n">StudyDirection</span>
-            <span class="kn">from</span> <span class="nn">optuna.trial</span> <span class="kn">import</span> <span class="n">TrialState</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.search_space</span><span class="w"> </span><span class="kn">import</span> <span class="n">IntersectionSearchSpace</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.study</span><span class="w"> </span><span class="kn">import</span> <span class="n">StudyDirection</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.trial</span><span class="w"> </span><span class="kn">import</span> <span class="n">TrialState</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">&quot;The Optuna package is required to load Optuna runs. &quot;</span>
@@ -1089,6 +1089,31 @@
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">run</span></div>
+
+
+<div class="viewcode-block" id="OptunaRun.is_valid_run">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.is_valid_run">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_valid_run</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether the path name belongs to a valid optuna run.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_name: str</span>
+<span class="sd">            The path to check.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if path is valid run.</span>
+<span class="sd">            False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span>
+        <span class="n">pickle_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.pkl&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pickle_files</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 </div>
 
 </pre></div>
@@ -1112,7 +1137,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

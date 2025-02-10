@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -820,27 +820,27 @@
 <span class="sd">For this, it uses plotly as well as dash.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
-<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace.hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
     <span class="n">Constant</span><span class="p">,</span>
     <span class="n">Hyperparameter</span><span class="p">,</span>
     <span class="n">IntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">html</span>
-<span class="kn">from</span> <span class="nn">dash.development.base_component</span> <span class="kn">import</span> <span class="n">Component</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dash</span><span class="w"> </span><span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dash.development.base_component</span><span class="w"> </span><span class="kn">import</span> <span class="n">Component</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">interactive</span>
-<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">CONSTANT_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">NAN_VALUE</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave</span><span class="w"> </span><span class="kn">import</span> <span class="n">interactive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">CONSTANT_VALUE</span><span class="p">,</span> <span class="n">NAN_LABEL</span><span class="p">,</span> <span class="n">NAN_VALUE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.logs</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -848,7 +848,7 @@
 <div class="viewcode-block" id="save_image">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.save_image">[docs]</a>
 <span class="nd">@interactive</span>
-<span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">:</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">:</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save a plotly figure as an image.</span>
 
@@ -860,7 +860,7 @@
 <span class="sd">        Name of the image with extension.</span>
 <span class="sd">        Will be automatically saved to the cache.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepcave</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">SAVE_IMAGES</span><span class="p">:</span>
         <span class="k">return</span>
@@ -877,7 +877,7 @@
 
 <div class="viewcode-block" id="hex_to_rgb">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.hex_to_rgb">[docs]</a>
-<span class="k">def</span> <span class="nf">hex_to_rgb</span><span class="p">(</span><span class="n">hex_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hex_to_rgb</span><span class="p">(</span><span class="n">hex_string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a hex_string to a tuple of rgb values.</span>
 
@@ -916,7 +916,7 @@
 
 <div class="viewcode-block" id="get_color">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_color">[docs]</a>
-<span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_color</span><span class="p">(</span><span class="n">id_</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get an RGBA Color, currently (Plotly version 5.3.1) there are 10 possible colors.</span>
 
@@ -944,7 +944,7 @@
 
 <div class="viewcode-block" id="get_discrete_heatmap">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_discrete_heatmap">[docs]</a>
-<span class="k">def</span> <span class="nf">get_discrete_heatmap</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_discrete_heatmap</span><span class="p">(</span>
     <span class="n">x</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">y</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Heatmap</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1030,7 +1030,7 @@
 
 <div class="viewcode-block" id="prettify_label">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.prettify_label">[docs]</a>
-<span class="k">def</span> <span class="nf">prettify_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">prettify_label</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Take a label and prettifies it.</span>
 
@@ -1067,7 +1067,7 @@
 
 <div class="viewcode-block" id="get_hyperparameter_ticks">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hyperparameter_ticks">[docs]</a>
-<span class="k">def</span> <span class="nf">get_hyperparameter_ticks</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hyperparameter_ticks</span><span class="p">(</span>
     <span class="n">hp</span><span class="p">:</span> <span class="n">Hyperparameter</span><span class="p">,</span>
     <span class="n">additional_values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">ticks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
@@ -1177,7 +1177,7 @@
 
 <div class="viewcode-block" id="get_hyperparameter_ticks_from_values">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hyperparameter_ticks_from_values">[docs]</a>
-<span class="k">def</span> <span class="nf">get_hyperparameter_ticks_from_values</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hyperparameter_ticks_from_values</span><span class="p">(</span>
     <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="n">forced</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">ticks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1275,7 +1275,7 @@
 
 <div class="viewcode-block" id="get_hovertext_from_config">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.get_hovertext_from_config">[docs]</a>
-<span class="k">def</span> <span class="nf">get_hovertext_from_config</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_hovertext_from_config</span><span class="p">(</span>
     <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1303,7 +1303,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
     <span class="c1"># Retrieve the link for the config id</span>
-    <span class="kn">from</span> <span class="nn">deepcave.plugins.summary.configurations</span> <span class="kn">import</span> <span class="n">Configurations</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.plugins.summary.configurations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configurations</span>
 
     <span class="n">link</span> <span class="o">=</span> <span class="n">Configurations</span><span class="o">.</span><span class="n">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">config_id</span><span class="p">)</span>
 
@@ -1345,7 +1345,7 @@
 
 <div class="viewcode-block" id="generate_config_code">
 <a class="viewcode-back" href="../../../api/deepcave.utils.styled_plotty.html#deepcave.utils.styled_plotty.generate_config_code">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_config_code</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_config_code</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">variables</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Component</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate HTML components to display code.</span>
 
@@ -1442,7 +1442,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

@@ -22,7 +22,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -823,24 +823,24 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-record-digits-sklearn-py"></span><h1>Multi-Layer Perceptron via Sklearn<a class="headerlink" href="#multi-layer-perceptron-via-sklearn" title="Link to this heading">¶</a></h1>
 <p>This more advanced example shows how sklearn can be used to record an optimization
 process in DeepCAVE format.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.exceptions</span> <span class="kn">import</span> <span class="n">ConvergenceWarning</span>
-<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace</span> <span class="kn">import</span> <span class="n">ConfigurationSpace</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvergenceWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">MLPClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigurationSpace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace.hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">Objective</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_digits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave</span><span class="w"> </span><span class="kn">import</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">Objective</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_digits</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">print_progress_bar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_progress_bar</span>
 
 
-<span class="k">def</span> <span class="nf">get_dataset</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dataset</span><span class="p">():</span>
     <span class="n">digits</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span>
 
     <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span>
@@ -849,7 +849,7 @@ process in DeepCAVE format.</p>
     <span class="k">return</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span>
 
 
-<span class="k">def</span> <span class="nf">get_configspace</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_configspace</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
     <span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
     <span class="n">num_neurons_layer1</span> <span class="o">=</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;num_neurons_layer1&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
     <span class="n">num_neurons_layer2</span> <span class="o">=</span> <span class="n">UniformIntegerHyperparameter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;num_neurons_layer2&quot;</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -874,7 +874,7 @@ process in DeepCAVE format.</p>
     <span class="k">return</span> <span class="n">configspace</span>
 
 
-<span class="k">def</span> <span class="nf">progress_bar</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;█&quot;</span><span class="p">,</span> <span class="n">printEnd</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">progress_bar</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="s2">&quot;█&quot;</span><span class="p">,</span> <span class="n">printEnd</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Call in a loop to create terminal progress bar</span>
 <span class="sd">    @params:</span>
@@ -996,7 +996,7 @@ process in DeepCAVE format.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

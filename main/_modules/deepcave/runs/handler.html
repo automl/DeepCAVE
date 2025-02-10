@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -825,23 +825,23 @@
 <span class="sd">    - RunHandler: Handle the runs.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">deepcave.config</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.group</span> <span class="kn">import</span> <span class="n">Group</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.run</span> <span class="kn">import</span> <span class="n">Run</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.cache</span> <span class="kn">import</span> <span class="n">Cache</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.logs</span> <span class="kn">import</span> <span class="n">get_logger</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.run_caches</span> <span class="kn">import</span> <span class="n">RunCaches</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.run</span><span class="w"> </span><span class="kn">import</span> <span class="n">Run</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.cache</span><span class="w"> </span><span class="kn">import</span> <span class="n">Cache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.logs</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.run_caches</span><span class="w"> </span><span class="kn">import</span> <span class="n">RunCaches</span>
 
 
 <div class="viewcode-block" id="RunHandler">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler">[docs]</a>
-<span class="k">class</span> <span class="nc">RunHandler</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RunHandler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Handle the runs.</span>
 
@@ -869,7 +869,7 @@
 <span class="sd">        Contains the available run classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="s2">&quot;Cache&quot;</span><span class="p">,</span> <span class="n">run_cache</span><span class="p">:</span> <span class="s2">&quot;RunCaches&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span> <span class="s2">&quot;Cache&quot;</span><span class="p">,</span> <span class="n">run_cache</span><span class="p">:</span> <span class="s2">&quot;RunCaches&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">cache</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rc</span> <span class="o">=</span> <span class="n">run_cache</span>
         <span class="c1"># Fields set by self.update()</span>
@@ -889,7 +889,7 @@
 
 <div class="viewcode-block" id="RunHandler.set_working_directory">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.set_working_directory">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_working_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_working_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the working directory to the meta cache.</span>
 
@@ -903,7 +903,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_working_directory">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_working_directory">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_working_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_working_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the current working directory in the cache.</span>
 
@@ -926,7 +926,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_available_run_paths">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_available_run_paths">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_available_run_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_run_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the available run paths from the current directory.</span>
 
@@ -963,7 +963,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_selected_run_paths">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_selected_run_paths">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_selected_run_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_selected_run_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the selected run paths from the cache.</span>
 
@@ -986,7 +986,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_selected_run_names">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_selected_run_names">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_selected_run_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_selected_run_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the run names of the selected runs.</span>
 
@@ -1000,7 +1000,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_run_name">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_run_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_run_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_run_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the stem of the path.</span>
 
@@ -1019,7 +1019,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_selected_groups">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_selected_groups">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_selected_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_selected_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the selected groups.</span>
 
@@ -1042,7 +1042,7 @@
 
 <div class="viewcode-block" id="RunHandler.add_run">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.add_run">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a run path to the cache.</span>
 
@@ -1071,7 +1071,7 @@
 
 <div class="viewcode-block" id="RunHandler.remove_run">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.remove_run">[docs]</a>
-    <span class="k">def</span> <span class="nf">remove_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove a run path from the cache.</span>
 
@@ -1116,7 +1116,7 @@
 
 <div class="viewcode-block" id="RunHandler.update">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update">[docs]</a>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the internal run and group instances but only if a hash changed.&quot;&quot;&quot;</span>
         <span class="n">update_required</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">run_path</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
@@ -1137,7 +1137,7 @@
 
 <div class="viewcode-block" id="RunHandler.update_runs">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_runs">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load selected runs and update cache if files changed.</span>
 
@@ -1177,7 +1177,7 @@
 
 <div class="viewcode-block" id="RunHandler.update_run">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_run">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_run</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">class_hint</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Run</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1251,7 +1251,7 @@
 
 <div class="viewcode-block" id="RunHandler.update_groups">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.update_groups">[docs]</a>
-    <span class="k">def</span> <span class="nf">update_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groups</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load chosen groups.</span>
 
@@ -1304,7 +1304,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_run">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_run">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractRun</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">run_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractRun</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Look inside `self.runs` and `self.groups` and if the run id is found, returns the run.</span>
 
@@ -1333,7 +1333,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_groups">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_groups">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Group</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Group</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return instantiated grouped runs.</span>
 
@@ -1348,7 +1348,7 @@
 
 <div class="viewcode-block" id="RunHandler.get_runs">
 <a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.get_runs">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_groups</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_runs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_groups</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">AbstractRun</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the runs from the internal cache.</span>
 
@@ -1372,6 +1372,29 @@
             <span class="n">runs</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="n">runs</span></div>
+
+
+<div class="viewcode-block" id="RunHandler.is_run">
+<a class="viewcode-back" href="../../../api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.is_run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check whether the path name belongs to a valid run.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_name: str</span>
+<span class="sd">            The path to check.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if path is valid run.</span>
+<span class="sd">            False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">run_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">available_run_classes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">run_class</span><span class="o">.</span><span class="n">is_valid_run</span><span class="p">(</span><span class="n">path_name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
 </div>
 
 </pre></div>
@@ -1395,7 +1418,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -824,35 +824,35 @@
 <span class="sd">    - Configurations: Visualize the characteristics of a configuration.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
 
-<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dash_bootstrap_components</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dbc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dash</span><span class="w"> </span><span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">deepcave.constants</span> <span class="kn">import</span> <span class="n">VALUE_RANGE</span>
-<span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs</span> <span class="kn">import</span> <span class="n">AbstractRun</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.compression</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">VALUE_RANGE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.plugins.dynamic</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicPlugin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractRun</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.status</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.compression</span><span class="w"> </span><span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">get_slider_marks</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.styled_plotty</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">generate_config_code</span><span class="p">,</span>
     <span class="n">get_color</span><span class="p">,</span>
     <span class="n">get_hyperparameter_ticks</span><span class="p">,</span>
     <span class="n">save_image</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.url</span> <span class="kn">import</span> <span class="n">create_url</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.url</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_url</span>
 
 
 <div class="viewcode-block" id="Configurations">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations">[docs]</a>
-<span class="k">class</span> <span class="nc">Configurations</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Configurations</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize the characteristics of a configuration.&quot;&quot;&quot;</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;configurations&quot;</span>
@@ -865,7 +865,7 @@
 <div class="viewcode-block" id="Configurations.get_link">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.get_link">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_link</span><span class="p">(</span><span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span><span class="p">,</span> <span class="n">config_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a link to a specific configuration.</span>
 
@@ -895,7 +895,7 @@
 <div class="viewcode-block" id="Configurations.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.get_input_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_input_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the layout for the input block.</span>
 
@@ -922,7 +922,7 @@
 
 <div class="viewcode-block" id="Configurations.load_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.load_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the content for the defined inputs in &#39;get_input_layout&#39; and &#39;get_filter_layout&#39;.</span>
 
@@ -942,7 +942,7 @@
 
 <div class="viewcode-block" id="Configurations.load_dependency_inputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.load_dependency_inputs">[docs]</a>
-    <span class="k">def</span> <span class="nf">load_dependency_inputs</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_dependency_inputs</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">run</span><span class="p">,</span> <span class="n">previous_inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -987,7 +987,7 @@
 <div class="viewcode-block" id="Configurations.process">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.process">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return raw data based on a run and input data.</span>
 
@@ -1111,7 +1111,7 @@
 <div class="viewcode-block" id="Configurations.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_output_layout</span><span class="p">(</span>
         <span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1180,7 +1180,7 @@
 
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_objective_figure</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_objective_figure</span><span class="p">(</span>
         <span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]],</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1262,7 +1262,7 @@
         <span class="k">return</span> <span class="n">objective_figure</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_configspace_figure</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_configspace_figure</span><span class="p">(</span>
         <span class="n">inputs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">outputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">run</span><span class="p">:</span> <span class="n">AbstractRun</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1327,7 +1327,7 @@
 <div class="viewcode-block" id="Configurations.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.configurations.html#deepcave.plugins.summary.configurations.Configurations.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read in the raw data and prepare them for the layout.</span>
 
@@ -1393,7 +1393,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

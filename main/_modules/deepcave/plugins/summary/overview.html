@@ -21,7 +21,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -826,14 +826,14 @@
 <span class="sd">    - Overview: Visualize an overall overview of the selected run.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
 
-<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
 
-<span class="kn">import</span> <span class="nn">dash_bootstrap_components</span> <span class="k">as</span> <span class="nn">dbc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
-<span class="kn">from</span> <span class="nn">ConfigSpace.hyperparameters</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dash_bootstrap_components</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dbc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace.hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">CategoricalHyperparameter</span><span class="p">,</span>
     <span class="n">Constant</span><span class="p">,</span>
     <span class="n">NormalFloatHyperparameter</span><span class="p">,</span>
@@ -842,21 +842,21 @@
     <span class="n">UniformFloatHyperparameter</span><span class="p">,</span>
     <span class="n">UniformIntegerHyperparameter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">dash</span> <span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dash</span><span class="w"> </span><span class="kn">import</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">deepcave</span> <span class="kn">import</span> <span class="n">config</span>
-<span class="kn">from</span> <span class="nn">deepcave.plugins.dynamic</span> <span class="kn">import</span> <span class="n">DynamicPlugin</span>
-<span class="kn">from</span> <span class="nn">deepcave.plugins.summary.configurations</span> <span class="kn">import</span> <span class="n">Configurations</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.group</span> <span class="kn">import</span> <span class="n">Group</span>
-<span class="kn">from</span> <span class="nn">deepcave.runs.status</span> <span class="kn">import</span> <span class="n">Status</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.layout</span> <span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">help_button</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.styled_plotty</span> <span class="kn">import</span> <span class="n">get_discrete_heatmap</span><span class="p">,</span> <span class="n">save_image</span>
-<span class="kn">from</span> <span class="nn">deepcave.utils.util</span> <span class="kn">import</span> <span class="n">custom_round</span><span class="p">,</span> <span class="n">get_latest_change</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.plugins.dynamic</span><span class="w"> </span><span class="kn">import</span> <span class="n">DynamicPlugin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.plugins.summary.configurations</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configurations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.status</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.layout</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_table</span><span class="p">,</span> <span class="n">help_button</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.styled_plotty</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_discrete_heatmap</span><span class="p">,</span> <span class="n">save_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">custom_round</span><span class="p">,</span> <span class="n">get_latest_change</span>
 
 
 <div class="viewcode-block" id="Overview">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview">[docs]</a>
-<span class="k">class</span> <span class="nc">Overview</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Overview</span><span class="p">(</span><span class="n">DynamicPlugin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Visualize an overall overview of the selected run.&quot;&quot;&quot;</span>
 
     <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;overview&quot;</span>
@@ -869,7 +869,7 @@
 <div class="viewcode-block" id="Overview.get_output_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview.get_output_layout">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_output_layout</span><span class="p">(</span><span class="n">register</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the layout for the output block.</span>
 
@@ -932,7 +932,7 @@
 <div class="viewcode-block" id="Overview.load_outputs">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.summary.overview.html#deepcave.plugins.summary.overview.Overview.load_outputs">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_outputs</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>  <span class="c1"># type: ignore</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read in the raw data and prepare them for the layout.</span>
 
@@ -1297,7 +1297,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

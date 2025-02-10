@@ -22,7 +22,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -869,7 +869,10 @@ make<span class="w"> </span>install-dev
 <p>DeepCAVE is officially tested and supported on Linux platforms.</p>
 <p>While it is generally expected to function correctly on MacOS, some issues may arise due to
 compatibility with Swig. Specifically, users may encounter problems with the
-Parallel Coordinates and Importance Plugin on MacOS.</p>
+Parallel Coordinates and Importance Plugin on MacOS.
+NumPy currently needs to be installed with conda (as opposed to pip) to ensure it being linked to openblas
+and not the Mac specific accelerate. The latter, if used, will result in a plugin failure for
+Configuration Footprint.</p>
 <p>Currently, DeepCAVE cannot be run on Windows due to its reliance on a bash script for
 starting services such as Redis, workers, and the webserver.</p>
 </div>
@@ -967,7 +970,7 @@ make<span class="w"> </span>install
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     

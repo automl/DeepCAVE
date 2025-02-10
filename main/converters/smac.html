@@ -22,7 +22,7 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=2eb4fb78" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
@@ -820,6 +820,14 @@
 runs created with the newer SMAC version &gt;= 2.0.0.</p>
 <p>As Auto-Sklearn and Auto-PyTorch rely on SMAC for hyperparameter optimization, the SMAC
 converter also allows to load runs created with these tools.</p>
+<p>To be able to load it correctly into DeepCAVE, you need to save the configuration space as a ConfigSpace JSON file,
+as well as the run history:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;configspace.json&quot;</span>
+<span class="s2">&quot;runhistory.json&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
 </section>
 
 
@@ -856,7 +864,7 @@ converter also allows to load runs created with these tools.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2024, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
