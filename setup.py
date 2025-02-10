@@ -22,6 +22,8 @@ extras_require = {
         "pydocstyle>=6.3.0",
         "pre-commit>=3.5.0",
         "flake8>=6.1.0",
+        "rq==1.10.1",
+        "pyPDPPartitioner>=0.1.9",
         # Docs
         "automl-sphinx-theme>=0.1.10",
     ],
