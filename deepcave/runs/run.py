@@ -139,25 +139,6 @@ class Run(AbstractRun, ABC):
         """
         pass
 
-    @classmethod
-    @abstractmethod
-    def is_valid_run(cls, path_name: str) -> bool:
-        """
-        Check whether the path name belongs to a valid run.
-
-        Parameters
-        ----------
-        path_name: str
-            The path to check.
-
-        Returns
-        -------
-        bool
-            True if path is valid run.
-            False otherwise.
-        """
-        pass
-
     @property
     def id(self) -> str:
         """

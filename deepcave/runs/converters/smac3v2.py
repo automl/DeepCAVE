@@ -25,10 +25,9 @@ Version 2.0.0 is used.
     - SMAC3v2Run: Define a SMAC3v2 run object.
 """
 
-from typing import Dict, List, Optional, Union
+from typing import Union
 
 import json
-import os
 from pathlib import Path
 
 import numpy as np
@@ -145,171 +144,75 @@ class SMAC3v2Run(Run):
             config_origins = all_data["config_origins"]
             configs = all_data["configs"]
 
-        instance_ids: List[int] = []
+        instance_ids = []
 
         first_starttime = None
+        for (
+            config_id,
+            instance_id,
+            seed,
+            budget,
+            cost,
+            time,
+            status,
+            starttime,
+            endtime,
+            additional_info,
+        ) in data:
+            if instance_id not in instance_ids:
+                instance_ids += [instance_id]
 
-        if isinstance(data, list):
-            import warnings
+            if len(instance_ids) > 1:
+                raise RuntimeError("Instances are not supported.")
 
-            warnings.warn(
-                "The runhistory.json file is in an outdated format.",
-                DeprecationWarning,
-                stacklevel=2,  # Adjusts the stack level to point to the caller.
+            config_id = str(config_id)
+            config = configs[config_id]
+
+            if first_starttime is None:
+                first_starttime = starttime
+
+            starttime = starttime - first_starttime
+            endtime = endtime - first_starttime
+
+            if status == 0:
+                # still running
+                continue
+            elif status == 1:
+                status = Status.SUCCESS
+            elif status == 3:
+                status = Status.TIMEOUT
+            elif status == 4:
+                status = Status.MEMORYOUT
+            else:
+                status = Status.CRASHED
+
+            if status != Status.SUCCESS:
+                # Costs which failed, should not be included
+                cost = [None] * len(cost) if isinstance(cost, list) else None
+                time = None
+            else:
+                time = endtime - starttime
+
+            # Round budget
+            if budget:
+                budget = np.round(budget, 2)
+            else:
+                budget = 0.0
+
+            origin = None
+            if config_id in config_origins:
+                origin = config_origins[config_id]
+
+            run.add(
+                costs=cost + [time] if isinstance(cost, list) else [cost, time],
+                config=config,
+                budget=budget,
+                seed=seed,
+                start_time=starttime,
+                end_time=endtime,
+                status=status,
+                origin=origin,
+                additional=additional_info,
             )
-            for (
-                config_id,
-                instance_id,
-                seed,
-                budget,
-                cost,
-                time,
-                status,
-                starttime,
-                endtime,
-                additional_info,
-            ) in data:
-                run_dict = run._process_data_entry(
-                    str(config_id),
-                    instance_id,
-                    seed,
-                    budget,
-                    cost,
-                    time,
-                    status,
-                    starttime,
-                    endtime,
-                    additional_info,
-                    first_starttime,
-                    instance_ids,
-                    configs,
-                    config_origins,
-                )
-                if run_dict is not None:
-                    run.add(**run_dict)
-        elif isinstance(data, dict):
-            for config_id, config_data in data.items():
-                instance_id = config_data["instance"]
-                seed = config_data["seed"]
-                budget = config_data["budget"]
-                cost = config_data["cost"]
-                time = config_data["time"]
-                status = config_data["status"]
-                starttime = config_data["starttime"]
-                endtime = config_data["endtime"]
-                additional_info = config_data["additional_info"]
-                run_dict = run._process_data_entry(
-                    config_id,
-                    instance_id,
-                    seed,
-                    budget,
-                    cost,
-                    time,
-                    status,
-                    starttime,
-                    endtime,
-                    additional_info,
-                    first_starttime,
-                    instance_ids,
-                    configs,
-                    config_origins,
-                )
-                if run_dict is not None:
-                    run.add(**run_dict)
-        else:
-            raise RuntimeError("Data in runhistory.json is not in a valid format.")
+
         return run
-
-    def _process_data_entry(
-        self,
-        config_id: str,
-        instance_id: int,
-        seed: int,
-        budget: Optional[float],
-        cost: Optional[Union[List[Union[float, None]], float]],
-        time: Optional[float],
-        status: int,
-        starttime: float,
-        endtime: float,
-        additional_info: Optional[Dict],
-        first_starttime: Optional[float],
-        instance_ids: List[int],
-        configs: Dict,
-        config_origins: Dict[str, str],
-    ) -> Optional[Dict]:
-        if instance_id not in instance_ids:
-            instance_ids += [instance_id]
-
-        if len(instance_ids) > 1:
-            raise RuntimeError("Instances are not supported.")
-
-        config = configs[config_id]
-
-        if first_starttime is None:
-            first_starttime = starttime
-
-        starttime = starttime - first_starttime
-        endtime = endtime - first_starttime
-
-        if status == 0:
-            # still running
-            return None
-        elif status == 1:
-            status = Status.SUCCESS
-        elif status == 3:
-            status = Status.TIMEOUT
-        elif status == 4:
-            status = Status.MEMORYOUT
-        else:
-            status = Status.CRASHED
-
-        if status != Status.SUCCESS:
-            # Costs which failed, should not be included
-            cost = [None] * len(cost) if isinstance(cost, list) else None
-            time = None
-        else:
-            time = endtime - starttime
-
-        # Round budget
-        if budget:
-            budget = np.round(budget, 2)
-        else:
-            budget = 0.0
-
-        origin = None
-        if config_id in config_origins:
-            origin = config_origins[config_id]
-
-        return {
-            "costs": cost + [time] if isinstance(cost, list) else [cost, time],
-            "config": config,
-            "budget": budget,
-            "seed": seed,
-            "start_time": starttime,
-            "end_time": endtime,
-            "status": status,
-            "origin": origin,
-            "additional": additional_info,
-        }
-
-    @classmethod
-    def is_valid_run(cls, path_name: str) -> bool:
-        """
-        Check whether the path name belongs to a valid smac3v2 run.
-
-        Parameters
-        ----------
-        path_name: str
-            The path to check.
-
-        Returns
-        -------
-        bool
-            True if path is valid run.
-            False otherwise.
-        """
-        if os.path.isfile(path_name + "/runhistory.json") and os.path.isfile(
-            path_name + "/configspace.json"
-        ):
-            return True
-        return False

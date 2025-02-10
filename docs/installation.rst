@@ -52,9 +52,6 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
     While it is generally expected to function correctly on MacOS, some issues may arise due to
     compatibility with Swig. Specifically, users may encounter problems with the
     Parallel Coordinates and Importance Plugin on MacOS.
-    NumPy currently needs to be installed with conda (as opposed to pip) to ensure it being linked to openblas
-    and not the Mac specific accelerate. The latter, if used, will result in a plugin failure for
-    Configuration Footprint.
 
     Currently, DeepCAVE cannot be run on Windows due to its reliance on a bash script for
     starting services such as Redis, workers, and the webserver.
