@@ -27,31 +27,23 @@ Step 1: Create the converter class
             @property
             def hash(self) -> str:
                 """
-                Return a unique hash for the run (e.g., hashing the trial history).
+                Returns a unique hash for the run (e.g., hashing the trial history).
                 """
                 pass
 
             @property
             def latest_change(self) -> float:
                 """
-                Return the timestamp of the latest change.
+                Returns the timestamp of the latest change.
                 """
                 pass
 
             @classmethod
             def from_path(cls, path: str) -> 'Run':
                 """
-                Return a Run object from a given path.
+                Returns a Run object from a given path.
                 """
                 pass
-            
-            @classmethod
-            def is_valid_run(cls, path: str) -> bool:
-                """
-                Check if the path belongs to a valid run.
-                """
-                pass
-
 
 Step 2: Register your converter
 -------------------------------
@@ -71,10 +63,7 @@ Step 3: Implement the methods
    Inside this method, you have to provide a configspace, objectives, and meta data, as well as the
    trials, which have to be added to the newly created run object.
 
-4. **is_valid_run**: This method should return True if the given path belongs to a valid run. Valid means that the given run
-   directory contains all files that are necessary for further processing (e.g. a configspace.json).
-   
-Step 5: Document your converter
+Step 4: Document your converter
 -------------------------------
 
 To document your converter,  create a corresponding `.rst` file under `docs/converters` and add it to

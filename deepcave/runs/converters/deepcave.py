@@ -24,7 +24,6 @@ This module defines the DeepCAVE run object.
 
 from typing import Union
 
-import os
 from pathlib import Path
 
 from deepcave.runs.run import Run
@@ -93,23 +92,3 @@ class DeepCAVERun(Run):
         The DeepCAVE run.
         """
         return DeepCAVERun(path.stem, path=Path(path))
-
-    @classmethod
-    def is_valid_run(cls, path_name: str) -> bool:
-        """
-        Check whether the path name belongs to a valid deepcave run.
-
-        Parameters
-        ----------
-        path_name: str
-            The path to check.
-
-        Returns
-        -------
-        bool
-            True if path is valid run.
-            False otherwise.
-        """
-        if os.path.isfile(path_name + "history.jsonl"):
-            return True
-        return False

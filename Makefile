@@ -45,9 +45,7 @@ FLAKE8 ?= flake8
 install:
 	$(PIP) install -e .
 
-# Fix numpy as version 2.1.0 will drop support for Python 3.9
 install-dev:
-	conda install -y numpy=2.0.1 
 	$(PIP) install -e ".[dev]"
 	pre-commit install
 

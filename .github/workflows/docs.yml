@@ -26,9 +26,6 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: read
     defaults:
       run:
         shell: bash # Default to using bash on all

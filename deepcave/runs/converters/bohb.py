@@ -25,7 +25,6 @@ This module provides utilities for managing and processing data concerning a BOH
 
 from typing import Any, Dict, Union
 
-import os
 from pathlib import Path
 
 from ConfigSpace.configuration_space import ConfigurationSpace
@@ -178,23 +177,3 @@ class BOHBRun(Run):
             )
 
         return run
-
-    @classmethod
-    def is_valid_run(cls, path_name: str) -> bool:
-        """
-        Check whether the path name belongs to a valid bohb run.
-
-        Parameters
-        ----------
-        path_name: str
-            The path to check.
-
-        Returns
-        -------
-        bool
-            True if path is valid run.
-            False otherwise.
-        """
-        if os.path.isfile(path_name + "/configspace.json"):
-            return True
-        return False
