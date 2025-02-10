@@ -1,17 +1,18 @@
-# Version 1.3.4
-
-## Installation
-- Numpy will be installed via conda instead of pip to fix linkage
-
 # Version 1.3.3
+
+## Bug-Fixes
+- Fixed configuration footprint for Mac platforms
 
 ## Converters
 - Add for each converter a method to check whether a run is valid.
 - Change rst docs of converters.
 
+## Quality of Life
+- Improve documentation on installation for Mac platforms
+- 
 ## General Layout
 - Fix navigation and button problems in general layout.
-- Change general layout to be more intuitiv.
+- Change general layout to be more intuitive.
 
 # Version 1.3.2
 
