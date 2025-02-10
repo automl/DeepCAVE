@@ -385,3 +385,25 @@ class DataFrameRun(Run):
         additional = data.drop(hyperparameters + costs_metrics + budgets + seeds + meta)
         additional = dict(additional)
         return {key: value if pd.notna(value) else None for key, value in additional.items()}
+
+    @classmethod
+    def is_valid_run(cls, path_name: str) -> bool:
+        """
+        Check whether the path name belongs to a valid dataframe run.
+
+        Parameters
+        ----------
+        path_name: str
+            The path to check.
+
+        Returns
+        -------
+        bool
+            True if path is valid run.
+            False otherwise.
+        """
+        if os.path.isfile(path_name + "/trials.csv") and os.path.isfile(
+            path_name + "/configspace.csv"
+        ):
+            return True
+        return False

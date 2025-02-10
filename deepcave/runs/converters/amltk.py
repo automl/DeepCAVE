@@ -24,6 +24,7 @@ This module provides utilities to create an AMLTK (AutoML Toolkit) run.
 
 from typing import Optional, Sequence, Union
 
+import os
 import re
 from pathlib import Path
 
@@ -215,3 +216,25 @@ class AMLTKRun(Run):
             )
 
         return run
+
+    @classmethod
+    def is_valid_run(cls, path_name: str) -> bool:
+        """
+        Check whether the path name belongs to a valid amltk run.
+
+        Parameters
+        ----------
+        path_name: str
+            The path to check.
+
+        Returns
+        -------
+        bool
+            True if path is valid run.
+            False otherwise.
+        """
+        if os.path.isfile(path_name + "/history.parquet") and os.path.isfile(
+            path_name + "/configspace.json"
+        ):
+            return True
+        return False
