@@ -27,6 +27,7 @@ Version 1.4 is used.
 from typing import Optional, Union
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -217,3 +218,25 @@ class SMAC3v1Run(Run):
             )
 
         return run
+
+    @classmethod
+    def is_valid_run(cls, path_name: str) -> bool:
+        """
+        Check whether the path name belongs to a valid smac3v1 run.
+
+        Parameters
+        ----------
+        path_name: str
+            The path to check.
+
+        Returns
+        -------
+        bool
+            True if path is valid run.
+            False otherwise.
+        """
+        if os.path.isfile(path_name + "/runhistory.json") and os.path.isfile(
+            path_name + "/configspace.json"
+        ):
+            return True
+        return False

@@ -14,6 +14,9 @@ consider when running Optuna:
 
    Replace ``<path-to-save-study>`` with the directory where you want to store the Pickle file.
 
+.. note::
+   There has to be exactly one Pickle file.
+
 2. Optional: If you want to display the names of your objectives in DeepCAVE, you can set metric names in Optuna using the following command:
 
    .. code-block:: python
