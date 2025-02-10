@@ -14,7 +14,7 @@ This plugin is capable of answering following questions:
 
 To learn more about Ablation Paths, please see the paper
 `Efficient Parameter Importance Analysis via Ablation with Surrogates
-<https://doi.org/10.1609/aaai.v31i1.10657>`_.
+<https://ojs.aaai.org/index.php/AAAI/article/view/10657>`_.
 
 .. image:: ../images/plugins/ablation_paths.png
 .. image:: ../images/plugins/ablation_paths2.png
