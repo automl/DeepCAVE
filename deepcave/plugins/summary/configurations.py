@@ -416,8 +416,7 @@ class Configurations(DynamicPlugin):
                 yaxis = f"yaxis{id+1}"
 
             layout_kwargs[yaxis] = {
-                # "title": objective.name,
-                "titlefont": {"color": get_color(id)},
+                "title": {"text": objective.name, "font": {"color": get_color(id)}},
                 "tickfont": {"color": get_color(id)},
                 "range": [objective.lower, objective.upper],
             }
