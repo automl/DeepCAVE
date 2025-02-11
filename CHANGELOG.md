@@ -2,6 +2,7 @@
 
 ## Bug-Fixes
 - Fixed configuration footprint for Mac platforms
+- fix bug in plots
 
 ## Converters
 - Add for each converter a method to check whether a run is valid.
@@ -9,7 +10,7 @@
 
 ## Quality of Life
 - Improve documentation on installation for Mac platforms
-- 
+
 ## General Layout
 - Fix navigation and button problems in general layout.
 - Change general layout to be more intuitive.
