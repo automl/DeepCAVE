@@ -1,3 +1,8 @@
+# Version 1.3.4
+
+## Bug-Fixes
+- Fix dependency issues 
+
 # Version 1.3.3
 
 ## Bug-Fixes
