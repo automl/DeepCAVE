@@ -2,7 +2,7 @@
 # are usually completed in github actions.
 
 SHELL := /bin/bash
-VERSION := 1.3.3
+VERSION := 1.3.4
 
 NAME := DeepCAVE
 PACKAGE_NAME := deepcave
@@ -43,6 +43,7 @@ PRECOMMIT ?= pre-commit
 FLAKE8 ?= flake8
 
 install:
+	conda install -y numpy=2.0.1 
 	$(PIP) install -e .
 
 # Fix numpy as version 2.1.0 will drop support for Python 3.9
