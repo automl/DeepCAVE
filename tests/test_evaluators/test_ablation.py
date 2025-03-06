@@ -36,7 +36,8 @@ class TestAblation(unittest.TestCase):
 
         self.evaluator.calculate(objective, budget, seed=42)
         importances2 = self.evaluator.get_ablation_performances()
-
+        print("RF: ")
+        print(importances)
         # Different seed: Different results
         assert importances["batch_size"][1] != importances2["batch_size"][1]
 
@@ -53,6 +54,17 @@ class TestAblation(unittest.TestCase):
 
         # Same seed: Same results
         assert importances["batch_size"][1] == importances2["batch_size"][1]
+
+    def test_polynomial(self):
+        budget = self.run.get_budget(0)
+        objective = self.run.get_objective(0)
+
+        # Calculate
+        self.evaluator.calculate(objectives=objective, budget=budget, polynomial=True, degree=2)
+        importances = self.evaluator.get_ablation_performances()
+
+        print("PS: ")
+        print(importances)
 
 
 if __name__ == "__main__":

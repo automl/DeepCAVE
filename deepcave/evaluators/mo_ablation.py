@@ -124,6 +124,8 @@ class MOAblation(Ablation):
         budget: Optional[Union[int, float]] = None,  # noqa
         n_trees: int = 50,  # noqa
         seed: int = 0,  # noqa
+        polynom: bool = False,
+        degree: int = 2,
     ) -> None:
         """
         Calculate the MO ablation path performances and improvements.

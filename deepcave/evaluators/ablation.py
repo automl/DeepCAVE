@@ -34,6 +34,7 @@ from collections import OrderedDict
 
 import numpy as np
 
+from deepcave.evaluators.epm.polynomial_surrogate import PolynomialSurrogateModel
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
@@ -76,7 +77,9 @@ class Ablation:
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
         n_trees: int = 50,  # noqa
-        seed: int = 0,  # noqa
+        seed: int = 0,
+        polynomial: bool = False,
+        degree: int = 2,  # noqa
     ) -> None:
         """
         Calculate the ablation path performances and improvements.
@@ -110,9 +113,13 @@ class Ablation:
         X = df[list(self.run.configspace.keys())].to_numpy()
         Y = df[objective.name].to_numpy()
 
-        # A Random Forest Regressor is used as surrogate model
-        self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-        self._model._fit(X, Y)
+        if polynomial:
+            self._model = PolynomialSurrogateModel(degree=degree)
+            self._model.fit(X, Y)
+        else:
+            # A Random Forest Regressor is used as surrogate model
+            self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
+            self._model._fit(X, Y)
 
         # Get the incumbent configuration
         incumbent_config, _ = self.run.get_incumbent(budget=budget, objectives=objective)
@@ -124,7 +131,9 @@ class Ablation:
 
         # Obtain the predicted cost of the default and incumbent configuration
         def_cost, def_std = self._model.predict(np.array([default_encode]))
-        def_cost, def_std = def_cost[0], def_std[0]
+
+        if not polynomial:
+            def_cost, def_std = def_cost[0], def_std[0]
         inc_cost, _ = self._model.predict(np.array([incumbent_encode]))
 
         # For further calculations, assume that the objective is to be minimized
@@ -153,7 +162,7 @@ class Ablation:
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
                 continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
-                    objective, budget, incumbent_config, def_cost, hp_it
+                    objective, budget, incumbent_config, def_cost, hp_it, polynomial
                 )
 
                 if not continue_ablation:
@@ -219,6 +228,7 @@ class Ablation:
         incumbent_config: Any,
         def_cost: Any,
         hp_it: List[str],
+        polynomial: bool,
     ) -> Tuple[Any, Any, Any, Any]:
         """
         Calculate the ablation importance for each hyperparameter.
@@ -270,7 +280,10 @@ class Ablation:
             )
             if objective.optimize == "upper":
                 max_hp_cost = -max_hp_cost
-            return True, max_hp, max_hp_cost[0], max_hp_std[0]
+            if not polynomial:
+                return True, max_hp, max_hp_cost[0], max_hp_std[0]
+            else:
+                return True, max_hp, max_hp_cost, max_hp_std
         else:
             self.logger.info(
                 f"End ablation at step {hp_count - len(hp_it) + 1}/{hp_count} "
