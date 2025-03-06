@@ -12,7 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import unittest
+
+import matplotlib.pyplot as plt
 
 from deepcave.evaluators.ablation import Ablation as Evaluator
 from deepcave.runs import AbstractRun
@@ -36,8 +39,7 @@ class TestAblation(unittest.TestCase):
 
         self.evaluator.calculate(objective, budget, seed=42)
         importances2 = self.evaluator.get_ablation_performances()
-        print("RF: ")
-        print(importances)
+
         # Different seed: Different results
         assert importances["batch_size"][1] != importances2["batch_size"][1]
 
@@ -61,10 +63,23 @@ class TestAblation(unittest.TestCase):
 
         # Calculate
         self.evaluator.calculate(objectives=objective, budget=budget, polynomial=True, degree=2)
-        importances = self.evaluator.get_ablation_performances()
+        self.poly_importance = self.evaluator.get_ablation_performances()
 
-        print("PS: ")
-        print(importances)
+        self.evaluator.calculate(objectives=objective, budget=budget, polynomial=False)
+        self.rf_importance = self.evaluator.get_ablation_performances()
+
+        keys = list(self.rf_importance.keys())
+        values1 = [v[0] for v in self.rf_importance.values()]
+        values2 = [v[0] for v in self.poly_importance.values()]
+
+        plt.plot(keys, values1, label="Random Forest Importances", marker="o")
+        plt.plot(keys, values2, label="Polynomial Importances", marker="s")
+
+        plt.xlabel("Hyperparameter")
+        plt.ylabel("Importance")
+        plt.legend()
+        plt.grid()
+        plt.show()
 
 
 if __name__ == "__main__":
