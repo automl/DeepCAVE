@@ -169,7 +169,7 @@ class MOAblation(Ablation):
             # train one model per objective
             Y = df[normed].to_numpy()
             model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-            model._fit(X, Y)
+            model.fit(X, Y)
             self.models.append(model)
 
         weightings = get_weightings(objectives_normed, df)

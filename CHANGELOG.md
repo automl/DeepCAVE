@@ -1,3 +1,8 @@
+# Version 1.3.5
+
+## Access Specifier
+- Changed access specifier from '_fit' to 'fit' in the RF surrogate
+
 # Version 1.3.4
 
 ## Bug-Fixes

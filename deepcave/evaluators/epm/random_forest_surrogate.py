@@ -66,7 +66,7 @@ class RandomForestSurrogate(SurrogateModel):
         means, stds = self._model.predict(X)
         return means[:, 0], stds[:, 0]
 
-    def _fit(self, X: np.ndarray, y: np.ndarray) -> None:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
         Train the surrogate model.
 

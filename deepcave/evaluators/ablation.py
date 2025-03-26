@@ -119,7 +119,7 @@ class Ablation:
         else:
             # A Random Forest Regressor is used as surrogate model
             self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-            self._model._fit(X, Y)
+            self._model.fit(X, Y)
 
         # Get the incumbent configuration
         incumbent_config, _ = self.run.get_incumbent(budget=budget, objectives=objective)
