@@ -30,11 +30,14 @@ hyperparameter that leads to the largest improvement in the objective function a
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import copy
+import math
+import string
 from collections import OrderedDict
 
 import numpy as np
+from ConfigSpace import Configuration, ConfigurationSpace
+from ConfigSpace.hyperparameters import UniformFloatHyperparameter
 
-from deepcave.evaluators.epm.polynomial_surrogate import PolynomialSurrogateModel
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
@@ -76,13 +79,15 @@ class Ablation:
         self,
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
-        n_trees: int = 50,  # noqa
+        model: Any = None,
         seed: int = 0,
-        polynomial: bool = False,
-        degree: int = 2,  # noqa
+        n_trees: int = 50,
     ) -> None:
         """
         Calculate the ablation path performances and improvements.
+
+        To use standard Random Forest surrogate do not pass a model.
+        The option to pass another model is just for testing purposes.
 
         Parameters
         ----------
@@ -91,12 +96,15 @@ class Ablation:
         budget : Optional[Union[int, float]]
             The budget to be considered. If None, all budgets of the run are considered.
             Default is None.
-        n_trees : int
-            The number of trees for the surrogate model.
-            Default is 50.
+        model :
+            The surrogate model to use for the prediction of the perfromances.
+            By default None.
         seed : int
-            The seed for the surrogate model.
-            Default is 0.
+            The seed to use for reproducability.
+            By default 0.
+        n_trees : int
+            The number of trees to use for the Random Forest.
+            By default 50.
         """
         if isinstance(objectives, list) and len(objectives) > 1:
             raise ValueError("Only one objective is supported for ablation paths.")
@@ -106,20 +114,13 @@ class Ablation:
         performances: OrderedDict = OrderedDict()
         improvements: OrderedDict = OrderedDict()
 
+        self._model = model
         df = self.run.get_encoded_data(objective, budget, specific=True)
 
         # Obtain all configurations with theirs costs
         df = df.dropna(subset=[objective.name])
         X = df[list(self.run.configspace.keys())].to_numpy()
         Y = df[objective.name].to_numpy()
-
-        if polynomial:
-            self._model = PolynomialSurrogateModel(degree=degree)
-            self._model.fit(X, Y)
-        else:
-            # A Random Forest Regressor is used as surrogate model
-            self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-            self._model.fit(X, Y)
 
         # Get the incumbent configuration
         incumbent_config, _ = self.run.get_incumbent(budget=budget, objectives=objective)
@@ -129,11 +130,52 @@ class Ablation:
         self.default_config = self.cs.get_default_configuration()
         default_encode = self.run.encode_config(self.default_config)
 
+        # The default model is a RF Surrogate, but it cant be passed as parameter directly
+        # because it needs access to its config space
+        if self._model is None:
+            self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
+
+        # The other possible model is a Polynomial, two masks get passed instead
+        # This is used for testing
+        else:
+            # Predict needs to be called once with the original number of values to generate
+            # the basis polynomial
+            self._model.predict(np.array([default_encode]))
+            degree = 2
+
+            # The number of coefficients are computed to set the starting masks
+            num_coeffs = sum(math.comb(len(self.default_config), k) for k in range(1, degree + 1))
+            default_encode = [np.float64(0.0) for _ in range(num_coeffs)]
+            incumbent_encode = [np.float64(1.0) for _ in range(num_coeffs)]
+
+            # A dummy configspace needs to be generated so the Poly model can fit
+            # the rest of the code
+            keys = list(string.ascii_lowercase[:num_coeffs])
+            self.hp_names = [key for key in keys]
+            self.cs = ConfigurationSpace()
+            self.cs.add(
+                [
+                    UniformFloatHyperparameter(name, lower=0.0, upper=1.0, default_value=0.0)
+                    for name in self.hp_names
+                ]
+            )
+            self.default_config = Configuration(
+                configuration_space=self.cs, values={k: np.float64(0.0) for k in self.hp_names}
+            )
+            incumbent_config = Configuration(
+                configuration_space=self.cs, values={k: np.float64(1.0) for k in self.hp_names}
+            )
+            self.run.configspace = self.cs
+
+            # The objectives optimize needs to be upper, because it is a polynomial
+            # function.
+            objective.optimize = "upper"
+
+        self._model.fit(X, Y)
+
         # Obtain the predicted cost of the default and incumbent configuration
         def_cost, def_std = self._model.predict(np.array([default_encode]))
-
-        if not polynomial:
-            def_cost, def_std = def_cost[0], def_std[0]
+        def_cost, def_std = def_cost[0], def_std[0]
         inc_cost, _ = self._model.predict(np.array([incumbent_encode]))
 
         # For further calculations, assume that the objective is to be minimized
@@ -162,7 +204,7 @@ class Ablation:
             for i in range(len(hp_it)):
                 # Get the results of the current ablation iteration
                 continue_ablation, max_hp, max_hp_cost, max_hp_std = self._ablation(
-                    objective, budget, incumbent_config, def_cost, hp_it, polynomial
+                    objective, budget, incumbent_config, def_cost, hp_it
                 )
 
                 if not continue_ablation:
@@ -228,7 +270,6 @@ class Ablation:
         incumbent_config: Any,
         def_cost: Any,
         hp_it: List[str],
-        polynomial: bool,
     ) -> Tuple[Any, Any, Any, Any]:
         """
         Calculate the ablation importance for each hyperparameter.
@@ -258,7 +299,6 @@ class Ablation:
             if hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
-
                 new_cost, _ = self._model.predict(np.array([self.run.encode_config(config_copy)]))
                 if objective.optimize == "upper":
                     new_cost = -new_cost
@@ -272,6 +312,7 @@ class Ablation:
             else:
                 continue
         hp_count = len(list(self.cs.keys()))
+
         if max_hp != "":
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
@@ -280,10 +321,8 @@ class Ablation:
             )
             if objective.optimize == "upper":
                 max_hp_cost = -max_hp_cost
-            if not polynomial:
-                return True, max_hp, max_hp_cost[0], max_hp_std[0]
-            else:
-                return True, max_hp, max_hp_cost, max_hp_std
+
+            return True, max_hp, max_hp_cost[0], max_hp_std[0]
         else:
             self.logger.info(
                 f"End ablation at step {hp_count - len(hp_it) + 1}/{hp_count} "

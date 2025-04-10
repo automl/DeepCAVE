@@ -3,6 +3,10 @@
 ## Access Specifier
 - Changed access specifier from '_fit' to 'fit' in the RF surrogate
 
+## Ablation tests
+- Added Polynomial "model" class for testing ablation path behavior
+- Added extra test case using the polynomial to validate ablation output correctness
+
 # Version 1.3.4
 
 ## Bug-Fixes

@@ -122,10 +122,9 @@ class MOAblation(Ablation):
         self,
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
-        n_trees: int = 50,  # noqa
+        model: Any = None,
         seed: int = 0,  # noqa
-        polynom: bool = False,
-        degree: int = 2,
+        n_trees: int = 50,  # noqa
     ) -> None:
         """
         Calculate the MO ablation path performances and improvements.
@@ -137,6 +136,9 @@ class MOAblation(Ablation):
         budget : Optional[Union[int, float]]
             The budget to be considered. If None, all budgets of the run are considered.
             Default is None.
+        model : Any
+            For mo ablation this parameter does not do anything, except fit the head.
+            By default None.
         n_trees : int
             The number of trees for the surrogate model.
             Default is 50.
