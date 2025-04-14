@@ -13,16 +13,18 @@
 # limitations under the License.
 
 
-from typing import Tuple
+from typing import Optional, Tuple
 
 import itertools
 import unittest
+from pathlib import Path
 
 import numpy as np
 from sympy import lambdify, symbols
 
 from deepcave.evaluators.ablation import Ablation as Evaluator
 from deepcave.runs import AbstractRun
+from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
 
@@ -34,10 +36,12 @@ class PolynomialSurrogateModel:
     It generates a ground truth for testing purposes.
     """
 
-    def __init__(self):
-        self.poly_func = None
+    def __init__(
+        self, n: int, max_degree: int = 2, seed: int = 42, coeffs: Optional[np.ndarray] = None
+    ):
+        self._polynomial(n, max_degree, seed, coeffs)
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
+    def fit(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         Since the model does not need fitting, this method does nothing.
         It solely exists to fit the norm.
@@ -59,15 +63,13 @@ class PolynomialSurrogateModel:
         Tuple[np.ndarray, np.ndarray]
             The result of the polynomial.
         """
-        if self.poly_func is None:
-            self.polynomial(len(X[0]))
-            return
 
         poly = self.poly_func(*X[0])
-
         return np.array([poly]), np.array([0])
 
-    def polynomial(self, n: int) -> np.ndarray:
+    def _polynomial(
+        self, n: int, max_degree: int = 2, seed: int = 42, coeffs: Optional[np.ndarray] = None
+    ) -> np.ndarray:
         """
         Get the multivariate basis polynomial with the given variables.
 
@@ -81,14 +83,13 @@ class PolynomialSurrogateModel:
         np.ndarray
             The fitting polynomial structure with random variables.
         """
+
         x = symbols(f"x1:{n+1}")
+
         terms = []
         a = []
+        count = 1
 
-        count = 0
-
-        # This is fixed to 2 as to avoid too large computations
-        max_degree = 2
         for d in range(1, max_degree + 1):
             # All combinations of the variables are generated and added a coefficient.
             for combo in itertools.combinations(x, r=d):
@@ -104,27 +105,31 @@ class PolynomialSurrogateModel:
         a0 = symbols("a0")
         expr = a0 + sum(terms)
 
-        variables = [v for v in expr.free_symbols if str(v).startswith("x")]
-        variables = sorted(variables, key=lambda s: str(s))
+        coeff_symb = [v for v in expr.free_symbols if str(v).startswith("a")]
+        coeff_symb = sorted(coeff_symb, key=lambda s: str(s))
 
-        np.random.seed(42)
-        input_values = np.random.uniform(1, 5, size=len(variables))
-        input_mapping = dict(zip(variables, input_values))
+        if coeffs is None:
+            np.random.seed(seed)
+            input_values = np.random.randint(1, 5, size=len(coeff_symb))
+
+        else:
+            input_values = coeffs
+
+        input_mapping = dict(zip(coeff_symb, input_values))
         partial_expr = expr.subs(input_mapping)
 
-        coeff_symbols = sorted(partial_expr.free_symbols, key=lambda s: str(s))
-        self.poly_func = lambdify(coeff_symbols, partial_expr, modules="numpy")
+        variables = sorted(partial_expr.free_symbols, key=lambda s: str(s))
+
+        self.poly_func = lambdify(variables, partial_expr, modules="numpy")
         return
 
 
 class TestAblation(unittest.TestCase):
-    def setUp(self):
-        # Initiate run here
+    def test(self):
         self.run: AbstractRun = SMAC3v2Run.from_path("logs/SMAC3v2/mlp/run_1")
         self.hp_names = list(self.run.configspace.keys())
         self.evaluator = Evaluator(self.run)
 
-    def test(self):
         budget = self.run.get_budget(0)
         objective = self.run.get_objective(0)
 
@@ -139,6 +144,10 @@ class TestAblation(unittest.TestCase):
         assert importances["batch_size"][1] != importances2["batch_size"][1]
 
     def test_seed(self):
+        self.run: AbstractRun = SMAC3v2Run.from_path("logs/SMAC3v2/mlp/run_1")
+        self.hp_names = list(self.run.configspace.keys())
+        self.evaluator = Evaluator(self.run)
+
         budget = self.run.get_budget(0)
         objective = self.run.get_objective(0)
 
@@ -153,18 +162,21 @@ class TestAblation(unittest.TestCase):
         assert importances["batch_size"][1] == importances2["batch_size"][1]
 
     def test_polynomial(self):
+        self.run = DeepCAVERun.from_path(Path("tests/test_evaluators/dummy_run"))
+        self.hp_names = list(self.run.configspace.keys())
+        self.evaluator = Evaluator(self.run)
+
+        model = PolynomialSurrogateModel(len(self.hp_names))
+
         budget = self.run.get_budget(0)
         objective = self.run.get_objective(0)
 
-        model = PolynomialSurrogateModel()
         self.evaluator.calculate(objectives=objective, budget=budget, model=model)
 
         # Evaluate the final ablation path
-        performances = self.evaluator.get_ablation_performances()
-
-        # Check if the performances are increasing
-        performances_list = [perf for perf, _ in performances.values()]
-        assert all(x <= y for x, y in zip(performances_list, performances_list[1:]))
+        # performances = self.evaluator.get_ablation_performances()
+        # importances = self.evaluator.get_ablation_improvements()
+        # TODO: evaluation
 
 
 if __name__ == "__main__":

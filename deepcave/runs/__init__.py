@@ -1317,6 +1317,7 @@ class AbstractRun(ABC):
         config_ids = []
 
         results = self.get_all_costs(budget, statuses, seed)
+
         for config_id, config_costs in results.items():
             config = self.configs[config_id]
             for seed, costs in config_costs.items():

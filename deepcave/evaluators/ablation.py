@@ -30,13 +30,9 @@ hyperparameter that leads to the largest improvement in the objective function a
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import copy
-import math
-import string
 from collections import OrderedDict
 
 import numpy as np
-from ConfigSpace import Configuration, ConfigurationSpace
-from ConfigSpace.hyperparameters import UniformFloatHyperparameter
 
 from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
@@ -115,6 +111,7 @@ class Ablation:
         improvements: OrderedDict = OrderedDict()
 
         self._model = model
+
         df = self.run.get_encoded_data(objective, budget, specific=True)
 
         # Obtain all configurations with theirs costs
@@ -127,6 +124,7 @@ class Ablation:
         incumbent_encode = self.run.encode_config(incumbent_config)
 
         # Get the default configuration
+
         self.default_config = self.cs.get_default_configuration()
         default_encode = self.run.encode_config(self.default_config)
 
@@ -135,44 +133,7 @@ class Ablation:
         if self._model is None:
             self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
 
-        # The other possible model is a Polynomial, two masks get passed instead
-        # This is used for testing
-        else:
-            # Predict needs to be called once with the original number of values to generate
-            # the basis polynomial
-            self._model.predict(np.array([default_encode]))
-            degree = 2
-
-            # The number of coefficients are computed to set the starting masks
-            num_coeffs = sum(math.comb(len(self.default_config), k) for k in range(1, degree + 1))
-            default_encode = [np.float64(0.0) for _ in range(num_coeffs)]
-            incumbent_encode = [np.float64(1.0) for _ in range(num_coeffs)]
-
-            # A dummy configspace needs to be generated so the Poly model can fit
-            # the rest of the code
-            keys = list(string.ascii_lowercase[:num_coeffs])
-            self.hp_names = [key for key in keys]
-            self.cs = ConfigurationSpace()
-            self.cs.add(
-                [
-                    UniformFloatHyperparameter(name, lower=0.0, upper=1.0, default_value=0.0)
-                    for name in self.hp_names
-                ]
-            )
-            self.default_config = Configuration(
-                configuration_space=self.cs, values={k: np.float64(0.0) for k in self.hp_names}
-            )
-            incumbent_config = Configuration(
-                configuration_space=self.cs, values={k: np.float64(1.0) for k in self.hp_names}
-            )
-            self.run.configspace = self.cs
-
-            # The objectives optimize needs to be upper, because it is a polynomial
-            # function.
-            objective.optimize = "upper"
-
         self._model.fit(X, Y)
-
         # Obtain the predicted cost of the default and incumbent configuration
         def_cost, def_std = self._model.predict(np.array([default_encode]))
         def_cost, def_std = def_cost[0], def_std[0]
@@ -217,6 +178,7 @@ class Ablation:
                     performances[max_hp] = (max_hp_cost, max_hp_std)
                 impr_std = np.sqrt(def_std**2 + max_hp_std**2)
                 improvements[max_hp] = ((def_cost - max_hp_cost), impr_std)
+
                 # New 'default' cost and std
                 def_cost = max_hp_cost
                 def_std = max_hp_std
