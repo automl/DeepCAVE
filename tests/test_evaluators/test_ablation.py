@@ -23,6 +23,7 @@ import numpy as np
 from sympy import lambdify, symbols
 
 from deepcave.evaluators.ablation import Ablation as Evaluator
+from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.deepcave import DeepCAVERun
 from deepcave.runs.converters.smac3v2 import SMAC3v2Run
@@ -37,8 +38,9 @@ class PolynomialSurrogateModel:
     """
 
     def __init__(
-        self, n: int, max_degree: int = 2, seed: int = 42, coeffs: Optional[np.ndarray] = None
+        self, n: int, max_degree: int = 1, seed: int = 42, coeffs: Optional[np.ndarray] = None
     ):
+        self.ground_truth: np.ndarray
         self._polynomial(n, max_degree, seed, coeffs)
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
@@ -83,7 +85,6 @@ class PolynomialSurrogateModel:
         np.ndarray
             The fitting polynomial structure with random variables.
         """
-
         x = symbols(f"x1:{n+1}")
 
         terms = []
@@ -110,12 +111,12 @@ class PolynomialSurrogateModel:
 
         if coeffs is None:
             np.random.seed(seed)
-            input_values = np.random.randint(1, 5, size=len(coeff_symb))
+            self.ground_truth = np.random.uniform(1, 5, size=len(coeff_symb))
 
         else:
-            input_values = coeffs
+            self.ground_truth = coeffs
 
-        input_mapping = dict(zip(coeff_symb, input_values))
+        input_mapping = dict(zip(coeff_symb, self.ground_truth))
         partial_expr = expr.subs(input_mapping)
 
         variables = sorted(partial_expr.free_symbols, key=lambda s: str(s))
@@ -134,10 +135,12 @@ class TestAblation(unittest.TestCase):
         objective = self.run.get_objective(0)
 
         # Calculate
-        self.evaluator.calculate(objective, budget, seed=0)
+        model_1 = RandomForestSurrogate(self.run.configspace, seed=0)
+        self.evaluator.calculate(objective, budget, model=model_1)
         importances = self.evaluator.get_ablation_performances()
 
-        self.evaluator.calculate(objective, budget, seed=42)
+        model_2 = RandomForestSurrogate(self.run.configspace, seed=42)
+        self.evaluator.calculate(objective, budget, model=model_2)
         importances2 = self.evaluator.get_ablation_performances()
 
         # Different seed: Different results
@@ -152,10 +155,12 @@ class TestAblation(unittest.TestCase):
         objective = self.run.get_objective(0)
 
         # Calculate
-        self.evaluator.calculate(objective, budget, seed=0)
+        model_1 = RandomForestSurrogate(self.run.configspace, seed=0)
+        self.evaluator.calculate(objective, budget, model=model_1)
         importances = self.evaluator.get_ablation_performances()
 
-        self.evaluator.calculate(objective, budget, seed=0)
+        model_2 = RandomForestSurrogate(self.run.configspace, seed=0)
+        self.evaluator.calculate(objective, budget, model=model_2)
         importances2 = self.evaluator.get_ablation_performances()
 
         # Same seed: Same results
@@ -174,9 +179,17 @@ class TestAblation(unittest.TestCase):
         self.evaluator.calculate(objectives=objective, budget=budget, model=model)
 
         # Evaluate the final ablation path
-        # performances = self.evaluator.get_ablation_performances()
-        # importances = self.evaluator.get_ablation_improvements()
-        # TODO: evaluation
+        importances = self.evaluator.get_ablation_improvements()
+        sorted_importances = np.array(
+            [
+                round(float(value[0]), 8)
+                for key, value in sorted(importances.items())
+                if key != "default"
+            ]
+        )
+        ground_truth = model.ground_truth[1:]
+
+        assert np.allclose(sorted_importances, ground_truth, rtol=1e-5, atol=1e-8)
 
 
 if __name__ == "__main__":

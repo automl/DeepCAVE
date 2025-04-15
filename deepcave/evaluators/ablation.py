@@ -76,8 +76,6 @@ class Ablation:
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
         model: Any = None,
-        seed: int = 0,
-        n_trees: int = 50,
     ) -> None:
         """
         Calculate the ablation path performances and improvements.
@@ -95,12 +93,6 @@ class Ablation:
         model :
             The surrogate model to use for the prediction of the perfromances.
             By default None.
-        seed : int
-            The seed to use for reproducability.
-            By default 0.
-        n_trees : int
-            The number of trees to use for the Random Forest.
-            By default 50.
         """
         if isinstance(objectives, list) and len(objectives) > 1:
             raise ValueError("Only one objective is supported for ablation paths.")
@@ -131,7 +123,7 @@ class Ablation:
         # The default model is a RF Surrogate, but it cant be passed as parameter directly
         # because it needs access to its config space
         if self._model is None:
-            self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
+            self._model = RandomForestSurrogate(self.cs, seed=0, n_trees=50)
 
         self._model.fit(X, Y)
         # Obtain the predicted cost of the default and incumbent configuration
