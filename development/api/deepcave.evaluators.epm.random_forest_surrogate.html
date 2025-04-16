@@ -808,6 +808,15 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.fit">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RandomForestSurrogate.fit()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.predict">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -864,6 +873,23 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SurrogateModel</span></code></p>
 <p>Random forest surrogate for the pyPDP package.</p>
 <p>Predict deviations and fit the model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/random_forest_surrogate.html#RandomForestSurrogate.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.fit" title="Link to this definition">¶</a></dt>
+<dd><p>Train the surrogate model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>np.ndarray</em>) – Input data points.</p></li>
+<li><p><strong>y</strong> (<em>np.ndarray</em>) – Corresponding target values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/evaluators/epm/random_forest_surrogate.html#RandomForestSurrogate.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate.predict" title="Link to this definition">¶</a></dt>

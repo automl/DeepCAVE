@@ -879,11 +879,13 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">objectives</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Objective</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Objective</span><span class="p">]]],</span>  <span class="c1"># noqa</span>
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># noqa</span>
-        <span class="n">n_trees</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># noqa</span>
-        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># noqa</span>
+        <span class="n">model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate the ablation path performances and improvements.</span>
+
+<span class="sd">        To use standard Random Forest surrogate do not pass a model.</span>
+<span class="sd">        The option to pass another model is just for testing purposes.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -892,12 +894,9 @@
 <span class="sd">        budget : Optional[Union[int, float]]</span>
 <span class="sd">            The budget to be considered. If None, all budgets of the run are considered.</span>
 <span class="sd">            Default is None.</span>
-<span class="sd">        n_trees : int</span>
-<span class="sd">            The number of trees for the surrogate model.</span>
-<span class="sd">            Default is 50.</span>
-<span class="sd">        seed : int</span>
-<span class="sd">            The seed for the surrogate model.</span>
-<span class="sd">            Default is 0.</span>
+<span class="sd">        model :</span>
+<span class="sd">            The surrogate model to use for the prediction of the perfromances.</span>
+<span class="sd">            By default None.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">objectives</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Only one objective is supported for ablation paths.&quot;</span><span class="p">)</span>
@@ -907,6 +906,8 @@
         <span class="n">performances</span><span class="p">:</span> <span class="n">OrderedDict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="n">improvements</span><span class="p">:</span> <span class="n">OrderedDict</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
+
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_encoded_data</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">budget</span><span class="p">,</span> <span class="n">specific</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Obtain all configurations with theirs costs</span>
@@ -914,18 +915,21 @@
         <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
         <span class="n">Y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">objective</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
-        <span class="c1"># A Random Forest Regressor is used as surrogate model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="n">n_trees</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
-
         <span class="c1"># Get the incumbent configuration</span>
         <span class="n">incumbent_config</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">get_incumbent</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">)</span>
         <span class="n">incumbent_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">incumbent_config</span><span class="p">)</span>
 
         <span class="c1"># Get the default configuration</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">default_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">get_default_configuration</span><span class="p">()</span>
         <span class="n">default_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_config</span><span class="p">)</span>
 
+        <span class="c1"># The default model is a RF Surrogate, but it cant be passed as parameter directly</span>
+        <span class="c1"># because it needs access to its config space</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">RandomForestSurrogate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_trees</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
         <span class="c1"># Obtain the predicted cost of the default and incumbent configuration</span>
         <span class="n">def_cost</span><span class="p">,</span> <span class="n">def_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">default_encode</span><span class="p">]))</span>
         <span class="n">def_cost</span><span class="p">,</span> <span class="n">def_std</span> <span class="o">=</span> <span class="n">def_cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">def_std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -970,6 +974,7 @@
                     <span class="n">performances</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_hp_cost</span><span class="p">,</span> <span class="n">max_hp_std</span><span class="p">)</span>
                 <span class="n">impr_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">def_std</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">max_hp_std</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
                 <span class="n">improvements</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">def_cost</span> <span class="o">-</span> <span class="n">max_hp_cost</span><span class="p">),</span> <span class="n">impr_std</span><span class="p">)</span>
+
                 <span class="c1"># New &#39;default&#39; cost and std</span>
                 <span class="n">def_cost</span> <span class="o">=</span> <span class="n">max_hp_cost</span>
                 <span class="n">def_std</span> <span class="o">=</span> <span class="n">max_hp_std</span>
@@ -1059,7 +1064,6 @@
             <span class="k">if</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">incumbent_config</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">hp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">config_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_config</span><span class="p">)</span>
                 <span class="n">config_copy</span><span class="p">[</span><span class="n">hp</span><span class="p">]</span> <span class="o">=</span> <span class="n">incumbent_config</span><span class="p">[</span><span class="n">hp</span><span class="p">]</span>
-
                 <span class="n">new_cost</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="o">.</span><span class="n">encode_config</span><span class="p">(</span><span class="n">config_copy</span><span class="p">)]))</span>
                 <span class="k">if</span> <span class="n">objective</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
                     <span class="n">new_cost</span> <span class="o">=</span> <span class="o">-</span><span class="n">new_cost</span>
@@ -1073,6 +1077,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">continue</span>
         <span class="n">hp_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+
         <span class="k">if</span> <span class="n">max_hp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="c1"># For the maximum impact hyperparameter, switch the default with the incumbent value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">default_config</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span> <span class="o">=</span> <span class="n">incumbent_config</span><span class="p">[</span><span class="n">max_hp</span><span class="p">]</span>
@@ -1081,6 +1086,7 @@
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">objective</span><span class="o">.</span><span class="n">optimize</span> <span class="o">==</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span>
                 <span class="n">max_hp_cost</span> <span class="o">=</span> <span class="o">-</span><span class="n">max_hp_cost</span>
+
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">max_hp</span><span class="p">,</span> <span class="n">max_hp_cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_hp_std</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
