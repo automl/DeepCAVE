@@ -338,7 +338,7 @@ class AblationPaths(StaticPlugin):
         data: Dict[Any, Any] = {}
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
-            evaluator.calculate(objective, budget, n_trees=n_trees, seed=0)
+            evaluator.calculate(objective, budget)
             if isinstance(objective, list):
                 assert isinstance(evaluator, MOAblation)
                 data[budget_id] = evaluator.get_importances()

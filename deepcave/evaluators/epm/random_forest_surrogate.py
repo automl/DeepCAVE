@@ -78,3 +78,16 @@ class RandomForestSurrogate(SurrogateModel):
             Corresponding target values.
         """
         self._model.train(X, y)
+
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
+        """
+        Train the surrogate model.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Input data points.
+        y : np.ndarray
+            Corresponding target values.
+        """
+        self._fit(X, y)
