@@ -156,7 +156,17 @@ class Config:
         from deepcave.runs.converters.dataframe import DataFrameRun
         from deepcave.runs.converters.deepcave import DeepCAVERun
         from deepcave.runs.converters.optuna import OptunaRun
+        from deepcave.runs.converters.raytune import RayTuneRun
         from deepcave.runs.converters.smac3v1 import SMAC3v1Run
         from deepcave.runs.converters.smac3v2 import SMAC3v2Run
 
-        return [AMLTKRun, BOHBRun, DeepCAVERun, OptunaRun, SMAC3v1Run, SMAC3v2Run, DataFrameRun]
+        return [
+            AMLTKRun,
+            BOHBRun,
+            DeepCAVERun,
+            OptunaRun,
+            RayTuneRun,
+            SMAC3v1Run,
+            SMAC3v2Run,
+            DataFrameRun,
+        ]
