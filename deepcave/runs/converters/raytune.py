@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 
 from deepcave.runs.run import Run
+from deepcave.utils.hash import file_to_hash
 
 
 class RayTuneRun(Run):
@@ -41,8 +42,9 @@ class RayTuneRun(Run):
         """
         if self.path is None:
             return ""
-        return ""
-        # TODO: What to use as id
+
+        # Use hash of results.json as id
+        return file_to_hash(self.path / "results.json")
 
     @property
     def latest_change(self) -> float:
@@ -56,12 +58,13 @@ class RayTuneRun(Run):
         """
         if self.path is None:
             return 0
-        return 0.0
-        # TODO: Which file for latest change
+
+        return Path(self.path / "results.json").stat().st_mtime
 
     @classmethod
     def from_path(cls, path: Path) -> "RayTuneRun":
         """Return a Run object from a given path."""
+        # Warning also in configspace.json
         return RayTuneRun("def")
 
     @classmethod
@@ -80,9 +83,16 @@ class RayTuneRun(Run):
             True if path is valid run.
             False otherwise.
         """
-        # TODO: What files to we need to process
-        if os.path.isfile(path_name + "/runhistory.json") and os.path.isfile(
-            path_name + "/configspace.json"
+        if os.path.isfile(path_name + "/result.json") and os.path.isfile(
+            path_name + "/params.json"
         ):
+            if not os.path.isfile(path_name + "/configspace.json"):
+                print(
+                    "The configspace.json file will be auto extracted. For more"
+                    "reliable results please provide your own configspace.json file or "
+                    "ajust the one provided."
+                )
+                # TODO: create issue for the notificationp problem
+                return True
             return True
         return False
