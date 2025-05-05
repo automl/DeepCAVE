@@ -61,6 +61,9 @@ install-optuna:
 install-bohb:
 	$(PIP) install -e ".[bohb]"
 
+install-raytune:
+	$(PIP) install -e ".[raytune]"
+
 check-black:
 	$(BLACK) ${SOURCE_DIR} --check || :
 	$(BLACK) ${EXAMPLES_DIR} --check || :
