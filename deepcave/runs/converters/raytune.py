@@ -8,12 +8,15 @@ This module provides utilities to create a RayTune run.
     - RayTuneRun: Define an RayTune run object.
 """
 
+import glob
+import json
 import os
 from pathlib import Path
 
-# from ConfigSpace import ConfigurationSpace
+from ConfigSpace import ConfigurationSpace
 from ray.tune import ExperimentAnalysis
 
+from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
 
@@ -84,6 +87,7 @@ class RayTuneRun(Run):
         RayTuneRun
             The run.
         """
+        configspace = None
         # Get the information of the configspace
         if not os.path.isfile(str(path) + "/configspace.json"):
             configspace = {  # type: ignore
@@ -98,39 +102,64 @@ class RayTuneRun(Run):
             hp_names = {}
             analysis = None
             analysis = ExperimentAnalysis(str(path)).results
+            print(analysis)
+            dic = ExperimentAnalysis(str(path)).get_all_configs()
+            print(dic)
+            dii = ExperimentAnalysis(str(path)).dataframe()
+            print(dii)
+
             for key in analysis.keys():
                 for hp, value in analysis[key]["config"].items():
                     if hp not in hp_names:
                         hp_names[hp] = [value]
                     else:
                         hp_names[hp].append(value)
-            for key, values in hp_names.items():
-                configspace["hyperparameters"].append(  # type: ignore
-                    {
-                        "type": str(type(values[0])),
-                        "name": key,
-                        "lower": min(values),
-                        "upper": max(values),
-                        "default": type(values[0])((min(values) + max(values)) / 2),
-                    }
-                )
-            # configspace = ConfigurationSpace(configspace)
-            print(configspace)
-        # TODO: Warning also in configspace.json
+
+            if isinstance(value, str):
+                for key, values in hp_names.items():
+                    values_set = set(values)
+                    configspace["hyperparameters"].append(  # type: ignore
+                        {"type": "categorical", "name": key, "choices": list(values_set)}
+                    )
+            else:
+                for key, values in hp_names.items():
+                    configspace["hyperparameters"].append(  # type: ignore
+                        {
+                            "type": "uniform_" + type(values[0]).__name__,
+                            "name": key,
+                            "lower": min(values),
+                            "upper": max(values),
+                            "default_value": type(values[0])((min(values) + max(values)) / 2),
+                        }
+                    )
+            with open(str(path) + "/configspace.json", "w") as f:
+                json.dump(configspace, f)
+
+        # Convert into a Configuration Space object
+        configspace = ConfigurationSpace.from_json(path / "configspace.json")  # type: ignore
+        file_path = str(path) + "/experiment_state*"
+        for filename in glob.glob(file_path):
+            with open(filename, "r") as f:
+                spamreader = json.load(f)
+                nested_json_str = spamreader["trial_data"][0][0]
+                obj = json.loads(nested_json_str)["trainable_name"]
+
+        objective = Objective(obj)
+        run = RayTuneRun(path.stem, configspace=configspace, objectives=objective)  # type: ignore
+        # TODO: Warning also in configspace.json -> Wie?
+        # TODO: Warning that all get treated as uniform
         # TODO: Create RayTune Run
-        # TODO: Get configspace, create json if necessary:
-        # TODO: Bounds are upper and lower of run configs
-        # TODO: different for categoricals
-        # TODO: {'name': null, 'hps':[{'type': null, 'name': null, 'lower': null,
-        # 'upper': null, 'default': null, (log and meta?)}, score?]}
-        # TODO: store results
-        # TODO: read data if cs is already there
+        # TODO: What else needs to be in the configspace
+        # TODO: Store results? Where?
         # TODO: Get Status
-        # TODO: Add cost, config, budget, seed, starttime, endtime, status, additional?, origin?,
-        # TODO: Test other functions of class
+        # TODO: Add cost, configs (get all configs), budget, seed, starttime,
+        # endtime, status, additional?, origin?,
+        # TODO: Test other functions of
+        # TODO: Test for mutliple search variants
         # TODO: put raytune in doc  install
         # TODO: Did pyarrow update break anything?
-        return RayTuneRun("def", configspace=configspace)  # type: ignore
+        # TODO: ignores rausnehmen
+        return run
 
     @classmethod
     def is_valid_run(cls, path_name: str) -> bool:
