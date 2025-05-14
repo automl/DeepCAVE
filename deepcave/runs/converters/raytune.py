@@ -13,9 +13,10 @@ import json
 import os
 from pathlib import Path
 
-from ConfigSpace import ConfigurationSpace
+from ConfigSpace import Configuration, ConfigurationSpace
 from ray.tune import ExperimentAnalysis
 
+from deepcave.runs import Status
 from deepcave.runs.objective import Objective
 from deepcave.runs.run import Run
 from deepcave.utils.hash import file_to_hash
@@ -88,6 +89,10 @@ class RayTuneRun(Run):
             The run.
         """
         configspace = None
+        hp_names = {}
+        analysis = None
+        analysis = ExperimentAnalysis(str(path)).results
+
         # Get the information of the configspace
         if not os.path.isfile(str(path) + "/configspace.json"):
             configspace = {  # type: ignore
@@ -99,14 +104,6 @@ class RayTuneRun(Run):
                 "format_version": 0.4,
             }
             # Get hyperparameters as well as upper and lower bounds, types etc
-            hp_names = {}
-            analysis = None
-            analysis = ExperimentAnalysis(str(path)).results
-            print(analysis)
-            dic = ExperimentAnalysis(str(path)).get_all_configs()
-            print(dic)
-            dii = ExperimentAnalysis(str(path)).dataframe()
-            print(dii)
 
             for key in analysis.keys():
                 for hp, value in analysis[key]["config"].items():
@@ -146,19 +143,56 @@ class RayTuneRun(Run):
 
         objective = Objective(obj)
         run = RayTuneRun(path.stem, configspace=configspace, objectives=objective)  # type: ignore
+
+        config = None
+        # Get all information of the run
+        for result in analysis:
+            config = Configuration(
+                configuration_space=configspace,
+                values=analysis[result]["config"],
+                config_id=analysis[result]["trial_id"],
+            )
+            if analysis[result]["done"]:
+                status = Status.SUCCESS
+            else:
+                status = Status.CRASHED
+            start_time = analysis[result]["timestamp"]
+            end_time = start_time + analysis[result]["time_this_iter_s"]
+            cost = analysis[result]["time_this_iter_s"]
+
+            run.add(
+                costs=cost,
+                config=config,
+                seed=42,
+                status=status,
+                start_time=start_time,
+                end_time=end_time,
+            )
+
+        # The configs are stored, without results
+        if not os.path.isfile(str(path) + "/configs.json"):
+            config_dict = {id: config["config"] for id, config in analysis.items()}
+            with open(str(path) + "/configs.json", "w") as f:
+                json.dump(config_dict, f, indent=4)
+
+        # The results with
+        if not os.path.isfile(str(path) + "/results.json"):
+            # The first value of the results should be the result itself
+            results_dict = {id: list(config.items())[0] for id, config in analysis.items()}
+            with open(str(path) + "/results.json", "w") as f:
+                json.dump(results_dict, f, indent=4)
         # TODO: Warning also in configspace.json -> Wie?
         # TODO: Warning that all get treated as uniform
-        # TODO: Create RayTune Run
-        # TODO: What else needs to be in the configspace
+        # TODO: Warning objective bounds & optimize goal
         # TODO: Store results? Where?
-        # TODO: Get Status
-        # TODO: Add cost, configs (get all configs), budget, seed, starttime,
-        # endtime, status, additional?, origin?,
         # TODO: Test other functions of
         # TODO: Test for mutliple search variants
         # TODO: put raytune in doc  install
         # TODO: Did pyarrow update break anything?
         # TODO: ignores rausnehmen
+        # TODO: adjust git ignore
+        os.remove(path / "configspace.json")
+
         return run
 
     @classmethod

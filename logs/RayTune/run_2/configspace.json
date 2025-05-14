@@ -1,1 +1,0 @@
-{"name": null, "hyperparameters": [{"type": "<class 'float'>", "name": "x", "lower": 1.5, "upper": 3.2, "default": 2.35}, {"type": "<class 'float'>", "name": "y", "lower": 4.2, "upper": 13.4, "default": 8.8}], "conditions": [], "forbiddens": [], "python_module_version": "1.2.0", "format_version": 0.4}
