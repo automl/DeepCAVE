@@ -56,7 +56,7 @@ class RayTuneRun(Run):
             if file.is_file() and file.name.startswith("experiment_stat")
         ]
         # Use hash of experiment_stat as id
-        return file_to_hash(hash_file)  # type: ignore
+        return file_to_hash(hash_file[0])
 
     @property
     def latest_change(self) -> float:
@@ -88,14 +88,14 @@ class RayTuneRun(Run):
         RayTuneRun
             The run.
         """
-        configspace = None
+        configspace_new: dict
         hp_names = {}
         analysis = None
         analysis = ExperimentAnalysis(str(path)).results
 
         # Get the information of the configspace
         if not os.path.isfile(str(path) + "/configspace.json"):
-            configspace = {  # type: ignore
+            configspace_new = {
                 "name": None,
                 "hyperparameters": [],
                 "conditions": [],
@@ -115,12 +115,12 @@ class RayTuneRun(Run):
             if isinstance(value, str):
                 for key, values in hp_names.items():
                     values_set = set(values)
-                    configspace["hyperparameters"].append(  # type: ignore
+                    configspace_new["hyperparameters"].append(
                         {"type": "categorical", "name": key, "choices": list(values_set)}
                     )
             else:
                 for key, values in hp_names.items():
-                    configspace["hyperparameters"].append(  # type: ignore
+                    configspace_new["hyperparameters"].append(
                         {
                             "type": "uniform_" + type(values[0]).__name__,
                             "name": key,
@@ -130,10 +130,10 @@ class RayTuneRun(Run):
                         }
                     )
             with open(str(path) + "/configspace.json", "w") as f:
-                json.dump(configspace, f)
+                json.dump(configspace_new, f)
 
         # Convert into a Configuration Space object
-        configspace = ConfigurationSpace.from_json(path / "configspace.json")  # type: ignore
+        configspace = ConfigurationSpace.from_json(path / "configspace.json")
         file_path = str(path) + "/experiment_state*"
         for filename in glob.glob(file_path):
             with open(filename, "r") as f:
@@ -142,7 +142,7 @@ class RayTuneRun(Run):
                 obj = json.loads(nested_json_str)["trainable_name"]
 
         objective = Objective(obj)
-        run = RayTuneRun(path.stem, configspace=configspace, objectives=objective)  # type: ignore
+        run = RayTuneRun(path.stem, configspace=configspace, objectives=objective)
 
         config = None
         # Get all information of the run
@@ -184,14 +184,12 @@ class RayTuneRun(Run):
         # TODO: Warning also in configspace.json -> Wie?
         # TODO: Warning that all get treated as uniform
         # TODO: Warning objective bounds & optimize goal
-        # TODO: Store results? Where?
         # TODO: Test other functions of
         # TODO: Test for mutliple search variants
         # TODO: put raytune in doc  install
         # TODO: Did pyarrow update break anything?
         # TODO: ignores rausnehmen
         # TODO: adjust git ignore
-        os.remove(path / "configspace.json")
 
         return run
 
