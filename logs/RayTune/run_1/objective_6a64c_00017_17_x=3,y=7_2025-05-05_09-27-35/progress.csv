@@ -1,2 +1,0 @@
-score,timestamp,checkpoint_dir_name,done,training_iteration,trial_id,date,time_this_iter_s,time_total_s,pid,hostname,node_ip,time_since_restore,iterations_since_restore
-16,1746430061,,False,1,6a64c_00017,2025-05-05_09-27-41,0.00011110305786132812,0.00011110305786132812,11266,MacBook-Air-von-Kristina.local,127.0.0.1,0.00011110305786132812,1

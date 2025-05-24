@@ -1,0 +1,2 @@
+score,timestamp,checkpoint_dir_name,done,training_iteration,trial_id,date,time_this_iter_s,time_total_s,pid,hostname,node_ip,time_since_restore,iterations_since_restore
+1.8,1747922706,,False,1,b92c8_00050,2025-05-22_16-05-06,0.00016117095947265625,0.00016117095947265625,17536,  .local,127.0.0.1,0.00016117095947265625,1

@@ -1,74 +1,14 @@
 {
-    "409ac_00001": {
-        "x": "beta",
-        "y": "delta"
+    "aeb07d05": {
+        "lr": 0.0554820076734,
+        "optimizer": "rmsprop"
     },
-    "409ac_00007": {
-        "x": "beta",
-        "y": "zeta"
+    "359f61c1": {
+        "lr": 0.0541373480134,
+        "optimizer": "adam"
     },
-    "409ac_00015": {
-        "x": "alpha",
-        "y": "zeta"
-    },
-    "409ac_00012": {
-        "x": "alpha",
-        "y": "epsilon"
-    },
-    "409ac_00008": {
-        "x": "gamma",
-        "y": "zeta"
-    },
-    "409ac_00005": {
-        "x": "gamma",
-        "y": "epsilon"
-    },
-    "409ac_00002": {
-        "x": "gamma",
-        "y": "delta"
-    },
-    "409ac_00009": {
-        "x": "alpha",
-        "y": "delta"
-    },
-    "409ac_00011": {
-        "x": "gamma",
-        "y": "delta"
-    },
-    "409ac_00010": {
-        "x": "beta",
-        "y": "delta"
-    },
-    "409ac_00013": {
-        "x": "beta",
-        "y": "epsilon"
-    },
-    "409ac_00016": {
-        "x": "beta",
-        "y": "zeta"
-    },
-    "409ac_00006": {
-        "x": "alpha",
-        "y": "zeta"
-    },
-    "409ac_00003": {
-        "x": "alpha",
-        "y": "epsilon"
-    },
-    "409ac_00000": {
-        "x": "alpha",
-        "y": "delta"
-    },
-    "409ac_00017": {
-        "x": "gamma",
-        "y": "zeta"
-    },
-    "409ac_00014": {
-        "x": "gamma",
-        "y": "epsilon"
-    },
-    "409ac_00004": {
-        "x": "beta",
-        "y": "epsilon"
+    "4b403622": {
+        "lr": 0.0494383919987,
+        "optimizer": "rmsprop"
     }
 }

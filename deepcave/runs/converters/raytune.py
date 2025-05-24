@@ -50,13 +50,8 @@ class RayTuneRun(Run):
         if self.path is None:
             return ""
 
-        hash_file = [
-            file
-            for file in Path(self.path).iterdir()
-            if file.is_file() and file.name.startswith("experiment_stat")
-        ]
         # Use hash of experiment_stat as id
-        return file_to_hash(hash_file[0])
+        return file_to_hash(self.path / "results.json")
 
     @property
     def latest_change(self) -> float:
@@ -93,6 +88,15 @@ class RayTuneRun(Run):
         analysis = None
         analysis = ExperimentAnalysis(str(path)).results
 
+        # RayTune does not provide a configspace.json
+        if not os.path.isfile(str(path) + "/configspace.json"):
+            print(
+                "The configspace.json file will be auto extracted. For more "
+                "reliable results please provide your own configspace.json file or "
+                "ajust the one provided. Numeric values will be treated as uniform values."
+                " Please also check if the objectives bounds as well as its goal are as wanted."
+            )
+
         # Get the information of the configspace
         if not os.path.isfile(str(path) + "/configspace.json"):
             configspace_new = {
@@ -102,6 +106,10 @@ class RayTuneRun(Run):
                 "forbiddens": [],
                 "python_module_version": "1.2.0",
                 "format_version": 0.4,
+                "comment": "The configspace.json file will be auto extracted. For more"
+                " reliable results please provide your own configspace.json file or "
+                "ajust the one provided. Numeric values will be treated as uniform values."
+                " Please also check if the objectives bounds as well as its goal are as wanted.",
             }
             # Get hyperparameters as well as upper and lower bounds, types etc
 
@@ -112,14 +120,13 @@ class RayTuneRun(Run):
                     else:
                         hp_names[hp].append(value)
 
-            if isinstance(value, str):
-                for key, values in hp_names.items():
+            for key, values in hp_names.items():
+                if isinstance(values[0], str):
                     values_set = set(values)
                     configspace_new["hyperparameters"].append(
                         {"type": "categorical", "name": key, "choices": list(values_set)}
                     )
-            else:
-                for key, values in hp_names.items():
+                else:
                     configspace_new["hyperparameters"].append(
                         {
                             "type": "uniform_" + type(values[0]).__name__,
@@ -129,9 +136,9 @@ class RayTuneRun(Run):
                             "default_value": type(values[0])((min(values) + max(values)) / 2),
                         }
                     )
+
             with open(str(path) + "/configspace.json", "w") as f:
                 json.dump(configspace_new, f)
-
         # Convert into a Configuration Space object
         configspace = ConfigurationSpace.from_json(path / "configspace.json")
         file_path = str(path) + "/experiment_state*"
@@ -142,11 +149,16 @@ class RayTuneRun(Run):
                 obj = json.loads(nested_json_str)["trainable_name"]
 
         objective = Objective(obj)
-        run = RayTuneRun(path.stem, configspace=configspace, objectives=objective)
-
+        run = RayTuneRun(name=str(path.stem), configspace=configspace, objectives=objective)
+        run.path = path
         config = None
         # Get all information of the run
+
         for result in analysis:
+            # ConfigSpace shortens floats to a certain length
+            for hp in analysis[result]["config"]:
+                if not isinstance(analysis[result]["config"][hp], str):
+                    analysis[result]["config"][hp] = round(analysis[result]["config"][hp], 13)
             config = Configuration(
                 configuration_space=configspace,
                 values=analysis[result]["config"],
@@ -158,11 +170,22 @@ class RayTuneRun(Run):
                 status = Status.CRASHED
             start_time = analysis[result]["timestamp"]
             end_time = start_time + analysis[result]["time_this_iter_s"]
-            cost = analysis[result]["time_this_iter_s"]
+            cost = analysis[result]["score"]
+
+            budget = []
+            if os.path.isfile(str(path) + "/budget.json"):
+                with open(str(path) + "/budget.json", "r") as f:
+                    budget_name = json.load(f)
+                    budget = analysis[result][budget_name]
+
+            # If a budget is not provided, the budget default is set to the number of trials
+            else:
+                budget = len(run.history)  # type: ignore
 
             run.add(
                 costs=cost,
                 config=config,
+                budget=budget,  # type: ignore
                 seed=42,
                 status=status,
                 start_time=start_time,
@@ -181,15 +204,6 @@ class RayTuneRun(Run):
             results_dict = {id: list(config.items())[0] for id, config in analysis.items()}
             with open(str(path) + "/results.json", "w") as f:
                 json.dump(results_dict, f, indent=4)
-        # TODO: Warning also in configspace.json -> Wie?
-        # TODO: Warning that all get treated as uniform
-        # TODO: Warning objective bounds & optimize goal
-        # TODO: Test other functions of
-        # TODO: Test for mutliple search variants
-        # TODO: put raytune in doc  install
-        # TODO: Did pyarrow update break anything?
-        # TODO: ignores rausnehmen
-        # TODO: adjust git ignore
 
         return run
 
@@ -211,14 +225,6 @@ class RayTuneRun(Run):
         """
         for file in Path(path_name).iterdir():
             if file.is_file() and file.name.startswith("experiment_state"):
-                # RayTune does not provide a configspace.json
-                if not os.path.isfile(path_name + "/configspace.json"):
-                    print(
-                        "The configspace.json file will be auto extracted. For more"
-                        "reliable results please provide your own configspace.json file or "
-                        "ajust the one provided."
-                    )
-                    return True
                 return True
-            return False
+
         return False

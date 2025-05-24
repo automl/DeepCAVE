@@ -1,2 +1,0 @@
-score,timestamp,checkpoint_dir_name,done,training_iteration,trial_id,date,time_this_iter_s,time_total_s,pid,hostname,node_ip,time_since_restore,iterations_since_restore
-alphadelta,1746537790,,False,1,409ac_00000,2025-05-06_15-23-10,0.0003139972686767578,0.0003139972686767578,39906,dyn-082158.mip.uni-hannover.de,127.0.0.1,0.0003139972686767578,1
