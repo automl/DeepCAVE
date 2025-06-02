@@ -106,10 +106,9 @@ class RayTuneRun(Run):
                 "forbiddens": [],
                 "python_module_version": "1.2.0",
                 "format_version": 0.4,
-                "comment": "The configspace.json file will be auto extracted. For more"
+                "comment": "The configspace.json file has been auto extracted. For more"
                 " reliable results please provide your own configspace.json file or "
-                "ajust the one provided. Numeric values will be treated as uniform values."
-                " Please also check if the objectives bounds as well as its goal are as wanted.",
+                "adjust the one provided. Numeric values will be treated as uniform values.",
             }
             # Get hyperparameters as well as upper and lower bounds, types etc
 
