@@ -1134,7 +1134,6 @@
                     <span class="k">if</span> <span class="n">passed_inputs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="c1"># First get normal inputs</span>
                         <span class="n">inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_inputs</span><span class="p">()</span>
-
                         <span class="c1"># Overwrite/set the passed inputs</span>
                         <span class="n">update_dict</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">passed_inputs</span><span class="p">)</span>
 
@@ -1933,7 +1932,6 @@
                     <span class="n">run_path</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">path</span>
                     <span class="k">if</span> <span class="n">run_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">run_name</span> <span class="o">=</span> <span class="n">run_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">run</span><span class="o">.</span><span class="n">name</span>
-
                     <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
                     <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">run_name</span><span class="p">)</span>
                     <span class="n">disabled</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>

@@ -1104,7 +1104,6 @@
         <span class="n">budgets</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budgets</span><span class="p">(</span><span class="n">human</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">budget_ids</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">get_budget_ids</span><span class="p">()</span>
         <span class="n">budget_options</span> <span class="o">=</span> <span class="n">get_checklist_options</span><span class="p">(</span><span class="n">budgets</span><span class="p">,</span> <span class="n">budget_ids</span><span class="p">)</span>
-
         <span class="n">hp_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">configspace</span><span class="o">.</span><span class="n">get_hyperparameters_dict</span><span class="p">()</span>
         <span class="n">hp_names_numerical</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">hp_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>

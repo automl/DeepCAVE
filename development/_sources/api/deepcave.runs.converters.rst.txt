@@ -15,5 +15,6 @@ deepcave.runs.converters
    dataframe
    deepcave
    optuna
+   raytune
    smac3v1
    smac3v2
