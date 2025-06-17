@@ -38,6 +38,9 @@ extras_require = {
     "bohb": [
         "hpbandster==0.7.4",
     ],
+    "raytune": [
+        "ray[tune]==2.45.0",
+    ],
 }
 
 

@@ -96,6 +96,7 @@ class Cache:
             return
 
         self._filename.parent.mkdir(exist_ok=True, parents=True)
+
         with self._filename.open("w") as f:
             if self._debug:
                 json.dump(self._data, f, cls=Encoder, indent=4)
@@ -177,6 +178,7 @@ class Cache:
             The value of the key.
         """
         d = deepcopy(self._data)
+
         for key in keys:
             if key not in d:
                 return None

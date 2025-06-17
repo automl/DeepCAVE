@@ -1,3 +1,9 @@
+# Version 1.3.6
+
+## Converter
+- Added a new converter to handle RayTune runs
+- Added example RayTune runs to logs
+
 # Version 1.3.5
 
 ## Access Specifier

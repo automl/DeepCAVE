@@ -25,11 +25,12 @@ conda install -c anaconda swig
 pip install DeepCAVE
 ```
 
-To load runs created with Optuna or the BOHB optimizer, you need to install the
+To load runs created with Optuna, the BOHB optimizer or RayTune, you need to install the
 respective packages by running:
 ```bash
 pip install deepcave[optuna]
 pip install deepcave[bohb]
+pip install deepcave[raytune]
 ```
 
 To try the examples for recording your results in DeepCAVE format, run this after installing:
