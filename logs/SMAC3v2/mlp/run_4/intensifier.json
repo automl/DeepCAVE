@@ -1,0 +1,2146 @@
+{
+  "incumbent_ids": [],
+  "rejected_config_ids": [],
+  "incumbents_changed": 0,
+  "trajectory": [],
+  "state": {
+    "tracker": {
+      "0,0": [
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 30,
+              "solver": "sgd",
+              "batch_size": 273,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0141088922837
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 124,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 50,
+              "solver": "sgd",
+              "batch_size": 129,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0002652347535
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 57,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 198,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 85,
+              "solver": "adam",
+              "batch_size": 129,
+              "learning_rate_init": 0.040966918875
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 146,
+              "solver": "sgd",
+              "batch_size": 73,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0011522798403
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 14,
+              "solver": "sgd",
+              "batch_size": 278,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0503218182456
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 8,
+              "solver": "adam",
+              "batch_size": 159,
+              "learning_rate_init": 0.0010999266138
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 75,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 97,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 58,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 62,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 86,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 56,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 106,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 57,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 58,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 56,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 56,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 111,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 149,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 57,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 24,
+              "solver": "adam",
+              "batch_size": 153,
+              "learning_rate_init": 0.0013317936311
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 83,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 22,
+              "solver": "sgd",
+              "batch_size": 181,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0109609970955
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 211,
+              "solver": "sgd",
+              "batch_size": 45,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0032552283604
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 198,
+              "solver": "sgd",
+              "batch_size": 189,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0017389954899
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 226,
+              "solver": "sgd",
+              "batch_size": 68,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.000230656431
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 208,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0204314284893
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 213,
+              "solver": "sgd",
+              "batch_size": 210,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0156063124291
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 213,
+              "solver": "sgd",
+              "batch_size": 160,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0002025754714
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 201,
+              "solver": "sgd",
+              "batch_size": 47,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0004894155904
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 8,
+              "solver": "adam",
+              "batch_size": 84,
+              "learning_rate_init": 0.0049736642548
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 138,
+              "solver": "sgd",
+              "batch_size": 77,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0051567835156
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 21,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 145,
+              "solver": "sgd",
+              "batch_size": 130,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0001706185927
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 149,
+              "solver": "sgd",
+              "batch_size": 103,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0020395016907
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 150,
+              "solver": "sgd",
+              "batch_size": 196,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.2618957632492
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 135,
+              "solver": "sgd",
+              "batch_size": 71,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.457052963446
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 138,
+              "solver": "sgd",
+              "batch_size": 70,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.2272529948052
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 200,
+              "solver": "sgd",
+              "batch_size": 135,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0129577785756
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 200,
+              "solver": "sgd",
+              "batch_size": 234,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.1755614827581
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 111,
+              "solver": "sgd",
+              "batch_size": 65,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.2063835089917
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 202,
+              "solver": "sgd",
+              "batch_size": 225,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0320627802197
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 127,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0296497545004
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 204,
+              "solver": "sgd",
+              "batch_size": 137,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.5291110187476
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 207,
+              "solver": "sgd",
+              "batch_size": 132,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0171712415057
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 204,
+              "solver": "sgd",
+              "batch_size": 167,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0099294155519
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 196,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0186990220015
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 185,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0183751635753
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 200,
+              "solver": "sgd",
+              "batch_size": 193,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0200409448425
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 32,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 200,
+              "solver": "adam",
+              "batch_size": 185,
+              "learning_rate_init": 0.0190405862911
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 218,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.1320549460395
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 200,
+              "solver": "adam",
+              "batch_size": 208,
+              "learning_rate_init": 0.090501126713
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 77,
+              "solver": "sgd",
+              "batch_size": 34,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0002197217688
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 9,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 22,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 66,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 104,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 107,
+              "solver": "adam",
+              "batch_size": 130,
+              "learning_rate_init": 0.5023228727291
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 103,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 78,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 60,
+              "solver": "sgd",
+              "batch_size": 252,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0004846114816
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 127,
+              "solver": "adam",
+              "batch_size": 159,
+              "learning_rate_init": 0.0222905894275
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 99,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 104,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 49,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0015632770345
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 38,
+              "solver": "sgd",
+              "batch_size": 188,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0035909234075
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 36,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 87,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0013159650108
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 76,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 243,
+              "solver": "adam",
+              "batch_size": 251,
+              "learning_rate_init": 0.0001221792402
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 54,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 52,
+              "solver": "sgd",
+              "batch_size": 193,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0015028644934
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 79,
+              "solver": "sgd",
+              "batch_size": 178,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0070147721993
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 56,
+              "solver": "adam",
+              "batch_size": 168,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 11,
+              "solver": "adam",
+              "batch_size": 144,
+              "learning_rate_init": 0.0300937102688
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 59,
+              "solver": "adam",
+              "batch_size": 162,
+              "learning_rate_init": 0.001162827467
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 42,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 83,
+              "solver": "sgd",
+              "batch_size": 184,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 18,
+              "solver": "sgd",
+              "batch_size": 40,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0185888665541
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 172,
+              "solver": "sgd",
+              "batch_size": 105,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0141609085959
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 8,
+              "solver": "sgd",
+              "batch_size": 58,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0198818016138
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 202,
+              "solver": "adam",
+              "batch_size": 195,
+              "learning_rate_init": 0.0234734973386
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 69,
+              "solver": "sgd",
+              "batch_size": 97,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0030593718268
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 22,
+              "solver": "adam",
+              "batch_size": 258,
+              "learning_rate_init": 0.0057926531907
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 120,
+              "solver": "sgd",
+              "batch_size": 86,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.1325659361795
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 120,
+              "solver": "sgd",
+              "batch_size": 71,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0009298464158
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 67,
+              "solver": "sgd",
+              "batch_size": 152,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.077739784749
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 15,
+              "solver": "adam",
+              "batch_size": 129,
+              "learning_rate_init": 0.062561967174
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 70,
+              "solver": "sgd",
+              "batch_size": 69,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.001583545555
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 149,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 65,
+              "solver": "adam",
+              "batch_size": 103,
+              "learning_rate_init": 0.0007550513528
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 16,
+              "solver": "adam",
+              "batch_size": 178,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 45,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 12,
+              "solver": "sgd",
+              "batch_size": 223,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0254690737291
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 14,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.7064012295524
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 8,
+              "solver": "sgd",
+              "batch_size": 50,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0109474018647
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 124,
+              "solver": "sgd",
+              "batch_size": 203,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0031337763331
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 100,
+              "solver": "sgd",
+              "batch_size": 54,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0032580783332
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 15,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 201,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 96,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 77,
+              "solver": "adam",
+              "batch_size": 37,
+              "learning_rate_init": 0.0003561980678
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 226,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 31,
+              "solver": "sgd",
+              "batch_size": 190,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0009429837695
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 156,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 98,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 14,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 28,
+              "solver": "sgd",
+              "batch_size": 119,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0264576021351
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 52,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 16,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 16,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0012513901881
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 147,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 67,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 145,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 12,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 24,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0005332095088
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 111,
+              "solver": "sgd",
+              "batch_size": 165,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0015089643986
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 58,
+              "solver": "adam",
+              "batch_size": 121,
+              "learning_rate_init": 0.0008607613477
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 15,
+              "solver": "adam",
+              "batch_size": 139,
+              "learning_rate_init": 0.4827661248018
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 72,
+              "solver": "adam",
+              "batch_size": 35,
+              "learning_rate_init": 0.2063835089917
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 54,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.00155557202
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 24,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001072886159
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 53,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 66,
+              "solver": "adam",
+              "batch_size": 106,
+              "learning_rate_init": 0.016430327642
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 16,
+              "solver": "sgd",
+              "batch_size": 276,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.000130246538
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 247,
+              "solver": "adam",
+              "batch_size": 161,
+              "learning_rate_init": 0.0004107475185
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 39,
+              "solver": "sgd",
+              "batch_size": 187,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 8,
+              "solver": "adam",
+              "batch_size": 41,
+              "learning_rate_init": 0.0264952252602
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 14,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 180,
+              "solver": "adam",
+              "batch_size": 191,
+              "learning_rate_init": 0.0550882044088
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 10,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0016215537738
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 25,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 18,
+              "solver": "adam",
+              "batch_size": 34,
+              "learning_rate_init": 0.0001531968204
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 112,
+              "solver": "sgd",
+              "batch_size": 65,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0501675048958
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 156,
+              "solver": "adam",
+              "batch_size": 107,
+              "learning_rate_init": 0.0052278675582
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 19,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0018707913811
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 28,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 28,
+              "solver": "adam",
+              "batch_size": 196,
+              "learning_rate_init": 0.0006526127272
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 28,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 18,
+              "solver": "sgd",
+              "batch_size": 40,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0109474018647
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 12,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 11,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 91,
+              "solver": "adam",
+              "batch_size": 113,
+              "learning_rate_init": 0.6204267362103
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 141,
+              "solver": "sgd",
+              "batch_size": 175,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0145037530165
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 18,
+              "solver": "adam",
+              "batch_size": 175,
+              "learning_rate_init": 0.7064012295524
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 19,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0010586610327
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 121,
+              "solver": "sgd",
+              "batch_size": 169,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.1691470215512
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 15,
+              "solver": "adam",
+              "batch_size": 173,
+              "learning_rate_init": 0.0005070859192
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 32,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 42,
+              "solver": "sgd",
+              "batch_size": 147,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 73,
+              "solver": "adam",
+              "batch_size": 172,
+              "learning_rate_init": 0.0085141993968
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 239,
+              "solver": "adam",
+              "batch_size": 271,
+              "learning_rate_init": 0.0002440205399
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 25,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 125,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 34,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 35,
+              "solver": "adam",
+              "batch_size": 108,
+              "learning_rate_init": 0.008869553967
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 9,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0005312018407
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 190,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 10,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0009060458472
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 34,
+              "solver": "sgd",
+              "batch_size": 167,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.1672796315874
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 98,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 15,
+              "solver": "sgd",
+              "batch_size": 276,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.000162034496
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 12,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 20,
+              "solver": "adam",
+              "batch_size": 186,
+              "learning_rate_init": 0.0006942244342
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 78,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 26,
+              "solver": "adam",
+              "batch_size": 122,
+              "learning_rate_init": 0.0002363392413
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 12,
+              "solver": "lbfgs"
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 108,
+              "solver": "sgd",
+              "batch_size": 77,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0057256355526
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 19,
+              "solver": "adam",
+              "batch_size": 179,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 77,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 29,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0009172663998
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 188,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 45,
+              "solver": "sgd",
+              "batch_size": 165,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.00155557202
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 20,
+              "solver": "sgd",
+              "batch_size": 194,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 93,
+              "solver": "adam",
+              "batch_size": 119,
+              "learning_rate_init": 0.0001928939292
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 43,
+              "solver": "adam",
+              "batch_size": 209,
+              "learning_rate_init": 0.0011818247222
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 32,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 12,
+              "solver": "sgd",
+              "batch_size": 208,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0075016351124
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 99,
+              "solver": "sgd",
+              "batch_size": 70,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.007325990793
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 11,
+              "solver": "adam",
+              "batch_size": 123,
+              "learning_rate_init": 0.0074404936319
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 123,
+              "solver": "sgd",
+              "batch_size": 209,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.1663294284682
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 51,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 57,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 43,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 10,
+              "solver": "sgd",
+              "batch_size": 198,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.5054096688184
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 161,
+              "solver": "adam",
+              "batch_size": 241,
+              "learning_rate_init": 0.0132595649236
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 75,
+              "solver": "sgd",
+              "batch_size": 70,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0087943317821
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 11,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 201,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 51,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 117,
+              "solver": "adam",
+              "batch_size": 181,
+              "learning_rate_init": 0.0009578540571
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 62,
+              "solver": "sgd",
+              "batch_size": 163,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0036319580009
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 88,
+              "solver": "sgd",
+              "batch_size": 232,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0061882094803
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 133,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 46,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0003558910936
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 44,
+              "solver": "sgd",
+              "batch_size": 162,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0011079331074
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 58,
+              "solver": "adam",
+              "batch_size": 121,
+              "learning_rate_init": 0.0008607613477
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 18,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 85,
+              "solver": "adam",
+              "batch_size": 66,
+              "learning_rate_init": 0.073549918014
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 121,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 80,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 73,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 70,
+              "solver": "adam",
+              "batch_size": 128,
+              "learning_rate_init": 0.0416547222199
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 176,
+              "solver": "sgd",
+              "batch_size": 296,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0579461750461
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 73,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 47,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 25,
+              "solver": "adam",
+              "batch_size": 149,
+              "learning_rate_init": 0.0325160895856
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 11,
+              "solver": "adam",
+              "batch_size": 101,
+              "learning_rate_init": 0.129723890035
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 58,
+              "solver": "sgd",
+              "batch_size": 250,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.3876211477281
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 47,
+              "solver": "adam",
+              "batch_size": 59,
+              "learning_rate_init": 0.1021195620553
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 38,
+              "solver": "sgd",
+              "batch_size": 61,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.5289387781735
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 101,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 82,
+              "solver": "sgd",
+              "batch_size": 217,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0268193791337
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 69,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 93,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0025123458804
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 59,
+              "solver": "adam",
+              "batch_size": 177,
+              "learning_rate_init": 0.0015706857198
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 20,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0008761954755
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 199,
+              "solver": "sgd",
+              "batch_size": 204,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0906033737222
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 74,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 42,
+              "solver": "sgd",
+              "batch_size": 234,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.2778216401875
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 22,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 3,
+              "n_neurons": 121,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 67,
+              "solver": "sgd",
+              "batch_size": 143,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0449980535289
+            },
+            {
+              "activation": "relu",
+              "n_layer": 2,
+              "n_neurons": 84,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 1,
+              "n_neurons": 14,
+              "solver": "sgd",
+              "batch_size": 188,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 30,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0007899545742
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 4,
+              "n_neurons": 12,
+              "solver": "sgd",
+              "batch_size": 260,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0001704743587
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 29,
+              "solver": "sgd",
+              "batch_size": 244,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0141469315265
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 18,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.0018439332302
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 5,
+              "n_neurons": 51,
+              "solver": "adam",
+              "batch_size": 141,
+              "learning_rate_init": 0.001122233934
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 38,
+              "solver": "adam",
+              "batch_size": 187,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 156,
+              "solver": "adam",
+              "batch_size": 184,
+              "learning_rate_init": 0.0012083835462
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 82,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "relu",
+              "n_layer": 5,
+              "n_neurons": 48,
+              "solver": "adam",
+              "batch_size": 175,
+              "learning_rate_init": 0.0015502075051
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 2,
+              "n_neurons": 29,
+              "solver": "sgd",
+              "batch_size": 147,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.0010246689037
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 32,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0022914196319
+            },
+            {
+              "activation": "relu",
+              "n_layer": 4,
+              "n_neurons": 16,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 2,
+              "n_neurons": 62,
+              "solver": "sgd",
+              "batch_size": 185,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 1,
+              "n_neurons": 42,
+              "solver": "adam",
+              "batch_size": 141,
+              "learning_rate_init": 0.0005405776718
+            }
+          ]
+        ],
+        [
+          0,
+          [
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 18,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 3,
+              "n_neurons": 123,
+              "solver": "lbfgs"
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 1,
+              "n_neurons": 157,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "invscaling",
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 89,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 126,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0010063743607
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 94,
+              "solver": "adam",
+              "batch_size": 200,
+              "learning_rate_init": 0.001
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 3,
+              "n_neurons": 28,
+              "solver": "sgd",
+              "batch_size": 200,
+              "learning_rate": "constant",
+              "learning_rate_init": 0.0006793405266
+            },
+            {
+              "activation": "logistic",
+              "n_layer": 4,
+              "n_neurons": 139,
+              "solver": "sgd",
+              "batch_size": 101,
+              "learning_rate": "adaptive",
+              "learning_rate_init": 0.0037300226979
+            },
+            {
+              "activation": "tanh",
+              "n_layer": 5,
+              "n_neurons": 15,
+              "solver": "lbfgs"
+            }
+          ]
+        ]
+      ]
+    }
+  }
+}
