@@ -5,6 +5,12 @@
 
 # Version 1.3.5
 
+## Converter
+- Added a new converter to handle RayTune runs
+- Added example RayTune runs to logs
+
+# Version 1.3.5
+
 ## Access Specifier
 - Changed access specifier from '_fit' to 'fit' in the RF surrogate
 

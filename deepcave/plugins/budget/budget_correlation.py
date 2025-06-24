@@ -198,6 +198,7 @@ class BudgetCorrelation(DynamicPlugin):
                             objective_id
                         ]
                     ]
+
                     c2 += [
                         run.get_avg_costs(config_id, budget2, statuses=[Status.SUCCESS])[0][
                             objective_id
