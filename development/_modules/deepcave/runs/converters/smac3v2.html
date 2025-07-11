@@ -953,14 +953,20 @@
 
         <span class="n">first_starttime</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+        <span class="c1"># The newer runhistory.json format needs to be transformed</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
 
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The runhistory.json file is in an outdated format.&quot;</span><span class="p">,</span>
-                <span class="ne">DeprecationWarning</span><span class="p">,</span>
-                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Adjusts the stack level to point to the caller.</span>
-            <span class="p">)</span>
+        <span class="c1"># There needs to be a slot for the cpu time parameter</span>
+        <span class="c1"># (which is absent in the older versions)</span>
+        <span class="n">right_form</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d_list</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">d_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">right_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d_list</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">right_form</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="p">(</span>
                 <span class="n">config_id</span><span class="p">,</span>
                 <span class="n">instance_id</span><span class="p">,</span>
@@ -968,6 +974,7 @@
                 <span class="n">budget</span><span class="p">,</span>
                 <span class="n">cost</span><span class="p">,</span>
                 <span class="n">time</span><span class="p">,</span>
+                <span class="n">cpu_time</span><span class="p">,</span>
                 <span class="n">status</span><span class="p">,</span>
                 <span class="n">starttime</span><span class="p">,</span>
                 <span class="n">endtime</span><span class="p">,</span>
@@ -980,6 +987,7 @@
                     <span class="n">budget</span><span class="p">,</span>
                     <span class="n">cost</span><span class="p">,</span>
                     <span class="n">time</span><span class="p">,</span>
+                    <span class="n">cpu_time</span><span class="p">,</span>
                     <span class="n">status</span><span class="p">,</span>
                     <span class="n">starttime</span><span class="p">,</span>
                     <span class="n">endtime</span><span class="p">,</span>
@@ -992,12 +1000,20 @@
                 <span class="k">if</span> <span class="n">run_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">**</span><span class="n">run_dict</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;The runhistory.json file is in an outdated format.&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Adjusts the stack level to point to the caller.</span>
+            <span class="p">)</span>
             <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">instance_id</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span>
                 <span class="n">seed</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
                 <span class="n">budget</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span>
                 <span class="n">cost</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">]</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+                <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;cpu_time&quot;</span><span class="p">]</span>
                 <span class="n">status</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
                 <span class="n">starttime</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span>
                 <span class="n">endtime</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;endtime&quot;</span><span class="p">]</span>
@@ -1009,6 +1025,7 @@
                     <span class="n">budget</span><span class="p">,</span>
                     <span class="n">cost</span><span class="p">,</span>
                     <span class="n">time</span><span class="p">,</span>
+                    <span class="n">cpu_time</span><span class="p">,</span>
                     <span class="n">status</span><span class="p">,</span>
                     <span class="n">starttime</span><span class="p">,</span>
                     <span class="n">endtime</span><span class="p">,</span>
@@ -1033,6 +1050,7 @@
         <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
         <span class="n">cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span> <span class="nb">float</span><span class="p">]],</span>
         <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+        <span class="n">cpu_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
         <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">starttime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">endtime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -1081,6 +1099,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">budget</span> <span class="o">=</span> <span class="mf">0.0</span>
 
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cpu_time</span><span class="p">:</span>
+            <span class="n">cpu_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+
         <span class="n">origin</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_origins</span><span class="p">:</span>
             <span class="n">origin</span> <span class="o">=</span> <span class="n">config_origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
@@ -1090,6 +1111,7 @@
             <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span>
             <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="n">budget</span><span class="p">,</span>
             <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">seed</span><span class="p">,</span>
+            <span class="s2">&quot;cpu_time&quot;</span><span class="p">:</span> <span class="n">cpu_time</span><span class="p">,</span>
             <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">starttime</span><span class="p">,</span>
             <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">endtime</span><span class="p">,</span>
             <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>

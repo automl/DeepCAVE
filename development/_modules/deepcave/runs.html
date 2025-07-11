@@ -1354,7 +1354,6 @@
             <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
         <span class="c1"># Use same rounding as ConfigSpace does</span>
         <span class="n">input_config_tuple</span> <span class="o">=</span> <span class="n">config_to_tuple</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">ROUND_PLACES</span><span class="p">)</span>
-
         <span class="c1"># Check if the input configuration tuple exists in the config id mapping</span>
         <span class="k">if</span> <span class="n">input_config_tuple</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_id_mapping</span><span class="p">[</span><span class="n">input_config_tuple</span><span class="p">]</span>
@@ -1615,6 +1614,7 @@
 
         <span class="c1"># Budget might not be evaluated</span>
         <span class="n">all_costs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_costs</span><span class="p">(</span><span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span> <span class="n">statuses</span><span class="o">=</span><span class="n">statuses</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">all_costs</span><span class="p">:</span>
             <span class="n">config_costs</span> <span class="o">=</span> <span class="n">all_costs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>

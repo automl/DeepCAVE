@@ -845,10 +845,12 @@
 <span class="sd">        The identificator of the configuration.</span>
 <span class="sd">    budget : Union[int, float]</span>
 <span class="sd">        The budget for the trial.</span>
-<span class="sd">    seed: int</span>
+<span class="sd">    seed : int</span>
 <span class="sd">        The seed for the trial.</span>
 <span class="sd">    costs : List[float]</span>
 <span class="sd">        A list of the costs of the trial.</span>
+<span class="sd">    cpu_time : float</span>
+<span class="sd">        The cpu time of the trial.</span>
 <span class="sd">    start_time : float</span>
 <span class="sd">        The start time of the trial.</span>
 <span class="sd">    end_time : float</span>
@@ -861,6 +863,7 @@
     <span class="n">budget</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
     <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">costs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">cpu_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">end_time</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">status</span><span class="p">:</span> <span class="n">Status</span>
@@ -908,6 +911,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">budget</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">costs</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cpu_time</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">end_time</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
