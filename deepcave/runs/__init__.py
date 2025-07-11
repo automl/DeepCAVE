@@ -505,7 +505,6 @@ class AbstractRun(ABC):
             config = dict(config)
         # Use same rounding as ConfigSpace does
         input_config_tuple = config_to_tuple(config, ROUND_PLACES)
-
         # Check if the input configuration tuple exists in the config id mapping
         if input_config_tuple in self.config_id_mapping:
             return self.config_id_mapping[input_config_tuple]
@@ -745,6 +744,7 @@ class AbstractRun(ABC):
 
         # Budget might not be evaluated
         all_costs = self.get_all_costs(budget=budget, statuses=statuses)
+
         if config_id in all_costs:
             config_costs = all_costs[config_id]
         else:

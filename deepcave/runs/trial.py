@@ -43,10 +43,12 @@ class Trial:
         The identificator of the configuration.
     budget : Union[int, float]
         The budget for the trial.
-    seed: int
+    seed : int
         The seed for the trial.
     costs : List[float]
         A list of the costs of the trial.
+    cpu_time : float
+        The cpu time of the trial.
     start_time : float
         The start time of the trial.
     end_time : float
@@ -59,6 +61,7 @@ class Trial:
     budget: Union[int, float]
     seed: int
     costs: List[float]
+    cpu_time: float
     start_time: float
     end_time: float
     status: Status
@@ -98,6 +101,7 @@ class Trial:
             self.budget,
             self.seed,
             self.costs,
+            self.cpu_time,
             self.start_time,
             self.end_time,
             self.status,

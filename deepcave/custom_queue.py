@@ -103,7 +103,7 @@ class Queue:
         List[Worker]
             A list of the queued workers.
         """
-        return Worker.all(queue=self._queue)
+        return Worker.all(queue=self._queue)  # type: ignore
 
     def is_processed(self, job_id: str) -> bool:
         """
