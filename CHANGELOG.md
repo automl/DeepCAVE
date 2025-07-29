@@ -1,3 +1,9 @@
+# Version 1.3.8
+
+## Converter Documentation
+- Added documentation to make it visible which converters cant handle instances
+- Added documentation to give some information about limitations (and capabilities) of the converters
+
 # Version 1.3.6
 
 ## New SMAC version compatibility

@@ -31,8 +31,11 @@ Furthermore, to load an Optuna run into DeepCAVE, it is necessary to install Opt
 
         pip install deepcave[optuna]
 
-.. warning::
-    Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
-    is not supported.
-    This limitation arises because Optuna leverages a dynamic search space, which cannot be
-    trivially converted into a static search space as used in DeepCAVE.
+.. note::
+   Optuna does not support instances.
+   The hyperparameters in the Optuna study must be of type FloatDistribution, IntDistribution or CategoricalDistribution.
+   Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
+   is not supported.
+   This limitation arises because Optuna leverages a dynamic search space, which cannot be
+   trivially converted into a static search space as used in DeepCAVE.
+
