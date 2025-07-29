@@ -4,6 +4,7 @@ Partial Dependencies
 
 This example shows how to use the plugin Partial Dependencies.
 Note that other plugins use the same interfaces and can be used in the same fashion.
+To use the API commands the according record example needs to be run in order create the run to analyze.
 """
 
 from deepcave.plugins.hyperparameter.pdp import PartialDependencies
