@@ -1,3 +1,8 @@
+# Version 1.3.9
+
+## Parallel Coordinates
+- Set the margin of the graph so it gets dynamically computed depending on the length of the labels.
+
 # Version 1.3.6
 
 ## New SMAC version compatibility
