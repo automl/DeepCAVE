@@ -1,3 +1,8 @@
+# Version 1.3.7
+
+## Documentation
+- Added the hint that for the api example the example records need to be run first to create the run.
+
 # Version 1.3.6
 
 ## New SMAC version compatibility

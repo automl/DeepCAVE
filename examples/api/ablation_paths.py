@@ -4,6 +4,7 @@ Ablation Paths
 
 This example shows how to use the plugin Ablation Paths.
 Note that other plugins use the same interfaces and can be used in the same fashion.
+To use the API commands in this example, we assume the run data to be already present in the mentioned folder. Please ensure that you have the run data located at the corresponding path.
 """
 
 from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
