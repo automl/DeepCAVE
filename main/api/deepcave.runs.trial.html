@@ -878,7 +878,7 @@ Utilities for handling the trial are provided.</p>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="deepcave.runs.trial.Trial">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.trial.</span></span><span class="sig-name descname"><span class="pre">Trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.trial.</span></span><span class="sig-name descname"><span class="pre">Trial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">budget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpu_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/trial.html#Trial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.trial.Trial" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Provide the trial object itself and multiple handling utilities.</p>
 <section id="properties">
@@ -890,9 +890,11 @@ Utilities for handling the trial are provided.</p>
 </dd>
 <dt>budget<span class="classifier">Union[int, float]</span></dt><dd><p>The budget for the trial.</p>
 </dd>
-<dt>seed: int</dt><dd><p>The seed for the trial.</p>
+<dt>seed<span class="classifier">int</span></dt><dd><p>The seed for the trial.</p>
 </dd>
 <dt>costs<span class="classifier">List[float]</span></dt><dd><p>A list of the costs of the trial.</p>
+</dd>
+<dt>cpu_time<span class="classifier">float</span></dt><dd><p>The cpu time of the trial.</p>
 </dd>
 <dt>start_time<span class="classifier">float</span></dt><dd><p>The start time of the trial.</p>
 </dd>
