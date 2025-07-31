@@ -1,20 +1,17 @@
-# Version 1.3.9
+# Version 1.4
+## Documentation
+- Updates and extension of the documentation.
+- GitHub pages are now linked in the web-based interface for help. 
 
 ## Parallel Coordinates
 - Set the margin of the graph so it gets dynamically computed depending on the length of the labels.
 
-# Version 1.3.6
-
 ## New SMAC version compatibility
 - The smac3v2 converter can now also handle the output of the new smac version
-
-# Version 1.3.5
 
 ## Converter
 - Added a new converter to handle RayTune runs
 - Added example RayTune runs to logs
-
-# Version 1.3.5
 
 ## Access Specifier
 - Changed access specifier from '_fit' to 'fit' in the RF surrogate

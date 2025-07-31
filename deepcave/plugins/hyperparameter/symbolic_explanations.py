@@ -67,7 +67,7 @@ class SymbolicExplanations(StaticPlugin):
     id = "symbolic_explanations"
     name = "Symbolic Explanations"
     icon = "fas fa-subscript"
-    help = "docs/plugins/symbolic_explanations.rst"
+    help = "plugins/symbolic_explanations.html"
     activate_run_selection = True
 
     @staticmethod

@@ -33,10 +33,10 @@ from pathlib import Path
 name = "DeepCAVE"
 package_name = "deepcave"
 author = (
-    "S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and "
+    "S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and M. Wever and A. Tornede and "
     "R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer"
 )
-author_email = "l.fehring@ai.uni-hannover.de"
+author_email = "m.wever@ai.uni-hannover.de"
 description = "A Visualization and Analysis Tool for Automated Machine Learning."
 url = "automl.org"
 project_urls = {
@@ -44,12 +44,13 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, {author}"
-version = "1.3.4"
+version = "1.4"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
 
 ROOT_DIR = Path(__file__).parent
+DOC_ROOT = "https://automl.github.io/DeepCAVE/main/"
 
 
 def get_app(title: str) -> Any:
