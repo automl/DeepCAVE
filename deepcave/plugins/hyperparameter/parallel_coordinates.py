@@ -53,7 +53,7 @@ class ParallelCoordinates(StaticPlugin):
     name = "Parallel Coordinates"
     icon = "far fa-map"
     activate_run_selection = True
-    help = "docs/plugins/parallel_coordinates.rst"
+    help = "plugins/parallel_coordinates.html"
 
     @staticmethod
     def get_input_layout(register: Callable) -> List[Any]:

@@ -60,7 +60,7 @@ class CostOverTime(DynamicPlugin):
     id = "cost_over_time"
     name = "Cost Over Time"
     icon = "fas fa-chart-line"
-    help = "docs/plugins/cost_over_time.rst"
+    help = "plugins/cost_over_time.html"
 
     def check_runs_compatibility(self, runs: List[AbstractRun]) -> None:
         """

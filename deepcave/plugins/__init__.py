@@ -37,7 +37,7 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import ROOT_DIR, interactive
+from deepcave import ROOT_DIR, DOC_ROOT, interactive
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group, NotMergeableError
@@ -856,30 +856,7 @@ class Plugin(Layout, ABC):
         components = []
 
         if self.help is not None:
-            doc_path = ROOT_DIR / self.help
-            if not doc_path.exists():
-                raise FileNotFoundError(doc_path)
-
-            if doc_path.name.endswith(".rst"):
-                data = rst_to_md(doc_path)
-            else:
-                with doc_path.open("r") as file:
-                    data = file.read()
-
-            modal = html.Div(
-                [
-                    dbc.Modal(
-                        [
-                            dbc.ModalBody([dcc.Markdown(data)]),
-                        ],
-                        id=self.get_internal_id("help"),
-                        size="xl",
-                        scrollable=True,
-                        is_open=False,
-                    ),
-                ]
-            )
-
+            doc_path = DOC_ROOT + self.help
             components += [
                 html.H1(
                     [
@@ -887,6 +864,8 @@ class Plugin(Layout, ABC):
                         dbc.Button(
                             [html.I(className="far fa-question-circle")],
                             id=self.get_internal_id("show_help"),
+                            href=doc_path,
+                            target="_blank",
                             style={"float": "right"},
                             color="primary",
                             outline=True,
@@ -894,7 +873,6 @@ class Plugin(Layout, ABC):
                         ),
                     ]
                 ),
-                modal,
             ]
         else:
             components += [html.H1(self.name)]

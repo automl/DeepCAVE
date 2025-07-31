@@ -1,20 +1,22 @@
-# Version 1.3.9
+# Version 1.4
+
+## Converter Documentation
+- Added documentation to make it visible which converters cant handle instances
+- Added documentation to give some information about limitations (and capabilities) of the converters
+
+## Documentation
+- Added the hint that for the api example the example records need to be run first to create the run.
+- Added links to GitHub pages in the web-based UI for help and more details on the method.
 
 ## Parallel Coordinates
 - Set the margin of the graph so it gets dynamically computed depending on the length of the labels.
 
-# Version 1.3.6
-
 ## New SMAC version compatibility
 - The smac3v2 converter can now also handle the output of the new smac version
-
-# Version 1.3.5
 
 ## Converter
 - Added a new converter to handle RayTune runs
 - Added example RayTune runs to logs
-
-# Version 1.3.5
 
 ## Access Specifier
 - Changed access specifier from '_fit' to 'fit' in the RF surrogate
