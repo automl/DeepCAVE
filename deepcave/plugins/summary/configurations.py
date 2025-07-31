@@ -56,7 +56,7 @@ class Configurations(DynamicPlugin):
     id = "configurations"
     name = "Configurations"
     icon = "fas fa-sliders-h"
-    help = "plugins/configurations.html"
+    help = "docs/plugins/configurations.rst"
     activate_run_selection = True
     use_cache = False
 

@@ -54,7 +54,7 @@ class BudgetCorrelation(DynamicPlugin):
     id = "budget_correlation"
     name = "Budget Correlation"
     icon = "fas fa-coins"
-    help = "plugins/budget_correlation.html"
+    help = "docs/plugins/budget_correlation.rst"
     activate_run_selection = True
 
     @staticmethod

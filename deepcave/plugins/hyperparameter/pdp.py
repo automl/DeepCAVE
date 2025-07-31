@@ -63,7 +63,7 @@ class PartialDependencies(StaticPlugin):
     id = "pdp"
     name = "Partial Dependencies"
     icon = "fas fa-grip-lines"
-    help = "plugins/partial_dependencies.html"
+    help = "docs/plugins/partial_dependencies.rst"
     activate_run_selection = True
 
     @staticmethod

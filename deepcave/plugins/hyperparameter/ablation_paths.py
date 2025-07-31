@@ -59,7 +59,7 @@ class AblationPaths(StaticPlugin):
     id = "ablation_paths"
     name = "Ablation Paths"
     icon = "fas fa-sort-amount-up"
-    help = "plugins/ablation_paths.html"
+    help = "docs/plugins/ablation_paths.rst"
     activate_run_selection = True
 
     @staticmethod

@@ -60,7 +60,7 @@ class Overview(DynamicPlugin):
     id = "overview"
     name = "Overview"
     icon = "fas fa-search"
-    help = "plugins/overview.html"
+    help = "docs/plugins/overview.rst"
     use_cache = False
     activate_run_selection = True
 

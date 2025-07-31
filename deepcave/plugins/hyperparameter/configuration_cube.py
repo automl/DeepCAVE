@@ -60,7 +60,7 @@ class ConfigurationCube(DynamicPlugin):
     name = "Configuration Cube"
     icon = "fas fa-cube"
     activate_run_selection = True
-    help = "plugins/configuration_cube.html"
+    help = "docs/plugins/configuration_cube.rst"
 
     @staticmethod
     def get_input_layout(register: Callable) -> List[dbc.Row]:
