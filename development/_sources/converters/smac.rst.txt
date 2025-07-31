@@ -15,3 +15,5 @@ as well as the run history:
       "configspace.json"
       "runhistory.json"
 
+.. note::
+   Instances are not supported.

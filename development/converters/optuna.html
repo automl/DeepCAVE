@@ -846,9 +846,11 @@ consider when running Optuna:</p>
 </pre></div>
 </div>
 </div></blockquote>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Optuna does not support instances.
+The hyperparameters in the Optuna study must be of type FloatDistribution, IntDistribution or CategoricalDistribution.
+Loading Optuna runs with conditional search spaces or dynamic hyperparameter value ranges
 is not supported.
 This limitation arises because Optuna leverages a dynamic search space, which cannot be
 trivially converted into a static search space as used in DeepCAVE.</p>

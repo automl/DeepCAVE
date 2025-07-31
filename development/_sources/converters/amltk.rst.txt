@@ -36,3 +36,6 @@ consider when running AMLTK:
    - Alternatively, you can still manually add the DeepCave time columns to ``history.parquet``
      after the AMLTK run has finished by loading it into a Pandas Dataframe, manipulating it, and
      writing it back to the ``history.parquet`` file.
+
+.. note::
+   Instances are not supported.

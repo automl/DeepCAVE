@@ -48,5 +48,8 @@ SUCCESS, TIMEOUT, MEMORYOUT, CRASHED, ABORTED, NOT_EVALUATED, FAILED, PRUNED, UN
 The ``budget`` column should contain the multi-fidelity budget and can be omitted if not used.
 The same holds for the ``seed`` column, containing the trial seed.
 
-.. warning::
+.. note::
     Conditions and forbiddens are not supported in the current version of the Pandas DataFrame converter.
+    Weights are not supported by us. They will be ignored.
+    hyperparameters are expected to be of type float, categorical or integer.
+    The numeric distribution must be normal, beta or uniform.

@@ -989,9 +989,12 @@ DeepCAVE</p>
 SUCCESS, TIMEOUT, MEMORYOUT, CRASHED, ABORTED, NOT_EVALUATED, FAILED, PRUNED, UNKNOWN</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">budget</span></code> column should contain the multi-fidelity budget and can be omitted if not used.
 The same holds for the <code class="docutils literal notranslate"><span class="pre">seed</span></code> column, containing the trial seed.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Conditions and forbiddens are not supported in the current version of the Pandas DataFrame converter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Conditions and forbiddens are not supported in the current version of the Pandas DataFrame converter.
+Weights are not supported by us. They will be ignored.
+hyperparameters are expected to be of type float, categorical or integer.
+The numeric distribution must be normal, beta or uniform.</p>
 </div>
 </section>
 
