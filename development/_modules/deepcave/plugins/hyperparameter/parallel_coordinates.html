@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.plugins.hyperparameter.parallel_coordinates &#8212; DeepCAVE Documentation 1.3.4 documentation</title>
+    <title>deepcave.plugins.hyperparameter.parallel_coordinates &#8212; DeepCAVE Documentation 1.4 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
   <link rel="preload" as="script" href="../../../../_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="../../../../_static/documentation_options.js?v=2b7d2ab1"></script>
+    <script src="../../../../_static/documentation_options.js?v=1e247831"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="../../../../_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.3.4
+        v1.4
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.3.4</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.4</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="../../../../index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.3.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -855,7 +855,7 @@
     <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Parallel Coordinates&quot;</span>
     <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;far fa-map&quot;</span>
     <span class="n">activate_run_selection</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;docs/plugins/parallel_coordinates.rst&quot;</span>
+    <span class="n">help</span> <span class="o">=</span> <span class="s2">&quot;plugins/parallel_coordinates.html&quot;</span>
 
 <div class="viewcode-block" id="ParallelCoordinates.get_input_layout">
 <a class="viewcode-back" href="../../../../api/deepcave.plugins.hyperparameter.parallel_coordinates.html#deepcave.plugins.hyperparameter.parallel_coordinates.ParallelCoordinates.get_input_layout">[docs]</a>
@@ -1156,10 +1156,17 @@
 <span class="sd">        dcc.Graph</span>
 <span class="sd">            The layouts for the output block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
-            <span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
-            <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_HEIGHT</span><span class="p">},</span>
-            <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+        <span class="k">return</span> <span class="n">html</span><span class="o">.</span><span class="n">Div</span><span class="p">(</span>
+            <span class="n">dcc</span><span class="o">.</span><span class="n">Graph</span><span class="p">(</span>
+                <span class="n">register</span><span class="p">(</span><span class="s2">&quot;graph&quot;</span><span class="p">,</span> <span class="s2">&quot;figure&quot;</span><span class="p">),</span>
+                <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;toImageButtonOptions&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">FIGURE_DOWNLOAD_SCALE</span><span class="p">}},</span>
+                <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="s2">&quot;1200px&quot;</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="s2">&quot;800px&quot;</span><span class="p">},</span>
+            <span class="p">),</span>
+            <span class="n">style</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;overflowX&quot;</span><span class="p">:</span> <span class="s2">&quot;scroll&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;overflowY&quot;</span><span class="p">:</span> <span class="s2">&quot;scroll&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="s2">&quot;500px&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
         <span class="p">)</span></div>
 
 
@@ -1252,17 +1259,26 @@
                 <span class="n">colorscale</span><span class="o">=</span><span class="s2">&quot;aggrnyl&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
+        <span class="c1"># Margin size is dynamically computed depending on the length of the labels</span>
+        <span class="n">char_width_px</span> <span class="o">=</span> <span class="mi">8</span>
+        <span class="n">max_label_length</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()])</span>
+        <span class="n">top_margin</span> <span class="o">=</span> <span class="n">max_label_length</span> <span class="o">*</span> <span class="n">char_width_px</span>
+        <span class="n">left_margin</span> <span class="o">=</span> <span class="n">max_label_length</span> <span class="o">*</span> <span class="n">char_width_px</span>
+
         <span class="n">figure</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">Parcoords</span><span class="p">(</span>
                 <span class="n">line</span><span class="o">=</span><span class="n">line</span><span class="p">,</span>
                 <span class="n">dimensions</span><span class="o">=</span><span class="nb">list</span><span class="p">([</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()]),</span>
-                <span class="n">labelangle</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                <span class="n">labelangle</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
             <span class="p">),</span>
             <span class="n">layout</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+                <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">top_margin</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">l</span><span class="o">=</span><span class="n">left_margin</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
                 <span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">FIGURE_FONT_SIZE</span><span class="p">),</span>
             <span class="p">),</span>
         <span class="p">)</span>
+
+        <span class="n">figure</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()]))</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+
         <span class="n">save_image</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="s2">&quot;parallel_coordinates.pdf&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">figure</span></div>
