@@ -1,0 +1,20 @@
+{
+    "objectives": [
+        {
+            "name": "test",
+            "lower": 0,
+            "upper": 1,
+            "lock_lower": true,
+            "lock_upper": true,
+            "optimize": "upper"
+        }
+    ],
+    "budgets": [
+        20,
+        40,
+        60
+    ],
+    "seeds": [
+        -1
+    ]
+}

@@ -505,7 +505,6 @@ class AbstractRun(ABC):
             config = dict(config)
         # Use same rounding as ConfigSpace does
         input_config_tuple = config_to_tuple(config, ROUND_PLACES)
-
         # Check if the input configuration tuple exists in the config id mapping
         if input_config_tuple in self.config_id_mapping:
             return self.config_id_mapping[input_config_tuple]
@@ -561,6 +560,7 @@ class AbstractRun(ABC):
             If the budget with this id is invalid.
         """
         budgets = self.get_budgets(human=human)
+
         return budgets[int(id)]  # type: ignore
 
     def get_budget_ids(self, include_combined: bool = True) -> List[int]:
@@ -744,6 +744,7 @@ class AbstractRun(ABC):
 
         # Budget might not be evaluated
         all_costs = self.get_all_costs(budget=budget, statuses=statuses)
+
         if config_id in all_costs:
             config_costs = all_costs[config_id]
         else:
@@ -1317,6 +1318,7 @@ class AbstractRun(ABC):
         config_ids = []
 
         results = self.get_all_costs(budget, statuses, seed)
+
         for config_id, config_costs in results.items():
             config = self.configs[config_id]
             for seed, costs in config_costs.items():

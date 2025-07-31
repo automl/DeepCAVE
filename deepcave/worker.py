@@ -18,7 +18,7 @@
 This module can create a redis queue worker.
 """
 
-from rq import Connection, Worker
+from rq import Connection, Worker  # type: ignore
 
 from deepcave import queue
 

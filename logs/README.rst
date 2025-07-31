@@ -2,7 +2,7 @@ Example Logs
 ============
 
 This directory contains exemplary run logs from hyperparameter optimization runs created with
-AMLTK, BOHB, Optuna, and SMAC3.
+AMLTK, BOHB, Optuna, RayTune and SMAC3.
 Furthermore, it contains example logs created with the DeepCAVE recorder and example logs in
 CSV format.
 

@@ -306,7 +306,6 @@ class Plugin(Layout, ABC):
                     if passed_inputs is not None:
                         # First get normal inputs
                         inputs = self.load_inputs()
-
                         # Overwrite/set the passed inputs
                         update_dict(inputs, passed_inputs)
 
@@ -1096,7 +1095,6 @@ class Plugin(Layout, ABC):
                     run_path = run.path
                     if run_path is not None:
                         run_name = run_path.parent.name + "/" + run.name
-
                     values.append(run.id)
                     labels.append(run_name)
                     disabled.append(False)

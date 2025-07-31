@@ -337,10 +337,17 @@ class ParallelCoordinates(StaticPlugin):
         dcc.Graph
             The layouts for the output block.
         """
-        return dcc.Graph(
-            register("graph", "figure"),
-            style={"height": config.FIGURE_HEIGHT},
-            config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+        return html.Div(
+            dcc.Graph(
+                register("graph", "figure"),
+                config={"toImageButtonOptions": {"scale": config.FIGURE_DOWNLOAD_SCALE}},
+                style={"width": "1200px", "height": "800px"},
+            ),
+            style={
+                "overflowX": "scroll",
+                "overflowY": "scroll",
+                "height": "500px",
+            },
         )
 
     @staticmethod
@@ -430,17 +437,26 @@ class ParallelCoordinates(StaticPlugin):
                 colorscale="aggrnyl",
             )
 
+        # Margin size is dynamically computed depending on the length of the labels
+        char_width_px = 8
+        max_label_length = max([len(label) for label in data.keys()])
+        top_margin = max_label_length * char_width_px
+        left_margin = max_label_length * char_width_px
+
         figure = go.Figure(
             data=go.Parcoords(
                 line=line,
                 dimensions=list([d for d in data.values()]),
-                labelangle=45,
+                labelangle=30,
             ),
             layout=dict(
-                margin=dict(t=150, b=50, l=100, r=0),
+                margin=dict(t=top_margin, b=50, l=left_margin, r=0),
                 font=dict(size=config.FIGURE_FONT_SIZE),
             ),
         )
+
+        figure.update_layout(width=max(1000, len(list([d for d in data.values()])) * 100))
+
         save_image(figure, "parallel_coordinates.pdf")
 
         return figure

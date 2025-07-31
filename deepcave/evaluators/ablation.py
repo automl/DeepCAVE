@@ -75,11 +75,13 @@ class Ablation:
         self,
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
-        n_trees: int = 50,  # noqa
-        seed: int = 0,  # noqa
+        model: Any = None,
     ) -> None:
         """
         Calculate the ablation path performances and improvements.
+
+        To use standard Random Forest surrogate do not pass a model.
+        The option to pass another model is just for testing purposes.
 
         Parameters
         ----------
@@ -88,12 +90,9 @@ class Ablation:
         budget : Optional[Union[int, float]]
             The budget to be considered. If None, all budgets of the run are considered.
             Default is None.
-        n_trees : int
-            The number of trees for the surrogate model.
-            Default is 50.
-        seed : int
-            The seed for the surrogate model.
-            Default is 0.
+        model :
+            The surrogate model to use for the prediction of the perfromances.
+            By default None.
         """
         if isinstance(objectives, list) and len(objectives) > 1:
             raise ValueError("Only one objective is supported for ablation paths.")
@@ -103,6 +102,8 @@ class Ablation:
         performances: OrderedDict = OrderedDict()
         improvements: OrderedDict = OrderedDict()
 
+        self._model = model
+
         df = self.run.get_encoded_data(objective, budget, specific=True)
 
         # Obtain all configurations with theirs costs
@@ -110,18 +111,21 @@ class Ablation:
         X = df[list(self.run.configspace.keys())].to_numpy()
         Y = df[objective.name].to_numpy()
 
-        # A Random Forest Regressor is used as surrogate model
-        self._model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-        self._model._fit(X, Y)
-
         # Get the incumbent configuration
         incumbent_config, _ = self.run.get_incumbent(budget=budget, objectives=objective)
         incumbent_encode = self.run.encode_config(incumbent_config)
 
         # Get the default configuration
+
         self.default_config = self.cs.get_default_configuration()
         default_encode = self.run.encode_config(self.default_config)
 
+        # The default model is a RF Surrogate, but it cant be passed as parameter directly
+        # because it needs access to its config space
+        if self._model is None:
+            self._model = RandomForestSurrogate(self.cs, seed=0, n_trees=50)
+
+        self._model.fit(X, Y)
         # Obtain the predicted cost of the default and incumbent configuration
         def_cost, def_std = self._model.predict(np.array([default_encode]))
         def_cost, def_std = def_cost[0], def_std[0]
@@ -166,6 +170,7 @@ class Ablation:
                     performances[max_hp] = (max_hp_cost, max_hp_std)
                 impr_std = np.sqrt(def_std**2 + max_hp_std**2)
                 improvements[max_hp] = ((def_cost - max_hp_cost), impr_std)
+
                 # New 'default' cost and std
                 def_cost = max_hp_cost
                 def_std = max_hp_std
@@ -248,7 +253,6 @@ class Ablation:
             if hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
-
                 new_cost, _ = self._model.predict(np.array([self.run.encode_config(config_copy)]))
                 if objective.optimize == "upper":
                     new_cost = -new_cost
@@ -262,6 +266,7 @@ class Ablation:
             else:
                 continue
         hp_count = len(list(self.cs.keys()))
+
         if max_hp != "":
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
@@ -270,6 +275,7 @@ class Ablation:
             )
             if objective.optimize == "upper":
                 max_hp_cost = -max_hp_cost
+
             return True, max_hp, max_hp_cost[0], max_hp_std[0]
         else:
             self.logger.info(

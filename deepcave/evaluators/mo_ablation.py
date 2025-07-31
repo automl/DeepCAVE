@@ -122,8 +122,7 @@ class MOAblation(Ablation):
         self,
         objectives: Optional[Union[Objective, List[Objective]]],  # noqa
         budget: Optional[Union[int, float]] = None,  # noqa
-        n_trees: int = 50,  # noqa
-        seed: int = 0,  # noqa
+        model: Any = None,
     ) -> None:
         """
         Calculate the MO ablation path performances and improvements.
@@ -135,12 +134,9 @@ class MOAblation(Ablation):
         budget : Optional[Union[int, float]]
             The budget to be considered. If None, all budgets of the run are considered.
             Default is None.
-        n_trees : int
-            The number of trees for the surrogate model.
-            Default is 50.
-        seed : int
-            The seed for the surrogate model.
-            Default is 0.
+        model : Any
+            For mo ablation this parameter does not do anything, except fit the head.
+            By default None.
         """
         assert isinstance(objectives, list)
         for objective in objectives:
@@ -166,8 +162,9 @@ class MOAblation(Ablation):
 
             # train one model per objective
             Y = df[normed].to_numpy()
-            model = RandomForestSurrogate(self.cs, seed=seed, n_trees=n_trees)
-            model._fit(X, Y)
+            if model is None:
+                model = RandomForestSurrogate(self.cs, seed=0, n_trees=50)
+            model.fit(X, Y)
             self.models.append(model)
 
         weightings = get_weightings(objectives_normed, df)

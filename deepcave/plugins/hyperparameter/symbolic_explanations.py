@@ -294,7 +294,6 @@ class SymbolicExplanations(StaticPlugin):
         budgets = run.get_budgets(human=True)
         budget_ids = run.get_budget_ids()
         budget_options = get_checklist_options(budgets, budget_ids)
-
         hp_dict = run.configspace.get_hyperparameters_dict()
         hp_names_numerical = []
         for k, v in hp_dict.items():

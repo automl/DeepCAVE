@@ -235,6 +235,7 @@ class Run(AbstractRun, ABC):
         config: Union[Dict, Configuration],
         seed: int,
         budget: float = np.inf,
+        cpu_time: float = 0.0,
         start_time: float = 0.0,
         end_time: float = 0.0,
         status: Status = Status.SUCCESS,
@@ -258,6 +259,8 @@ class Run(AbstractRun, ABC):
             Seed of the run.
         budget : float, optional
             Budget of the run. By default np.inf
+        cpu_time : float, optional
+            The cpu time of the run. By default 0.0.
         start_time : float, optional
             Start time. By default, 0.0
         end_time : float, optional
@@ -333,6 +336,7 @@ class Run(AbstractRun, ABC):
             budget=budget,
             seed=seed,
             costs=costs,
+            cpu_time=cpu_time,
             start_time=np.round(start_time, 2),
             end_time=np.round(end_time, 2),
             status=status,
@@ -475,6 +479,10 @@ class Run(AbstractRun, ABC):
         with jsonlines.open(self.history_fn) as f:
             self.history = []
             for obj in f:
+                # Check wheter cpu time is provided, if not set default
+                if len(obj) != 11:
+                    obj.insert(6, 0.0)
+
                 # Create trial object here
                 trial = Trial(*obj)
                 self.history.append(trial)

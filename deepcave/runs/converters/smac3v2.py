@@ -149,14 +149,20 @@ class SMAC3v2Run(Run):
 
         first_starttime = None
 
-        if isinstance(data, list):
-            import warnings
+        # The newer runhistory.json format needs to be transformed
+        if isinstance(data[0], dict):
+            data = [[d[k] for k in data[0].keys()] for d in data]
 
-            warnings.warn(
-                "The runhistory.json file is in an outdated format.",
-                DeprecationWarning,
-                stacklevel=2,  # Adjusts the stack level to point to the caller.
-            )
+        # There needs to be a slot for the cpu time parameter
+        # (which is absent in the older versions)
+        right_form = []
+        for d_list in data:
+            if len(d_list) == 10:
+                d_list.insert(6, 0.0)
+            right_form.append(d_list)
+        data = right_form
+
+        if isinstance(data, list):
             for (
                 config_id,
                 instance_id,
@@ -164,6 +170,7 @@ class SMAC3v2Run(Run):
                 budget,
                 cost,
                 time,
+                cpu_time,
                 status,
                 starttime,
                 endtime,
@@ -176,6 +183,7 @@ class SMAC3v2Run(Run):
                     budget,
                     cost,
                     time,
+                    cpu_time,
                     status,
                     starttime,
                     endtime,
@@ -188,12 +196,20 @@ class SMAC3v2Run(Run):
                 if run_dict is not None:
                     run.add(**run_dict)
         elif isinstance(data, dict):
+            import warnings
+
+            warnings.warn(
+                "The runhistory.json file is in an outdated format.",
+                DeprecationWarning,
+                stacklevel=2,  # Adjusts the stack level to point to the caller.
+            )
             for config_id, config_data in data.items():
                 instance_id = config_data["instance"]
                 seed = config_data["seed"]
                 budget = config_data["budget"]
                 cost = config_data["cost"]
                 time = config_data["time"]
+                cpu_time = config_data["cpu_time"]
                 status = config_data["status"]
                 starttime = config_data["starttime"]
                 endtime = config_data["endtime"]
@@ -205,6 +221,7 @@ class SMAC3v2Run(Run):
                     budget,
                     cost,
                     time,
+                    cpu_time,
                     status,
                     starttime,
                     endtime,
@@ -228,6 +245,7 @@ class SMAC3v2Run(Run):
         budget: Optional[float],
         cost: Optional[Union[List[Union[float, None]], float]],
         time: Optional[float],
+        cpu_time: Optional[float],
         status: int,
         starttime: float,
         endtime: float,
@@ -276,6 +294,9 @@ class SMAC3v2Run(Run):
         else:
             budget = 0.0
 
+        if not cpu_time:
+            cpu_time = 0.0
+
         origin = None
         if config_id in config_origins:
             origin = config_origins[config_id]
@@ -285,6 +306,7 @@ class SMAC3v2Run(Run):
             "config": config,
             "budget": budget,
             "seed": seed,
+            "cpu_time": cpu_time,
             "start_time": starttime,
             "end_time": endtime,
             "status": status,
