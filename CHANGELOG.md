@@ -1,7 +1,14 @@
+# Version 1.3.8
+
+## Converter Documentation
+- Added documentation to make it visible which converters cant handle instances
+- Added documentation to give some information about limitations (and capabilities) of the converters
+
 # Version 1.3.7
 
 ## Documentation
 - Added the hint that for the api example the example records need to be run first to create the run.
+
 
 # Version 1.3.6
 
