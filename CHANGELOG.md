@@ -8,6 +8,9 @@
 - Added the hint that for the api example the example records need to be run first to create the run.
 - Added links to GitHub pages in the web-based UI for help and more details on the method.
 
+## Parallel Coordinates
+- Set the margin of the graph so it gets dynamically computed depending on the length of the labels.
+
 ## New SMAC version compatibility
 - The smac3v2 converter can now also handle the output of the new smac version
 
