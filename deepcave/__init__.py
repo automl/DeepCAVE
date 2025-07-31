@@ -44,12 +44,13 @@ project_urls = {
     "Source Code": "https://github.com/automl/deepcave",
 }
 copyright = f"Copyright {datetime.date.today().strftime('%Y')}, {author}"
-version = "1.3.4"
+version = "1.4"
 
 _exec_file = sys.argv[0]
 _exec_files = ["server.py", "worker.py", "sphinx-build"]
 
 ROOT_DIR = Path(__file__).parent
+DOC_ROOT = "https://automl.github.io/DeepCAVE/main/"
 
 
 def get_app(title: str) -> Any:

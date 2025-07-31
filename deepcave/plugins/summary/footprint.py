@@ -51,7 +51,7 @@ class FootPrint(StaticPlugin):
     id = "footprint"
     name = "Configuration Footprint"
     icon = "fas fa-shoe-prints"
-    help = "docs/plugins/configuration_footprint.rst"
+    help = "plugins/configuration_footprint.html"
     activate_run_selection = True
 
     @staticmethod
