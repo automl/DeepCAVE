@@ -23,8 +23,9 @@ Parallel Coordinates
 
 This example shows how to use the plugin Parallel Coordinates.
 Note that other plugins use the same interfaces and can be used in the same fashion.
+To use the API commands in this example, we assume the run data to be already present in the mentioned folder. Please ensure that you have the run data located at the corresponding path.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-37
+.. GENERATED FROM PYTHON SOURCE LINES 9-38
 
 .. code-block:: Python
 
