@@ -8,6 +8,7 @@ Runs and Converters
    smac
    amltk
    optuna
+   raytune
    bohb
    deepcave
    dataframe
@@ -35,6 +36,7 @@ Currently, DeepCAVE offers the following converters:
 - SMAC (v2.0.0)
 - AMLTK
 - Optuna
+- Raytune
 - BOHB
 - DeepCAVE (native)
 - Pandas DataFrame
@@ -43,7 +45,7 @@ In the `logs` directory, you can find example runs for each of the converters.
 
 
 .. note::
-    DeepCAVE observes optimizer data on the file system and therefore allows for monitoring of both
+    DeepCAVE observes optimizer data on the file system and therefore, allows for monitoring of both
     finished processes and running processes that regularly write new results to disk.
 
 Adding a Converter
