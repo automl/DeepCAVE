@@ -14,7 +14,6 @@ import os
 from pathlib import Path
 
 from ConfigSpace import Configuration, ConfigurationSpace
-from ray.tune import ExperimentAnalysis
 
 from deepcave.runs import Status
 from deepcave.runs.objective import Objective
@@ -83,6 +82,8 @@ class RayTuneRun(Run):
         RayTuneRun
             The run.
         """
+        from ray.tune import ExperimentAnalysis
+
         configspace_new: dict
         hp_names = {}
         analysis = None
