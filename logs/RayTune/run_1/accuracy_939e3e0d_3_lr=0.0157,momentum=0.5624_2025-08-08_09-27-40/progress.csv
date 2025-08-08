@@ -1,0 +1,2 @@
+score,timestamp,checkpoint_dir_name,done,training_iteration,trial_id,date,time_this_iter_s,time_total_s,pid,hostname,node_ip,time_since_restore,iterations_since_restore
+0.00024605882118595426,1754638061,,False,1,939e3e0d,2025-08-08_09-27-41,8.893013000488281e-05,8.893013000488281e-05,12532,MacBook,127.0.0.1,8.893013000488281e-05,1

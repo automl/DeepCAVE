@@ -169,7 +169,7 @@ class RayTuneRun(Run):
                 status = Status.CRASHED
             start_time = analysis[result]["timestamp"]
             end_time = start_time + analysis[result]["time_this_iter_s"]
-            cost = analysis[result]["score"]
+            cost = next(iter(analysis[result].values()))
 
             budget = []
             if os.path.isfile(str(path) + "/budget.json"):
