@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>deepcave.evaluators.epm &#8212; DeepCAVE Documentation 1.4 documentation</title>
+    <title>deepcave.runs.converters.raytune &#8212; DeepCAVE Documentation 1.4 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -37,8 +37,8 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="deepcave.evaluators.epm.fanova_forest" href="deepcave.evaluators.epm.fanova_forest.html" />
-    <link rel="prev" title="deepcave.evaluators.ablation" href="deepcave.evaluators.ablation.html" />
+    <link rel="next" title="deepcave.runs.converters.smac3v1" href="deepcave.runs.converters.smac3v1.html" />
+    <link rel="prev" title="deepcave.runs.converters.optuna" href="deepcave.runs.converters.optuna.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -353,26 +353,26 @@
    </i>
   </label>
   <ul class="current">
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2 current active has-children">
     <a class="reference internal" href="deepcave.runs.html">
      deepcave.runs
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+    <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
     <label for="toctree-checkbox-7">
      <i class="fas fa-chevron-down">
      </i>
     </label>
-    <ul>
-     <li class="toctree-l3 has-children">
+    <ul class="current">
+     <li class="toctree-l3 current active has-children">
       <a class="reference internal" href="deepcave.runs.converters.html">
        deepcave.runs.converters
       </a>
-      <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+      <input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
       <label for="toctree-checkbox-8">
        <i class="fas fa-chevron-down">
        </i>
       </label>
-      <ul>
+      <ul class="current">
        <li class="toctree-l4">
         <a class="reference internal" href="deepcave.runs.converters.amltk.html">
          deepcave.runs.converters.amltk
@@ -398,8 +398,8 @@
          deepcave.runs.converters.optuna
         </a>
        </li>
-       <li class="toctree-l4">
-        <a class="reference internal" href="deepcave.runs.converters.raytune.html">
+       <li class="toctree-l4 current active">
+        <a class="current reference internal" href="#">
          deepcave.runs.converters.raytune
         </a>
        </li>
@@ -585,26 +585,26 @@
      </li>
     </ul>
    </li>
-   <li class="toctree-l2 current active has-children">
+   <li class="toctree-l2 has-children">
     <a class="reference internal" href="deepcave.evaluators.html">
      deepcave.evaluators
     </a>
-    <input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
     <label for="toctree-checkbox-13">
      <i class="fas fa-chevron-down">
      </i>
     </label>
-    <ul class="current">
+    <ul>
      <li class="toctree-l3">
       <a class="reference internal" href="deepcave.evaluators.ablation.html">
        deepcave.evaluators.ablation
       </a>
      </li>
-     <li class="toctree-l3 current active has-children">
-      <a class="current reference internal" href="#">
+     <li class="toctree-l3 has-children">
+      <a class="reference internal" href="deepcave.evaluators.epm.html">
        deepcave.evaluators.epm
       </a>
-      <input checked="" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
+      <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
       <label for="toctree-checkbox-14">
        <i class="fas fa-chevron-down">
        </i>
@@ -809,9 +809,51 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#modules">
-   ## Modules
+  <a class="reference internal nav-link" href="#deepcave.runs.converters.raytune.RayTuneRun">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     RayTuneRun
+    </span>
+   </code>
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.raytune.RayTuneRun.from_path">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RayTuneRun.from_path()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.raytune.RayTuneRun.hash">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RayTuneRun.hash
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.raytune.RayTuneRun.is_valid_run">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RayTuneRun.is_valid_run()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#deepcave.runs.converters.raytune.RayTuneRun.latest_change">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RayTuneRun.latest_change
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -834,40 +876,103 @@
               
               <div>
                 
-  <section id="module-deepcave.evaluators.epm">
-<span id="deepcave-evaluators-epm"></span><h1>deepcave.evaluators.epm<a class="headerlink" href="#module-deepcave.evaluators.epm" title="Link to this heading">¶</a></h1>
-<p># epm</p>
-<section id="modules">
-<h2>## Modules<a class="headerlink" href="#modules" title="Link to this heading">¶</a></h2>
+  <section id="module-deepcave.runs.converters.raytune">
+<span id="deepcave-runs-converters-raytune"></span><h1>deepcave.runs.converters.raytune<a class="headerlink" href="#module-deepcave.runs.converters.raytune" title="Link to this heading">¶</a></h1>
+<p># RayTuneRun</p>
+<p>This module provides utilities to create a RayTune run.</p>
 <dl class="simple">
-<dt>fanova_forest</dt><dd><p>The module provides utilities for creating a fANOVA forest.</p>
-</dd>
-<dt>random_forest</dt><dd><p>This module can be used for training and using a Random Forest Regression model.</p>
-</dd>
-<dt>random_forest_surrogate</dt><dd><p>This module provides a RandomForest Surrogate model.</p>
-</dd>
-<dt>utils</dt><dd><p>This module provides a utility to get the types
-as well as the bounds of the Hyperparameters.</p>
+<dt>## Classes</dt><dd><ul class="simple">
+<li><p>RayTuneRun: Define an RayTune run object.</p></li>
+</ul>
 </dd>
 </dl>
-</section>
-<p class="rubric">Modules</p>
+<p class="rubric">Classes</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.epm.fanova_forest.html#module-deepcave.evaluators.epm.fanova_forest" title="deepcave.evaluators.epm.fanova_forest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fanova_forest</span></code></a></p></td>
-<td><p># FanovaForest</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.epm.random_forest.html#module-deepcave.evaluators.epm.random_forest" title="deepcave.evaluators.epm.random_forest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_forest</span></code></a></p></td>
-<td><p># RandomForest</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="deepcave.evaluators.epm.random_forest_surrogate.html#module-deepcave.evaluators.epm.random_forest_surrogate" title="deepcave.evaluators.epm.random_forest_surrogate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_forest_surrogate</span></code></a></p></td>
-<td><p># RandomForest Surrogate</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="deepcave.evaluators.epm.utils.html#module-deepcave.evaluators.epm.utils" title="deepcave.evaluators.epm.utils"><code class="xref py py-obj docutils literal notranslate"><span class="pre">utils</span></code></a></p></td>
-<td><p># Utils</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#deepcave.runs.converters.raytune.RayTuneRun" title="deepcave.runs.converters.raytune.RayTuneRun"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RayTuneRun</span></code></a>(name[, configspace, objectives, ...])</p></td>
+<td><p>Define a RayTune run object.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py class">
+<dt class="sig sig-object py" id="deepcave.runs.converters.raytune.RayTuneRun">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">deepcave.runs.converters.raytune.</span></span><span class="sig-name descname"><span class="pre">RayTuneRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configspace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/raytune.html#RayTuneRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.raytune.RayTuneRun" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="deepcave.runs.run.html#deepcave.runs.run.Run" title="deepcave.runs.run.Run"><code class="xref py py-class docutils literal notranslate"><span class="pre">Run</span></code></a></p>
+<p>Define a RayTune run object.</p>
+<section id="properties">
+<h2>Properties<a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>path<span class="classifier">Path</span></dt><dd><p>The path to the run.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.converters.raytune.RayTuneRun.from_path">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/raytune.html#RayTuneRun.from_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.raytune.RayTuneRun.from_path" title="Link to this definition">¶</a></dt>
+<dd><p>Return a Run object from a given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>Path</em>) – The path where the data to the run lies.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The run.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#deepcave.runs.converters.raytune.RayTuneRun" title="deepcave.runs.converters.raytune.RayTuneRun">RayTuneRun</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.converters.raytune.RayTuneRun.hash">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hash</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#deepcave.runs.converters.raytune.RayTuneRun.hash" title="Link to this definition">¶</a></dt>
+<dd><p>Hash of the current run.</p>
+<p>If the hash changes, the cache has to be cleared.
+This ensures that the cache always holds the latest results of the run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The hash of the run.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="deepcave.runs.converters.raytune.RayTuneRun.is_valid_run">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid_run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/deepcave/runs/converters/raytune.html#RayTuneRun.is_valid_run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#deepcave.runs.converters.raytune.RayTuneRun.is_valid_run" title="Link to this definition">¶</a></dt>
+<dd><p>Check whether the path name belongs to a valid smac3v2 run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_name</strong> (<em>str</em>) – The path to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if path is valid run.
+False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="deepcave.runs.converters.raytune.RayTuneRun.latest_change">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">latest_change</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#deepcave.runs.converters.raytune.RayTuneRun.latest_change" title="Link to this definition">¶</a></dt>
+<dd><p>Get the timestamp of the latest change.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The latest change.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Union[float, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
 </section>
 
 
@@ -876,17 +981,17 @@ as well as the bounds of the Hyperparameters.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="deepcave.evaluators.ablation.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="deepcave.runs.converters.optuna.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">deepcave.evaluators.ablation</p>
+            <p class="prev-next-title">deepcave.runs.converters.optuna</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="deepcave.evaluators.epm.fanova_forest.html" title="next page">
+    <a class='right-next' id="next-link" href="deepcave.runs.converters.smac3v1.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">deepcave.evaluators.epm.fanova_forest</p>
+        <p class="prev-next-title">deepcave.runs.converters.smac3v1</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

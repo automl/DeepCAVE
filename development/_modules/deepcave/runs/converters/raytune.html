@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>deepcave.runs.converters.smac3v2 &#8212; DeepCAVE Documentation 1.4 documentation</title>
+    <title>deepcave.runs.converters.raytune &#8212; DeepCAVE Documentation 1.4 documentation</title>
     
   <link href="../../../../_static/css/theme.css" rel="stylesheet">
   <link href="../../../../_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -807,42 +807,23 @@
               
               <div>
                 
-  <h1>Source code for deepcave.runs.converters.smac3v2</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2021-2024 The DeepCAVE Authors</span>
-<span class="c1">#</span>
-<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="c1"># you may not use this file except in compliance with the License.</span>
-<span class="c1"># You may obtain a copy of the License at</span>
-<span class="c1">#</span>
-<span class="c1">#   http://www.apache.org/licenses/LICENSE-2.0</span>
-<span class="c1">#</span>
-<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
-<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="c1"># See the License for the specific language governing permissions and</span>
-<span class="c1"># limitations under the License.</span>
-
-<span class="c1">#  noqa: D400</span>
+  <h1>Source code for deepcave.runs.converters.raytune</h1><div class="highlight"><pre>
+<span></span><span class="c1">#  noqa: D400</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd"># SMAC3v2Run</span>
+<span class="sd"># RayTuneRun</span>
 
-<span class="sd">This module provides utilities to create a SMAC3v2</span>
-<span class="sd">(Sequential Model-based Algorithm Configuration) run.</span>
-
-<span class="sd">Version 2.0.0 is used.</span>
+<span class="sd">This module provides utilities to create a RayTune run.</span>
 
 <span class="sd">## Classes</span>
-<span class="sd">    - SMAC3v2Run: Define a SMAC3v2 run object.</span>
+<span class="sd">    - RayTuneRun: Define an RayTune run object.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
-
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace.configuration_space</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigurationSpace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ConfigSpace</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">ConfigurationSpace</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Status</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.runs.objective</span><span class="w"> </span><span class="kn">import</span> <span class="n">Objective</span>
@@ -850,13 +831,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">deepcave.utils.hash</span><span class="w"> </span><span class="kn">import</span> <span class="n">file_to_hash</span>
 
 
-<div class="viewcode-block" id="SMAC3v2Run">
-<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SMAC3v2Run</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
+<div class="viewcode-block" id="RayTuneRun">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RayTuneRun</span><span class="p">(</span><span class="n">Run</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Define a SMAC3v2 (Sequential Model-based Algorithm Configuration) run object.</span>
-
-<span class="sd">    Version 2.0.0 is used.</span>
+<span class="sd">    Define a RayTune run object.</span>
 
 <span class="sd">    Properties</span>
 <span class="sd">    ----------</span>
@@ -864,8 +843,7 @@
 <span class="sd">        The path to the run.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;SMAC3v2&quot;</span>
-    <span class="n">_initial_order</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;RayTune&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -883,11 +861,11 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
-        <span class="c1"># Use hash of history.json as id</span>
-        <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span>
+        <span class="c1"># Use hash of experiment_stat as id</span>
+        <span class="k">return</span> <span class="n">file_to_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;results.json&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">latest_change</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the timestamp of the latest change.</span>
 
@@ -899,238 +877,153 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;results.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span>
 
-<div class="viewcode-block" id="SMAC3v2Run.from_path">
-<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run.from_path">[docs]</a>
+<div class="viewcode-block" id="RayTuneRun.from_path">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.from_path">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;SMAC3v2Run&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RayTuneRun&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Based on working_dir/run_name/*, return a new trials object.</span>
+<span class="sd">        Return a Run object from a given path.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        path : Union[Path, str]</span>
-<span class="sd">            The path to base the trial object on.</span>
+<span class="sd">        path: Path</span>
+<span class="sd">            The path where the data to the run lies.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        The SMAC3v2 run.</span>
-
-<span class="sd">        Raises</span>
-<span class="sd">        ------</span>
-<span class="sd">        RuntimeError</span>
-<span class="sd">            Instances are not supported.</span>
+<span class="sd">        RayTuneRun</span>
+<span class="sd">            The run.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ray.tune</span><span class="w"> </span><span class="kn">import</span> <span class="n">ExperimentAnalysis</span>
 
-        <span class="c1"># Read configspace</span>
-        <span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;configspace.json&quot;</span><span class="p">)</span>
+        <span class="n">configspace_new</span><span class="p">:</span> <span class="nb">dict</span>
+        <span class="n">hp_names</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">analysis</span> <span class="o">=</span> <span class="n">ExperimentAnalysis</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span><span class="o">.</span><span class="n">results</span>
 
-        <span class="c1"># Read objectives</span>
-        <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scenario.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">all_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
-            <span class="n">objectives</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;objectives&quot;</span><span class="p">]</span>
-
-        <span class="n">obj_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">objectives</span> <span class="o">=</span> <span class="p">[</span><span class="n">objectives</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objectives</span><span class="p">:</span>
-            <span class="n">obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Objective</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span>
-        <span class="c1"># Only lock lower for time</span>
-        <span class="n">obj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Objective</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">))</span>
-
-        <span class="c1"># Read meta</span>
-        <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;scenario.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">meta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
-            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;run_objectives&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;objectives&quot;</span><span class="p">)</span>
-            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;optimizer_seed&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;seed&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Let&#39;s create a new run object</span>
-        <span class="n">run</span> <span class="o">=</span> <span class="n">SMAC3v2Run</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">,</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">obj_list</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="n">meta</span><span class="p">)</span>
-
-        <span class="c1"># The path has to be set manually</span>
-        <span class="n">run</span><span class="o">.</span><span class="n">_path</span> <span class="o">=</span> <span class="n">path</span>
-
-        <span class="c1"># Iterate over the runhistory</span>
-        <span class="k">with</span> <span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;runhistory.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
-            <span class="n">all_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-            <span class="n">config_origins</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;config_origins&quot;</span><span class="p">]</span>
-            <span class="n">configs</span> <span class="o">=</span> <span class="n">all_data</span><span class="p">[</span><span class="s2">&quot;configs&quot;</span><span class="p">]</span>
-
-        <span class="n">instance_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">first_starttime</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># The newer runhistory.json format needs to be transformed</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="n">d</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
-
-        <span class="c1"># There needs to be a slot for the cpu time parameter</span>
-        <span class="c1"># (which is absent in the older versions)</span>
-        <span class="n">right_form</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">d_list</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span>
-                <span class="n">d_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-            <span class="n">right_form</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d_list</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">right_form</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="k">for</span> <span class="p">(</span>
-                <span class="n">config_id</span><span class="p">,</span>
-                <span class="n">instance_id</span><span class="p">,</span>
-                <span class="n">seed</span><span class="p">,</span>
-                <span class="n">budget</span><span class="p">,</span>
-                <span class="n">cost</span><span class="p">,</span>
-                <span class="n">time</span><span class="p">,</span>
-                <span class="n">cpu_time</span><span class="p">,</span>
-                <span class="n">status</span><span class="p">,</span>
-                <span class="n">starttime</span><span class="p">,</span>
-                <span class="n">endtime</span><span class="p">,</span>
-                <span class="n">additional_info</span><span class="p">,</span>
-            <span class="p">)</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-                <span class="n">run_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">_process_data_entry</span><span class="p">(</span>
-                    <span class="nb">str</span><span class="p">(</span><span class="n">config_id</span><span class="p">),</span>
-                    <span class="n">instance_id</span><span class="p">,</span>
-                    <span class="n">seed</span><span class="p">,</span>
-                    <span class="n">budget</span><span class="p">,</span>
-                    <span class="n">cost</span><span class="p">,</span>
-                    <span class="n">time</span><span class="p">,</span>
-                    <span class="n">cpu_time</span><span class="p">,</span>
-                    <span class="n">status</span><span class="p">,</span>
-                    <span class="n">starttime</span><span class="p">,</span>
-                    <span class="n">endtime</span><span class="p">,</span>
-                    <span class="n">additional_info</span><span class="p">,</span>
-                    <span class="n">first_starttime</span><span class="p">,</span>
-                    <span class="n">instance_ids</span><span class="p">,</span>
-                    <span class="n">configs</span><span class="p">,</span>
-                    <span class="n">config_origins</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">run_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">**</span><span class="n">run_dict</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;The runhistory.json file is in an outdated format.&quot;</span><span class="p">,</span>
-                <span class="ne">DeprecationWarning</span><span class="p">,</span>
-                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Adjusts the stack level to point to the caller.</span>
+        <span class="c1"># RayTune does not provide a configspace.json</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/configspace.json&quot;</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;The configspace.json file will be auto extracted. For more &quot;</span>
+                <span class="s2">&quot;reliable results please provide your own configspace.json file or &quot;</span>
+                <span class="s2">&quot;ajust the one provided. Numeric values will be treated as uniform values.&quot;</span>
+                <span class="s2">&quot; Please also check if the objectives bounds as well as its goal are as wanted.&quot;</span>
             <span class="p">)</span>
-            <span class="k">for</span> <span class="n">config_id</span><span class="p">,</span> <span class="n">config_data</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">instance_id</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;instance&quot;</span><span class="p">]</span>
-                <span class="n">seed</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;seed&quot;</span><span class="p">]</span>
-                <span class="n">budget</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;budget&quot;</span><span class="p">]</span>
-                <span class="n">cost</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;cost&quot;</span><span class="p">]</span>
-                <span class="n">time</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
-                <span class="n">cpu_time</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;cpu_time&quot;</span><span class="p">]</span>
-                <span class="n">status</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span>
-                <span class="n">starttime</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">]</span>
-                <span class="n">endtime</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;endtime&quot;</span><span class="p">]</span>
-                <span class="n">additional_info</span> <span class="o">=</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;additional_info&quot;</span><span class="p">]</span>
-                <span class="n">run_dict</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">_process_data_entry</span><span class="p">(</span>
-                    <span class="n">config_id</span><span class="p">,</span>
-                    <span class="n">instance_id</span><span class="p">,</span>
-                    <span class="n">seed</span><span class="p">,</span>
-                    <span class="n">budget</span><span class="p">,</span>
-                    <span class="n">cost</span><span class="p">,</span>
-                    <span class="n">time</span><span class="p">,</span>
-                    <span class="n">cpu_time</span><span class="p">,</span>
-                    <span class="n">status</span><span class="p">,</span>
-                    <span class="n">starttime</span><span class="p">,</span>
-                    <span class="n">endtime</span><span class="p">,</span>
-                    <span class="n">additional_info</span><span class="p">,</span>
-                    <span class="n">first_starttime</span><span class="p">,</span>
-                    <span class="n">instance_ids</span><span class="p">,</span>
-                    <span class="n">configs</span><span class="p">,</span>
-                    <span class="n">config_origins</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">run_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">**</span><span class="n">run_dict</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Data in runhistory.json is not in a valid format.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get the information of the configspace</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/configspace.json&quot;</span><span class="p">):</span>
+            <span class="n">configspace_new</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;conditions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;forbiddens&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s2">&quot;python_module_version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.2.0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;format_version&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+                <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;The configspace.json file has been auto extracted. For more&quot;</span>
+                <span class="s2">&quot; reliable results please provide your own configspace.json file or &quot;</span>
+                <span class="s2">&quot;adjust the one provided. Numeric values will be treated as uniform values.&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="c1"># Get hyperparameters as well as upper and lower bounds, types etc</span>
+
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">analysis</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">hp</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">hp</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="p">:</span>
+                        <span class="n">hp_names</span><span class="p">[</span><span class="n">hp</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">hp_names</span><span class="p">[</span><span class="n">hp</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">hp_names</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">values_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                    <span class="n">configspace_new</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;choices&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">values_set</span><span class="p">)}</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">configspace_new</span><span class="p">[</span><span class="s2">&quot;hyperparameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;uniform_&quot;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+                            <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+                            <span class="s2">&quot;upper&quot;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">),</span>
+                            <span class="s2">&quot;default_value&quot;</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])((</span><span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+                        <span class="p">}</span>
+                    <span class="p">)</span>
+
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/configspace.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">configspace_new</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="c1"># Convert into a Configuration Space object</span>
+        <span class="n">configspace</span> <span class="o">=</span> <span class="n">ConfigurationSpace</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;configspace.json&quot;</span><span class="p">)</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/experiment_state*&quot;</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">spamreader</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">nested_json_str</span> <span class="o">=</span> <span class="n">spamreader</span><span class="p">[</span><span class="s2">&quot;trial_data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">obj</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">nested_json_str</span><span class="p">)[</span><span class="s2">&quot;trainable_name&quot;</span><span class="p">]</span>
+
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">Objective</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="n">RayTuneRun</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">stem</span><span class="p">),</span> <span class="n">configspace</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span> <span class="n">objectives</span><span class="o">=</span><span class="n">objective</span><span class="p">)</span>
+        <span class="n">run</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Get all information of the run</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">:</span>
+            <span class="c1"># ConfigSpace shortens floats to a certain length</span>
+            <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">][</span><span class="n">hp</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">][</span><span class="n">hp</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">][</span><span class="n">hp</span><span class="p">],</span> <span class="mi">13</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span>
+                <span class="n">configuration_space</span><span class="o">=</span><span class="n">configspace</span><span class="p">,</span>
+                <span class="n">values</span><span class="o">=</span><span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;config&quot;</span><span class="p">],</span>
+                <span class="n">config_id</span><span class="o">=</span><span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;trial_id&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;done&quot;</span><span class="p">]:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
+            <span class="n">start_time</span> <span class="o">=</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span>
+            <span class="n">end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;time_this_iter_s&quot;</span><span class="p">]</span>
+            <span class="n">cost</span> <span class="o">=</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;score&quot;</span><span class="p">]</span>
+
+            <span class="n">budget</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/budget.json&quot;</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/budget.json&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">budget_name</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                    <span class="n">budget</span> <span class="o">=</span> <span class="n">analysis</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="n">budget_name</span><span class="p">]</span>
+
+            <span class="c1"># If a budget is not provided, the budget default is set to the number of trials</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">budget</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">history</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+            <span class="n">run</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">costs</span><span class="o">=</span><span class="n">cost</span><span class="p">,</span>
+                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">budget</span><span class="o">=</span><span class="n">budget</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
+                <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
+                <span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span>
+                <span class="n">end_time</span><span class="o">=</span><span class="n">end_time</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># The configs are stored, without results</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/configs.json&quot;</span><span class="p">):</span>
+            <span class="n">config_dict</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">analysis</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/configs.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">config_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="c1"># The results with</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/results.json&quot;</span><span class="p">):</span>
+            <span class="c1"># The first value of the results should be the result itself</span>
+            <span class="n">results_dict</span> <span class="o">=</span> <span class="p">{</span><span class="nb">id</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">analysis</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/results.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">results_dict</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">run</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_process_data_entry</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">config_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">instance_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">budget</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-        <span class="n">cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span> <span class="nb">float</span><span class="p">]],</span>
-        <span class="n">time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-        <span class="n">cpu_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-        <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">starttime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">endtime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">additional_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
-        <span class="n">first_starttime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
-        <span class="n">instance_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
-        <span class="n">configs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
-        <span class="n">config_origins</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">instance_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance_ids</span><span class="p">:</span>
-            <span class="n">instance_ids</span> <span class="o">+=</span> <span class="p">[</span><span class="n">instance_id</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">instance_ids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Instances are not supported.&quot;</span><span class="p">)</span>
-
-        <span class="n">config</span> <span class="o">=</span> <span class="n">configs</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">first_starttime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">first_starttime</span> <span class="o">=</span> <span class="n">starttime</span>
-
-        <span class="n">starttime</span> <span class="o">=</span> <span class="n">starttime</span> <span class="o">-</span> <span class="n">first_starttime</span>
-        <span class="n">endtime</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">first_starttime</span>
-
-        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># still running</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span>
-        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">TIMEOUT</span>
-        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">MEMORYOUT</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">status</span> <span class="o">=</span> <span class="n">Status</span><span class="o">.</span><span class="n">CRASHED</span>
-
-        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">Status</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
-            <span class="c1"># Costs which failed, should not be included</span>
-            <span class="n">cost</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">endtime</span> <span class="o">-</span> <span class="n">starttime</span>
-
-        <span class="c1"># Round budget</span>
-        <span class="k">if</span> <span class="n">budget</span><span class="p">:</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">budget</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">budget</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">cpu_time</span><span class="p">:</span>
-            <span class="n">cpu_time</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-        <span class="n">origin</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">config_id</span> <span class="ow">in</span> <span class="n">config_origins</span><span class="p">:</span>
-            <span class="n">origin</span> <span class="o">=</span> <span class="n">config_origins</span><span class="p">[</span><span class="n">config_id</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;costs&quot;</span><span class="p">:</span> <span class="n">cost</span> <span class="o">+</span> <span class="p">[</span><span class="n">time</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">cost</span><span class="p">,</span> <span class="n">time</span><span class="p">],</span>
-            <span class="s2">&quot;config&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">,</span>
-            <span class="s2">&quot;budget&quot;</span><span class="p">:</span> <span class="n">budget</span><span class="p">,</span>
-            <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="n">seed</span><span class="p">,</span>
-            <span class="s2">&quot;cpu_time&quot;</span><span class="p">:</span> <span class="n">cpu_time</span><span class="p">,</span>
-            <span class="s2">&quot;start_time&quot;</span><span class="p">:</span> <span class="n">starttime</span><span class="p">,</span>
-            <span class="s2">&quot;end_time&quot;</span><span class="p">:</span> <span class="n">endtime</span><span class="p">,</span>
-            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
-            <span class="s2">&quot;origin&quot;</span><span class="p">:</span> <span class="n">origin</span><span class="p">,</span>
-            <span class="s2">&quot;additional&quot;</span><span class="p">:</span> <span class="n">additional_info</span><span class="p">,</span>
-        <span class="p">}</span>
-
-<div class="viewcode-block" id="SMAC3v2Run.is_valid_run">
-<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run.is_valid_run">[docs]</a>
+<div class="viewcode-block" id="RayTuneRun.is_valid_run">
+<a class="viewcode-back" href="../../../../api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.is_valid_run">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_valid_run</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1147,10 +1040,10 @@
 <span class="sd">            True if path is valid run.</span>
 <span class="sd">            False otherwise.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path_name</span> <span class="o">+</span> <span class="s2">&quot;/runhistory.json&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span>
-            <span class="n">path_name</span> <span class="o">+</span> <span class="s2">&quot;/configspace.json&quot;</span>
-        <span class="p">):</span>
-            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_name</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;experiment_state&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
         <span class="k">return</span> <span class="kc">False</span></div>
 </div>
 
