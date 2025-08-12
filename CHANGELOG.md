@@ -1,3 +1,10 @@
+# Version 1.4.1
+
+## Raytune
+- Fixed a small issue with the converter
+- Changed the runs so the pyarrow versions match
+- Made imports optional
+
 # Version 1.4
 
 ## Converter Documentation
