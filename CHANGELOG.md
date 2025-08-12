@@ -3,6 +3,7 @@
 ## Raytune
 - Fixed a small issue with the converter
 - Changed the runs so the pyarrow versions match
+- Made imports optional
 
 # Version 1.4
 
