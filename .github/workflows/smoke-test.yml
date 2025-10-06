@@ -45,7 +45,5 @@ jobs:
         run: |
           python - <<'PY'
           import importlib
-          for pkg in ('raytune'):  # <-- change to what you need
-              importlib.import_module(pkg)
-          print("All required imports succeeded")
+          importlib.import_module(raytune)
           PY
