@@ -8,14 +8,14 @@ on:
   push:
     branches:
       - main
+      # TODO: Remove later
+      - pytest_update
 
   # Run tests on anything that has a pull request to main/development
   pull_request:
     branches:
       - main
       - development
-      # TODO: Remove later
-      - pytest_update
 
 jobs:
   smoke:
