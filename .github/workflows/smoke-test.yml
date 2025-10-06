@@ -14,6 +14,8 @@ on:
     branches:
       - main
       - development
+      # TODO: Remove later
+      - pytest_update
 
 jobs:
   smoke:
