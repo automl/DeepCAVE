@@ -72,6 +72,6 @@ module = ["tests.*"]                # pytest uses decorators which are not typed
 disallow_untyped_decorators = false # decorators in testing are not all annotated
 
 [project.optional-dependencies]
-raytune = ["ray[tune]==2.45.0"]
-optune = ["optuna==3.6.1"]
-bohb = ["hpbandster==0.7.4"]
+raytune = ["ra[tune]==2.45.0"]
+optune = ["opuna==3.6.1"]
+bohb = ["hpbandter==0.7.4"]
