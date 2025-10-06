@@ -45,5 +45,5 @@ jobs:
         run: |
           python - <<'PY'
           import importlib
-          importlib.import_module(ray.tune)
+          importlib.import_module('ray.tune')
           PY
