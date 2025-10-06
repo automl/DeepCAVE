@@ -138,8 +138,8 @@ jobs:
           python - <<'PY'
           import importlib
           importlib.import_module('optuna')
-          importlib.import_module('raytune')
-          importlib.import_module('bohb')
+          importlib.import_module('ray.tune')
+          importlib.import_module('hpbandster')
           PY
 
  
