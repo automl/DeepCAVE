@@ -33,13 +33,13 @@ extras_require = {
         "pytorch-lightning>=2.1.1",
     ],
     "optuna": [
-        "otuna==3.6.1",
+        "optuna==3.6.1",
     ],
     "bohb": [
-        "hbandster==0.7.4",
+        "hpbandster==0.7.4",
     ],
     "raytune": [
-        "ry[tune]==2.45.0",
+        "ray[tune]==2.45.0",
     ],
 }
 

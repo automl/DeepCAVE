@@ -39,7 +39,7 @@ jobs:
       - name: Install stand alone raytune
         run: |
           pip install swig
-          python -m pip install 'deepcave[raytune]'
+          python -m pip install 'deepcave[raytun]'
 
       - name: Verify raytune dependency is importable
         run: |
@@ -69,7 +69,7 @@ jobs:
       - name: Install stand alone bohb
         run: |
           pip install swig
-          python -m pip install 'deepcave[bohb]'
+          python -m pip install 'deepcave[bhb]'
 
       - name: Verify bohb dependency is importable
         run: |
@@ -105,5 +105,5 @@ jobs:
         run: |
           python - <<'PY'
           import importlib
-          importlib.import_module('optuna')
+          importlib.import_module('otuna')
           PY
