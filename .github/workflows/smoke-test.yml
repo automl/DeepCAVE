@@ -18,7 +18,7 @@ on:
       - development
 
 jobs:
-  smoke:
+  smoke_raytune:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -46,4 +46,64 @@ jobs:
           python - <<'PY'
           import importlib
           importlib.import_module('ray.tune')
+          PY
+
+  smoke_bohb:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+          python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+          os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
+    defaults:
+      run:
+        shell: bash # Default to using bash on all
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install stand alone bohb
+        run: |
+          pip install swig
+          python -m pip install 'deepcave[bohb]'
+
+      - name: Verify bohb dependency is importable
+        run: |
+          python - <<'PY'
+          import importlib
+          importlib.import_module('hpbandster')
+          PY
+
+  smoke_optuna:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+          python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+          os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
+    defaults:
+      run:
+        shell: bash # Default to using bash on all
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install stand alone optuna
+        run: |
+          pip install swig
+          python -m pip install 'deepcave[optuna]'
+
+      - name: Verify bohb dependency is importable
+        run: |
+          python - <<'PY'
+          import importlib
+          importlib.import_module('optuna')
           PY
