@@ -38,7 +38,7 @@ jobs:
 
       - name: Install stand alone raytune
         run: |
-          python install swig
+          pip install swig
           python -m pip install 'deepcave[raytune]'
 
       - name: Verify raytune dependency is importable
