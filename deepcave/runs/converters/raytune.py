@@ -86,7 +86,7 @@ class RayTuneRun(Run):
         configspace_new: dict
         hp_names = {}
         analysis = None
-        analysis = ExperimentAnalysis(str(path)).results
+        analysis = ExperimentAnalysis(path.resolve().as_uri()).results
 
         # RayTune does not provide a configspace.json
         if not os.path.isfile(str(path) + "/configspace.json"):
