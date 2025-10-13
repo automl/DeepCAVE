@@ -95,7 +95,7 @@ class DeepCAVERun(Run):
         return DeepCAVERun(path.stem, path=Path(path))
 
     @classmethod
-    def is_valid_run(cls, path_name: str) -> bool:
+    def is_valid_run(cls, path_name: Union[Path, str]) -> bool:
         """
         Check whether the path name belongs to a valid deepcave run.
 
@@ -110,6 +110,6 @@ class DeepCAVERun(Run):
             True if path is valid run.
             False otherwise.
         """
-        if os.path.isfile(path_name + "history.jsonl"):
+        if os.path.isfile(str(path_name) + "history.jsonl"):
             return True
         return False
