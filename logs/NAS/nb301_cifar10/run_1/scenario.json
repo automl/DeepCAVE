@@ -1,0 +1,297 @@
+{
+    "name": "a3962b4a9735909a0a08d6706c782a0b",
+    "deterministic": true,
+    "objectives": [
+        "val_accuracy"
+    ],
+    "crash_cost": Infinity,
+    "termination_cost_threshold": Infinity,
+    "walltime_limit": Infinity,
+    "cputime_limit": Infinity,
+    "trial_walltime_limit": null,
+    "trial_memory_limit": null,
+    "n_trials": 400,
+    "use_default_config": false,
+    "instances": null,
+    "instance_features": null,
+    "min_budget": 1,
+    "max_budget": 98,
+    "seed": 1,
+    "n_workers": 1,
+    "_meta": {
+        "facade": {
+            "name": "MultiFidelityFacade"
+        },
+        "runner": {
+            "name": "TargetFunctionRunner",
+            "code": "b'|\\x00j\\x00|\\x01|\\x02|\\x03|\\x04d\\x01\\x8d\\x04}\\x05|\\x00j\\x01j\\x02j\\x03|\\x05d\\x02\\x8d\\x01}\\x06|\\x06j\\x04S\\x00'"
+        },
+        "model": {
+            "name": "RandomForest",
+            "types": [
+                7,
+                7,
+                7,
+                7,
+                3,
+                6,
+                10,
+                3,
+                6,
+                10,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8,
+                8
+            ],
+            "bounds": [
+                [
+                    7,
+                    NaN
+                ],
+                [
+                    7,
+                    NaN
+                ],
+                [
+                    7,
+                    NaN
+                ],
+                [
+                    7,
+                    NaN
+                ],
+                [
+                    3,
+                    NaN
+                ],
+                [
+                    6,
+                    NaN
+                ],
+                [
+                    10,
+                    NaN
+                ],
+                [
+                    3,
+                    NaN
+                ],
+                [
+                    6,
+                    NaN
+                ],
+                [
+                    10,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ],
+                [
+                    8,
+                    NaN
+                ]
+            ],
+            "pca_components": 7,
+            "n_trees": 10,
+            "n_points_per_tree": -1,
+            "ratio_features": 1.0,
+            "min_samples_split": 2,
+            "min_samples_leaf": 1,
+            "max_depth": 1048576,
+            "eps_purity": 1e-08,
+            "max_nodes": 1048576,
+            "bootstrapping": true
+        },
+        "acquisition_maximizer": {
+            "name": "LocalAndSortedRandomSearch",
+            "acquisition_function": {
+                "name": "EI",
+                "xi": 0.0,
+                "log": true
+            },
+            "challengers": 10000,
+            "seed": 1,
+            "random_search": {
+                "name": "RandomSearch",
+                "acquisition_function": {
+                    "name": "EI",
+                    "xi": 0.0,
+                    "log": true
+                },
+                "challengers": 5000,
+                "seed": 1
+            },
+            "local_search": {
+                "name": "LocalSearch",
+                "acquisition_function": {
+                    "name": "EI",
+                    "xi": 0.0,
+                    "log": true
+                },
+                "challengers": 5000,
+                "seed": 1,
+                "max_steps": null,
+                "n_steps_plateau_walk": 10,
+                "vectorization_min_obtain": 2,
+                "vectorization_max_obtain": 64
+            }
+        },
+        "acquisition_function": {
+            "name": "EI",
+            "xi": 0.0,
+            "log": true
+        },
+        "intensifier": {
+            "name": "Hyperband",
+            "max_incumbents": 10,
+            "max_config_calls": null,
+            "seed": 1,
+            "eta": 3,
+            "instance_seed_order": "shuffle_once",
+            "incumbent_selection": "highest_observed_budget"
+        },
+        "initial_design": {
+            "name": "RandomInitialDesign",
+            "n_configs": 100,
+            "n_configs_per_hyperparameter": 10,
+            "additional_configs": [],
+            "seed": 1
+        },
+        "random_design": {
+            "name": "ProbabilityRandomDesign",
+            "seed": 1,
+            "probability": 0.2
+        },
+        "runhistory_encoder": {
+            "name": "RunHistoryLogScaledEncoder",
+            "considered_states": [
+                1,
+                2,
+                4
+            ],
+            "lower_budget_states": [],
+            "scale_percentage": 5,
+            "seed": 1
+        },
+        "multi_objective_algorithm": null,
+        "config_selector": {
+            "name": "ConfigSelector",
+            "retrain_after": 8,
+            "retries": 16,
+            "min_trials": 1
+        },
+        "version": "2.3.1"
+    },
+    "output_directory": "runs/SMAC3-MultiFidelityFacade/YAHPO/yahpo/multifidelity/so/epoch/nb301/CIFAR10/epoch/1/1/smac3_output/a3962b4a9735909a0a08d6706c782a0b/1"
+}
