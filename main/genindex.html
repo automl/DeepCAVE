@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; DeepCAVE Documentation 1.4 documentation</title>
+    <title>Index &#8212; DeepCAVE Documentation 1.4.1 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ac9c05f7c49ca1e1f876c6e36360ea26.css" rel="stylesheet">
@@ -30,7 +30,7 @@
     
   <link rel="preload" as="script" href="_static/js/index.9ea38e314b9e6d9dab77.js">
 
-    <script src="_static/documentation_options.js?v=1e247831"></script>
+    <script src="_static/documentation_options.js?v=afb1b211"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="icon" href="_static/favicon.ico"/>
@@ -93,11 +93,11 @@
         <div class="dropdown mt-1">
     <button type="button" class="btn btn-secondary btn-md navbar-btn dropdown-toggle" id="dLabelMore"
         data-toggle="dropdown">
-        v1.4
+        v1.4.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
-        <a class="list-group-item list-group-item-action" href="#">v1.4</a>
+        <a class="list-group-item list-group-item-action" href="#">v1.4.1</a>
     </div>
 </div>
       </div>
@@ -122,7 +122,7 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar"><h4 class="mt-0 mb-0"><a href="index.html">DeepCAVE Documentation</a></h4>
-<div class="mb-3">v1.4</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+<div class="mb-3">v1.4.1</div><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
     <ul class="nav bd-sidenav">
  <li class="toctree-l1">
@@ -393,6 +393,11 @@
        <li class="toctree-l4">
         <a class="reference internal" href="api/deepcave.runs.converters.optuna.html">
          deepcave.runs.converters.optuna
+        </a>
+       </li>
+       <li class="toctree-l4">
+        <a class="reference internal" href="api/deepcave.runs.converters.raytune.html">
+         deepcave.runs.converters.raytune
         </a>
        </li>
        <li class="toctree-l4">
@@ -1221,8 +1226,6 @@
         <li><a href="api/deepcave.runs.converters.amltk.html#module-deepcave.runs.converters.amltk">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepcave.runs.converters.bohb
 
@@ -1230,6 +1233,8 @@
         <li><a href="api/deepcave.runs.converters.bohb.html#module-deepcave.runs.converters.bohb">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     deepcave.runs.converters.dataframe
 
@@ -1249,6 +1254,13 @@
 
       <ul>
         <li><a href="api/deepcave.runs.converters.optuna.html#module-deepcave.runs.converters.optuna">module</a>
+</li>
+      </ul></li>
+      <li>
+    deepcave.runs.converters.raytune
+
+      <ul>
+        <li><a href="api/deepcave.runs.converters.raytune.html#module-deepcave.runs.converters.raytune">module</a>
 </li>
       </ul></li>
       <li>
@@ -1539,6 +1551,8 @@
 </li>
         <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.from_path">(deepcave.runs.converters.optuna.OptunaRun class method)</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.from_path">(deepcave.runs.converters.raytune.RayTuneRun class method)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.from_path">(deepcave.runs.converters.smac3v1.SMAC3v1Run class method)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run.from_path">(deepcave.runs.converters.smac3v2.SMAC3v2Run class method)</a>
@@ -1815,6 +1829,8 @@
 </li>
         <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.hash">(deepcave.runs.converters.optuna.OptunaRun property)</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.hash">(deepcave.runs.converters.raytune.RayTuneRun property)</a>
+</li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.hash">(deepcave.runs.converters.smac3v1.SMAC3v1Run property)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v2.html#deepcave.runs.converters.smac3v2.SMAC3v2Run.hash">(deepcave.runs.converters.smac3v2.SMAC3v2Run property)</a>
@@ -1854,8 +1870,6 @@
 </li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.is_run">is_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/deepcave.runs.converters.amltk.html#deepcave.runs.converters.amltk.AMLTKRun.is_valid_run">is_valid_run() (deepcave.runs.converters.amltk.AMLTKRun class method)</a>
 
       <ul>
@@ -1866,6 +1880,8 @@
         <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun.is_valid_run">(deepcave.runs.converters.deepcave.DeepCAVERun class method)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.is_valid_run">(deepcave.runs.converters.optuna.OptunaRun class method)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.is_valid_run">(deepcave.runs.converters.raytune.RayTuneRun class method)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.is_valid_run">(deepcave.runs.converters.smac3v1.SMAC3v1Run class method)</a>
 </li>
@@ -1892,6 +1908,8 @@
         <li><a href="api/deepcave.runs.converters.deepcave.html#deepcave.runs.converters.deepcave.DeepCAVERun.latest_change">(deepcave.runs.converters.deepcave.DeepCAVERun property)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.optuna.html#deepcave.runs.converters.optuna.OptunaRun.latest_change">(deepcave.runs.converters.optuna.OptunaRun property)</a>
+</li>
+        <li><a href="api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun.latest_change">(deepcave.runs.converters.raytune.RayTuneRun property)</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#deepcave.runs.converters.smac3v1.SMAC3v1Run.latest_change">(deepcave.runs.converters.smac3v1.SMAC3v1Run property)</a>
 </li>
@@ -2080,6 +2098,8 @@
 </li>
         <li><a href="api/deepcave.runs.converters.optuna.html#module-deepcave.runs.converters.optuna">deepcave.runs.converters.optuna</a>
 </li>
+        <li><a href="api/deepcave.runs.converters.raytune.html#module-deepcave.runs.converters.raytune">deepcave.runs.converters.raytune</a>
+</li>
         <li><a href="api/deepcave.runs.converters.smac3v1.html#module-deepcave.runs.converters.smac3v1">deepcave.runs.converters.smac3v1</a>
 </li>
         <li><a href="api/deepcave.runs.converters.smac3v2.html#module-deepcave.runs.converters.smac3v2">deepcave.runs.converters.smac3v2</a>
@@ -2251,6 +2271,8 @@
 </li>
       <li><a href="api/deepcave.evaluators.epm.random_forest_surrogate.html#deepcave.evaluators.epm.random_forest_surrogate.RandomForestSurrogate">RandomForestSurrogate (class in deepcave.evaluators.epm.random_forest_surrogate)</a>
 </li>
+      <li><a href="api/deepcave.runs.converters.raytune.html#deepcave.runs.converters.raytune.RayTuneRun">RayTuneRun (class in deepcave.runs.converters.raytune)</a>
+</li>
       <li><a href="api/deepcave.utils.cache.html#deepcave.utils.cache.Cache.read">read() (deepcave.utils.cache.Cache method)</a>
 </li>
       <li><a href="api/deepcave.runs.recorder.html#deepcave.runs.recorder.Recorder">Recorder (class in deepcave.runs.recorder)</a>
@@ -2269,10 +2291,10 @@
       </ul></li>
       <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_input">register_input() (deepcave.plugins.Plugin method)</a>
 </li>
-      <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">register_output() (deepcave.plugins.Plugin method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/deepcave.plugins.html#deepcave.plugins.Plugin.register_output">register_output() (deepcave.plugins.Plugin method)</a>
+</li>
       <li><a href="api/deepcave.runs.handler.html#deepcave.runs.handler.RunHandler.remove_run">remove_run() (deepcave.runs.handler.RunHandler method)</a>
 </li>
       <li><a href="api/deepcave.runs.html#deepcave.runs.AbstractRun.reset">reset() (deepcave.runs.AbstractRun method)</a>
@@ -2419,7 +2441,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
+    &copy; Copyright Copyright 2025, S. Segel and H. Graf and E. Bergman and K. Thieme and L. Fehring and M. Wever and A. Tornede and R. Sass and A. Biedenkapp and F. Hutter and M. Lindauer.<br>
 </p>
     </div>
     
