@@ -12,16 +12,20 @@ import plotly.graph_objs as go
 from dash import dcc, html
 
 from deepcave import config
+from deepcave.evaluators.hypershap import HyperSHAP as Evaluator
 from deepcave.plugins.static import StaticPlugin
 from deepcave.runs import AbstractRun
-from deepcave.utils.layout import get_checklist_options
+from deepcave.utils.layout import get_select_options
+
+# from hypershap.hypershap import HyperSHAP
+# from hypershap.task import ExplanationTask
 
 
 class Tunability(StaticPlugin):
     """Provide a Plugin for the Tunability analysis of HyperSHAP."""
 
-    id = "hypershap"
-    name = "HyperSHAP"
+    id = "tunability"
+    name = "Tunability"
     icon = "fas fa-binoculars"
     activate_run_selection = True
 
@@ -33,7 +37,7 @@ class Tunability(StaticPlugin):
                 [
                     dbc.Label("Tunability"),
                     dbc.Select(
-                        id=register("tunability", ["value", "options"], type=int),
+                        id=register("tunability", ["value", "options"], type=str),
                         placeholder="Select tunabability ...",
                     ),
                 ],
@@ -42,14 +46,19 @@ class Tunability(StaticPlugin):
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
         """Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'."""
+        labels = ["Tunability", "Mistunability"]
+        values = ["tune", "mistune"]
         return {
-            "tunability": {"options": get_checklist_options()},
+            "tunability": {"options": get_select_options(labels=labels, values=values)},
         }
 
     @staticmethod
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
         """Process your input data and return raw data to be used in the output layout."""
-        return {}
+        eval = Evaluator(run)
+
+        eval.tunability(inputs["tunability"])
+        return {"inputs": eval.get_tunability()}
 
     @staticmethod
     def get_output_layout(register: Callable) -> Any:
@@ -65,4 +74,14 @@ class Tunability(StaticPlugin):
     @staticmethod
     def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
         """Read the raw data and prepare it for the layout."""
-        return go.Figure()
+        fig = go.Figure()
+        fig.add_annotation(
+            text=inputs["tunability"],
+            x=0.5,
+            y=0.5,  # position (middle of plot)
+            xref="paper",
+            yref="paper",  # use paper coords (0–1)
+            showarrow=False,
+            font=dict(size=20),
+        )
+        return fig

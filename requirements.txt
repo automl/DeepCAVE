@@ -33,3 +33,4 @@ pyarrow==19.0.1
 fastparquet==2024.5.0
 
 pyPDPPartitioner>=0.1.9
+
