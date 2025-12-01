@@ -34,21 +34,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel setuptools cython
 
-      - name: Clone pyrfr
+      
+      # Step 5: Download pyrfr source distribution from PyPI
+      - name: Download pyrfr source
         run: |
-          git clone https://github.com/automl/random_forest_run.git pyrfr
-          cd pyrfr
-          git submodule update --init --recursive
+          mkdir pyrfr_src
+          pip download pyrfr==0.9.0 --no-binary :all: -d pyrfr_src
+          cd pyrfr_src/pyrfr-0.9.0
+          python -m pip wheel . -w ../../wheelhouse
 
-      # Step 5: Build pyrfr wheel
-      - name: Build pyrfr wheel
+      # Step 6: Build your DeepCAVE wheel
+      - name: Build DeepCAVE wheel
         run: |
-          cd pyrfr
-          python -m pip wheel . -w ../wheelhouse
+          cd $GITHUB_WORKSPACE
+          python -m pip wheel . -w wheelhouse --no-deps
 
-      # Step 6: Upload the compiled wheel
-      - name: Upload pyrfr wheel
+      # Step 7: Upload built wheels
+      - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: pyrfr-wheel
+          name: built-wheels
           path: wheelhouse/*.whl
