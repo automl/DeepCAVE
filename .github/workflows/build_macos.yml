@@ -27,7 +27,7 @@ jobs:
       - name: Install system dependencies
         run: |
           brew update
-          brew install cmake boost
+          brew install cmake boost swig
 
       # Step 4: Install Python build tools
       - name: Install Python build tools
