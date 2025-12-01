@@ -19,7 +19,7 @@ your computer.
 
 Afterwards, follow the instructions to install DeepCAVE:
 ```bash
-conda create -n DeepCAVE python=3.9
+conda create -n DeepCAVE python=3.10
 conda activate DeepCAVE
 conda install -c anaconda swig
 pip install DeepCAVE
@@ -42,7 +42,7 @@ If you want to contribute to DeepCAVE, use the following steps instead:
 ```bash
 git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
-conda create -n DeepCAVE python=3.9
+conda create -n DeepCAVE python=3.10
 conda activate DeepCAVE
 conda install -c anaconda swig
 make install-dev

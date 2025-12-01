@@ -31,12 +31,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10"] # "3.11" fails due to swig
+        python-version: ["3.10"] # "3.11" fails due to swig
         os: ["ubuntu-latest"] # "macos-latest", "windows-latest" fails due to swig
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python 3.9
+      - name: Setup Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
