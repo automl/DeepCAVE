@@ -1,43 +1,48 @@
-name: Build pyrfr macOS wheels
+name: Build pyrfr macOS binaries
 
 on:
   push:
-    branches:
-      - python3.10
+    branches: [ python3.10 ]
   pull_request:
 
 jobs:
   build-macos:
     runs-on: macos-latest
-
     strategy:
       matrix:
         python-version: ["3.10"]
-        
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up Python
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      # Step 3: Install system dependencies
+      - name: Install system dependencies
         run: |
-          python -m pip install --upgrade pip wheel setuptools
+          brew update
           brew install cmake boost
 
-      - name: Build wheel using cibuildwheel
+      # Step 4: Install Python build tools
+      - name: Install Python build tools
         run: |
-          python -m pip install cibuildwheel delocate
-          cibuildwheel --output-dir wheelhouse
+          python -m pip install --upgrade pip wheel setuptools cython
 
-      - name: Repair wheels for macOS
+      # Step 5: Build pyrfr wheel
+      - name: Build pyrfr wheel
         run: |
-          delocate-wheel -v -w repaired wheelhouse/*.whl
+          cd pyrfr
+          python -m pip wheel . -w ../wheelhouse
 
-      - name: Upload wheel artifacts
+      # Step 6: Upload the compiled wheel
+      - name: Upload pyrfr wheel
         uses: actions/upload-artifact@v4
         with:
-          name: pyrfr-macos-wheels
-          path: repaired/*.whl
+          name: pyrfr-wheel
+          path: wheelhouse/*.whl
