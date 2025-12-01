@@ -40,7 +40,9 @@ jobs:
         run: |
           mkdir pyrfr_src
           pip download pyrfr==0.9.0 --no-binary :all: -d pyrfr_src
-          cd pyrfr_src/pyrfr-0.9.0
+          cd pyrfr_src
+          tar -xzf pyrfr-0.9.0.tar.gz
+          cd pyrfr-0.9.0
           python -m pip wheel . -w ../../wheelhouse
 
       # Step 6: Build your DeepCAVE wheel
