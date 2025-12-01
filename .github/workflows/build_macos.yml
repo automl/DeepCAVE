@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip wheel setuptools cython
 
-        - name: Clone pyrfr
+      - name: Clone pyrfr
         run: |
           git clone https://github.com/automl/random_forest_run.git pyrfr
           cd pyrfr
