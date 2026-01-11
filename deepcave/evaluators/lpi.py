@@ -183,6 +183,8 @@ class LPI:
                 # Get the leaf values
                 x = np.array(new_config.get_array())
                 leaf_values = self._model.get_leaf_values(x)
+                print(leaf_values)
+                print(type(leaf_values))
 
                 # And the prediction/performance/variance
                 predictions[hp_name].append([np.mean(tree_pred) for tree_pred in leaf_values])
