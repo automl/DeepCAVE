@@ -91,6 +91,8 @@ class FanovaForest(RandomForest):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             max_depth=max_depth,
+            max_nodes=max_nodes,
+            eps_purity=eps_purity,
             bootstrapping=bootstrapping,
             instance_features=instance_features,
             pca_components=pca_components,

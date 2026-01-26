@@ -130,7 +130,7 @@ class LPI:
         # Get model and train it
         # Use same forest as for fanova
         self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
-        self._model.train(X, Y)
+        self._model._train(X, Y)
 
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()

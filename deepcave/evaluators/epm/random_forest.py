@@ -28,13 +28,13 @@ A pyrfr wrapper is used for simplification.
     PYRFR_MAPPING : Dict[str, str]
 """
 
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 
+import functools
 import warnings
 
 import numpy as np
-
-# import pyrfr.regression as regression
+import pyrfr.regression as regression
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
@@ -43,7 +43,6 @@ from ConfigSpace.hyperparameters import (
     UniformIntegerHyperparameter,
 )
 from sklearn.decomposition import PCA
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.exceptions import NotFittedError
 from sklearn.preprocessing import MinMaxScaler
 
@@ -107,8 +106,8 @@ class RandomForest:
         min_samples_split: int = 3,
         min_samples_leaf: int = 3,
         max_depth: int = 2**20,
-        # max_nodes: int = 2**20,
-        # eps_purity: float = 1e-8,
+        max_nodes: int = 2**20,
+        eps_purity: float = 1e-8,
         bootstrapping: bool = True,
         instance_features: Optional[np.ndarray] = None,
         pca_components: Optional[int] = 2,
@@ -136,19 +135,11 @@ class RandomForest:
         self.instance_features = instance_features
 
         # Calculate max number of features
-        self.max_features = (
-            max(1, int(len(self.types) * ratio_features)) if ratio_features <= 1.0 else 0
-        )
+        max_features = max(1, int(len(self.types) * ratio_features)) if ratio_features <= 1.0 else 0
 
         # Prepare the model
         self._model = self._get_model()
-        self.n_trees = n_trees
-        self.min_samples_split = min_samples_split
-        self.min_samples_leaf = min_samples_leaf
-        self.max_depth = max_depth
-        self.bootstrapping = bootstrapping
-
-        """self._model.options = self._get_model_options(
+        self._model.options = self._get_model_options(
             n_trees=n_trees,
             max_features=max_features,
             min_samples_split=min_samples_split,
@@ -157,30 +148,21 @@ class RandomForest:
             max_nodes=max_nodes,
             eps_purity=eps_purity,
             bootstrapping=bootstrapping,
-        )"""
+        )
 
-    """def _get_model(self) -> regression.base_tree:
+    def _get_model(self) -> regression.base_tree:
+        """
         Return the internal model.
 
         Returns
         -------
         model : regression.base_tree
             Model which is used internally.
-        return regression.binary_rss_forest()"""
+        """
+        return regression.binary_rss_forest()
 
-    def _get_model(self) -> RandomForestRegressor:
-        return RandomForestRegressor(
-            n_estimators=self.n_trees,
-            max_features=self.max_features,
-            min_samples_split=self.min_samples_split,
-            min_samples_leaf=self.min_samples_leaf,
-            max_depth=None if self.max_depth >= 2**20 else self.max_depth,
-            bootstrap=self.bootstrapping,
-            random_state=self.seed,
-            n_jobs=-1,
-        )
-
-    """def _get_model_options(self, **kwargs: Union[int, float, bool]) -> regression.forest_opts:
+    def _get_model_options(self, **kwargs: Union[int, float, bool]) -> regression.forest_opts:
+        """
         Get model options from kwargs.
 
         The mapping `PYRFR_MAPPING` is used in combination with
@@ -195,6 +177,7 @@ class RandomForest:
         -------
         options : regression.forest_opts
             Random forest options.
+        """
         # Now the options are set
         options = regression.forest_opts()
 
@@ -213,7 +196,7 @@ class RandomForest:
             new_k = PYRFR_MAPPING[k]
             rsetattr(options, new_k, v)
 
-        return options"""
+        return options
 
     def _impute_inactive(self, X: np.ndarray) -> np.ndarray:
         """
@@ -288,9 +271,10 @@ class RandomForest:
             if X.shape[0] != Y.shape[0]:
                 raise ValueError(f"X.shape[0] ({X.shape[0]}) != y.shape[0] ({Y.shape[0]})")
 
-    """def _get_data_container(
+    def _get_data_container(
         self, X: np.ndarray, y: np.ndarray
     ) -> regression.default_data_container:
+        """
         Fill a pyrfr default data container.
 
         The goal here is, that the forest knows categoricals and bounds for continuous data.
@@ -306,6 +290,7 @@ class RandomForest:
         -------
         data : regression.default_data_container
             The filled data container that pyrfr can interpret.
+        """
         # retrieve the types and the bounds from the ConfigSpace
         data = regression.default_data_container(X.shape[1])
 
@@ -318,7 +303,7 @@ class RandomForest:
         for row_X, row_y in zip(X, y):
             data.add_data_point(row_X, row_y)
 
-        return data"""
+        return data
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
@@ -363,7 +348,8 @@ class RandomForest:
 
         self._train(X, Y)
 
-    """def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
+    def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
+        """
         Train the random forest on X and Y.
 
         Parameters
@@ -372,6 +358,7 @@ class RandomForest:
             Input data points.
         Y : np.ndarray
             Target values.
+        """
         # Now we can start to prepare the data for the pyrfr
         data = self._get_data_container(X, Y.flatten())
         seed = self.seed
@@ -380,15 +367,7 @@ class RandomForest:
 
         # Set more specific model options and finally fit it
         self._model.options.num_data_points_per_tree = X.shape[0]
-        self._model.fit(data, rng=rng)"""
-
-    def _train(self, X: np.ndarray, Y: np.ndarray) -> None:
-        X = self._impute_inactive(X)
-
-        if self.log_y:
-            Y = np.log(Y + VERY_SMALL_NUMBER)
-
-        self._model.fit(X, Y.ravel())
+        self._model.fit(data, rng=rng)
 
     def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -431,7 +410,8 @@ class RandomForest:
 
         return mean, var
 
-    """def _predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def _predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
         Predict means and variances for a given X.
 
         Parameters
@@ -445,6 +425,7 @@ class RandomForest:
             Predictive mean.
         vars : np.ndarray [n_samples, 1]
             Predictive variance.
+        """
         self._check_dimensions(X)
         X = self._impute_inactive(X)
 
@@ -484,28 +465,10 @@ class RandomForest:
         means = np.array(means)
         vars_ = np.array(vars_)
 
-        return means.reshape((-1, 1)), vars_.reshape((-1, 1))"""
+        return means.reshape((-1, 1)), vars_.reshape((-1, 1))
 
-    def _predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-        self._check_dimensions(X)
-        X = self._impute_inactive(X)
-
-        # collect per-tree predictions
-        all_tree_preds = np.array(
-            [tree.predict(X) for tree in self._model.estimators_]
-        )  # shape: (n_trees, n_samples)
-
-        if self.log_y:
-            all_tree_preds = np.exp(all_tree_preds)
-            mean = np.log(all_tree_preds.mean(axis=0) + VERY_SMALL_NUMBER)
-        else:
-            mean = all_tree_preds.mean(axis=0)
-
-        var = all_tree_preds.var(axis=0)
-
-        return mean.reshape(-1, 1), var.reshape(-1, 1)
-
-    """def predict_marginalized(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def predict_marginalized(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
         Predict mean and variance marginalized over all instances.
 
         Return the predictive mean and variance marginalized over all
@@ -522,6 +485,7 @@ class RandomForest:
             Predictive mean
         vars : np.ndarray  of shape = [n_samples, 1]
             Predictive variance
+        """
         self._check_dimensions(X)
 
         if self.instance_features is None or len(self.instance_features) == 0:
@@ -566,36 +530,10 @@ class RandomForest:
         if len(var.shape) == 1:
             var = var.reshape((-1, 1))
 
-        return mean_, var"""
+        return mean_, var
 
-    def predict_marginalized(self, X: Any) -> Any:
-        """Platzhalter."""
-        self._check_dimensions(X)
-        if self.instance_features is None or len(self.instance_features) == 0:
-            mean_, var_ = self.predict(X)
-            return mean_, var_
-
-        X = self._impute_inactive(X)
-        n_samples = X.shape[0]
-        n_trees = len(self._model.estimators_)
-        dat_ = np.zeros((n_samples, n_trees))
-
-        for i, x in enumerate(X):
-            for feat in self.instance_features:
-                x_ = np.hstack([x, feat])
-                tree_preds = np.array(
-                    [t.predict(x_.reshape(1, -1))[0] for t in self._model.estimators_]
-                )
-                dat_[i, :] += tree_preds
-
-            dat_[i, :] /= len(self.instance_features)  # average over instances
-
-        # mean + variance across trees
-        mean_ = dat_.mean(axis=1)
-        var_ = dat_.var(axis=1)
-        return mean_.reshape(-1, 1), var_.reshape(-1, 1)
-
-    """def get_leaf_values(self, x: np.ndarray) -> regression.binary_rss_forest:
+    def get_leaf_values(self, x: np.ndarray) -> regression.binary_rss_forest:
+        """
         Get the leaf values of the model.
 
         Parameters
@@ -607,8 +545,5 @@ class RandomForest:
         -------
         regression.binary_rss_forest
             The leaf values of the model.
-        return self._model.all_leaf_values(x)"""
-
-    def get_leaf_values(self, x: np.ndarray) -> np.ndarray:
-        """Platzhalter."""
-        return np.array([tree.predict(x.reshape(1, -1))[0] for tree in self._model.estimators_])
+        """
+        return self._model.all_leaf_values(x)
