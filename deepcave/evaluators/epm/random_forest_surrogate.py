@@ -81,7 +81,7 @@ class RandomForestSurrogate(SurrogateModel):
         y : np.ndarray
             Corresponding target values.
         """
-        self._model.train(X, y)
+        self._model._train(X, y)
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """
