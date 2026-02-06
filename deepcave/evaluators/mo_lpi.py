@@ -158,6 +158,7 @@ class MOLPI(LPI):
         self.importances = df_all.rename(
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
+
         self.importances = self.importances.map(
             lambda x: max(x, 0) if not isinstance(x, str) else x
         )  # no negative values
@@ -243,37 +244,7 @@ class MOLPI(LPI):
             if delta == 0:
                 delta = 1
 
-        # Creating actual importance value (by normalizing over sum of vars)
-        num_trees = len(list(predictions.values())[0][0])
-        hp_names = list(performances.keys())
-
-        overall_var_per_tree = {}
-        for hp_name in hp_names:
-            hp_variances = []
-            for tree_idx in range(num_trees):
-                variance = np.var([neighbor[tree_idx] for neighbor in predictions[hp_name]])
-                hp_variances += [variance]
-
-            overall_var_per_tree[hp_name] = hp_variances
-
-        # Sum up variances per tree across parameters
-        sum_var_per_tree = [
-            sum([overall_var_per_tree[hp_name][tree_idx] for hp_name in hp_names])
-            for tree_idx in range(num_trees)
-        ]
-
-        # Normalize
-        overall_var_per_tree = {
-            p: [
-                t / sum_var_per_tree[idx] if sum_var_per_tree[idx] != 0.0 else np.nan
-                for idx, t in enumerate(trees)
-            ]
-            for p, trees in overall_var_per_tree.items()
-        }
-        imp_var_dict = {
-            k: (np.mean(overall_var_per_tree[k]), np.var(overall_var_per_tree[k]))
-            for k in overall_var_per_tree
-        }
+        imp_var_dict = {k: (performances[k][0][0], variances[k][0][0]) for k in self.hp_names}
         return imp_var_dict
 
     def get_importances_(self, hp_names: List[str]) -> str:
