@@ -30,7 +30,9 @@ from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value
 from ConfigSpace.util import impute_inactive_values
 
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
+# from deepcave.evaluators.epm.fanova_forest import FanovaForest
+from sklearn.ensemble import RandomForestRegressor
+
 from deepcave.evaluators.lpi import LPI
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
@@ -143,8 +145,8 @@ class MOLPI(LPI):
         for w in weightings:
             Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
             # Use same forest as for fanova
-            self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
-            self._model.train(X, Y)
+            self._model = RandomForestRegressor(n_estimators=n_trees, random_state=seed)
+            self._model.fit(X, Y)
 
             incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
             self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
@@ -217,14 +219,10 @@ class MOLPI(LPI):
                 )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
-                # Get the leaf values
-                x = np.array(new_config.get_array())
-                leaf_values = self._model.get_leaf_values(x)
-
-                # And the prediction/performance/variance
-                predictions[hp_name].append([np.mean(tree_pred) for tree_pred in leaf_values])
-                performances[hp_name].append(np.mean(predictions[hp_name][-1]))
-                variances[hp_name].append(np.var(predictions[hp_name][-1]))
+                # x = np.array(new_config.get_array())
+                mean, var = self._predict_mean_var(new_config)
+                performances[hp_name].append(mean)
+                variances[hp_name].append(var)
 
             if len(neighborhood[hp_name][0]) > 0:
                 neighborhood[hp_name][0] = np.insert(

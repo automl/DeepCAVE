@@ -35,8 +35,10 @@ from ConfigSpace.hyperparameters import (
 from ConfigSpace.types import Array, f64
 from ConfigSpace.util import impute_inactive_values
 
+# from deepcave.evaluators.epm.fanova_forest import FanovaForest
+from sklearn.ensemble import RandomForestRegressor
+
 from deepcave.constants import COMBINED_COST_NAME
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
 
@@ -129,8 +131,8 @@ class LPI:
 
         # Get model and train it
         # Use same forest as for fanova
-        self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
-        self._model._train(X, Y)
+        self._model = RandomForestRegressor(n_estimators=n_trees, random_state=seed)
+        self._model.fit(X, Y)
 
         # Get neighborhood sampled on an unit-hypercube.
         neighborhood = self._get_neighborhood()
@@ -149,7 +151,6 @@ class LPI:
         # neighbors.
         importances = {}
         # Nested list of values per tree in random forest.
-        predictions: Dict[str, List[List[np.ndarray]]] = {}
 
         # Iterate over parameters
         for hp_idx, hp_name in enumerate(self.incumbent.keys()):
@@ -158,7 +159,6 @@ class LPI:
 
             performances[hp_name] = []
             variances[hp_name] = []
-            predictions[hp_name] = []
             incumbent_added = False
             incumbent_idx = 0
 
@@ -180,16 +180,10 @@ class LPI:
                 )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
-                # Get the leaf values
-                x = np.array(new_config.get_array())
-                leaf_values = self._model.get_leaf_values(x)
-                print(leaf_values)
-                print(type(leaf_values))
-
-                # And the prediction/performance/variance
-                predictions[hp_name].append([np.mean(tree_pred) for tree_pred in leaf_values])
-                performances[hp_name].append(np.mean(predictions[hp_name][-1]))
-                variances[hp_name].append(np.var(predictions[hp_name][-1]))
+                # x = np.array(new_config.get_array())
+                mean, var = self._predict_mean_var(new_config)
+                performances[hp_name].append(mean)
+                variances[hp_name].append(var)
 
             if len(neighborhood[hp_name][0]) > 0:
                 neighborhood[hp_name][0] = np.insert(
@@ -221,34 +215,7 @@ class LPI:
 
             importances[hp_name] = np.array([imp_over_mean, imp_over_median, imp_over_max])
 
-        # Creating actual importance value (by normalizing over sum of vars)
-        num_trees = len(list(predictions.values())[0][0])
-        hp_names = list(performances.keys())
-
-        overall_var_per_tree = {}
-        for hp_name in hp_names:
-            hp_variances = []
-            for tree_idx in range(num_trees):
-                variance = np.var([neighbor[tree_idx] for neighbor in predictions[hp_name]])
-                hp_variances += [variance]
-
-            overall_var_per_tree[hp_name] = hp_variances
-
-        # Sum up variances per tree across parameters
-        sum_var_per_tree = [
-            sum([overall_var_per_tree[hp_name][tree_idx] for hp_name in hp_names])
-            for tree_idx in range(num_trees)
-        ]
-
-        # Normalize
-        overall_var_per_tree = {
-            p: [
-                t / sum_var_per_tree[idx] if sum_var_per_tree[idx] != 0.0 else np.nan
-                for idx, t in enumerate(trees)
-            ]
-            for p, trees in overall_var_per_tree.items()
-        }
-        self.variances = overall_var_per_tree
+        self.variances = variances
         self.importances = importances
 
     def get_importances(self, hp_names: List[str]) -> Dict[str, Tuple[float, float]]:
@@ -403,7 +370,11 @@ class LPI:
             be able to be used.
         """
         config = impute_inactive_values(config)
-        array = np.array([config.get_array()])
-        mean, var = self._model.predict_marginalized(array)
 
-        return mean.squeeze(), var.squeeze()
+        array = np.array([config.get_array()])
+        all_tree_preds = np.array([tree.predict(array) for tree in self._model.estimators_])
+
+        mean = all_tree_preds.mean(axis=0)
+        var = all_tree_preds.var(axis=0)
+
+        return mean, var

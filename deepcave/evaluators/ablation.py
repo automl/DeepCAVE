@@ -129,7 +129,7 @@ class Ablation:
 
         self._model.fit(X, Y)
         # Obtain the predicted cost of the default and incumbent configuration
-
+        print(np.array([default_encode]))
         all_tree_preds = np.array(
             [tree.predict(np.array([default_encode])) for tree in self._model.estimators_]
         )
