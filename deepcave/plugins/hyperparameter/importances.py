@@ -397,6 +397,7 @@ class Importances(StaticPlugin):
             dict[str, tuple[float, float]],
             dict[Union[str, tuple[str, ...]], tuple[float, float, float, float]],
         ]
+
         for budget_id, budget in enumerate(budgets):
             assert isinstance(budget, (int, float))
             evaluator.calculate(objective, budget, seed=0)

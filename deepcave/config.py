@@ -109,11 +109,10 @@ class Config:
         from deepcave.plugins.budget.budget_correlation import BudgetCorrelation
         from deepcave.plugins.hyperparameter.ablation_paths import AblationPaths
         from deepcave.plugins.hyperparameter.configuration_cube import ConfigurationCube
-
-        # from deepcave.plugins.hyperparameter.importances import Importances
-        # from deepcave.plugins.hyperparameter.parallel_coordinates import (
-        # ParallelCoordinates,
-        # )
+        from deepcave.plugins.hyperparameter.importances import Importances
+        from deepcave.plugins.hyperparameter.parallel_coordinates import (
+            ParallelCoordinates,
+        )
         from deepcave.plugins.hyperparameter.pdp import PartialDependencies
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
             SymbolicExplanations,
@@ -139,10 +138,10 @@ class Config:
                 BudgetCorrelation(),
             ],
             "Hyperparameter Analysis": [
-                # Importances(),
+                Importances(),
                 AblationPaths(),
                 ConfigurationCube(),
-                # ParallelCoordinates(),
+                ParallelCoordinates(),
                 PartialDependencies(),
                 SymbolicExplanations(),
             ],

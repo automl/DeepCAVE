@@ -605,6 +605,7 @@ class AbstractRun(ABC):
             List of budgets. In a readable form, if human is True.
         """
         budgets = self.meta["budgets"].copy()
+
         if include_combined and len(budgets) > 1 and COMBINED_BUDGET not in budgets:
             budgets += [COMBINED_BUDGET]
 

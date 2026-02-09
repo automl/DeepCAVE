@@ -28,7 +28,6 @@ from typing import List, Optional, Union
 
 import pandas as pd
 
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.fanova import fANOVA
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
@@ -50,6 +49,7 @@ class MOfANOVA(fANOVA):
             raise RuntimeError("The run needs to be initialized.")
 
         super().__init__(run)
+
         self.importances_ = None
 
     def calculate(
@@ -91,7 +91,6 @@ class MOfANOVA(fANOVA):
         df = self.run.get_encoded_data(
             objectives, budget, specific=True, include_combined_cost=True
         )
-
         # normalize objectives
         assert isinstance(objectives, list)
         objectives_normed = list()
@@ -104,21 +103,17 @@ class MOfANOVA(fANOVA):
                 df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
-        X = df[self.hp_names].to_numpy()
+        # X = df[self.hp_names].to_numpy()
         weightings = get_weightings(objectives_normed, df)
         df_all = pd.DataFrame([])
 
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
-            Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
+            # Y = sum(df[obj] *weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
 
-            self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
-            self._model.train(X, Y)
-            df_res = (
-                pd.DataFrame(super(MOfANOVA, self).get_importances(hp_names=None))
-                .loc[0:1]
-                .T.reset_index()
-            )
+            self.importances = super().calculate(objectives, budget, seed)
+            print(self.importances)
+            df_res = pd.DataFrame.from_dict(self.importances).loc[0:1].T.reset_index()
             df_res["weight"] = w[0]
             df_all = pd.concat([df_all, df_res])
         self.importances_ = df_all.rename(
