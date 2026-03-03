@@ -14,17 +14,17 @@
 
 #  noqa: D400
 """
-# fANOVA
+# MOfANOVA
 
 This module provides a tool for assessing the importance of an algorithms Hyperparameters.
 
 Utilities provide calculation of the data wrt the budget and train the forest on the encoded data.
 
 ## Classes
-    - fANOVA: Calculate and provide midpoints and sizes.
+    - MOfANOVA: Calculate and provide midpoints and sizes.
 """
 
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import pandas as pd
 
@@ -38,8 +38,6 @@ class MOfANOVA(fANOVA):
     """
     Multi-Objective fANOVA.
 
-    Calculate and provide midpoints and sizes from the forest's split values in order to get
-    the marginals.
     Override: to train the random forest with an arbitrary weighting of the objectives
     (multi-objective case).
     """
@@ -58,6 +56,7 @@ class MOfANOVA(fANOVA):
         budget: Optional[Union[int, float]] = None,
         n_trees: int = 100,
         seed: int = 0,
+        y: Any = None,
     ) -> None:
         """
         Get the data with respect to budget and train the forest on the encoded data.
@@ -103,19 +102,24 @@ class MOfANOVA(fANOVA):
                 df[normed] = 1 - df[normed]
             objectives_normed.append(normed)
         df = df.dropna(subset=objectives_normed)
-        # X = df[self.hp_names].to_numpy()
+
         weightings = get_weightings(objectives_normed, df)
+
         df_all = pd.DataFrame([])
 
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
-            # Y = sum(df[obj] *weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
+            Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
 
-            self.importances = super().calculate(objectives, budget, seed)
-            print(self.importances)
+            super().calculate(
+                objectives=objectives, budget=budget, seed=seed, n_trees=self.n_trees, y=Y
+            )
+            self.importances = super().get_importances()
+
             df_res = pd.DataFrame.from_dict(self.importances).loc[0:1].T.reset_index()
             df_res["weight"] = w[0]
             df_all = pd.concat([df_all, df_res])
+
         self.importances_ = df_all.rename(
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)

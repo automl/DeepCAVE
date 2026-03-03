@@ -32,9 +32,6 @@ extras_require = {
         "torchvision>=0.16.0",
         "pytorch-lightning>=2.1.1",
     ],
-    "optuna": [
-        "optuna==3.6.1",
-    ],
     "bohb": [
         "hpbandster==0.7.4",
     ],

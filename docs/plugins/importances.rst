@@ -66,8 +66,3 @@ To refine your analysis, you can apply various filters after calculation:
 
 * **Budgets**: Filter the results to view importance scores specific to certain multi-fidelity budgets, allowing you to analyze how hyperparameter importance varies with budget changes.
 
-.. warning::
-    The fANOVA implementation relies on pyrfr, which cannot be applied to constant hyperparameters.
-    As a workaround, we remove constant hyperparameters before calculation.
-    This will break if the configuration space contains any conditions or forbiddens including
-    constant hyperparameters.

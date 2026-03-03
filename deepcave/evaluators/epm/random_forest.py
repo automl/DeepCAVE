@@ -18,14 +18,11 @@
 
 This module can be used for training and using a Random Forest Regression model.
 
-A pyrfr wrapper is used for simplification.
-
 ## Classes
-    - RandomForest: A random forest wrapper for pyrfr.
+    - RandomForest: For training and using a Random Forest Regression model.
 
 ## Constants
     VERY_SMALL_NUMBER : float
-    PYRFR_MAPPING : Dict[str, str]
 """
 
 from typing import Any, Dict, Optional, Tuple, Union
@@ -36,13 +33,10 @@ import numpy as np
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
-    Constant,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
 from sklearn.decomposition import PCA
-
-# import pyrfr.regression as regression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.exceptions import NotFittedError
 from sklearn.preprocessing import MinMaxScaler
@@ -62,14 +56,7 @@ RFR_MAPPING = {
 
 class RandomForest:
     """
-    A random forest wrapper for pyrfr.
-
-    This is handy because only the configuration space needs to be passed.
-    and have a working version without specifying e.g. types and bounds.
-
-    Note
-    ----
-    This wrapper also supports instances.
+    For training and using a Random Forest Regression model.
 
     Properties
     ----------
@@ -219,8 +206,7 @@ class RandomForest:
                         impute_values[idx] = len(hp.choices)
                     elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
                         impute_values[idx] = -1
-                    elif isinstance(hp, Constant):
-                        impute_values[idx] = 1
+
                     else:
                         raise ValueError
 
@@ -432,7 +418,7 @@ class RandomForest:
         # Mean per tree across instances
         dat_ = np.array([tree.predict(X) for tree in self._model.estimators_])  # shape: (n_trees,)
 
-        # 3. compute statistics across trees
+        # compute statistics across trees
         mean_ = dat_.mean(axis=1)
         var = dat_.var(axis=1)
 

@@ -33,8 +33,6 @@ import copy
 from collections import OrderedDict
 
 import numpy as np
-
-# from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from sklearn.ensemble import RandomForestRegressor
 
 from deepcave.runs import AbstractRun

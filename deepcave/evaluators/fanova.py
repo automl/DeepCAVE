@@ -39,8 +39,6 @@ class fANOVA:
     """
     Calculate and provide midpoints and sizes.
 
-    They are generated from the forest's split values in order to get the marginals.
-
     Properties
     ----------
     run : AbstractRun
@@ -71,6 +69,7 @@ class fANOVA:
         budget: Optional[Union[int, float]] = None,
         n_trees: int = 16,
         seed: int = 0,
+        y: Any = None,
     ) -> Any:
         """Create Optuna study from data and fit Fanova evaluator."""
         if objectives is None:
@@ -83,21 +82,16 @@ class fANOVA:
         df = self.run.get_encoded_data(
             objectives, budget, specific=True, include_combined_cost=True
         )
-
         X = df[self.hp_names].to_numpy()
 
         # Combined cost name includes the cost of all selected objectives
-        Y = df[COMBINED_COST_NAME].to_numpy()
+        if y is not None:
+            Y = y
+        else:
+            Y = df[COMBINED_COST_NAME].to_numpy()
 
-        direction = ""
+        self.study = optuna.create_study()
 
-        if isinstance(objectives, Objective):
-            if objectives.optimize == "upper":
-                direction = "maximize"
-            else:
-                direction = "minimize"
-
-        self.study = optuna.create_study(direction=direction)
         params: dict = {}
         distributions: dict = {}
 
@@ -112,6 +106,7 @@ class fANOVA:
                 if hp.__class__.__name__ == "CategoricalHyperparameter":
                     # For categorical, val is assumed to be an index
                     idx = int(val)
+
                     params[name] = hp.choices[idx]  # type: ignore
                     distributions[name] = optuna.distributions.CategoricalDistribution(
                         hp.choices  # type: ignore

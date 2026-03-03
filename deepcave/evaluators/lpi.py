@@ -34,8 +34,6 @@ from ConfigSpace.hyperparameters import (
 )
 from ConfigSpace.types import Array, f64
 from ConfigSpace.util import impute_inactive_values
-
-# from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from sklearn.ensemble import RandomForestRegressor
 
 from deepcave.constants import COMBINED_COST_NAME
@@ -130,7 +128,6 @@ class LPI:
         Y = df[COMBINED_COST_NAME].to_numpy()
 
         # Get model and train it
-        # Use same forest as for fanova
         self._model = RandomForestRegressor(n_estimators=n_trees, random_state=seed)
         self._model.fit(X, Y)
 
@@ -180,7 +177,6 @@ class LPI:
                 )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
-                # x = np.array(new_config.get_array())
                 mean, var = self._predict_mean_var(new_config)
                 performances[hp_name].append(mean)
                 variances[hp_name].append(var)

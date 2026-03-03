@@ -34,7 +34,6 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objs as go
-from ConfigSpace import ConfigurationSpace, Constant
 from dash import dcc, html
 from dash.exceptions import PreventUpdate
 
@@ -350,29 +349,6 @@ class Importances(StaticPlugin):
 
         if n_trees is None:
             raise RuntimeError("Please specify the number of trees.")
-
-        # Handle constant values in fANOVA: As the fANOVA implementation relies on pyrfr
-        # and pyrfr cannot be applied to constant hyperparameters
-        # (see https://github.com/automl/fanova/issues/81), as a workaround constant
-        # hyperparameters are removed before calculation.
-        # Note: This will break if there are conditions or forbiddens including
-        # constant hyperparameters.
-        hp_dict = run.configspace.get_hyperparameters_dict()
-        if method == "global" and any([type(v) == Constant for v in hp_dict.values()]):
-            hp_dict_wo_const = {k: v for k, v in hp_dict.items() if type(v) != Constant}
-            configspace_wo_const = ConfigurationSpace()
-            for k in hp_dict_wo_const.keys():
-                configspace_wo_const.add_hyperparameter(hp_dict_wo_const[k])
-            configspace_wo_const.add(run.configspace.conditions)
-            configspace_wo_const.add(run.configspace.forbidden_clauses)
-            run.configspace = configspace_wo_const
-
-            configs_wo_const = []
-            for n in range(len(run.configs)):
-                configs_wo_const.append(
-                    {k: v for k, v in run.configs[n].items() if k in hp_dict_wo_const.keys()}
-                )
-            run.configs = dict(enumerate(configs_wo_const))
 
         hp_names = list(run.configspace.keys())
         budgets = run.get_budgets(include_combined=True)

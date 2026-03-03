@@ -1,3 +1,12 @@
+# Version 1.4.2
+
+## Python 3.10
+- Upgraded python version to 3.10
+- Switched pyrfr with RandomForestRegressor from sklearn
+- Switched pyrfr with Optuna
+- Removed pyrfr all together
+- Optuna is now installed by default
+
 # Version 1.4.1
 
 ## Raytune

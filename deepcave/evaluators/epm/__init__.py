@@ -18,8 +18,6 @@
 
 ## Modules
 ----------
-fanova_forest
-    The module provides utilities for creating a fANOVA forest.
 random_forest
     This module can be used for training and using a Random Forest Regression model.
 random_forest_surrogate

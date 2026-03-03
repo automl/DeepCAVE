@@ -29,8 +29,6 @@ import pandas as pd
 from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value
 from ConfigSpace.util import impute_inactive_values
-
-# from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from sklearn.ensemble import RandomForestRegressor
 
 from deepcave.evaluators.lpi import LPI
@@ -144,12 +142,14 @@ class MOLPI(LPI):
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
             Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
-            # Use same forest as for fanova
+
             self._model = RandomForestRegressor(n_estimators=n_trees, random_state=seed)
             self._model.fit(X, Y)
 
             incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
+
             self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
+
             self.incumbent_array = self.incumbent.get_array()
             importances = self.calc_one_weighting()
             df_res = pd.DataFrame(importances).loc[0:1].T.reset_index()
@@ -197,6 +197,7 @@ class MOLPI(LPI):
                 continue
 
             performances[hp_name] = []
+
             variances[hp_name] = []
             predictions[hp_name] = []
             incumbent_added = False
@@ -220,7 +221,6 @@ class MOLPI(LPI):
                 )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
-                # x = np.array(new_config.get_array())
                 mean, var = self._predict_mean_var(new_config)
                 performances[hp_name].append(mean)
                 variances[hp_name].append(var)
@@ -243,8 +243,9 @@ class MOLPI(LPI):
             # Avoid division by zero
             if delta == 0:
                 delta = 1
-
-        imp_var_dict = {k: (performances[k][0][0], variances[k][0][0]) for k in self.hp_names}
+        imp_var_dict = {
+            k: (performances[k][0][0], variances[k][0][0]) for k in self.incumbent.keys()
+        }
         return imp_var_dict
 
     def get_importances_(self, hp_names: List[str]) -> str:
