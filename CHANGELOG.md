@@ -6,6 +6,7 @@
 - Switched custom fanova implementation for optunas implementation of fanova
 - Removed pyrfr all together
 - Optuna is now installed by default
+- removed swig
 
 # Version 1.4.1
 

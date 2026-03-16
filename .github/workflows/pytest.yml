@@ -43,7 +43,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install swig
           python -m pip install ".[dev]"
 
       - name: Run pytest

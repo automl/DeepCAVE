@@ -21,7 +21,6 @@ Afterwards, follow the instructions to install DeepCAVE:
 ```bash
 conda create -n DeepCAVE python=3.10
 conda activate DeepCAVE
-conda install -c anaconda swig
 pip install DeepCAVE
 ```
 
@@ -43,7 +42,6 @@ git clone https://github.com/automl/DeepCAVE.git
 cd DeepCAVE
 conda create -n DeepCAVE python=3.10
 conda activate DeepCAVE
-conda install -c anaconda swig
 make install-dev
 ```
 
