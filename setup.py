@@ -58,7 +58,7 @@ setuptools.setup(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"],
     ),
     include_package_data=True,
-    python_requires=">=3.10, <3.11",
+    python_requires=">=3.10, <3.12",
     install_requires=read_file("./requirements.txt").split("\n"),
     extras_require=extras_require,
     entry_points={
