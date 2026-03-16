@@ -3,7 +3,7 @@
 ## Python 3.10
 - Upgraded python version to 3.10
 - Switched pyrfr with RandomForestRegressor from sklearn
-- Switched pyrfr with Optuna
+- Switched custom fanova implementation for optunas implementation of fanova
 - Removed pyrfr all together
 - Optuna is now installed by default
 
