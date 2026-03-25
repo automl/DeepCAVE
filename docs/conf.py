@@ -14,7 +14,11 @@ options = {
     "sphinx_gallery_conf": {
         "examples_dirs": "../examples",
         "ignore_pattern": ".*logs$|.*__pycache__$|.*_pending$",
+        
     },
 }
+linkcheck_ignore = [
+    r'https://flaviocopes\.com/redis-installation/',
+]
 
 automl_sphinx_theme.set_options(globals(), options)

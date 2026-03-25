@@ -33,8 +33,8 @@ import copy
 from collections import OrderedDict
 
 import numpy as np
+from sklearn.ensemble import RandomForestRegressor
 
-from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
 from deepcave.utils.logs import get_logger
@@ -123,13 +123,23 @@ class Ablation:
         # The default model is a RF Surrogate, but it cant be passed as parameter directly
         # because it needs access to its config space
         if self._model is None:
-            self._model = RandomForestSurrogate(self.cs, seed=0, n_trees=50)
+            self._model = RandomForestRegressor(random_state=0, n_estimators=50)
 
         self._model.fit(X, Y)
         # Obtain the predicted cost of the default and incumbent configuration
-        def_cost, def_std = self._model.predict(np.array([default_encode]))
+        all_tree_preds = np.array(
+            [tree.predict(np.array([default_encode])) for tree in self._model.estimators_]
+        )
+
+        all_tree_preds_inc = np.array(
+            [tree.predict(np.array([incumbent_encode])) for tree in self._model.estimators_]
+        )
+
+        def_cost = all_tree_preds.mean(axis=0)
+        def_std = all_tree_preds.std(axis=0)
+
         def_cost, def_std = def_cost[0], def_std[0]
-        inc_cost, _ = self._model.predict(np.array([incumbent_encode]))
+        inc_cost = all_tree_preds_inc.mean(axis=0)
 
         # For further calculations, assume that the objective is to be minimized
         if objective.optimize == "upper":
@@ -253,7 +263,14 @@ class Ablation:
             if hp in incumbent_config.keys() and hp in self.default_config.keys():
                 config_copy = copy.copy(self.default_config)
                 config_copy[hp] = incumbent_config[hp]
-                new_cost, _ = self._model.predict(np.array([self.run.encode_config(config_copy)]))
+                all_tree_preds_new = np.array(
+                    [
+                        tree.predict([self.run.encode_config(config_copy)])
+                        for tree in self._model.estimators_
+                    ]
+                )
+                new_cost = all_tree_preds_new.mean(axis=0)
+
                 if objective.optimize == "upper":
                     new_cost = -new_cost
 
@@ -270,9 +287,15 @@ class Ablation:
         if max_hp != "":
             # For the maximum impact hyperparameter, switch the default with the incumbent value
             self.default_config[max_hp] = incumbent_config[max_hp]
-            max_hp_cost, max_hp_std = self._model.predict(
-                np.array([self.run.encode_config(self.default_config)])
+            all_tree_preds_max = np.array(
+                [
+                    tree.predict([self.run.encode_config(self.default_config)])
+                    for tree in self._model.estimators_
+                ]
             )
+            max_hp_cost = all_tree_preds_max.mean(axis=0)
+            max_hp_std = all_tree_preds_max.std(axis=0)
+
             if objective.optimize == "upper":
                 max_hp_cost = -max_hp_cost
 

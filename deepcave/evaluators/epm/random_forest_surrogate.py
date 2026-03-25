@@ -63,7 +63,9 @@ class RandomForestSurrogate(SurrogateModel):
         Tuple[np.ndarray, np.ndarray]
             The means and standard deviation.
         """
-        means, stds = self._model.predict(X)
+        means, vars_ = self._model.predict(X)
+        # Convert variance to standard deviation
+        stds = np.sqrt(vars_)
         return means[:, 0], stds[:, 0]
 
     def _fit(self, X: np.ndarray, y: np.ndarray) -> None:
@@ -77,7 +79,7 @@ class RandomForestSurrogate(SurrogateModel):
         y : np.ndarray
             Corresponding target values.
         """
-        self._model.train(X, y)
+        self._model._train(X, y)
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         """

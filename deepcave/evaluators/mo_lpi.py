@@ -29,8 +29,8 @@ import pandas as pd
 from ConfigSpace import Configuration
 from ConfigSpace.c_util import change_hp_value
 from ConfigSpace.util import impute_inactive_values
+from sklearn.ensemble import RandomForestRegressor
 
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.lpi import LPI
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
@@ -142,12 +142,14 @@ class MOLPI(LPI):
         # calculate importance for each weighting generated from the pareto efficient points
         for w in weightings:
             Y = sum(df[obj] * weighting for obj, weighting in zip(objectives_normed, w)).to_numpy()
-            # Use same forest as for fanova
-            self._model = FanovaForest(self.cs, n_trees=n_trees, seed=seed)
-            self._model.train(X, Y)
+
+            self._model = RandomForestRegressor(n_estimators=n_trees, random_state=seed)
+            self._model.fit(X, Y)
 
             incumbent_cfg_id = np.argmin(sum(df[obj] * w for obj, w in zip(objectives_normed, w)))
+
             self.incumbent = self.run.get_config(df.iloc[incumbent_cfg_id]["config_id"])
+
             self.incumbent_array = self.incumbent.get_array()
             importances = self.calc_one_weighting()
             df_res = pd.DataFrame(importances).loc[0:1].T.reset_index()
@@ -156,6 +158,7 @@ class MOLPI(LPI):
         self.importances = df_all.rename(
             columns={0: "importance", 1: "variance", "index": "hp_name"}
         ).reset_index(drop=True)
+
         self.importances = self.importances.map(
             lambda x: max(x, 0) if not isinstance(x, str) else x
         )  # no negative values
@@ -194,6 +197,7 @@ class MOLPI(LPI):
                 continue
 
             performances[hp_name] = []
+
             variances[hp_name] = []
             predictions[hp_name] = []
             incumbent_added = False
@@ -217,14 +221,9 @@ class MOLPI(LPI):
                 )
                 new_config = impute_inactive_values(Configuration(self.cs, vector=new_array))
 
-                # Get the leaf values
-                x = np.array(new_config.get_array())
-                leaf_values = self._model.get_leaf_values(x)
-
-                # And the prediction/performance/variance
-                predictions[hp_name].append([np.mean(tree_pred) for tree_pred in leaf_values])
-                performances[hp_name].append(np.mean(predictions[hp_name][-1]))
-                variances[hp_name].append(np.var(predictions[hp_name][-1]))
+                mean, var = self._predict_mean_var(new_config)
+                performances[hp_name].append(mean)
+                variances[hp_name].append(var)
 
             if len(neighborhood[hp_name][0]) > 0:
                 neighborhood[hp_name][0] = np.insert(
@@ -244,37 +243,8 @@ class MOLPI(LPI):
             # Avoid division by zero
             if delta == 0:
                 delta = 1
-
-        # Creating actual importance value (by normalizing over sum of vars)
-        num_trees = len(list(predictions.values())[0][0])
-        hp_names = list(performances.keys())
-
-        overall_var_per_tree = {}
-        for hp_name in hp_names:
-            hp_variances = []
-            for tree_idx in range(num_trees):
-                variance = np.var([neighbor[tree_idx] for neighbor in predictions[hp_name]])
-                hp_variances += [variance]
-
-            overall_var_per_tree[hp_name] = hp_variances
-
-        # Sum up variances per tree across parameters
-        sum_var_per_tree = [
-            sum([overall_var_per_tree[hp_name][tree_idx] for hp_name in hp_names])
-            for tree_idx in range(num_trees)
-        ]
-
-        # Normalize
-        overall_var_per_tree = {
-            p: [
-                t / sum_var_per_tree[idx] if sum_var_per_tree[idx] != 0.0 else np.nan
-                for idx, t in enumerate(trees)
-            ]
-            for p, trees in overall_var_per_tree.items()
-        }
         imp_var_dict = {
-            k: (np.mean(overall_var_per_tree[k]), np.var(overall_var_per_tree[k]))
-            for k in overall_var_per_tree
+            k: (performances[k][0][0], variances[k][0][0]) for k in self.incumbent.keys()
         }
         return imp_var_dict
 

@@ -15,7 +15,6 @@
 import unittest
 
 from deepcave.constants import COMBINED_COST_NAME
-from deepcave.evaluators.epm.fanova_forest import FanovaForest
 from deepcave.evaluators.epm.random_forest import RandomForest
 from deepcave.runs import AbstractRun
 from deepcave.runs.converters.smac3v1 import SMAC3v1Run
@@ -39,14 +38,6 @@ class TestEPM(unittest.TestCase):
     def test_random_forest(self):
         # Create random forest
         rf = RandomForest(self.cs, seed=0)
-        rf.train(self.X, self.Y)
-
-        mean, var = rf.predict(self.X)
-        mean, var = rf.predict_marginalized(self.X)
-
-    def test_fanova_forest(self):
-        # Create random forest
-        rf = FanovaForest(self.cs, seed=0)
         rf.train(self.X, self.Y)
 
         mean, var = rf.predict(self.X)

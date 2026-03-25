@@ -64,6 +64,13 @@ def get_weightings(objectives_normed: List[str], df: pd.DataFrame) -> np.ndarray
          The weightings.
     """
     optimized = is_pareto_efficient(df[objectives_normed].to_numpy())
+
     return (
-        df[optimized][objectives_normed].T.apply(lambda values: values / values.sum()).T.to_numpy()
+        df[optimized][objectives_normed]
+        .T.apply(
+            lambda values: values / values.sum()
+            if values.sum() != 0
+            else (values * 0 + 1.0 / len(values))
+        )
+        .T.to_numpy()
     )

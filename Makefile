@@ -55,9 +55,6 @@ install-dev:
 install-examples:
 	$(PIP) install -e ".[examples]"
 
-install-optuna:
-	$(PIP) install -e ".[optuna]"
-
 install-bohb:
 	$(PIP) install -e ".[bohb]"
 

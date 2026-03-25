@@ -1175,42 +1175,7 @@
       1724237691.2892265,
       {}
     ],
-    [
-      40,
-      null,
-      209652396,
-      null,
-      [
-        Infinity,
-        Infinity
-      ],
-      0.0,
-      2,
-      1724237691.3383894,
-      1724237692.254286,
-      {
-        "traceback": "Traceback (most recent call last):\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 186, in run\n    rval = self(config_copy, target_function, kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 259, in __call__\n    return algorithm(config, **algorithm_kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/examples/3_multi_objective/2_parego.py\", line 91, in train\n    score = cross_val_score(classifier, digits.data, digits.target, cv=cv, error_score=\"raise\")\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 712, in cross_val_score\n    cv_results = cross_validate(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 423, in cross_validate\n    results = parallel(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 74, in __call__\n    return super().__call__(iterable_with_config)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 1085, in __call__\n    if self.dispatch_one_batch(iterator):\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 901, in dispatch_one_batch\n    self._dispatch(tasks)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 819, in _dispatch\n    job = self._backend.apply_async(batch, callback=cb)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 208, in apply_async\n    result = ImmediateResult(func)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 597, in __init__\n    self.results = batch()\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in __call__\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in <listcomp>\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 136, in __call__\n    return self.function(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 888, in _fit_and_score\n    estimator.fit(X_train, y_train, **fit_params)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/base.py\", line 1473, in wrapper\n    return fit_method(estimator, *args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 751, in fit\n    return self._fit(X, y, incremental=False)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 495, in _fit\n    raise ValueError(\nValueError: Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.\n",
-        "error": "ValueError('Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.')"
-      }
-    ],
-    [
-      40,
-      null,
-      398764591,
-      null,
-      [
-        Infinity,
-        Infinity
-      ],
-      0.0,
-      2,
-      1724237692.2961733,
-      1724237698.8285115,
-      {
-        "traceback": "Traceback (most recent call last):\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 186, in run\n    rval = self(config_copy, target_function, kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/smac/runner/target_function_runner.py\", line 259, in __call__\n    return algorithm(config, **algorithm_kwargs)\n  File \"/home/skrebs/Projects/Software/SMAC3/examples/3_multi_objective/2_parego.py\", line 91, in train\n    score = cross_val_score(classifier, digits.data, digits.target, cv=cv, error_score=\"raise\")\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 712, in cross_val_score\n    cv_results = cross_validate(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/_param_validation.py\", line 213, in wrapper\n    return func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 423, in cross_validate\n    results = parallel(\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 74, in __call__\n    return super().__call__(iterable_with_config)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 1088, in __call__\n    while self.dispatch_one_batch(iterator):\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 901, in dispatch_one_batch\n    self._dispatch(tasks)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 819, in _dispatch\n    job = self._backend.apply_async(batch, callback=cb)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 208, in apply_async\n    result = ImmediateResult(func)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/_parallel_backends.py\", line 597, in __init__\n    self.results = batch()\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in __call__\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/.local/lib/python3.10/site-packages/joblib/parallel.py\", line 288, in <listcomp>\n    return [func(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/utils/parallel.py\", line 136, in __call__\n    return self.function(*args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/model_selection/_validation.py\", line 888, in _fit_and_score\n    estimator.fit(X_train, y_train, **fit_params)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/base.py\", line 1473, in wrapper\n    return fit_method(estimator, *args, **kwargs)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 751, in fit\n    return self._fit(X, y, incremental=False)\n  File \"/home/skrebs/miniconda3/envs/SMAC/lib/python3.10/site-packages/sklearn/neural_network/_multilayer_perceptron.py\", line 495, in _fit\n    raise ValueError(\nValueError: Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.\n",
-        "error": "ValueError('Solver produced non-finite parameter weights. The input data may contain large values and need to be preprocessed.')"
-      }
-    ],
+
     [
       41,
       null,

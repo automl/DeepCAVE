@@ -484,6 +484,7 @@ class AbstractRun(ABC):
             The corresponding Configuration.
         """
         config = Configuration(self.configspace, self.configs[id])
+
         return config
 
     def get_config_id(self, config: Union[Configuration, Dict]) -> Optional[int]:
@@ -605,6 +606,7 @@ class AbstractRun(ABC):
             List of budgets. In a readable form, if human is True.
         """
         budgets = self.meta["budgets"].copy()
+
         if include_combined and len(budgets) > 1 and COMBINED_BUDGET not in budgets:
             budgets += [COMBINED_BUDGET]
 
@@ -1288,8 +1290,7 @@ class AbstractRun(ABC):
             Which stati should be considered. If None, all stati are considered.
             By default None.
         specific : bool
-            Whether a specific encoding should be used. This encoding is compatible with pyrfr.
-            A wrapper for pyrfr is implemented in ``deepcave.evaluators.epm``.
+            Whether a specific encoding should be used.
             By default False.
         include_config_ids : bool
             Whether to include configuration ids. By default False.
@@ -1358,13 +1359,18 @@ class AbstractRun(ABC):
                         conditional[idx] = False
                     else:
                         conditional[idx] = True
+
                         if isinstance(hp, CategoricalHyperparameter):
-                            impute_values[idx] = len(hp.choices)
+                            if type(hp.choices) is tuple:
+                                impute_values[idx] = len(hp.choices) - 1
+                            else:
+                                impute_values[idx] = len(hp.choices)
+
                         elif isinstance(
                             hp,
                             (UniformFloatHyperparameter, UniformIntegerHyperparameter),
                         ):
-                            impute_values[idx] = -1
+                            impute_values[idx] = 0
                         elif isinstance(hp, Constant):
                             impute_values[idx] = 1
                         else:

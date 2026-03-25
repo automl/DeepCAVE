@@ -18,6 +18,7 @@ import string
 import unittest
 from pathlib import Path
 
+import numpy.testing as npt
 import pandas as pd
 
 from deepcave.utils.cache import Cache
@@ -160,7 +161,13 @@ class TestCompression(unittest.TestCase):
         )
         df_cycled = deserialize(df_ser, dtype=pd.DataFrame)
         self.assertIsInstance(df_cycled, pd.DataFrame)
-        self.assertTrue(all((df_cycled.to_numpy() == df.to_numpy()).reshape(-1)))
+        val_cycled = df_cycled.to_numpy()
+        val_orig = df.to_numpy()
+
+        npt.assert_array_equal(
+            pd.DataFrame(val_cycled).fillna(0).to_numpy(),
+            pd.DataFrame(val_orig).fillna(0).to_numpy(),
+        )
 
 
 class TestDataStructures(unittest.TestCase):

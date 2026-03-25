@@ -1,3 +1,13 @@
+# Version 1.4.2
+
+## Python 3.10
+- Upgraded python version to 3.10
+- Switched pyrfr with RandomForestRegressor from sklearn
+- Switched custom fanova implementation for optunas implementation of fanova
+- Removed pyrfr all together
+- Optuna is now installed by default
+- removed swig
+
 # Version 1.4.1
 
 ## Raytune
