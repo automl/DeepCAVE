@@ -1,3 +1,10 @@
+# Version 1.4.3
+
+## Requirements
+- Updated ConfigSpace to 1.2.2
+- Updated matplotlib to 3.10.8
+- Updates due to dependency reqs from hypershap
+
 # Version 1.4.2
 
 ## Python 3.10

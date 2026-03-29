@@ -6,7 +6,7 @@ absl-py>=1.0.0
 jsonlines>=3.0.0
 pandas>=1.3.4
 # numpy needs to be installed via conda instead of pip
-matplotlib==3.9.0
+matplotlib==3.10.8
 seaborn>=0.13.0
 pyyaml>=6.0.1
 kaleido>=0.2.1
@@ -15,7 +15,7 @@ sympy>=1.12
 requests>=2.31.0
 
 # AutoML packages
-ConfigSpace==1.2.0
+ConfigSpace==1.2.2
 optuna==3.6.1
 
 # Upgrading to 2.1.0 or higher breaks the slider because string keys in marks

@@ -833,6 +833,7 @@ class AbstractRun(ABC):
                 if trial.config_id not in results:
                     results[trial.config_id] = {}
                 results[trial.config_id][trial.seed] = trial.costs
+
         return results
 
     def get_status(
@@ -1389,7 +1390,6 @@ class AbstractRun(ABC):
 
         columns += [name for name in list(self.configspace.keys())]
         columns += [objective.name for objective in objectives]
-
         if include_combined_cost:
             columns += [COMBINED_COST_NAME]
 

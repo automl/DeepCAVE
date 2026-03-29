@@ -61,7 +61,8 @@ class Config:
 
     # General config
     TITLE: str = "DeepCAVE"
-    DEBUG: bool = False
+    # TODO: Turn it oooooooff before PR i swear to god
+    DEBUG: bool = True
     # How often to refresh background activities (such as update the sidebar or process button for
     # static plugins). Value in milliseconds.
     REFRESH_RATE: int = 500
