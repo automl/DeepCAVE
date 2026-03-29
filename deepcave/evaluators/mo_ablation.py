@@ -33,9 +33,9 @@ import copy
 
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import RandomForestRegressor
 
 from deepcave.evaluators.ablation import Ablation
-from deepcave.evaluators.epm.random_forest_surrogate import RandomForestSurrogate
 from deepcave.runs import AbstractRun
 from deepcave.runs.objective import Objective
 from deepcave.utils.multi_objective_importance import get_weightings
@@ -113,7 +113,9 @@ class MOAblation(Ablation):
         """
         mean, var = 0, 0
         for model, w in zip(self.models, weighting):
-            pred, var_ = model.predict(np.array([cfg]))
+            all_tree_preds = np.array([tree.predict(np.array([cfg])) for tree in model.estimators_])
+            pred = all_tree_preds.mean(axis=0)
+            var_ = all_tree_preds.var(axis=0)
             mean += w * pred[0]
             var += w * var_[0]
         return mean, var
@@ -163,7 +165,7 @@ class MOAblation(Ablation):
             # train one model per objective
             Y = df[normed].to_numpy()
             if model is None:
-                model = RandomForestSurrogate(self.cs, seed=0, n_trees=50)
+                model = RandomForestRegressor(random_state=0, n_estimators=50)
             model.fit(X, Y)
             self.models.append(model)
 

@@ -38,7 +38,7 @@ class TestFanova(unittest.TestCase):
         importances2 = self.evaluator.get_importances(self.hp_names)
 
         # Different seed: Different results
-        assert importances["batch_size"][1] != importances2["batch_size"][1]
+        assert importances["batch_size"][0] != importances2["batch_size"][0]
 
     def test_seed(self):
         budget = self.run.get_budget(0)

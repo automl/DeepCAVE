@@ -18,59 +18,45 @@
 
 This module can be used for training and using a Random Forest Regression model.
 
-A pyrfr wrapper is used for simplification.
-
 ## Classes
-    - RandomForest: A random forest wrapper for pyrfr.
+    - RandomForest: For training and using a Random Forest Regression model.
 
 ## Constants
     VERY_SMALL_NUMBER : float
-    PYRFR_MAPPING : Dict[str, str]
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Tuple, Union
 
-import functools
 import warnings
 
 import numpy as np
-import pyrfr.regression as regression
 from ConfigSpace import ConfigurationSpace
 from ConfigSpace.hyperparameters import (
     CategoricalHyperparameter,
-    Constant,
     UniformFloatHyperparameter,
     UniformIntegerHyperparameter,
 )
 from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.exceptions import NotFittedError
 from sklearn.preprocessing import MinMaxScaler
 
 from deepcave.evaluators.epm.utils import get_types
 
 VERY_SMALL_NUMBER = 1e-10
-PYRFR_MAPPING = {
-    "n_trees": "num_trees",
-    "bootstrapping": "do_bootstrapping",
-    "max_features": "tree_opts.max_features",
-    "min_samples_split": "tree_opts.min_samples_to_split",
-    "min_samples_leaf": "tree_opts.min_samples_in_leaf",
-    "max_depth": "tree_opts.max_depth",
-    "eps_purity": "tree_opts.epsilon_purity",
-    "max_nodes": "tree_opts.max_num_nodes",
+RFR_MAPPING = {
+    "n_trees": "n_estimators",
+    "bootstrapping": "bootstrap",
+    "max_features": "max_features",
+    "min_samples_split": "min_samples_split",
+    "min_samples_leaf": "min_samples_leaf",
+    "max_depth": "max_depth",
 }
 
 
 class RandomForest:
     """
-    A random forest wrapper for pyrfr.
-
-    This is handy because only the configuration space needs to be passed.
-    and have a working version without specifying e.g. types and bounds.
-
-    Note
-    ----
-    This wrapper also supports instances.
+    For training and using a Random Forest Regression model.
 
     Properties
     ----------
@@ -106,8 +92,6 @@ class RandomForest:
         min_samples_split: int = 3,
         min_samples_leaf: int = 3,
         max_depth: int = 2**20,
-        max_nodes: int = 2**20,
-        eps_purity: float = 1e-8,
         bootstrapping: bool = True,
         instance_features: Optional[np.ndarray] = None,
         pca_components: Optional[int] = 2,
@@ -145,12 +129,10 @@ class RandomForest:
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             max_depth=max_depth,
-            max_nodes=max_nodes,
-            eps_purity=eps_purity,
             bootstrapping=bootstrapping,
         )
 
-    def _get_model(self) -> regression.base_tree:
+    def _get_model(self) -> RandomForestRegressor:
         """
         Return the internal model.
 
@@ -159,14 +141,11 @@ class RandomForest:
         model : regression.base_tree
             Model which is used internally.
         """
-        return regression.binary_rss_forest()
+        return RandomForestRegressor()
 
-    def _get_model_options(self, **kwargs: Union[int, float, bool]) -> regression.forest_opts:
+    def _get_model_options(self, **kwargs: Union[int, float, bool]) -> Dict[str, Any]:
         """
         Get model options from kwargs.
-
-        The mapping `PYRFR_MAPPING` is used in combination with
-        a recursive attribute setter to set the options for the pyrfr model.
 
         Parameters
         ----------
@@ -179,22 +158,17 @@ class RandomForest:
             Random forest options.
         """
         # Now the options are set
-        options = regression.forest_opts()
-
-        def rgetattr(obj: object, attr: str, *args: Any) -> Any:
-            def _getattr(obj: object, attr: object) -> Any:
-                attr = str(attr)
-                return getattr(obj, attr, *args)
-
-            return functools.reduce(_getattr, [obj] + attr.split("."))
-
-        def rsetattr(obj: object, attr: str, val: Any) -> None:
-            pre, _, post = attr.rpartition(".")
-            return setattr(rgetattr(obj, pre) if pre else obj, post, val)
+        options = self._model.get_params()
 
         for k, v in kwargs.items():
-            new_k = PYRFR_MAPPING[k]
-            rsetattr(options, new_k, v)
+            new_k = RFR_MAPPING[k]
+
+            # Handle nested keys like "model.learning_rate"
+            keys = new_k.split(".")
+            d = options
+            for key in keys[:-1]:
+                d = d.setdefault(key, {})  # drill down, create dict if missing
+            d[keys[-1]] = v
 
         return options
 
@@ -232,8 +206,7 @@ class RandomForest:
                         impute_values[idx] = len(hp.choices)
                     elif isinstance(hp, (UniformFloatHyperparameter, UniformIntegerHyperparameter)):
                         impute_values[idx] = -1
-                    elif isinstance(hp, Constant):
-                        impute_values[idx] = 1
+
                     else:
                         raise ValueError
 
@@ -270,40 +243,6 @@ class RandomForest:
         if Y is not None:
             if X.shape[0] != Y.shape[0]:
                 raise ValueError(f"X.shape[0] ({X.shape[0]}) != y.shape[0] ({Y.shape[0]})")
-
-    def _get_data_container(
-        self, X: np.ndarray, y: np.ndarray
-    ) -> regression.default_data_container:
-        """
-        Fill a pyrfr default data container.
-
-        The goal here is, that the forest knows categoricals and bounds for continuous data.
-
-        Parameters
-        ----------
-        X : np.ndarray [n_samples, n_features]
-            Input data points.
-        y : np.ndarray [n_samples, ]
-            Target values.
-
-        Returns
-        -------
-        data : regression.default_data_container
-            The filled data container that pyrfr can interpret.
-        """
-        # retrieve the types and the bounds from the ConfigSpace
-        data = regression.default_data_container(X.shape[1])
-
-        for i, (mn, mx) in enumerate(self.bounds):
-            if np.isnan(mx):
-                data.set_type_of_feature(i, mn)
-            else:
-                data.set_bounds_of_feature(i, mn, mx)
-
-        for row_X, row_y in zip(X, y):
-            data.add_data_point(row_X, row_y)
-
-        return data
 
     def train(self, X: np.ndarray, Y: np.ndarray) -> None:
         """
@@ -359,15 +298,7 @@ class RandomForest:
         Y : np.ndarray
             Target values.
         """
-        # Now we can start to prepare the data for the pyrfr
-        data = self._get_data_container(X, Y.flatten())
-        seed = self.seed
-
-        rng = regression.default_random_engine(seed)
-
-        # Set more specific model options and finally fit it
-        self._model.options.num_data_points_per_tree = X.shape[0]
-        self._model.fit(data, rng=rng)
+        self._model.fit(X, Y)
 
     def predict(self, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
@@ -430,35 +361,20 @@ class RandomForest:
         X = self._impute_inactive(X)
 
         if self.log_y:
-            all_preds = []
-            third_dimension = 0
+            all_tree_preds = np.array([tree.predict(X) for tree in self._model.estimators_])
 
-            # Gather data in a list of 2d arrays and get statistics about the required size of the
-            # 3d array
-            for row_X in X:
-                preds_per_tree = self._model.all_leaf_values(row_X)
-                all_preds.append(preds_per_tree)
-                max_num_leaf_data = max(map(len, preds_per_tree))
-                third_dimension = max(max_num_leaf_data, third_dimension)
-
-            # Transform list of 2d arrays into a 3d array
-            num_trees = self._model.options.num_trees
-            shape = (X.shape[0], num_trees, third_dimension)
-            preds_as_array = np.zeros(shape) * np.nan
-            for i, preds_per_tree in enumerate(all_preds):
-                for j, pred in enumerate(preds_per_tree):
-                    preds_as_array[i, j, : len(pred)] = pred
-
-            # Do all necessary computation with vectorized functions
-            preds_as_array = np.log(np.nanmean(np.exp(preds_as_array), axis=2) + VERY_SMALL_NUMBER)
-
-            # Compute the mean and the variance across the different trees
-            means = preds_as_array.mean(axis=1)
-            vars_ = preds_as_array.var(axis=1)
+            means = all_tree_preds.mean(axis=1)
+            vars_ = all_tree_preds.var(axis=1)
         else:
             means, vars_ = [], []
             for row_X in X:
-                mean_, var = self._model.predict_mean_var(row_X)
+                all_tree_preds = np.array(
+                    [tree.predict([row_X]) for tree in self._model.estimators_]
+                )
+
+                mean_ = all_tree_preds.mean(axis=0)
+                var = all_tree_preds.var(axis=0)
+
                 means.append(mean_)
                 vars_.append(var)
 
@@ -499,27 +415,10 @@ class RandomForest:
         X = self._impute_inactive(X)
 
         # marginalized predictions for each tree
-        dat_ = np.zeros((X.shape[0], self._model.options.num_trees))
-        for i, x in enumerate(X):
-            # marginalize over instances
-            # 1. get all leaf values for each tree
-            preds_trees: List[List[float]] = [[] for i in range(self._model.options.num_trees)]
+        # Mean per tree across instances
+        dat_ = np.array([tree.predict(X) for tree in self._model.estimators_])  # shape: (n_trees,)
 
-            for feat in self.instance_features:
-                x_ = np.concatenate([x, feat])
-                preds_per_tree = self._model.all_leaf_values(x_)
-                for tree_id, preds in enumerate(preds_per_tree):
-                    preds_trees[tree_id] += preds
-
-            # 2. average in each tree
-            if self.log_y:
-                for tree_id in range(self._model.options.num_trees):
-                    dat_[i, tree_id] = np.log(np.exp(np.array(preds_trees[tree_id])).mean())
-            else:
-                for tree_id in range(self._model.options.num_trees):
-                    dat_[i, tree_id] = np.array(preds_trees[tree_id]).mean()
-
-        # 3. compute statistics across trees
+        # compute statistics across trees
         mean_ = dat_.mean(axis=1)
         var = dat_.var(axis=1)
 
@@ -531,19 +430,3 @@ class RandomForest:
             var = var.reshape((-1, 1))
 
         return mean_, var
-
-    def get_leaf_values(self, x: np.ndarray) -> regression.binary_rss_forest:
-        """
-        Get the leaf values of the model.
-
-        Parameters
-        ----------
-        x : np.ndarray
-            Input data array.
-
-        Returns
-        -------
-        regression.binary_rss_forest
-            The leaf values of the model.
-        """
-        return self._model.all_leaf_values(x)

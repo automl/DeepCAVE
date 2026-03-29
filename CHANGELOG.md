@@ -1,9 +1,23 @@
+# Version 1.4.2
+
+## Python 3.10
+- Upgraded python version to 3.10
+- Switched pyrfr with RandomForestRegressor from sklearn
+- Switched custom fanova implementation for optunas implementation of fanova
+- Removed pyrfr all together
+- Optuna is now installed by default
+- removed swig
+
 # Version 1.4.1
 
 ## Raytune
 - Fixed a small issue with the converter
 - Changed the runs so the pyarrow versions match
 - Made imports optional
+
+## Example Runs
+- Added example run for LLMs based on PD1: lm1b_2048
+- Added example run for neural architecture based on NASBench301: nb301_cifar10
 
 # Version 1.4
 

@@ -9,15 +9,12 @@ for the interactive mode, which can be done via:
     brew install redis  # MacOS
     sudo apt-get install redis-server  # Linux
 
-The following commands install DeepCAVE. We recommend using anaconda, as this way `swig` can be
-installed directly. If you use a different environment, make sure that
-`swig <https://www.swig.org/index.html>`_ is installed.
+The following commands install DeepCAVE. 
 
 .. code:: bash
 
-    conda create -n DeepCAVE python=3.9
+    conda create -n DeepCAVE python=3.10
     conda activate DeepCAVE
-    conda install -c anaconda swig
     pip install DeepCAVE
 
 To load runs created with Optuna or the BOHB optimizer, you need to install the
@@ -39,9 +36,8 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
 .. code:: bash
 
     git clone https://github.com/automl/DeepCAVE.git
-    conda create -n DeepCAVE python=3.9
+    conda create -n DeepCAVE python=3.10
     conda activate DeepCAVE
-    conda install -c anaconda swig
     make install-dev
 
 
@@ -49,9 +45,6 @@ If you want to contribute to DeepCAVE, you can clone it from GitHub and install 
 
     DeepCAVE is officially tested and supported on Linux platforms.
 
-    While it is generally expected to function correctly on MacOS, some issues may arise due to
-    compatibility with Swig. Specifically, users may encounter problems with the
-    Parallel Coordinates and Importance Plugin on MacOS.
     NumPy currently needs to be installed with conda (as opposed to pip) to ensure it being linked to openblas
     and not the Mac specific accelerate. The latter, if used, will result in a plugin failure for
     Configuration Footprint.

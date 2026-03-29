@@ -37,12 +37,11 @@ from dash.dependencies import Input, Output, State
 from dash.development.base_component import Component
 from dash.exceptions import PreventUpdate
 
-from deepcave import ROOT_DIR, DOC_ROOT, interactive
+from deepcave import DOC_ROOT, ROOT_DIR, interactive  # noqa
 from deepcave.layouts import Layout
 from deepcave.runs import AbstractRun
 from deepcave.runs.group import Group, NotMergeableError
 from deepcave.utils.data_structures import update_dict
-from deepcave.utils.docs import rst_to_md
 from deepcave.utils.hash import string_to_hash
 from deepcave.utils.layout import get_select_options
 from deepcave.utils.logs import get_logger
