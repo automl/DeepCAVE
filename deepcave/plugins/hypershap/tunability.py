@@ -50,6 +50,7 @@ class Tunability(StaticPlugin):
     id = "tunability"
     name = "Tunability"
     icon = "fas fa-binoculars"
+    help = "plugins/tunability.html"
     activate_run_selection = True
 
     @staticmethod
@@ -74,6 +75,12 @@ class Tunability(StaticPlugin):
                     dbc.Col(
                         [
                             dbc.Label("Tunability"),
+                            help_button(
+                                "Tunability: Quantify how much performance can be gained by "
+                                "tuning subsets of hyperparameters. \n Mistunability: Quantify how "
+                                "much performance can be lost due to mistuning a "
+                                "(subsets of) hyperparameter(s)."
+                            ),
                             dbc.Select(
                                 id=register("tunability", ["value", "options"], type=str),
                                 placeholder="Select tunability ...",
