@@ -1,10 +1,30 @@
-#  noqa: D400
+# Copyright 2021-2024 The DeepCAVE Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# noqa: D400
 """
-# HyperSHAP
+# Tunability
+
+This module provides a class for the visualization of HyperSHAP tuneability evaluations.
+
+Provided utilities include getting input and output layout,
+processing the data and loading the outputs.
 
 ## Classes
-    - HyperSHAP:
+    - Tunability: Provide a plugin for HyperSHAP tunability evaluation.
 """
+
 from typing import Any, Callable, Dict, List
 
 import ast
@@ -25,7 +45,7 @@ matplotlib.use("Agg")
 
 
 class Tunability(StaticPlugin):
-    """Provide a Plugin for the Tunability analysis of HyperSHAP."""
+    """Provide a plugin for HyperSHAP tunability evaluation."""
 
     id = "tunability"
     name = "Tunability"
@@ -34,7 +54,20 @@ class Tunability(StaticPlugin):
 
     @staticmethod
     def get_input_layout(register: Callable) -> List:
-        """Define the input block of the plugin."""
+        """
+        Get the layout for the input block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register (user) variables.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[Any]
+            Layout for the input block.
+        """
         return [
             dbc.Row(
                 [
@@ -103,7 +136,18 @@ class Tunability(StaticPlugin):
         ]
 
     def load_inputs(self) -> Dict[str, Dict[str, Any]]:
-        """Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'."""
+        """
+        Load the content for the defined inputs in 'get_input_layout' and 'get_filter_layout'.
+
+        This method is necessary to pre-load contents for the inputs.
+        If the plugin is called for the first time, or there are no results in the cache,
+        the plugin gets its content from this method.
+
+        Returns
+        -------
+        Dict[str, Dict[str, Any]]
+            Content to be filled.
+        """
         return {
             "tunability": {"options": get_select_options(labels=["Tunability", "Mistunability"])},
             "objective": {"options": get_select_options()},
@@ -168,7 +212,31 @@ class Tunability(StaticPlugin):
 
     @staticmethod
     def process(run: AbstractRun, inputs: Dict[str, Any]) -> Dict[str, Any]:
-        """Process your input data and return raw data to be used in the output layout."""
+        """
+        Return raw data based on the run and input data.
+
+        Warning
+        -------
+        The returned data must be JSON serializable.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run : AbstractRun
+            The run to process.
+        inputs :  Dict[str, Any]
+            The input data.
+
+        Returns
+        -------
+        Dict[str, Any]
+            A serialized dictionary.
+        """
         eval = Evaluator(run)
 
         eval.hype_tune(
@@ -181,7 +249,20 @@ class Tunability(StaticPlugin):
 
     @staticmethod
     def get_output_layout(register: Callable) -> Any:
-        """Define the output block of the plugin."""
+        """
+        Get the layout for the output block.
+
+        Parameters
+        ----------
+        register : Callable
+            Method to register outputs.
+            The register_input function is located in the Plugin superclass.
+
+        Returns
+        -------
+        List[dcc.Graph]
+            Layout for the output block.
+        """
         return [
             dcc.Graph(
                 register("perf_graph", "figure"),
@@ -192,7 +273,29 @@ class Tunability(StaticPlugin):
 
     @staticmethod
     def load_outputs(runs, inputs, outputs) -> go.Figure:  # type: ignore
-        """Read the raw data and prepare it for the layout."""
+        """
+        Read in raw data and prepare for layout.
+
+        Note
+        ----
+        The passed inputs are cleaned and therefore differ
+        compared to 'load_inputs' or 'load_dependency_inputs'.
+        Please see '_clean_inputs' for more information.
+
+        Parameters
+        ----------
+        run
+            The selected run.
+        inputs
+            Input and filter values from the user.
+        outputs
+            Raw output from the run.
+
+        Returns
+        -------
+        go.Figure
+            The figure for tuneability visualization.
+        """
         iv_values = outputs["inputs"]
 
         restored_interactions = {}
@@ -200,38 +303,32 @@ class Tunability(StaticPlugin):
             if key_str == "()":
                 restored_interactions[()] = value
             else:
-                # ast.literal_eval safely evaluates strings into tuples (e.g., "(0, 1)" -> (0, 1))
                 restored_interactions[ast.literal_eval(key_str)] = value
 
         feature_names = ["a", "b", "c"]
         n_nodes = len(feature_names)
         data_dict = restored_interactions
-        # --- Configuration & Styling ---
-        # SHAP standard colors
+
         COLOR_POS = "rgba(255, 13, 87, 1.0)"  # Red for positive
         COLOR_NEG = "rgba(30, 136, 229, 1.0)"  # Blue for negative
         HALO_POS = "rgba(255, 13, 87, 0.3)"  # Lighter red halo
         HALO_NEG = "rgba(30, 136, 229, 0.3)"  # Lighter blue halo
 
-        MAX_NODE_SIZE = 80  # Max pixel size for the largest node
-        MAX_EDGE_WIDTH = 25  # Max pixel thickness for the strongest line
+        MAX_NODE_SIZE = 80
+        MAX_EDGE_WIDTH = 25
 
-        # --- AUTOMATIC SCALING MAGIC ---
-        # Find the maximum absolute value in your data so sizes never explode or vanish
         all_values = [abs(v) for k, v in data_dict.items() if len(k) > 0]
         max_val = max(all_values) if all_values else 1
         if max_val == 0:
-            max_val = 1  # Prevent division by zero
+            max_val = 1
 
         fig = go.Figure()
 
-        # Calculate coordinates (arrange nodes in a circle)
         positions = {}
         for i in range(n_nodes):
             angle = 2 * math.pi * i / n_nodes + (math.pi / 2)
             positions[i] = (math.cos(angle), math.sin(angle))
 
-        # 2. Draw Edges (2nd-Order Interactions)
         for key, val in data_dict.items():
             if len(key) == 2:
                 u, v = key  # type: ignore
@@ -240,7 +337,6 @@ class Tunability(StaticPlugin):
 
                 color = COLOR_POS if val > 0 else COLOR_NEG
 
-                # Scale the line thickness relative to the maximum value
                 normalized_width = (abs(val) / max_val) * MAX_EDGE_WIDTH
 
                 fig.add_trace(
@@ -256,7 +352,6 @@ class Tunability(StaticPlugin):
                     )
                 )
 
-        # 3. Process Nodes (1st-Order Effects)
         node_x, node_y = [], []
         node_halo_sizes, node_colors, halo_colors = [], [], []
         hover_texts = []
@@ -270,15 +365,11 @@ class Tunability(StaticPlugin):
             node_colors.append(COLOR_POS if val >= 0 else COLOR_NEG)
             halo_colors.append(HALO_POS if val >= 0 else HALO_NEG)
 
-            # Scale the colored ring size relative to the maximum value
             normalized_size = (abs(val) / max_val) * MAX_NODE_SIZE
             node_halo_sizes.append(normalized_size)
 
             hover_texts.append(f"{feature_names[i]} main effect: {val:.4f}")
 
-        # 4. Draw the Nodes Layer by Layer
-
-        # Layer A: The transparent outer halo
         fig.add_trace(
             go.Scatter(
                 x=node_x,
@@ -290,7 +381,6 @@ class Tunability(StaticPlugin):
             )
         )
 
-        # Layer B: The solid colored circle
         fig.add_trace(
             go.Scatter(
                 x=node_x,
@@ -303,7 +393,6 @@ class Tunability(StaticPlugin):
             )
         )
 
-        # Layer C: The inner white circle with the text (Fixed size so it never vanishes)
         fig.add_trace(
             go.Scatter(
                 x=node_x,
@@ -317,8 +406,6 @@ class Tunability(StaticPlugin):
                 showlegend=False,
             )
         )
-
-        # 5. Clean up the canvas
 
         fig.update_layout(
             xaxis=dict(showgrid=False, zeroline=False, visible=False),
