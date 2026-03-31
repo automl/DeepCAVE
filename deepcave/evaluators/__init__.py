@@ -26,4 +26,6 @@ lpi
     This module provides utilities to calculate the local parameter importance (LPI).
 ablation
     This module evaluates the ablation paths.
+hypershap
+    This module uses HyperSHAP for explaining Hyperparameter Optimization (HPO).
 """

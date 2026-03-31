@@ -61,8 +61,7 @@ class Config:
 
     # General config
     TITLE: str = "DeepCAVE"
-    # TODO: Turn it oooooooff before PR i swear to god
-    DEBUG: bool = True
+    DEBUG: bool = False
     # How often to refresh background activities (such as update the sidebar or process button for
     # static plugins). Value in milliseconds.
     REFRESH_RATE: int = 500
@@ -118,6 +117,7 @@ class Config:
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
             SymbolicExplanations,
         )
+        from deepcave.plugins.hypershap.hype_ablation import HypeAblation
         from deepcave.plugins.hypershap.tunability import Tunability
         from deepcave.plugins.objective.cost_over_time import CostOverTime
         from deepcave.plugins.objective.pareto_front import ParetoFront
@@ -147,7 +147,7 @@ class Config:
                 PartialDependencies(),
                 SymbolicExplanations(),
             ],
-            "HyperSHAP": [Tunability()],
+            "HyperSHAP": [Tunability(), HypeAblation()],
         }
         return plugins
 

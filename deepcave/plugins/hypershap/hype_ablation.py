@@ -14,26 +14,26 @@
 
 # noqa: D400
 """
-# Tunability
+# HypeAblation
 
-This module provides a class for the visualization of HyperSHAP tuneability evaluations.
+This module provides a class for the visualization of HyperSHAP ablation evaluations.
 
 Provided utilities include getting input and output layout,
 processing the data and loading the outputs.
 
 ## Classes
-    - Tunability: Provide a plugin for HyperSHAP tunability evaluation.
+    - HypeAblation: Provide a plugin for HyperSHAP ablation evaluation.
 """
 
 from typing import Any, Callable, Dict, List
 
 import ast
-import math
 
 import dash_bootstrap_components as dbc
 import matplotlib
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 from dash import dcc, html
+from plotly.subplots import make_subplots
 
 from deepcave import config
 from deepcave.evaluators.hypershap import HyperSHAP_Eval as Evaluator
@@ -44,13 +44,13 @@ from deepcave.utils.layout import get_checklist_options, get_select_options, hel
 matplotlib.use("Agg")
 
 
-class Tunability(StaticPlugin):
+class HypeAblation(StaticPlugin):
     """Provide a plugin for HyperSHAP tunability evaluation."""
 
-    id = "tunability"
-    name = "Tunability"
-    icon = "fas fa-cogs"
-    help = "plugins/tunability.html"
+    id = "hype_ablation"
+    name = "HyperSHAP Ablation"
+    icon = "fas fa-puzzle-piece"
+    help = "plugins/hype_ablation.html"
     activate_run_selection = True
 
     @staticmethod
@@ -72,24 +72,6 @@ class Tunability(StaticPlugin):
         return [
             dbc.Row(
                 [
-                    dbc.Col(
-                        [
-                            dbc.Label("Tunability"),
-                            help_button(
-                                "Tunability: Quantify how much performance can be gained by "
-                                "tuning subsets of hyperparameters. \n Mistunability: Quantify how "
-                                "much performance can be lost due to mistuning a "
-                                "(subsets of) hyperparameter(s)."
-                                "Red Lines represent positive connections, Blue Line negative "
-                                "connections"
-                            ),
-                            dbc.Select(
-                                id=register("tunability", ["value", "options"], type=str),
-                                placeholder="Select tunability ...",
-                            ),
-                        ],
-                        md=6,
-                    ),
                     dbc.Col(
                         [
                             dbc.Label("Objective"),
@@ -158,8 +140,6 @@ class Tunability(StaticPlugin):
             Content to be filled.
         """
         return {
-            "tunability": {"options": get_select_options(labels=["Tunability", "Mistunability"])},
-            "objective": {"options": get_select_options()},
             "budget_id": {"options": get_checklist_options(), "value": None},
         }
 
@@ -192,6 +172,9 @@ class Tunability(StaticPlugin):
         objective_options = get_select_options(objective_names, objective_ids)
         objective_value = inputs["objective_id"]["value"]
 
+        if objective_value is None:
+            objective_value = objective_ids[0]
+
         # Prepare budgets
         budgets = run.get_budgets(human=True)
         budget_ids = run.get_budget_ids()
@@ -202,16 +185,10 @@ class Tunability(StaticPlugin):
             if budget_value is None:
                 budget_value = budget_ids[-1]
 
-        tune_value = inputs["tunability"]["value"]
-
         return {
             "objective_id": {
                 "options": objective_options,
                 "value": objective_value,
-            },
-            "tunability": {
-                "options": get_select_options(labels=["Tunability", "Mistunability"]),
-                "value": tune_value,
             },
             "budget_id": {
                 "options": budget_options,
@@ -247,14 +224,12 @@ class Tunability(StaticPlugin):
             A serialized dictionary.
         """
         eval = Evaluator(run)
-
-        eval.hype_tune(
-            tunability=inputs["tunability"],
+        eval.hype_ablation(
             objective_id=inputs["objective_id"],
             budget_id=inputs["budget_id"],
         )
 
-        return {"inputs": eval.get_tunability()}
+        return {"inputs": eval.get_ablation()}
 
     @staticmethod
     def get_output_layout(register: Callable) -> Any:
@@ -313,118 +288,127 @@ class Tunability(StaticPlugin):
                 restored_interactions[()] = value
             else:
                 restored_interactions[ast.literal_eval(key_str)] = value
-
+        print(restored_interactions)
         cs = runs.configspace
         hp_names = list(cs.keys())
-        feature_names = hp_names
-        n_nodes = len(feature_names)
-        data_dict = restored_interactions
 
-        COLOR_POS = "rgba(255, 13, 87, 1.0)"  # Red for positive
-        COLOR_NEG = "rgba(30, 136, 229, 1.0)"  # Blue for negative
-        HALO_POS = "rgba(255, 13, 87, 0.3)"  # Lighter red halo
-        HALO_NEG = "rgba(30, 136, 229, 0.3)"  # Lighter blue halo
+        sorted_data = sorted(restored_interactions.items(), key=lambda x: x[1], reverse=True)
+        values = [item[1] for item in sorted_data]
+        intersections = [
+            tuple(hp_names[i] for i in item[0]) for item in sorted_data  # type: ignore
+        ]
+        num_params = len(hp_names)
+        num_cols = len(values)
 
-        MAX_NODE_SIZE = 80
-        MAX_EDGE_WIDTH = 25
+        fig = make_subplots(
+            rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.05, row_heights=[0.7, 0.3]
+        )
 
-        all_values = [abs(v) for k, v in data_dict.items() if len(k) > 0]
-        max_val = max(all_values) if all_values else 1
-        if max_val == 0:
-            max_val = 1
+        pos_color = "#FF1053"
+        neg_color = "#1E88E5"
+        gray_dot = "#E0E0E0"
+        bg_stripe = "#F5F5F5"
 
-        fig = go.Figure()
+        bar_colors = [pos_color if v >= 0 else neg_color for v in values]
 
-        positions = {}
-        for i in range(n_nodes):
-            angle = 2 * math.pi * i / n_nodes + (math.pi / 2)
-            positions[i] = (math.cos(angle), math.sin(angle))
+        fig.add_trace(
+            go.Bar(
+                x=list(range(num_cols)),
+                y=values,
+                marker_color=bar_colors,
+                text=[f"{v:.3f}" if abs(v) > 0.0001 else "" for v in values],
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate="%{y}<extra></extra>",
+                showlegend=False,
+            ),
+            row=1,
+            col=1,
+        )
 
-        for key, val in data_dict.items():
-            if len(key) == 2:
-                u, v = key  # type: ignore
-                x0, y0 = positions[u]  # type: ignore
-                x1, y1 = positions[v]  # type: ignore
+        for i in range(num_params):
+            if i % 2 == 0:
+                fig.add_hrect(
+                    y0=i - 0.5,
+                    y1=i + 0.5,
+                    fillcolor=bg_stripe,
+                    layer="below",
+                    line_width=0,
+                    row=2,
+                    col=1,
+                )
 
-                color = COLOR_POS if val > 0 else COLOR_NEG
+        for i, param in enumerate(hp_names):
+            x_coords = list(range(num_cols))
+            y_coords = [i] * num_cols
 
-                normalized_width = (abs(val) / max_val) * MAX_EDGE_WIDTH
+            is_active = [param in tup for tup in intersections]
+            colors = ["black" if active else gray_dot for active in is_active]
+
+            fig.add_trace(
+                go.Scatter(
+                    x=x_coords,
+                    y=y_coords,
+                    mode="markers",
+                    marker=dict(size=14, color=colors),
+                    showlegend=False,
+                    hoverinfo="skip",
+                ),
+                row=2,
+                col=1,
+            )
+
+        for j, tup in enumerate(intersections):
+            if len(tup) > 1:
+                row_indices = [hp_names.index(p) for p in tup]
 
                 fig.add_trace(
                     go.Scatter(
-                        x=[x0, x1],
-                        y=[y0, y1],
+                        x=[j],
+                        y=[min(row_indices), max(row_indices)],
                         mode="lines",
-                        line=dict(width=normalized_width, color=color),
-                        hoverinfo="text",
-                        text=f"{feature_names[u]}"  # type: ignore
-                        f"& {feature_names[v]} interaction: {val:.4f}",  # type: ignore
+                        line=dict(color="black", width=2),
                         showlegend=False,
-                    )
+                        hoverinfo="skip",
+                    ),
+                    row=2,
+                    col=1,
                 )
 
-        node_x, node_y = [], []
-        node_halo_sizes, node_colors, halo_colors = [], [], []
-        hover_texts = []
-
-        for i in range(n_nodes):
-            val = data_dict.get((i,), 0)  # type: ignore
-            x, y = positions[i]
-            node_x.append(x)
-            node_y.append(y)
-
-            node_colors.append(COLOR_POS if val >= 0 else COLOR_NEG)
-            halo_colors.append(HALO_POS if val >= 0 else HALO_NEG)
-
-            normalized_size = (abs(val) / max_val) * MAX_NODE_SIZE
-            node_halo_sizes.append(normalized_size)
-
-            hover_texts.append(f"{feature_names[i]} main effect: {val:.4f}")
-
-        fig.add_trace(
-            go.Scatter(
-                x=node_x,
-                y=node_y,
-                mode="markers",
-                marker=dict(size=[s * 1.3 for s in node_halo_sizes], color=halo_colors),
-                hoverinfo="skip",
-                showlegend=False,
-            )
-        )
-
-        fig.add_trace(
-            go.Scatter(
-                x=node_x,
-                y=node_y,
-                mode="markers",
-                marker=dict(size=node_halo_sizes, color=node_colors),
-                hoverinfo="text",
-                text=hover_texts,
-                showlegend=False,
-            )
-        )
-
-        fig.add_trace(
-            go.Scatter(
-                x=node_x,
-                y=node_y,
-                mode="markers+text",
-                marker=dict(size=40, color="white", line=dict(color="black", width=1.5)),
-                text=feature_names,
-                textposition="middle center",
-                textfont=dict(size=14, color="black"),
-                hoverinfo="skip",
-                showlegend=False,
-            )
-        )
-
         fig.update_layout(
-            xaxis=dict(showgrid=False, zeroline=False, visible=False),
-            yaxis=dict(showgrid=False, zeroline=False, visible=False),
             plot_bgcolor="white",
-            paper_bgcolor="white",
-            margin=dict(t=30, b=0, l=0, r=0),
             autosize=True,
+            margin=dict(t=30, b=0, l=0, r=0),
         )
+        if values:
+            max_val = max(values)
+            min_val = min(values)
+            padding = (max_val - min_val) * 0.15 if max_val != min_val else 0.1
+            y_max = max_val + padding
+            y_min = min_val - padding if min_val < 0 else 0
+        else:
+            y_min, y_max = 0, 1
+
+        fig.update_yaxes(
+            title_text=runs.get_objective(inputs["objective_id"]).name,
+            range=[y_min, y_max],
+            row=1,
+            col=1,
+            gridcolor="#EEEEEE",
+            zerolinecolor="black",
+        )
+
+        fig.update_yaxes(
+            tickvals=list(range(num_params)),
+            ticktext=[p for p in hp_names],
+            autorange="reversed",
+            showgrid=False,
+            zeroline=False,
+            title_text="Parameter",
+            row=2,
+            col=1,
+        )
+
+        fig.update_xaxes(showticklabels=False, showgrid=False, zeroline=False)
 
         return fig

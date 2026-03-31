@@ -21,7 +21,7 @@ This module uses HyperSHAP for explaining Hyperparameter Optimization (HPO).
 HyperSHAP is a game-theoretic Python library that uses Shapley values and
 interaction indices to provide local and global insights into how
 individual hyper-parameters affect a model's performance.
-This module includes the evaluation of tunabilty, mistuneability.
+This module includes the evaluation of tunabilty, mistuneability, and ablation.
 
 ## Classes:
     - HyperSHAP_Eval: Provide an evaluator used for HyperSHAP evaluation.
@@ -53,7 +53,9 @@ class HyperSHAP_Eval:
     iv : InteractionValues
         An object containing evaluation results.
     tune : Dict[str: Any]
-        The iv parameters converted as python dictionary.
+        The iv tuneability parameters converted as python dictionary.
+    abl : Dict[str: Any]
+        The iv ablation parameters converted as python dictionary.
     """
 
     def __init__(self, run: AbstractRun):
@@ -62,7 +64,7 @@ class HyperSHAP_Eval:
         self.hp_names = list(self.cs.keys())
         self.logger = get_logger(self.__class__.__name__)
 
-    def hype_tune(self, tunability: str, objective_id: int, budget_id: int) -> Dict:
+    def hype_tune(self, tunability: str, objective_id: int, budget_id: int, seed: int = 42) -> Dict:
         """
         Calculate the tunability or mistunability.
 
@@ -96,9 +98,7 @@ class HyperSHAP_Eval:
         configuration_list = self.cs.sample_configuration(size=1_000)
         data = list(zip(configuration_list, df[objective.name].to_numpy()))  # type: ignore
 
-        self.cs.seed(42)
-
-        explanation_task = ExplanationTask.from_data(config_space=self.cs, data=data)
+        explanation_task = ExplanationTask.from_data(config_space=self.cs, data=data, seed=seed)
         self.hypershap = HyperSHAP(explanation_task=explanation_task)
 
         baseline_config = self.cs.sample_configuration()
@@ -122,6 +122,73 @@ class HyperSHAP_Eval:
 
         return self.tune
 
+    def hype_ablation(self, objective_id: int, budget_id: int, seed: int = 42) -> Dict:
+        """
+        Calculate the ablation.
+
+        Parameters
+        ----------
+        objective_id : int
+            The id of the objective to evaluate on.
+        budget_id : int
+            The id of the budget to evaluate on.
+
+        Returns
+        -------
+        Dict
+            The dictionary with the evaluation results.
+
+        Raises
+        ------
+        ValueError
+            If the Objective is None.
+        """
+        if budget_id is None:
+            budget_id = self.run.get_highest_budget()
+
+        objective = self.run.get_objective(objective_id)
+        budget = self.run.get_budget(budget_id)
+
+        if objective is None:
+            raise ValueError(
+                "No Objective has been chosen. Please select an "
+                "Objective or try to select the Objective again."
+            )
+
+        df = self.run.get_encoded_data(
+            objective,
+            budget,
+            statuses=Status.SUCCESS,
+        )
+
+        # Match the configuration data with the resulting performance
+        configuration_list = self.cs.sample_configuration(size=1_000)
+        data = list(zip(configuration_list, df[objective.name].to_numpy()))  # type: ignore
+
+        explanation_task = ExplanationTask.from_data(config_space=self.cs, data=data, seed=seed)
+        self.hypershap = HyperSHAP(explanation_task=explanation_task)
+
+        baseline_config = self.cs.get_default_configuration()
+        config_of_interest, _ = self.run.get_incumbent(budget=budget, objectives=objective)
+
+        self.iv = self.hypershap.ablation(
+            config_of_interest=config_of_interest, baseline_config=baseline_config
+        )
+
+        # Convert to python dictionary to avoid JSON serializability problems
+        self.abl = {
+            "index": str(self.iv.index),
+            "max_order": self.iv.max_order,
+            "min_order": self.iv.min_order,
+            "estimated": self.iv.estimated,
+            "estimation_budget": self.iv.estimation_budget,
+            "n_players": self.iv.n_players,
+            "baseline_value": self.iv.baseline_value,
+            "interactions": {str(key): value for key, value in self.iv.interactions.items()},
+        }
+
+        return self.abl
+
     def get_tunability(self) -> Dict:
         """
         Get the tunability or mistunability evaluation values.
@@ -132,3 +199,14 @@ class HyperSHAP_Eval:
             A dictionary containing the evaluation values.
         """
         return self.tune
+
+    def get_ablation(self) -> Dict:
+        """
+        Get the tunability or mistunability evaluation values.
+
+        Returns
+        -------
+        Dict
+            A dictionary containing the evaluation values.
+        """
+        return self.abl

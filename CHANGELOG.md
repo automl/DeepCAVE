@@ -1,5 +1,10 @@
 # Version 1.4.3
 
+## HyperSHAP
+- Added HyperSHAP evaluator
+- Added Tunability plugin
+- Added Ablation plugin
+
 ## Requirements
 - Updated ConfigSpace to 1.2.2
 - Updated matplotlib to 3.10.8
