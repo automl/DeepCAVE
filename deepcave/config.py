@@ -117,6 +117,8 @@ class Config:
         from deepcave.plugins.hyperparameter.symbolic_explanations import (
             SymbolicExplanations,
         )
+        from deepcave.plugins.hypershap.hype_ablation import HypeAblation
+        from deepcave.plugins.hypershap.tunability import Tunability
         from deepcave.plugins.objective.cost_over_time import CostOverTime
         from deepcave.plugins.objective.pareto_front import ParetoFront
         from deepcave.plugins.summary.configurations import Configurations
@@ -145,6 +147,7 @@ class Config:
                 PartialDependencies(),
                 SymbolicExplanations(),
             ],
+            "HyperSHAP": [Tunability(), HypeAblation()],
         }
         return plugins
 
